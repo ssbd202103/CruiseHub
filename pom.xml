@@ -9,7 +9,10 @@
     <name>ssbd03</name>
     
     <developers>
-        
+        <developer>
+            <name>Vitalii Shulhan</name>
+            <id>226454</id>
+        </developer>
     </developers>
     
     <properties>
