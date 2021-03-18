@@ -17,6 +17,10 @@
             <name>Vitalii Shulhan</name>
             <id>226454</id>
         </developer>
+        <developer>
+            <name>Damian Bednarek</name>
+            <id>224257</id>
+        </developer>
     </developers>
     
     <properties>
