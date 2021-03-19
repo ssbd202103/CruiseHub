@@ -17,6 +17,10 @@
             <name>Vitalii Shulhan</name>
             <id>226454</id>
         </developer>
+        <developer>
+            <name>Grzegorz Kempa</name>
+            <id>224325</id>
+        </developer>
     </developers>
     
     <properties>
