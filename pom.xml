@@ -37,6 +37,10 @@
             <name>Szymon Jeziorski</name>
             <id>216784</id>
         </developer>
+        <developer>
+            <name>Pawel Florczuk</name>
+            <id>224293</id>
+        </developer>
     </developers>
     
     <properties>
