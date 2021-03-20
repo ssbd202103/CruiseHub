@@ -33,6 +33,10 @@
             <name>Grzegorz Kempa</name>
             <id>224325</id>
         </developer>
+        <developer>
+            <name>Szymon Jeziorski</name>
+            <id>216784</id>
+        </developer>
     </developers>
     
     <properties>
