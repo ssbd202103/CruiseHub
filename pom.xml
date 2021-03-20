@@ -25,6 +25,10 @@
             <name>Damian Bednarek</name>
             <id>224257</id>
         </developer>
+        <developer>
+            <name>Michal Klyz</name>
+            <id>224329</id>
+        </developer>
     </developers>
     
     <properties>
