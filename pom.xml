@@ -21,6 +21,10 @@
             <name>Szymon Wróbel</name>
             <id>224463</id>
         </developer>
+        <developer>
+            <name>Damian Bednarek</name>
+            <id>224257</id>
+        </developer>
     </developers>
     
     <properties>
