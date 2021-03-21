@@ -27,7 +27,7 @@
         <web-resource-collection>
             <web-resource-name>Admin Page</web-resource-name>
                 <description />
-                <url-pattern>/*</url-pattern>
+                <url-pattern>/admin/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <description/>
@@ -44,7 +44,7 @@
         <web-resource-collection>
             <web-resource-name>Moderator Page </web-resource-name>
                 <description />
-                <url-pattern>/*</url-pattern>
+                <url-pattern>/moderator/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <description/>
@@ -61,7 +61,7 @@
         <web-resource-collection>
             <web-resource-name>Business Page</web-resource-name>
                 <description />
-                <url-pattern>/*</url-pattern>
+                <url-pattern>/business/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <description/>
@@ -75,10 +75,10 @@
       <!-- Client -->
     <security-constraint>
         <display-name>Client</display-name>
-        <web-resource-collection>Client Page</web-resource-name>
-            <web-resource-name>
+        <web-resource-collection>
+            <web-resource-name>Client Page</web-resource-name>
                 <description />
-                <url-pattern>/*</url-pattern>
+                <url-pattern>/client/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <description/>
@@ -86,7 +86,7 @@
         </auth-constraint>
         <user-data-constraint>
             <description/>
-            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+            <transport-guarantee>INTEGRAL</transport-guarantee>
         </user-data-constraint>
     </security-constraint>
     <!-- Logowanie -->
@@ -104,7 +104,7 @@
     </security-constraint>
     
     <login-config>
-        <auth-method>FROM</auth-method>
+        <auth-method>FORM</auth-method>
         <form-login-config>
             <form-login-page>/login/login.html</form-login-page>
             <form-error-page>/login/error.html</form-error-page>
