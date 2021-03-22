@@ -8,4 +8,106 @@
             30
         </session-timeout>
     </session-config>
+    <!-- Rols -->
+    <security-role>
+        <role-name>ADMINISTRATOR</role-name>
+    </security-role>
+    <security-role>
+        <role-name>MODERATOR</role-name>
+    </security-role>
+    <security-role>
+        <role-name>BUSINESS_WORKER</role-name>
+    </security-role>
+    <security-role>
+        <role-name>CLIENT</role-name>
+    </security-role>
+    <!-- Admin -->
+    <security-constraint>
+        <display-name>Administrator</display-name>
+        <web-resource-collection>
+            <web-resource-name>Admin Page</web-resource-name>
+                <description />
+                <url-pattern>/admin/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <description/>
+            <role-name>ADMINISTRATOR</role-name>
+        </auth-constraint>
+        <user-data-constraint>
+            <description/>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+     <!-- Moderator -->
+    <security-constraint>
+        <display-name>Moderator</display-name>
+        <web-resource-collection>
+            <web-resource-name>Moderator Page </web-resource-name>
+                <description />
+                <url-pattern>/moderator/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <description/>
+            <role-name>MODERATOR</role-name>
+        </auth-constraint>
+        <user-data-constraint>
+            <description/>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+      <!-- BusinessWorker -->
+    <security-constraint>
+        <display-name>BusinessWorker</display-name>
+        <web-resource-collection>
+            <web-resource-name>Business Page</web-resource-name>
+                <description />
+                <url-pattern>/business/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <description/>
+            <role-name>BUSINESS_WORKER</role-name>
+        </auth-constraint>
+        <user-data-constraint>
+            <description/>
+            <transport-guarantee>INTEGRAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+      <!-- Client -->
+    <security-constraint>
+        <display-name>Client</display-name>
+        <web-resource-collection>
+            <web-resource-name>Client Page</web-resource-name>
+                <description />
+                <url-pattern>/client/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <description/>
+            <role-name>CLIENT</role-name>
+        </auth-constraint>
+        <user-data-constraint>
+            <description/>
+            <transport-guarantee>INTEGRAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+    <!-- Logowanie -->
+    <security-constraint>
+        <display-name>LoginConstr</display-name>
+        <web-resource-collection>
+            <web-resource-name>Login Page</web-resource-name>
+                <description />
+                <url-pattern>/login/*</url-pattern>
+        </web-resource-collection>
+        <user-data-constraint>
+            <description/>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+    
+    <login-config>
+        <auth-method>FORM</auth-method>
+        <form-login-config>
+            <form-login-page>/login/login.html</form-login-page>
+            <form-error-page>/login/error.html</form-error-page>
+        </form-login-config>
+    </login-config>
 </web-app>
