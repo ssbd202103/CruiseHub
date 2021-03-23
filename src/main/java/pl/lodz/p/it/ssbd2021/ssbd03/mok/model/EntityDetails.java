@@ -9,13 +9,6 @@ public class EntityDetails {
     private LocalDateTime creationDateTime;
     private Account createdBy;
 
-    private LocalDateTime lastInCorrectAuthenticationDateTime;
-    private String lastInCorrectAuthenticationLogicalAdress;
-    private String languageVersion;
-
-    private LocalDateTime lastCorrectAuthenticationDateTime;
-    private String lastCorrectAuthenticationLogicalAdress;
-
     private LocalDateTime lastAlterDateTime;
     private Account alteredBy;
     private AlterType alterType;
