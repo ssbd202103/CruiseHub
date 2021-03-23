@@ -8,7 +8,7 @@
             30
         </session-timeout>
     </session-config>
-    <!-- Rols -->
+    <!-- Roles -->
     <security-role>
         <role-name>ADMINISTRATOR</role-name>
     </security-role>
@@ -105,6 +105,7 @@
     
     <login-config>
         <auth-method>FORM</auth-method>
+        <realm-name>ssbd03realm</realm-name>
         <form-login-config>
             <form-login-page>/login/login.html</form-login-page>
             <form-error-page>/login/error.html</form-error-page>
