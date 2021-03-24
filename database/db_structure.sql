@@ -137,3 +137,19 @@ WHERE accounts.confirmed
   AND access_levels.active = true;
 
 select * from glassfish_auth_view;
+
+-- Table owner --
+ALTER TABLE language_types OWNER TO ssbd03admin;
+ALTER TABLE alter_types OWNER TO ssbd03admin;
+ALTER TABLE entity_details OWNER TO ssbd03admin;
+ALTER TABLE accounts OWNER TO ssbd03admin;
+ALTER TABLE access_levels OWNER TO ssbd03admin;
+ALTER TABLE administrators OWNER TO ssbd03admin;
+ALTER TABLE business_workers OWNER TO ssbd03admin;
+ALTER TABLE addresses OWNER TO ssbd03admin;
+ALTER TABLE clients OWNER TO ssbd03admin;
+ALTER TABLE moderators OWNER TO ssbd03admin;
+ALTER VIEW glassfish_auth_view OWNER TO ssbd03admin;
+
+-- Table permissions --
+GRANT SELECT ON glassfish_auth_view TO ssbd03glassfish;
