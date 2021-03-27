@@ -1,7 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<persistence version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
-    <!-- Define Persistence Unit -->
-    <persistence-unit name="my_persistence_unit">
-        
+<persistence version="2.2" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
+  <!-- "Management" PU -->
+    <persistence-unit name="ssbd03adminPU" transaction-type="JTA">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <jta-data-source>java:app/jdbc/ssbd03admin</jta-data-source>
+        <excluded-unlisted-classes>false</excluded-unlisted-classes>
+        <properties>
+            <property name="eclipselink.logging.level" value="FINE" />
+            <property name="javax.persistence.schema-generation.database.action" value="create" />
+            <!-- Only one such property is effective -->
+            <property name="javax.persistence.sql-load-script-source" value="init/db_test.sql" />
+        </properties>
     </persistence-unit>
+  <!-- Authentication PU -->
+    <persistence-unit name="ssbd03glassfishPU" transaction-type="JTA">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <jta-data-source>java:app/jdbc/ssbd03glassfish</jta-data-source>
+        <!-- TODO: insert classes here -->
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        <properties>
+            <property name="eclipselink.logging.level" value="FINE" />
+            <property name="eclipselink.canonicalmodel.prefix" value="glassfish" />
+        </properties>
+    </persistence-unit>
+  <!-- Application PUs -->
+    <persistence-unit name="ssbd03mokPU" transaction-type="JTA">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <jta-data-source>java:app/jdbc/ssbd03mok</jta-data-source>
+        <!-- TODO: insert classes here -->
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        <properties>
+            <property name="eclipselink.logging.level" value="FINE" />
+            <property name="eclipselink.canonicalmodel.prefix" value="mok" />
+        </properties>
+    </persistence-unit> 
 </persistence>
