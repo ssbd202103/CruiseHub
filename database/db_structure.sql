@@ -1,26 +1,26 @@
 create table language_types
 (
-    id                  float   not null,
+    id                  bigint   not null,
     language_type_value varchar not null unique,
     CONSTRAINT language_versions_primary_key_constraint PRIMARY KEY (id)
 );
 
 create table alter_types
 (
-    id              float   not null,
+    id              bigint   not null,
     alter_type_name varchar not null,
     CONSTRAINT alter_type_primary_key_constraint PRIMARY KEY (id)
 );
 
 create table entity_details
 (
-    id                  float     not null,
-    version             float     not null,
+    id                  bigint     not null,
+    version             bigint     not null,
     creation_datetime   timestamp not null,
---     created_by_id       float     not null, -- FOREIGN KEY
+--     created_by_id       bigint     not null, -- FOREIGN KEY
     last_alter_datetime timestamp not null,
---     altered_by_id       float     not null, -- FOREIGN KEY
-    alter_type_id       float     not null, -- FOREIGN KEY
+--     altered_by_id       bigint     not null, -- FOREIGN KEY
+    alter_type_id       bigint     not null, -- FOREIGN KEY
 
     CONSTRAINT entity_details_primary_key_constraint PRIMARY KEY (id),
     CONSTRAINT entity_details_alter_type_id_fk_constraint FOREIGN KEY (alter_type_id) REFERENCES alter_types (id)
@@ -29,7 +29,7 @@ create table entity_details
 
 create table accounts
 (
-    id                                            float   not null,
+    id                                            bigint   not null,
 
     first_name                                    varchar,
     second_name                                   varchar,
@@ -48,8 +48,8 @@ create table accounts
     last_correct_authentication_datetime          timestamp,
     last_correct_authentication_logical_address   varchar,
 
-    entity_details_id                             float   not null, -- FOREIGN KEY
-    language_type_id                              float   not null, -- FOREIGN KEY
+    entity_details_id                             bigint   not null, -- FOREIGN KEY
+    language_type_id                              bigint   not null, -- FOREIGN KEY
 
     CONSTRAINT accounts_primary_key_constraint PRIMARY KEY (id),
     CONSTRAINT accounts_entity_details_id_fk_constraint FOREIGN KEY (entity_details_id) REFERENCES entity_details (id),
@@ -58,9 +58,9 @@ create table accounts
 
 create table access_levels
 (
-    id           float   not null,
+    id           bigint   not null,
     access_level varchar not null,
-    account_id   float   not null,
+    account_id   bigint   not null,
     active       boolean not null,
 
     CONSTRAINT access_levels_id_primary_key_constraint PRIMARY KEY (id),
@@ -69,8 +69,8 @@ create table access_levels
 
 create table administrators
 (
-    id                float not null, -- should be foreign for access_level
-    entity_details_id float not null, -- FOREIGN KEY
+    id                bigint not null, -- should be foreign for access_level
+    entity_details_id bigint not null, -- FOREIGN KEY
 
     CONSTRAINT administrators_id_pk_constraint PRIMARY KEY (id),
     CONSTRAINT administrators_id_fk_constraint FOREIGN KEY (id) REFERENCES access_levels (id),
@@ -79,8 +79,8 @@ create table administrators
 
 create table business_workers
 (
-    id                float not null,
-    entity_details_id float not null, -- FOREIGN KEY
+    id                bigint not null,
+    entity_details_id bigint not null, -- FOREIGN KEY
     phone_number      varchar,
 
     CONSTRAINT business_workers_id_pk_constraint PRIMARY KEY (id),
@@ -90,13 +90,13 @@ create table business_workers
 
 create table addresses
 (
-    id                float   not null,
-    house_number      float   not null,
+    id                bigint   not null,
+    house_number      bigint   not null,
     street            varchar not null,
     post_code         varchar not null,
     city              varchar not null,
     country           varchar not null,
-    entity_details_id float   not null, -- FOREIGN KEY
+    entity_details_id bigint   not null, -- FOREIGN KEY
 
     CONSTRAINT address_entity_details_id_fk_constraint FOREIGN KEY (entity_details_id) REFERENCES entity_details (id),
     CONSTRAINT address_primary_key_constraint PRIMARY KEY (id)
@@ -104,10 +104,10 @@ create table addresses
 
 create table clients
 (
-    id                float not null,
-    entity_details_id float not null, -- FOREIGN KEY
+    id                bigint not null,
+    entity_details_id bigint not null, -- FOREIGN KEY
     phone_number      varchar,
-    home_address_id   float,          -- FOREIGN KEY
+    home_address_id   bigint,          -- FOREIGN KEY
 
     CONSTRAINT clients_id_pk_constraint PRIMARY KEY (id),
     CONSTRAINT clients_id_fk_constraint FOREIGN KEY (id) REFERENCES access_levels (id),
@@ -117,8 +117,8 @@ create table clients
 
 create table moderators
 (
-    id                float not null,
-    entity_details_id float not null, -- FOREIGN KEY
+    id                bigint not null,
+    entity_details_id bigint not null, -- FOREIGN KEY
     CONSTRAINT moderators_id_pk_constraint PRIMARY KEY (id),
     CONSTRAINT moderators_id_fk_constraint FOREIGN KEY (id) REFERENCES access_levels (id),
     CONSTRAINT moderators_entity_details_id_fk_constraint FOREIGN KEY (entity_details_id) REFERENCES entity_details (id)
