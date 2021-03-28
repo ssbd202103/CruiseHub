@@ -8,6 +8,9 @@ import java.time.LocalDateTime;
 @Data
 @Embeddable
 public class EntityDetails {
+//    @Version
+//    private Long version;
+
     @Column(name = "creation_date_time", nullable = false, updatable = false)
     private LocalDateTime creationDateTime;
 
