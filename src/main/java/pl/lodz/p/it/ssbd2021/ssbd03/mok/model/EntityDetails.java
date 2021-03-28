@@ -1,8 +1,11 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+@Data
 //@Embeddable
 @MappedSuperclass
 public class EntityDetails {

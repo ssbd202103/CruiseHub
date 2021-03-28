@@ -8,12 +8,12 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 
-@Entity
-@DiscriminatorValue("Moderator")
-public class Moderator extends AccessLevel {
-
-    @Override
-    public AccessLevelType getAccessLevelType() {
-        return AccessLevelType.MODERATOR;
-    }
-}
+//@Entity
+//@DiscriminatorValue("Moderator")
+//public class Moderator extends AccessLevel {
+//
+//    @Override
+//    public AccessLevelType getAccessLevelType() {
+//        return AccessLevelType.MODERATOR;
+//    }
+//}

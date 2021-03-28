@@ -1,14 +1,18 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+@Data
 @Entity(name = "accounts")
 public class Account extends EntityDetails {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(name = "first_name")
@@ -43,6 +47,6 @@ public class Account extends EntityDetails {
     private String lastCorrectAuthenticationLogicalAddress;
 
 
-    @OneToMany(mappedBy = "account")
+    @OneToMany
     private List<AccessLevel> accessLevels = new ArrayList<>();
 }

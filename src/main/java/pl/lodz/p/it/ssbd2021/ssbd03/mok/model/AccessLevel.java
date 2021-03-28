@@ -2,19 +2,19 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.model;
 
 import javax.persistence.*;
 
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-//@Inheritance(strategy = InheritanceType.JOINED)
+//@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "access_level", discriminatorType = DiscriminatorType.STRING)
 @Entity(name = "access_levels")
-public class AccessLevel extends EntityDetails {
+public interface AccessLevel {
+
     @Id
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    Long getId();
 
-    @ManyToOne
-    @JoinColumn(name = "account_id")
-    private Account account;
+    void setId(Long id);
 
-    public AccessLevelType getAccessLevelType() {
-        return null; // todo
-    }
+    @Column(name = "access_level")
+    AccessLevelType getAccessLevelType();
+    void setAccessLevelType(AccessLevelType accessLevelType);
 }

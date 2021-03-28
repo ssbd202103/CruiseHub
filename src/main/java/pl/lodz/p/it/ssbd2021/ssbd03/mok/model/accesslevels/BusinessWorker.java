@@ -8,14 +8,14 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 
-@Entity
+//@Entity
 //@DiscriminatorValue("BusinessWorker")
-public class BusinessWorker extends AccessLevel {
-    private String phoneNumber;
-
-
-    @Override
-    public AccessLevelType getAccessLevelType() {
-        return AccessLevelType.BUSINESS_WORKER;
-    }
-}
+//public class BusinessWorker extends EntityDetails implements AccessLevel {
+//    private String phoneNumber;
+//
+//
+//    @Override
+//    public AccessLevelType getAccessLevelType() {
+//        return AccessLevelType.BUSINESS_WORKER;
+//    }
+//}
