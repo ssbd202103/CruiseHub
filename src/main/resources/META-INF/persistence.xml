@@ -1,7 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<persistence version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
-    <!-- Define Persistence Unit -->
-    <persistence-unit name="my_persistence_unit">
-        
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
+
+    <persistence-unit name="temp">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <jta-data-source>java:app/jdbc/temp</jta-data-source>
+
+
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.Account</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.AccessLevel</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.accesslevels.Administrator</class>
+<!--        <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.accesslevels.BusinessWorker</class>-->
+        <!--        <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.accesslevels.Moderator</class>-->
+<!--        <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.accesslevels.Client</class>-->
+
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+
+        <properties>
+            <property name="hibernate.connection.driver_class" value="org.postgresql.Driver"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL10Dialect"/>
+            <property name="hibernate.transaction.jta.platform"
+                      value="org.hibernate.service.jta.platform.internal.SunOneJtaPlatform"/>
+            <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
+            <!--     todo       <property name="javax.persistence.sql-load-script-source" value="initial-data-and-settings.sql"/>-->
+            <property name="javax.persistence.schema-generation.create-database-schemas" value="true"/>
+        </properties>
     </persistence-unit>
+
+
 </persistence>

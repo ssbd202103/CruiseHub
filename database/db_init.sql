@@ -23,41 +23,40 @@ values (-3, 'DELETE');
 --
 -- accounts start ||| password is 12345678
 insert into accounts(id, first_name, second_name, login, email, password_hash, confirmed, active,
-                     last_incorrect_authentication_datetime, last_incorrect_authentication_logical_address,
-                     last_correct_authentication_datetime, last_correct_authentication_logical_address,
-                     entity_details_id, language_type_id,
-                     version, creation_datetime, last_alter_datetime, alter_type_id, created_by_id, altered_by_id)
+                     last_incorrect_authentication_date_time, last_incorrect_authentication_logical_address,
+                     last_correct_authentication_date_time, last_correct_authentication_logical_address,
+                     language_type,
+                     version, creation_date_time, last_alter_date_time, alter_type, created_by_id, altered_by_id)
 values (-1, 'Richard', 'Branson', 'rbranson', 'rbranson@gmail.com',
         '2634c3097f98e36865f0c572009c4ffd73316bc8b88ccfe8d196af35f46e2394',
-        true, true, null, null, null, null, -1, -1, 0, now(), now(), -1, -1, -1);
+        true, true, null, null, null, null, 'pl', 0, now(), now(), 'INSERT', -1, -1);
 
 insert into accounts(id, first_name, second_name, login, email, password_hash, confirmed, active,
-                     last_incorrect_authentication_datetime, last_incorrect_authentication_logical_address,
-                     last_correct_authentication_datetime, last_correct_authentication_logical_address,
-                     entity_details_id, language_type_id,
-                     version, creation_datetime, last_alter_datetime, alter_type_id, created_by_id, altered_by_id)
+                     last_incorrect_authentication_date_time, last_incorrect_authentication_logical_address,
+                     last_correct_authentication_date_time, last_correct_authentication_logical_address,
+                     language_type,
+                     version, creation_date_time, last_alter_date_time, alter_type, created_by_id, altered_by_id)
 values (-2, 'Elon', 'Musk', 'emusk', 'emusk@gmail.com',
         '2634c3097f98e36865f0c572009c4ffd73316bc8b88ccfe8d196af35f46e2394',
-        true, true, null, null, null, null, -2, -1, 0, now(), now(), -1, -2, -2);
+        true, true, null, null, null, null, 'pl', 0, now(), now(), 'INSERT', -2, -2);
 
 insert into accounts(id, first_name, second_name, login, email, password_hash, confirmed, active,
-                     last_incorrect_authentication_datetime, last_incorrect_authentication_logical_address,
-                     last_correct_authentication_datetime, last_correct_authentication_logical_address,
-                     entity_details_id, language_type_id,
-                     version, creation_datetime, last_alter_datetime, alter_type_id, created_by_id, altered_by_id)
+                     last_incorrect_authentication_date_time, last_incorrect_authentication_logical_address,
+                     last_correct_authentication_date_time, last_correct_authentication_logical_address,
+                     language_type,
+                     version, creation_date_time, last_alter_date_time, alter_type, created_by_id, altered_by_id)
 values (-3, 'Jeff', 'Bezos', 'jbezos', 'jbezos@gmail.com',
         '2634c3097f98e36865f0c572009c4ffd73316bc8b88ccfe8d196af35f46e2394',
-        true, true, null, null, null, null, -3, -1, 0, now(), now(), -1, -3, -3);
-
+        true, true, null, null, null, null, 'pl', 0, now(), now(), 'INSERT', -3, -3);
 
 insert into accounts(id, first_name, second_name, login, email, password_hash, confirmed, active,
-                     last_incorrect_authentication_datetime, last_incorrect_authentication_logical_address,
-                     last_correct_authentication_datetime, last_correct_authentication_logical_address,
-                     entity_details_id, language_type_id,
-                     version, creation_datetime, last_alter_datetime, alter_type_id, created_by_id, altered_by_id)
+                     last_incorrect_authentication_date_time, last_incorrect_authentication_logical_address,
+                     last_correct_authentication_date_time, last_correct_authentication_logical_address,
+                     language_type,
+                     version, creation_date_time, last_alter_date_time, alter_type, created_by_id, altered_by_id)
 values (-4, 'Mark', 'Zuckerberg', 'mzuckerberg', 'mzuckerberg@gmail.com',
         '2634c3097f98e36865f0c572009c4ffd73316bc8b88ccfe8d196af35f46e2394',
-        true, true, null, null, null, null, -4, -1, 0, now(), now(), -1, -4, -4);
+        true, true, null, null, null, null, 'pl', 0, now(), now(), 'INSERT', -4, -4);
 -- accounts end
 --
 --
@@ -82,7 +81,7 @@ values (-5, 'moderator', -4, false);
 --
 --
 -- administrators start
-insert into administrators (id, version, creation_datetime, last_alter_datetime, alter_type_id, created_by_id,
+insert into administrators (id, version, creation_date_time, last_alter_date_time, alter_type_id, created_by_id,
                             altered_by_id)
 values (-1, 0, now(), now(), -1, -1, -1);
 -- administrators end
@@ -90,7 +89,7 @@ values (-1, 0, now(), now(), -1, -1, -1);
 --
 --
 -- business_workers start
-insert into business_workers (id, phone_number, version, creation_datetime, last_alter_datetime, alter_type_id,
+insert into business_workers (id, phone_number, version, creation_date_time, last_alter_date_time, alter_type_id,
                               created_by_id, altered_by_id)
 values (-4, '0987654321', 0, now(), now(), -1, -3, -3);
 -- business_workers end
@@ -99,11 +98,11 @@ values (-4, '0987654321', 0, now(), now(), -1, -3, -3);
 --
 -- addresses start
 insert into addresses(id, house_number, street, post_code, city, country,
-                      version, creation_datetime, last_alter_datetime, alter_type_id, created_by_id, altered_by_id)
+                      version, creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id)
 values (-1, 1, 'street 1', '123', 'London', 'United Kingdom', 0, now(), now(), -1, -2, -2);
 
 insert into addresses(id, house_number, street, post_code, city, country,
-                      version, creation_datetime, last_alter_datetime, alter_type_id, created_by_id, altered_by_id)
+                      version, creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id)
 values (-2, 1, 'street 2', '321', 'Manchester', 'United Kingdom', 0, now(), now(), -1, -3, -3);
 -- addresses end
 --
@@ -111,10 +110,10 @@ values (-2, 1, 'street 2', '321', 'Manchester', 'United Kingdom', 0, now(), now(
 --
 -- clients start
 insert into clients(id, phone_number, home_address_id,
-                    version, creation_datetime, last_alter_datetime, alter_type_id, created_by_id, altered_by_id)
+                    version, creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id)
 values (-2, '123456789', -1, 0, now(), now(), -1, -2, -2);
 
-insert into clients(id, phone_number, home_address_id, version, creation_datetime, last_alter_datetime, alter_type_id,
+insert into clients(id, phone_number, home_address_id, version, creation_date_time, last_alter_date_time, alter_type_id,
                     created_by_id, altered_by_id)
 values (-3, '123456789', -2, 0, now(), now(), -1, -3, -3);
 -- clients end
@@ -122,6 +121,7 @@ values (-3, '123456789', -2, 0, now(), now(), -1, -3, -3);
 --
 --
 -- moderators start
-insert into moderators(id, version, creation_datetime, last_alter_datetime, alter_type_id, created_by_id, altered_by_id)
+insert into moderators(id, version, creation_date_time, last_alter_date_time, alter_type_id, created_by_id,
+                       altered_by_id)
 values (-5, 0, now(), now(), -1, -4, -4)
 -- moderators end

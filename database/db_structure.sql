@@ -1,3 +1,5 @@
+-- accounts | entity_details - removed
+
 create table language_types
 (
     id                  bigint  not null,
@@ -33,12 +35,11 @@ create table accounts
     last_correct_authentication_datetime          timestamp,
     last_correct_authentication_logical_address   varchar,
 
-    entity_details_id                             bigint    not null, -- FOREIGN KEY
     language_type_id                              bigint    not null, -- FOREIGN KEY
 
     version                                       bigint    not null,
-    creation_datetime                             timestamp not null,
-    last_alter_datetime                           timestamp not null,
+    creation_date_time                             timestamp not null,
+    last_alter_date_time                           timestamp not null,
 
     created_by_id                                 bigint    not null, -- FOREIGN KEY
     altered_by_id                                 bigint    not null, -- FOREIGN KEY
@@ -64,13 +65,15 @@ create table access_levels
     CONSTRAINT access_levels_account_id_fk_constraint FOREIGN KEY (account_id) REFERENCES accounts (id)
 );
 
+
+
 create table administrators
 (
     id                  bigint    not null, -- should be foreign for access_level
 
     version             bigint    not null,
-    creation_datetime   timestamp not null,
-    last_alter_datetime timestamp not null,
+    creation_date_time   timestamp not null,
+    last_alter_date_time timestamp not null,
     created_by_id       bigint    not null, -- FOREIGN KEY
     altered_by_id       bigint    not null, -- FOREIGN KEY
     alter_type_id       bigint    not null, -- FOREIGN KEY
@@ -89,8 +92,8 @@ create table business_workers
     phone_number        varchar,
 
     version             bigint    not null,
-    creation_datetime   timestamp not null,
-    last_alter_datetime timestamp not null,
+    creation_date_time   timestamp not null,
+    last_alter_date_time timestamp not null,
     created_by_id       bigint    not null, -- FOREIGN KEY
     altered_by_id       bigint    not null, -- FOREIGN KEY
     alter_type_id       bigint    not null, -- FOREIGN KEY
@@ -113,8 +116,8 @@ create table addresses
     country             varchar   not null,
 
     version             bigint    not null,
-    creation_datetime   timestamp not null,
-    last_alter_datetime timestamp not null,
+    creation_date_time   timestamp not null,
+    last_alter_date_time timestamp not null,
     created_by_id       bigint    not null, -- FOREIGN KEY
     altered_by_id       bigint    not null, -- FOREIGN KEY
     alter_type_id       bigint    not null, -- FOREIGN KEY
@@ -133,8 +136,8 @@ create table clients
     home_address_id     bigint,             -- FOREIGN KEY
 
     version             bigint    not null,
-    creation_datetime   timestamp not null,
-    last_alter_datetime timestamp not null,
+    creation_date_time   timestamp not null,
+    last_alter_date_time timestamp not null,
     created_by_id       bigint    not null, -- FOREIGN KEY
     altered_by_id       bigint    not null, -- FOREIGN KEY
     alter_type_id       bigint    not null, -- FOREIGN KEY
@@ -153,8 +156,8 @@ create table moderators
     id                  bigint    not null,
 
     version             bigint    not null,
-    creation_datetime   timestamp not null,
-    last_alter_datetime timestamp not null,
+    creation_date_time   timestamp not null,
+    last_alter_date_time timestamp not null,
     created_by_id       bigint    not null, -- FOREIGN KEY
     altered_by_id       bigint    not null, -- FOREIGN KEY
     alter_type_id       bigint    not null, -- FOREIGN KEY
