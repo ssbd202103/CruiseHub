@@ -1,7 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
-    <!-- Define Persistence Unit -->
-    <persistence-unit name="my_persistence_unit">
-        
+    <persistence-unit name="ssbd03adminPU" transaction-type="JTA">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <jta-data-source>java:app/jdbc/ssbd03admin</jta-data-source>
+       <!-- <excluded-unlisted-classes>false</excluded-unlisted-classes>-->
+        <properties>
+            <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.SunOneJtaPlatform"/>
+            <property name="hibernate.logging.level" value="FINE" />
+            <property name="javax.persistence.schema-generation.database.action" value="none" />
+            <!-- Only one such property is effective -->
+            <property name="javax.persistence.sql-load-script-source" value="init/db_test.sql" />
+        </properties>
+    </persistence-unit>
+    <!-- Authentication PU -->
+    <persistence-unit name="ssbd03glassfishPU" transaction-type="JTA">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <jta-data-source>java:app/jdbc/ssbd03glassfish</jta-data-source>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.Account</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.AccessLevel</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.EntityDetails</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.accesslevels.Client</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.accesslevels.BusinessWorker</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.accesslevels.Administrator</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.accesslevels.Moderator</class>
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+
+        <properties>
+            <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.SunOneJtaPlatform"/>
+            <property name="hibernate.logging.level" value="FINE" />
+            <property name="hibernate.canonicalmodel.prefix" value="glassfish" />
+        </properties>
+    </persistence-unit>
+    <!-- Application PUs -->
+    <persistence-unit name="ssbd03mokPU" transaction-type="JTA">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <jta-data-source>java:app/jdbc/ssbd03mok</jta-data-source>
+            <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.Account</class>
+            <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.Address</class>
+            <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.AccessLevel</class>
+            <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.EntityDetails</class>
+             <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        <properties>
+            <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.SunOneJtaPlatform"/>
+            <property name="hibernate.logging.level" value="FINE" />
+            <property name="hibernate.canonicalmodel.prefix" value="mok" />
+        </properties>
     </persistence-unit>
 </persistence>
+
