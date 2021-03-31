@@ -11,7 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 @DataSourceDefinition ( // Ta pula połączeń jest na potrzeby tworzenia struktur przy wdrażaniu aplikacji
-        name = "java:app/jdbc/ssbd03admin",
+        name = "java:app/jdbc/ssbd03adminDS",
         className = "org.postgresql.ds.PGSimpleDataSource",
         user = "ssbd03admin",
         password = "adminpasswd",
@@ -25,7 +25,7 @@ import javax.persistence.PersistenceContext;
 )
 
 @DataSourceDefinition( // Ta pula połączeń jest na potrzeby implementacji uwierzytelnienia w aplikacji
-        name = "java:app/jdbc/ssbd03glassfish",
+        name = "java:app/jdbc/ssbd03glassfishDS",
         className = "org.postgresql.ds.PGSimpleDataSource",
         user = "ssbd03glassfish",
         password = "glassfishpasswd",
@@ -35,7 +35,7 @@ import javax.persistence.PersistenceContext;
 )
 
 @DataSourceDefinition ( // Ta pula połączeń jest na potrzeby operacji realizowanych przez moduł aplikacji
-        name = "java:app/jdbc/ssbd03mok",
+        name = "java:app/jdbc/ssbd03mokDS",
         className = "org.postgresql.ds.PGSimpleDataSource",
         user = "ssbd03mok",
         password = "mokpasswd",
