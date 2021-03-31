@@ -6,7 +6,8 @@
        <!-- <excluded-unlisted-classes>false</excluded-unlisted-classes>-->
         <properties>
             <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.SunOneJtaPlatform"/>
-            <property name="hibernate.logging.level" value="FINE" />
+            <property name="hibernate.show_sql" value="true" />
+            <property name="hibernate.format_sql" value="true" />
             <property name="javax.persistence.schema-generation.database.action" value="none" />
             <!-- Only one such property is effective -->
             <property name="javax.persistence.sql-load-script-source" value="init/db_test.sql" />
@@ -27,7 +28,6 @@
 
         <properties>
             <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.SunOneJtaPlatform"/>
-            <property name="hibernate.logging.level" value="FINE" />
             <property name="hibernate.canonicalmodel.prefix" value="glassfish" />
         </properties>
     </persistence-unit>
@@ -39,10 +39,13 @@
             <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.Address</class>
             <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.AccessLevel</class>
             <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.EntityDetails</class>
+            <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.accesslevels.Client</class>
+            <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.accesslevels.BusinessWorker</class>
+            <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.accesslevels.Administrator</class>
+            <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.accesslevels.Moderator</class>
              <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
             <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.SunOneJtaPlatform"/>
-            <property name="hibernate.logging.level" value="FINE" />
             <property name="hibernate.canonicalmodel.prefix" value="mok" />
         </properties>
     </persistence-unit>
