@@ -170,25 +170,25 @@ ALTER TABLE moderators
 ALTER VIEW glassfish_auth_view OWNER TO ssbd03admin;
 
 GRANT SELECT, INSERT, UPDATE, DELETE
-    ON access_levels TO ssbd00mok;
+    ON access_levels TO ssbd03mok;
 
 GRANT SELECT, INSERT, UPDATE, DELETE
-    ON accounts TO ssbd00mok;
+    ON accounts TO ssbd03mok;
 
 GRANT SELECT, INSERT, UPDATE, DELETE
-    ON addresses TO ssbd00mok;
+    ON addresses TO ssbd03mok;
 
 GRANT SELECT, INSERT, UPDATE, DELETE
-    ON administrators TO ssbd00mok;
+    ON administrators TO ssbd03mok;
 
 GRANT SELECT, INSERT, UPDATE, DELETE
-    ON business_workers TO ssbd00mok;
+    ON business_workers TO ssbd03mok;
 
 GRANT SELECT, INSERT, UPDATE, DELETE
-    ON clients TO ssbd00mok;
+    ON clients TO ssbd03mok;
 
 GRANT SELECT, INSERT, UPDATE, DELETE
-    ON moderators TO ssbd00mok;
+    ON moderators TO ssbd03mok;
 
 -- Table permissions --
 GRANT SELECT ON glassfish_auth_view TO ssbd03glassfish;
