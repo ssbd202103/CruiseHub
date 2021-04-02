@@ -141,7 +141,11 @@ create table moderators
     CONSTRAINT moderators_altered_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id)
 );
 
-
+CREATE TABLE generator 
+(
+    generator_key character varying(32),
+    generator_value bigint
+);
 
 CREATE VIEW glassfish_auth_view AS
 SELECT accounts.login, accounts.password_hash, access_levels.access_level
@@ -167,8 +171,12 @@ ALTER TABLE clients
     OWNER TO ssbd03admin;
 ALTER TABLE moderators
     OWNER TO ssbd03admin;
+ALTER TABLE generator
+    OWNER TO ssbd03admin;
 ALTER VIEW glassfish_auth_view OWNER TO ssbd03admin;
 
+
+-- Table permissions --
 GRANT SELECT, INSERT, UPDATE, DELETE
     ON access_levels TO ssbd00mok;
 
@@ -190,5 +198,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE
 GRANT SELECT, INSERT, UPDATE, DELETE
     ON moderators TO ssbd00mok;
 
--- Table permissions --
+GRANT SELECT, UPDATE
+    ON generator TO ssbd03mok;
+
 GRANT SELECT ON glassfish_auth_view TO ssbd03glassfish;

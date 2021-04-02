@@ -100,5 +100,13 @@ values (-3, '123456789', -2, now(), now(), 'INSERT', -3, -3);
 -- moderators start
 insert into moderators(id, creation_date_time, last_alter_date_time, alter_type, created_by_id,
                        altered_by_id)
-values (-5, now(), now(), 'INSERT', -4, -4)
+values (-5, now(), now(), 'INSERT', -4, -4);
 -- moderators end
+--
+--
+--
+-- generator start
+INSERT INTO generator VALUES ('AccessLevelId', 0);
+INSERT INTO generator VALUES ('AccountId', 0);
+INSERT INTO generator VALUES ('AddressId', 0);
+-- generator end
