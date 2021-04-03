@@ -54,6 +54,9 @@ public class Account {
     @Embedded
     private EntityDetails entityDetails;
 
+    @Version
+    private Long version;
+
     @OneToMany
     @JoinColumn(name = "account_id")
     private List<AccessLevel> accessLevels = new ArrayList<>();

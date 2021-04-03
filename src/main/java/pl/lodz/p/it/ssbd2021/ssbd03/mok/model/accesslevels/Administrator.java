@@ -15,6 +15,10 @@ public class Administrator extends AccessLevel {
     @Embedded
     private EntityDetails entityDetails;
 
+    @Version
+    private Long version;
+
+
     @Override
     public AccessLevelType getAccessLevelType() {
         return AccessLevelType.ADMINISTRATOR;

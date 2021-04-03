@@ -5,10 +5,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.model.AccessLevel;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.model.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.model.EntityDetails;
 
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
+import javax.persistence.*;
 
 @Data
 @Entity(name = "business_workers")
@@ -19,6 +16,9 @@ public class BusinessWorker extends AccessLevel {
 
     @Embedded
     private EntityDetails entityDetails;
+
+    @Version
+    private Long version;
 
     @Override
     public AccessLevelType getAccessLevelType() {

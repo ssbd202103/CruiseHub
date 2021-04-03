@@ -1,9 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.model;
 
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity(name = "addresses")
 public class Address  {
@@ -24,4 +21,7 @@ public class Address  {
 
     @Embedded
     private EntityDetails entityDetails;
+
+    @Version
+    private Long version;
 }
