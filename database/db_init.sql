@@ -100,5 +100,25 @@ values (-3, '123456789', -2, now(), now(), 'INSERT', -3, -3);
 -- moderators start
 insert into moderators(id, creation_date_time, last_alter_date_time, alter_type, created_by_id,
                        altered_by_id)
-values (-5, now(), now(), 'INSERT', -4, -4)
+values (-5, now(), now(), 'INSERT', -4, -4);
 -- moderators end
+--
+--
+--companies start
+insert into companies(id, name, address, phone_number, NIP, owner, worker_id)
+values (-1,'FirmaJez','Zakopane','777876542',232332323220, 'Jezy Musial', -4);
+--companies end
+--
+--
+--
+--cruises_groups start
+insert into cruises_groups(id, company_id, name, number_of_seats, price)
+values (-1,-1,'Przygoda morska', 24, 52);
+--cruises_groups end
+--
+--
+--
+--cruises start
+insert into cruises(id, start_date, end_date, active, description, start_place, cruises_groups_id, attractions)
+values (-1,now(),now(),true,'opis','miejsce poczatku', -1, -1)
+--cruises end
