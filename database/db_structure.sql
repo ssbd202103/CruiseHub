@@ -140,7 +140,30 @@ create table moderators
     CONSTRAINT moderators_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
     CONSTRAINT moderators_altered_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id)
 );
+--mow modul--
+create table reservations
+(
+    id                   bigint    not null,
+    client_id            bigint    not null,     --FOREIGN KEY
+    number_of_seats      bigint    not null,
+    atraction_id         bigint    not null,      --FOREIGN KEY
+    cruise_id            bigint    not null,     --FOREIGN KEY
 
+    CONSTRAINT reservations_id_pk_constraint PRIMARY KEY (id),
+    CONSTRAINT reservations_client_id_fk_constraint FOREIGN KEY (client_id) REFERENCES clients (id),
+    CONSTRAINT reservations_cruise_id_fk_constraint FOREIGN KEY (cruise_id) REFERENCES cruises (id),
+    CONSTRAINT reservations_atraction_id_fk_constraint FOREIGN KEY (atraction_id) REFERENCES atractions (id)
+);
+create table atractions
+(
+    id                   bigint     not null,
+    name                 varchar    not null,
+    description          varchar,
+    price                numeric,
+    number_of_seats      bigint    not null,
+
+    CONSTRAINT atractions_id_pk_constraint PRIMARY KEY (id)
+);
 
 
 CREATE VIEW glassfish_auth_view AS
@@ -166,6 +189,10 @@ ALTER TABLE addresses
 ALTER TABLE clients
     OWNER TO ssbd03admin;
 ALTER TABLE moderators
+    OWNER TO ssbd03admin;
+AlTER TABLE reservations
+    OWNER TO ssbd03admin;
+AlTER TABLE atractions
     OWNER TO ssbd03admin;
 ALTER VIEW glassfish_auth_view OWNER TO ssbd03admin;
 

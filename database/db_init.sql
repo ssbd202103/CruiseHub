@@ -100,5 +100,19 @@ values (-3, '123456789', -2, now(), now(), 'INSERT', -3, -3);
 -- moderators start
 insert into moderators(id, creation_date_time, last_alter_date_time, alter_type, created_by_id,
                        altered_by_id)
-values (-5, now(), now(), 'INSERT', -4, -4)
+values (-5, now(), now(), 'INSERT', -4, -4);
 -- moderators end
+--
+--
+--
+--atractions start
+insert into atractions(id,name,description,price,number_of_seats)
+values (-1,'atrakcja','opis atrakcji',123,20);
+--atractions end
+--
+--
+--
+--reservation start
+insert into reservations(id,client_id,number_of_seats,atraction_id,cruise_id)
+values (-1,-2,2,-1,-1)
+--reservation end
