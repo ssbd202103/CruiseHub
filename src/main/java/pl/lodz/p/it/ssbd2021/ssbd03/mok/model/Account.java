@@ -54,7 +54,7 @@ public class Account {
     @Embedded
     private EntityDetails entityDetails;
 
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "account_id")
     private List<AccessLevel> accessLevels = new ArrayList<>();
 }
