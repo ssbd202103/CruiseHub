@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Entity(name = "clients")
 @DiscriminatorValue("Client")
 public class Client extends AccessLevel {
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @OneToOne
     @JoinColumn(name = "home_address_id")
     private Address homeAddress;
     @Column(name = "phone_number")
