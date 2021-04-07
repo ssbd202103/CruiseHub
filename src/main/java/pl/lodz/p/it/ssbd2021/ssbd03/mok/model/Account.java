@@ -8,11 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@TableGenerator(name="AccountIdGenerator", table="generator", pkColumnName="generator_key", valueColumnName="generator_value", pkColumnValue="AccountId")
 @Entity(name = "accounts")
 public class Account {
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE, generator="AccountIdGenerator")
+    @SequenceGenerator(name = "ACCOUNT_SEQ_GEN", sequenceName = "account_id_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="ACCOUNT_SEQ_GEN")
     @Column(name = "id")
     private Long id;
 

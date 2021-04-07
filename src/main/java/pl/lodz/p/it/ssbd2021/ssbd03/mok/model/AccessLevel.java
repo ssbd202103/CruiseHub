@@ -4,11 +4,11 @@ import javax.persistence.*;
 
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "access_level", discriminatorType = DiscriminatorType.STRING)
-@TableGenerator(name="AccessLevelIdGenerator", table="generator", pkColumnName="generator_key", valueColumnName="generator_value", pkColumnValue="AccessLevelId")
 @Entity(name = "access_levels")
 public abstract class AccessLevel {
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE, generator="AccessLevelIdGenerator")
+    @SequenceGenerator(name = "ACCESSLEVEL_SEQ_GEN", sequenceName = "accesslevel_id_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="ACCESSLEVEL_SEQ_GEN")
     @Column(name = "id")
     private Long id;
 
