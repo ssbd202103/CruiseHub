@@ -142,6 +142,45 @@ create table moderators
 );
 
 
+CREATE TABLE ratings
+(
+    id bigint NOT NULL,
+    account_id bigint NOT NULL,
+    cruise_id bigint NOT NULL,
+    rating bigint NOT NULL,
+
+    CONSTRAINT ratings_primary_key_constraint PRIMARY KEY (id),
+
+    CONSTRAINT ratings_account_id_fk_constraint FOREIGN KEY (account_id) REFERENCES accounts (id),
+    CONSTRAINT ratings_cruise_id_fk_constraint FOREIGN KEY (cruise_id) REFERENCES cruises (id),
+);
+
+
+CREATE TABLE comments
+(
+    id bigint NOT NULL,
+    account_id bigint NOT NULL,
+    cruise_id bigint NOT NULL,
+    comment character varying NOT NULL,
+
+    CONSTRAINT comments_primary_key_constraint PRIMARY KEY (id),
+    CONSTRAINT comments_account_id_fk_constraint FOREIGN KEY (account_id) REFERENCES accounts (id),
+    CONSTRAINT comments_cruise_id_fk_constraint FOREIGN KEY (cruise_id) REFERENCES cruises (id)
+);
+
+
+CREATE TABLE positionings
+(
+    id bigint NOT NULL,
+    type boolean NOT NULL,
+    cruises_group_id bigint NOT NULL,
+    end_date timestamp NOT NULL,
+
+    CONSTRAINT positionings_primary_key_constraint PRIMARY KEY (id),
+
+    CONSTRAINT positionings_cruises_group_id_fk_constraint FOREIGN KEY (cruises_group_id) REFERENCES cruises_groups (id)
+);
+
 
 CREATE VIEW glassfish_auth_view AS
 SELECT accounts.login, accounts.password_hash, access_levels.access_level
@@ -167,6 +206,12 @@ ALTER TABLE clients
     OWNER TO ssbd03admin;
 ALTER TABLE moderators
     OWNER TO ssbd03admin;
+ALTER TABLE ratings
+    OWNER to ssbd03admin;
+ALTER TABLE comments
+    OWNER to ssbd03admin;
+ALTER TABLE positionings
+    OWNER to ssbd03admin;
 ALTER VIEW glassfish_auth_view OWNER TO ssbd03admin;
 
 GRANT SELECT, INSERT, UPDATE, DELETE
