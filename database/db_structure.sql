@@ -153,6 +153,50 @@ create table moderators
     CONSTRAINT moderators_altered_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id)
 );
 
+create table companies
+(
+    id bigint not null,
+    name varchar not null,
+    address varchar not null,
+    phone_number varchar not null,
+    nip bigint not null,
+    owner varchar not null,
+    worker_id bigint,                   -- FOREIGN KEY
+
+
+ CONSTRAINT companies_id_pk_constraint PRIMARY KEY (id)
+);
+
+
+create table cruises_groups
+(
+    id bigint not null,
+    company_id bigint not null,         -- FOREIGN KEY
+    name varchar not null,
+    number_of_seats bigint not null,
+    price numeric not null,
+
+	CONSTRAINT cruises_groups_id_pk_constraint PRIMARY KEY (id),
+    CONSTRAINT cruises_groups_companies_fk FOREIGN KEY (company_id) REFERENCES companies (id)
+);
+
+
+create table cruises
+(
+    id bigint not null,
+    start_date timestamp not null,
+    end_date timestamp,
+    active boolean not null,
+    description varchar,
+    start_place varchar,
+    cruises_groups_id bigint not null,  -- FOREIGN KEY
+    attractions bigint,                 -- FOREIGN KEY
+
+	CONSTRAINT cruises_id_pk_constraint PRIMARY KEY (id),
+	CONSTRAINT cruises_atractions_fk FOREIGN KEY (attractions) REFERENCES atractions (id),
+    CONSTRAINT cruises_cruises_groups_fk FOREIGN KEY (cruises_groups_id) REFERENCES cruises_groups (id)
+);
+
 CREATE VIEW glassfish_auth_view AS
 SELECT accounts.login, accounts.password_hash, access_levels.access_level
 FROM accounts
@@ -181,6 +225,13 @@ ALTER VIEW glassfish_auth_view OWNER TO ssbd03admin;
 
 
 -- Table permissions --
+ALTER TABLE cruises_groups
+    OWNER to ssbd03admin;
+ALTER TABLE companies
+    OWNER to ssbd03admin;
+ALTER TABLE cruises
+    OWNER to ssbd03admin;
+
 GRANT SELECT, INSERT, UPDATE, DELETE
     ON access_levels TO ssbd03mok;
 
