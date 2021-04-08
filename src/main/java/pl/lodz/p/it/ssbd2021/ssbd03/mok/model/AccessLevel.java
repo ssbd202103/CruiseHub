@@ -6,9 +6,10 @@ import javax.persistence.*;
 @DiscriminatorColumn(name = "access_level", discriminatorType = DiscriminatorType.STRING)
 @Entity(name = "access_levels")
 public abstract class AccessLevel {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "ACCESSLEVEL_SEQ_GEN", sequenceName = "accesslevel_id_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="ACCESSLEVEL_SEQ_GEN")
+    @Column(name = "id")
     private Long id;
 
     private boolean active;

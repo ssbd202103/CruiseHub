@@ -11,7 +11,9 @@ import java.util.List;
 @Entity(name = "accounts")
 public class Account {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "ACCOUNT_SEQ_GEN", sequenceName = "account_id_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="ACCOUNT_SEQ_GEN")
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "first_name", nullable = false)
