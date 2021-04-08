@@ -13,8 +13,14 @@ import javax.validation.constraints.NotNull;
 
 @Entity(name = "clients")
 @DiscriminatorValue("Client")
-public class Client extends AccessLevel {
+public class Client extends EntityDetails implements AccessLevel {
+    @Id
+    private Long id;
+
+    private boolean active;
+
     @Getter
+    @Setter
     @NotNull
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name = "home_address_id")
@@ -26,18 +32,29 @@ public class Client extends AccessLevel {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Getter
-    @NotNull
-    @Embedded
-    private EntityDetails entityDetails;
+    @Override
+    public Long getId() {
+        return id;
+    }
 
-    @Getter
-    @Setter
-    @Version
-    private Long version;
+    @Override
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Override
+    public boolean isActive() {
+        return active;
+    }
+
+    @Override
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 
     @Override
     public AccessLevelType getAccessLevelType() {
         return AccessLevelType.CLIENT;
     }
+
 }

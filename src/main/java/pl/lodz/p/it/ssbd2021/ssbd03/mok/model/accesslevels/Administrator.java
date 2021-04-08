@@ -1,34 +1,44 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.model.accesslevels;
 
-import lombok.Getter;
-import lombok.Setter;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.model.AccessLevel;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.model.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.model.EntityDetails;
 
 import javax.persistence.DiscriminatorValue;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.Version;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Id;
 
 @Entity(name = "administrators")
 @DiscriminatorValue("Administrator")
-public class Administrator extends AccessLevel {
+public class Administrator extends EntityDetails implements AccessLevel {
 
-    @Getter
-    @NotNull
-    @Embedded
-    private EntityDetails entityDetails;
+    @Id
+    private Long id;
 
-    @Getter
-    @Setter
-    @Version
-    private Long version;
+    private boolean active;
 
+    @Override
+    public boolean isActive() {
+        return active;
+    }
+
+    @Override
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 
     @Override
     public AccessLevelType getAccessLevelType() {
         return AccessLevelType.ADMINISTRATOR;
+    }
+
+    @Override
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Override
+    public Long getId() {
+        return id;
     }
 }

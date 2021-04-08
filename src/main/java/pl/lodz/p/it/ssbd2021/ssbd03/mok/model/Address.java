@@ -8,11 +8,10 @@ import validators.PostCode;
 import validators.Street;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 @Entity(name = "addresses")
-public class Address {
+public class Address extends EntityDetails {
     @Getter
     @Id
     @SequenceGenerator(name = "ADDRESS_SEQ_GEN", sequenceName = "address_id_seq")
@@ -47,13 +46,4 @@ public class Address {
     @Country
     private String country;
 
-    @Getter
-    @NotNull
-    @Embedded
-    private EntityDetails entityDetails;
-
-    @Getter
-    @Setter
-    @Version
-    private Long version;
 }

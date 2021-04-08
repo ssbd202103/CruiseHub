@@ -7,14 +7,13 @@ import validators.Name;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "accounts")
-public class Account {
+public class Account extends EntityDetails {
     @Getter
     @Id
     @SequenceGenerator(name = "ACCOUNT_SEQ_GEN", sequenceName = "account_id_seq")
@@ -89,17 +88,12 @@ public class Account {
     private String lastCorrectAuthenticationLogicalAddress;
 
     @Getter
-    @NotNull
-    @Embedded
-    private EntityDetails entityDetails;
-
-    @Getter
-    @Setter
-    @Version
-    private Long version;
-
-    @Getter
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name = "account_id")
     private final List<AccessLevel> accessLevels = new ArrayList<>();
+
+    public void addAccessLevel(AccessLevel accessLevel) {
+        accessLevels.add(accessLevel);
+    }
+
 }
