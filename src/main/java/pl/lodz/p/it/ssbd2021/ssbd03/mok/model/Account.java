@@ -1,8 +1,12 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.model;
 
 import lombok.Data;
+import validators.Login;
+import validators.Name;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,18 +20,23 @@ public class Account {
     @Column(name = "id")
     private Long id;
 
+    @Name
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
+    @Name
     @Column(name = "second_name", nullable = false)
     private String secondName;
 
+    @Login
     @Column(name = "login", nullable = false)
     private String login;
 
+    @Email
     @Column(name = "email", nullable = false)
     private String email;
 
+    @Size(min = 8, max = 64)
     @Column(name = "password_hash", nullable = false)
     private String password;
 
