@@ -78,6 +78,8 @@ create table business_workers
     altered_by_id        bigint    not null, -- FOREIGN KEY
     alter_type           varchar   not null, -- FOREIGN KEY
 
+    version              bigint    not null,
+
     CONSTRAINT business_workers_id_pk_constraint PRIMARY KEY (id),
     CONSTRAINT business_workers_id_fk_constraint FOREIGN KEY (id) REFERENCES access_levels (id),
 
