@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.TableGenerator;
+import javax.persistence.*;
 
 @Entity(name = "addresses")
 public class Address  {
@@ -31,4 +32,7 @@ public class Address  {
 
     @Embedded
     private EntityDetails entityDetails;
+
+    @Version
+    private Long version;
 }

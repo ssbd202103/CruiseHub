@@ -29,6 +29,8 @@ create table accounts
 
     alter_type                                    varchar   not null, -- FOREIGN KEY
 
+    version                                       bigint    not null,
+
     CONSTRAINT accounts_primary_key_constraint PRIMARY KEY (id),
 
     CONSTRAINT accounts_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
@@ -58,6 +60,8 @@ create table administrators
     altered_by_id        bigint    not null, -- FOREIGN KEY
     alter_type           varchar   not null, -- FOREIGN KEY
 
+    version              bigint    not null,
+
     CONSTRAINT administrators_id_pk_constraint PRIMARY KEY (id),
     CONSTRAINT administrators_id_fk_constraint FOREIGN KEY (id) REFERENCES access_levels (id),
 
@@ -75,6 +79,8 @@ create table business_workers
     created_by_id        bigint    not null, -- FOREIGN KEY
     altered_by_id        bigint    not null, -- FOREIGN KEY
     alter_type           varchar   not null, -- FOREIGN KEY
+
+    version              bigint    not null,
 
     CONSTRAINT business_workers_id_pk_constraint PRIMARY KEY (id),
     CONSTRAINT business_workers_id_fk_constraint FOREIGN KEY (id) REFERENCES access_levels (id),
@@ -98,6 +104,8 @@ create table addresses
     altered_by_id        bigint    not null, -- FOREIGN KEY
     alter_type           varchar   not null, -- FOREIGN KEY
 
+    version              bigint    not null,
+
     CONSTRAINT address_primary_key_constraint PRIMARY KEY (id),
 
     CONSTRAINT addresses_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
@@ -116,6 +124,8 @@ create table clients
     altered_by_id        bigint    not null, -- FOREIGN KEY
     alter_type           varchar   not null, -- FOREIGN KEY
 
+    version              bigint    not null,
+
     CONSTRAINT clients_id_pk_constraint PRIMARY KEY (id),
     CONSTRAINT clients_id_fk_constraint FOREIGN KEY (id) REFERENCES access_levels (id),
     CONSTRAINT clients_home_address_id_fk_constraint FOREIGN KEY (home_address_id) REFERENCES addresses (id),
@@ -133,6 +143,8 @@ create table moderators
     created_by_id        bigint    not null, -- FOREIGN KEY
     altered_by_id        bigint    not null, -- FOREIGN KEY
     alter_type           varchar   not null, -- FOREIGN KEY
+
+    version              bigint    not null,
 
     CONSTRAINT moderators_id_pk_constraint PRIMARY KEY (id),
     CONSTRAINT moderators_id_fk_constraint FOREIGN KEY (id) REFERENCES access_levels (id),
