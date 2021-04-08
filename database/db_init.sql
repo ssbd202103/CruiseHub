@@ -122,3 +122,17 @@ values (-1,-1,'Przygoda morska', 24, 52);
 insert into cruises(id, start_date, end_date, active, description, start_place, cruises_groups_id, attractions)
 values (-1,now(),now(),true,'opis','miejsce poczatku', -1, -1)
 --cruises end
+--
+--
+--
+--atractions start
+insert into atractions(id,name,description,price,number_of_seats)
+values (-1,'atrakcja','opis atrakcji',123,20);
+--atractions end
+--
+--
+--
+--reservation start
+insert into reservations(id,client_id,number_of_seats,atraction_id,cruise_id)
+values (-1,-2,2,-1,-1)
+--reservation end
