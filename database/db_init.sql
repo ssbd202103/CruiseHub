@@ -100,7 +100,7 @@ values (-3, '123456789', -2, now(), now(), 'INSERT', -3, -3, 0);
 -- moderators start
 insert into moderators(id, creation_date_time, last_alter_date_time, alter_type, created_by_id,
                        altered_by_id, version)
-values (-5, now(), now(), 'INSERT', -4, -4, 0)
+values (-5, now(), now(), 'INSERT', -4, -4, 0);
 -- moderators end
 --
 --
@@ -134,5 +134,32 @@ values (-1,'atrakcja','opis atrakcji',123,20);
 --
 --reservation start
 insert into reservations(id,client_id,number_of_seats,atraction_id,cruise_id)
-values (-1,-2,2,-1,-1)
+values (-1,-2,2,-1,-1);
 --reservation end
+--
+--
+--
+--ratings start
+insert into ratings(id, account_id, cruise_id, rating)
+values (-1, -2, -1, 3);
+
+insert into ratings(id, account_id, cruise_id, rating)
+values (-2, -3, -1, 5);
+--ratings end
+--
+--
+--
+--comments start
+insert into comments (id, account_id, cruise_id, comment)
+values (-1, -2, -1, "Not bad. Lorem ipsum dolor sit amet is weird");
+
+insert into comments (id, account_id, cruise_id, comment)
+values (-2, -3, -1, "It's one of the beatufiul travel in my life");
+--comments end
+--
+--
+--
+--positionings start
+insert into positionings (id, type, cruises_group_id, end_date)
+values (-1, true, -1, DATEADD(day, 30, now()));
+--positionings end
