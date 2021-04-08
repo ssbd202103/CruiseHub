@@ -111,24 +111,26 @@ values (-1,'FirmaJez','Zakopane','777876542',232332323220, 'Jezy Musial', -4);
 --
 --
 --
+--atractions start
+insert into atractions(id,name,description,price,number_of_seats)
+values (-1,'atrakcja','opis atrakcji',123,20);
+--atractions end
+
+--
+--
+--
 --cruises_groups start
 insert into cruises_groups(id, company_id, name, number_of_seats, price)
 values (-1,-1,'Przygoda morska', 24, 52);
 --cruises_groups end
+
 --
 --
 --
 --cruises start
 insert into cruises(id, start_date, end_date, active, description, start_place, cruises_groups_id, attractions)
-values (-1,now(),now(),true,'opis','miejsce poczatku', -1, -1)
+values (-1,now(),now(),true,'opis','miejsce poczatku', -1, -1);
 --cruises end
---
---
---
---atractions start
-insert into atractions(id,name,description,price,number_of_seats)
-values (-1,'atrakcja','opis atrakcji',123,20);
---atractions end
 --
 --
 --
@@ -151,15 +153,15 @@ values (-2, -3, -1, 5);
 --
 --comments start
 insert into comments (id, account_id, cruise_id, comment)
-values (-1, -2, -1, "Not bad. Lorem ipsum dolor sit amet is weird");
+values (-1, -2, -1, 'Not bad. Lorem ipsum dolor sit amet is weird');
 
 insert into comments (id, account_id, cruise_id, comment)
-values (-2, -3, -1, "It's one of the beatufiul travel in my life");
+values (-2, -3, -1, 'It is one of the beatufiul travel in my life');
 --comments end
 --
 --
 --
 --positionings start
 insert into positionings (id, type, cruises_group_id, end_date)
-values (-1, true, -1, DATEADD(day, 30, now()));
+values (-1, true, -1, now());
 --positionings end
