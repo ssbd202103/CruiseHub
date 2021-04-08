@@ -68,7 +68,7 @@ public class Account {
     @Version
     private Long version;
 
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name = "account_id")
     private List<AccessLevel> accessLevels = new ArrayList<>();
 }

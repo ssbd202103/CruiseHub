@@ -21,13 +21,13 @@ public class EntityDetails {
 
     @Getter
     @NotNull
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "created_by_id", nullable = false, updatable = false)
     private Account createdBy;
 
     @Getter
     @Setter
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "altered_by_id")
     private Account alteredBy;
 
