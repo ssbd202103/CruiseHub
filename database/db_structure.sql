@@ -37,6 +37,10 @@ create table accounts
     CONSTRAINT accounts_altered_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id)
 );
 
+create sequence account_id_seq
+    START WITH 1
+    INCREMENT BY 1;
+
 create table access_levels
 (
     id           bigint  not null,
@@ -48,6 +52,9 @@ create table access_levels
     CONSTRAINT access_levels_account_id_fk_constraint FOREIGN KEY (account_id) REFERENCES accounts (id)
 );
 
+create sequence accesslevel_id_seq
+    START WITH 1
+    INCREMENT BY 1;
 
 
 create table administrators
@@ -109,6 +116,10 @@ create table addresses
     CONSTRAINT addresses_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
     CONSTRAINT addresses_altered_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id)
 );
+
+create sequence address_id_seq
+    START WITH 1
+    INCREMENTED BY 1;
 
 create table clients
 (
@@ -322,5 +333,14 @@ GRANT SELECT, INSERT, UPDATE, DELETE
 
 GRANT SELECT, INSERT, UPDATE, DELETE
     ON moderators TO ssbd03mok;
+
+GRANT SELECT, UPDATE 
+    ON SEQUENCE account_id_seq TO ssbd03mok;
+
+GRANT SELECT, UPDATE 
+    ON SEQUENCE accesslevel_id_seq TO ssbd03mok;
+
+GRANT SELECT, UPDATE 
+    ON SEQUENCE address_id_seq TO ssbd03mok;
 
 GRANT SELECT ON glassfish_auth_view TO ssbd03glassfish;
