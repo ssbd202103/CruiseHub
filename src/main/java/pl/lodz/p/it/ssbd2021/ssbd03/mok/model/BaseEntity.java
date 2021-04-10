@@ -7,8 +7,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-@Embeddable
-public class EntityDetails {
+@MappedSuperclass
+public class BaseEntity {
     @Getter
     @NotNull
     @Column(name = "creation_date_time", nullable = false, updatable = false)
@@ -20,6 +20,7 @@ public class EntityDetails {
     private LocalDateTime lastAlterDateTime;
 
     @Getter
+    @Setter
     @NotNull
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "created_by_id", nullable = false, updatable = false)
@@ -37,8 +38,14 @@ public class EntityDetails {
     @Column(name = "alter_type", nullable = false)
     private AlterType alterType;
 
+    @Getter
+    @Setter
+    @Version
+    private Long version;
+
     @PrePersist
     private void prePersist() {
+        alterType = AlterType.CREATE;
         creationDateTime = LocalDateTime.now();
     }
 }
