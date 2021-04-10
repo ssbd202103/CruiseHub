@@ -8,6 +8,7 @@ import javax.persistence.PersistenceContext;
 
 @Stateless
 public class ClientFacade extends AbstractFacade<Client> {
+
     @PersistenceContext(unitName = "ssbd03mokPU")
     private EntityManager em;
 

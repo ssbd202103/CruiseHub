@@ -8,6 +8,7 @@ import javax.persistence.PersistenceContext;
 
 @Stateless
 public class AdministratorFacade extends AbstractFacade<Administrator> {
+
     @PersistenceContext(unitName = "ssbd03mokPU")
     private EntityManager em;
 
