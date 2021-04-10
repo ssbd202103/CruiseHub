@@ -15,7 +15,7 @@ import javax.validation.constraints.Positive;
 public class Address {
     @Getter
     @Id
-    @SequenceGenerator(name = "ADDRESS_SEQ_GEN", sequenceName = "address_id_seq")
+    @SequenceGenerator(name = "ADDRESS_SEQ_GEN", sequenceName = "address_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ADDRESS_SEQ_GEN")
     @Column(name = "id")
     private Long id;
