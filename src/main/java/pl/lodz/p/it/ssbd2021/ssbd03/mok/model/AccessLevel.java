@@ -11,7 +11,7 @@ import javax.persistence.*;
 public abstract class AccessLevel {
     @Getter
     @Id
-    @SequenceGenerator(name = "ACCESSLEVEL_SEQ_GEN", sequenceName = "accesslevel_id_seq")
+    @SequenceGenerator(name = "ACCESSLEVEL_SEQ_GEN", sequenceName = "accesslevel_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ACCESSLEVEL_SEQ_GEN")
     @Column(name = "id")
     private Long id;
