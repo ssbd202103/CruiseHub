@@ -155,16 +155,15 @@ create table moderators
     CONSTRAINT moderators_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
     CONSTRAINT moderators_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id)
 );
-------------------------mow modul--------------------------
-create table companies
+------------------------mow module--------------------------
+create table cruise_addresses
 (
-    id                  bigint      not null,
-    name                varchar     not null,
-    address             varchar     not null,
-    phone_number        varchar     not null,
-    nip                 bigint      not null,
-    owner               varchar     not null,
-    worker_id           bigint,                -- FOREIGN KEY
+    id                   bigint    not null,
+    street               varchar   not null,
+    street_number        bigint,
+    harbor_name          varchar,
+    city                 varchar   not null,
+    country              varchar   not null,
 
     creation_date_time   timestamp not null,
     last_alter_date_time timestamp not null,
@@ -174,7 +173,59 @@ create table companies
 
     version              bigint    not null,
 
+    CONSTRAINT cruise_addresses_primary_key_constraint PRIMARY KEY (id),
+
+    CONSTRAINT cruise_addresses_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
+    CONSTRAINT cruise_addresses_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id)
+);
+
+create table cruise_pictures
+ (
+    id                   bigint    not null,
+    imgName              varchar,
+    img                  bytea,                 --nullable only for implementation time.
+
+    creation_date_time   timestamp not null,
+    last_alter_date_time timestamp not null,
+    created_by_id        bigint    not null, -- FOREIGN KEY
+    altered_by_id        bigint    not null, -- FOREIGN KEY
+    alter_type           varchar   not null,
+
+    version              bigint    not null,
+
+    CONSTRAINT cruise_pictures_primary_key_constraint PRIMARY KEY (id),
+
+    CONSTRAINT cruise_pictures_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
+    CONSTRAINT cruise_pictures_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id)
+ );
+
+create table commercial_type
+ (
+    id                   bigint    not null,
+    commercial_type      varchar   not null,
+
+    CONSTRAINT commercial_type_primary_key_constraint PRIMARY KEY (id)
+ );
+create table companies
+(
+    id                  bigint      not null,
+    name                varchar     not null,
+    address_by_id       bigint      not null,  -- FOREIGN KEY
+    phone_number        varchar     not null,
+    nip                 bigint      not null,
+    worker_id           bigint,                -- FOREIGN KEY
+
+    creation_date_time   timestamp  not null,
+    last_alter_date_time timestamp  not null,
+    created_by_id        bigint     not null, -- FOREIGN KEY
+    altered_by_id        bigint     not null, -- FOREIGN KEY
+    alter_type           varchar    not null,
+
+    version              bigint     not null,
+
     CONSTRAINT companies_id_pk_constraint PRIMARY KEY (id),
+    CONSTRAINT companies_address_by_id_fk_constraint FOREIGN KEY (address_by_id) REFERENCES addresses (id),
+    CONSTRAINT companies_worker_id_fk_constraint FOREIGN KEY (worker_id) REFERENCES business_workers (id),
 
     CONSTRAINT companies_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
     CONSTRAINT companies_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id)
@@ -185,16 +236,16 @@ create table attractions
     id                   bigint     not null,
     name                 varchar    not null,
     description          varchar,
-    price                numeric,
+    price                numeric    not null,
     number_of_seats      bigint     not null,
 
-    creation_date_time   timestamp not null,
-    last_alter_date_time timestamp not null,
-    created_by_id        bigint    not null, -- FOREIGN KEY
-    altered_by_id        bigint    not null, -- FOREIGN KEY
-    alter_type           varchar   not null,
+    creation_date_time   timestamp  not null,
+    last_alter_date_time timestamp  not null,
+    created_by_id        bigint     not null, -- FOREIGN KEY
+    altered_by_id        bigint     not null, -- FOREIGN KEY
+    alter_type           varchar    not null,
 
-    version              bigint    not null,
+    version              bigint     not null,
 
     CONSTRAINT attractions_id_pk_constraint PRIMARY KEY (id),
 
@@ -209,17 +260,21 @@ create table cruises_groups
     name                varchar     not null,
     number_of_seats     bigint      not null,
     price               numeric     not null,
+    start_address_id    bigint      not null,  -- FOREIGN KEY
+    cruise_pictures_id  bigint,                -- FOREIGN KEY
 
-    creation_date_time   timestamp not null,
-    last_alter_date_time timestamp not null,
-    created_by_id        bigint    not null, -- FOREIGN KEY
-    altered_by_id        bigint    not null, -- FOREIGN KEY
-    alter_type           varchar   not null,
+    creation_date_time   timestamp  not null,
+    last_alter_date_time timestamp  not null,
+    created_by_id        bigint     not null, -- FOREIGN KEY
+    altered_by_id        bigint     not null, -- FOREIGN KEY
+    alter_type           varchar    not null,
 
-    version              bigint    not null,
+    version              bigint     not null,
 
 	CONSTRAINT cruises_groups_id_pk_constraint PRIMARY KEY (id),
     CONSTRAINT cruises_groups_companies_fk FOREIGN KEY (company_id) REFERENCES companies (id),
+    CONSTRAINT cruises_start_address_id_fk_constraint FOREIGN KEY (start_address_id) REFERENCES cruise_addresses (id),
+    CONSTRAINT cruises_cruise_pictures_id_fk_constraint FOREIGN KEY (cruise_pictures_id) REFERENCES cruise_pictures (id),
 
     CONSTRAINT cruises_groups_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
     CONSTRAINT cruises_groups_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id)
@@ -232,17 +287,16 @@ create table cruises
     end_date            timestamp,
     active              boolean     not null,
     description         varchar,
-    start_place         varchar,
     cruises_groups_id   bigint      not null,  -- FOREIGN KEY
     attractions         bigint,                -- FOREIGN KEY
 
-    creation_date_time   timestamp not null,
-    last_alter_date_time timestamp not null,
-    created_by_id        bigint    not null, -- FOREIGN KEY
-    altered_by_id        bigint    not null, -- FOREIGN KEY
-    alter_type           varchar   not null,
+    creation_date_time   timestamp  not null,
+    last_alter_date_time timestamp  not null,
+    created_by_id        bigint     not null, -- FOREIGN KEY
+    altered_by_id        bigint     not null, -- FOREIGN KEY
+    alter_type           varchar    not null,
 
-    version              bigint    not null,
+    version              bigint     not null,
 
 	CONSTRAINT cruises_id_pk_constraint PRIMARY KEY (id),
 	CONSTRAINT cruises_attractions_fk FOREIGN KEY (attractions) REFERENCES attractions (id),
@@ -257,7 +311,7 @@ create table reservations
     id                   bigint    not null,
     client_id            bigint    not null, --FOREIGN KEY
     number_of_seats      bigint    not null,
-    attractions_id       bigint    not null, --FOREIGN KEY
+    attractions_id       bigint,             --FOREIGN KEY
     cruise_id            bigint    not null, --FOREIGN KEY
 
     creation_date_time   timestamp not null,
@@ -279,18 +333,18 @@ create table reservations
 
 create table ratings
 (
-    id                  bigint      not null,
-    account_id          bigint      not null,
-    cruise_id           bigint      not null,
-    rating              bigint      not null,
+    id                   bigint     not null,
+    account_id           bigint     not null, -- FOREIGN KEY
+    cruise_id            bigint     not null, -- FOREIGN KEY
+    rating               bigint     not null,
 
-    creation_date_time   timestamp not null,
-    last_alter_date_time timestamp not null,
-    created_by_id        bigint    not null, -- FOREIGN KEY
-    altered_by_id        bigint    not null, -- FOREIGN KEY
-    alter_type           varchar   not null,
+    creation_date_time   timestamp  not null,
+    last_alter_date_time timestamp  not null,
+    created_by_id        bigint     not null, -- FOREIGN KEY
+    altered_by_id        bigint     not null, -- FOREIGN KEY
+    alter_type           varchar    not null,
 
-    version              bigint    not null,
+    version              bigint     not null,
 
     CONSTRAINT ratings_primary_key_constraint PRIMARY KEY (id),
 
@@ -304,8 +358,8 @@ create table ratings
 create table comments
 (
     id                  bigint      not null,
-    account_id          bigint      not null,
-    cruise_id           bigint      not null,
+    account_id          bigint      not null, -- FOREIGN KEY
+    cruise_id           bigint      not null, -- FOREIGN KEY
     comment             varchar     not null,
 
     creation_date_time   timestamp not null,
@@ -325,12 +379,13 @@ create table comments
 );
 
 
-CREATE TABLE positioning
+create table commercials
 (
-    id                   bigint NOT NULL,
-    isPremium            boolean NOT NULL,
-    cruises_group_id     bigint NOT NULL,
-    end_date             timestamp NOT NULL,
+    id                   bigint     not null,
+    commercial_type      bigint     not null, -- FOREIGN KEY
+    cruises_group_id     bigint     not null, -- FOREIGN KEY
+    start_date           timestamp  not null,
+    end_date             timestamp  not null,
 
     creation_date_time   timestamp not null,
     last_alter_date_time timestamp not null,
@@ -340,12 +395,14 @@ CREATE TABLE positioning
 
     version              bigint    not null,
 
-    CONSTRAINT positioning_primary_key_constraint PRIMARY KEY (id),
-    CONSTRAINT positioning_cruises_group_id_fk_constraint FOREIGN KEY (cruises_group_id) REFERENCES cruises_groups (id),
+    CONSTRAINT commercials_primary_key_constraint PRIMARY KEY (id),
+    CONSTRAINT commercials_cruises_group_id_fk_constraint FOREIGN KEY (cruises_group_id) REFERENCES cruises_groups (id),
+    CONSTRAINT commercials_commercial_type_fk_constraint FOREIGN KEY (commercial_type) REFERENCES commercial_type  (id),
 
-    CONSTRAINT positioning_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
-    CONSTRAINT positioning_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id)
+    CONSTRAINT commercials_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
+    CONSTRAINT commercials_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id)
 );
+
 
 
 CREATE VIEW glassfish_auth_view AS
@@ -380,7 +437,13 @@ ALTER TABLE ratings
     OWNER to ssbd03admin;
 ALTER TABLE comments
     OWNER to ssbd03admin;
-ALTER TABLE positionings
+ALTER TABLE commercials
+    OWNER to ssbd03admin;
+ALTER TABLE cruise_addresses
+    OWNER to ssbd03admin;
+ALTER TABLE cruise_pictures
+    OWNER to ssbd03admin;
+ALTER TABLE commercial_type
     OWNER to ssbd03admin;
 ALTER VIEW glassfish_auth_view OWNER TO ssbd03admin;
 
