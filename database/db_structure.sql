@@ -328,7 +328,7 @@ create table comments
 CREATE TABLE positioning
 (
     id                   bigint NOT NULL,
-    type                 boolean NOT NULL,
+    isPremium            boolean NOT NULL,
     cruises_group_id     bigint NOT NULL,
     end_date             timestamp NOT NULL,
 
