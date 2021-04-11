@@ -23,7 +23,7 @@ public class Client extends AccessLevel {
     @Getter
     @Setter
     @PhoneNumber
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
     @Override
@@ -34,8 +34,9 @@ public class Client extends AccessLevel {
     public Client() {
     }
 
-    public Client(Address homeAddress, String phoneNumber) {
+    public Client(Address homeAddress, String phoneNumber, boolean enabled) {
         this.homeAddress = homeAddress;
         this.phoneNumber = phoneNumber;
+        this.enabled = enabled;
     }
 }

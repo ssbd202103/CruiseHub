@@ -19,7 +19,7 @@ public abstract class AccessLevel extends BaseEntity {
 
     @Getter
     @Setter
-    private boolean enabled;
+    protected boolean enabled;
 
     public abstract AccessLevelType getAccessLevelType();
 

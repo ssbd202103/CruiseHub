@@ -17,7 +17,7 @@ public class BusinessWorker extends AccessLevel {
     @Getter
     @Setter
     @PhoneNumber
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
 
@@ -29,7 +29,8 @@ public class BusinessWorker extends AccessLevel {
     public BusinessWorker() {
     }
 
-    public BusinessWorker(String phoneNumber) {
+    public BusinessWorker(String phoneNumber, boolean enabled) {
         this.phoneNumber = phoneNumber;
+        this.enabled = enabled;
     }
 }

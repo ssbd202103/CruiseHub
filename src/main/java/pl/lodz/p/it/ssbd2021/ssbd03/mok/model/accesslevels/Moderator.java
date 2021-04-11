@@ -14,4 +14,11 @@ public class Moderator extends AccessLevel {
     public AccessLevelType getAccessLevelType() {
         return AccessLevelType.MODERATOR;
     }
+
+    public Moderator() {
+    }
+
+    public Moderator(boolean enabled) {
+        this.enabled = enabled;
+    }
 }

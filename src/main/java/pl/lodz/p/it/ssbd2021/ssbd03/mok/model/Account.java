@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.model;
 
+import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import validators.Login;
@@ -71,8 +72,9 @@ public class Account extends BaseEntity {
 
     @Getter
     @Setter
+    @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "language_type", nullable = false)
+    @Column(name = "language_type")
     private LanguageType languageType;
 
     @Getter
@@ -90,6 +92,10 @@ public class Account extends BaseEntity {
     @JoinColumn(name = "account_id")
     private final Set<AccessLevel> accessLevels = new HashSet<>();
 
+    public void setAccessLevel(AccessLevel accessLevel) {
+        accessLevels.add(accessLevel);
+    }
+
     public Account() {
     }
 
@@ -104,10 +110,11 @@ public class Account extends BaseEntity {
         this.active = active;
         this.languageType = languageType;
         this.setCreatedBy(this); // Account is set as self-owner by default
+        this.setAlteredBy(this);
     }
 
-    public Account(String firstName, String secondName, String login, String email,
-                   String passwordHash, boolean confirmed, boolean active, LanguageType languageType, Account createdBy) {
+    public Account(String firstName, String secondName, String login, String email, String passwordHash,
+                   boolean confirmed, boolean active, LanguageType languageType, Account createdBy, Account alteredBy) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.login = login;
@@ -117,5 +124,6 @@ public class Account extends BaseEntity {
         this.active = active;
         this.languageType = languageType;
         this.setCreatedBy(createdBy);
+        this.setAlteredBy(alteredBy);
     }
 }
