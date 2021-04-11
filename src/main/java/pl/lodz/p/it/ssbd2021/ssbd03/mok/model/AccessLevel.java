@@ -12,8 +12,8 @@ import java.util.Objects;
 public abstract class AccessLevel extends BaseEntity {
     @Getter
     @Id
-    @SequenceGenerator(name = "ACCESSLEVEL_SEQ_GEN", sequenceName = "accesslevel_id_seq", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ACCESSLEVEL_SEQ_GEN")
+    @SequenceGenerator(name = "ACCESS_LEVEL_SEQ_GEN", sequenceName = "access_level_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ACCESS_LEVEL_SEQ_GEN")
     @Column(name = "id")
     private Long id;
 

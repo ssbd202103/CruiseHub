@@ -8,20 +8,19 @@ create table accounts
     password_hash                                 varchar   not null, -- hash sha256
     confirmed                                     boolean   not null,
     active                                        boolean   not null,
+
     last_incorrect_authentication_date_time       timestamp,
     last_incorrect_authentication_logical_address varchar,
-
     last_correct_authentication_date_time         timestamp,
     last_correct_authentication_logical_address   varchar,
 
-    language_type                                 varchar   not null, -- FOREIGN KEY
+    language_type                                 varchar   not null,
 
     creation_date_time                            timestamp not null,
     last_alter_date_time                          timestamp not null,
     created_by_id                                 bigint    not null, -- FOREIGN KEY
     altered_by_id                                 bigint    not null, -- FOREIGN KEY
     alter_type                                    varchar   not null,
-
     version                                       bigint    not null,
 
     CONSTRAINT accounts_primary_key_constraint PRIMARY KEY (id),
@@ -36,56 +35,44 @@ create sequence account_id_seq
 
 create table access_levels
 (
-    id           bigint  not null,
-    access_level varchar not null,
-    account_id   bigint  not null,
-    active       boolean not null,
+    id                   bigint    not null,
+    access_level         varchar   not null,
+    account_id           bigint    not null, -- FOREIGN KEY
+    enabled              boolean   not null,
+
+    creation_date_time   timestamp not null,
+    last_alter_date_time timestamp not null,
+    created_by_id        bigint    not null, -- FOREIGN KEY
+    altered_by_id        bigint    not null, -- FOREIGN KEY
+    alter_type           varchar   not null,
+    version              bigint    not null,
 
     CONSTRAINT access_levels_id_primary_key_constraint PRIMARY KEY (id),
-    CONSTRAINT access_levels_account_id_fk_constraint FOREIGN KEY (account_id) REFERENCES accounts (id)
+    CONSTRAINT access_levels_account_id_fk_constraint FOREIGN KEY (account_id) REFERENCES accounts (id),
+
+    CONSTRAINT access_levels_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
+    CONSTRAINT access_levels_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id)
 );
 
-create sequence accesslevel_id_seq
+create sequence access_level_id_seq
     START WITH 1
     INCREMENT BY 1;
 
 create table administrators
 (
-    id                   bigint    not null, -- should be foreign for access_level
-
-    creation_date_time   timestamp not null,
-    last_alter_date_time timestamp not null,
-    created_by_id        bigint    not null, -- FOREIGN KEY
-    altered_by_id        bigint    not null, -- FOREIGN KEY
-    alter_type           varchar   not null,
-
-    version              bigint    not null,
+    id bigint not null, -- FOREIGN KEY
 
     CONSTRAINT administrators_id_pk_constraint PRIMARY KEY (id),
-    CONSTRAINT administrators_id_fk_constraint FOREIGN KEY (id) REFERENCES access_levels (id),
-
-    CONSTRAINT administrators_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
-    CONSTRAINT administrators_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id)
+    CONSTRAINT administrators_id_fk_constraint FOREIGN KEY (id) REFERENCES access_levels (id)
 );
 
 create table business_workers
 (
-    id                   bigint    not null,
-    phone_number         varchar,
-
-    creation_date_time   timestamp not null,
-    last_alter_date_time timestamp not null,
-    created_by_id        bigint    not null, -- FOREIGN KEY
-    altered_by_id        bigint    not null, -- FOREIGN KEY
-    alter_type           varchar   not null,
-
-    version              bigint    not null,
+    id           bigint  not null, -- FOREIGN KEY
+    phone_number varchar not null,
 
     CONSTRAINT business_workers_id_pk_constraint PRIMARY KEY (id),
-    CONSTRAINT business_workers_id_fk_constraint FOREIGN KEY (id) REFERENCES access_levels (id),
-
-    CONSTRAINT business_workers_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
-    CONSTRAINT business_workers_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id)
+    CONSTRAINT business_workers_id_fk_constraint FOREIGN KEY (id) REFERENCES access_levels (id)
 );
 
 create table addresses
@@ -102,7 +89,6 @@ create table addresses
     created_by_id        bigint    not null, -- FOREIGN KEY
     altered_by_id        bigint    not null, -- FOREIGN KEY
     alter_type           varchar   not null,
-
     version              bigint    not null,
 
     CONSTRAINT address_primary_key_constraint PRIMARY KEY (id),
@@ -117,43 +103,21 @@ create sequence address_id_seq
 
 create table clients
 (
-    id                   bigint    not null,
-    phone_number         varchar,
-    home_address_id      bigint,             -- FOREIGN KEY
-
-    creation_date_time   timestamp not null,
-    last_alter_date_time timestamp not null,
-    created_by_id        bigint    not null, -- FOREIGN KEY
-    altered_by_id        bigint    not null, -- FOREIGN KEY
-    alter_type           varchar   not null,
-
-    version              bigint    not null,
+    id              bigint  not null, -- FOREIGN KEY
+    phone_number    varchar not null,
+    home_address_id bigint  not null, -- FOREIGN KEY
 
     CONSTRAINT clients_id_pk_constraint PRIMARY KEY (id),
     CONSTRAINT clients_id_fk_constraint FOREIGN KEY (id) REFERENCES access_levels (id),
-    CONSTRAINT clients_home_address_id_fk_constraint FOREIGN KEY (home_address_id) REFERENCES addresses (id),
-
-    CONSTRAINT clients_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
-    CONSTRAINT clients_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id)
+    CONSTRAINT clients_home_address_id_fk_constraint FOREIGN KEY (home_address_id) REFERENCES addresses (id)
 );
 
 create table moderators
 (
-    id                   bigint    not null,
-
-    creation_date_time   timestamp not null,
-    last_alter_date_time timestamp not null,
-    created_by_id        bigint    not null, -- FOREIGN KEY
-    altered_by_id        bigint    not null, -- FOREIGN KEY
-    alter_type           varchar   not null,
-
-    version              bigint    not null,
+    id bigint not null, -- FOREIGN KEY
 
     CONSTRAINT moderators_id_pk_constraint PRIMARY KEY (id),
-    CONSTRAINT moderators_id_fk_constraint FOREIGN KEY (id) REFERENCES access_levels (id),
-
-    CONSTRAINT moderators_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
-    CONSTRAINT moderators_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id)
+    CONSTRAINT moderators_id_fk_constraint FOREIGN KEY (id) REFERENCES access_levels (id)
 );
 ------------------------mow modul--------------------------
 create table companies
@@ -354,7 +318,7 @@ FROM accounts
          JOIN access_levels ON accounts.id = access_levels.account_id
 WHERE accounts.confirmed
   AND accounts.active
-  AND access_levels.active = true;
+  AND access_levels.enabled = true;
 
 
 -- Table owner --
@@ -418,7 +382,7 @@ GRANT SELECT, UPDATE
     ON SEQUENCE account_id_seq TO ssbd03mok;
 
 GRANT SELECT, UPDATE
-    ON SEQUENCE accesslevel_id_seq TO ssbd03mok;
+    ON SEQUENCE access_level_id_seq TO ssbd03mok;
 
 GRANT SELECT, UPDATE
     ON SEQUENCE address_id_seq TO ssbd03mok;
