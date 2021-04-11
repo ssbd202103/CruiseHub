@@ -105,63 +105,71 @@ values (-5, now(), now(), 'INSERT', -4, -4, 0);
 --
 --
 --companies start
-insert into companies(id, name, address, phone_number, NIP, owner, worker_id)
-values (-1,'FirmaJez','Zakopane','777876542',232332323220, 'Jezy Musial', -4);
+insert into companies(id, name, address, phone_number, NIP, owner, worker_id, creation_date_time, last_alter_date_time, alter_type, created_by_id,
+                            altered_by_id, version)
+values (-1,'FirmaJez','Zakopane','777876542',232332323220, 'Jezy Musial', -4, now(), now(), 'INSERT', -1, -1, 0);
 --companies end
 --
 --
 --
---atractions start
-insert into atractions(id,name,description,price,number_of_seats)
-values (-1,'atrakcja','opis atrakcji',123,20);
---atractions end
-
+--attractions start
+insert into attractions(id,name,description,price,number_of_seats, creation_date_time, last_alter_date_time, alter_type, created_by_id,
+                            altered_by_id, version)
+values (-1,'atrakcja','opis atrakcji',123,20, now(), now(), 'INSERT', -1, -1, 0);
+--attractions end
 --
 --
 --
 --cruises_groups start
-insert into cruises_groups(id, company_id, name, number_of_seats, price)
-values (-1,-1,'Przygoda morska', 24, 52);
+insert into cruises_groups(id, company_id, name, number_of_seats, price, creation_date_time, last_alter_date_time, alter_type, created_by_id,
+                            altered_by_id, version)
+values (-1,-1,'Przygoda morska', 24, 52, now(), now(), 'INSERT', -1, -1, 0);
 --cruises_groups end
-
 --
 --
 --
 --cruises start
-insert into cruises(id, start_date, end_date, active, description, start_place, cruises_groups_id, attractions)
-values (-1,now(),now(),true,'opis','miejsce poczatku', -1, -1);
+insert into cruises(id, start_date, end_date, active, description, start_place, cruises_groups_id, attractions, creation_date_time, last_alter_date_time, alter_type, created_by_id,
+                            altered_by_id, version)
+values (-1,now(),now(),true,'opis','miejsce poczatku', -1, -1, now(), now(), 'INSERT', -1, -1, 0);
 --cruises end
 --
 --
 --
 --reservation start
-insert into reservations(id,client_id,number_of_seats,atraction_id,cruise_id)
-values (-1,-2,2,-1,-1);
+insert into reservations(id,client_id,number_of_seats,attractions_id,cruise_id, creation_date_time, last_alter_date_time, alter_type, created_by_id,
+                            altered_by_id, version)
+values (-1,-2,2,-1,-1, now(), now(), 'INSERT', -1, -1, 0);
 --reservation end
 --
 --
 --
 --ratings start
-insert into ratings(id, account_id, cruise_id, rating)
-values (-1, -2, -1, 3);
+insert into ratings(id, account_id, cruise_id, rating, creation_date_time, last_alter_date_time, alter_type, created_by_id,
+                            altered_by_id, version)
+values (-1, -2, -1, 3, now(), now(), 'INSERT', -1, -1, 0);
 
-insert into ratings(id, account_id, cruise_id, rating)
-values (-2, -3, -1, 5);
+insert into ratings(id, account_id, cruise_id, rating, creation_date_time, last_alter_date_time, alter_type, created_by_id,
+                            altered_by_id, version)
+values (-2, -3, -1, 5, now(), now(), 'INSERT', -1, -1, 0);
 --ratings end
 --
 --
 --
 --comments start
-insert into comments (id, account_id, cruise_id, comment)
-values (-1, -2, -1, 'Not bad. Lorem ipsum dolor sit amet is weird');
+insert into comments (id, account_id, cruise_id, comment, creation_date_time, last_alter_date_time, alter_type, created_by_id,
+                            altered_by_id, version)
+values (-1, -2, -1, 'Not bad. Lorem ipsum dolor sit amet is weird', now(), now(), 'INSERT', -1, -1, 0);
 
-insert into comments (id, account_id, cruise_id, comment)
-values (-2, -3, -1, 'It is one of the beatufiul travel in my life');
+insert into comments (id, account_id, cruise_id, comment, creation_date_time, last_alter_date_time, alter_type, created_by_id,
+                            altered_by_id, version)
+values (-2, -3, -1, 'It is one of the beatufiul travel in my life', now(), now(), 'INSERT', -1, -1, 0);
 --comments end
 --
 --
 --
 --positionings start
-insert into positionings (id, type, cruises_group_id, end_date)
-values (-1, true, -1, now());
+insert into positioning (id, type, cruises_group_id, end_date, creation_date_time, last_alter_date_time, alter_type, created_by_id,
+                            altered_by_id, version)
+values (-1, true, -1, now(), now(), now(), 'INSERT', -1, -1, 0);
 --positionings end
