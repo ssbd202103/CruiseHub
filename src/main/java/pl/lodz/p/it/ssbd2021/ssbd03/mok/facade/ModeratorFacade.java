@@ -8,6 +8,7 @@ import javax.persistence.PersistenceContext;
 
 @Stateless
 public class ModeratorFacade extends AbstractFacade<Moderator> {
+
     @PersistenceContext(unitName = "ssbd03mokPU")
     private EntityManager em;
 
