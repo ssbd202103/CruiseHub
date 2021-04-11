@@ -5,7 +5,6 @@ import lombok.Setter;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.model.AccessLevel;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.model.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.model.Address;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.model.EntityDetails;
 import validators.PhoneNumber;
 
 import javax.persistence.*;
@@ -14,6 +13,7 @@ import javax.validation.constraints.NotNull;
 @Entity(name = "clients")
 @DiscriminatorValue("Client")
 public class Client extends AccessLevel {
+
     @Getter
     @NotNull
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
@@ -23,21 +23,20 @@ public class Client extends AccessLevel {
     @Getter
     @Setter
     @PhoneNumber
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
-
-    @Getter
-    @NotNull
-    @Embedded
-    private EntityDetails entityDetails;
-
-    @Getter
-    @Setter
-    @Version
-    private Long version;
 
     @Override
     public AccessLevelType getAccessLevelType() {
         return AccessLevelType.CLIENT;
+    }
+
+    public Client() {
+    }
+
+    public Client(Address homeAddress, String phoneNumber, boolean enabled) {
+        this.homeAddress = homeAddress;
+        this.phoneNumber = phoneNumber;
+        this.enabled = enabled;
     }
 }

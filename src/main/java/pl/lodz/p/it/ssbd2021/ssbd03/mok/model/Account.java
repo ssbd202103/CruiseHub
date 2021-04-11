@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.model;
 
+import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import validators.Login;
@@ -7,14 +8,12 @@ import validators.Name;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity(name = "accounts")
-public class Account {
+public class Account extends BaseEntity {
     @Getter
     @Id
     @SequenceGenerator(name = "ACCOUNT_SEQ_GEN", sequenceName = "account_id_seq", allocationSize = 1)
@@ -48,9 +47,8 @@ public class Account {
 
     @Getter
     @Setter
-    @Size(min = 8, max = 64)
     @Column(name = "password_hash", nullable = false)
-    private String password;
+    private String passwordHash;
 
     @Getter
     @Setter
@@ -74,8 +72,9 @@ public class Account {
 
     @Getter
     @Setter
+    @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "language_type", nullable = false)
+    @Column(name = "language_type")
     private LanguageType languageType;
 
     @Getter
@@ -89,17 +88,42 @@ public class Account {
     private String lastCorrectAuthenticationLogicalAddress;
 
     @Getter
-    @NotNull
-    @Embedded
-    private EntityDetails entityDetails;
-
-    @Getter
-    @Setter
-    @Version
-    private Long version;
-
-    @Getter
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name = "account_id")
-    private final List<AccessLevel> accessLevels = new ArrayList<>();
+    private final Set<AccessLevel> accessLevels = new HashSet<>();
+
+    public void setAccessLevel(AccessLevel accessLevel) {
+        accessLevels.add(accessLevel);
+    }
+
+    public Account() {
+    }
+
+    public Account(String firstName, String secondName, String login, String email,
+                   String passwordHash, boolean confirmed, boolean active, LanguageType languageType) {
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.login = login;
+        this.email = email;
+        this.passwordHash = passwordHash;
+        this.confirmed = confirmed;
+        this.active = active;
+        this.languageType = languageType;
+        this.setCreatedBy(this); // Account is set as self-owner by default
+        this.setAlteredBy(this);
+    }
+
+    public Account(String firstName, String secondName, String login, String email, String passwordHash,
+                   boolean confirmed, boolean active, LanguageType languageType, Account createdBy, Account alteredBy) {
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.login = login;
+        this.email = email;
+        this.passwordHash = passwordHash;
+        this.confirmed = confirmed;
+        this.active = active;
+        this.languageType = languageType;
+        this.setCreatedBy(createdBy);
+        this.setAlteredBy(alteredBy);
+    }
 }
