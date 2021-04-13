@@ -268,10 +268,6 @@ values (-3, -3, -3, now(), now(), now(), now(), 'INSERT', -1, -1, 0);
 --company_workers start
 insert into company_workers (id,companies_id, business_workers_id)
 values (-1, -1, -4);
-insert into company_workers (id,companies_id, business_workers_id)
-values (-2, -2, -3);
-insert into company_workers (id,companies_id, business_workers_id)
-values (-3, -3, -2);
 --company_workers end
 --
 --
