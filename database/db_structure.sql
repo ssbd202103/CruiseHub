@@ -375,7 +375,7 @@ FROM accounts
          JOIN access_levels ON accounts.id = access_levels.account_id
 WHERE accounts.confirmed
   AND accounts.active
-  AND access_levels.enabled = true;
+  AND access_levels.enabled;
 
 
 -- Table owner --

@@ -39,36 +39,39 @@ values (-4, 'Mark', 'Zuckerberg', 'mzuckerberg', 'mzuckerberg@gmail.com',
 --
 --
 -- access_levels start
-insert into access_levels(id, access_level, account_id, active)
-values (-1, 'administrator', -1, true);
+insert into access_levels (id, access_level, account_id, enabled, creation_date_time, last_alter_date_time,
+                           created_by_id, altered_by_id, alter_type, version)
+values (-1, 'administrator', -1, true, now(), now(), -1, -1, 'INSERT', 0);
 
-insert into access_levels(id, access_level, account_id, active)
-values (-2, 'client', -1, true);
+insert into access_levels (id, access_level, account_id, enabled, creation_date_time, last_alter_date_time,
+                           created_by_id, altered_by_id, alter_type, version)
+values (-2, 'client', -1, true, now(), now(), -2, -2, 'INSERT', 0);
 
-insert into access_levels(id, access_level, account_id, active)
-values (-3, 'client', -2, true);
+insert into access_levels (id, access_level, account_id, enabled, creation_date_time, last_alter_date_time,
+                           created_by_id, altered_by_id, alter_type, version)
+values (-3, 'client', -2, true, now(), now(), -3, -3, 'INSERT', 0);
 
-insert into access_levels(id, access_level, account_id, active)
-values (-4, 'business_worker', -3, true);
+insert into access_levels (id, access_level, account_id, enabled, creation_date_time, last_alter_date_time,
+                           created_by_id, altered_by_id, alter_type, version)
+values (-4, 'business_worker', -3, true, now(), now(), -3, -3, 'INSERT', 0);
 
-insert into access_levels(id, access_level, account_id, active)
-values (-5, 'moderator', -4, false);
+insert into access_levels (id, access_level, account_id, enabled, creation_date_time, last_alter_date_time,
+                           created_by_id, altered_by_id, alter_type, version)
+values (-5, 'moderator', -4, false, now(), now(), -4, -4, 'INSERT', 0);
 -- access_levels end
 --
 --
 --
 -- administrators start
-insert into administrators (id, creation_date_time, last_alter_date_time, alter_type, created_by_id,
-                            altered_by_id, version)
-values (-1, now(), now(), 'INSERT', -1, -1, 0);
+insert into administrators (id)
+values (-1);
 -- administrators end
 --
 --
 --
 -- business_workers start
-insert into business_workers (id, phone_number, creation_date_time, last_alter_date_time, alter_type,
-                              created_by_id, altered_by_id, version)
-values (-4, '0987654321', now(), now(), 'INSERT', -3, -3, 0);
+insert into business_workers (id, phone_number)
+values (-4, '0987654321');
 -- business_workers end
 --
 --
@@ -86,21 +89,18 @@ values (-2, 1, 'street 2', '321', 'Manchester', 'United Kingdom', now(), now(), 
 --
 --
 -- clients start
-insert into clients(id, phone_number, home_address_id,
-                    creation_date_time, last_alter_date_time, alter_type, created_by_id, altered_by_id, version)
-values (-2, '123456789', -1, now(), now(), 'INSERT', -2, -2, 0);
+insert into clients(id, phone_number, home_address_id)
+values (-2, '123456789', -1);
 
-insert into clients(id, phone_number, home_address_id, creation_date_time, last_alter_date_time, alter_type,
-                    created_by_id, altered_by_id, version)
-values (-3, '123456789', -2, now(), now(), 'INSERT', -3, -3, 0);
+insert into clients(id, phone_number, home_address_id)
+values (-3, '123456789', -2);
 -- clients end
 --
 --
 --
 -- moderators start
-insert into moderators(id, creation_date_time, last_alter_date_time, alter_type, created_by_id,
-                       altered_by_id, version)
-values (-5, now(), now(), 'INSERT', -4, -4, 0);
+insert into moderators(id)
+values (-5);
 -- moderators end
 --
 --
