@@ -19,26 +19,11 @@ insert into alter_type(id, alter_type)
 values (-3,'DELETE');
 --alter_type end
 
---access_level_type start
---access_level_type 1
-insert into access_level_type(id, access_level_type)
-values (-1,'ADMINISTRATOR');
---access_level_type 2
-insert into access_level_type(id, access_level_type)
-values (-2,'CLIENT');
---access_level_type 3
-insert into access_level_type(id, access_level_type)
-values (-3,'BUSINESS_WORKER');
---access_level_type 4
-insert into access_level_type(id, access_level_type)
-values (-4,'MODERATOR');
---access_level_type end
-
 -- accounts start ||| password is 12345678
 insert into accounts(id, first_name, second_name, login, email, password_hash, confirmed, active,
                      last_incorrect_authentication_date_time, last_incorrect_authentication_logical_address,
                      last_correct_authentication_date_time, last_correct_authentication_logical_address,
-                     language_type,
+                     language_type_id,
                      creation_date_time, last_alter_date_time, alter_type, created_by_id, altered_by_id, version)
 values (-1, 'Richard', 'Branson', 'rbranson', 'rbranson@gmail.com',
         '2634c3097f98e36865f0c572009c4ffd73316bc8b88ccfe8d196af35f46e2394',
@@ -47,7 +32,7 @@ values (-1, 'Richard', 'Branson', 'rbranson', 'rbranson@gmail.com',
 insert into accounts(id, first_name, second_name, login, email, password_hash, confirmed, active,
                      last_incorrect_authentication_date_time, last_incorrect_authentication_logical_address,
                      last_correct_authentication_date_time, last_correct_authentication_logical_address,
-                     language_type,
+                     language_type_id,
                      creation_date_time, last_alter_date_time, alter_type, created_by_id, altered_by_id, version)
 values (-2, 'Elon', 'Musk', 'emusk', 'emusk@gmail.com',
         '2634c3097f98e36865f0c572009c4ffd73316bc8b88ccfe8d196af35f46e2394',
@@ -56,7 +41,7 @@ values (-2, 'Elon', 'Musk', 'emusk', 'emusk@gmail.com',
 insert into accounts(id, first_name, second_name, login, email, password_hash, confirmed, active,
                      last_incorrect_authentication_date_time, last_incorrect_authentication_logical_address,
                      last_correct_authentication_date_time, last_correct_authentication_logical_address,
-                     language_type,
+                     language_type_id,
                      creation_date_time, last_alter_date_time, alter_type, created_by_id, altered_by_id, version)
 values (-3, 'Jeff', 'Bezos', 'jbezos', 'jbezos@gmail.com',
         '2634c3097f98e36865f0c572009c4ffd73316bc8b88ccfe8d196af35f46e2394',
@@ -65,7 +50,7 @@ values (-3, 'Jeff', 'Bezos', 'jbezos', 'jbezos@gmail.com',
 insert into accounts(id, first_name, second_name, login, email, password_hash, confirmed, active,
                      last_incorrect_authentication_date_time, last_incorrect_authentication_logical_address,
                      last_correct_authentication_date_time, last_correct_authentication_logical_address,
-                     language_type,
+                     language_type_id,
                      creation_date_time, last_alter_date_time, alter_type, created_by_id, altered_by_id, version)
 values (-4, 'Mark', 'Zuckerberg', 'mzuckerberg', 'mzuckerberg@gmail.com',
         '2634c3097f98e36865f0c572009c4ffd73316bc8b88ccfe8d196af35f46e2394',
@@ -77,23 +62,23 @@ values (-4, 'Mark', 'Zuckerberg', 'mzuckerberg', 'mzuckerberg@gmail.com',
 -- access_levels start
 insert into access_levels (id, access_level, account_id, enabled, creation_date_time, last_alter_date_time,
                            created_by_id, altered_by_id, alter_type, version)
-values (-1, -1, -1, true, now(), now(), -1, -1, -2, 0);
+values (-1, 'Administrator', -1, true, now(), now(), -1, -1, -2, 0);
 
 insert into access_levels (id, access_level, account_id, enabled, creation_date_time, last_alter_date_time,
                            created_by_id, altered_by_id, alter_type, version)
-values (-2, -2, -1, true, now(), now(), -2, -2, -2, 0);
+values (-2, 'Client', -1, true, now(), now(), -2, -2, -2, 0);
 
 insert into access_levels (id, access_level, account_id, enabled, creation_date_time, last_alter_date_time,
                            created_by_id, altered_by_id, alter_type, version)
-values (-3, -2, -2, true, now(), now(), -3, -3, -2, 0);
+values (-3, 'Client', -2, true, now(), now(), -3, -3, -2, 0);
 
 insert into access_levels (id, access_level, account_id, enabled, creation_date_time, last_alter_date_time,
                            created_by_id, altered_by_id, alter_type, version)
-values (-4, -3, -3, true, now(), now(), -3, -3, -2, 0);
+values (-4, 'BusinessWorker', -3, true, now(), now(), -3, -3, -2, 0);
 
 insert into access_levels (id, access_level, account_id, enabled, creation_date_time, last_alter_date_time,
                            created_by_id, altered_by_id, alter_type, version)
-values (-5, -4, -4, false, now(), now(), -4, -4, -2, 0);
+values (-5, 'Moderator', -4, false, now(), now(), -4, -4, -2, 0);
 -- access_levels end
 --
 --
@@ -220,13 +205,13 @@ values (-3,-2,'Beautiful Sandy Shores', 31, 502, -4, 5, now(), now(), -2, -1, -1
 --cruises start
 insert into cruises(id, start_date, end_date, active, description, cruises_groups_id, available, creation_date_time, last_alter_date_time, alter_type, created_by_id,
                             altered_by_id, version)
-values (-1,now(),now(),true,'Beautiful tour', -1, true, now(), now(), 'INSERT', -1, -1, 0);
+values (-1,now(),now(),true,'Beautiful tour', -1, true, now(), now(), -2, -1, -1, 0);
 insert into cruises(id, start_date, end_date, active, description, cruises_groups_id, available, creation_date_time, last_alter_date_time, alter_type, created_by_id,
                             altered_by_id, version)
-values (-2,now(),now(),false,'Beautiful Beautiful tour', -2, true, now(), now(), 'INSERT', -1, -1, 0);
+values (-2,now(),now(),false,'Beautiful Beautiful tour', -2, true, now(), now(), -2, -1, -1, 0);
 insert into cruises(id, start_date, end_date, active, description, cruises_groups_id, available, creation_date_time, last_alter_date_time, alter_type, created_by_id,
                             altered_by_id, version)
-values (-3,now(),now(),true,'The most Beautiful tour', -3, false, now(), now(), 'INSERT', -1, -1, 0);
+values (-3,now(),now(),true,'The most Beautiful tour', -3, false, now(), now(), -2, -1, -1, 0);
 --cruises end
 --
 --

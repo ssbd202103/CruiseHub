@@ -11,6 +11,7 @@ import javax.validation.constraints.Email;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.model.wrappers.*;
 
 @Entity(name = "accounts")
 public class Account extends BaseEntity {
@@ -71,11 +72,9 @@ public class Account extends BaseEntity {
     private String lastIncorrectAuthenticationLogicalAddress;
 
     @Getter
-    @Setter
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(name = "language_type")
-    private LanguageType languageType;
+    @JoinColumn(name = "language_type_id")
+    @OneToOne
+    private LanguageTypeWrapper languageType;
 
     @Getter
     @Setter
@@ -100,7 +99,7 @@ public class Account extends BaseEntity {
     }
 
     public Account(String firstName, String secondName, String login, String email,
-                   String passwordHash, boolean confirmed, boolean active, LanguageType languageType) {
+                   String passwordHash, boolean confirmed, boolean active, LanguageTypeWrapper languageType) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.login = login;
@@ -114,7 +113,7 @@ public class Account extends BaseEntity {
     }
 
     public Account(String firstName, String secondName, String login, String email, String passwordHash,
-                   boolean confirmed, boolean active, LanguageType languageType, Account createdBy, Account alteredBy) {
+                   boolean confirmed, boolean active, LanguageTypeWrapper languageType, Account createdBy, Account alteredBy) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.login = login;
