@@ -3,7 +3,7 @@ create table language_type
     id                  bigint      not null,
     language_type       varchar     not null,
 
-    CONSTRAINT laanguage_type_primary_key_constraint PRIMARY KEY (id)
+    CONSTRAINT language_type_primary_key_constraint PRIMARY KEY (id)
  );
 
 create table alter_type
