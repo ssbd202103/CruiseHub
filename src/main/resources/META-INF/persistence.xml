@@ -19,7 +19,7 @@
         <jta-data-source>java:app/jdbc/ssbd03glassfishDS</jta-data-source>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.Account</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.AccessLevel</class>
-        <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.EntityDetails</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.BaseEntity</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.accesslevels.Client</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.accesslevels.BusinessWorker</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.accesslevels.Administrator</class>
@@ -40,7 +40,7 @@
             <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.Account</class>
             <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.Address</class>
             <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.AccessLevel</class>
-            <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.EntityDetails</class>
+            <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.BaseEntity</class>
             <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.accesslevels.Client</class>
             <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.accesslevels.BusinessWorker</class>
             <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.accesslevels.Administrator</class>
