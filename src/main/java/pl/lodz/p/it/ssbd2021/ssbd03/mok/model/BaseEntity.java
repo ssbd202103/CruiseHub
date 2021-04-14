@@ -51,7 +51,7 @@ public abstract class BaseEntity {
 
     @PrePersist
     private void prePersist() {
-        alterType = AlterType.CREATE;
+        alterType = AlterType.INSERT;
         creationDateTime = LocalDateTime.now();
         lastAlterDateTime = creationDateTime; //referencing creationDateTime as LDT is immutable
     }
