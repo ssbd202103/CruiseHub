@@ -1,3 +1,27 @@
+create table language_type
+ (
+    id                  bigint      not null,
+    language_type       varchar     not null,
+
+    CONSTRAINT laanguage_type_primary_key_constraint PRIMARY KEY (id)
+ );
+
+create table alter_type
+ (
+    id                  bigint      not null,
+    alter_type          varchar     not null,
+
+    CONSTRAINT alter_type_primary_key_constraint PRIMARY KEY (id)
+ );
+
+create table account_level_type
+ (
+    id                       bigint      not null,
+    account_level_type       varchar     not null,
+
+    CONSTRAINT account_level_type_primary_key_constraint PRIMARY KEY (id)
+ );
+
 create table accounts
 (
     id                                            bigint    not null,
@@ -14,13 +38,13 @@ create table accounts
     last_correct_authentication_date_time         timestamp,
     last_correct_authentication_logical_address   varchar,
 
-    language_type                                 varchar   not null,
+    language_type_id                              bigint   not null, -- FOREIGN KEY
 
     creation_date_time                            timestamp not null,
     last_alter_date_time                          timestamp not null,
     created_by_id                                 bigint    not null, -- FOREIGN KEY
     altered_by_id                                 bigint    not null, -- FOREIGN KEY
-    alter_type                                    varchar   not null,
+    alter_type                                    bigint    not null, -- FOREIGN KEY
     version                                       bigint    not null,
 
     CONSTRAINT accounts_primary_key_constraint PRIMARY KEY (id),
@@ -44,7 +68,7 @@ create table access_levels
     last_alter_date_time timestamp not null,
     created_by_id        bigint    not null, -- FOREIGN KEY
     altered_by_id        bigint    not null, -- FOREIGN KEY
-    alter_type           varchar   not null,
+    alter_type           bigint    not null, -- FOREIGN KEY
     version              bigint    not null,
 
     CONSTRAINT access_levels_id_primary_key_constraint PRIMARY KEY (id),
@@ -88,7 +112,7 @@ create table addresses
     last_alter_date_time timestamp not null,
     created_by_id        bigint    not null, -- FOREIGN KEY
     altered_by_id        bigint    not null, -- FOREIGN KEY
-    alter_type           varchar   not null,
+    alter_type           bigint    not null, -- FOREIGN KEY
     version              bigint    not null,
 
     CONSTRAINT address_primary_key_constraint PRIMARY KEY (id),
@@ -133,7 +157,7 @@ create table cruise_addresses
     last_alter_date_time timestamp not null,
     created_by_id        bigint    not null, -- FOREIGN KEY
     altered_by_id        bigint    not null, -- FOREIGN KEY
-    alter_type           varchar   not null,
+    alter_type           bigint    not null, -- FOREIGN KEY
 
     version              bigint    not null,
 
@@ -153,7 +177,7 @@ create table cruise_pictures
     last_alter_date_time timestamp not null,
     created_by_id        bigint    not null, -- FOREIGN KEY
     altered_by_id        bigint    not null, -- FOREIGN KEY
-    alter_type           varchar   not null,
+    alter_type           bigint    not null, -- FOREIGN KEY
 
     version              bigint    not null,
 
@@ -183,7 +207,7 @@ create table companies
     last_alter_date_time timestamp  not null,
     created_by_id        bigint     not null, -- FOREIGN KEY
     altered_by_id        bigint     not null, -- FOREIGN KEY
-    alter_type           varchar    not null,
+    alter_type           bigint     not null, -- FOREIGN KEY
 
     version              bigint     not null,
 
@@ -208,7 +232,7 @@ create table cruises_groups
     last_alter_date_time timestamp  not null,
     created_by_id        bigint     not null, -- FOREIGN KEY
     altered_by_id        bigint     not null, -- FOREIGN KEY
-    alter_type           varchar    not null,
+    alter_type           bigint     not null, -- FOREIGN KEY
 
     version              bigint     not null,
 
@@ -234,7 +258,7 @@ create table cruises
     last_alter_date_time timestamp  not null,
     created_by_id        bigint     not null, -- FOREIGN KEY
     altered_by_id        bigint     not null, -- FOREIGN KEY
-    alter_type           varchar    not null,
+    alter_type           bigint     not null, -- FOREIGN KEY
 
     version              bigint     not null,
 
@@ -259,7 +283,7 @@ create table attractions
     last_alter_date_time timestamp  not null,
     created_by_id        bigint     not null, -- FOREIGN KEY
     altered_by_id        bigint     not null, -- FOREIGN KEY
-    alter_type           varchar    not null,
+    alter_type           bigint     not null, -- FOREIGN KEY
 
     version              bigint     not null,
 
@@ -281,7 +305,7 @@ create table reservations
     last_alter_date_time timestamp not null,
     created_by_id        bigint    not null, -- FOREIGN KEY
     altered_by_id        bigint    not null, -- FOREIGN KEY
-    alter_type           varchar   not null,
+    alter_type           bigint    not null, -- FOREIGN KEY
 
     version              bigint    not null,
 
@@ -304,7 +328,7 @@ create table ratings
     last_alter_date_time timestamp  not null,
     created_by_id        bigint     not null, -- FOREIGN KEY
     altered_by_id        bigint     not null, -- FOREIGN KEY
-    alter_type           varchar    not null,
+    alter_type           bigint     not null, -- FOREIGN KEY
 
     version              bigint     not null,
 
@@ -327,7 +351,7 @@ create table comments
     last_alter_date_time timestamp not null,
     created_by_id        bigint    not null, -- FOREIGN KEY
     altered_by_id        bigint    not null, -- FOREIGN KEY
-    alter_type           varchar   not null,
+    alter_type           bigint   not null, -- FOREIGN KEY
 
     version              bigint    not null,
 
@@ -351,7 +375,7 @@ create table commercials
     last_alter_date_time timestamp not null,
     created_by_id        bigint    not null, -- FOREIGN KEY
     altered_by_id        bigint    not null, -- FOREIGN KEY
-    alter_type           varchar   not null,
+    alter_type           bigint    not null, -- FOREIGN KEY
 
     version              bigint    not null,
 
@@ -438,6 +462,12 @@ ALTER TABLE cruise_addresses
 ALTER TABLE cruise_pictures
     OWNER to ssbd03admin;
 ALTER TABLE commercial_type
+    OWNER to ssbd03admin;
+ALTER TABLE language_type
+    OWNER to ssbd03admin;
+ALTER TABLE alter_type
+    OWNER to ssbd03admin;
+ALTER TABLE account_level_type
     OWNER to ssbd03admin;
 ALTER TABLE company_workers
     OWNER to ssbd03admin;
