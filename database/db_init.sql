@@ -1,3 +1,39 @@
+--language_type start
+--language_type 1
+insert into language_type(id, language_type)
+values (-1,'PL');
+--language_type 2
+insert into language_type(id, language_type)
+values (-2,'ENG');
+--language_type end
+
+--alter_type start
+--alter_type 1
+insert into alter_type(id, alter_type)
+values (-1,'UPDATE');
+--alter_type 2
+insert into alter_type(id, alter_type)
+values (-2,'INSERT');
+--alter_type 3
+insert into alter_type(id, alter_type)
+values (-3,'DELETE');
+--alter_type end
+
+--access_level_type start
+--access_level_type 1
+insert into access_level_type(id, access_level_type)
+values (-1,'ADMINISTRATOR');
+--access_level_type 2
+insert into access_level_type(id, access_level_type)
+values (-2,'CLIENT');
+--access_level_type 3
+insert into access_level_type(id, access_level_type)
+values (-3,'BUSINESS_WORKER');
+--access_level_type 4
+insert into access_level_type(id, access_level_type)
+values (-4,'MODERATOR');
+--access_level_type end
+
 -- accounts start ||| password is 12345678
 insert into accounts(id, first_name, second_name, login, email, password_hash, confirmed, active,
                      last_incorrect_authentication_date_time, last_incorrect_authentication_logical_address,

@@ -14,12 +14,12 @@ create table alter_type
     CONSTRAINT alter_type_primary_key_constraint PRIMARY KEY (id)
  );
 
-create table account_level_type
+create table access_level_type
  (
     id                       bigint      not null,
-    account_level_type       varchar     not null,
+    access_level_type        varchar     not null,
 
-    CONSTRAINT account_level_type_primary_key_constraint PRIMARY KEY (id)
+    CONSTRAINT access_level_type_primary_key_constraint PRIMARY KEY (id)
  );
 
 create table accounts
@@ -60,7 +60,7 @@ create sequence account_id_seq
 create table access_levels
 (
     id                   bigint    not null,
-    access_level         varchar   not null,
+    access_level         bigint    not null, -- FOREIGN KEY
     account_id           bigint    not null, -- FOREIGN KEY
     enabled              boolean   not null,
 
@@ -467,7 +467,7 @@ ALTER TABLE language_type
     OWNER to ssbd03admin;
 ALTER TABLE alter_type
     OWNER to ssbd03admin;
-ALTER TABLE account_level_type
+ALTER TABLE access_level_type
     OWNER to ssbd03admin;
 ALTER TABLE company_workers
     OWNER to ssbd03admin;
