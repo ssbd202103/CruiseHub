@@ -36,11 +36,10 @@ public abstract class BaseEntity {
     private Account alteredBy;
 
     @Getter
-    @Setter
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(name = "alter_type")
-    private AlterType alterType;
+//    @NotNull
+    @JoinColumn(name = "alter_type_id")
+    @OneToOne
+    private AlterTypeWrapper alterType;
 
     @Getter
     @Setter
@@ -51,7 +50,7 @@ public abstract class BaseEntity {
 
     @PrePersist
     private void prePersist() {
-        alterType = AlterType.INSERT;
+//        alterType = new AlterTypeWrapper(AlterType.INSERT);
         creationDateTime = LocalDateTime.now();
         lastAlterDateTime = creationDateTime; //referencing creationDateTime as LDT is immutable
     }
