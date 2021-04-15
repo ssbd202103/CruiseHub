@@ -399,7 +399,7 @@ create table cruises_groups_pictures
     cruise_pictures_id   bigint     not null, -- FOREIGN KEY
 
     CONSTRAINT cruises_groups_pictures_primary_key_constraint PRIMARY KEY (id),
-    CONSTRAINT cruises_groups_pictures_cruises_groups_id_cruise_pictures_id_unique UNIQUE (cruises_groups_id, cruise_pictures_id),
+    CONSTRAINT cruises_groups_pictures_groups_id_pictures_id_unique UNIQUE (cruises_groups_id, cruise_pictures_id),
     CONSTRAINT cruises_groups_pictures_cruises_groups_id_fk_constraint FOREIGN KEY (cruises_groups_id) REFERENCES cruises_groups (id),
     CONSTRAINT cruises_groups_pictures_cruise_pictures_id_fk_constraint FOREIGN KEY (cruise_pictures_id) REFERENCES  cruise_pictures (id)
 );
