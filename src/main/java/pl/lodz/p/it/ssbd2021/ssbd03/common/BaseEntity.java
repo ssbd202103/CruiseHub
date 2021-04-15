@@ -1,4 +1,4 @@
-package pl.lodz.p.it.ssbd2021.ssbd03.mok.model;
+package pl.lodz.p.it.ssbd2021.ssbd03.common;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,7 +7,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.model.wrappers.AlterTypeWrapper;
+
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.model.entities.Account;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.wrappers.AlterTypeWrapper;
 
 @MappedSuperclass
 public abstract class BaseEntity {

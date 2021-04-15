@@ -1,6 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.facade;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.model.accesslevels.Administrator;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.model.entities.accesslevels.Administrator;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

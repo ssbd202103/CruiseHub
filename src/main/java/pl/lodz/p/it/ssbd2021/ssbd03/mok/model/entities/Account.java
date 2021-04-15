@@ -1,8 +1,8 @@
-package pl.lodz.p.it.ssbd2021.ssbd03.mok.model;
+package pl.lodz.p.it.ssbd2021.ssbd03.mok.model.entities;
 
-import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.BaseEntity;
 import validators.Login;
 import validators.Name;
 

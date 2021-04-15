@@ -1,7 +1,9 @@
-package pl.lodz.p.it.ssbd2021.ssbd03.mok.model;
+package pl.lodz.p.it.ssbd2021.ssbd03.mok.model.entities;
 
 import lombok.Getter;
 import lombok.Setter;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.BaseEntity;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.model.AccessLevelType;
 
 import javax.persistence.*;
 import java.util.Objects;

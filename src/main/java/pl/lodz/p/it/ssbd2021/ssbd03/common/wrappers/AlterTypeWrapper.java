@@ -1,10 +1,10 @@
-package pl.lodz.p.it.ssbd2021.ssbd03.mok.model.wrappers;
+package pl.lodz.p.it.ssbd2021.ssbd03.common.wrappers;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.model.AlterType;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.AlterType;
 
 @Entity(name = "alter_type")
 public class AlterTypeWrapper {

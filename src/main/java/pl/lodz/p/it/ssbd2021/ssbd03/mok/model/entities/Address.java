@@ -1,7 +1,8 @@
-package pl.lodz.p.it.ssbd2021.ssbd03.mok.model;
+package pl.lodz.p.it.ssbd2021.ssbd03.mok.model.entities;
 
 import lombok.Getter;
 import lombok.Setter;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.BaseEntity;
 import validators.City;
 import validators.Country;
 import validators.PostCode;

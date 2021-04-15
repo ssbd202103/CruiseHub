@@ -1,6 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.facade;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.model.Account;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.model.entities.Account;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
