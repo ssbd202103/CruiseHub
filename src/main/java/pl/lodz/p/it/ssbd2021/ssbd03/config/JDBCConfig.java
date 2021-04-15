@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pl.lodz.p.it.ssbd2021.ssbd03.mok.model.config;
+package pl.lodz.p.it.ssbd2021.ssbd03.config;
 
 import java.sql.Connection;
 import javax.annotation.sql.DataSourceDefinition;

@@ -17,15 +17,15 @@
     <persistence-unit name="ssbd03glassfishPU" transaction-type="JTA">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <jta-data-source>java:app/jdbc/ssbd03glassfishDS</jta-data-source>
-        <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.Account</class>
-        <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.AccessLevel</class>
-        <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.BaseEntity</class>
-        <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.accesslevels.Client</class>
-        <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.accesslevels.BusinessWorker</class>
-        <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.accesslevels.Administrator</class>
-        <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.accesslevels.Moderator</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.entities.Account</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.entities.AccessLevel</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.common.BaseEntity</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.entities.accesslevels.Client</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.entities.accesslevels.BusinessWorker</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.entities.accesslevels.Administrator</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.entities.accesslevels.Moderator</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.wrappers.LanguageTypeWrapper</class>
-        <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.wrappers.AlterTypeWrapper</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.common.wrappers.AlterTypeWrapper</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
 
         <properties>
@@ -37,16 +37,16 @@
     <persistence-unit name="ssbd03mokPU" transaction-type="JTA">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <jta-data-source>java:app/jdbc/ssbd03mokDS</jta-data-source>
-            <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.Account</class>
-            <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.Address</class>
-            <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.AccessLevel</class>
-            <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.BaseEntity</class>
-            <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.accesslevels.Client</class>
-            <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.accesslevels.BusinessWorker</class>
-            <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.accesslevels.Administrator</class>
-            <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.accesslevels.Moderator</class>
+            <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.entities.Account</class>
+            <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.entities.Address</class>
+            <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.entities.AccessLevel</class>
+            <class>pl.lodz.p.it.ssbd2021.ssbd03.common.BaseEntity</class>
+            <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.entities.accesslevels.Client</class>
+            <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.entities.accesslevels.BusinessWorker</class>
+            <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.entities.accesslevels.Administrator</class>
+            <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.entities.accesslevels.Moderator</class>
             <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.wrappers.LanguageTypeWrapper</class>
-            <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.wrappers.AlterTypeWrapper</class>
+            <class>pl.lodz.p.it.ssbd2021.ssbd03.common.wrappers.AlterTypeWrapper</class>
             <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
             <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.SunOneJtaPlatform"/>

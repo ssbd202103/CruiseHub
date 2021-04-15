@@ -1,10 +1,10 @@
-package pl.lodz.p.it.ssbd2021.ssbd03.mok.model.accesslevels;
+package pl.lodz.p.it.ssbd2021.ssbd03.mok.model.entities.accesslevels;
 
 import lombok.Getter;
 import lombok.Setter;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.model.AccessLevel;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.model.entities.AccessLevel;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.model.AccessLevelType;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.model.Address;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.model.entities.Address;
 import validators.PhoneNumber;
 
 import javax.persistence.*;
