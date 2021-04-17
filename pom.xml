@@ -1,13 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-   
+
     <groupId>pl.lodz.p.it.ssbd2021</groupId>
     <artifactId>ssbd03</artifactId>
     <version>0.2.0-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>ssbd03</name>
-    
+
     <developers>
         <developer>
             <name>Artur Radiuk</name>
@@ -42,15 +42,22 @@
             <id>224293</id>
         </developer>
     </developers>
-    
+
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jakartaee>8.0</jakartaee>
+
+        <ui.dir>src/main/ui</ui.dir>
+        <ui.build.dir>src/main/ui/build</ui.build.dir>
+
+        <maven.clean.plugin>3.0.0</maven.clean.plugin>
+        <maven.war.plugin>3.0.0</maven.war.plugin>
+        <exec.maven.plugin>3.0.0</exec.maven.plugin>
     </properties>
-    
+
     <dependencies>
         <dependency>
             <groupId>javax</groupId>
@@ -72,7 +79,7 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
-    
+
     <build>
         <plugins>
             <plugin>
@@ -82,6 +89,182 @@
             </plugin>
         </plugins>
     </build>
-    
-    
+
+    <profiles>
+        <profile>
+            <id>dev-without-ui</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>dev</id>
+            <build>
+                <plugins>
+                    <!--            to clean build data in ui (react client)    -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-clean-plugin</artifactId>
+                        <version>${maven.clean.plugin}</version>
+                        <configuration>
+                            <filesets>
+                                <fileset>
+                                    <directory>${ui.build.dir}</directory>
+                                    <includes>
+                                        <include>**/*</include>
+                                    </includes>
+                                </fileset>
+                            </filesets>
+                        </configuration>
+                    </plugin>
+
+                    <!--            to copy build data from ui (react client) to the war    -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>${maven.war.plugin}</version>
+                        <configuration>
+                            <webResources>
+                                <resource>
+                                    <directory>${ui.build.dir}</directory>
+                                </resource>
+                            </webResources>
+                        </configuration>
+                    </plugin>
+
+                    <!--            to prepare static data in ui (react client)     -->
+                    <plugin>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <version>${exec.maven.plugin}</version>
+                        <executions>
+
+                            <execution>
+                                <id>installing</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>npm</executable>
+                                    <arguments>
+                                        <argument>install</argument>
+                                    </arguments>
+                                    <environmentVariables>
+                                        <NPM_CONFIG_PREFIX>${project.build.directory}</NPM_CONFIG_PREFIX>
+                                    </environmentVariables>
+                                    <workingDirectory>${ui.dir}</workingDirectory>
+                                </configuration>
+                            </execution>
+
+                            <execution>
+                                <id>build</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>npm</executable>
+                                    <arguments>
+                                        <argument>run</argument>
+                                        <argument>build</argument>
+                                    </arguments>
+                                    <workingDirectory>${ui.dir}</workingDirectory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>prod</id>
+            <build>
+                <plugins>
+                    <!--            to clean build data in ui (react client)    -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-clean-plugin</artifactId>
+                        <version>${maven.clean.plugin}</version>
+                        <configuration>
+                            <filesets>
+                                <fileset>
+                                    <directory>${ui.build.dir}</directory>
+                                    <includes>
+                                        <include>**/*</include>
+                                    </includes>
+                                </fileset>
+                            </filesets>
+                        </configuration>
+                    </plugin>
+
+                    <!--            to copy build data from ui (react client) to the war    -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>${maven.war.plugin}</version>
+                        <configuration>
+                            <webResources>
+                                <resource>
+                                    <directory>${ui.build.dir}</directory>
+                                </resource>
+                            </webResources>
+                        </configuration>
+                    </plugin>
+
+                    <!--            to prepare static data in ui (react client)     -->
+                    <plugin>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <version>${exec.maven.plugin}</version>
+                        <executions>
+
+                            <execution>
+                                <id>installing</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>npm</executable>
+                                    <arguments>
+                                        <argument>install</argument>
+                                    </arguments>
+                                    <environmentVariables>
+                                        <NPM_CONFIG_PREFIX>${project.build.directory}</NPM_CONFIG_PREFIX>
+                                    </environmentVariables>
+                                    <workingDirectory>${ui.dir}</workingDirectory>
+                                </configuration>
+                            </execution>
+
+                            <execution>
+                                <id>build</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>npm</executable>
+                                    <arguments>
+                                        <argument>run</argument>
+                                        <argument>build</argument>
+                                    </arguments>
+                                    <workingDirectory>${ui.dir}</workingDirectory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+    </profiles>
+
+
 </project>
