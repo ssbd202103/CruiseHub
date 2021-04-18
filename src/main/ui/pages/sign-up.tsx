@@ -1,24 +1,27 @@
 import Link from 'next/link'
+import en from '../locales/en'
+import pl from '../locales/pl'
 
 function SignUp() {
+    const lang = pl // this should be taken from account preferences
     return (
         <div>
             <h1>This is the sign up page</h1>
 
-            <label>First name:</label><br/>
+            <label> {lang.signUpPage.firstName} :</label><br/>
             <input type="text" id="firstName"/><br/>
-            <label>Last name:</label><br/>
+            <label> {lang.signUpPage.lastName} :</label><br/>
             <input type="text" id="lastName"/><br/>
-            <label>Login:</label><br/>
+            <label> {lang.signUpPage.login} :</label><br/>
             <input type="text" id="login"/><br/>
-            <label>Email:</label><br/>
+            <label> {lang.signUpPage.email} :</label><br/>
             <input type="text" id="email"/><br/>
-            <label>Password:</label><br/>
+            <label> {lang.signUpPage.password} :</label><br/>
             <input type="password" id="password"/><br/>
-            <label>Confirm password:</label><br/>
+            <label> {lang.signUpPage.confirmPassword} :</label><br/>
             <input type="password" id="password_confirm"/><br/>
             
-            <Link href="/">Sign up (Go to main page for now)</Link>
+            <Link href="/">{lang.signUpPage.signUpButton}</Link>
         </div>
     )
 }
