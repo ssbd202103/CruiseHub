@@ -511,51 +511,57 @@ GRANT SELECT, UPDATE
 
 -- Table permissions for MOW --
 GRANT SELECT
-    ON alter_type TO ssbd03mow
-
-GRANT SELECT, INSERT, UPDATE, DELETE
-    ON attractions TO ssbd03mow
-
-GRANT SELECT, INSERT, UPDATE, DELETE
-    ON comments TO ssbd03mow
+    ON access_levels TO ssbd03mow;
 
 GRANT SELECT
-    ON commercial_type TO ssbd03mow
-
-GRANT SELECT, INSERT, UPDATE, DELETE
-    ON commercials TO ssbd03mow
-
-GRANT SELECT, INSERT, UPDATE, DELETE
-    ON companies TO ssbd03mow
-
-GRANT SELECT, INSERT, UPDATE, DELETE
-    ON company_workers TO ssbd03mow
-
-GRANT SELECT, INSERT, DELETE
-    ON cruise_addresses TO ssbd03mow
-
-GRANT SELECT, INSERT, DELETE
-    ON cruise_pictures TO ssbd03mow
-
-GRANT SELECT, INSERT, UPDATE, DELETE
-    ON cruises TO ssbd03mow
-
-GRANT SELECT, INSERT, UPDATE, DELETE
-    ON cruises_groups TO ssbd03mow
-
-GRANT SELECT, INSERT, DELETE
-    ON cruises_groups_pictures TO ssbd03mow
+    ON accounts TO ssbd03mow;
 
 GRANT SELECT
-    ON language_type TO ssbd03mow
+    ON alter_type TO ssbd03mow;
 
 GRANT SELECT, INSERT, UPDATE, DELETE
-    ON ratings TO ssbd03mow
+    ON attractions TO ssbd03mow;
 
 GRANT SELECT, INSERT, UPDATE, DELETE
-    ON reservations TO ssbd03mow
+    ON comments TO ssbd03mow;
+
+GRANT SELECT
+    ON commercial_type TO ssbd03mow;
 
 GRANT SELECT, INSERT, UPDATE, DELETE
-    ON reservations_attractions TO ssbd03mow
+    ON commercials TO ssbd03mow;
+
+GRANT SELECT, INSERT, UPDATE, DELETE
+    ON companies TO ssbd03mow;
+
+GRANT SELECT, INSERT, UPDATE, DELETE
+    ON company_workers TO ssbd03mow;
+
+GRANT SELECT, INSERT, DELETE
+    ON cruise_addresses TO ssbd03mow;
+
+GRANT SELECT, INSERT, DELETE
+    ON cruise_pictures TO ssbd03mow;
+
+GRANT SELECT, INSERT, UPDATE, DELETE
+    ON cruises TO ssbd03mow;
+
+GRANT SELECT, INSERT, UPDATE, DELETE
+    ON cruises_groups TO ssbd03mow;
+
+GRANT SELECT, INSERT, DELETE
+    ON cruises_groups_pictures TO ssbd03mow;
+
+GRANT SELECT
+    ON language_type TO ssbd03mow;
+
+GRANT SELECT, INSERT, UPDATE, DELETE
+    ON ratings TO ssbd03mow;
+
+GRANT SELECT, INSERT, UPDATE, DELETE
+    ON reservations TO ssbd03mow;
+
+GRANT SELECT, INSERT, UPDATE, DELETE
+    ON reservations_attractions TO ssbd03mow;
 
 GRANT SELECT ON glassfish_auth_view TO ssbd03glassfish;
