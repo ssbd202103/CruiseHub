@@ -87,6 +87,11 @@ public class Account extends BaseEntity {
     private String lastCorrectAuthenticationLogicalAddress;
 
     @Getter
+    @Setter
+    @Column(name = "amount_of_incorrect_authentications")
+    private int amountOfIncorrectAuthentications;
+    
+    @Getter
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name = "account_id")
     private final Set<AccessLevel> accessLevels = new HashSet<>();
@@ -108,6 +113,7 @@ public class Account extends BaseEntity {
         this.confirmed = confirmed;
         this.active = active;
         this.languageType = languageType;
+        this.amountOfIncorrectAuthentications = 0; // When creating an account the counter starts from 0
         this.setCreatedBy(this); // Account is set as self-owner by default
         this.setAlteredBy(this);
     }
@@ -122,6 +128,7 @@ public class Account extends BaseEntity {
         this.confirmed = confirmed;
         this.active = active;
         this.languageType = languageType;
+        this.amountOfIncorrectAuthentications = 0;
         this.setCreatedBy(createdBy);
         this.setAlteredBy(alteredBy);
     }

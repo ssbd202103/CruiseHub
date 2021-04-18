@@ -29,6 +29,7 @@ create table accounts
     last_incorrect_authentication_logical_address varchar,
     last_correct_authentication_date_time         timestamp,
     last_correct_authentication_logical_address   varchar,
+    amount_of_incorrect_authentications           integer default 0,
 
     language_type_id                              bigint   not null, -- FOREIGN KEY
 
@@ -43,7 +44,8 @@ create table accounts
     CONSTRAINT accounts_language_type_id_fk_constraint FOREIGN KEY (language_type_id) REFERENCES language_type (id),
     CONSTRAINT accounts_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
     CONSTRAINT accounts_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id),
-    CONSTRAINT accounts_alter_type_fk_constraint FOREIGN KEY (alter_type) REFERENCES alter_type (id)
+    CONSTRAINT accounts_alter_type_fk_constraint FOREIGN KEY (alter_type) REFERENCES alter_type (id),
+    CONSTRAINT accounts_amount_of_incorrect_authentications_check CHECK (amount_of_incorrect_authentications >= 0)
 );
 
 create sequence account_id_seq
