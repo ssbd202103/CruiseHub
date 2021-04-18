@@ -509,6 +509,12 @@ GRANT SELECT, UPDATE
 
 -- Table permissions for MOW --
 GRANT SELECT
+    ON access_levels TO ssbd03mow
+
+GRANT SELECT
+    ON accounts TO ssbd03mow
+
+GRANT SELECT
     ON alter_type TO ssbd03mow
 
 GRANT SELECT, INSERT, UPDATE, DELETE
