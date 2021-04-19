@@ -161,6 +161,10 @@ create table cruise_addresses
     CONSTRAINT cruise_addresses_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id)
 );
 
+create sequence cruise_addresses_id_seq
+    START WITH 1
+    INCREMENT BY 1;
+
 create table cruise_pictures
 (
     id                   bigint                              not null,
@@ -179,6 +183,10 @@ create table cruise_pictures
     CONSTRAINT cruise_pictures_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
     CONSTRAINT cruise_pictures_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id)
 );
+
+create sequence cruise_pictures_id_seq
+    START WITH 1
+    INCREMENT BY 1;
 
 create table commercial_type
 (
@@ -210,6 +218,10 @@ create table companies
     CONSTRAINT companies_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id)
 );
 
+create sequence companies_id_seq
+    START WITH 1
+    INCREMENT BY 1;
+
 create table cruises_groups
 (
     id                   bigint                                                              not null,
@@ -234,6 +246,10 @@ create table cruises_groups
     CONSTRAINT cruises_groups_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
     CONSTRAINT cruises_groups_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id)
 );
+
+create sequence cruises_groups_id_seq
+    START WITH 1
+    INCREMENT BY 1;
 
 create table cruises
 (
@@ -260,6 +276,10 @@ create table cruises
     CONSTRAINT cruises_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id)
 );
 
+create sequence cruises_id_seq
+    START WITH 1
+    INCREMENT BY 1;
+
 create table attractions
 (
     id                   bigint                                                              not null,
@@ -284,6 +304,10 @@ create table attractions
     CONSTRAINT attractions_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id)
 );
 
+create sequence attractions_id_seq
+    START WITH 1
+    INCREMENT BY 1;
+
 create table reservations
 (
     id                   bigint                                                              not null,
@@ -305,6 +329,10 @@ create table reservations
     CONSTRAINT reservations_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
     CONSTRAINT reservations_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id)
 );
+
+create sequence reservations_id_seq
+    START WITH 1
+    INCREMENT BY 1;
 
 create table ratings
 (
@@ -328,6 +356,10 @@ create table ratings
     CONSTRAINT ratings_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id)
 );
 
+create sequence ratings_id_seq
+    START WITH 1
+    INCREMENT BY 1;
+
 create table comments
 (
     id                   bigint                              not null,
@@ -349,6 +381,10 @@ create table comments
     CONSTRAINT comments_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
     CONSTRAINT comments_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id)
 );
+
+create sequence comments_id_seq
+    START WITH 1
+    INCREMENT BY 1;
 
 create table commercials
 (
@@ -373,6 +409,10 @@ create table commercials
     CONSTRAINT commercials_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id)
 );
 
+create sequence commercials_id_seq
+    START WITH 1
+    INCREMENT BY 1;
+
 create table company_workers
 (
     id                  bigint not null,
@@ -384,6 +424,10 @@ create table company_workers
     CONSTRAINT company_workers_companies_id_fk_constraint FOREIGN KEY (companies_id) REFERENCES companies (id),
     CONSTRAINT company_workers_business_workers_id_fk_constraint FOREIGN KEY (business_workers_id) REFERENCES business_workers (id)
 );
+
+create sequence company_workers_id_seq
+    START WITH 1
+    INCREMENT BY 1;
 
 create table cruises_groups_pictures
 (
@@ -397,6 +441,10 @@ create table cruises_groups_pictures
     CONSTRAINT cruises_groups_pictures_cruise_pictures_id_fk_constraint FOREIGN KEY (cruise_pictures_id) REFERENCES cruise_pictures (id)
 );
 
+create sequence cruises_groups_pictures_id_seq
+    START WITH 1
+    INCREMENT BY 1;
+
 create table reservations_attractions
 (
     id              bigint not null,
@@ -408,6 +456,10 @@ create table reservations_attractions
     CONSTRAINT reservations_attractions_reservations_id_fk_constraint FOREIGN KEY (reservations_id) REFERENCES reservations (id),
     CONSTRAINT reservations_attractions_attractions_id_fk_constraint FOREIGN KEY (attractions_id) REFERENCES attractions (id)
 );
+
+create sequence reservations_attractions_id_seq
+    START WITH 1
+    INCREMENT BY 1;
 
 CREATE VIEW glassfish_auth_view AS
 SELECT accounts.login, accounts.password_hash, access_levels.access_level
@@ -467,6 +519,35 @@ ALTER TABLE cruises
     OWNER to ssbd03admin;
 ALTER
     VIEW glassfish_auth_view OWNER TO ssbd03admin;
+
+--Table sequence--
+ALTER TABLE accounts ALTER COLUMN id
+SET DEFAULT nextval('account_id_seq');
+ALTER TABLE access_levels ALTER COLUMN id
+SET DEFAULT nextval('access_level_id_seq');
+ALTER TABLE addresses ALTER COLUMN id
+SET DEFAULT nextval('address_id_seq');
+AlTER TABLE reservations ALTER COLUMN id
+SET DEFAULT nextval('reservations_id_seq');
+AlTER TABLE attractions ALTER COLUMN id
+SET DEFAULT nextval('attractions_id_seq');
+ALTER TABLE ratings ALTER COLUMN id
+SET DEFAULT nextval('ratings_id_seq');
+ALTER TABLE comments ALTER COLUMN id
+SET DEFAULT nextval('comments_id_seq');
+ALTER TABLE commercials ALTER COLUMN id
+SET DEFAULT nextval('commercials_id_seq');
+ALTER TABLE cruise_addresses ALTER COLUMN id
+SET DEFAULT nextval('cruise_addresses_id_seq');
+ALTER TABLE cruise_pictures ALTER COLUMN id
+SET DEFAULT nextval('cruise_pictures_id_seq');
+ALTER TABLE cruises_groups ALTER COLUMN id
+SET DEFAULT nextval('cruises_groups_id_seq');
+ALTER TABLE companies ALTER COLUMN id
+SET DEFAULT nextval('companies_id_seq');
+ALTER TABLE cruises ALTER COLUMN id
+SET DEFAULT nextval('cruises_id_seq');
+
 
 
 -- Table permissions --
