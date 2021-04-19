@@ -766,7 +766,7 @@ CREATE INDEX commercials_alter_type_id_index
 CREATE INDEX company_workers_companies_id_index
     ON company_workers USING btree
         (companies_id ASC NULLS LAST);
-CREATE INDEX company_workers_buisness_workers_id_index
+CREATE INDEX company_workers_business_workers_id_index
     ON company_workers USING btree
         (business_workers_id ASC NULLS LAST);
 
