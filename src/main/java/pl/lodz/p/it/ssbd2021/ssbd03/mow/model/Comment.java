@@ -39,5 +39,17 @@ public class Comment extends BaseEntity {
     @JoinColumn(name = "cruise_id")
     private Cruise cruise;
 
+
+    public Comment(Long id, @NotNull Account account, @NotNull String content, @NotNull Cruise cruise) {
+        this.id = id;
+        this.account = account;
+        this.content = content;
+        this.cruise = cruise;
+    }
+
+    public Comment() {
+    }
 }
+
+
 

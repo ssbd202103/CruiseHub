@@ -8,6 +8,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.model.entities.accesslevels.Client;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "reservations")
@@ -42,5 +43,16 @@ public class Reservation extends BaseEntity {
     @NotNull
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     @JoinTable(name = "reservations_attractions")
-    private List<Attraction> attractions;
+    private List<Attraction> attractions = new ArrayList<>();
+
+    public Reservation(Long id, @NotNull Long numberOfSeats, @NotNull Cruise cruise, @NotNull Client client, @NotNull List<Attraction> attractions) {
+        this.id = id;
+        this.numberOfSeats = numberOfSeats;
+        this.cruise = cruise;
+        this.client = client;
+        this.attractions = attractions;
+    }
+
+    public Reservation() {
+    }
 }

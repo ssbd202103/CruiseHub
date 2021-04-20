@@ -48,5 +48,18 @@ public class CruiseAddress extends BaseEntity {
     @NotNull
     @Column(name = "country")
     private String country;
+
+
+    public CruiseAddress(Integer id, @NotNull String street, @NotNull Integer streetNumber, @NotNull String harborName, @NotNull String city, @NotNull String country) {
+        this.id = id;
+        this.street = street;
+        this.streetNumber = streetNumber;
+        this.harborName = harborName;
+        this.city = city;
+        this.country = country;
+    }
+
+    public CruiseAddress() {
+    }
 }
 

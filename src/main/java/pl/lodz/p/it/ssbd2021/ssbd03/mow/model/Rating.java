@@ -37,5 +37,13 @@ public class Rating extends BaseEntity {
     @Column(name = "rating")
     private double rating;
 
+    public Rating(Long id, @NotNull Account account, @NotNull Cruise cruise, @NotNull double rating) {
+        this.id = id;
+        this.account = account;
+        this.cruise = cruise;
+        this.rating = rating;
+    }
 
+    public Rating() {
+    }
 }

@@ -3,8 +3,6 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.model;
 import lombok.Getter;
 import lombok.Setter;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.BaseEntity;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.model.entities.Address;
-
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -68,6 +66,19 @@ public class CruiseGroup extends BaseEntity {
     private BigDecimal averageRating;
 
 
+    public CruiseGroup(Long id, @NotNull Company company, @NotNull CruiseAddress address, @NotNull String name, @NotNull Long numberOfSeats, @NotNull BigDecimal price, @NotNull List<CruisePicture> cruisePicture, @NotNull BigDecimal averageRating) {
+        this.id = id;
+        this.company = company;
+        this.address = address;
+        this.name = name;
+        this.numberOfSeats = numberOfSeats;
+        this.price = price;
+        this.cruisePicture = cruisePicture;
+        this.averageRating = averageRating;
+    }
+
+    public CruiseGroup() {
+    }
 }
 
 

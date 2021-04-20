@@ -2,7 +2,6 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.bytebuddy.asm.Advice;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.BaseEntity;
 
 
@@ -57,6 +56,17 @@ public class Cruise extends BaseEntity {
     @JoinColumn(name = "cruises_groups_id")
     private CruiseGroup crusesGroup;
 
+    public Cruise(Long id, @NotNull LocalDateTime startDate, @NotNull LocalDateTime endDate, @NotNull boolean active, @NotNull String description, @NotNull Boolean available, @NotNull CruiseGroup crusesGroup) {
+        this.id = id;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.active = active;
+        this.description = description;
+        this.available = available;
+        this.crusesGroup = crusesGroup;
+    }
 
+    public Cruise() {
+    }
 }
 

@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.model;
 import lombok.Getter;
 import lombok.Setter;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.BaseEntity;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.wrappers.CommercialTypeWrapper;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -43,4 +44,15 @@ public class Commercial extends BaseEntity {
     @Column(name = "end_date")
     private LocalDateTime endDate;
 
+    public Commercial(Long id, @NotNull CruiseGroup crusesGroup, CommercialTypeWrapper commercialType, @NotNull LocalDateTime startDate, @NotNull LocalDateTime endDate) {
+        this.id = id;
+        this.crusesGroup = crusesGroup;
+        this.commercialType = commercialType;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
+
+    public Commercial() {
+    }
 }

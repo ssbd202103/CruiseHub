@@ -1,7 +1,8 @@
-package pl.lodz.p.it.ssbd2021.ssbd03.mow.model;
+package pl.lodz.p.it.ssbd2021.ssbd03.common.wrappers;
 
 import lombok.Getter;
 import lombok.Setter;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.model.CommercialType;
 
 import javax.persistence.*;
 
@@ -15,7 +16,15 @@ public class CommercialTypeWrapper {
     private Integer id;
 
     @Enumerated(EnumType.STRING)
-    @Column(unique = true)
+    @Column(unique = true, name = "commercial_type")
     @Setter
     private CommercialType commercialType;
+
+    public CommercialTypeWrapper(Integer id, CommercialType commercialType) {
+        this.id = id;
+        this.commercialType = commercialType;
+    }
+
+    public CommercialTypeWrapper() {
+    }
 }
