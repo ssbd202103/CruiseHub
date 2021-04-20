@@ -23,7 +23,7 @@ public class Commercial extends BaseEntity {
     @NotNull
     @OneToOne
     @JoinColumn(name = "cruises_group_id")
-    private CruiseGroup crusesGroup;
+    private CruiseGroup cruisesGroup;
 
     @Getter
     @Setter
@@ -44,9 +44,9 @@ public class Commercial extends BaseEntity {
     @Column(name = "end_date")
     private LocalDateTime endDate;
 
-    public Commercial(Long id, @NotNull CruiseGroup crusesGroup, CommercialTypeWrapper commercialType, @NotNull LocalDateTime startDate, @NotNull LocalDateTime endDate) {
+    public Commercial(Long id, @NotNull CruiseGroup cruisesGroup, CommercialTypeWrapper commercialType, @NotNull LocalDateTime startDate, @NotNull LocalDateTime endDate) {
         this.id = id;
-        this.crusesGroup = crusesGroup;
+        this.cruisesGroup = cruisesGroup;
         this.commercialType = commercialType;
         this.startDate = startDate;
         this.endDate = endDate;
