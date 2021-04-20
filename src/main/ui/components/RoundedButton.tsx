@@ -20,7 +20,6 @@ export default function RoundedButton(props: RoundedButtonProps) {
     const classes = makeStyles(theme => ({
         root: {
             fontFamily: "'Montserrat', sans-serif",
-            fontSize: '1.2rem',
             backgroundColor: 'var(--' + color + ')',
             color: 'var(--white)',
             height: 68,

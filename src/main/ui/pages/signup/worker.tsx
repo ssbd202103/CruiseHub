@@ -15,7 +15,7 @@ export default function ClientSignUp() {
     return (
         <AuthLayout>
             <h1 className={styles.h1}>Witamy</h1>
-            <h2 className={styles.h2}>Zostań członkiem największej przygody w Twoim życiu</h2>
+            <h2 className={styles.h2}>W kilka klików uzyskasz dostęp do jednej z największych sieci klientów</h2>
 
             <Box style={{
                 display: "flex",
@@ -92,14 +92,11 @@ export default function ClientSignUp() {
                 alignItems: "center",
                 justifyContent: "space-between"
             }}>
-                <RoundedButton style={{width: '50%'}} color="pink">Zarejestruj mnie</RoundedButton>
+                <RoundedButton style={{width: '50%', fontSize: '1.2rem'}} color="pink">Zarejestruj mnie</RoundedButton>
                 <Link href="client">
                     <a className={styles.link}>Jestem klientem</a>
                 </Link>
             </Box>
-
-            
-
         </AuthLayout>
     )
 }

@@ -18,7 +18,10 @@ export default function SignIn() {
                 <DarkedTextField 
                     type="email"
                     label="Email"
-                    className={styles.input} 
+                    style={{
+                        width: '50%',
+                        margin: '20px 0'
+                    }}
                     icon={(<EmailIcon />)}
                     placeholder="example@email.com"
                 />
@@ -26,13 +29,19 @@ export default function SignIn() {
                 <DarkedTextField 
                     type="password"
                     label="Hasło"
-                    className={styles.input} 
+                    style={{
+                        width: '50%',
+                        margin: '20px 0'
+                    }} 
                     icon={(<PasswordIcon />)}
                     placeholder="1234567890"
                 />
 
                 <RoundedButton
-                    className={styles.button}
+                    style={{
+                        width: '50%',
+                        fontSize: '1.2rem',
+                    }}
                     color="pink"
                 >Zaloguj</RoundedButton>
         </AuthLayout>
