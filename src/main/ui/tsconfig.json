@@ -25,5 +25,9 @@
   ],
   "exclude": [
     "node_modules"
-  ]
+  ],
+  "i18n": {
+    "locales": ["pl", "en"],
+    "defaultLocale": "pl"
+  }
 }
