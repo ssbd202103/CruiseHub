@@ -9,21 +9,11 @@ import PasswordIcon from '@material-ui/icons/VpnKeyRounded'
 import { withStyles } from '@material-ui/styles'
 
 import DarkedTextField from '../components/DarkedTextField'
+import RoundedButton from '../components/RoundedButton'
 
 import styles from '../styles/auth.global.module.css'
 
-const StyledButton = withStyles({
-    root: {
-        backgroundColor: 'var(--pink)',
-        color: 'var(--white)',
-        width: '75%',
-        height: 68,
-        borderRadius: 34,
-        '&:hover': {
-            backgroundColor: "var(--pink-dark)"
-        }
-    }
-})(Button)
+
 
 export default function SignIn() {
     return (
@@ -33,18 +23,23 @@ export default function SignIn() {
                 <h2 className={styles.h2}>Bardzo się cziesimy, że znów jesteś z nami</h2>
 
                 <DarkedTextField 
+                    label="Email"
                     className={styles.input} 
                     icon={(<EmailIcon />)}
                     placeholder="example@email.com"
                 />
 
                 <DarkedTextField 
+                    label="Hasło"
                     className={styles.input} 
                     icon={(<PasswordIcon />)}
                     placeholder="1234567890"
                 />
 
-                <StyledButton>Zaloguj</StyledButton>
+                <RoundedButton
+                    className={styles.button}
+                    color="pink"
+                >Zaloguj</RoundedButton>
 
             </Grid>
         </Grid>

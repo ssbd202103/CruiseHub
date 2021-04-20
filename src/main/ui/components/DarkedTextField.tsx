@@ -31,7 +31,8 @@ export interface DarkedTextFieldProps {
     readonly type: "text" | "email" | "password",
     readonly className?: string,
     readonly icon: JSX.Element,
-    readonly placeholder?: string
+    readonly placeholder?: string,
+    readonly label?: string
 }
 
 export default function DarkedTextField(props: any) {
@@ -39,7 +40,8 @@ export default function DarkedTextField(props: any) {
         className: styles,
         icon,
         type,
-        placeholder
+        placeholder,
+        label
     } = props
 
     return (
@@ -47,7 +49,7 @@ export default function DarkedTextField(props: any) {
             type={type || "text"}      
             className={styles || ""} 
             variant="outlined"
-            label="Email"
+            label={label || ""}
             InputProps={{
                 startAdornment: (
                     <InputAdornment position="start">
