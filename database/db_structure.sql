@@ -17,10 +17,10 @@ create table alter_type
 create table accounts
 (
     id                                            bigint                              not null,
-    first_name                                    varchar(25),
-    second_name                                   varchar(25),
+    first_name                                    varchar(25)                         not null,
+    second_name                                   varchar(25)                         not null,
     login                                         varchar(25)                         not null,
-    email                                         varchar(25)                         not null,
+    email                                         varchar(64)                         not null,
     password_hash                                 varchar(64)                         not null, -- hash sha256
     confirmed                                     boolean   default false             not null,
     active                                        boolean   default false             not null,
@@ -144,7 +144,7 @@ create table cruise_addresses
     id                   bigint                              not null,
     street               varchar(25)                         not null,
     street_number        bigint check ((street_number >= 0) AND (street_number <= 999)),
-    harbor_name          varchar(25),
+    harbor_name          varchar(25)                         not null,
     city                 varchar(25)                         not null,
     country              varchar(25)                         not null,
 
@@ -227,8 +227,8 @@ create table cruises_groups
     id                   bigint                                                              not null,
     company_id           bigint                                                              not null, -- FOREIGN KEY
     name                 varchar(64)                                                         not null,
-    number_of_seats      bigint check ((number_of_seats >= 0) AND (number_of_seats <= 9999)) not null,
-    price                numeric(8,2) check ((price >= (0)::numeric))                       not null,
+    number_of_seats      bigint check ((number_of_seats >= 0) AND (number_of_seats <= 5200)) not null,
+    price                numeric(8,2) check ((price >= (0)::numeric))                        not null,
     start_address_id     bigint                                                              not null, -- FOREIGN KEY
     average_rating       numeric(2,1) check ((average_rating >= (0)::numeric) AND (average_rating <= (5)::numeric)),
 
@@ -257,7 +257,7 @@ create table cruises
     start_date           timestamp                           not null,
     end_date             timestamp,
     active               boolean   default false             not null,
-    description          varchar(256),
+    description          varchar                             not null,
     cruises_groups_id    bigint                              not null, -- FOREIGN KEY
     available            boolean   default false             not null,
 
@@ -284,9 +284,9 @@ create table attractions
 (
     id                   bigint                                                              not null,
     name                 varchar(25)                                                         not null,
-    description          varchar(256),
+    description          varchar                                                             not null,
     price                numeric(8, 2)                                                       not null,
-    number_of_seats      bigint check ((number_of_seats >= 0) AND (number_of_seats <= 9999)) not null,
+    number_of_seats      bigint check (number_of_seats >= 0)                                 not null,
     available            boolean   default false                                             not null,
     cruise_id            bigint,                                                                       -- FOREIGN KEY
 
@@ -312,7 +312,7 @@ create table reservations
 (
     id                   bigint                                                              not null,
     client_id            bigint                                                              not null, --FOREIGN KEY
-    number_of_seats      bigint check ((number_of_seats >= 0) AND (number_of_seats <= 9999)) not null,
+    number_of_seats      bigint check (number_of_seats >= 0)                                 not null,
     cruise_id            bigint                                                              not null, --FOREIGN KEY
 
     creation_date_time   timestamp default CURRENT_TIMESTAMP                                 not null,
@@ -365,7 +365,7 @@ create table comments
     id                   bigint                              not null,
     account_id           bigint                              not null, -- FOREIGN KEY
     cruise_id            bigint                              not null, -- FOREIGN KEY
-    comment              varchar(256)                        not null,
+    comment              varchar(2500)                       not null,
 
     creation_date_time   timestamp default CURRENT_TIMESTAMP not null,
     last_alter_date_time timestamp                           not null,
@@ -425,10 +425,6 @@ create table company_workers
     CONSTRAINT company_workers_business_workers_id_fk_constraint FOREIGN KEY (business_workers_id) REFERENCES business_workers (id)
 );
 
-create sequence company_workers_id_seq
-    START WITH 1
-    INCREMENT BY 1;
-
 create table cruises_groups_pictures
 (
     id                 bigint not null,
@@ -440,10 +436,6 @@ create table cruises_groups_pictures
     CONSTRAINT cruises_groups_pictures_cruises_groups_id_fk_constraint FOREIGN KEY (cruises_groups_id) REFERENCES cruises_groups (id),
     CONSTRAINT cruises_groups_pictures_cruise_pictures_id_fk_constraint FOREIGN KEY (cruise_pictures_id) REFERENCES cruise_pictures (id)
 );
-
-create sequence cruises_groups_pictures_id_seq
-    START WITH 1
-    INCREMENT BY 1;
 
 create table reservations_attractions
 (
@@ -457,9 +449,6 @@ create table reservations_attractions
     CONSTRAINT reservations_attractions_attractions_id_fk_constraint FOREIGN KEY (attractions_id) REFERENCES attractions (id)
 );
 
-create sequence reservations_attractions_id_seq
-    START WITH 1
-    INCREMENT BY 1;
 
 CREATE VIEW glassfish_auth_view AS
 SELECT accounts.login, accounts.password_hash, access_levels.access_level
