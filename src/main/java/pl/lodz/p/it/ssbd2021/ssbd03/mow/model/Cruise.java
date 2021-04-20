@@ -54,7 +54,7 @@ public class Cruise extends BaseEntity {
     @NotNull
     @OneToOne
     @JoinColumn(name = "cruises_groups_id")
-    private CruiseGroup crusesGroup;
+    private CruiseGroup cruisesGroup;
 
     public Cruise(Long id, @NotNull LocalDateTime startDate, @NotNull LocalDateTime endDate, @NotNull boolean active, @NotNull String description, @NotNull Boolean available, @NotNull CruiseGroup crusesGroup) {
         this.id = id;
@@ -63,7 +63,7 @@ public class Cruise extends BaseEntity {
         this.active = active;
         this.description = description;
         this.available = available;
-        this.crusesGroup = crusesGroup;
+        this.cruisesGroup = crusesGroup;
     }
 
     public Cruise() {

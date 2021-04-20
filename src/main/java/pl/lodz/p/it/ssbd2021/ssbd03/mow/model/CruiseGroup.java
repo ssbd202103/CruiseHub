@@ -56,7 +56,10 @@ public class CruiseGroup extends BaseEntity {
     @Getter
     @NotNull
     @ManyToMany
-    @JoinTable(name = "cruises_groups_pictures")
+    @JoinTable(name = "cruises_groups_pictures",
+            joinColumns = @JoinColumn(name = "cruise_pictures_id"),
+            inverseJoinColumns = @JoinColumn(name = "cruises_groups_id")
+    )
     private List<CruisePicture> cruisePicture;
 
     @Getter

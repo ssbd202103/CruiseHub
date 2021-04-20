@@ -9,7 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-@Entity(name = "comercials")
+@Entity(name = "commercials")
 public class Commercial extends BaseEntity {
     @Getter
     @Id

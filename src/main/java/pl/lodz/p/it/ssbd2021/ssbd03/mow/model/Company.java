@@ -49,7 +49,10 @@ public class Company extends BaseEntity {
     @Getter
     @NotNull
     @ManyToMany
-    @JoinTable(name = "company_workers")
+    @JoinTable(name = "company_workers",
+            joinColumns = @JoinColumn(name = "companies_id"),
+            inverseJoinColumns = @JoinColumn(name = "business_workers_id")
+    )
     private List<BusinessWorker> workers = new ArrayList<>();
 
     public Company(Long id, @NotNull Address address, @NotNull String name, @NotNull String phoneNumber, @NotNull Long NIP, @NotNull List<BusinessWorker> workers) {
