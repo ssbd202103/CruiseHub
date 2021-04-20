@@ -22,7 +22,6 @@ export default function RoundedButton(props: RoundedButtonProps) {
             fontFamily: "'Montserrat', sans-serif",
             backgroundColor: 'var(--' + color + ')',
             color: 'var(--white)',
-            height: 68,
             borderRadius: 34,
             '&:hover': {
                 backgroundColor: 'var(--' + color + '-dark)'

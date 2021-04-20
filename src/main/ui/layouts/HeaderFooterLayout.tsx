@@ -1,7 +1,8 @@
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import LayoutProps from './LayoutProps'
 
-function UserLayout({children}) {
+export default function HeaderFooterLayout({children}: LayoutProps) {
     return (
         <>
             <Header />
@@ -10,5 +11,3 @@ function UserLayout({children}) {
         </>
     )
 }
-
-export default UserLayout

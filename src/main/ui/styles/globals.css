@@ -23,6 +23,13 @@ body *::after {
     box-sizing: border-box;
 }
 
+a {
+    color: var(--white);
+    text-decoration: none;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+}
+
 .MuiMenu-paper>.MuiList-root>.MuiButtonBase-root {
     font-family: 'Montserrat Alternates', sans-serif;
     font-size: 1.2rem;

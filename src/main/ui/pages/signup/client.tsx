@@ -77,7 +77,7 @@ export default function ClientSignUp() {
                 alignItems: "center",
                 justifyContent: "space-between"
             }}>
-                <RoundedButton style={{width: '50%', fontSize: '1.2rem'}} color="pink">Zarejestruj mnie</RoundedButton>
+                <RoundedButton style={{width: '50%', fontSize: '1.2rem', padding: '10px 0'}} color="pink">Zarejestruj mnie</RoundedButton>
                 <Link href="worker">
                     <a className={styles.link}>Jestem pracownikiem firmy</a>
                 </Link>

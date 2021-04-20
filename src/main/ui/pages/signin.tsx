@@ -1,3 +1,6 @@
+import Link from 'next/link'
+
+import Box from '@material-ui/core/Box'
 import EmailIcon from '@material-ui/icons/AlternateEmail'
 import PasswordIcon from '@material-ui/icons/VpnKeyRounded'
 
@@ -19,7 +22,7 @@ export default function SignIn() {
                     type="email"
                     label="Email"
                     style={{
-                        width: '50%',
+                        width: '70%',
                         margin: '20px 0'
                     }}
                     icon={(<EmailIcon />)}
@@ -30,20 +33,33 @@ export default function SignIn() {
                     type="password"
                     label="Hasło"
                     style={{
-                        width: '50%',
+                        width: '70%',
                         margin: '20px 0'
                     }} 
                     icon={(<PasswordIcon />)}
                     placeholder="1234567890"
                 />
 
-                <RoundedButton
-                    style={{
-                        width: '50%',
-                        fontSize: '1.2rem',
-                    }}
-                    color="pink"
-                >Zaloguj</RoundedButton>
+                <Box style={{
+                    width: '70%',
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between"
+                }}>
+                    <RoundedButton
+                        style={{
+                            width: '50%',
+                            fontSize: '1.2rem',
+                            padding: '10px 0'
+                        }}
+                        color="pink"
+                    >Zaloguj</RoundedButton>
+                    <Link href="signup/client">
+                        <a className={styles.link}>Nie mam konta</a>
+                    </Link>
+                </Box>
+
+                
         </AuthLayout>
     )
 }
