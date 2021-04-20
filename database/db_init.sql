@@ -145,7 +145,7 @@ values (-4, 'Rancho', '88', 'TackoHarbor', 'Las Colinas', 'USA', now(), now(), -
 --
 --
 --
---cruise_pictures start
+/*--cruise_pictures start
 insert into cruise_pictures(id, img_name, img, creation_date_time, last_alter_date_time, alter_type, created_by_id,
                             altered_by_id, version)
 values (-1, 'LowRidder.jpg', null, now(), now(), -2, -1, -1, 0);
@@ -155,7 +155,7 @@ values (-2, 'kitty.jpg', null, now(), now(), -2, -1, -1, 0);
 insert into cruise_pictures(id, img_name, img, creation_date_time, last_alter_date_time, alter_type, created_by_id,
                             altered_by_id, version)
 values (-3, 'PearlHarbort.jpg', null, now(), now(), -2, -1, -1, 0);
---cruise_pictures end
+--cruise_pictures end*/
 --
 --
 --
@@ -295,11 +295,11 @@ values (-1, -1, -4);
 --
 --cruises_groups_pictures start
 insert into cruises_groups_pictures (id, cruises_groups_id, cruise_pictures_id)
-values (-1, -3, -1);
+values (-1, -3,null);
 insert into cruises_groups_pictures (id, cruises_groups_id, cruise_pictures_id)
-values (-2, -2, -2);
+values (-2, -2,null);
 insert into cruises_groups_pictures (id, cruises_groups_id, cruise_pictures_id)
-values (-3, -1, -3);
+values (-3, -1,null);
 --cruises_groups_pictures end
 --
 --
