@@ -1,10 +1,11 @@
 import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/styles'
-
+import * as React from 'react'
 export interface RoundedButtonProps {
     readonly className?: string,
     readonly color: "pink" | "yellow" | "green" | "blue"
     readonly children?: any,
+    readonly style?: React.CSSProperties 
 }
 
 export default function RoundedButton(props: RoundedButtonProps) {
@@ -12,7 +13,8 @@ export default function RoundedButton(props: RoundedButtonProps) {
     const {
         className: styles,
         children,
-        color
+        color,
+        style
     } = props
 
     const classes = makeStyles(theme => ({
@@ -32,6 +34,7 @@ export default function RoundedButton(props: RoundedButtonProps) {
     return (
         <Button 
             className={(styles || '') + ' ' + classes.root}
+            style={style || null}
         >{children}</Button>
     )
 }

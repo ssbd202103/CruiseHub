@@ -22,3 +22,8 @@ body *::before,
 body *::after {
     box-sizing: border-box;
 }
+
+.MuiMenu-paper>.MuiList-root>.MuiButtonBase-root {
+    font-family: 'Montserrat Alternates', sans-serif;
+    font-size: 1.2rem;
+}

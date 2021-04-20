@@ -1,28 +1,22 @@
-import {useRouter} from 'next/router'
-
-import {
-    Grid,
-    Button
-} from '@material-ui/core'
 import EmailIcon from '@material-ui/icons/AlternateEmail'
 import PasswordIcon from '@material-ui/icons/VpnKeyRounded'
-import { withStyles } from '@material-ui/styles'
 
+import AuthLayout from '../layouts/AuthLayout'
 import DarkedTextField from '../components/DarkedTextField'
 import RoundedButton from '../components/RoundedButton'
 
 import styles from '../styles/auth.global.module.css'
 
-
-
 export default function SignIn() {
     return (
-        <Grid container className={styles.wrapper}>
-            <Grid item className={styles.form} xs sm={9} md={9} lg={7} xl={5}>
+        <AuthLayout>
                 <h1 className={styles.h1}>Witamy ponownie</h1>
                 <h2 className={styles.h2}>Bardzo się cziesimy, że znów jesteś z nami</h2>
 
+                
+
                 <DarkedTextField 
+                    type="email"
                     label="Email"
                     className={styles.input} 
                     icon={(<EmailIcon />)}
@@ -30,6 +24,7 @@ export default function SignIn() {
                 />
 
                 <DarkedTextField 
+                    type="password"
                     label="Hasło"
                     className={styles.input} 
                     icon={(<PasswordIcon />)}
@@ -40,8 +35,6 @@ export default function SignIn() {
                     className={styles.button}
                     color="pink"
                 >Zaloguj</RoundedButton>
-
-            </Grid>
-        </Grid>
+        </AuthLayout>
     )
 }

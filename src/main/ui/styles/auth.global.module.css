@@ -38,10 +38,18 @@
 }
 
 .input.input {
-    width: 75%;
-    margin: 20px;
+    width: 100%;
+    margin: 20px 0;
 }
 
 .button {
     width: 75%;
+}
+
+.link {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+    color: var(--blue);
 }

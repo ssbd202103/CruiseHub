@@ -2,64 +2,72 @@ import {
     TextField,
     InputAdornment
 } from '@material-ui/core'
-import { withStyles } from '@material-ui/styles'
+import { makeStyles } from '@material-ui/styles'
 import * as React from 'react'
 
-const StyledTextFiled = withStyles({
+const useStyles = makeStyles(theme => ({
     root: {
         borderColor: 'var(--dark)',
         '& input:focus:focus + fieldset': {
             borderColor: 'var(--dark)'
         }
     }
-})(TextField)
+}))
 
 const inputStyle = {
     fontFamily: "'Montserrat Alternates', sans-serif",
-    fontSize: '1.4rem',
+    fontSize: '1.2rem',
 }
 
 const labelStyle = {
     style: {
         fontFamily: "'Montserrat', sans-serif",
-        fontSize: '1.3rem',
+        fontSize: '1.1rem',
         color: 'var(--dark)'
     }
 }
 
 export interface DarkedTextFieldProps {
-    readonly type: "text" | "email" | "password",
+    readonly type?: "text" | "email" | "password",
     readonly className?: string,
-    readonly icon: JSX.Element,
+    readonly icon?: JSX.Element,
     readonly placeholder?: string,
-    readonly label?: string
+    readonly label?: string,
+    readonly style?: React.CSSProperties
 }
 
-export default function DarkedTextField(props: any) {
+function DarkedTextField(props: DarkedTextFieldProps) {
+
+    const classes = useStyles()
+
     const {
         className: styles,
         icon,
         type,
         placeholder,
-        label
+        label,
+        style
     } = props
 
     return (
-        <StyledTextFiled 
+        <TextField 
             type={type || "text"}      
-            className={styles || ""} 
+            className={classes.root + ' ' + (styles || "")} 
             variant="outlined"
             label={label || ""}
             InputProps={{
                 startAdornment: (
                     <InputAdornment position="start">
-                        {icon}
+                        {icon || ""}
                     </InputAdornment>
                 ),
                 style: inputStyle,
             }}
             InputLabelProps={labelStyle}
             placeholder={placeholder || ""}
+            style={style || null}
         />
     )
 }
+
+export default DarkedTextField;
