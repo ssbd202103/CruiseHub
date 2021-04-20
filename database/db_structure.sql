@@ -565,3 +565,221 @@ GRANT SELECT, INSERT, UPDATE, DELETE
     ON reservations_attractions TO ssbd03mow;
 
 GRANT SELECT ON glassfish_auth_view TO ssbd03glassfish;
+
+
+
+-- INDEXES --
+CREATE INDEX accounts_language_type_id_index
+    ON accounts USING btree
+    (language_type_id ASC NULLS LAST);
+CREATE INDEX accounts_created_by_id_index
+    ON accounts USING btree
+        (created_by_id ASC NULLS LAST);
+CREATE INDEX accounts_altered_by_id_index
+    ON accounts USING btree
+        (altered_by_id ASC NULLS LAST);
+CREATE INDEX accounts_alter_type_id_index
+    ON accounts USING btree
+        (alter_type_id ASC NULLS LAST);
+
+CREATE INDEX access_levels_account_id_index
+    ON access_levels USING btree
+        (account_id ASC NULLS LAST);
+CREATE INDEX access_levels_created_by_id_index
+    ON access_levels USING btree
+        (created_by_id ASC NULLS LAST);
+CREATE INDEX access_levels_altered_by_id_index
+    ON access_levels USING btree
+        (altered_by_id ASC NULLS LAST);
+CREATE INDEX access_levels_alter_type_id_index
+    ON access_levels USING btree
+        (alter_type_id ASC NULLS LAST);
+
+CREATE INDEX administrators_id_index
+    ON administrators USING btree
+        (id ASC NULLS LAST);
+
+CREATE INDEX business_workers_id_index
+    ON business_workers USING btree
+        (id ASC NULLS LAST);
+
+CREATE INDEX addresses_created_by_id_index
+    ON addresses USING btree
+        (created_by_id ASC NULLS LAST);
+CREATE INDEX addresses_altered_by_id_index
+    ON addresses USING btree
+        (altered_by_id ASC NULLS LAST);
+CREATE INDEX addresses_alter_type_id_index
+    ON addresses USING btree
+        (alter_type_id ASC NULLS LAST);
+
+CREATE INDEX clients_id_index
+    ON clients USING btree
+        (id ASC NULLS LAST);
+CREATE INDEX clients_home_address_id_index
+    ON clients USING btree
+        (home_address_id ASC NULLS LAST);
+
+CREATE INDEX moderators_id_index
+    ON moderators USING btree
+        (id ASC NULLS LAST);
+
+CREATE INDEX cruise_addresses_created_by_id_index
+    ON cruise_addresses USING btree
+        (created_by_id ASC NULLS LAST);
+CREATE INDEX cruise_addresses_altered_by_id_index
+    ON cruise_addresses USING btree
+        (altered_by_id ASC NULLS LAST);
+CREATE INDEX cruise_addresses_alter_type_id_index
+    ON cruise_addresses USING btree
+        (alter_type_id ASC NULLS LAST);
+
+CREATE INDEX cruise_pictures_created_by_id_index
+    ON cruise_pictures USING btree
+        (created_by_id ASC NULLS LAST);
+CREATE INDEX cruise_pictures_altered_by_id_index
+    ON cruise_pictures USING btree
+        (altered_by_id ASC NULLS LAST);
+CREATE INDEX cruise_pictures_alter_type_id_index
+    ON cruise_pictures USING btree
+        (alter_type_id ASC NULLS LAST);
+
+CREATE INDEX companies_address_id_index
+    ON companies USING btree
+        (address_id ASC NULLS LAST);
+CREATE INDEX companies_created_by_id_index
+    ON companies USING btree
+        (created_by_id ASC NULLS LAST);
+CREATE INDEX companies_altered_by_id_index
+    ON companies USING btree
+        (altered_by_id ASC NULLS LAST);
+CREATE INDEX companies_alter_type_id_index
+    ON companies USING btree
+        (alter_type_id ASC NULLS LAST);
+
+CREATE INDEX cruises_groups_company_id_index
+    ON cruises_groups USING btree
+        (company_id ASC NULLS LAST);
+CREATE INDEX cruises_groups_start_address_id_index
+    ON cruises_groups USING btree
+        (start_address_id ASC NULLS LAST);
+CREATE INDEX cruises_groups_created_by_id_index
+    ON cruises_groups USING btree
+        (created_by_id ASC NULLS LAST);
+CREATE INDEX cruises_groups_altered_by_id_index
+    ON cruises_groups USING btree
+        (altered_by_id ASC NULLS LAST);
+CREATE INDEX cruises_groups_alter_type_id_index
+    ON cruises_groups USING btree
+        (alter_type_id ASC NULLS LAST);
+
+CREATE INDEX cruises_cruises_groups_id_index
+    ON cruises USING btree
+        (cruises_groups_id ASC NULLS LAST);
+CREATE INDEX cruises_created_by_id_index
+    ON cruises USING btree
+        (created_by_id ASC NULLS LAST);
+CREATE INDEX cruises_altered_by_id_index
+    ON cruises USING btree
+        (altered_by_id ASC NULLS LAST);
+CREATE INDEX cruises_alter_type_id_index
+    ON cruises USING btree
+        (alter_type_id ASC NULLS LAST);
+
+CREATE INDEX attractions_cruise_id_index
+    ON attractions USING btree
+        (cruise_id ASC NULLS LAST);
+CREATE INDEX attractions_created_by_id_index
+    ON attractions USING btree
+        (created_by_id ASC NULLS LAST);
+CREATE INDEX attractions_altered_by_id_index
+    ON attractions USING btree
+        (altered_by_id ASC NULLS LAST);
+CREATE INDEX attractions_alter_type_id_index
+    ON attractions USING btree
+        (alter_type_id ASC NULLS LAST);
+
+CREATE INDEX reservations_client_id_index
+    ON reservations USING btree
+        (client_id ASC NULLS LAST);
+CREATE INDEX reservations_cruise_id_index
+    ON reservations USING btree
+        (cruise_id ASC NULLS LAST);
+CREATE INDEX reservations_created_by_id_index
+    ON reservations USING btree
+        (created_by_id ASC NULLS LAST);
+CREATE INDEX reservations_altered_by_id_index
+    ON reservations USING btree
+        (altered_by_id ASC NULLS LAST);
+CREATE INDEX reservations_alter_type_id_index
+    ON reservations USING btree
+        (alter_type_id ASC NULLS LAST);
+
+CREATE INDEX ratings_account_id_index
+    ON ratings USING btree
+        (account_id ASC NULLS LAST);
+CREATE INDEX ratings_cruise_id_index
+    ON ratings USING btree
+        (cruise_id ASC NULLS LAST);
+CREATE INDEX ratings_created_by_id_index
+    ON ratings USING btree
+        (created_by_id ASC NULLS LAST);
+CREATE INDEX ratings_altered_by_id_index
+    ON ratings USING btree
+        (altered_by_id ASC NULLS LAST);
+CREATE INDEX ratings_alter_type_id_index
+    ON ratings USING btree
+        (alter_type_id ASC NULLS LAST);
+
+CREATE INDEX comments_account_id_index
+    ON comments USING btree
+        (account_id ASC NULLS LAST);
+CREATE INDEX comments_cruise_id_index
+    ON comments USING btree
+        (cruise_id ASC NULLS LAST);
+CREATE INDEX comments_created_by_id_index
+    ON comments USING btree
+        (created_by_id ASC NULLS LAST);
+CREATE INDEX comments_altered_by_id_index
+    ON comments USING btree
+        (altered_by_id ASC NULLS LAST);
+CREATE INDEX comments_alter_type_id_index
+    ON comments USING btree
+        (alter_type_id ASC NULLS LAST);
+
+CREATE INDEX commercials_commercial_type_id_index
+    ON commercials USING btree
+        (commercial_type_id ASC NULLS LAST);
+CREATE INDEX commercials_cruises_group_id_index
+    ON commercials USING btree
+        (cruises_group_id ASC NULLS LAST);
+CREATE INDEX commercials_created_by_id_index
+    ON commercials USING btree
+        (created_by_id ASC NULLS LAST);
+CREATE INDEX commercials_altered_by_id_index
+    ON commercials USING btree
+        (altered_by_id ASC NULLS LAST);
+CREATE INDEX commercials_alter_type_id_index
+    ON commercials USING btree
+        (alter_type_id ASC NULLS LAST);
+
+CREATE INDEX company_workers_companies_id_index
+    ON company_workers USING btree
+        (companies_id ASC NULLS LAST);
+CREATE INDEX company_workers_business_workers_id_index
+    ON company_workers USING btree
+        (business_workers_id ASC NULLS LAST);
+
+CREATE INDEX cruises_groups_pictures_cruises_group_id_index
+    ON cruises_groups_pictures USING btree
+        (cruises_groups_id ASC NULLS LAST);
+CREATE INDEX cruises_groups_pictures_cruise_pictures_id_index
+    ON cruises_groups_pictures USING btree
+        (cruise_pictures_id ASC NULLS LAST);
+
+CREATE INDEX reservations_attractions_reservations_id_index
+    ON reservations_attractions USING btree
+        (reservations_id ASC NULLS LAST);
+CREATE INDEX reservations_attractions_attractions_id_index
+    ON reservations_attractions USING btree
+        (attractions_id ASC NULLS LAST);
