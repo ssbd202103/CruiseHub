@@ -506,6 +506,33 @@ ALTER TABLE companies
     OWNER to ssbd03admin;
 ALTER TABLE cruises
     OWNER to ssbd03admin;
+ALTER TABLE account_id_seq
+    OWNER to ssbd03admin;
+ALTER TABLE access_level_id_seq
+    OWNER to ssbd03admin;
+ALTER TABLE address_id_seq
+    OWNER to ssbd03admin;
+ALTER TABLE cruise_addresses_id_seq
+    OWNER to ssbd03admin;
+ALTER TABLE cruise_pictures_id_seq
+    OWNER to ssbd03admin;
+ALTER TABLE companies_id_seq
+    OWNER to ssbd03admin;
+ALTER TABLE cruises_groups_id_seq
+    OWNER to ssbd03admin;
+ALTER TABLE cruises_id_seq
+    OWNER to ssbd03admin;
+ALTER TABLE attractions_id_seq
+    OWNER to ssbd03admin;
+ALTER TABLE reservations_id_seq
+    OWNER to ssbd03admin;
+ALTER TABLE ratings_id_seq
+    OWNER to ssbd03admin;
+ALTER TABLE comments_id_seq
+    OWNER to ssbd03admin;
+ALTER TABLE commercials_id_seq
+    OWNER to ssbd03admin;
+
 ALTER
     VIEW glassfish_auth_view OWNER TO ssbd03admin;
 
@@ -595,7 +622,6 @@ GRANT SELECT, UPDATE
 GRANT SELECT, UPDATE
     ON SEQUENCE address_id_seq TO ssbd03mok;
 
-
 -- Table permissions for MOW --
 GRANT SELECT
     ON access_levels TO ssbd03mow;
@@ -651,7 +677,39 @@ GRANT SELECT, INSERT, UPDATE, DELETE
 GRANT SELECT, INSERT, UPDATE, DELETE
     ON reservations_attractions TO ssbd03mow;
 
-GRANT SELECT ON glassfish_auth_view TO ssbd03glassfish;
+GRANT SELECT, UPDATE
+    ON SEQUENCE cruise_addresses_id_seq TO ssbd03mow;
+
+GRANT SELECT, UPDATE
+    ON SEQUENCE cruise_pictures_id_seq TO ssbd03mow;
+
+GRANT SELECT, UPDATE
+    ON SEQUENCE companies_id_seq TO ssbd03mow;
+
+GRANT SELECT, UPDATE
+    ON SEQUENCE cruises_groups_id_seq TO ssbd03mow;
+
+GRANT SELECT, UPDATE
+    ON SEQUENCE cruises_id_seq TO ssbd03mow;
+
+GRANT SELECT, UPDATE
+    ON SEQUENCE attractions_id_seq TO ssbd03mow;
+
+GRANT SELECT, UPDATE
+    ON SEQUENCE reservations_id_seq TO ssbd03mow;
+
+GRANT SELECT, UPDATE
+    ON SEQUENCE ratings_id_seq TO ssbd03mow;
+
+GRANT SELECT, UPDATE
+    ON SEQUENCE comments_id_seq TO ssbd03mow;
+
+GRANT SELECT, UPDATE
+    ON SEQUENCE commercials_id_seq TO ssbd03mow;
+
+
+
+
 
 
 -- INDEXES --
