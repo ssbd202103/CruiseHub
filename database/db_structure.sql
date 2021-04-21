@@ -622,6 +622,7 @@ GRANT SELECT, UPDATE
 GRANT SELECT, UPDATE
     ON SEQUENCE address_id_seq TO ssbd03mok;
 
+
 -- Table permissions for MOW --
 GRANT SELECT
     ON access_levels TO ssbd03mow;
@@ -890,7 +891,6 @@ CREATE INDEX comments_altered_by_id_index
 CREATE INDEX comments_alter_type_id_index
     ON comments USING btree
         (alter_type_id ASC NULLS LAST);
-
 CREATE INDEX commercials_commercial_type_id_index
     ON commercials USING btree
         (commercial_type_id ASC NULLS LAST);
