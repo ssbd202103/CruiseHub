@@ -5,7 +5,7 @@ import lombok.Setter;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.model.entities.AccessLevel;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.model.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.model.entities.Address;
-import validators.PhoneNumber;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.validators.PhoneNumber;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

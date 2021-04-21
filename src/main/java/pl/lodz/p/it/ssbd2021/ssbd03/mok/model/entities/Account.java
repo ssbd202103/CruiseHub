@@ -3,8 +3,8 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.model.entities;
 import lombok.Getter;
 import lombok.Setter;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.BaseEntity;
-import validators.Login;
-import validators.Name;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.validators.Login;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.validators.Name;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
