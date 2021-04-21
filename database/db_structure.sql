@@ -228,9 +228,9 @@ create table cruises_groups
     company_id           bigint                                                              not null, -- FOREIGN KEY
     name                 varchar(64)                                                         not null,
     number_of_seats      bigint check ((number_of_seats >= 0) AND (number_of_seats <= 5200)) not null,
-    price                numeric(8,2) check ((price >= (0)::numeric))                        not null,
+    price                numeric(8, 2) check ((price >= (0)::numeric))                       not null,
     start_address_id     bigint                                                              not null, -- FOREIGN KEY
-    average_rating       numeric(2,1) check ((average_rating >= (0)::numeric) AND (average_rating <= (5)::numeric)),
+    average_rating       numeric(2, 1) check ((average_rating >= (0)::numeric) AND (average_rating <= (5)::numeric)),
 
     creation_date_time   timestamp default CURRENT_TIMESTAMP                                 not null,
     last_alter_date_time timestamp                                                           not null,
@@ -282,20 +282,20 @@ create sequence cruises_id_seq
 
 create table attractions
 (
-    id                   bigint                                                              not null,
-    name                 varchar(25)                                                         not null,
-    description          varchar                                                             not null,
-    price                numeric(8, 2)                                                       not null,
-    number_of_seats      bigint check (number_of_seats >= 0)                                 not null,
-    available            boolean   default false                                             not null,
-    cruise_id            bigint,                                                                       -- FOREIGN KEY
+    id                   bigint                              not null,
+    name                 varchar(25)                         not null,
+    description          varchar                             not null,
+    price                numeric(8, 2)                       not null,
+    number_of_seats      bigint check (number_of_seats >= 0) not null,
+    available            boolean   default false             not null,
+    cruise_id            bigint,                                       -- FOREIGN KEY
 
-    creation_date_time   timestamp default CURRENT_TIMESTAMP                                 not null,
-    last_alter_date_time timestamp                                                           not null,
-    created_by_id        bigint                                                              not null, -- FOREIGN KEY
-    altered_by_id        bigint                                                              not null, -- FOREIGN KEY
-    alter_type_id        bigint                                                              not null, -- FOREIGN KEY
-    version              bigint check (version >= 0)                                         not null,
+    creation_date_time   timestamp default CURRENT_TIMESTAMP not null,
+    last_alter_date_time timestamp                           not null,
+    created_by_id        bigint                              not null, -- FOREIGN KEY
+    altered_by_id        bigint                              not null, -- FOREIGN KEY
+    alter_type_id        bigint                              not null, -- FOREIGN KEY
+    version              bigint check (version >= 0)         not null,
 
     CONSTRAINT attractions_id_pk_constraint PRIMARY KEY (id),
     CONSTRAINT attractions_cruise_id_fk_constraint FOREIGN KEY (cruise_id) REFERENCES cruises (id),
@@ -310,17 +310,17 @@ create sequence attractions_id_seq
 
 create table reservations
 (
-    id                   bigint                                                              not null,
-    client_id            bigint                                                              not null, --FOREIGN KEY
-    number_of_seats      bigint check (number_of_seats >= 0)                                 not null,
-    cruise_id            bigint                                                              not null, --FOREIGN KEY
+    id                   bigint                              not null,
+    client_id            bigint                              not null, --FOREIGN KEY
+    number_of_seats      bigint check (number_of_seats >= 0) not null,
+    cruise_id            bigint                              not null, --FOREIGN KEY
 
-    creation_date_time   timestamp default CURRENT_TIMESTAMP                                 not null,
-    last_alter_date_time timestamp                                                           not null,
-    created_by_id        bigint                                                              not null, -- FOREIGN KEY
-    altered_by_id        bigint                                                              not null, -- FOREIGN KEY
-    alter_type_id        bigint                                                              not null, -- FOREIGN KEY
-    version              bigint check (version >= 0)                                         not null,
+    creation_date_time   timestamp default CURRENT_TIMESTAMP not null,
+    last_alter_date_time timestamp                           not null,
+    created_by_id        bigint                              not null, -- FOREIGN KEY
+    altered_by_id        bigint                              not null, -- FOREIGN KEY
+    alter_type_id        bigint                              not null, -- FOREIGN KEY
+    version              bigint check (version >= 0)         not null,
 
     CONSTRAINT reservations_id_pk_constraint PRIMARY KEY (id),
     CONSTRAINT reservations_client_id_fk_constraint FOREIGN KEY (client_id) REFERENCES clients (id),
@@ -510,32 +510,57 @@ ALTER
     VIEW glassfish_auth_view OWNER TO ssbd03admin;
 
 --Table sequence--
-ALTER TABLE accounts ALTER COLUMN id
-SET DEFAULT nextval('account_id_seq');
-ALTER TABLE access_levels ALTER COLUMN id
-SET DEFAULT nextval('access_level_id_seq');
-ALTER TABLE addresses ALTER COLUMN id
-SET DEFAULT nextval('address_id_seq');
-AlTER TABLE reservations ALTER COLUMN id
-SET DEFAULT nextval('reservations_id_seq');
-AlTER TABLE attractions ALTER COLUMN id
-SET DEFAULT nextval('attractions_id_seq');
-ALTER TABLE ratings ALTER COLUMN id
-SET DEFAULT nextval('ratings_id_seq');
-ALTER TABLE comments ALTER COLUMN id
-SET DEFAULT nextval('comments_id_seq');
-ALTER TABLE commercials ALTER COLUMN id
-SET DEFAULT nextval('commercials_id_seq');
-ALTER TABLE cruise_addresses ALTER COLUMN id
-SET DEFAULT nextval('cruise_addresses_id_seq');
-ALTER TABLE cruise_pictures ALTER COLUMN id
-SET DEFAULT nextval('cruise_pictures_id_seq');
-ALTER TABLE cruises_groups ALTER COLUMN id
-SET DEFAULT nextval('cruises_groups_id_seq');
-ALTER TABLE companies ALTER COLUMN id
-SET DEFAULT nextval('companies_id_seq');
-ALTER TABLE cruises ALTER COLUMN id
-SET DEFAULT nextval('cruises_id_seq');
+ALTER TABLE accounts
+    ALTER COLUMN id
+        SET DEFAULT nextval('account_id_seq');
+
+ALTER TABLE access_levels
+    ALTER COLUMN id
+        SET DEFAULT nextval('access_level_id_seq');
+
+ALTER TABLE addresses
+    ALTER COLUMN id
+        SET DEFAULT nextval('address_id_seq');
+
+AlTER TABLE reservations
+    ALTER COLUMN id
+        SET DEFAULT nextval('reservations_id_seq');
+
+AlTER TABLE attractions
+    ALTER COLUMN id
+        SET DEFAULT nextval('attractions_id_seq');
+
+ALTER TABLE ratings
+    ALTER COLUMN id
+        SET DEFAULT nextval('ratings_id_seq');
+
+ALTER TABLE comments
+    ALTER COLUMN id
+        SET DEFAULT nextval('comments_id_seq');
+
+ALTER TABLE commercials
+    ALTER COLUMN id
+        SET DEFAULT nextval('commercials_id_seq');
+
+ALTER TABLE cruise_addresses
+    ALTER COLUMN id
+        SET DEFAULT nextval('cruise_addresses_id_seq');
+
+ALTER TABLE cruise_pictures
+    ALTER COLUMN id
+        SET DEFAULT nextval('cruise_pictures_id_seq');
+
+ALTER TABLE cruises_groups
+    ALTER COLUMN id
+        SET DEFAULT nextval('cruises_groups_id_seq');
+
+ALTER TABLE companies
+    ALTER COLUMN id
+        SET DEFAULT nextval('companies_id_seq');
+
+ALTER TABLE cruises
+    ALTER COLUMN id
+        SET DEFAULT nextval('cruises_id_seq');
 
 
 
@@ -629,11 +654,10 @@ GRANT SELECT, INSERT, UPDATE, DELETE
 GRANT SELECT ON glassfish_auth_view TO ssbd03glassfish;
 
 
-
 -- INDEXES --
 CREATE INDEX accounts_language_type_id_index
     ON accounts USING btree
-    (language_type_id ASC NULLS LAST);
+        (language_type_id ASC NULLS LAST);
 CREATE INDEX accounts_created_by_id_index
     ON accounts USING btree
         (created_by_id ASC NULLS LAST);
