@@ -708,6 +708,7 @@ GRANT SELECT, UPDATE
 GRANT SELECT, UPDATE
     ON SEQUENCE commercials_id_seq TO ssbd03mow;
 
+GRANT SELECT ON glassfish_auth_view TO ssbd03glassfish;
 
 
 
