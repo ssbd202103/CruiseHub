@@ -7,7 +7,11 @@ import Brand from './Brand'
 import styles from '../styles/Header.module.css'
 import RoundedButton from './RoundedButton'
 
+import { useTranslation } from 'react-i18next'
+
 function Header() {
+    const {t} = useTranslation()
+
     return (
         <Box className={styles.wrapper}>
             <Brand />
@@ -16,7 +20,7 @@ function Header() {
 
             <Box>
                 <Link href="signin">
-                    <a style={{marginRight: 20}} className={styles.link}>Zaloguj się</a>
+                    <a style={{marginRight: 20}} className={styles.link}>{t("signin")}</a>
                 </Link>
 
                 <RoundedButton
@@ -27,8 +31,8 @@ function Header() {
                             }}
                             color="pink"
                 >
-                    <Link href="signin">
-                        <a>Zarejestruj</a>
+                    <Link href="signup/client">
+                        <a>{t("signup")}</a>
                     </Link>
                 </RoundedButton>
             </Box>
