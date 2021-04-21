@@ -1,15 +1,15 @@
 create table language_type
 (
-    id            bigint  not null,
-    language_type varchar not null,
+    id   bigint  not null,
+    name varchar not null,
 
     CONSTRAINT language_type_primary_key_constraint PRIMARY KEY (id)
 );
 
 create table alter_type
 (
-    id         bigint  not null,
-    alter_type varchar not null,
+    id   bigint  not null,
+    name varchar not null,
 
     CONSTRAINT alter_type_primary_key_constraint PRIMARY KEY (id)
 );
@@ -415,11 +415,9 @@ create sequence commercials_id_seq
 
 create table company_workers
 (
-    id                  bigint not null,
     companies_id        bigint not null,        -- FOREIGN KEY
     business_workers_id bigint not null unique, -- FOREIGN KEY
 
-    CONSTRAINT company_workers_primary_key_constraint PRIMARY KEY (id),
     CONSTRAINT company_workers_companies_id_business_workers_id_unique UNIQUE (companies_id, business_workers_id),
     CONSTRAINT company_workers_companies_id_fk_constraint FOREIGN KEY (companies_id) REFERENCES companies (id),
     CONSTRAINT company_workers_business_workers_id_fk_constraint FOREIGN KEY (business_workers_id) REFERENCES business_workers (id)
@@ -427,11 +425,9 @@ create table company_workers
 
 create table cruises_groups_pictures
 (
-    id                 bigint not null,
     cruises_groups_id  bigint not null, -- FOREIGN KEY
     cruise_pictures_id bigint,          -- FOREIGN KEY no not null in this moment
 
-    CONSTRAINT cruises_groups_pictures_primary_key_constraint PRIMARY KEY (id),
     CONSTRAINT cruises_groups_pictures_groups_id_pictures_id_unique UNIQUE (cruises_groups_id, cruise_pictures_id),
     CONSTRAINT cruises_groups_pictures_cruises_groups_id_fk_constraint FOREIGN KEY (cruises_groups_id) REFERENCES cruises_groups (id),
     CONSTRAINT cruises_groups_pictures_cruise_pictures_id_fk_constraint FOREIGN KEY (cruise_pictures_id) REFERENCES cruise_pictures (id)
@@ -439,11 +435,9 @@ create table cruises_groups_pictures
 
 create table reservations_attractions
 (
-    id              bigint not null,
     reservations_id bigint not null,--FOREIGN KEY
     attractions_id  bigint not null,--FOREIGN KEY
 
-    CONSTRAINT reservations_attractions_primary_key_constraint PRIMARY KEY (id),
     CONSTRAINT reservations_attractions_reservations_id_attractions_id_unique UNIQUE (reservations_id, attractions_id),
     CONSTRAINT reservations_attractions_reservations_id_fk_constraint FOREIGN KEY (reservations_id) REFERENCES reservations (id),
     CONSTRAINT reservations_attractions_attractions_id_fk_constraint FOREIGN KEY (attractions_id) REFERENCES attractions (id)
@@ -561,7 +555,6 @@ ALTER TABLE companies
 ALTER TABLE cruises
     ALTER COLUMN id
         SET DEFAULT nextval('cruises_id_seq');
-
 
 
 -- Table permissions --
