@@ -1,4 +1,4 @@
-package validators;
+package pl.lodz.p.it.ssbd2021.ssbd03.common.validators;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -12,9 +12,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
 @Constraint(validatedBy = {})
-@Pattern(regexp = ValidationRegex.NAME)
-public @interface Name {
-    String message() default "Invalid Name format"; //should be later replaced with resource bundle
+@Pattern(regexp = ValidationRegex.LOGIN)
+public @interface Login {
+    String message() default "Invalid Login format"; //should be later replaced with resource bundle
 
     Class<?>[] groups() default {};
 

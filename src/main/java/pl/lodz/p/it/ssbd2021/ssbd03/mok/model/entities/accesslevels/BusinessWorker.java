@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.model.entities.AccessLevel;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.model.AccessLevelType;
-import validators.PhoneNumber;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.validators.PhoneNumber;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;

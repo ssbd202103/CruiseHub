@@ -3,10 +3,10 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.model.entities;
 import lombok.Getter;
 import lombok.Setter;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.BaseEntity;
-import validators.City;
-import validators.Country;
-import validators.PostCode;
-import validators.Street;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.validators.City;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.validators.Country;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.validators.PostCode;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.validators.Street;
 
 import javax.persistence.*;
 import javax.validation.constraints.Positive;

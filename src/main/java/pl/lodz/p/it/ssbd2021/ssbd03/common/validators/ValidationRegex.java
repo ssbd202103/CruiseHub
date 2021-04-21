@@ -1,4 +1,4 @@
-package validators;
+package pl.lodz.p.it.ssbd2021.ssbd03.common.validators;
 
 public class ValidationRegex {
     public static final String PHONE_NUMBER = "\\+?(?:[\\s\\-/\\\\]?\\d){6,15}";
