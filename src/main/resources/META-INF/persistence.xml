@@ -53,5 +53,36 @@
             <property name="hibernate.canonicalmodel.prefix" value="mok" />
         </properties>
     </persistence-unit>
+    <persistence-unit name="ssbd03mowPU" transaction-type="JTA">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <jta-data-source>java:app/jdbc/ssbd03mowDS</jta-data-source>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.entities.Account</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.entities.Address</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.entities.AccessLevel</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.common.BaseEntity</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.entities.accesslevels.Client</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.entities.accesslevels.BusinessWorker</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.entities.accesslevels.Administrator</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.entities.accesslevels.Moderator</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.mok.model.wrappers.LanguageTypeWrapper</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.common.wrappers.AlterTypeWrapper</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.mow.model.Attraction</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.mow.model.Comment</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.mow.model.Commercial</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.mow.model.CommercialType</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.common.wrappers.CommercialTypeWrapper</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.mow.model.Company</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.mow.model.Cruise</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.mow.model.CruiseAddress</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.mow.model.CruiseGroup</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.mow.model.CruisePicture</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.mow.model.Rating</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.mow.model.Reservation</class>
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        <properties>
+            <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.SunOneJtaPlatform"/>
+            <property name="hibernate.canonicalmodel.prefix" value="mow" />
+        </properties>
+    </persistence-unit>
 </persistence>
 

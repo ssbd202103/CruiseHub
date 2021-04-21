@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package pl.lodz.p.it.ssbd2021.ssbd03.config;
 
 import java.sql.Connection;
@@ -51,6 +46,20 @@ import javax.persistence.PersistenceContext;
     minPoolSize = 0,
     maxPoolSize = 1,
     maxIdleTime = 10
+)
+
+@DataSourceDefinition( // Ta pula połączeń jest na potrzeby operacji realizowanych przez moduł aplikacji
+        name = "java:app/jdbc/ssbd03mowDS",
+        className = "org.postgresql.ds.PGSimpleDataSource",
+        user = "ssbd03mow",
+        password = "mowpasswd",
+        serverName = "studdev.it.p.lodz.pl",
+        portNumber = 5432,
+        databaseName = "ssbd03",
+        isolationLevel = Connection.TRANSACTION_READ_COMMITTED,
+        minPoolSize = 0,
+        maxPoolSize = 1,
+        maxIdleTime = 10
 )
 
 public class JDBCConfig {
