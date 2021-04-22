@@ -13,7 +13,7 @@ export default function AuthLayout({children}: LayoutProps) {
 
     return (
             <Grid container className={styles.wrapper}>
-                <Grid item className={styles.form} xs md={10} xl={6}>
+                <Grid item className={styles.form} xs md={9} xl={6}>
                     {children}
                 </Grid>
                     <Link href="../">

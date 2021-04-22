@@ -7,6 +7,10 @@
     cursor: pointer;
 }
 
+.wrapper * {
+    transition: opacity .5s ease-in-out;
+}
+
 .cost {
     position: absolute;
     top: 0;
@@ -29,6 +33,7 @@
     right: 10px;
     font-family: 'Montserrat', sans-serif;
     color: var(--white);
+
 }
 
 .title {
@@ -48,10 +53,14 @@
     border-radius: 10px;
     background-color: rgba(0, 0, 0, 0.4);
     opacity: 0;
-    transition: opacity .5s ease-in-out;
 }
 
-.eye:hover {
+.wrapper:hover .cost,
+.wrapper:hover .description {
+    opacity: 0;
+}
+
+.wrapper:hover .eye {
     opacity: 1;
 }
 

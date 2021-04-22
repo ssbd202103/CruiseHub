@@ -80,7 +80,7 @@ export default function ClientSignUp() {
 
                 <DarkedTextField
                     type="password"
-                    label={t("submit password") + ' *'}
+                    label={t("confirm password") + ' *'}
                     placeholder="1234567890"
                     className={styles.input}
                     icon={(<PasswordIcon />)}

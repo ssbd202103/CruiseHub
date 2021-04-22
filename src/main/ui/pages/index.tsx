@@ -17,6 +17,7 @@ export default function Home() {
     return (
         <HeaderFooterLayout>
             <header className={styles.header}>
+                <h1>Lorem ipsum dolor sit amet</h1>
                 <ArrowIcon className={styles.arrow} />
             </header>
 
