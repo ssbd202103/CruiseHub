@@ -13,8 +13,8 @@ import javax.validation.constraints.NotNull;
 public class Comment extends BaseEntity {
     @Getter
     @Id
-    @SequenceGenerator(name = "ACCOUNT_SEQ_GEN", sequenceName = "account_id_seq", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ACCOUNT_SEQ_GEN")
+    @SequenceGenerator(name = "COMMENT_SEQ_GEN", sequenceName = "comments_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "COMMENT_SEQ_GEN")
     @Column(name = "id")
     private Long id;
 

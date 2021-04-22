@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 public class Commercial extends BaseEntity {
     @Getter
     @Id
-    @SequenceGenerator(name = "ACCOUNT_SEQ_GEN", sequenceName = "account_id_seq", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ACCOUNT_SEQ_GEN")
+    @SequenceGenerator(name = "COMMERCIAL_SEQ_GEN", sequenceName = "commercials_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "COMMERCIAL_SEQ_GEN")
     @Column(name = "id")
     private Long id;
 
