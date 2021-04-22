@@ -455,7 +455,6 @@ WHERE accounts.confirmed
   AND accounts.active
   AND access_levels.enabled;
 
-
 -- Table owner --
 ALTER TABLE accounts
     OWNER TO ssbd03admin;
@@ -586,7 +585,6 @@ ALTER TABLE cruises
     ALTER COLUMN id
         SET DEFAULT nextval('cruises_id_seq');
 
-
 -- Table permissions --
 GRANT SELECT, INSERT, UPDATE, DELETE
     ON access_levels TO ssbd03mok;
@@ -620,7 +618,6 @@ GRANT SELECT, UPDATE
 
 GRANT SELECT, UPDATE
     ON SEQUENCE address_id_seq TO ssbd03mok;
-
 
 -- Table permissions for MOW --
 GRANT SELECT
@@ -708,7 +705,6 @@ GRANT SELECT, UPDATE
     ON SEQUENCE commercials_id_seq TO ssbd03mow;
 
 GRANT SELECT ON glassfish_auth_view TO ssbd03glassfish;
-
 
 -- INDEXES --
 CREATE INDEX accounts_language_type_id_index
