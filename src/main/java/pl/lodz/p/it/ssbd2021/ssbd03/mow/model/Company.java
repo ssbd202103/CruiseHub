@@ -50,8 +50,8 @@ public class Company extends BaseEntity {
     @NotNull
     @ManyToMany
     @JoinTable(name = "company_workers",
-            joinColumns = @JoinColumn(name = "companies_id"),
-            inverseJoinColumns = @JoinColumn(name = "business_workers_id")
+            joinColumns = @JoinColumn(name = "company_id"),
+            inverseJoinColumns = @JoinColumn(name = "business_worker_id")
     )
     private List<BusinessWorker> workers = new ArrayList<>();
 

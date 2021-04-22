@@ -42,9 +42,9 @@ public class Reservation extends BaseEntity {
     @Getter
     @NotNull
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
-    @JoinTable(name = "reservations_attractions",
-            joinColumns = @JoinColumn(name = "reservations_id"),
-            inverseJoinColumns = @JoinColumn(name = "attractions_id")
+    @JoinTable(name = "reservation_attractions",
+            joinColumns = @JoinColumn(name = "reservation_id"),
+            inverseJoinColumns = @JoinColumn(name = "attraction_id")
     )
     private List<Attraction> attractions = new ArrayList<>();
 

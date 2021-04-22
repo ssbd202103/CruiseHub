@@ -6,7 +6,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.model.CommercialType;
 
 import javax.persistence.*;
 
-@Entity(name = "commercial_type")
+@Entity(name = "commercial_types")
 public class CommercialTypeWrapper {
     @Getter
     @Id
@@ -16,13 +16,13 @@ public class CommercialTypeWrapper {
     private Integer id;
 
     @Enumerated(EnumType.STRING)
-    @Column(unique = true, name = "commercial_type")
+    @Column(unique = true, name = "name")
     @Setter
-    private CommercialType commercialType;
+    private CommercialType name;
 
-    public CommercialTypeWrapper(Integer id, CommercialType commercialType) {
+    public CommercialTypeWrapper(Integer id, CommercialType commercialType_name) {
         this.id = id;
-        this.commercialType = commercialType;
+        this.name = commercialType_name;
     }
 
     public CommercialTypeWrapper() {

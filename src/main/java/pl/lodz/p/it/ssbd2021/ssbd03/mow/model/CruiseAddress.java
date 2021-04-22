@@ -40,23 +40,23 @@ public class CruiseAddress extends BaseEntity {
     @Getter
     @Setter
     @NotNull
-    @Column(name = "city")
-    private String city;
+    @Column(name = "city_name")
+    private String city_name;
 
     @Getter
     @Setter
     @NotNull
-    @Column(name = "country")
-    private String country;
+    @Column(name = "country_name")
+    private String country_name;
 
 
-    public CruiseAddress(Integer id, @NotNull String street, @NotNull Integer streetNumber, @NotNull String harborName, @NotNull String city, @NotNull String country) {
+    public CruiseAddress(Integer id, @NotNull String street, @NotNull Integer streetNumber, @NotNull String harborName, @NotNull String city_name, @NotNull String country_name) {
         this.id = id;
         this.street = street;
         this.streetNumber = streetNumber;
         this.harborName = harborName;
-        this.city = city;
-        this.country = country;
+        this.city_name = city_name;
+        this.country_name = country_name;
     }
 
     public CruiseAddress() {

@@ -1,23 +1,23 @@
---language_type start
---language_type 1
-insert into language_type(id, name)
+--language_types start
+--language_types 1
+insert into language_types(id, name)
 values (-1,'PL');
---language_type 2
-insert into language_type(id, name)
+--language_types 2
+insert into language_types(id, name)
 values (-2,'ENG');
---language_type end
+--language_types end
 
---alter_type start
---alter_type 1
-insert into alter_type(id, name)
+--alter_types start
+--alter_types 1
+insert into alter_types(id, name)
 values (-1,'UPDATE');
---alter_type 2
-insert into alter_type(id, name)
+--alter_types 2
+insert into alter_types(id, name)
 values (-2,'INSERT');
---alter_type 3
-insert into alter_type(id, name)
+--alter_types 3
+insert into alter_types(id, name)
 values (-3,'DELETE');
---alter_type end
+--alter_types end
 
 -- accounts start ||| password is 12345678
 insert into accounts(id, first_name, second_name, login, email, password_hash, confirmed, active,
@@ -129,16 +129,16 @@ values (-5);
 --
 --
 --cruise_addresses start
-insert into cruise_addresses(id, street, street_number, harbor_name,  city, country,
+insert into cruise_addresses(id, street, street_number, harbor_name,  city_name, country_name,
                       creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id, version)
 values (-1, 'street Company', '321', 'ManchesterHabor', 'Manchester', 'United Kingdom', now(), now(), -2, -3, -3, 0);
-insert into cruise_addresses(id, street, street_number, harbor_name,  city, country,
+insert into cruise_addresses(id, street, street_number, harbor_name,  city_name, country_name,
                       creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id, version)
 values (-2, 'Grove Street', '420', 'FamillyHarbor', 'Los Santos', 'USA', now(), now(), -2, -3, -3, 0);
-insert into cruise_addresses(id, street, street_number, harbor_name,  city, country,
+insert into cruise_addresses(id, street, street_number, harbor_name,  city_name, country_name,
                       creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id, version)
 values (-3, 'Ballas', '60', 'PurpleHarBor', 'Idlewood', 'USA', now(), now(), -2, -3, -3, 0);
-insert into cruise_addresses(id, street, street_number, harbor_name,  city, country,
+insert into cruise_addresses(id, street, street_number, harbor_name,  city_name, country_name,
                       creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id, version)
 values (-4, 'Rancho', '88', 'TackoHarbor', 'Las Colinas', 'USA', now(), now(), -2, -3, -3, 0);
 --cruise_addresses end
@@ -146,30 +146,30 @@ values (-4, 'Rancho', '88', 'TackoHarbor', 'Las Colinas', 'USA', now(), now(), -
 --
 --
 /*--cruise_pictures start
-insert into cruise_pictures(id, img_name, img, creation_date_time, last_alter_date_time, alter_type, created_by_id,
+insert into cruise_pictures(id, img_name, img, creation_date_time, last_alter_date_time, alter_type_id, created_by_id,
                             altered_by_id, version)
 values (-1, 'LowRidder.jpg', null, now(), now(), -2, -1, -1, 0);
-insert into cruise_pictures(id, img_name, img, creation_date_time, last_alter_date_time, alter_type, created_by_id,
+insert into cruise_pictures(id, img_name, img, creation_date_time, last_alter_date_time, alter_type_id, created_by_id,
                             altered_by_id, version)
 values (-2, 'kitty.jpg', null, now(), now(), -2, -1, -1, 0);
-insert into cruise_pictures(id, img_name, img, creation_date_time, last_alter_date_time, alter_type, created_by_id,
+insert into cruise_pictures(id, img_name, img, creation_date_time, last_alter_date_time, alter_type_id, created_by_id,
                             altered_by_id, version)
 values (-3, 'PearlHarbort.jpg', null, now(), now(), -2, -1, -1, 0);
 --cruise_pictures end*/
 --
 --
 --
---commercial_type start
---commercial_type 1
-insert into commercial_type(id, commercial_type)
+--commercial_types start
+--commercial_types 1
+insert into commercial_types(id, name)
 values (-1,'None');
---commercial_type 2
-insert into commercial_type(id, commercial_type)
+--commercial_types 2
+insert into commercial_types(id, name)
 values (-2,'Normal');
---commercial_type 3
-insert into commercial_type(id, commercial_type)
+--commercial_types 3
+insert into commercial_types(id, name)
 values (-3,'Premium');
---commercial_type end
+--commercial_types end
 --
 --
 --
@@ -203,13 +203,13 @@ values (-3,-2,'Beautiful Sandy Shores', 31, 502, -4, 5, now(), now(), -2, -1, -1
 --
 --
 --cruises start
-insert into cruises(id, start_date, end_date, active, description, cruises_groups_id, available, creation_date_time, last_alter_date_time, alter_type_id, created_by_id,
+insert into cruises(id, start_date, end_date, active, description, cruises_group_id, available, creation_date_time, last_alter_date_time, alter_type_id, created_by_id,
                             altered_by_id, version)
 values (-1,now(),now(),true,'Beautiful tour', -1, true, now(), now(), -2, -1, -1, 0);
-insert into cruises(id, start_date, end_date, active, description, cruises_groups_id, available, creation_date_time, last_alter_date_time, alter_type_id, created_by_id,
+insert into cruises(id, start_date, end_date, active, description, cruises_group_id, available, creation_date_time, last_alter_date_time, alter_type_id, created_by_id,
                             altered_by_id, version)
 values (-2,now(),now(),false,'Beautiful Beautiful tour', -2, true, now(), now(), -2, -1, -1, 0);
-insert into cruises(id, start_date, end_date, active, description, cruises_groups_id, available, creation_date_time, last_alter_date_time, alter_type_id, created_by_id,
+insert into cruises(id, start_date, end_date, active, description, cruises_group_id, available, creation_date_time, last_alter_date_time, alter_type_id, created_by_id,
                             altered_by_id, version)
 values (-3,now(),now(),true,'The most Beautiful tour', -3, false, now(), now(), -2, -1, -1, 0);
 --cruises end
@@ -287,28 +287,28 @@ values (-3, -3, -3, now(), now(), now(), now(), -2, -1, -1, 0);
 --
 --
 --company_workers start
-insert into company_workers (companies_id, business_workers_id)
+insert into company_workers (company_id, business_worker_id)
 values (-1, -4);
 --company_workers end
 --
 --
 --
---cruises_groups_pictures start
--- insert into cruises_groups_pictures (cruises_groups_id, cruise_pictures_id)
+--cruises_group_pictures start
+-- insert into cruises_group_pictures (cruises_group_id, cruise_picture_id)
 -- values (-3,-1);
--- insert into cruises_groups_pictures (cruises_groups_id, cruise_pictures_id)
+-- insert into cruises_group_pictures (cruises_group_id, cruise_picture_id)
 -- values (-2,-2);
--- insert into cruises_groups_pictures (cruises_groups_id, cruise_pictures_id)
--- values (-1,-3);
---cruises_groups_pictures end
+ --insert into cruises_group_pictures (cruises_group_id, cruise_picture_id)
+ --values (-1,-3);
+--cruises_group_pictures end
 --
 --
 --
---reservations_attractions start
-insert into reservations_attractions (reservations_id, attractions_id)
+--reservation_attractions start
+insert into reservation_attractions (reservation_id, attraction_id)
 values (-1, -1);
-insert into reservations_attractions (reservations_id, attractions_id)
+insert into reservation_attractions (reservation_id, attraction_id)
 values (-2, -2);
-insert into reservations_attractions (reservations_id, attractions_id)
+insert into reservation_attractions (reservation_id, attraction_id)
 values (-3, -3);
---reservations_attractions end
+--reservation_attractions end

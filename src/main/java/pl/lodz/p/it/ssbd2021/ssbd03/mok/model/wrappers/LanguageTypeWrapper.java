@@ -5,7 +5,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.model.LanguageType;
 
-@Entity(name = "language_type")
+@Entity(name = "language_types")
 public class LanguageTypeWrapper {
     @Getter
     @Id
