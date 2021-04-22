@@ -413,37 +413,37 @@ create sequence commercials_id_seq
     START WITH 1
     INCREMENT BY 1;
 
-create table company_worker
+create table company_workers
 (
     company_id         bigint not null,        -- FOREIGN KEY
     business_worker_id bigint not null unique, -- FOREIGN KEY
 
-    CONSTRAINT company_worker_primary_key_constraint PRIMARY KEY (company_id, business_worker_id),
-    CONSTRAINT company_worker_company_id_business_worker_id_unique UNIQUE (company_id, business_worker_id),
-    CONSTRAINT company_worker_company_id_fk_constraint FOREIGN KEY (company_id) REFERENCES companies (id),
-    CONSTRAINT company_worker_business_worker_id_fk_constraint FOREIGN KEY (business_worker_id) REFERENCES business_workers (id)
+    CONSTRAINT company_workers_primary_key_constraint PRIMARY KEY (company_id, business_worker_id),
+    CONSTRAINT company_workers_company_id_business_worker_id_unique UNIQUE (company_id, business_worker_id),
+    CONSTRAINT company_workers_company_id_fk_constraint FOREIGN KEY (company_id) REFERENCES companies (id),
+    CONSTRAINT company_workers_business_worker_id_fk_constraint FOREIGN KEY (business_worker_id) REFERENCES business_workers (id)
 );
 
-create table cruises_group_picture
+create table cruises_group_pictures
 (
     cruises_group_id  bigint not null, -- FOREIGN KEY
     cruise_picture_id bigint,          -- FOREIGN KEY no not null in this moment
 
-    CONSTRAINT cruises_group_picture_primary_key_constraint PRIMARY KEY (cruises_group_id, cruise_picture_id),
-    CONSTRAINT cruises_group_picture_groups_id_pictures_id_unique UNIQUE (cruises_group_id, cruise_picture_id),
-    CONSTRAINT cruises_group_picture_cruises_group_id_fk_constraint FOREIGN KEY (cruises_group_id) REFERENCES cruises_groups (id),
-    CONSTRAINT cruises_group_picture_cruise_picture_id_fk_constraint FOREIGN KEY (cruise_picture_id) REFERENCES cruise_pictures (id)
+    CONSTRAINT cruises_group_pictures_primary_key_constraint PRIMARY KEY (cruises_group_id, cruise_picture_id),
+    CONSTRAINT cruises_group_pictures_groups_id_pictures_id_unique UNIQUE (cruises_group_id, cruise_picture_id),
+    CONSTRAINT cruises_group_pictures_cruises_group_id_fk_constraint FOREIGN KEY (cruises_group_id) REFERENCES cruises_groups (id),
+    CONSTRAINT cruises_group_pictures_cruise_picture_id_fk_constraint FOREIGN KEY (cruise_picture_id) REFERENCES cruise_pictures (id)
 );
 
-create table reservation_attraction
+create table reservation_attractions
 (
     reservation_id bigint not null,--FOREIGN KEY
     attraction_id  bigint not null,--FOREIGN KEY
 
-    CONSTRAINT reservation_attraction_primary_key_constraint PRIMARY KEY (reservation_id, attraction_id),
-    CONSTRAINT reservation_attraction_reservation_id_attraction_id_unique UNIQUE (reservation_id, attraction_id),
-    CONSTRAINT reservation_attraction_reservation_id_fk_constraint FOREIGN KEY (reservation_id) REFERENCES reservations (id),
-    CONSTRAINT reservation_attraction_attraction_id_fk_constraint FOREIGN KEY (attraction_id) REFERENCES attractions (id)
+    CONSTRAINT reservation_attractions_primary_key_constraint PRIMARY KEY (reservation_id, attraction_id),
+    CONSTRAINT reservation_attractions_reservation_id_attraction_id_unique UNIQUE (reservation_id, attraction_id),
+    CONSTRAINT reservation_attractions_reservation_id_fk_constraint FOREIGN KEY (reservation_id) REFERENCES reservations (id),
+    CONSTRAINT reservation_attractions_attraction_id_fk_constraint FOREIGN KEY (attraction_id) REFERENCES attractions (id)
 );
 
 
@@ -490,11 +490,11 @@ ALTER TABLE language_types
     OWNER to ssbd03admin;
 ALTER TABLE alter_types
     OWNER to ssbd03admin;
-ALTER TABLE company_worker
+ALTER TABLE company_workers
     OWNER to ssbd03admin;
-ALTER TABLE cruises_group_picture
+ALTER TABLE cruises_group_pictures
     OWNER to ssbd03admin;
-ALTER TABLE reservation_attraction
+ALTER TABLE reservation_attractions
     OWNER to ssbd03admin;
 ALTER TABLE cruises_groups
     OWNER to ssbd03admin;
@@ -645,7 +645,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE
     ON companies TO ssbd03mow;
 
 GRANT SELECT, INSERT, UPDATE, DELETE
-    ON company_worker TO ssbd03mow;
+    ON company_workers TO ssbd03mow;
 
 GRANT SELECT, INSERT, DELETE
     ON cruise_addresses TO ssbd03mow;
@@ -660,7 +660,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE
     ON cruises_groups TO ssbd03mow;
 
 GRANT SELECT, INSERT, DELETE
-    ON cruises_group_picture TO ssbd03mow;
+    ON cruises_group_pictures TO ssbd03mow;
 
 GRANT SELECT
     ON language_types TO ssbd03mow;
@@ -672,7 +672,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE
     ON reservations TO ssbd03mow;
 
 GRANT SELECT, INSERT, UPDATE, DELETE
-    ON reservation_attraction TO ssbd03mow;
+    ON reservation_attractions TO ssbd03mow;
 
 GRANT SELECT, UPDATE
     ON SEQUENCE cruise_addresses_id_seq TO ssbd03mow;
@@ -900,23 +900,23 @@ CREATE INDEX commercials_alter_type_id_index
     ON commercials USING btree
         (alter_type_id ASC NULLS LAST);
 
-CREATE INDEX company_worker_company_id_index
-    ON company_worker USING btree
+CREATE INDEX company_workers_company_id_index
+    ON company_workers USING btree
         (company_id ASC NULLS LAST);
-CREATE INDEX company_worker_business_worker_id_index
-    ON company_worker USING btree
+CREATE INDEX company_workers_business_worker_id_index
+    ON company_workers USING btree
         (business_worker_id ASC NULLS LAST);
 
-CREATE INDEX cruises_group_picture_cruises_group_id_index
-    ON cruises_group_picture USING btree
+CREATE INDEX cruises_group_pictures_cruises_group_id_index
+    ON cruises_group_pictures USING btree
         (cruises_group_id ASC NULLS LAST);
-CREATE INDEX cruises_group_picture_cruise_picture_id_index
-    ON cruises_group_picture USING btree
+CREATE INDEX cruises_group_pictures_cruise_picture_id_index
+    ON cruises_group_pictures USING btree
         (cruise_picture_id ASC NULLS LAST);
 
-CREATE INDEX reservation_attraction_reservation_id_index
-    ON reservation_attraction USING btree
+CREATE INDEX reservation_attractions_reservation_id_index
+    ON reservation_attractions USING btree
         (reservation_id ASC NULLS LAST);
-CREATE INDEX reservation_attraction_attraction_id_index
-    ON reservation_attraction USING btree
+CREATE INDEX reservation_attractions_attraction_id_index
+    ON reservation_attractions USING btree
         (attraction_id ASC NULLS LAST);

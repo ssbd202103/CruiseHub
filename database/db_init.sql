@@ -286,29 +286,29 @@ values (-3, -3, -3, now(), now(), now(), now(), -2, -1, -1, 0);
 --
 --
 --
---company_worker start
-insert into company_worker (company_id, business_worker_id)
+--company_workers start
+insert into company_workers (company_id, business_worker_id)
 values (-1, -4);
---company_worker end
+--company_workers end
 --
 --
 --
---cruises_group_picture start
--- insert into cruises_group_picture (cruises_group_id, cruise_picture_id)
+--cruises_group_pictures start
+-- insert into cruises_group_pictures (cruises_group_id, cruise_picture_id)
 -- values (-3,-1);
--- insert into cruises_group_picture (cruises_group_id, cruise_picture_id)
+-- insert into cruises_group_pictures (cruises_group_id, cruise_picture_id)
 -- values (-2,-2);
- --insert into cruises_group_picture (cruises_group_id, cruise_picture_id)
+ --insert into cruises_group_pictures (cruises_group_id, cruise_picture_id)
  --values (-1,-3);
---cruises_group_picture end
+--cruises_group_pictures end
 --
 --
 --
---reservation_attraction start
-insert into reservation_attraction (reservation_id, attraction_id)
+--reservation_attractions start
+insert into reservation_attractions (reservation_id, attraction_id)
 values (-1, -1);
-insert into reservation_attraction (reservation_id, attraction_id)
+insert into reservation_attractions (reservation_id, attraction_id)
 values (-2, -2);
-insert into reservation_attraction (reservation_id, attraction_id)
+insert into reservation_attractions (reservation_id, attraction_id)
 values (-3, -3);
---reservation_attraction end
+--reservation_attractions end

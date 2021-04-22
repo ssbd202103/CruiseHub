@@ -49,7 +49,7 @@ public class Company extends BaseEntity {
     @Getter
     @NotNull
     @ManyToMany
-    @JoinTable(name = "company_worker",
+    @JoinTable(name = "company_workers",
             joinColumns = @JoinColumn(name = "company_id"),
             inverseJoinColumns = @JoinColumn(name = "business_worker_id")
     )
