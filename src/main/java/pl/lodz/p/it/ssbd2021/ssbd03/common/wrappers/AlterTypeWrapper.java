@@ -6,7 +6,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.AlterType;
 
-@Entity(name = "alter_type")
+@Entity(name = "alter_types")
 public class AlterTypeWrapper {
     @Getter
     @Id
