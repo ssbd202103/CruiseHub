@@ -1,7 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;

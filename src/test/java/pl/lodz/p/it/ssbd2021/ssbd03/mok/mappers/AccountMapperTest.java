@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class AccountMapperTest {
 
     @Test
-    void toAccountDto() {
+    void toAccountDtoTest() {
         List<Account> accounts = getSampleAccounts();
 
         for (Account account : accounts) {
