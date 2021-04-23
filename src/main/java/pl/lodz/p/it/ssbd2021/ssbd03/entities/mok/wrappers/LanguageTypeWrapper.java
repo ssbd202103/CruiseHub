@@ -13,17 +13,18 @@ public class LanguageTypeWrapper {
     @Id
     @GeneratedValue
     private Long id;
-    
+
+    @Getter
     @Enumerated(EnumType.STRING)
     @Column(unique = true)
     @Setter
     private LanguageType name;
-    
+
     public LanguageTypeWrapper(LanguageType name) {
         this.name = name;
     }
-    
+
     public LanguageTypeWrapper() {
-        
+
     }
 }
