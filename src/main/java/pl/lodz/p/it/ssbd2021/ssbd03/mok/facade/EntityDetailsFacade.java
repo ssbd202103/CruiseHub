@@ -1,6 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.facade;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.common.BaseEntity;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
