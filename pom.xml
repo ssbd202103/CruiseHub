@@ -51,7 +51,7 @@
         <jakartaee>8.0</jakartaee>
 
         <ui.dir>src/main/ui</ui.dir>
-        <ui.build.dir>src/main/ui/.next/server/pages</ui.build.dir>
+        <ui.build.dir>src/main/ui/build</ui.build.dir>
 
         <maven.clean.plugin>3.0.0</maven.clean.plugin>
         <maven.war.plugin>3.0.0</maven.war.plugin>
@@ -77,16 +77,15 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>5.8.0-M1</version>
+            <groupId>com.jayway.restassured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>2.9.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-params</artifactId>
+            <artifactId>junit-jupiter</artifactId>
             <version>5.8.0-M1</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.auth0</groupId>
@@ -103,7 +102,6 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.12.3</version>
         </dependency>
-
 
     </dependencies>
 
