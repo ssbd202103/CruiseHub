@@ -1,6 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03;
 
-import static com.jayway.restassured.RestAssured.given;
+import static io.restassured.RestAssured.given;
 
 public class Test {
 
