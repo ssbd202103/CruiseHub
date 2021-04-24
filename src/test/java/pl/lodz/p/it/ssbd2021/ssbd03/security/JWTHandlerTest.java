@@ -1,7 +1,9 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.security;
 
+import com.auth0.jwt.JWT;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
@@ -10,6 +12,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -26,7 +29,7 @@ class JWTHandlerTest {
             Map<String, Object> claims = mapper.convertValue(account, Map.class);
             String subject = "184";
 
-            String token = JWTHandler.createToken(claims, "184");
+            String token = JWTHandler.createToken(claims, subject);
             Map<String, Claim> decodedClaims = JWTHandler.getClaimsFromToken(token);
 
             assertEquals(subject, decodedClaims.get("sub").asString());
@@ -46,7 +49,7 @@ class JWTHandlerTest {
         for (AccountDto account : accounts) {
             Map<String, Object> claims = mapper.convertValue(account, Map.class);
 
-            String token = JWTHandler.createToken(claims, "Szymon");
+            String token = JWTHandler.createToken(claims, "152");
             assertDoesNotThrow(() -> JWTHandler.validateToken(token));
 
             String editedToken = token.replaceAll(".{3}(?=$)", "zzz"); //changing last 3 signs of token's signature
@@ -63,5 +66,30 @@ class JWTHandlerTest {
                 new AccountDto("mmMod944_", "Mariusz", "Skrowronek", "mariusz.skowronek@hotmail.com",
                         LanguageType.PL, Set.of(AccessLevelType.CLIENT, AccessLevelType.BUSINESS_WORKER))
         );
+    }
+
+    @Test
+    public void refreshTokenTest() throws InterruptedException {
+        AccountDto account = getSampleAccounts().get(0);
+        Map<String, Object> claims = mapper.convertValue(account, Map.class);
+        String subject = "184";
+
+        String token = JWTHandler.createToken(claims, subject);
+        DecodedJWT decodedToken = JWT.decode(token);
+
+        Thread.sleep(2000); //there should be more efficient way to test it
+
+        String refreshedToken = JWTHandler.refreshToken(token);
+        DecodedJWT decodedRefreshToken = JWT.decode(refreshedToken);
+
+        for (Entry<String, Claim> entry : decodedToken.getClaims().entrySet()) {
+
+            if (List.of("exp", "iat").contains(entry.getKey())) {
+                assertTrue(entry.getValue().asDate().before(decodedRefreshToken.getClaim(entry.getKey()).asDate()));
+            } else {
+                assertEquals(entry.getValue().as(Object.class), decodedRefreshToken.getClaim(entry.getKey()).as(Object.class));
+            }
+
+        }
     }
 }

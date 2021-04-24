@@ -5,7 +5,9 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.Claim;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
 
 import java.time.Instant;
@@ -13,6 +15,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 /**
  * Klasa odpowiedzialna za zarządzanie tokenami JWT.
@@ -27,13 +30,34 @@ public class JWTHandler {
      * @param subject String określający podmiot tokenu
      * @return Zwrócony token w postaci Stringa
      */
-    public static String createToken(Map<String, Object> claims, String subject) {
+    public static String createToken(Map<String, ?> claims, String subject) {
         Algorithm algorithm = Algorithm.HMAC256(getJWTSecret());
         return JWT.create()
                 .withPayload(claims).withSubject(subject)
                 .withIssuedAt(new Date())
                 .withExpiresAt(Date.from(Instant.now().plus(getDefaultValidityInMinutes(), ChronoUnit.MINUTES)))
                 .sign(algorithm);
+    }
+
+    /**
+     * Metoda pozwalająca na stworzenie odświeżonego tokenu poprzez podanie już istniejącego.
+     * W przypadku próby odświeżenia wygaśniętego tokenu rzucany jest wyjątek TokenExpiredException
+     *
+     * @param token Istniejący token
+     * @return Nowy token JWT z zachowaniem oryginalnego payloadu
+     * @throws TokenExpiredException Wyjątek wygaśniętego tokenu
+     */
+    public static String refreshToken(String token) {
+        DecodedJWT decodedToken = JWT.decode(token);
+        if (decodedToken.getExpiresAt().before(new Date())) {
+            throw new TokenExpiredException("Cannot refresh expired token");
+        }
+
+        //getClaims returns Map<String, Claim> where Claim value needs to be explicitly converted to Object type,
+        // to fit Map<String, Object>, thus mapping
+        Map<String, Object> convertedClaims = decodedToken.getClaims().entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().as(Object.class)));
+        return createToken(convertedClaims, decodedToken.getSubject());
     }
 
 
