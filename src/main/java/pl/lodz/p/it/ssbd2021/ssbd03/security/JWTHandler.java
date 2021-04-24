@@ -3,7 +3,9 @@ package pl.lodz.p.it.ssbd2021.ssbd03.security;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.Claim;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
 
 import java.time.Instant;
@@ -32,6 +34,22 @@ public class JWTHandler {
                 .withIssuedAt(new Date())
                 .withExpiresAt(Date.from(Instant.now().plus(getDefaultValidityInMinutes(), ChronoUnit.MINUTES)))
                 .sign(algorithm);
+    }
+
+
+    /**
+     * Metoda zwrająca zestaw par klucz-wartość stwierdzeń tokenu w postaci Mapy &lt;String, Claim&gt;
+     *
+     * @param token Token poddawany dekodowaniu
+     * @return Mapa stwierdzeń &lt;String, Claim&gt;
+     * @throws JWTDecodeException Wyjątek błędu dekodowania
+     */
+    public static Map<String, Claim> getClaimsFromToken(String token) {
+        try {
+            return JWT.decode(token).getClaims();
+        } catch (JWTDecodeException e) {
+            throw new JWTDecodeException("Provided token could not be decoded");
+        }
     }
 
 
