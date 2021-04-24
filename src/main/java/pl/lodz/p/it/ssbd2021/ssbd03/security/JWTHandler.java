@@ -15,6 +15,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Map;
 import java.util.Properties;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -36,6 +37,8 @@ public class JWTHandler {
                 .withPayload(claims).withSubject(subject)
                 .withIssuedAt(new Date())
                 .withExpiresAt(Date.from(Instant.now().plus(getDefaultValidityInMinutes(), ChronoUnit.MINUTES)))
+                .withJWTId(UUID.randomUUID().toString())
+                .withIssuer(getJWTIssuer())
                 .sign(algorithm);
     }
 
@@ -105,5 +108,9 @@ public class JWTHandler {
 
     private static String getJWTSecret() {
         return securityProperties.getProperty("jwt.secret");
+    }
+
+    private static String getJWTIssuer() {
+        return securityProperties.getProperty("jwt.issuer");
     }
 }

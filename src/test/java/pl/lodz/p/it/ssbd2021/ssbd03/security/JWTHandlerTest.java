@@ -86,6 +86,8 @@ class JWTHandlerTest {
 
             if (List.of("exp", "iat").contains(entry.getKey())) {
                 assertTrue(entry.getValue().asDate().before(decodedRefreshToken.getClaim(entry.getKey()).asDate()));
+            } else if (entry.getKey().equals("jti")) {
+                assertNotEquals(entry.getValue().as(Object.class), decodedRefreshToken.getClaim(entry.getKey()).as(Object.class));
             } else {
                 assertEquals(entry.getValue().as(Object.class), decodedRefreshToken.getClaim(entry.getKey()).as(Object.class));
             }
