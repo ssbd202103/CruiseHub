@@ -38,13 +38,13 @@ public class Account extends BaseEntity {
     @Getter
     @Setter
     @Login
-    @Column(name = "login", nullable = false)
+    @Column(name = "login", nullable = false, unique = true, updatable = false)
     private String login;
 
     @Getter
     @Setter
     @Email
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Getter
@@ -91,7 +91,7 @@ public class Account extends BaseEntity {
     @Setter
     @Column(name = "number_of_authentication_failures")
     private int numberOfAuthenticationFailures;
-    
+
     @Getter
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name = "account_id")
