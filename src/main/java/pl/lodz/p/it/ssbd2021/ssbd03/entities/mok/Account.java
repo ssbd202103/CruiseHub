@@ -38,13 +38,13 @@ public class Account extends BaseEntity {
     @Getter
     @Setter
     @Login
-    @Column(name = "login", nullable = false)
+    @Column(name = "login", nullable = false, unique = true, updatable = false)
     private String login;
 
     @Getter
     @Setter
     @Email
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true, updatable = false)
     private String email;
 
     @Getter
