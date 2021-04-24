@@ -1,5 +1,5 @@
 import i18n from 'i18next'
-import { initReactI18next } from 'react-i18next'
+import {initReactI18next} from 'react-i18next'
 
 const resources = {
     pl: {
@@ -27,7 +27,27 @@ const resources = {
             "i am a business worker": "Jestem pracownikiem firmy",
             //signup.worker
             "signup.worker.subtitle": "Tylko kilka kliknięć dzieli Cię od dostępu do jednej z największych sieci klientów",
-            "i am a client": "Jestem clientem"
+            "i am a client": "Jestem clientem",
+
+            //panels.clientPanel
+            "clientPanelH2": "Panel klienta",
+            "passwordChange": "Zmień hasło",
+            "phoneNumber": "Numer telefonu",
+            "personalDataChange": "Zmień dane personalne",
+            "personalData": "Dane personalne",
+            "address": "Adres",
+            "addressChange": "Zmień adres",
+            "street": "Ulica",
+            "houseNumber": "Numer domu",
+            "postalCode": "Kod pocztowy",
+            "city": "Miasto",
+            "country": "Kraj",
+            "emailChange": "Zmień Email",
+            "newEmail": "Podaj nowy Emial",
+            "newEmailConfirm": "Potwierdź nowy Email",
+            "oldPassword": "Podaj stare hasło",
+            "newPassword": "Podaj nowe hasło",
+            "newPasswordConfirm": "Porwierdź nowe hasło",
         }
     },
     en: {
@@ -55,7 +75,27 @@ const resources = {
             "i am a business worker": "I'm a business worker",
             //signup.worker
             "signup.worker.subtitle": "You'll have an access to the largest clients network after a couple of clicks",
-            "i am a client": "I'm a client"
+            "i am a client": "I'm a client",
+
+            //panels.clientPanel
+            "clientPanelH2": "Client panel",
+            "passwordChange": "Change password",
+            "phoneNumber": "Phone number",
+            "personalDataChange":"Change personal data",
+            "personalData": "Personal data",
+            "address": "Address",
+            "addressChange": "Change address",
+            "street": "Street",
+            "houseNumber": "House number",
+            "postalCode": "Postal code",
+            "city": "City",
+            "country": "Country",
+            "emailChange": "Change email",
+            "newEmail": "New Email",
+            "newEmailConfirm": "Confirm Email",
+            "oldPassword": "Enter the old password",
+            "newPassword": "Enter a new password",
+            "newPasswordConfirm": "Confirm new password",
         }
     }
 }
