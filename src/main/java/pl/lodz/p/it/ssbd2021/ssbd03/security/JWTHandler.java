@@ -53,8 +53,8 @@ public class JWTHandler {
             throw new TokenExpiredException("Cannot refresh expired token");
         }
 
-        //getClaims returns Map<String, Claim> where Claim value needs to be explicitly converted to Object type,
-        // to fit Map<String, Object>, thus mapping
+        //getClaims returns Map<String, Claim> where Claim needs to be converted to Object type,
+        //to satisfy allowed Claim types, thus mapping it explicitly
         Map<String, Object> convertedClaims = decodedToken.getClaims().entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().as(Object.class)));
         return createToken(convertedClaims, decodedToken.getSubject());
