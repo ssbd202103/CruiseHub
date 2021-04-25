@@ -2,7 +2,7 @@ import {useTranslation} from 'react-i18next'
 import React, {useState} from "react";
 import ListClient from "./moderator/ListClient";
 
-import ManageAccount from "./admin/ManageAccount"
+import ManageAccount from "./common/ManageAccount"
 import {Button, ListItem, ListItemText} from "@material-ui/core";
 
 
@@ -23,7 +23,7 @@ export default function ModeratorPanel() {
 
         <div>
             <header >
-                <h1>{t('moderator Panel')}</h1>
+                <h1>{t('moderator panel')}</h1>
             </header>
             <div >
                 <div>

@@ -14,11 +14,11 @@ export default function WorkerPanel() {
     return (
         <div>
             <header>
-                <h1>{t('WorkerPanel')}</h1>
+                <h1>{t('worker panel')}</h1>
             </header>
             <div>
                 <ListItem button  onClick={handleManageAccount}>
-                    <ListItemText primary={t("Manage account")} />
+                    <ListItemText primary={t("manage account")} />
                 </ListItem>
             </div>
 
@@ -28,7 +28,7 @@ export default function WorkerPanel() {
 
             <div>
                 <Button variant="contained">
-                    {t("Logout")}
+                    {t("logout")}
                 </Button>
             </div>
         </div>
