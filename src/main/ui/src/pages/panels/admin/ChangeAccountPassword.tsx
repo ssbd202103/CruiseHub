@@ -35,7 +35,7 @@ export default function ChangeAccountPassword() {
                 <input type="password" placeholder={t("newPasswordConfirm")}/>
                 <Button variant="contained"
                         onClick={changePassword}
-                >{t("Confirm")}</Button>
+                >{t("confirm")}</Button>
             </div>
 
         </Box>

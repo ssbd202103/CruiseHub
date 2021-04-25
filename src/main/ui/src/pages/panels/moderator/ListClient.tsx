@@ -15,6 +15,7 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import {Button} from "@material-ui/core";
 import {Link} from "react-router-dom";
+import {useTranslation} from "react-i18next";
 
 const useRowStyles = makeStyles({
     root: {
@@ -64,17 +65,17 @@ const rows = [
     createData('mzuckerberg', 'mzuckerberg@gmail.com','true', 'admin'),
 ];
 
-export default function CollapsibleTable() {
+export default function ModListClient() {
+    const {t} = useTranslation()
     return (
         <TableContainer component={Paper}>
-            <Table aria-label="collapsible table">
+            <Table aria-label="Clients">
                 <TableHead>
                     <TableRow>
-
-                        <TableCell align="center">t{("login")}</TableCell>
-                        <TableCell align="center">t{("email")}</TableCell>
-                        <TableCell align="center">t{("active")}</TableCell>
-                        <TableCell align="center">t{("access level")}</TableCell>
+                        <TableCell align="center">{t("login")}</TableCell>
+                        <TableCell align="center">{t("email")}</TableCell>
+                        <TableCell align="center">{t("active")}</TableCell>
+                        <TableCell align="center">{t("access level")}</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>

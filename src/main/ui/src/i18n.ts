@@ -13,7 +13,8 @@ const resources = {
             "company": "Firma",
             "the best cruises": "Najlepsze wycieczki",
             "ad": "Reklama",
-            "confirm": "potwierdz",
+            "confirm": "Potwierdz",
+            "logout": "Wyloguj",
             //signin
             "signin": "Zaloguj się",
             "signin.welcome": "Witamy ponownie",
@@ -31,11 +32,18 @@ const resources = {
             "i am a client": "Jestem clientem",
             //adminPanel
             "adminPanel": "Panel administracyjny",
-            "login": "login",
-            "active": "aktywny",
-            "access level": "poziom dostępu",
-            "logout": "wyloguj",
-            "moderator Panel": "Panel moderatora"
+            "login": "Login",
+            "active": "Aktywny",
+            "access level": "Poziom dostępu",
+            "moderator Panel": "Panel moderatora",
+            "list accounts": "Lista kont",
+            "manage account": "Zarządzaj swoim kontem",
+            "edit": "Edytuj dane",
+            "change password" : "Zmień hasło",
+            "reset password": "Resetuj hasło",
+            "block": "Zablokuj konto",
+            "grand access level": "Przydziel poziom dostępu"
+
 
 
 
@@ -52,7 +60,8 @@ const resources = {
             "company": "Company",
             "the best cruises": "The best cruises",
             "ad": "Ad",
-            "confirm": "confirm",
+            "confirm": "Confrim",
+            "logout": "Logout",
             //signin
             "signin": "Sign in",
             "signin.welcome": "Welcome back",
@@ -70,11 +79,17 @@ const resources = {
             "i am a client": "I'm a client",
             //adminPanel
             "adminPanel": "Administrator panel",
-            "login": "login",
-            "active": "active",
-            "access level": "access level",
-            "list accounts": "accounts list",
-            "manage account": "account manage",
+            "login": "Login",
+            "active": "Active",
+            "access level": "Access level",
+            "list accounts": "Accounts list",
+            "manage account": "Account manage",
+            "moderator Panel": "Moderator Panel",
+            "edit": "Edit data",
+            "change password" : "Change password",
+            "reset password": "Reset password",
+            "block": "Block account",
+            "grand access level": "Grand access level"
 
 
         }

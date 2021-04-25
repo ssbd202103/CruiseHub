@@ -23,17 +23,17 @@ export default function AdminPanel() {
 
         <div>
             <header >
-                <h1>{t('AdminPanel')}</h1>
+                <h1>{t('adminPanel')}</h1>
             </header>
             <div >
                 <div>
                     <ListItem button
                               onClick={handleListClient}>
-                        <ListItemText primary={t("List accounts")} />
+                        <ListItemText primary={t("list accounts")} />
                     </ListItem>
 
                     <ListItem button  onClick={handleManageAccount}>
-                        <ListItemText primary={t("Manage account")} />
+                        <ListItemText primary={t("manage account")} />
                     </ListItem>
                 </div>
             </div>
@@ -49,7 +49,7 @@ export default function AdminPanel() {
 
             <div>
                 <Button variant="contained">
-                    {t("Logout")}
+                    {t("logout")}
                 </Button>
             </div>
         </div>

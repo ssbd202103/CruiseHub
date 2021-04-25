@@ -14,6 +14,7 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import {Button} from "@material-ui/core";
 import {Link} from "react-router-dom";
+import {useTranslation} from "react-i18next";
 
 const useRowStyles = makeStyles({
     root: {
@@ -41,7 +42,7 @@ function Row(props: { row: ReturnType<typeof createData> }) {
     const {row} = props;
     const [open, setOpen] = React.useState(false);
     const classes = useRowStyles();
-
+    const {t} = useTranslation()
     return (
         <React.Fragment>
             <TableRow className={classes.root}>
@@ -61,20 +62,18 @@ function Row(props: { row: ReturnType<typeof createData> }) {
                 <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box margin={1}>
-                            <Table size="small" aria-label="purchases">
+                            <Table size="small" aria-label="clients">
                                 <TableHead>
 
                                 </TableHead>
                                 <TableBody>
                                     <TableRow>
                                         <TableCell> <Link to="admin/ChangeAccountData"><Button>
-                                            Edit</Button></Link></TableCell>
-                                        <TableCell><Link to="admin/ChangeAccountPassword"><Button>Change
-                                            password</Button></Link></TableCell>
-                                        <TableCell><Button>Reset password</Button></TableCell>
-                                        <TableCell><Button>Block</Button></TableCell>
-                                        <TableCell><Link to="admin/GrantAccessLevel"><Button>Grand Access
-                                            Level</Button></Link></TableCell>
+                                            {t("edit")}</Button></Link></TableCell>
+                                        <TableCell><Link to="admin/ChangeAccountPassword"><Button>{t("change password")}</Button></Link></TableCell>
+                                        <TableCell><Button>{t("reset password")}</Button></TableCell>
+                                        <TableCell><Button>{t("block")}</Button></TableCell>
+                                        <TableCell><Link to="admin/GrantAccessLevel"><Button>{t("grand access level")}</Button></Link></TableCell>
                                     </TableRow>
                                 </TableBody>
                             </Table>
@@ -93,17 +92,18 @@ const rows = [
     createData('mzuckerberg', 'mzuckerberg@gmail.com', 'true', 'admin'),
 ];
 
-export default function adminListClient() {
+export default function AdminListClient() {
+    const {t} = useTranslation()
     return (
         <TableContainer component={Paper}>
             <Table aria-label="collapsible table">
                 <TableHead>
                     <TableRow>
                         <TableCell/>
-                        <TableCell align="center">t{("login")}</TableCell>
-                        <TableCell align="center">t{("email")}</TableCell>
-                        <TableCell align="center">t{("active")}</TableCell>
-                        <TableCell align="center">t{("access level")}</TableCell>
+                        <TableCell align="center">{t("login")}</TableCell>
+                        <TableCell align="center">{t("email")}</TableCell>
+                        <TableCell align="center">{t("active")}</TableCell>
+                        <TableCell align="center">{t("access level")}</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>

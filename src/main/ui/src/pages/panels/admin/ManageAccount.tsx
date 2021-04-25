@@ -139,7 +139,7 @@ export default function ManageAccount() {
                             onClick={changePassword}
                     >{t("confirm")}</Button>
                 </div>
-                <Button variant="contained">Reset Password</Button>
+                <Button variant="contained">{t("reset password")}</Button>
             </div>
         </Box>
     )
