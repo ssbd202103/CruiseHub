@@ -136,4 +136,19 @@ public class Account extends BaseEntity {
         this.setCreatedBy(createdBy);
         this.setAlteredBy(alteredBy);
     }
+
+
+    public Account(String firstName, String secondName, String login, String email, String passwordHash,
+                   boolean confirmed, boolean active, LanguageTypeWrapper languageType) {
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.login = login;
+        this.email = email;
+        this.passwordHash = passwordHash;
+        this.confirmed = confirmed;
+        this.active = active;
+        this.languageType = languageType;
+        this.setCreatedBy(this);
+        this.setAlteredBy(this);
+    }
 }

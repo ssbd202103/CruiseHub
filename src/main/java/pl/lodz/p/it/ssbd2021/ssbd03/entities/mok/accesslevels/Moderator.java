@@ -18,4 +18,8 @@ public class Moderator extends AccessLevel {
     public Moderator() {
         this.enabled = false;
     }
+
+    public Moderator(boolean enabled) {
+        this.enabled = enabled;
+    }
 }

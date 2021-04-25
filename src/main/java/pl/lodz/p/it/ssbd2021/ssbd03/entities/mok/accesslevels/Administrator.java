@@ -20,4 +20,8 @@ public class Administrator extends AccessLevel {
         this.enabled = false;
     }
 
+    public Administrator(boolean enabled) {
+        this.enabled = enabled;
+    }
+
 }

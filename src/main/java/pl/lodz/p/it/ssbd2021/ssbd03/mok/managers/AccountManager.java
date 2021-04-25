@@ -44,7 +44,7 @@ public class AccountManager implements AccountManagerLocal {
 
         client.setHomeAddress(address);
 
-        account.addAccessLevel(client);
+        account.setAccessLevel(client);
 
         accountFacade.create(account);
     }
@@ -64,7 +64,7 @@ public class AccountManager implements AccountManagerLocal {
         businessWorker.setAlterType(insertAlterType);
         businessWorker.setAccount(account);
 
-        account.addAccessLevel(businessWorker);
+        account.setAccessLevel(businessWorker);
 
         this.accountFacade.create(account);
     }
@@ -84,7 +84,7 @@ public class AccountManager implements AccountManagerLocal {
         administrator.setAlterType(insertAlterType);
         administrator.setAccount(account);
 
-        account.addAccessLevel(administrator);
+        account.setAccessLevel(administrator);
 
         this.accountFacade.create(account);
     }
@@ -104,7 +104,7 @@ public class AccountManager implements AccountManagerLocal {
         moderator.setAlterType(insertAlterType);
         moderator.setAccount(account);
 
-        account.addAccessLevel(moderator);
+        account.setAccessLevel(moderator);
 
         this.accountFacade.create(account);
     }

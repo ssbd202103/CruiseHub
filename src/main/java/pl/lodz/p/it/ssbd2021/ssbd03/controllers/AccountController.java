@@ -12,6 +12,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 
 /**
@@ -71,5 +72,11 @@ public class AccountController {
     @Consumes(MediaType.APPLICATION_JSON)
     public void createModerator(@Valid @NotNull ModeratorForRegistrationDto moderatorForRegistrationDto) {
         accountEndpoint.createModeratorAccount(moderatorForRegistrationDto);
+    }
+
+    @GET
+    @Path("/greeting")
+    public String greeting() {
+        return "Hello SSBD";
     }
 }

@@ -42,6 +42,12 @@ public class Client extends AccessLevel {
         this.enabled = false;
     }
 
+    public Client(Address homeAddress, String phoneNumber, boolean enabled) {
+        this.homeAddress = homeAddress;
+        this.phoneNumber = phoneNumber;
+        this.enabled = enabled;
+    }
+
     public Client(String phoneNumber) {
         this.phoneNumber = phoneNumber;
         this.enabled = false;
