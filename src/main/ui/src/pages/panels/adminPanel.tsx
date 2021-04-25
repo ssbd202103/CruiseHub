@@ -2,7 +2,7 @@ import {useTranslation} from 'react-i18next'
 import React, {useState} from "react";
 import ListClient from "./admin/ListClient";
 
-import ManageAccount from "./admin/ManageAccount"
+import ManageAccount from "./common/ManageAccount"
 import {Button, ListItem, ListItemText} from "@material-ui/core";
 
 
@@ -23,7 +23,7 @@ export default function AdminPanel() {
 
         <div>
             <header >
-                <h1>{t('adminPanel')}</h1>
+                <h1>{t('admin panel')}</h1>
             </header>
             <div >
                 <div>

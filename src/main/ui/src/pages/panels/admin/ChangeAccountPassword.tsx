@@ -26,13 +26,12 @@ export default function ChangeAccountPassword() {
                 <h3>{t("password")}</h3>
                 <Button variant="contained"
                         onClick={handleChangPasswd}
-                >{t("passwordChange")}</Button>
+                >{t("password change btn")}</Button>
             </div>
             <div style={{display: ChangPasswd ? "block" : "none"}}>
-                <h3>{t("passwordChange")}</h3>
-                <input type="password" placeholder={t("oldPassword")}/>
-                <input type="password" placeholder={t("newPassword")}/>
-                <input type="password" placeholder={t("newPasswordConfirm")}/>
+                <h3>{t("password change")}</h3>
+                <input type="password" placeholder={t("new password")}/>
+                <input type="password" placeholder={t("new password confirm")}/>
                 <Button variant="contained"
                         onClick={changePassword}
                 >{t("confirm")}</Button>
