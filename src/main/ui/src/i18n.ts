@@ -13,6 +13,8 @@ const resources = {
             "company": "Firma",
             "the best cruises": "Najlepsze wycieczki",
             "ad": "Reklama",
+            "confirm": "Potwierdz",
+            "logout": "Wyloguj",
             //signin
             "signin": "Zaloguj się",
             "signin.welcome": "Witamy ponownie",
@@ -28,6 +30,19 @@ const resources = {
             //signup.worker
             "signup.worker.subtitle": "Tylko kilka kliknięć dzieli Cię od dostępu do jednej z największych sieci klientów",
             "i am a client": "Jestem clientem",
+            //adminPanel
+            "adminPanel": "Panel administracyjny",
+            "login": "Login",
+            "active": "Aktywny",
+            "access level": "Poziom dostępu",
+            "moderator Panel": "Panel moderatora",
+            "list accounts": "Lista kont",
+            "manage account": "Zarządzaj swoim kontem",
+            "edit": "Edytuj dane",
+            "change password" : "Zmień hasło",
+            "reset password": "Resetuj hasło",
+            "block": "Zablokuj konto",
+            "grand access level": "Przydziel poziom dostępu",
 
             //panels.clientPanel
             "clientPanelH2": "Panel klienta",
@@ -61,6 +76,8 @@ const resources = {
             "company": "Company",
             "the best cruises": "The best cruises",
             "ad": "Ad",
+            "confirm": "Confrim",
+            "logout": "Logout",
             //signin
             "signin": "Sign in",
             "signin.welcome": "Welcome back",
@@ -76,6 +93,19 @@ const resources = {
             //signup.worker
             "signup.worker.subtitle": "You'll have an access to the largest clients network after a couple of clicks",
             "i am a client": "I'm a client",
+            //adminPanel
+            "adminPanel": "Administrator panel",
+            "login": "Login",
+            "active": "Active",
+            "access level": "Access level",
+            "list accounts": "Accounts list",
+            "manage account": "Account manage",
+            "moderator Panel": "Moderator Panel",
+            "edit": "Edit data",
+            "change password" : "Change password",
+            "reset password": "Reset password",
+            "block": "Block account",
+            "grand access level": "Grand access level",
 
             //panels.clientPanel
             "clientPanelH2": "Client panel",
