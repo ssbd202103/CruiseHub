@@ -15,11 +15,9 @@ public class Administrator extends AccessLevel {
         return AccessLevelType.ADMINISTRATOR;
     }
 
-    public Administrator() {
-    }
 
-    public Administrator(boolean enabled) {
-        this.enabled = enabled;
+    public Administrator() {
+        this.enabled = false;
     }
 
 }

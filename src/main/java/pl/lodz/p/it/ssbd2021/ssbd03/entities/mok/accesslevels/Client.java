@@ -15,6 +15,7 @@ import javax.validation.constraints.NotNull;
 public class Client extends AccessLevel {
 
     @Getter
+    @Setter
     @NotNull
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name = "home_address_id")
@@ -32,11 +33,17 @@ public class Client extends AccessLevel {
     }
 
     public Client() {
+        this.enabled = false;
     }
 
-    public Client(Address homeAddress, String phoneNumber, boolean enabled) {
+    public Client(Address homeAddress, String phoneNumber) {
         this.homeAddress = homeAddress;
         this.phoneNumber = phoneNumber;
-        this.enabled = enabled;
+        this.enabled = false;
+    }
+
+    public Client(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+        this.enabled = false;
     }
 }

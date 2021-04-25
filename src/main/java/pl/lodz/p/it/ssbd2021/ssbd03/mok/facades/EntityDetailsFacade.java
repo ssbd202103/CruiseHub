@@ -1,19 +1,18 @@
-package pl.lodz.p.it.ssbd2021.ssbd03.mok.facade;
+package pl.lodz.p.it.ssbd2021.ssbd03.mok.facades;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Administrator;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 @Stateless
-public class AdministratorFacade extends AbstractFacade<Administrator> {
-
+public class EntityDetailsFacade extends AbstractFacade<BaseEntity> {
     @PersistenceContext(unitName = "ssbd03mokPU")
     private EntityManager em;
 
-    public AdministratorFacade() {
-        super(Administrator.class);
+    public EntityDetailsFacade() {
+        super(BaseEntity.class);
     }
 
     @Override

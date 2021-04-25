@@ -1,18 +1,19 @@
-package pl.lodz.p.it.ssbd2021.ssbd03.mok.facade;
+package pl.lodz.p.it.ssbd2021.ssbd03.mok.facades;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 @Stateless
-public class EntityDetailsFacade extends AbstractFacade<BaseEntity> {
+public class ModeratorFacade extends AbstractFacade<Moderator> {
+
     @PersistenceContext(unitName = "ssbd03mokPU")
     private EntityManager em;
 
-    public EntityDetailsFacade() {
-        super(BaseEntity.class);
+    public ModeratorFacade() {
+        super(Moderator.class);
     }
 
     @Override

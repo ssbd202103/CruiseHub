@@ -4,11 +4,7 @@
    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
    version="4.0">
     <default-context-path>/cruisehub</default-context-path>
-    <session-config>
-        <session-timeout>
-            30
-        </session-timeout>
-    </session-config>
+
     <!-- Roles -->
     <security-role>
         <role-name>ADMINISTRATOR</role-name>
@@ -29,6 +25,7 @@
             <web-resource-name>Admin Page</web-resource-name>
                 <description />
                 <url-pattern>/admin/*</url-pattern>
+            <url-pattern>/account/administrator/registration</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <description/>
@@ -95,15 +92,30 @@
         <display-name>LoginConstr</display-name>
         <web-resource-collection>
             <web-resource-name>Login Page</web-resource-name>
-                <description />
-                <url-pattern>/login/*</url-pattern>
+            <description/>
+            <url-pattern>/login/*</url-pattern>
         </web-resource-collection>
         <user-data-constraint>
             <description/>
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>
         </user-data-constraint>
     </security-constraint>
-    
+
+
+    <security-constraint>
+        <display-name>PublicResources</display-name>
+        <web-resource-collection>
+            <web-resource-name>PublicResources</web-resource-name>
+            <url-pattern>/account/client/registration</url-pattern>
+            <url-pattern>/account/businessworker/registration</url-pattern>
+        </web-resource-collection>
+        <user-data-constraint>
+            <description/>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+
+
     <login-config>
         <auth-method>FORM</auth-method>
         <realm-name>ssbd03realm</realm-name>

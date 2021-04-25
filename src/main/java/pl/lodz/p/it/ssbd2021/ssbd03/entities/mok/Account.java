@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.entities.mok;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Name;
@@ -15,6 +16,9 @@ import java.util.Set;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.*;
 
 @Entity(name = "accounts")
+@NamedQueries({
+        @NamedQuery(name = "Account.findByLogin", query = "SELECT acc FROM accounts acc WHERE acc.login = :login")
+})
 public class Account extends BaseEntity {
     @Getter
     @Id
@@ -73,8 +77,9 @@ public class Account extends BaseEntity {
     private String lastIncorrectAuthenticationLogicalAddress;
 
     @Getter
+    @Setter
     @JoinColumn(name = "language_type_id")
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.PERSIST})
     private LanguageTypeWrapper languageType;
 
     @Getter
@@ -93,11 +98,11 @@ public class Account extends BaseEntity {
     private int numberOfAuthenticationFailures;
 
     @Getter
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
-    @JoinColumn(name = "account_id")
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE}, mappedBy = "account")
+    @ToString.Exclude
     private final Set<AccessLevel> accessLevels = new HashSet<>();
 
-    public void setAccessLevel(AccessLevel accessLevel) {
+    public void addAccessLevel(AccessLevel accessLevel) {
         accessLevels.add(accessLevel);
     }
 
@@ -105,14 +110,14 @@ public class Account extends BaseEntity {
     }
 
     public Account(String firstName, String secondName, String login, String email,
-                   String passwordHash, boolean confirmed, boolean active, LanguageTypeWrapper languageType) {
+                   String passwordHash, LanguageTypeWrapper languageType) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.login = login;
         this.email = email;
         this.passwordHash = passwordHash;
-        this.confirmed = confirmed;
-        this.active = active;
+        this.confirmed = false;
+        this.active = false;
         this.languageType = languageType;
         this.setCreatedBy(this); // Account is set as self-owner by default
         this.setAlteredBy(this);
@@ -131,4 +136,6 @@ public class Account extends BaseEntity {
         this.setCreatedBy(createdBy);
         this.setAlteredBy(alteredBy);
     }
+
+
 }

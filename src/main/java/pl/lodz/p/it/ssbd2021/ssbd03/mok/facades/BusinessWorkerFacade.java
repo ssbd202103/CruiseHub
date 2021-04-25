@@ -1,24 +1,23 @@
-package pl.lodz.p.it.ssbd2021.ssbd03.mok.facade;
+package pl.lodz.p.it.ssbd2021.ssbd03.mok.facades;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 @Stateless
-public class AddressFacade extends AbstractFacade<Address> {
+public class BusinessWorkerFacade extends AbstractFacade<BusinessWorker> {
 
     @PersistenceContext(unitName = "ssbd03mokPU")
     private EntityManager em;
 
-    public AddressFacade() {
-        super(Address.class);
+    public BusinessWorkerFacade() {
+        super(BusinessWorker.class);
     }
 
     @Override
     protected EntityManager getEntityManager() {
         return em;
     }
-
 }

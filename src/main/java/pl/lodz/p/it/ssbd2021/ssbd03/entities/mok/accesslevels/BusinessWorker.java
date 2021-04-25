@@ -29,8 +29,8 @@ public class BusinessWorker extends AccessLevel {
     public BusinessWorker() {
     }
 
-    public BusinessWorker(String phoneNumber, boolean enabled) {
+    public BusinessWorker(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-        this.enabled = enabled;
+        this.enabled = false;
     }
 }
