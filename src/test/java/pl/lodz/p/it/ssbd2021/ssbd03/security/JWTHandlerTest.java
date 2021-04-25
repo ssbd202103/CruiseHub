@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.testModel.mok.dto.TestAccountDto;
 
 import java.util.List;
 import java.util.Map;
@@ -23,9 +23,9 @@ class JWTHandlerTest {
 
     @Test
     void createTokenTest() {
-        List<AccountDto> accounts = getSampleAccounts();
+        List<TestAccountDto> accounts = getSampleAccounts();
 
-        for (AccountDto account : accounts) {
+        for (TestAccountDto account : accounts) {
             Map<String, Object> claims = mapper.convertValue(account, Map.class);
             String subject = "184";
 
@@ -44,9 +44,9 @@ class JWTHandlerTest {
 
     @Test
     void verifyTokenTest() {
-        List<AccountDto> accounts = getSampleAccounts();
+        List<TestAccountDto> accounts = getSampleAccounts();
 
-        for (AccountDto account : accounts) {
+        for (TestAccountDto account : accounts) {
             Map<String, Object> claims = mapper.convertValue(account, Map.class);
 
             String token = JWTHandler.createToken(claims, "152");
@@ -57,20 +57,9 @@ class JWTHandlerTest {
         }
     }
 
-    private List<AccountDto> getSampleAccounts() {
-        return List.of(
-                new AccountDto("admin1", "Michał", "Konieczny", "michal.konieczny@gmail.com",
-                        LanguageType.PL, Set.of(AccessLevelType.ADMINISTRATOR, AccessLevelType.CLIENT)),
-                new AccountDto("mariola123", "Mariola", "Niebieska", "mariolka374@gmail.com",
-                        LanguageType.PL, Set.of(AccessLevelType.CLIENT)),
-                new AccountDto("mmMod944_", "Mariusz", "Skrowronek", "mariusz.skowronek@hotmail.com",
-                        LanguageType.PL, Set.of(AccessLevelType.CLIENT, AccessLevelType.BUSINESS_WORKER))
-        );
-    }
-
     @Test
     public void refreshTokenTest() throws InterruptedException {
-        AccountDto account = getSampleAccounts().get(0);
+        TestAccountDto account = getSampleAccounts().get(0);
         Map<String, Object> claims = mapper.convertValue(account, Map.class);
         String subject = "184";
 
@@ -93,5 +82,16 @@ class JWTHandlerTest {
             }
 
         }
+    }
+
+    private List<TestAccountDto> getSampleAccounts() {
+        return List.of(
+                new TestAccountDto("admin1", "Michał", "Konieczny", "michal.konieczny@gmail.com",
+                        LanguageType.PL, Set.of(AccessLevelType.ADMINISTRATOR, AccessLevelType.CLIENT)),
+                new TestAccountDto("mariola123", "Mariola", "Niebieska", "mariolka374@gmail.com",
+                        LanguageType.PL, Set.of(AccessLevelType.CLIENT)),
+                new TestAccountDto("mmMod944_", "Mariusz", "Skrowronek", "mariusz.skowronek@hotmail.com",
+                        LanguageType.PL, Set.of(AccessLevelType.CLIENT, AccessLevelType.BUSINESS_WORKER))
+        );
     }
 }
