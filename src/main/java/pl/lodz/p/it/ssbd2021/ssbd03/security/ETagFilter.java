@@ -14,7 +14,7 @@ import java.io.IOException;
 public class ETagFilter implements ContainerRequestFilter {
     /**
      * Funkcja sprawdzająca poprawność pobranego nagłówka
-     * @param requestContext zmiena z której pobierany jest nagłówek
+     * @param requestContext zmienna z której pobierany jest nagłówek
      */
     @Override
     public void filter(ContainerRequestContext requestContext)  {

@@ -5,7 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * Adnotacja udosępniająca możliwość filtrowania ETagu
+ * Adnotacja udostępniająca możliwość filtrowania ETagu
  */
 @NameBinding
 @Retention(RetentionPolicy.RUNTIME)

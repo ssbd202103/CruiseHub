@@ -3,15 +3,16 @@ package pl.lodz.p.it.ssbd2021.ssbd03.security;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
+import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
 
 import java.text.ParseException;
+import java.util.Properties;
 
 /**
  * Klasa udostępniająca statyczne metody obsługujące ETag
  */
 public class EntityIdentitySignerVerifier {
-    private static final String SECRET = "8YuS04LvRqjpnGnet02bvcdoLIubmcXEt597Gj1rU6bW2MXHvQM90jNnascqF71jsmbp-co91xqE1hie-xKz68BwqAfukX8pGCpXtlzXxrXF_fz46kTcC1HsbvwDzLpxaoAoRKAtEt0onytN4wflPcNvzWjZvAYVcfhb6ydUofU";
-
+   private static final Properties securityProperties = PropertiesReader.getSecurityProperties();
     /**
      * Metoda służąca do stworzenia ETagu
      * @param entity Przesyłana encja dla której bedzie tworzony ETag
@@ -19,7 +20,7 @@ public class EntityIdentitySignerVerifier {
      */
     public static String calculateEntitySignature(SignableEntity entity) {
         try {
-            JWSSigner signer = new MACSigner(SECRET);
+            JWSSigner signer = new MACSigner(securityProperties.getProperty("etag.secret"));
             JWSObject jwsObject = new JWSObject(new JWSHeader(JWSAlgorithm.HS256), new Payload(entity.getSignablePayload()));
             jwsObject.sign(signer);
             return jwsObject.serialize();
@@ -37,7 +38,7 @@ public class EntityIdentitySignerVerifier {
     public static boolean validateEntitySignature(String tag) {
         try {
             JWSObject jwsObject = JWSObject.parse(tag);
-            JWSVerifier verifier = new MACVerifier(SECRET);
+            JWSVerifier verifier = new MACVerifier(securityProperties.getProperty("etag.secret"));
             return jwsObject.verify(verifier);
 
         } catch (ParseException | JOSEException e) {
