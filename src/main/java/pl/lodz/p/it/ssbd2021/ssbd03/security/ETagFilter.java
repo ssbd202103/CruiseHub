@@ -6,11 +6,18 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
 
+/**
+ * Klasa odpowiadający za filtrowanie nagłówka
+ */
 @Provider
 @ETagFilterBinding
 public class ETagFilter implements ContainerRequestFilter {
+    /**
+     * Funkcja sprawdzająca poprawność pobranego nagłówka
+     * @param requestContext zmiena z której pobierany jest nagłówek
+     */
     @Override
-    public void filter(ContainerRequestContext requestContext) throws IOException {
+    public void filter(ContainerRequestContext requestContext)  {
         String header = requestContext.getHeaderString("If-Match");
         if(header == null || header.isEmpty()) {
             requestContext.abortWith(Response.status(Response.Status.BAD_REQUEST).build());

@@ -35,10 +35,6 @@ public class AccountDto implements SignableEntity {
     @NotNull
     private Set<AccessLevelType> accessLevels;
 
-
-
-
-
     @Override
     public String getSignablePayload() {
         return email ;
