@@ -13,6 +13,7 @@ const resources = {
             "company": "Firma",
             "the best cruises": "Najlepsze wycieczki",
             "ad": "Reklama",
+            "confirm": "potwierdz",
             //signin
             "signin": "Zaloguj się",
             "signin.welcome": "Witamy ponownie",
@@ -27,7 +28,17 @@ const resources = {
             "i am a business worker": "Jestem pracownikiem firmy",
             //signup.worker
             "signup.worker.subtitle": "Tylko kilka kliknięć dzieli Cię od dostępu do jednej z największych sieci klientów",
-            "i am a client": "Jestem clientem"
+            "i am a client": "Jestem clientem",
+            //adminPanel
+            "adminPanel": "Panel administracyjny",
+            "login": "login",
+            "active": "aktywny",
+            "access level": "poziom dostępu",
+            "logout": "wyloguj",
+            "moderator Panel": "Panel moderatora"
+
+
+
         }
     },
     en: {
@@ -41,6 +52,7 @@ const resources = {
             "company": "Company",
             "the best cruises": "The best cruises",
             "ad": "Ad",
+            "confirm": "confirm",
             //signin
             "signin": "Sign in",
             "signin.welcome": "Welcome back",
@@ -55,7 +67,16 @@ const resources = {
             "i am a business worker": "I'm a business worker",
             //signup.worker
             "signup.worker.subtitle": "You'll have an access to the largest clients network after a couple of clicks",
-            "i am a client": "I'm a client"
+            "i am a client": "I'm a client",
+            //adminPanel
+            "adminPanel": "Administrator panel",
+            "login": "login",
+            "active": "active",
+            "access level": "access level",
+            "list accounts": "accounts list",
+            "manage account": "account manage",
+
+
         }
     }
 }

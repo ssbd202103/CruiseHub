@@ -16,6 +16,12 @@ import Home from './pages/home'
 import Signin from './pages/signin'
 import SignUpClient from './pages/signup/client'
 import SignUpWorker from './pages/signup/worker'
+import AdminPanel from './pages/panels/adminPanel'
+import ModeratorPanel from "./pages/panels/moderatorPanel";
+import ChangeAccountData from "./pages/panels/admin/ChangeAccountData"
+import ChangeAccountPassword from "./pages/panels/admin/ChangeAccountPassword"
+import GrantAccessLevel from "./pages/panels/admin/GrantAccessLevel"
+
 
 function App() {
   return (
@@ -30,6 +36,7 @@ function App() {
               <Signin/>
             </Route>
 
+
             <Route path="/signup/client">
               <SignUpClient/>
             </Route>
@@ -37,6 +44,23 @@ function App() {
             <Route path="/signup/worker">
               <SignUpWorker/>
             </Route>
+
+            <Route path="/panels/adminPanel">
+              <AdminPanel/>
+            </Route>
+            <Route path="/panels/moderatorPanel">
+              <ModeratorPanel/>
+            </Route>
+            <Route path="/panels/admin/ChangeAccountData">
+            <ChangeAccountData/>
+          </Route>
+            <Route path="/panels/admin/ChangeAccountPassword">
+              <ChangeAccountPassword/>
+            </Route>
+            <Route path="/panels/admin/GrantAccessLevel">
+              <GrantAccessLevel/>
+            </Route>
+
 
             <Route path="*">
               <div>404 not found</div>
