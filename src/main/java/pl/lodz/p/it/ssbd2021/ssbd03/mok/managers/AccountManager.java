@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.managers;
 
+import javassist.compiler.ast.Pair;
 import org.apache.commons.codec.digest.DigestUtils;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
@@ -9,10 +10,16 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Administrator;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AuthenticateResponse;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacade;
+import pl.lodz.p.it.ssbd2021.ssbd03.security.JWTHandler;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
+import javax.validation.constraints.NotNull;
+import javax.ws.rs.core.Response;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Klasa która zarządza logiką biznesową kont
@@ -109,5 +116,14 @@ public class AccountManager implements AccountManagerLocal {
         this.accountFacade.create(account);
     }
 
+    @Override
+    public AuthenticateResponse authenticate(@NotNull String login, @NotNull String passwordHash) {
+        AuthenticateResponse response = this.accountFacade.authenticate(login, passwordHash);
 
+        HashMap map = new HashMap();
+        map.put(response.getAccount().getLogin(), response.getAccount().getAccessLevels());
+        String token = JWTHandler.createToken(map, response.getAccount().getId().toString());
+        response.setToken(token);
+        return response;
+    }
 }

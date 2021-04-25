@@ -5,6 +5,7 @@ export interface RoundedButtonProps {
     readonly className?: string,
     readonly color: "pink" | "yellow" | "green" | "blue"
     readonly children?: any,
+    readonly onClick?: any,
     readonly style?: React.CSSProperties 
 }
 
@@ -14,7 +15,8 @@ export default function RoundedButton(props: RoundedButtonProps) {
         className: styles,
         children,
         color,
-        style
+        style,
+        onClick
     } = props
 
     const classes = makeStyles(theme => ({
@@ -31,6 +33,7 @@ export default function RoundedButton(props: RoundedButtonProps) {
 
     return (
         <Button
+            onClick={onClick}
             className={(styles || '') + ' ' + classes.root}
             style={style || undefined}
         >{children}</Button>

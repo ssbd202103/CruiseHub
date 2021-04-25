@@ -1,14 +1,17 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.managers;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
+import javassist.compiler.ast.Pair;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Administrator;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AuthenticateResponse;
 
 import javax.ejb.Local;
+import javax.validation.constraints.NotNull;
+import javax.ws.rs.core.Response;
 
 /**
  * Klasa która zarządza logiką biznesową kont
@@ -47,4 +50,12 @@ public interface AccountManagerLocal {
      * @param moderator obiekt prezentujący poziom dostępu administrator
      */
     void createModerator(Account account, Moderator moderator);
+
+    /**
+     * Loguje użytkwnika lub zwraca odpowiedni kod błędu
+     * @param login Login użytkownika
+     * @param passwordHash Hash hasła użytkownika
+     * @return Kod HTTP, konto użytkownika oraz token
+     */
+    AuthenticateResponse authenticate(@NotNull String login, @NotNull String passwordHash);
 }

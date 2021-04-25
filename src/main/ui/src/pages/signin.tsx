@@ -11,9 +11,15 @@ import RoundedButton from '../components/RoundedButton'
 import {useTranslation} from 'react-i18next'
 
 import styles from '../styles/auth.global.module.css'
+import AuthService from "../services/AuthService";
 
 export default function SignIn() {
     const {t} = useTranslation();
+
+    function auth() {
+        AuthService('', '')
+    }
+
 
     return (
             <AuthLayout>
@@ -55,6 +61,7 @@ export default function SignIn() {
                                 padding: '10px 0'
                             }}
                             color="pink"
+                            onClick={auth}
                         >{t("signin")}</RoundedButton>
                         <Link to="signup/client">
                             <a className={styles.link}>{t("i don't have an account")}</a>
