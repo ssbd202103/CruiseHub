@@ -16,6 +16,7 @@ import Home from './pages/home'
 import Signin from './pages/signin'
 import SignUpClient from './pages/signup/client'
 import SignUpWorker from './pages/signup/worker'
+import WorkerPanel from './pages/panels/workerPanel'
 
 function App() {
   return (
@@ -36,6 +37,10 @@ function App() {
 
             <Route path="/signup/worker">
               <SignUpWorker/>
+            </Route>
+
+            <Route path="/panels/workerPanel">
+              <WorkerPanel/>
             </Route>
 
             <Route path="*">

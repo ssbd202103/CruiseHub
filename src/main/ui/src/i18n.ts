@@ -5,7 +5,7 @@ const resources = {
     pl: {
         translation: {
             "go back": "Wróć",
-            "email": "Email",
+            "email": "E-mail",
             "password": "Hasło",
             "confirm password": "Potwierdź hasło",
             "name": "Imię",
@@ -13,6 +13,8 @@ const resources = {
             "company": "Firma",
             "the best cruises": "Najlepsze wycieczki",
             "ad": "Reklama",
+            "confirm": "Potwierdź",
+            "Logout": "Wyloguj",
             //signin
             "signin": "Zaloguj się",
             "signin.welcome": "Witamy ponownie",
@@ -27,7 +29,30 @@ const resources = {
             "i am a business worker": "Jestem pracownikiem firmy",
             //signup.worker
             "signup.worker.subtitle": "Tylko kilka kliknięć dzieli Cię od dostępu do jednej z największych sieci klientów",
-            "i am a client": "Jestem clientem"
+            "i am a client": "Jestem clientem",
+            //ManageAccount
+            "Manage account": "Zarządzaj kontem",
+            "personalData": "Dane presonalne",
+            "phoneNumber": "Numer telefonu",
+            "personalDataChangeBtn": "Edytuj dane personalne",
+            "personalDataChange": "Edycja danych personalnych",
+            "address": "Adres",
+            "street": "Ulica",
+            "houseNumber": "Numer domu",
+            "postalCode": "Kod pocztowy",
+            "city": "Miasto",
+            "country": "Kraj",
+            "addressChangeBtn": "Edytuj dane adresowe",
+            "addressChange": "Edycja danych adresowych",
+            "emailChangeBtn": "Edytuj e-mail",
+            "emailChange": "Edycja e-maila",
+            "newEmail": "Podaj nowy e-mail",
+            "newEmailConfirm": "Potwierdź nowy e-mail",
+            "passwordChangeBtn": "Zmień hasło",
+            "passwordChange": "Zmiana hasła",
+            //workerPanel
+            "WorkerPanel": "Panel pracownika",
+            "buyAdvertisement": "Kup reklamę",
         }
     },
     en: {
@@ -41,6 +66,8 @@ const resources = {
             "company": "Company",
             "the best cruises": "The best cruises",
             "ad": "Ad",
+            "confirm": "Confirm",
+            "Logout": "Logout",
             //signin
             "signin": "Sign in",
             "signin.welcome": "Welcome back",
@@ -55,7 +82,29 @@ const resources = {
             "i am a business worker": "I'm a business worker",
             //signup.worker
             "signup.worker.subtitle": "You'll have an access to the largest clients network after a couple of clicks",
-            "i am a client": "I'm a client"
+            "i am a client": "I'm a client",
+            //ManageAccount
+            "Manage account": "Manage account",
+            "personalData": "Personal Data",
+            "phoneNumber": "Phone Number",
+            "personalDataChangeBtn": "Edit personal data",
+            "personalDataChange": "Editing personal data",
+            "address": "Address",
+            "street": "Street",
+            "houseNumber": "House number",
+            "postalCode": "Postal code",
+            "city": "City",
+            "country": "Country",
+            "addressChangeBtn": "Edit address",
+            "addressChange": "Editing address",
+            "emailChangeBtn": "Change e-mail",
+            "emailChange": "Editing e-mail",
+            "newEmail": "Insert new e-mail",
+            "newEmailConfirm": "Confirm new e-mail",
+            "passwordChangeBtn": "Change password",
+            "passwordChange": " password",
+            //workerPanel
+            "WorkerPanel": "Worker panel"
         }
     }
 }
