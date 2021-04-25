@@ -19,6 +19,12 @@ function Header() {
                 <Link to="signin">
                     <a style={{marginRight: 20}} className={styles.link}>{t("signin")}</a>
                 </Link>
+                <Link to="panels/adminPanel">
+                    <a style={{marginRight: 20}} className={styles.link}>{t("adminPanel")}</a>
+                </Link>
+                <Link to="panels/moderatorPanel">
+                    <a style={{marginRight: 20}} className={styles.link}>{t("moderatorPanel")}</a>
+                </Link>
 
                 <Link to="signup/client">
                     <RoundedButton

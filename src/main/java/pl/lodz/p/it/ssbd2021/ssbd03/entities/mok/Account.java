@@ -42,13 +42,13 @@ public class Account extends BaseEntity {
     @Getter
     @Setter
     @Login
-    @Column(name = "login", nullable = false, unique = true)
+    @Column(name = "login", nullable = false, unique = true, updatable = false)
     private String login;
 
     @Getter
     @Setter
     @Email
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Getter
@@ -96,13 +96,13 @@ public class Account extends BaseEntity {
     @Setter
     @Column(name = "number_of_authentication_failures")
     private int numberOfAuthenticationFailures;
-
+    
     @Getter
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE}, mappedBy = "account")
     @ToString.Exclude
     private final Set<AccessLevel> accessLevels = new HashSet<>();
 
-    public void addAccessLevel(AccessLevel accessLevel) {
+    public void setAccessLevel(AccessLevel accessLevel) {
         accessLevels.add(accessLevel);
     }
 
@@ -136,6 +136,4 @@ public class Account extends BaseEntity {
         this.setCreatedBy(createdBy);
         this.setAlteredBy(alteredBy);
     }
-
-
 }
