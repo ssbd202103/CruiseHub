@@ -23,6 +23,7 @@ import ChangeAccountPassword from "./pages/panels/admin/ChangeAccountPassword"
 import GrantAccessLevel from "./pages/panels/admin/GrantAccessLevel"
 
 import ClientPanel from './pages/panels/clientPanel'
+import WorkerPanel from './pages/panels/workerPanel'
 
 function App() {
   return (
@@ -44,6 +45,10 @@ function App() {
 
             <Route path="/signup/worker">
               <SignUpWorker/>
+            </Route>
+
+            <Route path="/panels/workerPanel">
+              <WorkerPanel/>
             </Route>
 
             <Route path="/panels/clientPanel">
