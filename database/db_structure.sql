@@ -663,7 +663,7 @@ GRANT SELECT, INSERT, DELETE
     ON cruises_group_pictures TO ssbd03mow;
 
 GRANT SELECT
-    ON language_types TO ssbd03mow;
+    ON language_types TO ssbd03mok;
 
 GRANT SELECT, INSERT, UPDATE, DELETE
     ON ratings TO ssbd03mow;

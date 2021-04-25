@@ -1,19 +1,19 @@
-package pl.lodz.p.it.ssbd2021.ssbd03.mok.facade;
+package pl.lodz.p.it.ssbd2021.ssbd03.mok.facades;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 @Stateless
-public class AccountFacade extends AbstractFacade<Account> {
+public class ClientFacade extends AbstractFacade<Client> {
 
     @PersistenceContext(unitName = "ssbd03mokPU")
     private EntityManager em;
 
-    public AccountFacade() {
-        super(Account.class);
+    public ClientFacade() {
+        super(Client.class);
     }
 
     @Override

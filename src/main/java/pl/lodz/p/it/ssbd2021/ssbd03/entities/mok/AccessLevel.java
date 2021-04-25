@@ -22,6 +22,12 @@ public abstract class AccessLevel extends BaseEntity {
     @Setter
     protected boolean enabled;
 
+    @JoinColumn(name = "account_id", referencedColumnName = "id", updatable = false)
+    @ManyToOne(optional = false, cascade = CascadeType.PERSIST)
+    @Getter
+    @Setter
+    private Account account;
+
     public abstract AccessLevelType getAccessLevelType();
 
     @Override

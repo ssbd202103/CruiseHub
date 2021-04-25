@@ -7,6 +7,9 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
 import javax.persistence.*;
 
 @Entity(name = "alter_types")
+@NamedQueries({
+        @NamedQuery(name = "AlterTypeWrapper.findByName", query = "SELECT at FROM alter_types at WHERE at.name = :name")
+})
 public class AlterTypeWrapper {
     @Getter
     @Id
