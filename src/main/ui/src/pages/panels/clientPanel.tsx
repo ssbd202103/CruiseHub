@@ -16,6 +16,9 @@ export default function ClientPanel() {
     //Functions for personal data change
     const handleChangePerData = () => {
         setPerData(state => !state)
+        setChangChangAddress( false)
+        setChangEmail( false)
+        setChangPasswd(false)
     }
     const changePersonalData = () => {
         //Place for transfer function (change personal data in database)
@@ -25,6 +28,9 @@ export default function ClientPanel() {
     //Functions for address data change
     const handleChangAddress = () => {
         setChangChangAddress(state => !state)
+        setPerData(false)
+        setChangEmail(false)
+        setChangPasswd( false)
     }
     const changeAddress = () => {
         //Place for transfer function (change address in database)
@@ -34,6 +40,9 @@ export default function ClientPanel() {
     //Functions for email data change
     const handleChangEmail = () => {
         setChangEmail(state => !state)
+        setPerData( false)
+        setChangChangAddress( false)
+        setChangPasswd(false)
     }
     const changeEmail = () => {
         //Place for transfer function (change email in database)
@@ -43,6 +52,9 @@ export default function ClientPanel() {
     //Functions for password
     const handleChangPasswd = () => {
         setChangPasswd(state => !state)
+        setPerData( false)
+        setChangChangAddress(false)
+        setChangEmail( false)
     }
     const changePassword = () => {
         //Place for transfer function (change password in database)
