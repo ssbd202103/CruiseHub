@@ -1,7 +1,6 @@
 import {Link} from 'react-router-dom'
 
 import Box from '@material-ui/core/Box'
-import EmailIcon from '@material-ui/icons/AlternateEmail'
 import PasswordIcon from '@material-ui/icons/VpnKeyRounded'
 
 import AuthLayout from '../layouts/AuthLayout'
@@ -11,13 +10,28 @@ import RoundedButton from '../components/RoundedButton'
 import {useTranslation} from 'react-i18next'
 
 import styles from '../styles/auth.global.module.css'
-import AuthService from "../services/AuthService";
+import axios from "axios"
+import React, {createRef} from "react"
 
 export default function SignIn() {
     const {t} = useTranslation();
 
-    function auth() {
-        AuthService('', '')
+    const loginRef = createRef() as React.RefObject<HTMLDivElement>
+    const passwordRef = createRef() as React.RefObject<HTMLDivElement>
+
+    const auth = async () => {
+        const json = JSON.stringify({
+            login: loginRef?.current?.querySelector('input')?.value,
+            password: passwordRef?.current?.querySelector('input')?.value
+        })
+
+        let response = await axios.post('http://localhost:8080/cruisehub/api/signin', json, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+
+        window.localStorage.setItem('token', response.data)
     }
 
 
@@ -27,14 +41,14 @@ export default function SignIn() {
                     <h2 className={styles.h2}>{t("signin.subtitle")}</h2>
 
                     <DarkedTextField 
-                        type="email"
-                        label={t("email") + ' *'}
+                        type="text"
+                        label={t("login") + ' *'}
                         style={{
                             width: '70%',
                             margin: '20px 0'
                         }}
-                        icon={(<EmailIcon />)}
-                        placeholder="example@email.com"
+                        placeholder="login"
+                        ref={loginRef}
                     />
 
                     <DarkedTextField 
@@ -46,6 +60,7 @@ export default function SignIn() {
                         }} 
                         icon={(<PasswordIcon />)}
                         placeholder="1234567890"
+                        ref={passwordRef}
                     />
 
                     <Box style={{

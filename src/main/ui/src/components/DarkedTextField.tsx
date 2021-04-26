@@ -1,8 +1,8 @@
-import { 
+import {
     TextField,
     InputAdornment
 } from '@material-ui/core'
-import { makeStyles } from '@material-ui/styles'
+import {makeStyles} from '@material-ui/styles'
 import * as React from 'react'
 
 const useStyles = makeStyles(theme => ({
@@ -36,7 +36,7 @@ export interface DarkedTextFieldProps {
     readonly style?: React.CSSProperties
 }
 
-function DarkedTextField(props: DarkedTextFieldProps) {
+const DarkedTextField = React.forwardRef((props: DarkedTextFieldProps, ref) => {
 
     const classes = useStyles()
 
@@ -46,28 +46,26 @@ function DarkedTextField(props: DarkedTextFieldProps) {
         type,
         placeholder,
         label,
-        style
+        style,
     } = props
-
-    return (
-        <TextField
-            type={type || "text"}
-            className={classes.root + ' ' + (styles || "")}
-            variant="outlined"
-            label={label || ""}
-            InputProps={{
-                startAdornment: (
-                    <InputAdornment position="start">
-                        {icon || ""}
-                    </InputAdornment>
-                ),
-                style: inputStyle,
-            }}
-            InputLabelProps={labelStyle}
-            placeholder={placeholder || ""}
-            style={style || undefined}
-        />
-    )
-}
+    return (<TextField
+        type={type || "text"}
+        className={classes.root + ' ' + (styles || "")}
+        variant="outlined"
+        label={label || ""}
+        InputProps={{
+            startAdornment: (
+                <InputAdornment position="start">
+                    {icon || ""}
+                </InputAdornment>
+            ),
+            style: inputStyle,
+        }}
+        InputLabelProps={labelStyle}
+        placeholder={placeholder || ""}
+        style={style || undefined}
+        ref={ref as React.RefObject<HTMLDivElement>}
+    />)
+});
 
 export default DarkedTextField;

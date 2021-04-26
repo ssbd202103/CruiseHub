@@ -120,10 +120,12 @@ public class AccountManager implements AccountManagerLocal {
     public AuthenticateResponse authenticate(@NotNull String login, @NotNull String passwordHash) {
         AuthenticateResponse response = this.accountFacade.authenticate(login, passwordHash);
 
-        HashMap map = new HashMap();
-        map.put(response.getAccount().getLogin(), response.getAccount().getAccessLevels());
-        String token = JWTHandler.createToken(map, response.getAccount().getId().toString());
-        response.setToken(token);
+        if (response.getResponseStatus() == Response.Status.OK) {
+            HashMap map = new HashMap();
+            map.put(response.getAccount().getLogin(), response.getAccount().getAccessLevels());
+            String token = JWTHandler.createToken(map, response.getAccount().getId().toString());
+            response.setToken(token);
+        }
         return response;
     }
 }
