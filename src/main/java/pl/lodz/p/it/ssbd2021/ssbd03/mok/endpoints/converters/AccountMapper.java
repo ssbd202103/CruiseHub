@@ -60,7 +60,7 @@ public class AccountMapper {
      * @return obiekt klasy modelu który prezentuje poziom dostępu pracownik firmy
      */
     public static BusinessWorker extractBusinessWorkerFromBusinessWorkerForRegistrationDto(BusinessWorkerForRegistrationDto bw) {
-        return new BusinessWorker(bw.getPhoneNumber());
+        return new BusinessWorker(bw.getPhoneNumber(), true);
     }
 
     /**

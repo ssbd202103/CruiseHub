@@ -32,7 +32,7 @@ class AccountControllerTest {
     @Test
     public void registerBusinessWorkerTest_SUCCESS() {
         BusinessWorkerForRegistrationDto businessWorker = new BusinessWorkerForRegistrationDto("Artur", "Radiuk", "aradiuk", "aradiuk@gmail.com",
-                "123456789", LanguageType.ENG, "123456789");
+                "123456789", LanguageType.ENG, "123456789", "FirmaJez");
         given().baseUri(baseUri).contentType("application/json").body(businessWorker).when().post("account/businessworker/registration").then().statusCode(204);
         // todo implement remove method to clean created data
     }

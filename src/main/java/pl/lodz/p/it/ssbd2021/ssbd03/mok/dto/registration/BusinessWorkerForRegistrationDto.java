@@ -47,4 +47,8 @@ public class BusinessWorkerForRegistrationDto {
     @NotEmpty
     @PhoneNumber
     private String phoneNumber;
+
+    @NotNull
+    @NotEmpty
+    private String companyName;
 }

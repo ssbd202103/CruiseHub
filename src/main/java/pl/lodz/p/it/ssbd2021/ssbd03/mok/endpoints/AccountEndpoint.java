@@ -37,7 +37,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
     public void createBusinessWorkerAccount(BusinessWorkerForRegistrationDto businessWorkerForRegistrationDto) {
         BusinessWorker businessWorker = AccountMapper.extractBusinessWorkerFromBusinessWorkerForRegistrationDto(businessWorkerForRegistrationDto);
         Account account = AccountMapper.extractAccountFromBusinessWorkerForRegistrationDto(businessWorkerForRegistrationDto);
-        this.accountManager.createBusinessWorker(account, businessWorker);
+        this.accountManager.createBusinessWorker(account, businessWorker, businessWorkerForRegistrationDto.getCompanyName());
     }
 
     @Override

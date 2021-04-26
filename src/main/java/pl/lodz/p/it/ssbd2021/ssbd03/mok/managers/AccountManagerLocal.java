@@ -30,7 +30,7 @@ public interface AccountManagerLocal {
      * @param account        obiekt prezentujący konto
      * @param businessWorker obiekt prezentujący poziom dostępu pracownik firmy
      */
-    void createBusinessWorker(Account account, BusinessWorker businessWorker);
+    void createBusinessWorker(Account account, BusinessWorker businessWorker, String companyName);
 
     /**
      * Tworzy konto przypisując do niego odpowiedni poziom dostępu
