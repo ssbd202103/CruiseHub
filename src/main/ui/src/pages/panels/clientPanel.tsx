@@ -8,16 +8,20 @@ import {
     ListItemText
 } from '@material-ui/core'
 
+
 import {
     Route,
-    Link
+    Link,
+    Redirect
 } from 'react-router-dom'
 
 import SettingsIcon from '@material-ui/icons/SettingsRounded'
 import CruiseIcon from '@material-ui/icons/CardTravelRounded'
+import GoBackIcon from '@material-ui/icons/ArrowBackRounded'
 
 import ManageAccount from "./common/ManageAccount"
 import PanelMenu from '../../components/PanelMenu'
+import RoundedButton from '../../components/RoundedButton'
 
 import { useTranslation } from 'react-i18next'
 
@@ -28,10 +32,11 @@ export default function ClientPanel() {
 
     return (
         <Grid container className={styles.wrapper}>
+            <Redirect to="/panels/clientPanel/cruises" />
             <Grid item xs={2}>
-                <PanelMenu>
+                <PanelMenu color="blue">
                     <List className={styles.menu} component="nav" aria-label="panel menu">
-                        <Link to="cruises">
+                        <Link to="/panels/clientPanel/cruises">
                             <ListItem button>
                                 <ListItemIcon>
                                     <CruiseIcon style={{ fill: 'var(--white)' }} />
@@ -39,12 +44,20 @@ export default function ClientPanel() {
                                 <ListItemText> {t("cruises")} </ListItemText>
                             </ListItem>
                         </Link>
-                        <Link to="settings">
+                        <Link to="/panels/clientPanel/settings">
                             <ListItem button>
                                 <ListItemIcon>
                                     <SettingsIcon style={{ fill: 'var(--white)' }} />
                                 </ListItemIcon>
                                 <ListItemText>{t("settings")}</ListItemText>
+                            </ListItem>
+                        </Link>
+                        <Link to="/">
+                            <ListItem button>
+                                <ListItemIcon style={{fill: 'var(--white)'}}>
+                                    <GoBackIcon />
+                                </ListItemIcon>
+                                <ListItemText>{t("go back")}</ListItemText>
                             </ListItem>
                         </Link>
                     </List>
@@ -57,17 +70,12 @@ export default function ClientPanel() {
                 </Route>
                 <Route exact path="/panels/clientPanel/settings">
                     <ManageAccount />
+                    <RoundedButton
+                        color="pink">
+                    {t("logout")}
+                    </RoundedButton>
                 </Route>
             </Grid>
-            {/* <h2>{t("client panel")}</h2>
-            <div>
-                <ManageAccount/>
-            </div>
-            <div>
-                <Button variant="contained">
-                    {t("logout")}
-                </Button>
-            </div> */}
         </Grid>
     )
 }

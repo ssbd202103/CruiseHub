@@ -24,7 +24,6 @@ import GrantAccessLevel from "./pages/panels/admin/GrantAccessLevel"
 
 import ClientPanel from './pages/panels/clientPanel'
 import WorkerPanel from './pages/panels/workerPanel'
-import Example from './pages/example';
 
 function App() {
   return (
@@ -70,10 +69,6 @@ function App() {
             </Route>
             <Route path="/panels/admin/GrantAccessLevel">
               <GrantAccessLevel/>
-            </Route>
-
-            <Route exact path="/example">
-              <Example />
             </Route>
 
             <Route path="*">
