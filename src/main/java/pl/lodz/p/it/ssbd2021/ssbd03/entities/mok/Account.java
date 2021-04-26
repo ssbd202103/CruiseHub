@@ -17,9 +17,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.*;
 
 @Entity(name = "accounts")
 @NamedQueries({
-        @NamedQuery(name = "Account.findByLogin", query = "SELECT acc FROM accounts acc WHERE acc.login = :login")
-})
-@NamedQueries({
+    @NamedQuery(name = "Account.findByLogin", query = "SELECT acc FROM accounts acc WHERE acc.login = :login"),
     @NamedQuery(name = "Account.findById", query = "SELECT acc FROM accounts acc WHERE acc.id = :id")
 })
 public class Account extends BaseEntity {
@@ -99,7 +97,7 @@ public class Account extends BaseEntity {
     @Setter
     @Column(name = "number_of_authentication_failures")
     private int numberOfAuthenticationFailures;
-    
+
     @Getter
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE}, mappedBy = "account")
     @ToString.Exclude
