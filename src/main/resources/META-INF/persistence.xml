@@ -59,8 +59,10 @@
     <persistence-unit name="ssbd03mowPU" transaction-type="JTA">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <jta-data-source>java:app/jdbc/ssbd03mowDS</jta-data-source>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Attraction</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Comment</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Commercial</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CommercialType</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.wrappers.CommercialTypeWrapper</class>
@@ -71,6 +73,10 @@
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruisePicture</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Rating</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Reservation</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.LanguageTypeWrapper</class>
+
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
             <property name="hibernate.transaction.jta.platform"

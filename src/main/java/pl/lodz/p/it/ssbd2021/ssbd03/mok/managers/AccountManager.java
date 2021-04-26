@@ -10,7 +10,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacade;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.CompanyFacade;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.CompanyFacadeMok;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
@@ -25,7 +25,7 @@ public class AccountManager implements AccountManagerLocal {
     private AccountFacade accountFacade;
 
     @EJB
-    private CompanyFacade companyFacade;
+    private CompanyFacadeMok companyFacadeMok;
 
     @Override
     public void createClientAccount(Account account, Client client, Address address) {
@@ -67,7 +67,7 @@ public class AccountManager implements AccountManagerLocal {
         businessWorker.setCreatedBy(account);
         businessWorker.setAlterType(insertAlterType);
         businessWorker.setAccount(account);
-        businessWorker.setCompany(companyFacade.getCompanyByName(companyName));
+        businessWorker.setCompany(companyFacadeMok.getCompanyByName(companyName));
 
         account.setAccessLevel(businessWorker);
 

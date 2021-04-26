@@ -150,7 +150,7 @@ create table companies
     CONSTRAINT companies_alter_type_id_fk_constraint FOREIGN KEY (alter_type_id) REFERENCES alter_types (id),
     CONSTRAINT companies_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
     CONSTRAINT companies_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id),
-    CONSTRAINT companies_name_unique_constraint UNIQUE (name)
+    CONSTRAINT companies_name_unique_constraint UNIQUE (name, nip)
 
 );
 
@@ -590,6 +590,9 @@ GRANT SELECT, INSERT, UPDATE, DELETE
 GRANT SELECT, INSERT, UPDATE, DELETE
     ON addresses TO ssbd03mok;
 
+GRANT SELECT
+    ON addresses TO ssbd03mow;
+
 GRANT SELECT, INSERT, UPDATE, DELETE
     ON administrators TO ssbd03mok;
 
@@ -659,6 +662,9 @@ GRANT SELECT, INSERT, DELETE
 
 GRANT SELECT
     ON language_types TO ssbd03mok;
+
+GRANT SELECT
+    ON language_types TO ssbd03mow;
 
 GRANT SELECT, INSERT, UPDATE, DELETE
     ON ratings TO ssbd03mow;

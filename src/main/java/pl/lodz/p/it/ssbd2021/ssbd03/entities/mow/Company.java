@@ -13,6 +13,9 @@ import javax.validation.constraints.NotNull;
 @NamedQueries({
         @NamedQuery(name = "Company.findByName", query = "SELECT company FROM companies company WHERE company.name = :name")
 })
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"nip", "name"})
+})
 public class Company extends BaseEntity {
     @Getter
     @Id
@@ -45,15 +48,6 @@ public class Company extends BaseEntity {
     @NotNull
     @Column(name = "nip")
     private Long NIP;
-
-//    @Getter
-//    @NotNull
-//    @ManyToMany
-//    @JoinTable(name = "scompany_workers",
-//            joinColumns = @JoinColumn(name = "company_id"),
-//            inverseJoinColumns = @JoinColumn(name = "business_worker_id")
-//    )
-//    private List<BusinessWorker> workers = new ArrayList<>();
 
     public Company(Long id, @NotNull Address address, @NotNull String name, @NotNull String phoneNumber, @NotNull Long NIP) {
         this.id = id;

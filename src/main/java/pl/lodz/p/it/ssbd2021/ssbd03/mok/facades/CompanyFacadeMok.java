@@ -9,12 +9,12 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 @Stateless
-public class CompanyFacade extends AbstractFacade<Company> {
+public class CompanyFacadeMok extends AbstractFacade<Company> {
 
     @PersistenceContext(unitName = "ssbd03mokPU")
     private EntityManager em;
 
-    public CompanyFacade() {
+    public CompanyFacadeMok() {
         super(Company.class);
     }
 
