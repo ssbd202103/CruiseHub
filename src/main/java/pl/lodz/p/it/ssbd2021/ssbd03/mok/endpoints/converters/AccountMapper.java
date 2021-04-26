@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
@@ -22,7 +23,7 @@ public class AccountMapper {
      * @return obiekt klasy modelu który przezentuje poziom dostępu klient
      */
     public static Client extractClientFromClientForRegistrationDto(ClientForRegistrationDto client) {
-        return new Client(client.getPhoneNumber());
+        return new Client(extractAddressFromClientForRegistrationDto(client), client.getPhoneNumber());
     }
 
     /**
@@ -33,7 +34,7 @@ public class AccountMapper {
      */
     public static Account extractAccountFromClientForRegistrationDto(ClientForRegistrationDto client) {
         return new Account(client.getFirstName(), client.getSecondName(),
-                client.getLogin(), client.getEmail(), client.getPassword(),
+                client.getLogin(), client.getEmail(), DigestUtils.sha256Hex(client.getPassword()),
                 new LanguageTypeWrapper(client.getLanguageType()));
     }
 
@@ -69,10 +70,9 @@ public class AccountMapper {
      */
     public static Account extractAccountFromBusinessWorkerForRegistrationDto(BusinessWorkerForRegistrationDto bw) {
         return new Account(bw.getFirstName(), bw.getSecondName(),
-                bw.getLogin(), bw.getEmail(), bw.getPassword(),
+                bw.getLogin(), bw.getEmail(), DigestUtils.sha256Hex(bw.getPassword()),
                 new LanguageTypeWrapper(bw.getLanguageType()));
     }
-
 
 
 }

@@ -29,10 +29,9 @@ public class AccountManager implements AccountManagerLocal {
     private CompanyFacadeMok companyFacadeMok;
 
     @Override
-    public void createClientAccount(Account account, Client client, Address address) {
+    public void createClientAccount(Account account, Client client) {
         AlterTypeWrapper insertAlterType = accountFacade.getAlterTypeWrapperByAlterType(AlterType.INSERT);
 
-        account.setPasswordHash(DigestUtils.sha256Hex(account.getPasswordHash()));
         account.setLanguageType(accountFacade.getLanguageTypeWrapperByLanguageType(account.getLanguageType().getName()));
         account.setAlterType(insertAlterType);
         account.setAlteredBy(account);
@@ -43,11 +42,10 @@ public class AccountManager implements AccountManagerLocal {
         client.setAlterType(insertAlterType);
         client.setAccount(account);
 
-        address.setCreatedBy(account);
-        address.setAlteredBy(account);
-        address.setAlterType(insertAlterType);
+        client.getHomeAddress().setCreatedBy(account);
+        client.getHomeAddress().setAlteredBy(account);
+        client.getHomeAddress().setAlterType(insertAlterType);
 
-        client.setHomeAddress(address);
 
         account.setAccessLevel(client);
 
@@ -59,7 +57,6 @@ public class AccountManager implements AccountManagerLocal {
     public void createBusinessWorker(Account account, BusinessWorker businessWorker, String companyName) {
         AlterTypeWrapper insertAlterType = accountFacade.getAlterTypeWrapperByAlterType(AlterType.INSERT);
 
-        account.setPasswordHash(DigestUtils.sha256Hex(account.getPasswordHash()));
         account.setLanguageType(accountFacade.getLanguageTypeWrapperByLanguageType(account.getLanguageType().getName()));
         account.setAlterType(insertAlterType);
         account.setAlteredBy(account);

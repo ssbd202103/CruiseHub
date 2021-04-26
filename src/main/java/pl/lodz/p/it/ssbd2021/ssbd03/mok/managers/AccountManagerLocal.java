@@ -20,9 +20,8 @@ public interface AccountManagerLocal {
      *
      * @param account obiekt prezentujący konto
      * @param client  obiekt prezentujący poziom dostępu klient
-     * @param address obiekt prezentujący adres
      */
-    void createClientAccount(Account account, Client client, Address address);
+    void createClientAccount(Account account, Client client);
 
     /**
      * Tworzy konto przypisując do niego odpowiedni poziom dostępu

@@ -26,9 +26,8 @@ public class AccountEndpoint implements AccountEndpointLocal {
     @Override
     public void createClientAccount(ClientForRegistrationDto clientForRegistrationDto) {
         Client client = AccountMapper.extractClientFromClientForRegistrationDto(clientForRegistrationDto);
-        Address address = AccountMapper.extractAddressFromClientForRegistrationDto(clientForRegistrationDto);
         Account account = AccountMapper.extractAccountFromClientForRegistrationDto(clientForRegistrationDto);
-        this.accountManager.createClientAccount(account, client, address);
+        this.accountManager.createClientAccount(account, client);
     }
 
     @Override
