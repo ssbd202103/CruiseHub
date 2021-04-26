@@ -11,7 +11,7 @@ import RoundedButton from '../../components/RoundedButton'
 import styles from '../../styles/auth.global.module.css'
 
 import {useTranslation} from 'react-i18next'
-import {createRef, useState} from "react";
+import {createRef, useEffect, useState} from "react";
 import axios from "axios";
 
 export default function WorkerSignUp() {
@@ -29,16 +29,26 @@ export default function WorkerSignUp() {
 
     const [company, setCompany] = useState("");
 
+    const [companiesList, setCompaniesList] = useState([]);
+
+    useEffect(() => {
+        const getCompaniesList = async () => {
+            const {data} = await axios.get('http://localhost:8080/cruisehub/api/company/companiesinfo', {});
+            setCompaniesList(data.map((comp: { name: string }) => comp.name))
+        }
+        getCompaniesList()
+    }, [company]);
+    console.log(companiesList)
 
     const workerSignUpFun = async () => {
 
         const json = JSON.stringify({
-                firstName: firstNameRef?.current?.querySelector('input')?.value,
-                secondName: secondNameRef?.current?.querySelector('input')?.value,
-                login: loginRef?.current?.querySelector('input')?.value,
-                email: emailRef?.current?.querySelector('input')?.value,
-                password: passwordRef?.current?.querySelector('input')?.value,
-                languageType: languageTypeRef?.current?.querySelector('input')?.value,
+            firstName: firstNameRef?.current?.querySelector('input')?.value,
+            secondName: secondNameRef?.current?.querySelector('input')?.value,
+            login: loginRef?.current?.querySelector('input')?.value,
+            email: emailRef?.current?.querySelector('input')?.value,
+            password: passwordRef?.current?.querySelector('input')?.value,
+            languageType: languageTypeRef?.current?.querySelector('input')?.value,
                 phoneNumber: phoneNumberRef?.current?.querySelector('input')?.value,
                 companyName: company
             }
@@ -92,7 +102,8 @@ export default function WorkerSignUp() {
             >
                 <DarkedSelect
                     label={t("company") + ' *'}
-                    options={["Firma 1", "Firma 2", "FirmaJez", "Firma 4", "Firma 5"]}
+                    // options={["Firma 1", "Firma 2", "FirmaJez", "Firma 4", "Firma 5"]}
+                    options={companiesList}
                     className={styles.input}
                     style={{
                         marginRight: 20
