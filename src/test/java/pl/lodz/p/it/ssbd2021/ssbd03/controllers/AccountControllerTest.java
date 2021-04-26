@@ -1,13 +1,10 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
-import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AddressDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.AdministratorForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ModeratorForRegistrationDto;
 
 import static io.restassured.RestAssured.given;
 
@@ -37,19 +34,4 @@ class AccountControllerTest {
         // todo implement remove method to clean created data
     }
 
-    @Test
-    public void registerModeratorTest_SUCCESS() {
-        ModeratorForRegistrationDto moderator = new ModeratorForRegistrationDto("Artur", "Radiuk", "aradiuk_moderator", "aradiuk@gmail.com",
-                "123456789", LanguageType.ENG);
-        given().baseUri(baseUri).contentType("application/json").body(moderator).when().post("account/moderator/registration").then().statusCode(204);
-        // todo implement remove method to clean created data
-    }
-
-    @Test
-    public void registerAdministratorTest_SUCCESS() {
-        AdministratorForRegistrationDto administrator = new AdministratorForRegistrationDto("Artur", "Radiuk", "aradiuk_administrator", "aradiuk@gmail.com",
-                "123456789", LanguageType.ENG);
-        given().baseUri(baseUri).contentType("application/json").body(administrator).when().post("account/administrator/registration").then().statusCode(204);
-        // todo implement remove method to clean created data
-    }
 }

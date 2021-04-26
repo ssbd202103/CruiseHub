@@ -6,10 +6,8 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Administrator;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.AdministratorForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ModeratorForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters.AccountMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.managers.AccountManagerLocal;
 
@@ -38,17 +36,5 @@ public class AccountEndpoint implements AccountEndpointLocal {
         BusinessWorker businessWorker = AccountMapper.extractBusinessWorkerFromBusinessWorkerForRegistrationDto(businessWorkerForRegistrationDto);
         Account account = AccountMapper.extractAccountFromBusinessWorkerForRegistrationDto(businessWorkerForRegistrationDto);
         this.accountManager.createBusinessWorker(account, businessWorker, businessWorkerForRegistrationDto.getCompanyName());
-    }
-
-    @Override
-    public void createAdministratorAccount(AdministratorForRegistrationDto administratorForRegistrationDto) {
-        Account account = AccountMapper.extractAccountFromAdministratorForRegistrationDto(administratorForRegistrationDto);
-        this.accountManager.createAdministrator(account, new Administrator());
-    }
-
-    @Override
-    public void createModeratorAccount(ModeratorForRegistrationDto moderatorForRegistrationDto) {
-        Account account = AccountMapper.extractAccountFromModeratorForRegistrationDto(moderatorForRegistrationDto);
-        this.accountManager.createModerator(account, new Moderator());
     }
 }

@@ -10,6 +10,9 @@ import javax.ejb.Stateless;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Klasa która zajmuje się gromadzeniem zmapowanych obiektów klas Dto na obiekty klas modelu związanych z firmami oraz wywołuje metody logiki przekazując zmapowane obiekty.
+ */
 @Stateful
 public class CompanyEndpoint implements CompanyEndpointLocal {
     @EJB

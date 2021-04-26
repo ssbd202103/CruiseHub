@@ -5,10 +5,8 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.LanguageTypeWrapper;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.AdministratorForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ModeratorForRegistrationDto;
 
 /**
  * Klasa która zajmuje się mapowaniem obiektów klas dto na obiekty klas modelu
@@ -75,29 +73,6 @@ public class AccountMapper {
                 new LanguageTypeWrapper(bw.getLanguageType()));
     }
 
-    /**
-     * Mapuje obiekt klasy dto na obiekt klasy modelu Account który jest wykorzystany do utrwalenia danych w bazie
-     *
-     * @param administrator obiekt klasy dto
-     * @return biekt klasy modelu który prezentuje konto
-     */
-    public static Account extractAccountFromAdministratorForRegistrationDto(AdministratorForRegistrationDto administrator) {
-        return new Account(administrator.getFirstName(), administrator.getSecondName(),
-                administrator.getLogin(), administrator.getEmail(), administrator.getPassword(),
-                new LanguageTypeWrapper(administrator.getLanguageType()));
-    }
-
-    /**
-     * Mapuje obiekt klasy dto na obiekt klasy modelu Account który jest wykorzystany do utrwalenia danych w bazie
-     *
-     * @param moderator obiekt klasy dto
-     * @return biekt klasy modelu który prezentuje konto
-     */
-    public static Account extractAccountFromModeratorForRegistrationDto(ModeratorForRegistrationDto moderator) {
-        return new Account(moderator.getFirstName(), moderator.getSecondName(),
-                moderator.getLogin(), moderator.getEmail(), moderator.getPassword(),
-                new LanguageTypeWrapper(moderator.getLanguageType()));
-    }
 
 
 }

@@ -34,8 +34,6 @@ public class AccountDto  {
 
     @NotNull
     private Set<AccessLevelType> accessLevels;
-
-
 }
 
 

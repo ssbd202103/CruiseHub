@@ -1,9 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.AdministratorForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ModeratorForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.AccountEndpointLocal;
 
 import javax.ejb.EJB;
@@ -12,7 +10,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 
 /**
@@ -48,35 +45,5 @@ public class AccountController {
     @Consumes(MediaType.APPLICATION_JSON)
     public void createBusinessWorker(@Valid @NotNull BusinessWorkerForRegistrationDto businessWorkerForRegistrationDto) {
         accountEndpoint.createBusinessWorkerAccount(businessWorkerForRegistrationDto);
-    }
-
-    /**
-     * Stwórz nowe konto z poziomem dostępu Administrator.
-     *
-     * @param administratorForRegistrationDto zbiór danych niezbędnych dla stworzenia konta z poziomem dostępu Administrator
-     */
-    @POST
-    @Path("/administrator/registration")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void createAdministrator(@Valid @NotNull AdministratorForRegistrationDto administratorForRegistrationDto) {
-        accountEndpoint.createAdministratorAccount(administratorForRegistrationDto);
-    }
-
-    /**
-     * Stwórz nowe konto z poziomem dostępu Moderator.
-     *
-     * @param moderatorForRegistrationDto zbiór danych niezbędnych dla stworzenia konta z poziomem dostępu Moderator
-     */
-    @POST
-    @Path("/moderator/registration")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void createModerator(@Valid @NotNull ModeratorForRegistrationDto moderatorForRegistrationDto) {
-        accountEndpoint.createModeratorAccount(moderatorForRegistrationDto);
-    }
-
-    @GET
-    @Path("/greeting")
-    public String greeting() {
-        return "Hello SSBD";
     }
 }

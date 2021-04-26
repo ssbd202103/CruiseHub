@@ -8,6 +8,9 @@ import javax.ejb.Stateful;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Klasa która zarządza logiką biznesową firm
+ */
 @Stateful
 public class CompanyManager implements CompanyManagerLocal {
     @EJB

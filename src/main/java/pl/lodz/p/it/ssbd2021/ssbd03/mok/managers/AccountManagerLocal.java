@@ -31,20 +31,4 @@ public interface AccountManagerLocal {
      * @param businessWorker obiekt prezentujący poziom dostępu pracownik firmy
      */
     void createBusinessWorker(Account account, BusinessWorker businessWorker, String companyName);
-
-    /**
-     * Tworzy konto przypisując do niego odpowiedni poziom dostępu
-     *
-     * @param account       obiekt prezentujący konto
-     * @param administrator obiekt prezentujący poziom dostępu administrator
-     */
-    void createAdministrator(Account account, Administrator administrator);
-
-    /**
-     * Tworzy konto przypisując do niego odpowiedni poziom dostępu
-     *
-     * @param account   obiekt prezentujący konto
-     * @param moderator obiekt prezentujący poziom dostępu administrator
-     */
-    void createModerator(Account account, Moderator moderator);
 }

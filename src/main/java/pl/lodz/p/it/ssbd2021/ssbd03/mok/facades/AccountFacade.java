@@ -2,21 +2,22 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.facades;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.LanguageTypeWrapper;
 
-import javax.ejb.Stateless;
+import javax.ejb.Stateful;
 import javax.persistence.*;
 
-@Stateless
-public class AccountFacade extends AbstractFacade<Account> {
+@Stateful
+public class AccountFacade extends AbstractFacade<Object> {
 
     @PersistenceContext(unitName = "ssbd03mokPU")
     private EntityManager em;
 
     public AccountFacade() {
-        super(Account.class);
+        super(Object.class);
     }
 
     @Override
