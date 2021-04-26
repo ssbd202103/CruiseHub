@@ -1,11 +1,11 @@
 import * as React from 'react'
-import { 
+import {
     FormControl,
     InputLabel,
     Select,
     MenuItem
 } from '@material-ui/core'
-import { makeStyles } from '@material-ui/styles'
+import {makeStyles} from '@material-ui/styles'
 
 
 const useStyles = makeStyles(theme => ({
@@ -28,25 +28,23 @@ const useStyles = makeStyles(theme => ({
         '& .MuiInputLabel-root.Mui-focused': {
             color: 'var(--dark) !important'
         },
-        
+
     }
 }))
 
-const inputStyle = {
-
-}
+const inputStyle = {}
 
 const labelStyle = {
-    style: {
-
-    }
+    style: {}
 }
 
 export interface DarkedTextFieldProps {
     readonly className?: string,
     readonly label?: string,
-    readonly style?: React.CSSProperties
-    readonly options: Array<string | number>
+    readonly style?: React.CSSProperties,
+    readonly options: Array<string | number>,
+
+    readonly  onSelectedChange?: any
 }
 
 export default function DarkedTextField(props: any) {
@@ -57,25 +55,30 @@ export default function DarkedTextField(props: any) {
         className: styles,
         label,
         style,
-        options
+        options,
+        onSelectedChange
     } = props
 
     return (
-        <FormControl 
+        <FormControl
             className={classes.root + ' ' + (styles || "")}
             style={style || null}
-            variant="outlined" 
+            variant="outlined"
         >
             <InputLabel>{label}</InputLabel>
-            <Select 
+            <Select
                 label={label + 'a'}
             >
-                {options.map((item: string | number, index: number) => <MenuItem key={item} value={item}>{item}</MenuItem>)}
+                {options.map((item: string | number, index: number) => <MenuItem
+                    key={item} value={item}
+                    onClick={() => {
+                        onSelectedChange(item)
+                    }
+                    }
+                >{item}</MenuItem>)}
             </Select>
         </FormControl>
 
-            
 
-        
     )
 }

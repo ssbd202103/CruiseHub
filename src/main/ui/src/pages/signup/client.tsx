@@ -16,6 +16,7 @@ import {createRef} from "react";
 
 export default function ClientSignUp() {
     const {t} = useTranslation()
+
     const firstNameRef = createRef() as React.RefObject<HTMLDivElement>
     const secondNameRef = createRef() as React.RefObject<HTMLDivElement>
     const loginRef = createRef() as React.RefObject<HTMLDivElement>
@@ -113,8 +114,6 @@ export default function ClientSignUp() {
                 placeholder="examplelogin"
                 className={styles.input}
                 ref={loginRef}
-
-
             />
 
 
