@@ -30,7 +30,7 @@ public interface AccountEndpointLocal {
 
     /**
      * Metoda odpowiedzialna za wywołanie metody odpowiedzialnej za blokowanie użytkownika
-     * @param uuid UUID użytkownika w postaci stringa
+     * @param id ID użytkownika w postaci obiektu klasy IdDto
      */
     void blockUser(@Valid @NotNull IdDto id);
 }
