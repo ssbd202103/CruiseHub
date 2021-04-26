@@ -5,7 +5,7 @@ import {
 import styles from '../styles/PanelMenu.module.css'
 
 export interface PanelMenuProps {
-    color: "pink" | "pink-dart" | "pink-light" | "blue" | "blue-dark" | "blue-light" | "green" | "green-dark" | "green-light" | "yellow" | "yellow-dark" | "yellow-light" | "dark" 
+    color: "pink" | "pink-dark" | "pink-light" | "blue" | "blue-dark" | "blue-light" | "green" | "green-dark" | "green-light" | "yellow" | "yellow-dark" | "yellow-light" | "dark" 
     children?: any
 }
 

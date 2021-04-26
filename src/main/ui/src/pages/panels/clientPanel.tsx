@@ -33,7 +33,7 @@ export default function ClientPanel() {
     return (
         <Grid container className={styles.wrapper}>
             <Redirect to="/panels/clientPanel/cruises" />
-            <Grid item xs={2}>
+            <Grid item xs={2} md={3}>
                 <PanelMenu color="blue">
                     <List className={styles.menu} component="nav" aria-label="panel menu">
                         <Link to="/panels/clientPanel/cruises">
@@ -64,7 +64,7 @@ export default function ClientPanel() {
                 </PanelMenu>
             </Grid>
 
-            <Grid item className={styles.content} xs={10}>
+            <Grid item className={styles.content} xs={10} md={9}>
                 <Route exact path="/panels/clientPanel/cruises">
                     <div> {t("my cruises")} </div>
                 </Route>

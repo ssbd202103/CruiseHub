@@ -45,16 +45,14 @@ function Row(props: { row: ReturnType<typeof createData> }) {
     const classes = useRowStyles();
 
     return (
-        <React.Fragment>
-            <TableRow className={classes.root}>
-                <TableCell component="th" scope="row">
-                    {row.login}
-                </TableCell>
-                <TableCell align="center">{row.email}</TableCell>
-                <TableCell align="center">{row.active}</TableCell>
-                <TableCell align="center">{row.accessLevel}</TableCell>
-            </TableRow>
-        </React.Fragment>
+        <TableRow className={classes.root}>
+            <TableCell component="th" scope="row">
+            {row.login}
+            </TableCell>
+            <TableCell>{row.email}</TableCell>
+            <TableCell>{row.active}</TableCell>
+            <TableCell>{row.accessLevel}</TableCell>
+        </TableRow>
     );
 }
 
@@ -72,10 +70,10 @@ export default function ModListClient() {
             <Table aria-label="Clients">
                 <TableHead>
                     <TableRow>
-                        <TableCell align="center">{t("login")}</TableCell>
-                        <TableCell align="center">{t("email")}</TableCell>
-                        <TableCell align="center">{t("active")}</TableCell>
-                        <TableCell align="center">{t("access level")}</TableCell>
+                        <TableCell>{t("login")}</TableCell>
+                        <TableCell>{t("email")}</TableCell>
+                        <TableCell>{t("active")}</TableCell>
+                        <TableCell>{t("access level")}</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>

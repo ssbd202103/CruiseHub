@@ -28,14 +28,10 @@ import styles from '../../styles/workerPanel.module.css'
 export default function WorkerPanel() {
     const {t} = useTranslation()
 
-    const [manageAccount, setManage] = useState(true)
-    const handleManageAccount = () => {
-        setManage(state => !state)
-    }
     return (
         <Grid container className={styles.wrapper}>
             <Redirect to="/panels/workerPanel/cruises" />
-            <Grid item xs={2}>
+            <Grid item xs={2} md={3}>
                 <PanelMenu color="green-dark">
                     <List className={styles.menu} component="nav" aria-label="panel menu">
                         <Link to="/panels/workerPanel/cruises">
@@ -66,7 +62,7 @@ export default function WorkerPanel() {
                 </PanelMenu>
             </Grid>
 
-            <Grid item className={styles.content} xs={10}>
+            <Grid item className={styles.content} xs={10} md={9}>
                 <Route exact path="/panels/workerPanel/cruises">
                     <div> {t("my cruises")} </div>
                 </Route>
