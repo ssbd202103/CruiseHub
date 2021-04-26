@@ -58,7 +58,7 @@ class AccountControllerTest {
 
     @Test
     public void changeEmailTest() {
-        AccountChangeEmailDto accountChangeEmailDto = new AccountChangeEmailDto("rbranson", 0L,"zmieniony@gmail.com");
+        AccountChangeEmailDto accountChangeEmailDto = new AccountChangeEmailDto("rbranson", 0L, "zmieniony@gmail.com");
 
         Response res = given().baseUri(baseUri).contentType("application/json").body(accountChangeEmailDto).when().put("account/change_email");
         res.then().statusCode(204);

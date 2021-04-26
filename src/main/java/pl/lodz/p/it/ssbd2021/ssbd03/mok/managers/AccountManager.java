@@ -3,6 +3,8 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.managers;
 import org.apache.commons.codec.digest.DigestUtils;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Administrator;
@@ -14,7 +16,10 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.CompanyFacade;
 
 import javax.ejb.EJB;
+import javax.ejb.Local;
 import javax.ejb.Stateful;
+import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 
 /**
  * Klasa która zarządza logiką biznesową kont
@@ -120,5 +125,83 @@ public class AccountManager implements AccountManagerLocal {
         Account account = accountFacade.findByLogin(login);
         account.setVersion(version);
         account.setEmail(newEmail);
+    }
+
+    private AccessLevel getAccessLevel(Account from, AccessLevelType target) {
+        return from.getAccessLevels().stream().filter(accessLevel -> accessLevel.getAccessLevelType() == target).collect(Collectors.toList()).get(0);
+    }
+
+    private void setAccountChanges(Account account,Long version, String newFirstName, String newSecondName, String newLogin, LocalDateTime time) {
+        account.setVersion(version);
+        account.setFirstName(newFirstName);
+        account.setSecondName(newSecondName);
+        account.setLogin(newLogin);
+        account.setAlteredBy(account);
+        account.setAlterType(account.getAlterType());
+        account.setLastAlterDateTime(time);
+    }
+
+    private void setAccessLevelChanges(AccessLevel accessLevel, Account account, Long version, LocalDateTime time) {
+        accessLevel.setVersion(version);
+        accessLevel.setAlteredBy(account);
+        accessLevel.setAlterType(account.getAlterType());
+        accessLevel.setLastAlterDateTime(time);
+    }
+
+    @Override
+    public void changeClientData(String login, Long version, String newFirstName, String newSecondName, String newLogin, String newPhoneNumber, Address newAddress) {
+        LocalDateTime time = LocalDateTime.now();
+
+        Account account = accountFacade.findByLogin(login);
+
+        setAccountChanges(account, version, newFirstName, newSecondName, newLogin, time);
+
+        Client client = (Client) getAccessLevel(account, AccessLevelType.CLIENT);
+
+        setAccessLevelChanges(client, account, version, time);
+
+        client.setPhoneNumber(newPhoneNumber);
+        client.setHomeAddress(newAddress);
+    }
+
+    @Override
+    public void changeBusinessWorkerData(String login, Long version, String newFirstName, String newSecondName, String newLogin, String newPhoneNumber) {
+        LocalDateTime time = LocalDateTime.now();
+
+        Account account = accountFacade.findByLogin(login);
+
+        setAccountChanges(account, version, newFirstName, newSecondName, newLogin, time);
+
+        BusinessWorker businessWorker = (BusinessWorker) getAccessLevel(account, AccessLevelType.BUSINESS_WORKER);
+
+        setAccessLevelChanges(businessWorker, account, version, time);
+
+        businessWorker.setPhoneNumber(newPhoneNumber);
+    }
+
+    @Override
+    public void changeModeratorData(String login, Long version, String newFirstName, String newSecondName, String newLogin) {
+        LocalDateTime time = LocalDateTime.now();
+
+        Account account = accountFacade.findByLogin(login);
+
+        setAccountChanges(account, version, newFirstName, newSecondName, newLogin, time);
+
+        Moderator moderator = (Moderator) getAccessLevel(account, AccessLevelType.MODERATOR);
+
+        setAccessLevelChanges(moderator, account, version, time);
+    }
+
+    @Override
+    public void changeAdministratorData(String login, Long version, String newFirstName, String newSecondName, String newLogin) {
+        LocalDateTime time = LocalDateTime.now();
+
+        Account account = accountFacade.findByLogin(login);
+
+        setAccountChanges(account, version, newFirstName, newSecondName, newLogin, time);
+
+        Administrator administrator = (Administrator) getAccessLevel(account, AccessLevelType.ADMINISTRATOR);
+
+        setAccessLevelChanges(administrator, account, version, time);
     }
 }

@@ -7,6 +7,10 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountChangeEmailDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AdministratorChangeDataDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.BusinessWorkerChangeDataDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.ClientChangeDataDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.ModeratorChangeDataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.AdministratorForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
@@ -56,5 +60,52 @@ public class AccountEndpoint implements AccountEndpointLocal {
     @Override
     public void changeEmail(AccountChangeEmailDto accountChangeEmailDto) {
         accountManager.changeEmail(accountChangeEmailDto.getLogin(), accountChangeEmailDto.getVersion(), accountChangeEmailDto.getNewEmail());
+    }
+
+    @Override
+    public void changeClientData(ClientChangeDataDto clientChangeDataDto) {
+        accountManager.changeClientData(
+                clientChangeDataDto.getLogin(),
+                clientChangeDataDto.getVersion(),
+                clientChangeDataDto.getNewFirstName(),
+                clientChangeDataDto.getNewSecondName(),
+                clientChangeDataDto.getNewLogin(),
+                clientChangeDataDto.getNewPhoneNumber(),
+                clientChangeDataDto.getNewAddress()
+        );
+    }
+
+    @Override
+    public void changeBusinessWorkerData(BusinessWorkerChangeDataDto businessWorkerChangeDataDto) {
+        accountManager.changeBusinessWorkerData(
+                businessWorkerChangeDataDto.getLogin(),
+                businessWorkerChangeDataDto.getVersion(),
+                businessWorkerChangeDataDto.getNewFirstName(),
+                businessWorkerChangeDataDto.getNewSecondName(),
+                businessWorkerChangeDataDto.getNewLogin(),
+                businessWorkerChangeDataDto.getNewPhoneNumber()
+        );
+    }
+
+    @Override
+    public void changeModeratorData(ModeratorChangeDataDto moderatorChangeDataDto) {
+        accountManager.changeModeratorData(
+                moderatorChangeDataDto.getLogin(),
+                moderatorChangeDataDto.getVersion(),
+                moderatorChangeDataDto.getNewFirstName(),
+                moderatorChangeDataDto.getNewSecondName(),
+                moderatorChangeDataDto.getNewLogin()
+        );
+    }
+
+    @Override
+    public void changeAdministratorData(AdministratorChangeDataDto administratorChangeDataDto) {
+        accountManager.changeModeratorData(
+                administratorChangeDataDto.getLogin(),
+                administratorChangeDataDto.getVersion(),
+                administratorChangeDataDto.getNewFirstName(),
+                administratorChangeDataDto.getNewSecondName(),
+                administratorChangeDataDto.getNewLogin()
+        );
     }
 }

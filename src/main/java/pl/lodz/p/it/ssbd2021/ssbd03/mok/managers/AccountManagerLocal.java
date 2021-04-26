@@ -58,4 +58,53 @@ public interface AccountManagerLocal {
      */
 
     void changeEmail(String login, Long version, String newEmail);
+
+    /**
+     * Zmień dane klienta
+     *
+     * @param login login klienta
+     * @param version wersja
+     * @param newFirstName nowe imię
+     * @param newSecondName nowe nazwisko
+     * @param newLogin nowy login
+     * @param newPhoneNumber nowy numer telefonu
+     * @param newAddress nowy adres
+     */
+    void changeClientData(String login, Long version, String newFirstName, String newSecondName, String newLogin, String newPhoneNumber, Address newAddress);
+
+    /**
+     * Zmień dane pracownika firmy
+     *
+     * @param login login pracownika
+     * @param version wersja
+     * @param newFirstName nowe imię
+     * @param newSecondName nowe nazwisko
+     * @param newLogin nowy login
+     * @param newPhoneNumber nowy numer telefonu
+     */
+    void changeBusinessWorkerData(String login, Long version, String newFirstName, String newSecondName, String newLogin, String newPhoneNumber);
+
+    /**
+     * Zmień dane moderatora
+     *
+     * @param login login moderatora
+     * @param version wersja
+     * @param newFirstName nowe imię
+     * @param newSecondName nowe nazwisko
+     * @param newLogin nowy login
+     *
+     */
+    void changeModeratorData(String login, Long version, String newFirstName, String newSecondName, String newLogin);
+
+    /**
+     * Zmień dane administratora
+     *
+     * @param login login administratora
+     * @param version wersja
+     * @param newFirstName nowe imię
+     * @param newSecondName nowe nazwisko
+     * @param newLogin nowy login
+     *
+     */
+    void changeAdministratorData(String login, Long version, String newFirstName, String newSecondName, String newLogin);
 }

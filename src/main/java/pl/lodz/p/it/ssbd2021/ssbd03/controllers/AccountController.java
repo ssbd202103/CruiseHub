@@ -1,6 +1,10 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountChangeEmailDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AdministratorChangeDataDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.BusinessWorkerChangeDataDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.ClientChangeDataDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.ModeratorChangeDataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.AdministratorForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
@@ -9,6 +13,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.AccountEndpointLocal;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
+import javax.print.attribute.standard.Media;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
@@ -84,6 +89,34 @@ public class AccountController {
     @Consumes(MediaType.APPLICATION_JSON)
     public void changeEmail(AccountChangeEmailDto accountChangeEmailDto) {
         accountEndpoint.changeEmail(accountChangeEmailDto);
+    }
+
+    @PUT
+    @Path("/client/changedata")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void changeClientData(ClientChangeDataDto clientChangeDataDto) {
+        accountEndpoint.changeClientData(clientChangeDataDto);
+    }
+
+    @PUT
+    @Path("/businessworker/changedata")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void changeBusinessWorkerData(BusinessWorkerChangeDataDto businessWorkerChangeDataDto) {
+        accountEndpoint.changeBusinessWorkerData(businessWorkerChangeDataDto);
+    }
+
+    @PUT
+    @Path("/moderator/changedata")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void changeModeratorData(ModeratorChangeDataDto moderatorChangeDataDto) {
+        accountEndpoint.changeModeratorData(moderatorChangeDataDto);
+    }
+
+    @PUT
+    @Path("/administrator/changedata")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void changeAdministratorData(AdministratorChangeDataDto administratorChangeDataDto) {
+        accountEndpoint.changeAdministratorData(administratorChangeDataDto);
     }
 
     @GET
