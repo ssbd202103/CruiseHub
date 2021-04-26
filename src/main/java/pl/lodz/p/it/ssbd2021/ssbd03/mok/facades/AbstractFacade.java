@@ -1,4 +1,4 @@
-package pl.lodz.p.it.ssbd2021.ssbd03.mok.facade;
+package pl.lodz.p.it.ssbd2021.ssbd03.mok.facades;
 
 import java.util.List;
 import javax.persistence.EntityManager;
