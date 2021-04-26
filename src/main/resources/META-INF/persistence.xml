@@ -3,7 +3,7 @@
     <persistence-unit name="ssbd03adminPU" transaction-type="JTA">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <jta-data-source>java:app/jdbc/ssbd03adminDS</jta-data-source>
-       <!-- <excluded-unlisted-classes>false</excluded-unlisted-classes>-->
+<!--        <excluded-unlisted-classes>false</excluded-unlisted-classes>-->
         <properties>
             <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.SunOneJtaPlatform"/>
             <property name="hibernate.show_sql" value="true" />
@@ -38,6 +38,7 @@
     <persistence-unit name="ssbd03mokPU" transaction-type="JTA">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <jta-data-source>java:app/jdbc/ssbd03mokDS</jta-data-source>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel</class>

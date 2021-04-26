@@ -19,5 +19,5 @@
     </security-role-mapping>
 
     <class-loader delegate="true"/>
-    
+
 </glassfish-web-app>

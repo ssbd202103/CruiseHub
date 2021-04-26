@@ -85,15 +85,6 @@ create table administrators
     CONSTRAINT administrators_id_fk_constraint FOREIGN KEY (id) REFERENCES access_levels (id)
 );
 
-create table business_workers
-(
-    id           bigint      not null, -- FOREIGN KEY
-    phone_number varchar(12) not null,
-
-    CONSTRAINT business_workers_id_pk_constraint PRIMARY KEY (id),
-    CONSTRAINT business_workers_id_fk_constraint FOREIGN KEY (id) REFERENCES access_levels (id)
-);
-
 create table addresses
 (
     id                   bigint                                                       not null,
@@ -138,7 +129,49 @@ create table moderators
     CONSTRAINT moderators_id_pk_constraint PRIMARY KEY (id),
     CONSTRAINT moderators_id_fk_constraint FOREIGN KEY (id) REFERENCES access_levels (id)
 );
-------------------------mow module--------------------------
+
+create table companies
+(
+    id                   bigint                               not null,
+    name                 varchar(25)                          not null,
+    address_id           bigint                               not null, -- FOREIGN KEY
+    phone_number         varchar(12)                          not null,
+    nip                  numeric(10) check (nip >= 999999999) not null,
+
+    creation_date_time   timestamp default CURRENT_TIMESTAMP  not null,
+    last_alter_date_time timestamp                            not null,
+    created_by_id        bigint                               not null, -- FOREIGN KEY
+    altered_by_id        bigint                               not null, -- FOREIGN KEY
+    alter_type_id        bigint                               not null, -- FOREIGN KEY
+    version              bigint check (version >= 0)          not null,
+
+    CONSTRAINT companies_id_pk_constraint PRIMARY KEY (id),
+    CONSTRAINT companies_address_id_fk_constraint FOREIGN KEY (address_id) REFERENCES addresses (id),
+    CONSTRAINT companies_alter_type_id_fk_constraint FOREIGN KEY (alter_type_id) REFERENCES alter_types (id),
+    CONSTRAINT companies_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
+    CONSTRAINT companies_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id),
+    CONSTRAINT companies_name_unique_constraint UNIQUE (name)
+
+);
+
+create sequence companies_id_seq
+    START WITH 1
+    INCREMENT BY 1;
+
+create table business_workers
+(
+    id                           bigint      not null, -- FOREIGN KEY
+    phone_number                 varchar(12) not null,
+    company_id                   bigint      not null,
+    confirmed_by_business_worker bool        not null,
+
+    CONSTRAINT business_workers_id_pk_constraint PRIMARY KEY (id),
+    CONSTRAINT business_workers_id_fk_constraint FOREIGN KEY (id) REFERENCES access_levels (id),
+    CONSTRAINT business_workers_company_id_fk_constraint FOREIGN KEY (company_id) REFERENCES companies (id)
+);
+
+
+
 create table cruise_addresses
 (
     id                   bigint                              not null,
@@ -195,32 +228,6 @@ create table commercial_types
 
     CONSTRAINT commercial_types_primary_key_constraint PRIMARY KEY (id)
 );
-
-create table companies
-(
-    id                   bigint                               not null,
-    name                 varchar(25)                          not null,
-    address_id           bigint                               not null, -- FOREIGN KEY
-    phone_number         varchar(12)                          not null,
-    nip                  numeric(10) check (nip >= 999999999) not null,
-
-    creation_date_time   timestamp default CURRENT_TIMESTAMP  not null,
-    last_alter_date_time timestamp                            not null,
-    created_by_id        bigint                               not null, -- FOREIGN KEY
-    altered_by_id        bigint                               not null, -- FOREIGN KEY
-    alter_type_id        bigint                               not null, -- FOREIGN KEY
-    version              bigint check (version >= 0)          not null,
-
-    CONSTRAINT companies_id_pk_constraint PRIMARY KEY (id),
-    CONSTRAINT companies_address_id_fk_constraint FOREIGN KEY (address_id) REFERENCES addresses (id),
-    CONSTRAINT companies_alter_type_id_fk_constraint FOREIGN KEY (alter_type_id) REFERENCES alter_types (id),
-    CONSTRAINT companies_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
-    CONSTRAINT companies_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id)
-);
-
-create sequence companies_id_seq
-    START WITH 1
-    INCREMENT BY 1;
 
 create table cruises_groups
 (
@@ -413,16 +420,6 @@ create sequence commercials_id_seq
     START WITH 1
     INCREMENT BY 1;
 
-create table company_workers
-(
-    company_id         bigint not null,        -- FOREIGN KEY
-    business_worker_id bigint not null unique, -- FOREIGN KEY
-
-    CONSTRAINT company_workers_primary_key_constraint PRIMARY KEY (company_id, business_worker_id),
-    CONSTRAINT company_workers_company_id_business_worker_id_unique UNIQUE (company_id, business_worker_id),
-    CONSTRAINT company_workers_company_id_fk_constraint FOREIGN KEY (company_id) REFERENCES companies (id),
-    CONSTRAINT company_workers_business_worker_id_fk_constraint FOREIGN KEY (business_worker_id) REFERENCES business_workers (id)
-);
 
 create table cruises_group_pictures
 (
@@ -489,8 +486,6 @@ ALTER TABLE commercial_types
 ALTER TABLE language_types
     OWNER to ssbd03admin;
 ALTER TABLE alter_types
-    OWNER to ssbd03admin;
-ALTER TABLE company_workers
     OWNER to ssbd03admin;
 ALTER TABLE cruises_group_pictures
     OWNER to ssbd03admin;
@@ -601,6 +596,9 @@ GRANT SELECT, INSERT, UPDATE, DELETE
 GRANT SELECT, INSERT, UPDATE, DELETE
     ON business_workers TO ssbd03mok;
 
+GRANT SELECT
+    ON companies TO ssbd03mok;
+
 GRANT SELECT, INSERT, UPDATE, DELETE
     ON clients TO ssbd03mok;
 
@@ -644,9 +642,6 @@ GRANT SELECT, INSERT, UPDATE, DELETE
 GRANT SELECT, INSERT, UPDATE, DELETE
     ON companies TO ssbd03mow;
 
-GRANT SELECT, INSERT, UPDATE, DELETE
-    ON company_workers TO ssbd03mow;
-
 GRANT SELECT, INSERT, DELETE
     ON cruise_addresses TO ssbd03mow;
 
@@ -663,7 +658,7 @@ GRANT SELECT, INSERT, DELETE
     ON cruises_group_pictures TO ssbd03mow;
 
 GRANT SELECT
-    ON language_types TO ssbd03mow;
+    ON language_types TO ssbd03mok;
 
 GRANT SELECT, INSERT, UPDATE, DELETE
     ON ratings TO ssbd03mow;
@@ -740,6 +735,10 @@ CREATE INDEX administrators_id_index
 CREATE INDEX business_workers_id_index
     ON business_workers USING btree
         (id ASC NULLS LAST);
+
+CREATE INDEX business_workers_company_id_index
+    ON business_workers USING btree
+        (company_id ASC NULLS LAST);
 
 CREATE INDEX addresses_created_by_id_index
     ON addresses USING btree
@@ -899,13 +898,6 @@ CREATE INDEX commercials_altered_by_id_index
 CREATE INDEX commercials_alter_type_id_index
     ON commercials USING btree
         (alter_type_id ASC NULLS LAST);
-
-CREATE INDEX company_workers_company_id_index
-    ON company_workers USING btree
-        (company_id ASC NULLS LAST);
-CREATE INDEX company_workers_business_worker_id_index
-    ON company_workers USING btree
-        (business_worker_id ASC NULLS LAST);
 
 CREATE INDEX cruises_group_pictures_cruises_group_id_index
     ON cruises_group_pictures USING btree

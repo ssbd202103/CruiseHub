@@ -10,20 +10,60 @@ import DarkedSelect from '../../components/DarkedSelect'
 import RoundedButton from '../../components/RoundedButton'
 import styles from '../../styles/auth.global.module.css'
 
-import { useTranslation } from 'react-i18next'
+import {useTranslation} from 'react-i18next'
+import {createRef, useState} from "react";
+import axios from "axios";
 
-export default function ClientSignUp() {
+export default function WorkerSignUp() {
     const {t} = useTranslation()
+
+    const firstNameRef = createRef() as React.RefObject<HTMLDivElement>
+    const secondNameRef = createRef() as React.RefObject<HTMLDivElement>
+    const loginRef = createRef() as React.RefObject<HTMLDivElement>
+    const emailRef = createRef() as React.RefObject<HTMLDivElement>
+    const passwordRef = createRef() as React.RefObject<HTMLDivElement>
+    const confirmPasswordRef = createRef() as React.RefObject<HTMLDivElement>
+
+    const languageTypeRef = createRef() as React.RefObject<HTMLDivElement>
+    const phoneNumberRef = createRef() as React.RefObject<HTMLDivElement>
+
+    const [company, setCompany] = useState("");
+
+
+    const workerSignUpFun = async () => {
+
+        const json = JSON.stringify({
+                firstName: firstNameRef?.current?.querySelector('input')?.value,
+                secondName: secondNameRef?.current?.querySelector('input')?.value,
+                login: loginRef?.current?.querySelector('input')?.value,
+                email: emailRef?.current?.querySelector('input')?.value,
+                password: passwordRef?.current?.querySelector('input')?.value,
+                languageType: languageTypeRef?.current?.querySelector('input')?.value,
+                phoneNumber: phoneNumberRef?.current?.querySelector('input')?.value,
+                companyName: company
+            }
+        );
+
+        await axios.post('http://localhost:8080/cruisehub/api/account/businessworker/registration', json, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+    }
+
 
     return (
         <AuthLayout>
             <h1 className={styles.h1}>{t("signup.welcome")}</h1>
             <h2 className={styles.h2}>{t("signup.worker.subtitle")}</h2>
 
-            <Box style={{
-                display: "flex",
-                width: '100%',
-            }}>
+            <Box
+                style={{
+                    display: "flex",
+                    width: '100%',
+                }}
+            >
                 <DarkedTextField
                     label={t("name") + ' *'}
                     placeholder="John"
@@ -31,6 +71,7 @@ export default function ClientSignUp() {
                     style={{
                         marginRight: 20
                     }}
+                    ref={firstNameRef}
                 />
 
 
@@ -38,21 +79,25 @@ export default function ClientSignUp() {
                     label={t("surname") + ' *'}
                     placeholder="Doe"
                     className={styles.input}
+                    ref={secondNameRef}
                 />
             </Box>
 
-            <Box style={{
-                display: "flex",
-                width: '100%',
-                padding: 0
-            }}>
-                <DarkedSelect 
+            <Box
+                style={{
+                    display: "flex",
+                    width: '100%',
+                    padding: 0
+                }}
+            >
+                <DarkedSelect
                     label={t("company") + ' *'}
-                    options={["Firma 1", "Firma 2", "Firma 3", "Firma 4", "Firma 5"]}
+                    options={["Firma 1", "Firma 2", "FirmaJez", "Firma 4", "Firma 5"]}
                     className={styles.input}
                     style={{
                         marginRight: 20
                     }}
+                    onSelectedChange={setCompany}
                 />
 
                 <DarkedTextField
@@ -60,22 +105,73 @@ export default function ClientSignUp() {
                     label={t("email") + ' *'}
                     placeholder="example@email.com"
                     className={styles.input}
-                    icon={(<EmailIcon />)}
+                    icon={(<EmailIcon/>)}
+                    ref={emailRef}
+                />
+
+
+            </Box>
+
+
+            <Box
+                style={{
+                    display: "flex",
+                    width: '100%',
+                    padding: 0
+                }}
+            >
+
+                <DarkedTextField
+                    label={t("login") + ' *'}
+                    placeholder="examplelogin"
+                    className={styles.input}
+                    style={{
+                        marginRight: 20
+                    }}
+                    ref={loginRef}
+                />
+
+                <DarkedTextField
+                    label={t("phoneNumber") + ' *'}
+                    placeholder="examplenumber"
+                    className={styles.input}
+                    ref={phoneNumberRef}
+                />
+
+            </Box>
+
+            <Box
+                style={{
+                    display: "flex",
+                    width: '100%',
+                    padding: 0
+                }}
+            >
+                <DarkedTextField
+                    label={t("languageType") + ' *'}
+                    placeholder="language type"
+                    className={styles.input}
+                    ref={languageTypeRef}
+
                 />
             </Box>
 
-            <Box style={{
-                display: "flex",
-                width: '100%',
-                padding: 0
-            }}>
+
+            <Box
+                style={{
+                    display: "flex",
+                    width: '100%',
+                    padding: 0
+                }}
+            >
                 <DarkedTextField
                     type="password"
                     label={t("password") + ' *'}
                     placeholder="1234567890"
                     className={styles.input}
                     style={{marginRight: 20}}
-                    icon={(<PasswordIcon />)}
+                    icon={(<PasswordIcon/>)}
+                    ref={passwordRef}
                 />
 
                 <DarkedTextField
@@ -83,20 +179,26 @@ export default function ClientSignUp() {
                     label={t("confirm password") + ' *'}
                     placeholder="1234567890"
                     className={styles.input}
-                    icon={(<PasswordIcon />)}
+                    icon={(<PasswordIcon/>)}
+                    ref={confirmPasswordRef}
                 />
             </Box>
 
 
-            <Box style={{
-                width: '100%',
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "flex-end",
-                justifyContent: "space-between"
-            }}>
-                <RoundedButton style={{width: '50%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
-                               color="pink">{t("signup")}</RoundedButton>
+            <Box
+                style={{
+                    width: '100%',
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-end",
+                    justifyContent: "space-between"
+                }}
+            >
+                <RoundedButton
+                    onClickListenerFun={workerSignUpFun}
+                    style={{width: '50%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
+                    color="pink"
+                >{t("signup")}</RoundedButton>
                 <Link to="client">
                     <a className={styles.link}>{t("i am a client")}</a>
                 </Link>
