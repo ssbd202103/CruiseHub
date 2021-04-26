@@ -42,5 +42,9 @@ public interface AccountEndpointLocal {
      */
     void createModeratorAccount(ModeratorForRegistrationDto moderatorForRegistrationDto);
 
+    /**
+     * Mapuje obiekt dto z nowym mailem do obiektu modelu oraz zmienia mail
+     * @param accountChangeEmailDto dto z nowym mailem
+     */
     void changeEmail(AccountChangeEmailDto accountChangeEmailDto);
 }

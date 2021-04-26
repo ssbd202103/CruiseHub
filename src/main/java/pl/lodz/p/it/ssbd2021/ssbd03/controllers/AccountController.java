@@ -74,6 +74,11 @@ public class AccountController {
         accountEndpoint.createModeratorAccount(moderatorForRegistrationDto);
     }
 
+    /**
+     * Zmień hasło webług podanych w dto danych
+     *
+     * @param accountChangeEmailDto obiekt dto z loginem, nowym mailem oraz wersją
+     */
     @PUT
     @Path("/change_email")
     @Consumes(MediaType.APPLICATION_JSON)

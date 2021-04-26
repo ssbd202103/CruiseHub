@@ -49,5 +49,13 @@ public interface AccountManagerLocal {
      */
     void createModerator(Account account, Moderator moderator);
 
+    /**
+     * Zmienia email konta o podanym loginie
+     *
+     * @param login login konta
+     * @param version wersja
+     * @param newEmail nowy email
+     */
+
     void changeEmail(String login, Long version, String newEmail);
 }
