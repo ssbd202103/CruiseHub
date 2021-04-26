@@ -13,8 +13,6 @@ export interface RoundedButtonProps {
 
 export default function RoundedButton(props: RoundedButtonProps) {
 
-    console.log(props.onClickListenerFun)
-
     const {
         className: styles,
         children,
