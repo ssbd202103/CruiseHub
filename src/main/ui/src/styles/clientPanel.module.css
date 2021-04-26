@@ -1,0 +1,19 @@
+.wrapper.wrapper {
+    height:100vh;
+    justify-content: space-between;
+}
+
+.wrapper>* {
+    height: 100%;
+}
+
+.menu.menu * {
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 1.2rem;
+    color: var(--white);
+}
+
+.content {
+    overflow-y: scroll;
+    padding: 30px;
+}

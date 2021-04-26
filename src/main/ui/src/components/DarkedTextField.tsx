@@ -36,21 +36,20 @@ export interface DarkedTextFieldProps {
     readonly style?: React.CSSProperties
 }
 
-function DarkedTextField(props: DarkedTextFieldProps) {
+const DarkedTextField = React.forwardRef((props: DarkedTextFieldProps, ref) => {
+        
+        const classes = useStyles()
 
-    const classes = useStyles()
+        const {
+            className: styles,
+            icon,
+            type,
+            placeholder,
+            label,
+            style,
+        } = props
 
-    const {
-        className: styles,
-        icon,
-        type,
-        placeholder,
-        label,
-        style
-    } = props
-
-    return (
-        <TextField
+        return (<TextField
             type={type || "text"}
             className={classes.root + ' ' + (styles || "")}
             variant="outlined"
@@ -66,8 +65,8 @@ function DarkedTextField(props: DarkedTextFieldProps) {
             InputLabelProps={labelStyle}
             placeholder={placeholder || ""}
             style={style || undefined}
-        />
-    )
-}
+            ref={ref as React.RefObject<HTMLDivElement>}
+        />)
+    });
 
 export default DarkedTextField;

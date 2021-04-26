@@ -15,6 +15,10 @@ const resources = {
             "ad": "Reklama",
             "confirm": "Potwierdź",
             "logout": "Wyloguj",
+            "settings": "Ustawienia",
+            "cruises": "Wycieczki",
+            "my cruises": "Moje wycieczki",
+            "phone": "Telefon",
             //signin
             "signin": "Zaloguj się",
             "signin.welcome": "Witamy ponownie",
@@ -84,6 +88,10 @@ const resources = {
             "ad": "Ad",
             "confirm": "Confirm",
             "logout": "Logout",
+            "settings": "Settings",
+            "cruises": "Cruises",
+            "my cruises": "My cruises",
+            "phone": "Phone",
             //signin
             "signin": "Sign in",
             "signin.welcome": "Welcome back",

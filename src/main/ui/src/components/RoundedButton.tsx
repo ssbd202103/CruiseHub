@@ -5,7 +5,8 @@ export interface RoundedButtonProps {
     readonly className?: string,
     readonly color: "pink" | "yellow" | "green" | "blue"
     readonly children?: any,
-    readonly style?: React.CSSProperties 
+    readonly style?: React.CSSProperties,
+    readonly onClick?: React.MouseEventHandler<any>
 }
 
 export default function RoundedButton(props: RoundedButtonProps) {
@@ -14,11 +15,13 @@ export default function RoundedButton(props: RoundedButtonProps) {
         className: styles,
         children,
         color,
-        style
+        style,
+        onClick
     } = props
 
     const classes = makeStyles(theme => ({
         root: {
+            padding: '8px 16px',
             fontFamily: "'Montserrat', sans-serif",
             backgroundColor: 'var(--' + color + ')',
             color: 'var(--white)',
@@ -33,6 +36,7 @@ export default function RoundedButton(props: RoundedButtonProps) {
         <Button
             className={(styles || '') + ' ' + classes.root}
             style={style || undefined}
+            onClick={onClick || undefined}
         >{children}</Button>
     )
 }
