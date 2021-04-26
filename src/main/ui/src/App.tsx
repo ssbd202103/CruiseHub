@@ -61,13 +61,13 @@ function App() {
             <Route path="/panels/moderatorPanel">
               <ModeratorPanel/>
             </Route>
-            <Route path="/panels/admin/ChangeAccountData">
+            <Route path="/panels/adminPanel/ChangeAccountData">
             <ChangeAccountData/>
           </Route>
-            <Route path="/panels/admin/ChangeAccountPassword">
+            <Route path="/panels/adminPanel/ChangeAccountPassword">
               <ChangeAccountPassword/>
             </Route>
-            <Route path="/panels/admin/GrantAccessLevel">
+            <Route path="/panels/adminPanel/GrantAccessLevel">
               <GrantAccessLevel/>
             </Route>
 

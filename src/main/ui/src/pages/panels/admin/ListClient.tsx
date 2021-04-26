@@ -15,6 +15,7 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import {Button} from "@material-ui/core";
 import {Link} from "react-router-dom";
 import {useTranslation} from "react-i18next";
+import ButtonGroup from '@material-ui/core/ButtonGroup'
 
 const useRowStyles = makeStyles({
     root: {
@@ -23,6 +24,19 @@ const useRowStyles = makeStyles({
         },
     },
 });
+
+const useButtonStyles = makeStyles({
+    root: {
+        fontFamily: '"Montserrat", sans-serif',
+        color: 'var(--white)',
+        backgroundColor: "var(--blue)",
+        padding: '8px 16px',
+        margin: '0 16px',
+        '&:hover': {
+            backgroundColor: "var(--blue-dark)",
+        }
+    }
+})
 
 function createData(
     login: string,
@@ -42,6 +56,7 @@ function Row(props: { row: ReturnType<typeof createData> }) {
     const {row} = props;
     const [open, setOpen] = React.useState(false);
     const classes = useRowStyles();
+    const buttonClass = useButtonStyles();
     const {t} = useTranslation()
     return (
         <React.Fragment>
@@ -54,9 +69,9 @@ function Row(props: { row: ReturnType<typeof createData> }) {
                 <TableCell component="th" scope="row">
                     {row.login}
                 </TableCell>
-                <TableCell align="center">{row.email}</TableCell>
-                <TableCell align="center">{row.active}</TableCell>
-                <TableCell align="center">{row.accessLevel}</TableCell>
+                <TableCell>{row.email}</TableCell>
+                <TableCell>{row.active}</TableCell>
+                <TableCell>{row.accessLevel}</TableCell>
             </TableRow>
             <TableRow>
                 <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>
@@ -68,12 +83,23 @@ function Row(props: { row: ReturnType<typeof createData> }) {
                                 </TableHead>
                                 <TableBody>
                                     <TableRow>
-                                        <TableCell> <Link to="admin/ChangeAccountData"><Button>
-                                            {t("edit")}</Button></Link></TableCell>
-                                        <TableCell><Link to="admin/ChangeAccountPassword"><Button>{t("change password")}</Button></Link></TableCell>
-                                        <TableCell><Button>{t("reset password")}</Button></TableCell>
-                                        <TableCell><Button>{t("block")}</Button></TableCell>
-                                        <TableCell><Link to="admin/GrantAccessLevel"><Button>{t("grand access level")}</Button></Link></TableCell>
+                                        <TableCell align="center">
+                                                <Link to="/panels/adminPanel/ChangeAccountData">
+                                                    <Button className={buttonClass.root}>{t("edit")}</Button>
+                                                </Link>
+
+                                                <Link to="/panels/adminPanel/ChangeAccountPassword">
+                                                    <Button className={buttonClass.root}>{t("change password")}</Button>
+                                                </Link>
+
+                                                <Button className={buttonClass.root}>{t("reset password")}</Button>
+                                                    
+                                                <Button className={buttonClass.root}>{t("block")}</Button>
+
+                                                <Link to="/panels/adminPanel/GrantAccessLevel">
+                                                    <Button className={buttonClass.root}>{t("grand access level")}</Button>
+                                                </Link>
+                                        </TableCell>
                                     </TableRow>
                                 </TableBody>
                             </Table>
@@ -100,10 +126,10 @@ export default function AdminListClient() {
                 <TableHead>
                     <TableRow>
                         <TableCell/>
-                        <TableCell align="center">{t("login")}</TableCell>
-                        <TableCell align="center">{t("email")}</TableCell>
-                        <TableCell align="center">{t("active")}</TableCell>
-                        <TableCell align="center">{t("access level")}</TableCell>
+                        <TableCell>{t("login")}</TableCell>
+                        <TableCell>{t("email")}</TableCell>
+                        <TableCell>{t("active")}</TableCell>
+                        <TableCell>{t("access level")}</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
