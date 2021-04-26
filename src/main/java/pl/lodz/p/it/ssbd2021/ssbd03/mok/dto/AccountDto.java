@@ -16,7 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Getter
 @Setter
-public class AccountDto implements SignableEntity {
+public class AccountDto  {
     @Login
     private String login;
 
@@ -35,10 +35,7 @@ public class AccountDto implements SignableEntity {
     @NotNull
     private Set<AccessLevelType> accessLevels;
 
-    @Override
-    public String getSignablePayload() {
-        return email ;
-    }
+
 }
 
 

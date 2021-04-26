@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
+import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Name;
 
@@ -15,7 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Getter
 @Setter
-public class TestAccountDto {
+public class TestAccountDto implements SignableEntity {
     @Login
     private String login;
 
@@ -33,4 +34,9 @@ public class TestAccountDto {
 
     @NotNull
     private Set<AccessLevelType> accessLevels;
+
+    @Override
+    public String getSignablePayload() {
+        return email ;
+    }
 }
