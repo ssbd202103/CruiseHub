@@ -2,8 +2,6 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.facades;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.LanguageTypeWrapper;
 
@@ -35,5 +33,13 @@ public class AccountFacade extends AbstractFacade<Object> {
         TypedQuery<LanguageTypeWrapper> tq = em.createNamedQuery("LanguageTypeWrapper.findByName", LanguageTypeWrapper.class);
         tq.setParameter("name", languageType);
         return tq.getSingleResult();
+    }
+
+    public void blockUser(long id) {
+        Query updateQuery = em.createQuery("UPDATE accounts SET accounts.active = :active WHERE accounts.id = :id");
+        updateQuery.setParameter("active", false);
+        updateQuery.setParameter("id", id);
+
+        updateQuery.getSingleResult();
     }
 }

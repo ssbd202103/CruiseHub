@@ -76,4 +76,9 @@ public class AccountManager implements AccountManagerLocal {
         this.accountFacade.create(account);
     }
 
+    @Override
+    public void blockUser(long id) {
+        this.accountFacade.blockUser(id);
+    }
+
 }

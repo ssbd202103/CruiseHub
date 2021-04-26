@@ -19,6 +19,9 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.*;
 @NamedQueries({
         @NamedQuery(name = "Account.findByLogin", query = "SELECT acc FROM accounts acc WHERE acc.login = :login")
 })
+@NamedQueries({
+    @NamedQuery(name = "Account.findById", query = "SELECT acc FROM accounts acc WHERE acc.id = :id")
+})
 public class Account extends BaseEntity {
     @Getter
     @Id

@@ -31,4 +31,10 @@ public interface AccountManagerLocal {
      * @param businessWorker obiekt prezentujący poziom dostępu pracownik firmy
      */
     void createBusinessWorker(Account account, BusinessWorker businessWorker, String companyName);
+
+    /**
+     * Metoda odpowiedzialna za blokowanie konta
+     * @param id ID użytkownika
+     */
+    void blockUser(long id);
 }
