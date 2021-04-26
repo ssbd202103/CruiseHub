@@ -6,6 +6,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Administrator;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountChangeEmailDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.AdministratorForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
@@ -50,5 +51,10 @@ public class AccountEndpoint implements AccountEndpointLocal {
     public void createModeratorAccount(ModeratorForRegistrationDto moderatorForRegistrationDto) {
         Account account = AccountMapper.extractAccountFromModeratorForRegistrationDto(moderatorForRegistrationDto);
         this.accountManager.createModerator(account, new Moderator());
+    }
+
+    @Override
+    public void changeEmail(AccountChangeEmailDto accountChangeEmailDto) {
+        accountManager.changeEmail(accountChangeEmailDto.getLogin(), accountChangeEmailDto.getVersion(), accountChangeEmailDto.getNewEmail());
     }
 }

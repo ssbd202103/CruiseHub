@@ -9,6 +9,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Administrator;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountChangeEmailDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.CompanyFacade;
 
@@ -114,5 +115,10 @@ public class AccountManager implements AccountManagerLocal {
         this.accountFacade.create(account);
     }
 
-
+    @Override
+    public void changeEmail(String login, Long version, String newEmail) {
+        Account account = accountFacade.findByLogin(login);
+        account.setVersion(version);
+        account.setEmail(newEmail);
+    }
 }

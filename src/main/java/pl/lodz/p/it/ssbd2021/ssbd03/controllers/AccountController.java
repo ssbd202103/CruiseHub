@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountChangeEmailDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.AdministratorForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
@@ -24,7 +25,6 @@ public class AccountController {
 
     @EJB
     private AccountEndpointLocal accountEndpoint;
-
 
     /**
      * Stwórz nowe konto z poziomem dostępu Klient
@@ -72,6 +72,13 @@ public class AccountController {
     @Consumes(MediaType.APPLICATION_JSON)
     public void createModerator(@Valid @NotNull ModeratorForRegistrationDto moderatorForRegistrationDto) {
         accountEndpoint.createModeratorAccount(moderatorForRegistrationDto);
+    }
+
+    @PUT
+    @Path("/change_email")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void changeEmail(AccountChangeEmailDto accountChangeEmailDto) {
+        accountEndpoint.changeEmail(accountChangeEmailDto);
     }
 
     @GET

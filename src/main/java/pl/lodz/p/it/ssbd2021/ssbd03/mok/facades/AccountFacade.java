@@ -7,9 +7,12 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.LanguageTypeWrapper;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.persistence.*;
 
 @Stateless
+@TransactionAttribute(TransactionAttributeType.MANDATORY)
 public class AccountFacade extends AbstractFacade<Account> {
 
     @PersistenceContext(unitName = "ssbd03mokPU")
@@ -34,5 +37,11 @@ public class AccountFacade extends AbstractFacade<Account> {
         TypedQuery<LanguageTypeWrapper> tq = em.createNamedQuery("LanguageTypeWrapper.findByName", LanguageTypeWrapper.class);
         tq.setParameter("name", languageType);
         return tq.getSingleResult();
+    }
+
+    public Account findByLogin(String login) {
+        TypedQuery<Account> accountTypedQuery = em.createNamedQuery("Account.findByLogin", Account.class);
+        accountTypedQuery.setParameter("login", login);
+        return accountTypedQuery.getSingleResult();
     }
 }

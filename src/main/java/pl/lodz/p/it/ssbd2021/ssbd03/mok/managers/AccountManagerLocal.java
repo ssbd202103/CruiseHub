@@ -7,6 +7,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Administrator;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountChangeEmailDto;
 
 import javax.ejb.Local;
 
@@ -47,4 +48,6 @@ public interface AccountManagerLocal {
      * @param moderator obiekt prezentujący poziom dostępu administrator
      */
     void createModerator(Account account, Moderator moderator);
+
+    void changeEmail(String login, Long version, String newEmail);
 }
