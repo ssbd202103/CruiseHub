@@ -6,6 +6,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.LanguageTypeWrapper;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 
 import javax.ejb.Stateful;
 import javax.persistence.*;
@@ -35,5 +36,15 @@ public class AccountFacade extends AbstractFacade<Object> {
         TypedQuery<LanguageTypeWrapper> tq = em.createNamedQuery("LanguageTypeWrapper.findByName", LanguageTypeWrapper.class);
         tq.setParameter("name", languageType);
         return tq.getSingleResult();
+    }
+
+    public Account findByLogin(String login) throws FacadeException {
+        TypedQuery<Account> tq = em.createNamedQuery("Account.findByLogin", Account.class);
+        tq.setParameter("login", login);
+        try {
+            return tq.getSingleResult();
+        } catch (NoResultException e) {
+            throw FacadeException.noSuchElement();
+        }
     }
 }

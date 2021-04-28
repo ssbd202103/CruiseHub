@@ -63,12 +63,16 @@ const resources = {
             "moderator panel": "Panel moderatora",
             "list accounts": "Lista kont",
             "edit": "Edytuj dane",
-            "change password" : "Zmień hasło",
+            "change password": "Zmień hasło",
             "reset password": "Resetuj hasło",
             "block": "Zablokuj konto",
             "grand access level": "Przydziel poziom dostępu",
             //panels.clientPanel
-            "client panel": "Panel klienta"
+            "client panel": "Panel klienta",
+            "exception.facade.noSuchElement": "Nie znaleziono elementu w bazie danych",
+            "exception.account.accessLevels.alreadyAssigned": "Poziom dostępu jest już przydzielony do konta",
+            "exception.account.accessLevels.notAssignable": "Nie można przydzielić podanego poziomu dostępu",
+            "exception.account.accessLevels.doesNotExist": "Podany poziom dostępu nie istnieje"
         }
     },
     en: {
@@ -132,12 +136,16 @@ const resources = {
             "list accounts": "Accounts list",
             "moderator panel": "Moderator Panel",
             "edit": "Edit data",
-            "change password" : "Change password",
+            "change password": "Change password",
             "reset password": "Reset password",
             "block": "Block account",
             "grand access level": "Grand access level",
             //panels.clientPanel
             "clientPanelH2": "Client panel",
+            "exception.facade.noSuchElement": "No such element found in the database",
+            "exception.account.accessLevels.alreadyAssigned": "Access level already assigned to account",
+            "exception.account.accessLevels.notAssignable": "Cannot assign this access level",
+            "exception.account.accessLevels.doesNotExist": "This access level does not exist"
         }
     }
 }

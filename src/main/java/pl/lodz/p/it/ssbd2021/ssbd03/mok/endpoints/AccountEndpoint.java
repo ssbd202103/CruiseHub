@@ -1,11 +1,9 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Administrator;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters.AccountMapper;
@@ -34,6 +32,16 @@ public class AccountEndpoint implements AccountEndpointLocal {
     public void createBusinessWorkerAccount(BusinessWorkerForRegistrationDto businessWorkerForRegistrationDto) {
         BusinessWorker businessWorker = AccountMapper.extractBusinessWorkerFromBusinessWorkerForRegistrationDto(businessWorkerForRegistrationDto);
         Account account = AccountMapper.extractAccountFromBusinessWorkerForRegistrationDto(businessWorkerForRegistrationDto);
-        this.accountManager.createBusinessWorker(account, businessWorker, businessWorkerForRegistrationDto.getCompanyName());
+        this.accountManager.createBusinessWorkerAccount(account, businessWorker, businessWorkerForRegistrationDto.getCompanyName());
+    }
+
+    @Override
+    public void grantModeratorAccessLevel(String accountLogin) throws BaseAppException {
+        accountManager.grantModeratorAccessLevel(accountLogin);
+    }
+
+    @Override
+    public void grantAdministratorAccessLevel(String accountLogin) throws BaseAppException {
+        accountManager.grantAdministratorAccessLevel(accountLogin);
     }
 }
