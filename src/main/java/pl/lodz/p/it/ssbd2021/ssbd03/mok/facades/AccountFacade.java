@@ -11,13 +11,13 @@ import javax.ejb.Stateful;
 import javax.persistence.*;
 
 @Stateful
-public class AccountFacade extends AbstractFacade<Object> {
+public class AccountFacade extends AbstractFacade<Account> {
 
     @PersistenceContext(unitName = "ssbd03mokPU")
     private EntityManager em;
 
     public AccountFacade() {
-        super(Object.class);
+        super(Account.class);
     }
 
     @Override
@@ -36,4 +36,9 @@ public class AccountFacade extends AbstractFacade<Object> {
         tq.setParameter("name", languageType);
         return tq.getSingleResult();
     }
+
+
+
+
+
 }

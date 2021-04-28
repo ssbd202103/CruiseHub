@@ -9,25 +9,25 @@ import pl.lodz.p.it.ssbd2021.ssbd03.testModel.mok.dto.TestAccountDto;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ETagTest {
 
 
     @Test
-    void verifyEtag() {
+    void verifyEtag_SUCCESS() {
         List<TestAccountDto> accounts = getSampleAccounts();
         String etag = EntityIdentitySignerVerifier.calculateEntitySignature(accounts.get(0));
-        assertEquals(EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, accounts.get(0)), true);
+        assertTrue(EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, accounts.get(0)));
 
     }
 
     @Test
-    void verifyChangedObjectETag() {
+    void verifyChangedObjectETag_UNSUCCESS() {
         List<TestAccountDto> accounts = getSampleAccounts();
         String etag = EntityIdentitySignerVerifier.calculateEntitySignature(accounts.get(0));
         accounts.get(0).setEmail("andrzej.konieczny@gmail.com");
-        assertEquals(EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, accounts.get(0)), false);
+        assertFalse(EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, accounts.get(0)));
 
     }
 

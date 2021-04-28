@@ -17,6 +17,10 @@ import java.util.Set;
 @Getter
 @Setter
 public class AccountDto  {
+
+    public AccountDto() {
+    }
+
     @Login
     private String login;
 

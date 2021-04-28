@@ -10,11 +10,14 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Administrator;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.CompanyFacadeMok;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Klasa która zarządza logiką biznesową kont
@@ -71,6 +74,11 @@ public class AccountManager implements AccountManagerLocal {
         account.setAccessLevel(businessWorker);
 
         this.accountFacade.create(account);
+    }
+
+    @Override
+    public List<Account> getAllAccounts() {
+        return accountFacade.findAll();
     }
 
 }

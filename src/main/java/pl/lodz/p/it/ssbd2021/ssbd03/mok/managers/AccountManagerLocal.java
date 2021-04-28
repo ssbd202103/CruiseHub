@@ -7,8 +7,10 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Administrator;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 
 import javax.ejb.Local;
+import java.util.List;
 
 /**
  * Klasa która zarządza logiką biznesową kont
@@ -30,4 +32,7 @@ public interface AccountManagerLocal {
      * @param businessWorker obiekt prezentujący poziom dostępu pracownik firmy
      */
     void createBusinessWorker(Account account, BusinessWorker businessWorker, String companyName);
+
+
+    List<Account> getAllAccounts();
 }

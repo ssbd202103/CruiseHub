@@ -1,9 +1,11 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 
 import javax.ejb.Local;
+import java.util.List;
 
 
 /**
@@ -24,4 +26,8 @@ public interface AccountEndpointLocal {
      * @param businessWorkerForRegistrationDto obiekt klasy dto która przechowuje wszystkie niezbędne pola do stworzenia nowego konta użytkownika z przypisanym poziomem dostępu Pracownik Firmy
      */
     void createBusinessWorkerAccount(BusinessWorkerForRegistrationDto businessWorkerForRegistrationDto);
+
+
+    List<AccountDto> getAllAccounts();
+
 }
