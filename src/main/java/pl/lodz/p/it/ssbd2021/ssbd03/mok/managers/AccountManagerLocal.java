@@ -1,20 +1,15 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.managers;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Administrator;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountChangeEmailDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.validators.City;
-import pl.lodz.p.it.ssbd2021.ssbd03.validators.Country;
-import pl.lodz.p.it.ssbd2021.ssbd03.validators.PostCode;
-import pl.lodz.p.it.ssbd2021.ssbd03.validators.Street;
+
 
 import javax.ejb.Local;
-import javax.validation.constraints.Positive;
+
 
 /**
  * Klasa która zarządza logiką biznesową kont
