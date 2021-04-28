@@ -34,5 +34,10 @@ public interface AccountManagerLocal {
     void createBusinessWorker(Account account, BusinessWorker businessWorker, String companyName);
 
 
+    /**
+     * Pobiera liste kont z bazy danych
+     *
+     * @return lista kont
+     */
     List<Account> getAllAccounts();
 }

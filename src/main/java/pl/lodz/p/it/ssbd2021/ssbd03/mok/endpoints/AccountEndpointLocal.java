@@ -28,6 +28,11 @@ public interface AccountEndpointLocal {
     void createBusinessWorkerAccount(BusinessWorkerForRegistrationDto businessWorkerForRegistrationDto);
 
 
+    /**
+     * Mapuje obiety kont dto na obiekty modelu
+     *
+     * @return obiekty kont dto
+     */
     List<AccountDto> getAllAccounts();
 
 }

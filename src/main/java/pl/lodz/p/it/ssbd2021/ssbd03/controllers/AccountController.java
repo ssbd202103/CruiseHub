@@ -49,6 +49,11 @@ public class AccountController {
         accountEndpoint.createBusinessWorkerAccount(businessWorkerForRegistrationDto);
     }
 
+    /**
+     * Pobierz informacje o wszystkich kontach
+     *
+     * @return lista kont
+     */
     @GET
     @Path("/accounts")
     @Produces(MediaType.APPLICATION_JSON)
