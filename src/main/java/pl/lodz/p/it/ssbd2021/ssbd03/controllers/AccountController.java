@@ -20,6 +20,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Arrays;
 
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ACCESS_LEVEL_DOES_NOT_EXIST_ERROR;
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ACCESS_LEVEL_NOT_ASSIGNABLE_ERROR;
 
@@ -59,13 +60,13 @@ public class AccountController {
         accountEndpoint.createBusinessWorkerAccount(businessWorkerForRegistrationDto);
     }
 
-    //    @ETagFilterBinding
+    @ETagFilterBinding
     @PUT
     @Path("/{login}/grantAccessLevel/{accessLevel}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response grantAccessLevel(@PathParam("login") @Login String accountLogin, @PathParam("accessLevel") String accessLevel) throws BaseAppException {
         if (Arrays.stream(AccessLevelType.values()).noneMatch(accessLevelType -> accessLevelType.name().equalsIgnoreCase(accessLevel))) {
-            return Response.status(400).entity(ACCESS_LEVEL_DOES_NOT_EXIST_ERROR).build();
+            return Response.status(BAD_REQUEST).entity(ACCESS_LEVEL_DOES_NOT_EXIST_ERROR).build();
         }
 
         try {
@@ -79,10 +80,10 @@ public class AccountController {
                 return Response.ok().entity(account).build();
             }
         } catch (AccountManagerException e) {
-            return Response.status(400).entity(e.getMessage()).build();
+            return Response.status(BAD_REQUEST).entity(e.getMessage()).build();
         }
 
-        return Response.status(400).entity(ACCESS_LEVEL_NOT_ASSIGNABLE_ERROR).build();
+        return Response.status(BAD_REQUEST).entity(ACCESS_LEVEL_NOT_ASSIGNABLE_ERROR).build();
     }
 
     @GET
