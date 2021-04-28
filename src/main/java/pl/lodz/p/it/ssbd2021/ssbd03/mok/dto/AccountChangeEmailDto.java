@@ -1,7 +1,10 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.dto;
 
 
-import lombok.*;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
