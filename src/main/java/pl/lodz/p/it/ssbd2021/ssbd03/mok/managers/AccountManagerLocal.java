@@ -8,8 +8,13 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountChangeEmailDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.City;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.Country;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.PostCode;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.Street;
 
 import javax.ejb.Local;
+import javax.validation.constraints.Positive;
 
 /**
  * Klasa która zarządza logiką biznesową kont
@@ -66,11 +71,16 @@ public interface AccountManagerLocal {
      * @param version wersja
      * @param newFirstName nowe imię
      * @param newSecondName nowe nazwisko
-     * @param newLogin nowy login
      * @param newPhoneNumber nowy numer telefonu
-     * @param newAddress nowy adres
+     * @param newHouseNumber nowy numer domu
+     * @param newStreet nowa ulica
+     * @param newPostalCode nowy kod pocztowy
+     * @param newCity nowe miasto
+     * @param newCountry nowe państwo
      */
-    void changeClientData(String login, Long version, String newFirstName, String newSecondName, String newLogin, String newPhoneNumber, Address newAddress);
+    void changeClientData(String login, Long version,
+                          String newFirstName, String newSecondName, String newPhoneNumber,
+                          Long newHouseNumber, String newStreet, String newPostalCode, String newCity,String newCountry);
 
     /**
      * Zmień dane pracownika firmy
@@ -79,10 +89,9 @@ public interface AccountManagerLocal {
      * @param version wersja
      * @param newFirstName nowe imię
      * @param newSecondName nowe nazwisko
-     * @param newLogin nowy login
      * @param newPhoneNumber nowy numer telefonu
      */
-    void changeBusinessWorkerData(String login, Long version, String newFirstName, String newSecondName, String newLogin, String newPhoneNumber);
+    void changeBusinessWorkerData(String login, Long version, String newFirstName, String newSecondName, String newPhoneNumber);
 
     /**
      * Zmień dane moderatora
@@ -91,10 +100,9 @@ public interface AccountManagerLocal {
      * @param version wersja
      * @param newFirstName nowe imię
      * @param newSecondName nowe nazwisko
-     * @param newLogin nowy login
      *
      */
-    void changeModeratorData(String login, Long version, String newFirstName, String newSecondName, String newLogin);
+    void changeModeratorData(String login, Long version, String newFirstName, String newSecondName);
 
     /**
      * Zmień dane administratora
@@ -103,8 +111,7 @@ public interface AccountManagerLocal {
      * @param version wersja
      * @param newFirstName nowe imię
      * @param newSecondName nowe nazwisko
-     * @param newLogin nowy login
      *
      */
-    void changeAdministratorData(String login, Long version, String newFirstName, String newSecondName, String newLogin);
+    void changeAdministratorData(String login, Long version, String newFirstName, String newSecondName);
 }

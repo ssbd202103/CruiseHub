@@ -64,14 +64,18 @@ public class AccountEndpoint implements AccountEndpointLocal {
 
     @Override
     public void changeClientData(ClientChangeDataDto clientChangeDataDto) {
+        System.out.println("Address: " + clientChangeDataDto.getNewAddress());
         accountManager.changeClientData(
                 clientChangeDataDto.getLogin(),
                 clientChangeDataDto.getVersion(),
                 clientChangeDataDto.getNewFirstName(),
                 clientChangeDataDto.getNewSecondName(),
-                clientChangeDataDto.getNewLogin(),
                 clientChangeDataDto.getNewPhoneNumber(),
-                clientChangeDataDto.getNewAddress()
+                clientChangeDataDto.getNewAddress().getNewHouseNumber(),
+                clientChangeDataDto.getNewAddress().getNewStreet(),
+                clientChangeDataDto.getNewAddress().getNewPostalCode(),
+                clientChangeDataDto.getNewAddress().getNewCity(),
+                clientChangeDataDto.getNewAddress().getNewCountry()
         );
     }
 
@@ -82,7 +86,6 @@ public class AccountEndpoint implements AccountEndpointLocal {
                 businessWorkerChangeDataDto.getVersion(),
                 businessWorkerChangeDataDto.getNewFirstName(),
                 businessWorkerChangeDataDto.getNewSecondName(),
-                businessWorkerChangeDataDto.getNewLogin(),
                 businessWorkerChangeDataDto.getNewPhoneNumber()
         );
     }
@@ -93,19 +96,17 @@ public class AccountEndpoint implements AccountEndpointLocal {
                 moderatorChangeDataDto.getLogin(),
                 moderatorChangeDataDto.getVersion(),
                 moderatorChangeDataDto.getNewFirstName(),
-                moderatorChangeDataDto.getNewSecondName(),
-                moderatorChangeDataDto.getNewLogin()
+                moderatorChangeDataDto.getNewSecondName()
         );
     }
 
     @Override
     public void changeAdministratorData(AdministratorChangeDataDto administratorChangeDataDto) {
-        accountManager.changeModeratorData(
+        accountManager.changeAdministratorData(
                 administratorChangeDataDto.getLogin(),
                 administratorChangeDataDto.getVersion(),
                 administratorChangeDataDto.getNewFirstName(),
-                administratorChangeDataDto.getNewSecondName(),
-                administratorChangeDataDto.getNewLogin()
+                administratorChangeDataDto.getNewSecondName()
         );
     }
 }

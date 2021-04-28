@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ModeratorChangeDataDto extends AccountChangeDataDto {
 
-    public ModeratorChangeDataDto(String login, Long version, String newFirstName, String newSecondName, String newLogin) {
-        super(login, version, newFirstName, newSecondName, newLogin);
+    public ModeratorChangeDataDto(String login, Long version, String newFirstName, String newSecondName) {
+        super(login, version, newFirstName, newSecondName);
     }
 }

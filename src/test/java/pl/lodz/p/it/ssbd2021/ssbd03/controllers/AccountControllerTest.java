@@ -3,9 +3,11 @@ package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 import com.google.gson.Gson;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountChangeEmailDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AddressDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.AdministratorForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
@@ -62,5 +64,35 @@ class AccountControllerTest {
 
         Response res = given().baseUri(baseUri).contentType("application/json").body(accountChangeEmailDto).when().put("account/change_email");
         res.then().statusCode(204);
+    }
+
+    @Test
+    public void changeClientDataTest() {
+        AddressChangeDto newAddress = new AddressChangeDto(100L, "Aleja Politechniki", "94-690", "Lodz", "Polska");
+        ClientChangeDataDto clientChangeDataDto = new ClientChangeDataDto("emusk",0L, "Elonczek", "Maseczek", "987654321", newAddress);
+
+        given().baseUri(baseUri).contentType("application/json").body(clientChangeDataDto).when().put("account/client/changedata").then().statusCode(204);
+
+    }
+
+    @Test
+    public void changeBusinessWorkerDataTest() {
+        BusinessWorkerChangeDataDto businessWorkerChangeDataDto = new BusinessWorkerChangeDataDto("jbezos", 0L, "Jefus", "Besoses", "000000001");
+
+        given().baseUri(baseUri).contentType("application/json").body(businessWorkerChangeDataDto).when().put("account/businessworker/changedata").then().statusCode(204);
+    }
+
+    @Test
+    public void changeModeratorDataTest() {
+        ModeratorChangeDataDto moderatorChangeDataDto = new ModeratorChangeDataDto("mzuckerberg", 0L, "Marcus", "Sugarus");
+
+        given().baseUri(baseUri).contentType("application/json").body(moderatorChangeDataDto).when().put("account/moderator/changedata").then().statusCode(204);
+    }
+
+    @Test
+    public void changeAdministratorDataTest() {
+        AdministratorChangeDataDto administratorChangeDataDto = new AdministratorChangeDataDto("rbranson", 0L, "Rubertiono", "Bransolino");
+
+        given().baseUri(baseUri).contentType("application/json").body(administratorChangeDataDto).when().put("account/administrator/changedata").then().statusCode(204);
     }
 }

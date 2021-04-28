@@ -10,8 +10,8 @@ public class BusinessWorkerChangeDataDto extends AccountChangeDataDto {
     @PhoneNumber
     private String newPhoneNumber;
 
-    public BusinessWorkerChangeDataDto(String login, Long version, String newFirstName, String newSecondName, String newLogin, String newPhoneNumber) {
-        super(login, version, newFirstName, newSecondName, newLogin);
+    public BusinessWorkerChangeDataDto(String login, Long version, String newFirstName, String newSecondName, String newPhoneNumber) {
+        super(login, version, newFirstName, newSecondName);
 
         this.newPhoneNumber = newPhoneNumber;
     }

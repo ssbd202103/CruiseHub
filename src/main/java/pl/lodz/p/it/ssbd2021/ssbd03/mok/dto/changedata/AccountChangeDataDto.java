@@ -16,14 +16,11 @@ public class AccountChangeDataDto extends AbstractAccountDTO {
     private String newFirstName;
     @Name
     private String newSecondName;
-    @Login
-    private String newLogin;
 
-    public AccountChangeDataDto(String login, Long version, String newFirstName, String newSecondName, String newLogin) {
+    public AccountChangeDataDto(String login, Long version, String newFirstName, String newSecondName) {
         super(login, version);
 
         this.newFirstName = newFirstName;
         this.newSecondName = newSecondName;
-        this.newLogin = newLogin;
     }
 }
