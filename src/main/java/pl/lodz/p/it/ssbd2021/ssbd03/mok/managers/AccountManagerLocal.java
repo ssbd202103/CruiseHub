@@ -1,17 +1,14 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.managers;
 
-import javassist.compiler.ast.Pair;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Administrator;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AuthenticateResponse;
 
 import javax.ejb.Local;
-import javax.validation.constraints.NotNull;
-import javax.ws.rs.core.Response;
+import java.time.LocalDateTime;
 
 /**
  * Klasa która zarządza logiką biznesową kont
@@ -52,10 +49,19 @@ public interface AccountManagerLocal {
     void createModerator(Account account, Moderator moderator);
 
     /**
-     * Loguje użytkwnika lub zwraca odpowiedni kod błędu
+     * Metoda odpowiedzialna za edycję pól w bazie danych w przypadku niepoprawnego logowania.
      * @param login Login użytkownika
-     * @param passwordHash Hash hasła użytkownika
-     * @return Kod HTTP, konto użytkownika oraz token
+     * @param IpAddr Adres IP użytkownika
+     * @param time Czas
      */
-    AuthenticateResponse authenticate(@NotNull String login, @NotNull String passwordHash);
+    void updateIncorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws Exception;
+
+    /**
+     * Metoda odpowiedzialna za edycję pól w bazie danych w przypadku poprawnego logowania.
+     * @param login Login użytkownika
+     * @param IpAddr Adres IP użytkownika
+     * @param time Czas
+     * @return Token JWT
+     */
+    String updateCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws Exception;
 }

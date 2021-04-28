@@ -37,23 +37,23 @@ class AccountMapperTest {
 
 
     private static List<Account> getSampleAccounts() {
-        Account account1 = new Account("Michał", "Kolanko", "michal123", "michu743@gmail.com",
-                "5d8786696f7776169055f8b689aa9a02bc88060a2c13ddd2c602369a96bfbe17", true, true,
-                new LanguageTypeWrapper(LanguageType.PL));
-        account1.setAccessLevel(new Moderator(true));
+//        Account account1 = new Account("Michał", "Kolanko", "michal123", "michu743@gmail.com",
+//                "5d8786696f7776169055f8b689aa9a02bc88060a2c13ddd2c602369a96bfbe17", true, true,
+//                new LanguageTypeWrapper(LanguageType.PL));
+//        account1.setAccessLevel(new Moderator(true));
+//
+//        Account account2 = new Account("Julia", "Niebieska", "julanta88", "julia.niebieska@gmail.com",
+//                "8b689aa9a026fasdfasdf9aas302bc88112060a2c13ddd2c6202369a96bfbe17", true, true,
+//                new LanguageTypeWrapper(LanguageType.PL));
+//        account2.setAccessLevel(new Client(new Address(20L, "Łęczycka", "283-138", "Warsaw", "Poland"), "473-173-183", true));
+//
+//        Account account3 = new Account("John", "Wayne", "batman001", "john.wayne@waynecorp.com",
+//                "1532e76dbe9d43d0dea98c331ca5ae8a65c5e8e8b99d3e2a42ae989356f6242a", true, true,
+//                new LanguageTypeWrapper(LanguageType.ENG));
+//        account3.setAccessLevel(new Administrator(true));
+//        account3.setAccessLevel(new Client(new Address(174L, "Wallstreet", "123-1382", "New York", "USA"), "473-173-183", true));
 
-        Account account2 = new Account("Julia", "Niebieska", "julanta88", "julia.niebieska@gmail.com",
-                "8b689aa9a026fasdfasdf9aas302bc88112060a2c13ddd2c6202369a96bfbe17", true, true,
-                new LanguageTypeWrapper(LanguageType.PL));
-        account2.setAccessLevel(new Client(new Address(20L, "Łęczycka", "283-138", "Warsaw", "Poland"), "473-173-183", true));
-
-        Account account3 = new Account("John", "Wayne", "batman001", "john.wayne@waynecorp.com",
-                "1532e76dbe9d43d0dea98c331ca5ae8a65c5e8e8b99d3e2a42ae989356f6242a", true, true,
-                new LanguageTypeWrapper(LanguageType.ENG));
-        account3.setAccessLevel(new Administrator(true));
-        account3.setAccessLevel(new Client(new Address(174L, "Wallstreet", "123-1382", "New York", "USA"), "473-173-183", true));
-
-        return Arrays.asList(account1, account2, account3);
+        return Arrays.asList(null, null, null);
     }
 
 }

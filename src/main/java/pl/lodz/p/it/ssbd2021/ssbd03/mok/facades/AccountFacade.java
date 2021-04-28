@@ -1,17 +1,15 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.facades;
 
-import javassist.compiler.ast.Pair;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.LanguageTypeWrapper;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AuthenticateResponse;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AccountBlockedOrNotConfirmed;
 
 import javax.ejb.Stateless;
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.ws.rs.core.Response;
+import java.time.LocalDateTime;
 
 @Stateless
 public class AccountFacade extends AbstractFacade<Account> {
@@ -40,23 +38,28 @@ public class AccountFacade extends AbstractFacade<Account> {
         return tq.getSingleResult();
     }
 
-    public AuthenticateResponse authenticate(@NotNull String login, @NotNull String passwordHash) {
+    public Account updateAuthenticateInfo(String login, String ipAddr, LocalDateTime time, boolean isAuthValid) throws Exception {
         TypedQuery<Account> tq = em.createNamedQuery("Account.findByLogin", Account.class);
         tq.setParameter("login", login);
         Account account = tq.getSingleResult();
 
-        AuthenticateResponse ar = new AuthenticateResponse();
-        ar.setAccount(account);
-        if (account.getPasswordHash().equals(passwordHash)) {
-            if (!account.isActive() || !account.isConfirmed()) {
-                ar.setResponseStatus(Response.Status.FORBIDDEN);
-            } else {
-                ar.setResponseStatus(Response.Status.OK);
-            }
-        } else {
-            ar.setResponseStatus(Response.Status.UNAUTHORIZED);
+        if (!account.isActive() || !account.isConfirmed()) {
+            throw new AccountBlockedOrNotConfirmed();
         }
 
-        return ar;
+        if (isAuthValid) {
+            account.setLastCorrectAuthenticationDateTime(time);
+            account.setLastCorrectAuthenticationLogicalAddress(ipAddr);
+        } else {
+            account.setLastIncorrectAuthenticationDateTime(time);
+            account.setLastIncorrectAuthenticationLogicalAddress(ipAddr);
+        }
+        try {
+            super.edit(account);
+        } catch (Exception e) {
+            throw new Exception(e);
+        }
+
+        return account;
     }
 }

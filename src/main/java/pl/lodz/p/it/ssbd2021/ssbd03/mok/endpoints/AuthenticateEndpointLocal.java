@@ -1,21 +1,26 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints;
 
-import javassist.compiler.ast.Pair;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AuthenticateResponse;
-
-import javax.validation.constraints.NotNull;
-import javax.ws.rs.core.Response;
+import java.time.LocalDateTime;
 
 /**
  * Klasa służąca do logowania się użytkowników
  */
 public interface AuthenticateEndpointLocal {
+
     /**
-     * Metoda służąca do logowania się użytkownika
+     * Metoda odpowiedzialna za edycję pól w bazie danych w przypadku niepoprawnego logowania.
      * @param login Login użytkownika
-     * @param passwordHash Hasło użytkownika
-     * @return Kod HTTP dotyczący wyniku logowania, konto użytkownika oraz token
+     * @param IpAddr Adres IP użytkownika
+     * @param time Czas
      */
-    Response authenticate(@NotNull String login, @NotNull String passwordHash);
+    void updateIncorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws Exception;
+
+    /**
+     * Metoda odpowiedzialna za edycję pól w bazie danych w przypadku poprawnego logowania.
+     * @param login Login użytkownika
+     * @param IpAddr Adres IP użytkownika
+     * @param time Czas
+     * @return Token JWT
+     */
+    String updateCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws Exception;
 }

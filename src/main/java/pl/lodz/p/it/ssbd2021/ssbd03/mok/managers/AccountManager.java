@@ -1,6 +1,5 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.managers;
 
-import javassist.compiler.ast.Pair;
 import org.apache.commons.codec.digest.DigestUtils;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
@@ -10,15 +9,12 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Administrator;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AuthenticateResponse;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.JWTHandler;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
-import javax.validation.constraints.NotNull;
-import javax.ws.rs.core.Response;
-import java.util.HashMap;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
@@ -117,15 +113,15 @@ public class AccountManager implements AccountManagerLocal {
     }
 
     @Override
-    public AuthenticateResponse authenticate(@NotNull String login, @NotNull String passwordHash) {
-        AuthenticateResponse response = this.accountFacade.authenticate(login, passwordHash);
+    public void updateIncorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws Exception {
+        this.accountFacade.updateAuthenticateInfo(login, IpAddr, time, false);
+    }
 
-        if (response.getResponseStatus() == Response.Status.OK) {
-            HashMap map = new HashMap();
-            map.put(response.getAccount().getLogin(), response.getAccount().getAccessLevels());
-            String token = JWTHandler.createToken(map, response.getAccount().getId().toString());
-            response.setToken(token);
-        }
-        return response;
+    @Override
+    public String updateCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws Exception {
+        Account account = this.accountFacade.updateAuthenticateInfo(login, IpAddr, time, true);
+
+        Map<String, Object> map = Map.of("login", login, "accessLevels", account.getAccessLevels());
+        return JWTHandler.createToken(map, account.getId().toString());
     }
 }
