@@ -1,6 +1,8 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 
@@ -26,7 +28,11 @@ public interface AccountEndpointLocal {
      */
     void createBusinessWorkerAccount(BusinessWorkerForRegistrationDto businessWorkerForRegistrationDto);
 
-    void grantModeratorAccessLevel(String accountLogin) throws BaseAppException;
+    AccountDto grantModeratorAccessLevel(String accountLogin) throws BaseAppException;
 
-    void grantAdministratorAccessLevel(String accountLogin) throws BaseAppException;
+    AccountDto grantAdministratorAccessLevel(String accountLogin) throws BaseAppException;
+
+
+    /////
+    AccountDto getAccountByLogin(String login) throws BaseAppException;
 }

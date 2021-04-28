@@ -12,8 +12,10 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AccountManagerException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.CompanyFacadeMok;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.mappers.AccountMapper;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
@@ -58,7 +60,7 @@ public class AccountManager implements AccountManagerLocal {
 
     //todo implement @RolesAllowed
     @Override
-    public void grantModeratorAccessLevel(String accountLogin) throws BaseAppException {
+    public AccountDto grantModeratorAccessLevel(String accountLogin) throws BaseAppException {
         Account account;
         try {
             account = accountFacade.findByLogin(accountLogin);
@@ -71,11 +73,13 @@ public class AccountManager implements AccountManagerLocal {
 
         Moderator moderator = new Moderator(true);
         setAccessLevelInitialMetadata(account, moderator, false);
+
+        return AccountMapper.toAccountDto(account);
     }
 
     //todo implement @RolesAllowed
     @Override
-    public void grantAdministratorAccessLevel(String accountLogin) throws BaseAppException {
+    public AccountDto grantAdministratorAccessLevel(String accountLogin) throws BaseAppException {
         Account account;
         try {
             account = accountFacade.findByLogin(accountLogin);
@@ -88,6 +92,8 @@ public class AccountManager implements AccountManagerLocal {
 
         Administrator administrator = new Administrator(true);
         setAccessLevelInitialMetadata(account, administrator, false);
+
+        return AccountMapper.toAccountDto(account);
     }
 
     private void setAccessLevelInitialMetadata(Account account, AccessLevel accessLevel, boolean newAccount) {
@@ -112,6 +118,11 @@ public class AccountManager implements AccountManagerLocal {
             account.setLastAlterDateTime(LocalDateTime.now());
         }
         account.setAlteredBy(account);
+    }
+
+    /////////
+    public AccountDto getAccountByLogin(String login) throws BaseAppException {
+        return AccountMapper.toAccountDto(accountFacade.findByLogin(login));
     }
 
 }

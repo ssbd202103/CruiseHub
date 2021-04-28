@@ -1,7 +1,10 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AccountManagerException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.AccountEndpointLocal;
@@ -56,24 +59,36 @@ public class AccountController {
         accountEndpoint.createBusinessWorkerAccount(businessWorkerForRegistrationDto);
     }
 
-    @ETagFilterBinding
+    //    @ETagFilterBinding
     @PUT
-    @Path("account/grantAccessLevel/{login}/{accessLevel}")
+    @Path("/{login}/grantAccessLevel/{accessLevel}")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response grantAccessLevel(@PathParam("login") @Login String accountLogin, @PathParam("accessLevel") String accessLevel) throws BaseAppException {
         if (Arrays.stream(AccessLevelType.values()).noneMatch(accessLevelType -> accessLevelType.name().equalsIgnoreCase(accessLevel))) {
             return Response.status(400).entity(ACCESS_LEVEL_DOES_NOT_EXIST_ERROR).build();
         }
 
-        if (accessLevel.toLowerCase().equalsIgnoreCase(AccessLevelType.ADMINISTRATOR.name())) {
-            accountEndpoint.grantAdministratorAccessLevel(accountLogin);
-            return Response.noContent().build();
-        }
+        try {
+            if (accessLevel.toLowerCase().equalsIgnoreCase(AccessLevelType.ADMINISTRATOR.name())) {
+                AccountDto account = accountEndpoint.grantAdministratorAccessLevel(accountLogin);
+                return Response.ok().entity(account).build();
+            }
 
-        if (accessLevel.toLowerCase().equalsIgnoreCase(AccessLevelType.MODERATOR.name())) {
-            accountEndpoint.grantModeratorAccessLevel(accountLogin);
-            return Response.noContent().build();
+            if (accessLevel.toLowerCase().equalsIgnoreCase(AccessLevelType.MODERATOR.name())) {
+                AccountDto account = accountEndpoint.grantModeratorAccessLevel(accountLogin);
+                return Response.ok().entity(account).build();
+            }
+        } catch (AccountManagerException e) {
+            return Response.status(400).entity(e.getMessage()).build();
         }
 
         return Response.status(400).entity(ACCESS_LEVEL_NOT_ASSIGNABLE_ERROR).build();
+    }
+
+    @GET
+    @Path("/{login}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public AccountDto getAccountByLogin(@PathParam("login") @Login String login) throws BaseAppException {
+        return accountEndpoint.getAccountByLogin(login);
     }
 }

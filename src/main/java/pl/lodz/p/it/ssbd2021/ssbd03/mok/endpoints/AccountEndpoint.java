@@ -4,6 +4,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters.AccountMapper;
@@ -36,12 +37,17 @@ public class AccountEndpoint implements AccountEndpointLocal {
     }
 
     @Override
-    public void grantModeratorAccessLevel(String accountLogin) throws BaseAppException {
-        accountManager.grantModeratorAccessLevel(accountLogin);
+    public AccountDto grantModeratorAccessLevel(String accountLogin) throws BaseAppException {
+        return accountManager.grantModeratorAccessLevel(accountLogin);
     }
 
     @Override
-    public void grantAdministratorAccessLevel(String accountLogin) throws BaseAppException {
-        accountManager.grantAdministratorAccessLevel(accountLogin);
+    public AccountDto grantAdministratorAccessLevel(String accountLogin) throws BaseAppException {
+        return accountManager.grantAdministratorAccessLevel(accountLogin);
+    }
+
+    @Override
+    public AccountDto getAccountByLogin(String login) throws BaseAppException {
+        return accountManager.getAccountByLogin(login);
     }
 }

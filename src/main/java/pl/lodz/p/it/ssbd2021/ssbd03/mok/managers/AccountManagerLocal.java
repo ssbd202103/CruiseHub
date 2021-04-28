@@ -8,6 +8,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 
 import javax.ejb.Local;
 
@@ -32,8 +33,10 @@ public interface AccountManagerLocal {
      */
     void createBusinessWorkerAccount(Account account, BusinessWorker businessWorker, String companyName);
 
-    void grantModeratorAccessLevel(String accountLogin) throws BaseAppException;
+    AccountDto grantModeratorAccessLevel(String accountLogin) throws BaseAppException;
 
-    void grantAdministratorAccessLevel(String accountLogin) throws BaseAppException;
+    AccountDto grantAdministratorAccessLevel(String accountLogin) throws BaseAppException;
+
+    AccountDto getAccountByLogin(String login) throws BaseAppException;
 
 }
