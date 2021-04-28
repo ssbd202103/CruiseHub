@@ -15,6 +15,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.CompanyFacade;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
+import java.time.LocalDateTime;
 
 /**
  * Klasa która zarządza logiką biznesową kont
@@ -120,5 +121,9 @@ public class AccountManager implements AccountManagerLocal {
         Account account = accountFacade.findByLogin(login);
         account.setVersion(version);
         account.setEmail(newEmail);
+
+        account.setLastAlterDateTime(LocalDateTime.now());
+        account.setAlteredBy(account);
+        account.setAlterType(account.getAlterType());
     }
 }
