@@ -91,6 +91,11 @@ public class AccountController {
         accountEndpoint.changeEmail(accountChangeEmailDto);
     }
 
+    /**
+     * Zmień dane konta klienta
+     *
+     * @param clientChangeDataDto obiekt dto z nowymi danymi
+     */
     @PUT
     @Path("/client/changedata")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -98,6 +103,11 @@ public class AccountController {
         accountEndpoint.changeClientData(clientChangeDataDto);
     }
 
+    /**
+     * Zmień dane konta pracownika firmy
+     *
+     * @param businessWorkerChangeDataDto obiekt dto z nowymi danymi
+     */
     @PUT
     @Path("/businessworker/changedata")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -105,6 +115,11 @@ public class AccountController {
         accountEndpoint.changeBusinessWorkerData(businessWorkerChangeDataDto);
     }
 
+    /**
+     * Zmień dane konta moderatora
+     *
+     * @param moderatorChangeDataDto obiekt dto z nowymi danymi
+     */
     @PUT
     @Path("/moderator/changedata")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -112,6 +127,11 @@ public class AccountController {
         accountEndpoint.changeModeratorData(moderatorChangeDataDto);
     }
 
+    /**
+     * Zmień dane konta administratora
+     *
+     * @param administratorChangeDataDto obiekt dto z nowymi danymi
+     */
     @PUT
     @Path("/administrator/changedata")
     @Consumes(MediaType.APPLICATION_JSON)
