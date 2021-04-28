@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-public class AccountDto  {
+public class AccountDto implements SignableEntity {
     @Login
     private String login;
 
@@ -36,6 +37,14 @@ public class AccountDto  {
 
     @NotNull
     private Set<AccessLevelType> accessLevels;
+
+    private Long version;
+
+    @JsonIgnore
+    @Override
+    public String getSignablePayload() {
+        return login + "." + version;
+    }
 }
 
 

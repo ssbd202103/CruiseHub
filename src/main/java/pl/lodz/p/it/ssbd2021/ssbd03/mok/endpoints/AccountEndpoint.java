@@ -1,17 +1,24 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.EndpointException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters.AccountMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.managers.AccountManagerLocal;
+import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
+import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
+
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ACCESS_LEVEL_NOT_ASSIGNABLE_ERROR;
 
 /**
  * Klasa która zajmuje się growadzeniem zmapowanych obiektów klas Dto na obiekty klas modelu związanych z kontami użytkowników i poziomami dostępu, oraz wywołuje metody logiki przekazując zmapowane obiekty.
@@ -37,17 +44,28 @@ public class AccountEndpoint implements AccountEndpointLocal {
     }
 
     @Override
-    public AccountDto grantModeratorAccessLevel(String accountLogin) throws BaseAppException {
-        return accountManager.grantModeratorAccessLevel(accountLogin);
+    public AccountDto grantAccessLevel(GrantAccessLevelDto grantAccessLevelDto) throws BaseAppException {
+        if (grantAccessLevelDto.getAccessLevel().equals(AccessLevelType.MODERATOR)) {
+            return AccountMapper.toAccountDto(
+                    accountManager.grantModeratorAccessLevel(grantAccessLevelDto.getAccountLogin(), grantAccessLevelDto.getAccountVersion())
+            );
+        }
+
+        if (grantAccessLevelDto.getAccessLevel().equals(AccessLevelType.ADMINISTRATOR)) {
+            return AccountMapper.toAccountDto(
+                    accountManager.grantAdministratorAccessLevel(grantAccessLevelDto.getAccountLogin(), grantAccessLevelDto.getAccountVersion())
+            );
+        }
+        throw new EndpointException(ACCESS_LEVEL_NOT_ASSIGNABLE_ERROR);
     }
 
     @Override
-    public AccountDto grantAdministratorAccessLevel(String accountLogin) throws BaseAppException {
-        return accountManager.grantAdministratorAccessLevel(accountLogin);
+    public String getETagFromSignableEntity(SignableEntity entity) throws BaseAppException {
+        return EntityIdentitySignerVerifier.calculateEntitySignature(entity);
     }
 
     @Override
     public AccountDto getAccountByLogin(String login) throws BaseAppException {
-        return accountManager.getAccountByLogin(login);
+        return AccountMapper.toAccountDto(accountManager.getAccountByLogin(login));
     }
 }

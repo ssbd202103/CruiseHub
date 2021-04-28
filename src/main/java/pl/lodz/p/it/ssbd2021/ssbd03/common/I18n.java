@@ -1,5 +1,8 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.common;
 
+/**
+ * Klasa agregująca wartości Stringów poddawane internacjonalizacji, używane w backendzie aplikacji
+ */
 public class I18n {
     public static final String NO_SUCH_ELEMENT_ERROR = "error.facade.noSuchElement";
     public static final String ACCESS_LEVEL_ALREADY_ASSIGNED_ERROR = "error.account.accessLevels.alreadyAssigned";

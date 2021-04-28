@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.testModel.mok.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -37,6 +38,6 @@ public class TestAccountDto implements SignableEntity {
 
     @Override
     public String getSignablePayload() {
-        return email ;
+        return email;
     }
 }

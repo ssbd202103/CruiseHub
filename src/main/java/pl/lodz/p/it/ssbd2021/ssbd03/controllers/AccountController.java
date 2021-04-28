@@ -1,10 +1,8 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AccountManagerException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.AccountEndpointLocal;
@@ -18,11 +16,9 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.Arrays;
 
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ACCESS_LEVEL_DOES_NOT_EXIST_ERROR;
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ACCESS_LEVEL_NOT_ASSIGNABLE_ERROR;
+import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 
 
 /**
@@ -35,6 +31,26 @@ public class AccountController {
     @EJB
     private AccountEndpointLocal accountEndpoint;
 
+    /**
+     * Pobiera użytkownika po loginie oraz tworzy ETaga na jego podstawie
+     *
+     * @param login użytkownika
+     * @return Odpowiedź serwera z reprezentacją JSON obiektu użytkownika
+     * oraz nagłówkiem ETag wygenerowanym na podstawie obiektu
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
+    @GET
+    @Path("/{login}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAccountByLogin(@PathParam("login") @Login String login) throws BaseAppException {
+        try {
+            AccountDto account = accountEndpoint.getAccountByLogin(login);
+            String ETag = accountEndpoint.getETagFromSignableEntity(account);
+            return Response.ok().entity(account).header("ETag", ETag).build();
+        } catch (BaseAppException e) {
+            return Response.status(NOT_FOUND).entity(e.getMessage()).build();
+        }
+    }
 
     /**
      * Stwórz nowe konto z poziomem dostępu Klient
@@ -60,36 +76,26 @@ public class AccountController {
         accountEndpoint.createBusinessWorkerAccount(businessWorkerForRegistrationDto);
     }
 
+    /**
+     * Dodaj poziom dostępu do istniejącego konta
+     *
+     * @param grantAccessLevel Obiekt przesyłowy danych potrzebnych do nadania poziomu dostępu
+     * @return Odpowiedź serwera w postaci JSON
+     * @throws BaseAppException bazowy wyjątek aplikacji
+     */
     @ETagFilterBinding
     @PUT
-    @Path("/{login}/grantAccessLevel/{accessLevel}")
+    @Path("/grantAccessLevel")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response grantAccessLevel(@PathParam("login") @Login String accountLogin, @PathParam("accessLevel") String accessLevel) throws BaseAppException {
-        if (Arrays.stream(AccessLevelType.values()).noneMatch(accessLevelType -> accessLevelType.name().equalsIgnoreCase(accessLevel))) {
-            return Response.status(BAD_REQUEST).entity(ACCESS_LEVEL_DOES_NOT_EXIST_ERROR).build();
-        }
+    public Response grantAccessLevel(GrantAccessLevelDto grantAccessLevel) throws BaseAppException {
 
         try {
-            if (accessLevel.toLowerCase().equalsIgnoreCase(AccessLevelType.ADMINISTRATOR.name())) {
-                AccountDto account = accountEndpoint.grantAdministratorAccessLevel(accountLogin);
-                return Response.ok().entity(account).build();
-            }
+            AccountDto account = accountEndpoint.grantAccessLevel(grantAccessLevel);
+            return Response.ok().entity(account).build();
 
-            if (accessLevel.toLowerCase().equalsIgnoreCase(AccessLevelType.MODERATOR.name())) {
-                AccountDto account = accountEndpoint.grantModeratorAccessLevel(accountLogin);
-                return Response.ok().entity(account).build();
-            }
-        } catch (AccountManagerException e) {
+        } catch (BaseAppException e) {
             return Response.status(BAD_REQUEST).entity(e.getMessage()).build();
         }
-
-        return Response.status(BAD_REQUEST).entity(ACCESS_LEVEL_NOT_ASSIGNABLE_ERROR).build();
-    }
-
-    @GET
-    @Path("/{login}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public AccountDto getAccountByLogin(@PathParam("login") @Login String login) throws BaseAppException {
-        return accountEndpoint.getAccountByLogin(login);
     }
 }

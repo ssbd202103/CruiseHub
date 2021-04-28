@@ -12,10 +12,8 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AccountManagerException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.CompanyFacadeMok;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.mappers.AccountMapper;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
@@ -34,6 +32,11 @@ public class AccountManager implements AccountManagerLocal {
 
     @EJB
     private CompanyFacadeMok companyFacadeMok;
+
+    @Override
+    public Account getAccountByLogin(String login) throws BaseAppException {
+        return accountFacade.findByLogin(login);
+    }
 
     @Override
     public void createClientAccount(Account account, Client client) {
@@ -58,12 +61,12 @@ public class AccountManager implements AccountManagerLocal {
         this.accountFacade.create(account);
     }
 
-    //todo implement @RolesAllowed
     @Override
-    public AccountDto grantModeratorAccessLevel(String accountLogin) throws BaseAppException {
+    public Account grantModeratorAccessLevel(String accountLogin, Long accountVersion) throws BaseAppException {
         Account account;
         try {
             account = accountFacade.findByLogin(accountLogin);
+            account.setVersion(accountVersion); //to assure optimistic lock mechanism
             if (account.getAccessLevels().stream().anyMatch(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.MODERATOR)) {
                 throw new AccountManagerException(ACCESS_LEVEL_ALREADY_ASSIGNED_ERROR);
             }
@@ -74,15 +77,15 @@ public class AccountManager implements AccountManagerLocal {
         Moderator moderator = new Moderator(true);
         setAccessLevelInitialMetadata(account, moderator, false);
 
-        return AccountMapper.toAccountDto(account);
+        return account;
     }
 
-    //todo implement @RolesAllowed
     @Override
-    public AccountDto grantAdministratorAccessLevel(String accountLogin) throws BaseAppException {
+    public Account grantAdministratorAccessLevel(String accountLogin, Long accountVersion) throws BaseAppException {
         Account account;
         try {
             account = accountFacade.findByLogin(accountLogin);
+            account.setVersion(accountVersion); //to assure optimistic lock mechanism
             if (account.getAccessLevels().stream().anyMatch(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.ADMINISTRATOR)) {
                 throw new AccountManagerException(ACCESS_LEVEL_ALREADY_ASSIGNED_ERROR);
             }
@@ -93,7 +96,7 @@ public class AccountManager implements AccountManagerLocal {
         Administrator administrator = new Administrator(true);
         setAccessLevelInitialMetadata(account, administrator, false);
 
-        return AccountMapper.toAccountDto(account);
+        return account;
     }
 
     private void setAccessLevelInitialMetadata(Account account, AccessLevel accessLevel, boolean newAccount) {
@@ -118,11 +121,6 @@ public class AccountManager implements AccountManagerLocal {
             account.setLastAlterDateTime(LocalDateTime.now());
         }
         account.setAlteredBy(account);
-    }
-
-    /////////
-    public AccountDto getAccountByLogin(String login) throws BaseAppException {
-        return AccountMapper.toAccountDto(accountFacade.findByLogin(login));
     }
 
 }

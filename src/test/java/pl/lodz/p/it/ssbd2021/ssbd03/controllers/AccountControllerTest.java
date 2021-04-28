@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.Test;
@@ -9,10 +10,10 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AddressDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
-import pl.lodz.p.it.ssbd2021.ssbd03.testModel.mok.dto.TestAccountDto;
 
 import java.util.Set;
 
@@ -40,7 +41,7 @@ class AccountControllerTest {
 
     @Test
     public void registerBusinessWorkerTest_SUCCESS() {
-        BusinessWorkerForRegistrationDto businessWorker = new BusinessWorkerForRegistrationDto("Artur", "Radiuk", "aradiuk", "aradiuk@gmail.com",
+        BusinessWorkerForRegistrationDto businessWorker = new BusinessWorkerForRegistrationDto("Artur", "Radiuk", randomAlphanumeric(15), "aradiuk@gmail.com",
                 "123456789", LanguageType.ENG, "123456789", "FirmaJez");
         given().baseUri(baseUri).contentType("application/json").body(businessWorker).when().post("businessworker/registration").then().statusCode(204);
         // todo implement remove method to clean created data
@@ -50,12 +51,14 @@ class AccountControllerTest {
     void grantAccessLevelTest_SUCCESS() throws JsonProcessingException {
         ClientForRegistrationDto client = getSampleClientForRegistrationDto();
         AccountDto account = registerClientAndGetAccountDto(client);
-        String etag = getEtagForAccountDto(account);
+        String etag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
 
         Set<AccessLevelType> originalAccessLevels = account.getAccessLevels();
         assertThat(originalAccessLevels).doesNotContain(AccessLevelType.MODERATOR);
 
-        Response response = getBaseUriETagRequest(etag).put("/" + account.getLogin() + "/grantAccessLevel/moderator");
+        GrantAccessLevelDto grantAccessLevel = new GrantAccessLevelDto(account.getLogin(), AccessLevelType.MODERATOR, account.getVersion());
+
+        Response response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).body(grantAccessLevel).put("/grantAccessLevel");
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         AccountDto updatedAccount = objectMapper.readValue(response.asString(), AccountDto.class);
@@ -67,30 +70,31 @@ class AccountControllerTest {
     void grantAccessLevelTest_FAIL() throws JsonProcessingException {
         ClientForRegistrationDto client = getSampleClientForRegistrationDto();
         AccountDto account = registerClientAndGetAccountDto(client);
-        String etag = getEtagForAccountDto(account);
+        GrantAccessLevelDto grantAccessLevel = new GrantAccessLevelDto(account.getLogin(), AccessLevelType.MODERATOR, account.getVersion());
+        String etag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
 
         // requesting granting accessLevel with no ETAG
-        Response response = given().baseUri(baseUri).put("/" + account.getLogin() + "/grantAccessLevel/moderator");
+        Response response = given().baseUri(baseUri).contentType(ContentType.JSON).body(grantAccessLevel).put("/grantAccessLevel");
         assertThat(response.getStatusCode()).isEqualTo(400);
         assertThat(response.asString()).isEqualTo(ETAG_EMPTY_ERROR);
 
-        // requesting granting not existing accessLevel
-        response = getBaseUriETagRequest(etag).put("/" + account.getLogin() + "/grantAccessLevel/SuperProUser");
-        assertThat(response.getStatusCode()).isEqualTo(400);
-        assertThat(response.asString()).isEqualTo(ACCESS_LEVEL_DOES_NOT_EXIST_ERROR);
-
         // requesting granting already assigned accessLevel
-        response = getBaseUriETagRequest(etag).put("/" + account.getLogin() + "/grantAccessLevel/moderator");
+        response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).body(grantAccessLevel).put("/grantAccessLevel");
         assertThat(response.getStatusCode()).isEqualTo(200);
 
-        response = getBaseUriETagRequest(etag).put("/" + account.getLogin() + "/grantAccessLevel/moderator");
+
+        response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).body(grantAccessLevel).put("/grantAccessLevel");
         assertThat(response.getStatusCode()).isEqualTo(400);
         assertThat(response.asString()).isEqualTo(ACCESS_LEVEL_ALREADY_ASSIGNED_ERROR);
 
         // requesting granting not assignable accessLevel
-        response = getBaseUriETagRequest(etag).put("/" + account.getLogin() + "/grantAccessLevel/business_Worker");
+        grantAccessLevel.setAccessLevel(AccessLevelType.BUSINESS_WORKER);
+
+        response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).body(grantAccessLevel).put("/grantAccessLevel");
         assertThat(response.getStatusCode()).isEqualTo(400);
         assertThat(response.asString()).isEqualTo(ACCESS_LEVEL_NOT_ASSIGNABLE_ERROR);
+
+        // todo check for optimistic lock once working mechanism is implemented correctly
         // todo implement remove method to clean created data
     }
 
@@ -98,7 +102,6 @@ class AccountControllerTest {
         AddressDto address = new AddressDto(1L, "Bortnyka", "30-302", "Pluzhne", "Ukraine");
         return new ClientForRegistrationDto("Artur", "Radiuk", randomAlphanumeric(15), "aradiuk@gmail.com",
                 "123456789", LanguageType.PL, address, "123456789");
-
     }
 
     private AccountDto registerClientAndGetAccountDto(ClientForRegistrationDto client) throws JsonProcessingException {
@@ -110,15 +113,7 @@ class AccountControllerTest {
         return objectMapper.readValue(given().baseUri(baseUri).get("/" + login).thenReturn().asString(), AccountDto.class);
     }
 
-    private String getEtagForAccountDto(AccountDto account) {
-        return EntityIdentitySignerVerifier.calculateEntitySignature(
-                new TestAccountDto(account.getLogin(), account.getFirstName(), account.getSecondName(),
-                        account.getEmail(), account.getLanguageType(), account.getAccessLevels())
-        );
-    }
-
     private RequestSpecification getBaseUriETagRequest(String etag) {
         return given().baseUri(baseUri).header("If-Match", etag);
     }
-
 }
