@@ -45,7 +45,9 @@ create table accounts
     CONSTRAINT accounts_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
     CONSTRAINT accounts_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id),
     CONSTRAINT accounts_alter_type_id_fk_constraint FOREIGN KEY (alter_type_id) REFERENCES alter_types (id),
-    CONSTRAINT accounts_number_of_authentication_failures_check CHECK (number_of_authentication_failures >= 0)
+    CONSTRAINT accounts_number_of_authentication_failures_check CHECK (number_of_authentication_failures >= 0),
+    CONSTRAINT accounts_login_unique_constraint UNIQUE (login),
+    CONSTRAINT accounts_email_unique_constraint UNIQUE (email)
 );
 
 create sequence account_id_seq
