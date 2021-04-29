@@ -2,6 +2,8 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.facades;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.LanguageTypeWrapper;
 
@@ -9,13 +11,13 @@ import javax.ejb.Stateful;
 import javax.persistence.*;
 
 @Stateful
-public class AccountFacade extends AbstractFacade<Object> {
+public class AccountFacade extends AbstractFacade<Account> {
 
     @PersistenceContext(unitName = "ssbd03mokPU")
     private EntityManager em;
 
     public AccountFacade() {
-        super(Object.class);
+        super(Account.class);
     }
 
     @Override
@@ -42,4 +44,6 @@ public class AccountFacade extends AbstractFacade<Object> {
 
         updateQuery.getSingleResult();
     }
+
+
 }

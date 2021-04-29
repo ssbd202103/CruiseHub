@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.IdDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
@@ -12,6 +13,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 
 /**
@@ -47,6 +49,19 @@ public class AccountController {
     public void createBusinessWorker(@Valid @NotNull BusinessWorkerForRegistrationDto businessWorkerForRegistrationDto) {
         accountEndpoint.createBusinessWorkerAccount(businessWorkerForRegistrationDto);
     }
+
+    /**
+     * Pobierz informacje o wszystkich kontach
+     *
+     * @return lista kont
+     */
+    @GET
+    @Path("/accounts")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<AccountDto> getAllAccounts() {
+        return accountEndpoint.getAllAccounts();
+    }
+
 
     @POST
     @Path("/block/{id}")

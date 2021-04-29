@@ -7,8 +7,10 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Administrator;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 
 import javax.ejb.Local;
+import java.util.List;
 
 /**
  * Klasa która zarządza logiką biznesową kont
@@ -36,4 +38,12 @@ public interface AccountManagerLocal {
      * @param id ID użytkownika
      */
     void blockUser(long id);
+
+
+    /**
+     * Pobiera liste kont z bazy danych
+     *
+     * @return lista kont
+     */
+    List<Account> getAllAccounts();
 }

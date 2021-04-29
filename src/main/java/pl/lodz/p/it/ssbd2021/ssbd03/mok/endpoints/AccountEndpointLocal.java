@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.IdDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
@@ -7,6 +8,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDt
 import javax.ejb.Local;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 
 /**
@@ -27,6 +29,15 @@ public interface AccountEndpointLocal {
      * @param businessWorkerForRegistrationDto obiekt klasy dto która przechowuje wszystkie niezbędne pola do stworzenia nowego konta użytkownika z przypisanym poziomem dostępu Pracownik Firmy
      */
     void createBusinessWorkerAccount(BusinessWorkerForRegistrationDto businessWorkerForRegistrationDto);
+
+
+    /**
+     * Mapuje obiety kont dto na obiekty modelu
+     *
+     * @return obiekty kont dto
+     */
+    List<AccountDto> getAllAccounts();
+
 
     /**
      * Metoda odpowiedzialna za wywołanie metody odpowiedzialnej za blokowanie użytkownika
