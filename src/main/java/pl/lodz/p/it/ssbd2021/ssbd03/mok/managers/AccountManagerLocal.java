@@ -54,7 +54,7 @@ public interface AccountManagerLocal {
      * @param IpAddr Adres IP użytkownika
      * @param time Czas
      */
-    void updateIncorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws Exception;
+    void updateIncorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time);
 
     /**
      * Metoda odpowiedzialna za edycję pól w bazie danych w przypadku poprawnego logowania.
@@ -63,5 +63,5 @@ public interface AccountManagerLocal {
      * @param time Czas
      * @return Token JWT
      */
-    String updateCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws Exception;
+    String updateCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time);
 }

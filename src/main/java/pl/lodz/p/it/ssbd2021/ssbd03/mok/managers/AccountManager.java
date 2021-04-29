@@ -10,6 +10,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacade;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.mappers.AccountMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.JWTHandler;
 
 import javax.ejb.EJB;
@@ -113,15 +114,15 @@ public class AccountManager implements AccountManagerLocal {
     }
 
     @Override
-    public void updateIncorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws Exception {
+    public void updateIncorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) {
         this.accountFacade.updateAuthenticateInfo(login, IpAddr, time, false);
     }
 
     @Override
-    public String updateCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws Exception {
+    public String updateCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) {
         Account account = this.accountFacade.updateAuthenticateInfo(login, IpAddr, time, true);
 
-        Map<String, Object> map = Map.of("login", login, "accessLevels", account.getAccessLevels());
+        Map<String, Object> map = Map.of("login", login, "accessLevels", AccountMapper.toAccountDto(account).getAccessLevels().toString());
         return JWTHandler.createToken(map, account.getId().toString());
     }
 }

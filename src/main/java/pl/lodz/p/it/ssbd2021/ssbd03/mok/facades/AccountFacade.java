@@ -5,7 +5,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.LanguageTypeWrapper;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AccountBlockedOrNotConfirmed;
 
 import javax.ejb.Stateless;
 import javax.persistence.*;
@@ -38,14 +37,10 @@ public class AccountFacade extends AbstractFacade<Account> {
         return tq.getSingleResult();
     }
 
-    public Account updateAuthenticateInfo(String login, String ipAddr, LocalDateTime time, boolean isAuthValid) throws Exception {
+    public Account updateAuthenticateInfo(String login, String ipAddr, LocalDateTime time, boolean isAuthValid) {
         TypedQuery<Account> tq = em.createNamedQuery("Account.findByLogin", Account.class);
         tq.setParameter("login", login);
         Account account = tq.getSingleResult();
-
-        if (!account.isActive() || !account.isConfirmed()) {
-            throw new AccountBlockedOrNotConfirmed();
-        }
 
         if (isAuthValid) {
             account.setLastCorrectAuthenticationDateTime(time);
@@ -53,11 +48,6 @@ public class AccountFacade extends AbstractFacade<Account> {
         } else {
             account.setLastIncorrectAuthenticationDateTime(time);
             account.setLastIncorrectAuthenticationLogicalAddress(ipAddr);
-        }
-        try {
-            super.edit(account);
-        } catch (Exception e) {
-            throw new Exception(e);
         }
 
         return account;

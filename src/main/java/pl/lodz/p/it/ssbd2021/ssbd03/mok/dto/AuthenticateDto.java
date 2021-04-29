@@ -1,8 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 
 import javax.security.enterprise.credential.Credential;
@@ -10,8 +8,8 @@ import javax.security.enterprise.credential.UsernamePasswordCredential;
 import javax.validation.constraints.NotNull;
 
 @AllArgsConstructor
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
 public class AuthenticateDto {
     @NotNull
     @Login

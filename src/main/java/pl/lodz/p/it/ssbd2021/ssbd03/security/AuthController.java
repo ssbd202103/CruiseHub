@@ -1,11 +1,12 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.security;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AccountBlockedOrNotConfirmed;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AuthUnauthorized;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AuthenticateDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.AuthenticateEndpointLocal;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.security.enterprise.credential.Credential;
 import javax.security.enterprise.identitystore.CredentialValidationResult;
 import javax.security.enterprise.identitystore.IdentityStoreHandler;
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +25,7 @@ import java.time.LocalDateTime;
  * Klasa udostępniająca API do logowania
  */
 @Path("/signin")
+@RequestScoped
 public class AuthController {
 
     @Inject
@@ -40,35 +42,22 @@ public class AuthController {
      * @param auth Login oraz hasło użytkownika
      * @return Token JWT
      */
+    @Path("/auth")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response auth(@Valid @NotNull AuthenticateDto auth) throws Exception {
-        CredentialValidationResult result = identityStoreHandler.validate(auth.toCredential());
+        Credential fiut = auth.toCredential();
+        CredentialValidationResult result = identityStoreHandler.validate(fiut);
         String token;
 
         if (result.getStatus() != CredentialValidationResult.Status.VALID) {
             authEndpoint.updateIncorrectAuthenticateInfo(auth.getLogin(), httpServletRequest.getRemoteAddr(), LocalDateTime.now());
             return Response.status(Response.Status.UNAUTHORIZED)
-                .entity(new AuthUnauthorized("Unauthorized"))
-                .build();
-        }
-        try {
-            token = authEndpoint.updateCorrectAuthenticateInfo(auth.getLogin(), httpServletRequest.getRemoteAddr(), LocalDateTime.now());
-        }
-        catch (Exception e) {
-            return Response
-                .status(Response.Status.FORBIDDEN)
-                .entity(new AccountBlockedOrNotConfirmed((e.getMessage())))
                 .build();
         }
 
-        if (token.isEmpty()) {
-            return Response
-                .status(Response.Status.FORBIDDEN)
-                .entity(new AccountBlockedOrNotConfirmed())
-                .build();
-        }
+        token = authEndpoint.updateCorrectAuthenticateInfo(auth.getLogin(), httpServletRequest.getRemoteAddr(), LocalDateTime.now());
 
         return Response.ok()
             .entity(token)
