@@ -1,6 +1,8 @@
-import {Checkbox, FormControlLabel, FormGroup} from "@material-ui/core";
+import {Checkbox, FormControlLabel, FormGroup, Box} from "@material-ui/core";
+import {Link} from 'react-router-dom';
 import React from "react";
 import {useTranslation} from 'react-i18next'
+import RoundedButton from '../../../components/RoundedButton'
 
 
 export default function Checkboxes() {
@@ -38,6 +40,16 @@ export default function Checkboxes() {
                     />
 
                 </FormGroup>
+                <Box style={{marginTop: 16}}>
+                    <RoundedButton color="blue" style={{marginRight: 16}}>
+                        {t("confirm")}
+                    </RoundedButton>
+                    <Link to="/panels/adminPanel/accounts">
+                        <RoundedButton color="pink">
+                            {t("go back")}
+                        </RoundedButton>
+                    </Link>
+                </Box>
             </div>
     )
 }

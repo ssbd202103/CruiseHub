@@ -1,36 +1,79 @@
 import {useTranslation} from 'react-i18next'
 import {useState} from 'react'
-import Button from "@material-ui/core/Button";
+
 import ManageAccount from "./common/ManageAccount"
-import {ListItem, ListItemText} from "@material-ui/core";
+import {
+    Grid,
+    List,
+    ListItem, 
+    ListItemIcon,
+    ListItemText
+} from "@material-ui/core";
+
+import {
+    Route,
+    Link,
+    Redirect
+} from 'react-router-dom'
+
+import SettingsIcon from '@material-ui/icons/SettingsRounded'
+import CruiseIcon from '@material-ui/icons/CardTravelRounded'
+import GoBackIcon from '@material-ui/icons/ArrowBackRounded'
+
+import PanelMenu from '../../components/PanelMenu'
+import RoundedButton from '../../components/RoundedButton'
+
+import styles from '../../styles/workerPanel.module.css'
 
 export default function WorkerPanel() {
     const {t} = useTranslation()
 
-    const [manageAccount, setManage] = useState(true)
-    const handleManageAccount = () => {
-        setManage(state => !state)
-    }
     return (
-        <div>
-            <header>
-                <h1>{t('worker panel')}</h1>
-            </header>
-            <div>
-                <ListItem button  onClick={handleManageAccount}>
-                    <ListItemText primary={t("manage account")} />
-                </ListItem>
-            </div>
+        <Grid container className={styles.wrapper}>
+            <Redirect to="/panels/workerPanel/cruises" />
+            <Grid item xs={2} md={3}>
+                <PanelMenu color="green-dark">
+                    <List className={styles.menu} component="nav" aria-label="panel menu">
+                        <Link to="/panels/workerPanel/cruises">
+                            <ListItem button>
+                                <ListItemIcon>
+                                    <CruiseIcon style={{ fill: 'var(--white)' }} />
+                                </ListItemIcon>
+                                <ListItemText> {t("cruises")} </ListItemText>
+                            </ListItem>
+                        </Link>
+                        <Link to="/panels/workerPanel/settings">
+                            <ListItem button>
+                                <ListItemIcon>
+                                    <SettingsIcon style={{ fill: 'var(--white)' }} />
+                                </ListItemIcon>
+                                <ListItemText>{t("settings")}</ListItemText>
+                            </ListItem>
+                        </Link>
+                        <Link to="/">
+                            <ListItem button>
+                                <ListItemIcon>
+                                    <GoBackIcon style={{fill: 'var(--white)'}} />
+                                </ListItemIcon>
+                                <ListItemText>{t("go back")}</ListItemText>
+                            </ListItem>
+                        </Link>
+                    </List>
+                </PanelMenu>
+            </Grid>
 
-            <div style={{display: manageAccount ? "none" : "block"}}>
-                <ManageAccount/>
-            </div>
-
-            <div>
-                <Button variant="contained">
+            <Grid item className={styles.content} xs={10} md={9}>
+                <Route exact path="/panels/workerPanel/cruises">
+                    <div> {t("my cruises")} </div>
+                </Route>
+                <Route exact path="/panels/workerPanel/settings">
+                    <ManageAccount />
+                    <RoundedButton
+                        color="pink">
                     {t("logout")}
-                </Button>
-            </div>
-        </div>
+                    </RoundedButton>
+                </Route>
+            </Grid>
+        </Grid>
     )
 }

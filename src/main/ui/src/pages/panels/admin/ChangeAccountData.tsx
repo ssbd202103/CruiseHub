@@ -1,9 +1,14 @@
 import {useState} from 'react'
 
-import Box from '@material-ui/core/Box'
-import Button from "@material-ui/core/Button";
+import Grid from '@material-ui/core/Grid'
 
-import {useTranslation} from 'react-i18next'
+import {Link} from 'react-router-dom'
+
+import {useTranslation} from 'react-i18next';
+
+import styles from '../../../styles/ManageAccount.module.css'
+import RoundedButton from '../../../components/RoundedButton';
+import DarkedTextField from '../../../components/DarkedTextField';
 
 export default function ChangeAccountData() {
     const {t} = useTranslation()
@@ -12,9 +17,11 @@ export default function ChangeAccountData() {
     const [ChangAddress, setChangChangAddress] = useState(false)
     const [ChangEmail, setChangEmail] = useState(false)
 
-
+    //Functions for personal data change
     const handleChangePerData = () => {
         setPerData(state => !state)
+        setChangChangAddress( false)
+        setChangEmail( false)
     }
     const changePersonalData = () => {
         //Place for transfer function (change personal data in database)
@@ -24,6 +31,8 @@ export default function ChangeAccountData() {
     //Functions for address data change
     const handleChangAddress = () => {
         setChangChangAddress(state => !state)
+        setPerData(false)
+        setChangEmail(false)
     }
     const changeAddress = () => {
         //Place for transfer function (change address in database)
@@ -33,75 +42,161 @@ export default function ChangeAccountData() {
     //Functions for email data change
     const handleChangEmail = () => {
         setChangEmail(state => !state)
+        setPerData( false)
+        setChangChangAddress( false)
     }
     const changeEmail = () => {
         //Place for transfer function (change email in database)
         handleChangEmail()
     }
 
-
     return (
-        <Box>
-            <div>
-                <div style={{display: ChangePerData ? "none" : "block"}}>
+        <Grid container className={styles.wrapper}>
+                <Grid item style={{display: ChangePerData ? "none" : "block"}} className={styles.item}>
                     <h3>{t("personal data")}</h3>
-                    <h4>{t("name")}</h4><p>Michał</p>
-                    <h4>{t("surname")}</h4><p>Blazymur</p>
-                    <h4>{t("login")}</h4><p>BigMike</p>
-                    <h4>{t("phone number")}</h4><p>+48-767-765-456</p>
-                    <Button variant="contained"
+                    <div>
+                        <div>
+                            <h4>{t("name")}</h4>
+                            <p>Michał</p>
+                        </div>
+                        <div>                        
+                            <h4>{t("surname")}</h4>
+                            <p>Blazymur</p>
+                        </div>
+                        <div>                        
+                            <h4>{t("Login")}</h4>
+                            <p>BigMike</p>
+                        </div>
+                        <div>                                            
+                            <h4>{t("phone number")}</h4>
+                            <p>+48-767-765-456</p>
+                        </div>
+
+                        <RoundedButton 
+                            color="blue"
                             onClick={handleChangePerData}
-                    >{t("personal data change btn")}</Button>
-                </div>
-                <div style={{display: ChangePerData ? "block" : "none"}}>
+                        >{t("personal data change btn")}</RoundedButton>
+                    </div>
+                </Grid>
+
+                <Grid item style={{display: ChangePerData ? "block" : "none"}} className={styles['change-item']}>
                     <h3>{t("personal data change")}</h3>
-                    <input type="text" placeholder="Michał"/>
-                    <input type="text" placeholder="Blazymur"/>
-                    <input type="text" placeholder="BigMike"/>
-                    <input type="text" placeholder="+48-767-765-456"/>
-                    <Button variant="contained"
-                            onClick={changePersonalData}
-                    >{t("confirm")}</Button>
-                </div>
+                    <div>
+                        <DarkedTextField 
+                            type="text" 
+                            label={t("name")}
+                            placeholder="Michał" />
+                        <DarkedTextField 
+                            type="text" 
+                            label={t("surname")}
+                            placeholder="Blazymur"/>
+                        <DarkedTextField 
+                            type="text" 
+                            label="Login"
+                            placeholder="BigMike"/>
+                        <DarkedTextField 
+                            type="text" 
+                            label={t("phone")}
+                            placeholder="+48-767-765-456"/>
+                    </div>
+                    <RoundedButton color="blue"
+                                onClick={changePersonalData}
+                        >{t("confirm")}</RoundedButton>
+                </Grid>
 
-                <div style={{display: ChangAddress ? "none" : "block"}}>
+                <Grid item  style={{display: ChangAddress ? "none" : "block"}} className={styles.item}>
                     <h3>{t("address")}</h3>
-                    <h4>{t("street")}</h4><p>11-Listopada 28</p>
-                    <h4>{t("house number")}</h4><p>23</p>
-                    <h4>{t("postal code")}</h4><p>91-345</p>
-                    <h4>{t("city")}</h4><p>Zakopianka</p>
-                    <h4>{t("country")}</h4><p>Zanzibar</p>
-                    <Button variant="contained"
+                    <div>
+                        <div>
+                            <h4>{t("street")}</h4>
+                            <p>11-Listopada 28</p>
+                        </div>
+                        <div>
+                            <h4>{t("house number")}</h4>
+                            <p>23</p>
+                        </div>
+                        <div>
+                            <h4>{t("postal code")}</h4>
+                            <p>91-345</p>
+                        </div>
+                        <div>
+                            <h4>{t("city")}</h4>
+                            <p>Zakopianka</p>
+                        </div>
+                        <div>
+                            <h4>{t("country")}</h4>
+                            <p>Zanzibar</p>
+                        </div>
+                    <RoundedButton color="blue"
                             onClick={handleChangAddress}
-                    >{t("address change btn")}</Button>
-                </div>
-                <div style={{display: ChangAddress ? "block" : "none"}}>
+                    >{t("address change btn")}</RoundedButton>
+                    </div>
+                </Grid>
+                <Grid item  style={{display:ChangAddress  ? "block" : "none"}} className={styles['change-item']}>
                     <h3>{t("address change")}</h3>
-                    <input type="text" placeholder="11-Listopada 28"/>
-                    <input type="text" placeholder="23"/>
-                    <input type="text" placeholder="91-345"/>
-                    <input type="text" placeholder="Zakopianka"/>
-                    <input type="text" placeholder="Zanzibar"/>
-                    <Button variant="contained"
-                            onClick={changeAddress}
-                    >{t("confirm")}</Button>
-                </div>
+                    <div>
+                    <DarkedTextField 
+                        type="text" 
+                        label={t("street")}
+                        placeholder="11-Listopada 28" />
+                    <DarkedTextField 
+                        type="text" 
+                        label={t("house number")}
+                        placeholder="23" />
+                    <DarkedTextField 
+                        type="text" 
+                        label={t("postal code")}
+                        placeholder="91-345" />
+                    <DarkedTextField 
+                        type="text" 
+                        label={t("city")}
+                        placeholder="Zakopianka" />
+                    <DarkedTextField 
+                        type="text"
+                        label={t("country")} 
+                        placeholder="Zanzibar" />
+                    </div>
 
-                <div style={{display: ChangEmail ? "none" : "block"}}>
-                    <h4>{t("email")}</h4><p>BigMIke@gmail.com</p>
-                    <Button variant="contained"
+                    <RoundedButton 
+                        color="blue"
+                        onClick={changeAddress}
+                    >{t("confirm")}</RoundedButton>
+                </Grid>
+
+                <Grid item  style={{display: ChangEmail ? "none" : "block"}} className={styles.item}>
+                    <h3>{t("email")}</h3>
+                    <div>
+                        <p>BigMIke@gmail.com</p>
+                        <RoundedButton 
+                            color="blue"
                             onClick={handleChangEmail}
-                    >{t("email change btn")}</Button>
-                </div>
-                <div style={{display: ChangEmail ? "block" : "none"}}>
+                        >{t("email change btn")}</RoundedButton>
+                    </div>
+                </Grid>
+                <Grid item  style={{display: ChangEmail ? "block" : "none"}} className={styles['change-item']}>
                     <h3>{t("email change")}</h3>
-                    <input type="text" placeholder={t("new email")}/>
-                    <input type="text" placeholder={t("new email confirm")}/>
-                    <Button variant="contained"
-                            onClick={changeEmail}
-                    >{t("confirm")}</Button>
-                </div>
-            </div>
-        </Box>
+                    <div>
+                        <DarkedTextField 
+                            type="text"
+                            label={t("new email")} 
+                            placeholder={t("new email")} />
+                        <DarkedTextField 
+                            type="text" 
+                            label={t("new email confirm")}
+                            placeholder={t("new email confirm")} />
+                    </div>
+                    <RoundedButton 
+                        color="blue"
+                        onClick={changeEmail}
+                    >{t("confirm")}</RoundedButton>
+                </Grid>
+                <Grid item>
+                    <Link to="/panels/adminPanel/accounts">
+                        <RoundedButton color="pink">
+                            {t("go back")}
+                        </RoundedButton>
+                    </Link>
+                </Grid>
+        </Grid>
     )
 }
