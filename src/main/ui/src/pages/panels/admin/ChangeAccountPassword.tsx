@@ -1,19 +1,24 @@
 import {useState} from 'react'
 
-import Box from '@material-ui/core/Box'
-import Button from "@material-ui/core/Button";
+import Grid from '@material-ui/core/Grid'
+
+import {Link} from 'react-router-dom'
 
 import {useTranslation} from 'react-i18next'
+
+import styles from '../../../styles/ManageAccount.module.css'
+import RoundedButton from '../../../components/RoundedButton';
+import DarkedTextField from '../../../components/DarkedTextField';
 
 export default function ChangeAccountPassword() {
     const {t} = useTranslation()
 
     const [ChangPasswd, setChangPasswd] = useState(false)
 
-
     //Functions for password
     const handleChangPasswd = () => {
         setChangPasswd(state => !state)
+
     }
     const changePassword = () => {
         //Place for transfer function (change password in database)
@@ -21,22 +26,44 @@ export default function ChangeAccountPassword() {
     }
 
     return (
-        <Box>
-            <div style={{display: ChangPasswd ? "none" : "block"}}>
-                <h3>{t("password")}</h3>
-                <Button variant="contained"
-                        onClick={handleChangPasswd}
-                >{t("password change btn")}</Button>
-            </div>
-            <div style={{display: ChangPasswd ? "block" : "none"}}>
-                <h3>{t("password change")}</h3>
-                <input type="password" placeholder={t("new password")}/>
-                <input type="password" placeholder={t("new password confirm")}/>
-                <Button variant="contained"
-                        onClick={changePassword}
-                >{t("confirm")}</Button>
-            </div>
+        <Grid container className={styles.wrapper}>
+                <Grid item  style={{display: ChangPasswd ? "none" : "block"}} className={styles.item}>
+                    <h3>{t("password")}</h3>
+                    <RoundedButton color="blue"
+                            onClick={handleChangPasswd}
+                    >{t("password change btn")}</RoundedButton>
+                </Grid>
+                <Grid item  style={{display: ChangPasswd ? "block" : "none"}} className={styles['change-item']}>
+                    <h3>{t("password change")}</h3>
+                    <div>
+                        <DarkedTextField 
+                            type="password"
+                            label={t("old password")}
+                            placeholder={t("old password")} />
 
-        </Box>
+                        <DarkedTextField
+                            type="password" 
+                            label={t("new password")}
+                            placeholder={t("new password")} />
+
+                        <DarkedTextField 
+                            type="password" 
+                            label={t("new password confirm")}
+                            placeholder={t("new password confirm")} />
+                    </div>
+                    <RoundedButton 
+                        color="blue"
+                        onClick={changePassword}
+                    >{t("confirm")}</RoundedButton>
+                    
+                </Grid>
+                <Grid item>
+                    <Link to="/panels/adminPanel/accounts">
+                        <RoundedButton color="pink">
+                            {t("go back")}
+                        </RoundedButton>
+                    </Link>
+                </Grid>
+        </Grid>
     )
 }
