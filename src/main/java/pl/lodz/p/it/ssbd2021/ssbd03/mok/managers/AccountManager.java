@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.managers;
 import org.apache.commons.codec.digest.DigestUtils;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Administrator;
@@ -10,13 +11,13 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacade;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.mappers.AccountMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.JWTHandler;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Klasa która zarządza logiką biznesową kont
@@ -122,7 +123,8 @@ public class AccountManager implements AccountManagerLocal {
     public String updateCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) {
         Account account = this.accountFacade.updateAuthenticateInfo(login, IpAddr, time, true);
 
-        Map<String, Object> map = Map.of("login", login, "accessLevels", AccountMapper.toAccountDto(account).getAccessLevels().toString());
+        Map<String, Object> map = Map.of("login", login, "accessLevels", account.getAccessLevels()
+            .stream().map(AccessLevel::getAccessLevelType).collect(Collectors.toSet()));
         return JWTHandler.createToken(map, account.getId().toString());
     }
 }
