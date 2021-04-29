@@ -26,7 +26,7 @@ insert into accounts(id, first_name, second_name, login, email, password_hash, c
                      language_type_id,
                      creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id, version)
 values (-1, 'Richard', 'Branson', 'rbranson', 'rbranson@gmail.com',
-        '2634c3097f98e36865f0c572009c4ffd73316bc8b88ccfe8d196af35f46e2394',
+        'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f',
         true, true, null, null, null, null, -1, now(), now(), -2, -1, -1, 0);
 
 insert into accounts(id, first_name, second_name, login, email, password_hash, confirmed, active,
@@ -35,7 +35,7 @@ insert into accounts(id, first_name, second_name, login, email, password_hash, c
                      language_type_id,
                      creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id, version)
 values (-2, 'Elon', 'Musk', 'emusk', 'emusk@gmail.com',
-        '2634c3097f98e36865f0c572009c4ffd73316bc8b88ccfe8d196af35f46e2394',
+        'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f',
         true, true, null, null, null, null, -1, now(), now(), -2, -2, -2, 0);
 
 insert into accounts(id, first_name, second_name, login, email, password_hash, confirmed, active,
@@ -44,7 +44,7 @@ insert into accounts(id, first_name, second_name, login, email, password_hash, c
                      language_type_id,
                      creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id, version)
 values (-3, 'Jeff', 'Bezos', 'jbezos', 'jbezos@gmail.com',
-        '2634c3097f98e36865f0c572009c4ffd73316bc8b88ccfe8d196af35f46e2394',
+        'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f',
         true, true, null, null, null, null, -1, now(), now(), -2, -3, -3, 0);
 
 insert into accounts(id, first_name, second_name, login, email, password_hash, confirmed, active,
@@ -53,7 +53,7 @@ insert into accounts(id, first_name, second_name, login, email, password_hash, c
                      language_type_id,
                      creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id, version)
 values (-4, 'Mark', 'Zuckerberg', 'mzuckerberg', 'mzuckerberg@gmail.com',
-        '2634c3097f98e36865f0c572009c4ffd73316bc8b88ccfe8d196af35f46e2394',
+        'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f',
         true, true, null, null, null, null, -1, now(), now(), -2, -4, -4, 0);
 -- accounts end
 --
