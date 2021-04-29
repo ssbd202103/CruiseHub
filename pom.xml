@@ -4,7 +4,7 @@
 
     <groupId>pl.lodz.p.it.ssbd2021</groupId>
     <artifactId>ssbd03</artifactId>
-    <version>0.2.3-SNAPSHOT</version>
+    <version>0.2.8-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>ssbd03</name>
 
