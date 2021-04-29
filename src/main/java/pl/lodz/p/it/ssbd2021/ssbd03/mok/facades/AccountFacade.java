@@ -9,6 +9,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.LanguageTypeWrapper;
 
 import javax.ejb.Stateful;
 import javax.persistence.*;
+import java.util.List;
 
 @Stateful
 public class AccountFacade extends AbstractFacade<Object> {
@@ -35,5 +36,11 @@ public class AccountFacade extends AbstractFacade<Object> {
         TypedQuery<LanguageTypeWrapper> tq = em.createNamedQuery("LanguageTypeWrapper.findByName", LanguageTypeWrapper.class);
         tq.setParameter("name", languageType);
         return tq.getSingleResult();
+    }
+
+    public List<Account> getUnconfirmedAccounts() {
+        TypedQuery<Account> tqq = em.createNamedQuery("Account.findUnconfirmedAccount", Account.class);
+        return tqq.getResultList();
+
     }
 }
