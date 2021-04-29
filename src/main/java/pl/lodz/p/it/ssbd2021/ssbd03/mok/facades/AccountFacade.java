@@ -2,13 +2,17 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.facades;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.LanguageTypeWrapper;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 
 import javax.ejb.Stateful;
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 @Stateful
 public class AccountFacade extends AbstractFacade<Account> {
@@ -46,4 +50,14 @@ public class AccountFacade extends AbstractFacade<Account> {
     }
 
 
+
+    public Account findByLogin(String login) throws BaseAppException {
+        TypedQuery<Account> tq = em.createNamedQuery("Account.findByLogin", Account.class);
+        tq.setParameter("login", login);
+        try {
+            return tq.getSingleResult();
+        } catch (NoResultException e) {
+            throw FacadeException.noSuchElement();
+        }
+    }
 }

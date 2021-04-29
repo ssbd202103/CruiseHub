@@ -2,8 +2,12 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.IdDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
 
 import javax.ejb.Local;
 import javax.validation.Valid;
@@ -29,6 +33,34 @@ public interface AccountEndpointLocal {
      * @param businessWorkerForRegistrationDto obiekt klasy dto która przechowuje wszystkie niezbędne pola do stworzenia nowego konta użytkownika z przypisanym poziomem dostępu Pracownik Firmy
      */
     void createBusinessWorkerAccount(BusinessWorkerForRegistrationDto businessWorkerForRegistrationDto);
+
+    /**
+     * Pobiera obiekt AccountDto szukanego użytkownika
+     *
+     * @param login użytkownika
+     * @return reprezentacja użytkownika po dokonanych zmianach w postaci AccountDto
+     * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku nieznalezienia użytkownika.
+     */
+    AccountDto getAccountByLogin(String login) throws BaseAppException;
+
+    /**
+     * Dodaje poziom dostępu do użytkownika
+     *
+     * @param grantAccessLevel Obiekt przesyłowy danych potrzebnych do nadania poziomu dostępu
+     * @return reprezentacja użytkownika po dokonanych zmianach w postaci AccountDto
+     * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku gdy dodanie poziomu jest niemożliwe,
+     *                          lub narusza zasady biznesowe aplikacji
+     */
+    AccountDto grantAccessLevel(GrantAccessLevelDto grantAccessLevel) throws BaseAppException;
+
+    /**
+     * Oblicza ETag dla encji
+     *
+     * @param entity Encja implementująca SignableEntity
+     * @return ETag w postaci String
+     * @throws BaseAppException Bazowy wyjątek aplikacji rzucany w przypadku błędu tworzonia ETaga
+     */
+    String getETagFromSignableEntity(SignableEntity entity) throws BaseAppException;
 
 
     /**

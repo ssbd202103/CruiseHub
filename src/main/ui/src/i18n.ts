@@ -67,12 +67,20 @@ const resources = {
             "moderator panel": "Panel moderatora",
             "list accounts": "Lista kont",
             "edit": "Edytuj dane",
-            "change password" : "Zmień hasło",
+            "change password": "Zmień hasło",
             "reset password": "Resetuj hasło",
             "block": "Zablokuj konto",
             "grand access level": "Przydziel poziom dostępu",
             //panels.clientPanel
-            "client panel": "Panel klienta"
+            "client panel": "Panel klienta",
+            //errors
+            "error.facade.noSuchElement": "Nie znaleziono elementu w bazie danych",
+            "error.account.accessLevels.alreadyAssigned": "Poziom dostępu jest już przydzielony do konta",
+            "error.account.accessLevels.notAssignable": "Nie można przydzielić podanego poziomu dostępu",
+            "error.account.accessLevels.doesNotExist": "Podany poziom dostępu nie istnieje",
+            "error.security.etag.empty": "Żądanie nie zawiera wymaganego nagłówka ETag",
+            "error.security.etag.invalid": "Nagłówek ETAG żądania nie przechodzi walidacji"
+
         }
     },
     en: {
@@ -140,12 +148,19 @@ const resources = {
             "list accounts": "Accounts list",
             "moderator panel": "Moderator Panel",
             "edit": "Edit data",
-            "change password" : "Change password",
+            "change password": "Change password",
             "reset password": "Reset password",
             "block": "Block account",
             "grand access level": "Grand access level",
             //panels.clientPanel
             "clientPanelH2": "Client panel",
+            //errors
+            "error.facade.noSuchElement": "No such element found in the database",
+            "error.account.accessLevels.alreadyAssigned": "Access level already assigned to account",
+            "error.account.accessLevels.notAssignable": "Cannot assign this access level",
+            "error.account.accessLevels.doesNotExist": "This access level does not exist",
+            "error.security.etag.empty": "Request does not contain necessary ETag header",
+            "error.security.etag.invalid": "Request's ETag header does not pass validation"
         }
     }
 }

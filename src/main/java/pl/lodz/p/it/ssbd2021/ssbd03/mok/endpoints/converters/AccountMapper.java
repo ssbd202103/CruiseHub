@@ -78,7 +78,6 @@ public class AccountMapper {
                 new LanguageTypeWrapper(bw.getLanguageType()));
     }
 
-
     /**
      * @param account Konto poddawane konwersji
      * @return Reprezentacja obiektu przesyłowego DTO konta
