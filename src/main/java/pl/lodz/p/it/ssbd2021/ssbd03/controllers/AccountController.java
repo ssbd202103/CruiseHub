@@ -1,11 +1,13 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.IdDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.AccountEndpointLocal;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
+import javax.print.attribute.standard.Media;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
@@ -21,7 +23,6 @@ public class AccountController {
 
     @EJB
     private AccountEndpointLocal accountEndpoint;
-
 
     /**
      * Stwórz nowe konto z poziomem dostępu Klient
@@ -45,5 +46,12 @@ public class AccountController {
     @Consumes(MediaType.APPLICATION_JSON)
     public void createBusinessWorker(@Valid @NotNull BusinessWorkerForRegistrationDto businessWorkerForRegistrationDto) {
         accountEndpoint.createBusinessWorkerAccount(businessWorkerForRegistrationDto);
+    }
+
+    @POST
+    @Path("/block/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void blockUser(@Valid @NotNull IdDto id) {
+        accountEndpoint.blockUser(id);
     }
 }
