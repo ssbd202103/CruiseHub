@@ -7,9 +7,7 @@ export interface RoundedButtonProps {
     readonly color: "pink" | "yellow" | "green" | "blue"
     readonly children?: any,
     readonly style?: React.CSSProperties,
-    readonly onClick?: React.MouseEventHandler<any>
-    readonly style?: React.CSSProperties,
-
+    readonly onClick?: React.MouseEventHandler<any>,
     readonly onClickListenerFun?: any
 }
 

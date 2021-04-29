@@ -6,11 +6,10 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.EndpointException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.account_list.AccountListDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.IdDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters.AccountMapper;
@@ -78,8 +77,8 @@ public class AccountEndpoint implements AccountEndpointLocal {
     }
 
     @Override
-    public List<AccountDto> getAllAccounts() {
-        return accountManager.getAllAccounts().stream().map(AccountMapper::toAccountDto).collect(Collectors.toList());
+    public List<AccountListDto> getAllAccounts() {
+        return accountManager.getAllAccounts().stream().map(AccountMapper::toAccountListDto).collect(Collectors.toList());
     }
 
     @Override

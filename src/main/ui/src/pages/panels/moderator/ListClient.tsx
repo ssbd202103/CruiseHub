@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Collapse from '@material-ui/core/Collapse';
@@ -16,6 +16,7 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import {Button} from "@material-ui/core";
 import {Link} from "react-router-dom";
 import {useTranslation} from "react-i18next";
+import axios from "axios";
 
 const useRowStyles = makeStyles({
     root: {
@@ -28,18 +29,22 @@ const useRowStyles = makeStyles({
 function createData(
     login: string,
     email: string,
-    active: string,
-    accessLevel: string,
+    active: boolean,
+    accessLevels: string[],
 ) {
     return {
         login: login,
         email: email,
         active: active,
-        accessLevel: accessLevel,
+        accessLevels: accessLevels,
     };
 }
 
-function Row(props: { row: ReturnType<typeof createData> }) {
+export interface RowProps {
+    row : ReturnType<typeof createData>
+}
+
+function Row(props: RowProps) {
     const { row } = props;
     const [open, setOpen] = React.useState(false);
     const classes = useRowStyles();
@@ -50,20 +55,27 @@ function Row(props: { row: ReturnType<typeof createData> }) {
             {row.login}
             </TableCell>
             <TableCell>{row.email}</TableCell>
-            <TableCell>{row.active}</TableCell>
-            <TableCell>{row.accessLevel}</TableCell>
+            <TableCell>{row.active.toString()}</TableCell>
+            <TableCell>{row.accessLevels.toString()}</TableCell>
         </TableRow>
     );
 }
 
-const rows = [
-    createData('rbranson', 'rbranson@gmail.com','true', 'client'),
-    createData('emusk', 'emusk@gmail.com','true', 'buisnessWorker'),
-    createData('jbezos', 'jbezos@gmail.com','true', 'moderator'),
-    createData('mzuckerberg', 'mzuckerberg@gmail.com','true', 'admin'),
-];
+
 
 export default function ModListClient() {
+    const [users, setUsers] = useState([]);
+    useEffect(() => {
+        loadUsers();
+    },[]);
+
+
+    const loadUsers = async () => {
+        const result = await axios.get('http://localhost:8080/cruisehub/api/account/accounts');
+        setUsers(result.data)
+    }
+
+
     const {t} = useTranslation()
     return (
         <TableContainer component={Paper}>
@@ -77,8 +89,8 @@ export default function ModListClient() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows.map((row) => (
-                        <Row key={row.login} row={row} />
+                    {users.map((user, index) => (
+                        <Row key={index} row={user}/>
                     ))}
                 </TableBody>
             </Table>

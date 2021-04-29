@@ -1,9 +1,9 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.account_list.AccountListDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.IdDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
@@ -68,7 +68,7 @@ public interface AccountEndpointLocal {
      *
      * @return obiekty kont dto
      */
-    List<AccountDto> getAllAccounts();
+    List<AccountListDto> getAllAccounts();
 
 
     /**

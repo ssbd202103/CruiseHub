@@ -102,6 +102,7 @@ public class AccountManager implements AccountManagerLocal {
         return account;
     }
 
+
     private void setAccessLevelInitialMetadata(Account account, AccessLevel accessLevel, boolean newAccount) {
 
         AlterTypeWrapper insertAlterType = accountFacade.getAlterTypeWrapperByAlterType(AlterType.INSERT);

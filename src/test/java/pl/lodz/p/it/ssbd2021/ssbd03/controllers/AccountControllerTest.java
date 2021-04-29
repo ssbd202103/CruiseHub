@@ -16,6 +16,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AddressDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.account_list.AccountListDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
@@ -117,12 +118,12 @@ class AccountControllerTest {
     @Test
     public void getAllAccountsTest_SUCCESS() {
         Response response = null;
-        List<AccountDto> accountDtoList = null;
+        List<AccountListDto> accountDtoList = null;
         try {
-            response = RestAssured.given().header("Content-Type", "application/json").baseUri(baseUri).get(new URI("account/accounts"));
+            response = RestAssured.given().header("Content-Type", "application/json").baseUri(baseUri).get(new URI("/accounts"));
             String accountString = response.getBody().asString();
             ObjectMapper mapper = new ObjectMapper();
-            accountDtoList = Arrays.asList(mapper.readValue(accountString, AccountDto[].class));
+            accountDtoList = Arrays.asList(mapper.readValue(accountString, AccountListDto[].class));
         } catch (URISyntaxException | IOException e) {
             e.printStackTrace();
         }
@@ -131,8 +132,8 @@ class AccountControllerTest {
        assertEquals(accountDtoList.get(0).getEmail(),"rbranson@gmail.com");
        assertEquals(accountDtoList.get(1).getEmail(),"emusk@gmail.com");
        assertEquals(accountDtoList.get(2).getEmail(),"jbezos@gmail.com");
-       assertEquals(accountDtoList.get(0).getFirstName(),"Richard");
-       assertEquals(accountDtoList.get(0).getSecondName(),"Branson");
+       assertEquals(accountDtoList.get(0).getLogin(), "rbranson");
+       assertEquals(accountDtoList.get(1).getLogin(), "emusk");
 
 
     }

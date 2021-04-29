@@ -8,6 +8,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.LanguageTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.account_list.AccountListDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 
@@ -87,8 +88,20 @@ public class AccountMapper {
                 account.getSecondName(), account.getEmail(), account.getLanguageType().getName(),
                 account.getAccessLevels().stream()
                         .map(AccessLevel::getAccessLevelType)
-                        .collect(Collectors.toSet()));
+                        .collect(Collectors.toSet()), account.getVersion());
     }
 
+    /**
+     * @param account Konto poddawane konwersji
+     * @return Reprezentacja obiektu przesyłowego DTO konta zawierający login, e-mail ,poziomy dostępu oraz informacje
+     * czy dane konto jest aktywne
+     */
+    public static AccountListDto toAccountListDto(Account account) {
+        return new AccountListDto(account.getLogin(),
+                account.getEmail(), account.isActive(),
+                account.getAccessLevels().stream()
+                        .map(AccessLevel::getAccessLevelType)
+                        .collect(Collectors.toSet()));
+    }
 
 }
