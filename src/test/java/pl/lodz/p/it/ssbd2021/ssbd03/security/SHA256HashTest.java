@@ -15,6 +15,6 @@ class SHA256HashTest {
     @Test
     void verify() {
         SHA256Hash hash = new SHA256Hash();
-        hash.verify("haslo2115".toCharArray(), "219c2cdf5b1e49888c0adf23911ad5eeabf8f1aa88f3c1420441073a39ffd945");
+        hash.verify("12345678".toCharArray(), "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f");
     }
 }
