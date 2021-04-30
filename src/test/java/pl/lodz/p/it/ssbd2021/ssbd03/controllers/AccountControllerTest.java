@@ -44,7 +44,7 @@ class AccountControllerTest {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    private static final String baseUri = "http://localhost:8080/cruisehub/api/account";
+    private static final String baseUri = "http://localhost:8080/api/account";
 
     AccountControllerTest() {
     }
@@ -115,31 +115,32 @@ class AccountControllerTest {
         // todo implement remove method to clean created data
     }
     @Test
-    public void getAllAccountsTest_SUCCESS() {
-        Response response = null;
-        List<AccountDto> accountDtoList = null;
-        try {
-            response = RestAssured.given().header("Content-Type", "application/json").baseUri(baseUri).get(new URI("account/accounts"));
-            String accountString = response.getBody().asString();
-            ObjectMapper mapper = new ObjectMapper();
-            accountDtoList = Arrays.asList(mapper.readValue(accountString, AccountDto[].class));
-        } catch (URISyntaxException | IOException e) {
-            e.printStackTrace();
-        }
+    public void getAllAccountsTest_SUCCESS() throws JsonProcessingException {
+        Response response = RestAssured.given().header("Content-Type", "application/json").baseUri(baseUri).get("/accounts");
+        String accountString = response.getBody().asString();
+        ObjectMapper mapper = new ObjectMapper();
+        List<AccountDto> accountDtoList = Arrays.asList(mapper.readValue(accountString, AccountDto[].class));
 
-       assertEquals(response.getStatusCode(),javax.ws.rs.core.Response.Status.OK.getStatusCode());
-       assertEquals(accountDtoList.get(0).getEmail(),"rbranson@gmail.com");
-       assertEquals(accountDtoList.get(1).getEmail(),"emusk@gmail.com");
-       assertEquals(accountDtoList.get(2).getEmail(),"jbezos@gmail.com");
-       assertEquals(accountDtoList.get(0).getFirstName(),"Richard");
-       assertEquals(accountDtoList.get(0).getSecondName(),"Branson");
+        int numberOfUsers = accountDtoList.size();
 
+        ClientForRegistrationDto client = getSampleClientForRegistrationDto();
+        given().baseUri(baseUri).contentType("application/json").body(client).when().post("/client/registration").then().statusCode(204);
+
+        response = RestAssured.given().header("Content-Type", "application/json").baseUri(baseUri).get("/accounts");
+        accountString = response.getBody().asString();
+        mapper = new ObjectMapper();
+        accountDtoList = Arrays.asList(mapper.readValue(accountString, AccountDto[].class));
+
+        int numberOfUsersAfterChanges = accountDtoList.size();
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+        assertEquals(numberOfUsers + 1, numberOfUsersAfterChanges);
 
     }
 
     private ClientForRegistrationDto getSampleClientForRegistrationDto() {
         AddressDto address = new AddressDto(1L, "Bortnyka", "30-302", "Pluzhne", "Ukraine");
-        return new ClientForRegistrationDto("Artur", "Radiuk", randomAlphanumeric(15), "aradiuk@gmail.com",
+        return new ClientForRegistrationDto("Artur", "Radiuk", randomAlphanumeric(15), randomAlphanumeric(10) + "@gmail.com",
                 "123456789", LanguageType.PL, address, "123456789");
     }
 
