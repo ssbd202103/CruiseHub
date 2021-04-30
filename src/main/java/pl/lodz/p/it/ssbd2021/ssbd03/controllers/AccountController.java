@@ -75,15 +75,16 @@ public class AccountController {
     }
 
     /**
-     * Zmień hasło webług podanych w dto danych
+     * Zmień hasło według podanych w dto danych
      *
      * @param accountChangeEmailDto obiekt dto z loginem, nowym mailem oraz wersją
      */
     @PUT
     @Path("/change_email")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void changeEmail(AccountChangeEmailDto accountChangeEmailDto) {
+    public Response changeEmail(AccountChangeEmailDto accountChangeEmailDto) {
         accountEndpoint.changeEmail(accountChangeEmailDto);
+        return Response.noContent().build();
     }
 
     @GET

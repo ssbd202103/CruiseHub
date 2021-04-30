@@ -16,7 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Getter
 @Setter
-public class AccountDto  {
+public class AccountDto {
     @Login
     private String login;
 
