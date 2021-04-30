@@ -15,7 +15,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CompanyControllerTest {
-    private static final String baseUri = "http://localhost:8080/cruisehub/api/";
+    private static final String baseUri = "http://localhost:8080/api/";
 
     @Test
     void getAllCompaniesInfo_SUCCESS() {

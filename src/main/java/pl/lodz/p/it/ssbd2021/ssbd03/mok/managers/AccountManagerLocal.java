@@ -63,8 +63,6 @@ public interface AccountManagerLocal {
      */
     Account grantAdministratorAccessLevel(String accountLogin, Long accountVersion) throws BaseAppException;
 
-    void createBusinessWorker(Account account, BusinessWorker businessWorker, String companyName);
-
     /**
      * Metoda odpowiedzialna za blokowanie konta
      * @param id ID użytkownika

@@ -44,7 +44,7 @@ class AccountControllerTest {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    private static final String baseUri = "http://localhost:8080/cruisehub/api/account";
+    private static final String baseUri = "http://localhost:8080/api/account";
 
     AccountControllerTest() {
     }
@@ -58,7 +58,7 @@ class AccountControllerTest {
 
     @Test
     public void registerBusinessWorkerTest_SUCCESS() {
-        BusinessWorkerForRegistrationDto businessWorker = new BusinessWorkerForRegistrationDto("Artur", "Radiuk", randomAlphanumeric(15), "aradiuk@gmail.com",
+        BusinessWorkerForRegistrationDto businessWorker = new BusinessWorkerForRegistrationDto("Artur", "Radiuk", randomAlphanumeric(15), randomAlphanumeric(10) + "@gmail.com",
                 "123456789", LanguageType.ENG, "123456789", "FirmaJez");
         given().baseUri(baseUri).contentType("application/json").body(businessWorker).when().post("businessworker/registration").then().statusCode(204);
         // todo implement remove method to clean created data
@@ -119,7 +119,7 @@ class AccountControllerTest {
         Response response = null;
         List<AccountDto> accountDtoList = null;
         try {
-            response = RestAssured.given().header("Content-Type", "application/json").baseUri(baseUri).get(new URI("account/accounts"));
+            response = RestAssured.given().header("Content-Type", "application/json").baseUri(baseUri).get(new URI("accounts"));
             String accountString = response.getBody().asString();
             ObjectMapper mapper = new ObjectMapper();
             accountDtoList = Arrays.asList(mapper.readValue(accountString, AccountDto[].class));
@@ -139,7 +139,7 @@ class AccountControllerTest {
 
     private ClientForRegistrationDto getSampleClientForRegistrationDto() {
         AddressDto address = new AddressDto(1L, "Bortnyka", "30-302", "Pluzhne", "Ukraine");
-        return new ClientForRegistrationDto("Artur", "Radiuk", randomAlphanumeric(15), "aradiuk@gmail.com",
+        return new ClientForRegistrationDto("Artur", "Radiuk", randomAlphanumeric(15), randomAlphanumeric(10) + "@gmail.com",
                 "123456789", LanguageType.PL, address, "123456789");
     }
 
