@@ -1,7 +1,8 @@
-package pl.lodz.p.it.ssbd2021.ssbd03.mok.dto;
+package pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata;
 
 
 import lombok.*;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AbstractAccountDTO;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
