@@ -212,6 +212,7 @@
                                         <argument>install</argument>
                                     </arguments>
                                     <environmentVariables>
+                                        <REACT_APP_ROUTER_BASE>/${project.artifactId}</REACT_APP_ROUTER_BASE>
                                         <NPM_CONFIG_PREFIX>${project.build.directory}</NPM_CONFIG_PREFIX>
                                     </environmentVariables>
                                     <workingDirectory>${ui.dir}</workingDirectory>
@@ -293,6 +294,7 @@
                                         <argument>install</argument>
                                     </arguments>
                                     <environmentVariables>
+                                        <REACT_APP_ROUTER_BASE>/${project.artifactId}</REACT_APP_ROUTER_BASE>
                                         <NPM_CONFIG_PREFIX>${project.build.directory}</NPM_CONFIG_PREFIX>
                                     </environmentVariables>
                                     <workingDirectory>${ui.dir}</workingDirectory>

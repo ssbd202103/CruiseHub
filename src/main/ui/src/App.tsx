@@ -26,7 +26,8 @@ import WorkerPanel from './pages/panels/workerPanel'
 function App() {
   return (
       <I18nextProvider i18n={i18n}>
-        <Router basename="/cruisehub">
+
+        <Router basename={process.env.REACT_APP_ROUTER_BASE || ''}>
           <Switch>
             <Route exact path="/">
               <Home/>
