@@ -24,7 +24,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
 import java.util.Set;
 
 
-
 import java.io.DataInput;
 import java.io.IOException;
 import java.net.URI;
@@ -37,6 +36,7 @@ import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 
 
@@ -114,27 +114,31 @@ class AccountControllerTest {
         // todo check for optimistic lock once working mechanism is implemented correctly
         // todo implement remove method to clean created data
     }
+
     @Test
     public void getAllAccountsTest_SUCCESS() throws JsonProcessingException {
         Response response = RestAssured.given().header("Content-Type", "application/json").baseUri(baseUri).get("/accounts");
         String accountString = response.getBody().asString();
-        ObjectMapper mapper = new ObjectMapper();
-        List<AccountDto> accountDtoList = Arrays.asList(mapper.readValue(accountString, AccountDto[].class));
+        List<AccountDto> accountDtoList = Arrays.asList(objectMapper.readValue(accountString, AccountDto[].class));
 
         int numberOfUsers = accountDtoList.size();
-
         ClientForRegistrationDto client = getSampleClientForRegistrationDto();
-        given().baseUri(baseUri).contentType("application/json").body(client).when().post("/client/registration").then().statusCode(204);
 
-        response = RestAssured.given().header("Content-Type", "application/json").baseUri(baseUri).get("/accounts");
+        assertTrue(accountDtoList.stream().noneMatch(account -> account.getLogin().equals(client.getLogin())));
+
+        AccountDto account = registerClientAndGetAccountDto(client);
+
+        response = RestAssured.given().contentType(ContentType.JSON).baseUri(baseUri).get("/accounts");
+
         accountString = response.getBody().asString();
-        mapper = new ObjectMapper();
-        accountDtoList = Arrays.asList(mapper.readValue(accountString, AccountDto[].class));
+        accountDtoList = Arrays.asList(objectMapper.readValue(accountString, AccountDto[].class));
 
         int numberOfUsersAfterChanges = accountDtoList.size();
 
         assertThat(response.getStatusCode()).isEqualTo(200);
         assertEquals(numberOfUsers + 1, numberOfUsersAfterChanges);
+
+        assertTrue(accountDtoList.stream().anyMatch(newAccount -> newAccount.getLogin().equals(account.getLogin())));
 
     }
 
