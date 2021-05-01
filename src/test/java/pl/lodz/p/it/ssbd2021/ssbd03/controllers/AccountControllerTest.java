@@ -12,6 +12,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AddressDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.ChangeAccessLevelStateDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
@@ -20,10 +21,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
 import java.util.Set;
 
 
-import java.io.DataInput;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -71,13 +68,27 @@ class AccountControllerTest {
 
         GrantAccessLevelDto grantAccessLevel = new GrantAccessLevelDto(account.getLogin(), AccessLevelType.MODERATOR, account.getVersion());
 
-        Response response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).body(grantAccessLevel).put("/grantAccessLevel");
+        Response response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).body(grantAccessLevel).put("/grant-access-level");
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         AccountDto updatedAccount = objectMapper.readValue(response.asString(), AccountDto.class);
         assertThat(updatedAccount.getAccessLevels()).contains(AccessLevelType.MODERATOR).containsAll(originalAccessLevels);
         // todo implement remove method to clean created data
     }
+//
+//    @Test
+//    void changeAccessLevelState_SUCCESS() throws JsonProcessingException {
+//        ClientForRegistrationDto client = getSampleClientForRegistrationDto();
+//        AccountDto account = registerClientAndGetAccountDto(client);
+//        grantAccessLevel(account, AccessLevelType.MODERATOR, account.getVersion());
+//        account = getAccountDto(account.getLogin());
+//
+//        assertThat()
+//        String etag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
+//
+//        ChangeAccessLevelStateDto = new ChangeAccessLevelStateDto(account.getLogin(), )
+//        getBaseUriETagRequest(etag).contentType(ContentType.JSON).body(changeAccessLevelState)
+//    }
 
     @Test
     void grantAccessLevelTest_FAIL() throws JsonProcessingException {
@@ -87,23 +98,23 @@ class AccountControllerTest {
         String etag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
 
         // requesting granting accessLevel with no ETAG
-        Response response = given().baseUri(baseUri).contentType(ContentType.JSON).body(grantAccessLevel).put("/grantAccessLevel");
+        Response response = given().baseUri(baseUri).contentType(ContentType.JSON).body(grantAccessLevel).put("/grant-access-level");
         assertThat(response.getStatusCode()).isEqualTo(400);
         assertThat(response.asString()).isEqualTo(ETAG_EMPTY_ERROR);
 
         // requesting granting already assigned accessLevel
-        response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).body(grantAccessLevel).put("/grantAccessLevel");
+        response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).body(grantAccessLevel).put("/grant-access-level");
         assertThat(response.getStatusCode()).isEqualTo(200);
 
 
-        response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).body(grantAccessLevel).put("/grantAccessLevel");
+        response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).body(grantAccessLevel).put("/grant-access-level");
         assertThat(response.getStatusCode()).isEqualTo(400);
         assertThat(response.asString()).isEqualTo(ACCESS_LEVEL_ALREADY_ASSIGNED_ERROR);
 
         // requesting granting not assignable accessLevel
         grantAccessLevel.setAccessLevel(AccessLevelType.BUSINESS_WORKER);
 
-        response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).body(grantAccessLevel).put("/grantAccessLevel");
+        response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).body(grantAccessLevel).put("/grant-access-level");
         assertThat(response.getStatusCode()).isEqualTo(400);
         assertThat(response.asString()).isEqualTo(ACCESS_LEVEL_NOT_ASSIGNABLE_ERROR);
 
@@ -151,6 +162,15 @@ class AccountControllerTest {
 
     private AccountDto getAccountDto(String login) throws JsonProcessingException {
         return objectMapper.readValue(given().baseUri(baseUri).get("/" + login).thenReturn().asString(), AccountDto.class);
+    }
+
+    private void grantAccessLevel(AccountDto account, AccessLevelType accessLevelType, Long accountVersion) {
+        if (!account.getAccessLevels().contains(accessLevelType)) {
+            GrantAccessLevelDto grantAccessLevel = new GrantAccessLevelDto(account.getLogin(), accessLevelType, accountVersion);
+            String etag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
+
+            getBaseUriETagRequest(etag).contentType(ContentType.JSON).body(grantAccessLevel).put("/grant-access-level");
+        }
     }
 
     private RequestSpecification getBaseUriETagRequest(String etag) {

@@ -16,25 +16,19 @@ import javax.validation.constraints.Positive;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AddressDto {
+
     @Positive
     private Long houseNumber;
-    @NotNull
-    @NotEmpty
+
     @Street
     private String street;
 
-    @NotNull
-    @NotEmpty
     @PostCode
     private String postalCode;
 
-    @NotNull
-    @NotEmpty
     @City
     private String city;
 
-    @NotNull
-    @NotEmpty
     @Country
     private String country;
 }

@@ -76,8 +76,10 @@ const resources = {
             //errors
             "error.facade.noSuchElement": "Nie znaleziono elementu w bazie danych",
             "error.account.accessLevels.alreadyAssigned": "Poziom dostępu jest już przydzielony do konta",
+            "error.account.accessLevels.notAssigned": "Poziom dostępu nie jest przydzielony do konta",
             "error.account.accessLevels.notAssignable": "Nie można przydzielić podanego poziomu dostępu",
-            "error.account.accessLevels.doesNotExist": "Podany poziom dostępu nie istnieje",
+            "error.account.accessLevels.alreadyDisabled": "Poziom dostępu jest już zablokowany",
+            "error.account.accessLevels.alreadyEnabled": "Poziom dostępu nie jest zablokowany",
             "error.security.etag.empty": "Żądanie nie zawiera wymaganego nagłówka ETag",
             "error.security.etag.invalid": "Nagłówek ETAG żądania nie przechodzi walidacji"
 
@@ -156,9 +158,11 @@ const resources = {
             "clientPanelH2": "Client panel",
             //errors
             "error.facade.noSuchElement": "No such element found in the database",
-            "error.account.accessLevels.alreadyAssigned": "Access level already assigned to account",
+            "error.account.accessLevels.alreadyAssigned": "Access level already assigned to the account",
+            "error.account.accessLevels.notAssigned": "Access level not assigned to the account",
             "error.account.accessLevels.notAssignable": "Cannot assign this access level",
-            "error.account.accessLevels.doesNotExist": "This access level does not exist",
+            "error.account.accessLevels.alreadyDisabled": "Access level is already disabled",
+            "error.account.accessLevels.alreadyEnabled": "Access level is already enabled",
             "error.security.etag.empty": "Request does not contain necessary ETag header",
             "error.security.etag.invalid": "Request's ETag header does not pass validation"
         }

@@ -4,7 +4,9 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.IdDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.ChangeAccessLevelStateDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccountDetailsViewDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
@@ -43,6 +45,8 @@ public interface AccountEndpointLocal {
      */
     AccountDto getAccountByLogin(String login) throws BaseAppException;
 
+    AccountDetailsViewDto getAccountDetailsByLogin(String login) throws BaseAppException;
+
     /**
      * Dodaje poziom dostępu do użytkownika
      *
@@ -52,6 +56,8 @@ public interface AccountEndpointLocal {
      *                          lub narusza zasady biznesowe aplikacji
      */
     AccountDto grantAccessLevel(GrantAccessLevelDto grantAccessLevel) throws BaseAppException;
+
+    AccountDto changeAccessLevelState(ChangeAccessLevelStateDto changeAccessLevelState) throws BaseAppException;
 
     /**
      * Oblicza ETag dla encji

@@ -8,8 +8,10 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.EndpointException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.ChangeAccessLevelStateDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.IdDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccountDetailsViewDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters.AccountMapper;
@@ -67,6 +69,15 @@ public class AccountEndpoint implements AccountEndpointLocal {
     }
 
     @Override
+    public AccountDto changeAccessLevelState(ChangeAccessLevelStateDto changeAccessLevelStateDto) throws BaseAppException {
+        return AccountMapper.toAccountDto(
+                accountManager.changeAccessLevelState(changeAccessLevelStateDto.getAccountLogin(),
+                        changeAccessLevelStateDto.getAccessLevel(), changeAccessLevelStateDto.isEnabled(),
+                        changeAccessLevelStateDto.getAccountVersion())
+        );
+    }
+
+    @Override
     public String getETagFromSignableEntity(SignableEntity entity) throws BaseAppException {
         return EntityIdentitySignerVerifier.calculateEntitySignature(entity);
     }
@@ -74,6 +85,11 @@ public class AccountEndpoint implements AccountEndpointLocal {
     @Override
     public AccountDto getAccountByLogin(String login) throws BaseAppException {
         return AccountMapper.toAccountDto(accountManager.getAccountByLogin(login));
+    }
+
+    @Override
+    public AccountDetailsViewDto getAccountDetailsByLogin(String login) throws BaseAppException {
+        return AccountMapper.toAccountDetailsViewDto(accountManager.getAccountByLogin(login));
     }
 
     @Override

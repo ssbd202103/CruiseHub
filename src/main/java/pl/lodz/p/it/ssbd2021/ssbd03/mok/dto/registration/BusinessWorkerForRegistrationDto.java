@@ -16,39 +16,28 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BusinessWorkerForRegistrationDto {
-    @NotNull
-    @NotEmpty
+
     @Name
     private String firstName;
 
-    @NotNull
-    @NotEmpty
     @Name
     private String secondName;
 
-    @NotNull
-    @NotEmpty
     @Login
     private String login;
 
-    @NotNull
-    @NotEmpty
     @Email
     private String email;
 
-    @NotNull
     @NotEmpty
     private String password;
 
     @NotNull
     private LanguageType languageType;
 
-    @NotNull
-    @NotEmpty
     @PhoneNumber
     private String phoneNumber;
 
-    @NotNull
     @NotEmpty
     private String companyName;
 }

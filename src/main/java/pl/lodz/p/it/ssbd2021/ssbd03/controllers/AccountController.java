@@ -4,7 +4,9 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.IdDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.ChangeAccessLevelStateDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccountDetailsViewDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.AccountEndpointLocal;
@@ -21,6 +23,7 @@ import javax.ws.rs.core.Response;
 
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
+
 import java.util.List;
 
 
@@ -52,6 +55,18 @@ public class AccountController {
             return Response.ok().entity(account).header("ETag", ETag).build();
         } catch (BaseAppException e) {
             return Response.status(NOT_FOUND).entity(e.getMessage()).build();
+        }
+    }
+
+    @GET
+    @Path("/detailsView/{login}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAccountDetailsByLogin(@PathParam("login") String login) {
+        try {
+            AccountDetailsViewDto account = accountEndpoint.getAccountDetailsByLogin(login);
+            return Response.ok().entity(account).build();
+        } catch (BaseAppException e) {
+            return Response.status(BAD_REQUEST).entity(e.getMessage()).build();
         }
     }
 
@@ -104,21 +119,33 @@ public class AccountController {
      *
      * @param grantAccessLevel Obiekt przesyłowy danych potrzebnych do nadania poziomu dostępu
      * @return Odpowiedź serwera w postaci JSON
-     * @throws BaseAppException bazowy wyjątek aplikacji
      */
     @ETagFilterBinding
     @PUT
-    @Path("/grantAccessLevel")
+    @Path("/grant-access-level")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response grantAccessLevel(GrantAccessLevelDto grantAccessLevel) throws BaseAppException {
-
+    public Response grantAccessLevel(GrantAccessLevelDto grantAccessLevel) {
         try {
             AccountDto account = accountEndpoint.grantAccessLevel(grantAccessLevel);
             return Response.ok().entity(account).build();
-
         } catch (BaseAppException e) {
             return Response.status(BAD_REQUEST).entity(e.getMessage()).build();
         }
     }
+
+    @ETagFilterBinding
+    @PUT
+    @Path("/change-access-level-state")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response changeAccessLevelState(ChangeAccessLevelStateDto changeAccessLevelStateDto) {
+        try {
+            AccountDto account = accountEndpoint.changeAccessLevelState(changeAccessLevelStateDto);
+            return Response.ok().entity(account).build();
+        } catch (BaseAppException e) {
+            return Response.status(BAD_REQUEST).entity(e.getMessage()).build();
+        }
+    }
+
 }

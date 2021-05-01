@@ -9,7 +9,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Administrator;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AccountManagerException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
@@ -18,11 +17,11 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.CompanyFacadeMok;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
-import java.util.ArrayList;
-import java.util.List;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ACCESS_LEVEL_ALREADY_ASSIGNED_ERROR;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 
 /**
  * Klasa która zarządza logiką biznesową kont
@@ -85,20 +84,42 @@ public class AccountManager implements AccountManagerLocal {
 
     @Override
     public Account grantAdministratorAccessLevel(String accountLogin, Long accountVersion) throws BaseAppException {
-        Account account;
-        try {
-            account = accountFacade.findByLogin(accountLogin);
-            account.setVersion(accountVersion); //to assure optimistic lock mechanism
-            if (account.getAccessLevels().stream().anyMatch(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.ADMINISTRATOR)) {
-                throw new AccountManagerException(ACCESS_LEVEL_ALREADY_ASSIGNED_ERROR);
-            }
-        } catch (FacadeException e) {
-            throw new AccountManagerException(e.getMessage());
+        Account account = accountFacade.findByLogin(accountLogin);
+        account.setVersion(accountVersion); //to assure optimistic lock mechanism
+
+        if (account.getAccessLevels().stream().anyMatch(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.ADMINISTRATOR)) {
+            throw new AccountManagerException(ACCESS_LEVEL_ALREADY_ASSIGNED_ERROR);
         }
 
         Administrator administrator = new Administrator(true);
         setAccessLevelInitialMetadata(account, administrator, false);
 
+        return account;
+    }
+
+    @Override
+    public Account changeAccessLevelState(String accountLogin, AccessLevelType accessLevelType,
+                                          boolean enabled, Long accountVersion) throws BaseAppException {
+        Account account = accountFacade.findByLogin(accountLogin);
+        account.setVersion(accountVersion); //to assure optimistic lock mechanism
+
+        Optional<AccessLevel> accountAccessLevel = account.getAccessLevels().stream()
+                .filter(accessLevel -> accessLevel.getAccessLevelType() == accessLevelType).findFirst();
+
+        if (accountAccessLevel.isEmpty()) {
+            throw new AccountManagerException(ACCESS_LEVEL_NOT_ASSIGNED_ERROR);
+        }
+
+        AccessLevel accessLevel = accountAccessLevel.get();
+
+        if (enabled == accessLevel.isEnabled()) {
+            throw new AccountManagerException(enabled ? ACCESS_LEVEL_ALREADY_ENABLED_ERROR : ACCESS_LEVEL_ALREADY_DISABLED_ERROR);
+        }
+
+        accessLevel.setEnabled(enabled);
+        AlterTypeWrapper updateAlterType = accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE);
+        account.setAlterType(updateAlterType);
+        accessLevel.setAlterType(updateAlterType);
         return account;
     }
 
