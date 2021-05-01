@@ -5,18 +5,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import groovyjarjarasm.asm.TypeReference;
 import io.restassured.RestAssured;
-import io.restassured.http.Header;
-import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.Test;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AddressDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.account_list.AccountListDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
@@ -25,8 +20,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
 import java.util.Set;
 
 
-
-import java.io.DataInput;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -118,12 +111,12 @@ class AccountControllerTest {
     @Test
     public void getAllAccountsTest_SUCCESS() {
         Response response = null;
-        List<AccountListDto> accountDtoList = null;
+        List<AccountDtoForList> accountDtoList = null;
         try {
             response = RestAssured.given().header("Content-Type", "application/json").baseUri(baseUri).get(new URI("/accounts"));
             String accountString = response.getBody().asString();
             ObjectMapper mapper = new ObjectMapper();
-            accountDtoList = Arrays.asList(mapper.readValue(accountString, AccountListDto[].class));
+            accountDtoList = Arrays.asList(mapper.readValue(accountString, AccountDtoForList[].class));
         } catch (URISyntaxException | IOException e) {
             e.printStackTrace();
         }

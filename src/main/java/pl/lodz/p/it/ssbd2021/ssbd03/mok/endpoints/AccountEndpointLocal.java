@@ -1,6 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.account_list.AccountListDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.IdDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
@@ -68,7 +68,7 @@ public interface AccountEndpointLocal {
      *
      * @return obiekty kont dto
      */
-    List<AccountListDto> getAllAccounts();
+    List<AccountDtoForList> getAllAccounts();
 
 
     /**
