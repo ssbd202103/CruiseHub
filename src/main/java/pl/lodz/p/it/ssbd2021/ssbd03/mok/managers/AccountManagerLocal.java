@@ -63,6 +63,7 @@ public interface AccountManagerLocal {
      */
     Account grantAdministratorAccessLevel(String accountLogin, Long accountVersion) throws BaseAppException;
 
+
     /**
      * Metoda odpowiedzialna za blokowanie konta
      * @param id ID użytkownika

@@ -3,7 +3,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.IdDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
@@ -13,7 +13,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
-import javax.print.attribute.standard.Media;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
@@ -88,7 +87,7 @@ public class AccountController {
     @GET
     @Path("/accounts")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<AccountDto> getAllAccounts() {
+    public List<AccountDtoForList> getAllAccounts() {
         return accountEndpoint.getAllAccounts();
     }
 
