@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
@@ -7,6 +8,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.EndpointException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.PasswordResetDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.IdDto;
@@ -85,5 +87,15 @@ public class AccountEndpoint implements AccountEndpointLocal {
     @Override
     public void blockUser(@Valid @NotNull IdDto id) {
         this.accountManager.blockUser(IdMapper.toLong(id));
+    }
+
+    @Override
+    public void requestPasswordReset(String login) throws BaseAppException {
+        this.accountManager.requestPasswordReset(login);
+    }
+
+    @Override
+    public void resetPassword(PasswordResetDto passwordResetDto) throws BaseAppException {
+        this.accountManager.resetPassword(passwordResetDto.getLogin(), DigestUtils.sha256Hex(passwordResetDto.getPassword()), passwordResetDto.getToken());
     }
 }

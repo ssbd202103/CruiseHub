@@ -9,10 +9,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 
 import javax.ejb.Stateful;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 
 @Stateful
 public class AccountFacade extends AbstractFacade<Account> {
@@ -48,8 +45,6 @@ public class AccountFacade extends AbstractFacade<Account> {
 
         updateQuery.getSingleResult();
     }
-
-
 
     public Account findByLogin(String login) throws BaseAppException {
         TypedQuery<Account> tq = em.createNamedQuery("Account.findByLogin", Account.class);

@@ -87,7 +87,7 @@ public class AccountMapper {
                 account.getSecondName(), account.getEmail(), account.getLanguageType().getName(),
                 account.getAccessLevels().stream()
                         .map(AccessLevel::getAccessLevelType)
-                        .collect(Collectors.toSet()));
+                        .collect(Collectors.toSet()), account.getVersion());
     }
 
 

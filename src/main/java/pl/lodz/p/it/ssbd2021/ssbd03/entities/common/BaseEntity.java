@@ -48,12 +48,17 @@ public abstract class BaseEntity {
     @Setter
     @PositiveOrZero
     @Version
-    @Column(nullable=false)
+    @Column(nullable = false)
     private Long version;
 
     @PrePersist
     private void prePersist() {
         creationDateTime = LocalDateTime.now();
         lastAlterDateTime = creationDateTime; //referencing creationDateTime as LDT is immutable
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.setLastAlterDateTime(LocalDateTime.now());
     }
 }

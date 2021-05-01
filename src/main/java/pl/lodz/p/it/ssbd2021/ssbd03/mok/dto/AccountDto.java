@@ -40,7 +40,7 @@ public class AccountDto implements SignableEntity {
 
     private Long version;
 
-    @JsonIgnore
+//    @JsonIgnore
     @Override
     public String getSignablePayload() {
         return login + "." + version;

@@ -8,6 +8,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.JWTException;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
 
 import java.time.Instant;
@@ -22,6 +23,9 @@ import java.util.stream.Collectors;
  * Klasa odpowiedzialna za zarządzanie tokenami JWT.
  */
 public class JWTHandler {
+    private JWTHandler() {
+    }
+
     private static final Properties securityProperties = PropertiesReader.getSecurityProperties();
 
     /**
@@ -71,11 +75,11 @@ public class JWTHandler {
      * @return Mapa stwierdzeń &lt;String, Claim&gt;
      * @throws JWTDecodeException Wyjątek błędu dekodowania
      */
-    public static Map<String, Claim> getClaimsFromToken(String token) {
+    public static Map<String, Claim> getClaimsFromToken(String token) throws JWTException {
         try {
             return JWT.decode(token).getClaims();
         } catch (JWTDecodeException e) {
-            throw new JWTDecodeException("Provided token could not be decoded");
+            throw new JWTException("Provided token could not be decoded");
         }
     }
 
