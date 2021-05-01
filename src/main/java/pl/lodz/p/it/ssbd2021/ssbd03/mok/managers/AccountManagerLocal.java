@@ -71,7 +71,13 @@ public interface AccountManagerLocal {
     void blockUser(long id);
 
 
-
+    /**
+     * Metoda odpowiedzialna za odblokowanie konta
+     * @param unblockedUserLogin login konta odblokowywanego
+     * @param adminLogin login konta odblokowywującego
+     * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku gdy występuje błąd w p
+     *                          obraniu danych w fasadzie
+     */
     void unblockUser(String unblockedUserLogin, String adminLogin) throws BaseAppException;
 
 

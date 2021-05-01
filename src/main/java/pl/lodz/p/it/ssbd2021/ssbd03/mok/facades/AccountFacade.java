@@ -47,9 +47,6 @@ public class AccountFacade extends AbstractFacade<Account> {
     }
 
 
-
-
-
     public Account findByLogin(String login) throws BaseAppException {
         TypedQuery<Account> tq = em.createNamedQuery("Account.findByLogin", Account.class);
         tq.setParameter("login", login);
