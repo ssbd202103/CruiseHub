@@ -7,16 +7,12 @@ import pl.lodz.p.it.ssbd2021.ssbd03.validators.PhoneNumber;
 
 @Data
 @NoArgsConstructor
-public class ClientChangeDataDto extends AccountChangeDataDto {
-    @PhoneNumber
-    private String newPhoneNumber;
-
+public class ClientChangeDataDto extends ConsumerChangeDataDto {
     private AddressChangeDto newAddress;
 
     public ClientChangeDataDto(String login, Long version, String newFirstName, String newSecondName, String newPhoneNumber, AddressChangeDto newAddress) {
-        super(login, version, newFirstName, newSecondName);
+        super(login, version, newFirstName, newSecondName, newPhoneNumber);
 
-        this.newPhoneNumber = newPhoneNumber;
         this.newAddress = newAddress;
     }
 }
