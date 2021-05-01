@@ -1,6 +1,5 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.security;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AuthUnauthorized;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AuthenticateDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.AuthenticateEndpointLocal;
 
