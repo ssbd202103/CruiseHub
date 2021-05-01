@@ -14,6 +14,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -121,4 +122,13 @@ public class AccountController {
             return Response.status(BAD_REQUEST).entity(e.getMessage()).build();
         }
     }
+
+    @ETagFilterBinding
+    @PUT
+    @Path("/unblock/{unblockedUserLogin}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void unblockUser(@PathParam("unblockedUserLogin") String unblockedUserLogin, @HeaderParam("If-Match") @NotNull @NotEmpty String tagValue,  @NotNull String adminLogin) throws BaseAppException {
+        accountEndpoint.unblockUser(unblockedUserLogin, adminLogin);
+    }
+
 }

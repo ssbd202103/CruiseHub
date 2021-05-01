@@ -76,4 +76,7 @@ public interface AccountEndpointLocal {
      * @param id ID użytkownika w postaci obiektu klasy IdDto
      */
     void blockUser(@Valid @NotNull IdDto id);
+
+
+    void unblockUser(@NotNull String unblockedUserLogin, @NotNull String adminLogin) throws BaseAppException;
 }

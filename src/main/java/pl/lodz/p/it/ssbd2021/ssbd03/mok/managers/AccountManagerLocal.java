@@ -71,6 +71,10 @@ public interface AccountManagerLocal {
     void blockUser(long id);
 
 
+
+    void unblockUser(String unblockedUserLogin, String adminLogin) throws BaseAppException;
+
+
     /**
      * Pobiera liste kont z bazy danych
      *
