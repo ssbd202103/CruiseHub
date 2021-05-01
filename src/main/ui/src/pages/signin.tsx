@@ -59,6 +59,11 @@ export default function SignIn() {
                         <Link to="signup/client">
                             <a className={styles.link}>{t("i don't have an account")}</a>
                         </Link>
+
+                        <Link to="/reset/requestPassword">
+                            <a className={styles.link}>Zapomniałem hasło</a>
+                        </Link>
+
                     </Box>
 
                     

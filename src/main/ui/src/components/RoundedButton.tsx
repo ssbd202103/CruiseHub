@@ -8,8 +8,6 @@ export interface RoundedButtonProps {
     readonly children?: any,
     readonly style?: React.CSSProperties,
     readonly onClick?: React.MouseEventHandler<any>
-
-    readonly onClickListenerFun?: any
 }
 
 export default function RoundedButton(props: RoundedButtonProps) {

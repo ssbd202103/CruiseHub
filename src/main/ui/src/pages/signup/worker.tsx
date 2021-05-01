@@ -33,7 +33,7 @@ export default function WorkerSignUp() {
 
     useEffect(() => {
         const getCompaniesList = async () => {
-            const {data} = await axios.get('http://localhost:8080/cruisehub/api/company/companiesinfo', {});
+            const {data} = await axios.get('http://localhost:8080/api/company/companiesinfo', {});
             setCompaniesList(data.map((comp: { name: string }) => comp.name))
         }
         getCompaniesList()
@@ -54,7 +54,7 @@ export default function WorkerSignUp() {
             }
         );
 
-        await axios.post('http://localhost:8080/cruisehub/api/account/businessworker/registration', json, {
+        await axios.post('http://localhost:8080/api/account/businessworker/registration', json, {
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -206,7 +206,7 @@ export default function WorkerSignUp() {
                 }}
             >
                 <RoundedButton
-                    onClickListenerFun={workerSignUpFun}
+                    onClick={workerSignUpFun}
                     style={{width: '50%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
                     color="pink"
                 >{t("signup")}</RoundedButton>
