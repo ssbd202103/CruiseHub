@@ -11,7 +11,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
+
 
 import java.util.stream.Collectors;
 
@@ -98,14 +98,12 @@ public class AccountMapper {
      * czy dane konto jest aktywne
      */
     public static AccountDtoForList toAccountListDto(Account account) {
-        AccountDtoForList accountDtoForList = new AccountDtoForList(account.getLogin(),
+        return new AccountDtoForList(account.getLogin(),
                 account.getEmail(), account.isActive(),
                 account.getVersion(),
                 account.getAccessLevels().stream()
                         .map(AccessLevel::getAccessLevelType)
                         .collect(Collectors.toSet()));
-        //accountDtoForList.setETag(EntityIdentitySignerVerifier.calculateEntitySignature(accountDtoForList));
-        return accountDtoForList;
     }
 
 }
