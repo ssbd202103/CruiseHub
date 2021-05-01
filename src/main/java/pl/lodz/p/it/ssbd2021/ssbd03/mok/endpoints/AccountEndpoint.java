@@ -64,49 +64,25 @@ public class AccountEndpoint implements AccountEndpointLocal {
 
     @Override
     public void changeClientData(ClientChangeDataDto clientChangeDataDto) {
-        System.out.println("Address: " + clientChangeDataDto.getNewAddress());
-        accountManager.changeClientData(
-                clientChangeDataDto.getLogin(),
-                clientChangeDataDto.getVersion(),
-                clientChangeDataDto.getNewFirstName(),
-                clientChangeDataDto.getNewSecondName(),
-                clientChangeDataDto.getNewPhoneNumber(),
-                clientChangeDataDto.getNewAddress().getNewHouseNumber(),
-                clientChangeDataDto.getNewAddress().getNewStreet(),
-                clientChangeDataDto.getNewAddress().getNewPostalCode(),
-                clientChangeDataDto.getNewAddress().getNewCity(),
-                clientChangeDataDto.getNewAddress().getNewCountry()
-        );
+        Account account = AccountMapper.extractAccountFromClientChangeDataDto(clientChangeDataDto);
+        accountManager.changeClientData(account);
     }
 
     @Override
     public void changeBusinessWorkerData(BusinessWorkerChangeDataDto businessWorkerChangeDataDto) {
-        accountManager.changeBusinessWorkerData(
-                businessWorkerChangeDataDto.getLogin(),
-                businessWorkerChangeDataDto.getVersion(),
-                businessWorkerChangeDataDto.getNewFirstName(),
-                businessWorkerChangeDataDto.getNewSecondName(),
-                businessWorkerChangeDataDto.getNewPhoneNumber()
-        );
+        Account account = AccountMapper.extractAccountFromBusinessWorkerChangeDataDto(businessWorkerChangeDataDto);
+        accountManager.changeBusinessWorkerData(account);
     }
 
     @Override
     public void changeModeratorData(ModeratorChangeDataDto moderatorChangeDataDto) {
-        accountManager.changeModeratorData(
-                moderatorChangeDataDto.getLogin(),
-                moderatorChangeDataDto.getVersion(),
-                moderatorChangeDataDto.getNewFirstName(),
-                moderatorChangeDataDto.getNewSecondName()
-        );
+        Account account = AccountMapper.extractAccountFromModeratorChangeDataDto(moderatorChangeDataDto);
+        accountManager.changeModeratorData(account);
     }
 
     @Override
     public void changeAdministratorData(AdministratorChangeDataDto administratorChangeDataDto) {
-        accountManager.changeAdministratorData(
-                administratorChangeDataDto.getLogin(),
-                administratorChangeDataDto.getVersion(),
-                administratorChangeDataDto.getNewFirstName(),
-                administratorChangeDataDto.getNewSecondName()
-        );
+        Account account = AccountMapper.extractAccountFromAdministratorChangeDataDto(administratorChangeDataDto);
+        accountManager.changeAdministratorData(account);
     }
 }

@@ -62,51 +62,32 @@ public interface AccountManagerLocal {
     /**
      * Zmień dane klienta
      *
-     * @param login login klienta
-     * @param version wersja
-     * @param newFirstName nowe imię
-     * @param newSecondName nowe nazwisko
-     * @param newPhoneNumber nowy numer telefonu
-     * @param newHouseNumber nowy numer domu
-     * @param newStreet nowa ulica
-     * @param newPostalCode nowy kod pocztowy
-     * @param newCity nowe miasto
-     * @param newCountry nowe państwo
+     * @param account encja konta zawierająca zmiany
+     *
      */
-    void changeClientData(String login, Long version,
-                          String newFirstName, String newSecondName, String newPhoneNumber,
-                          Long newHouseNumber, String newStreet, String newPostalCode, String newCity,String newCountry);
+    void changeClientData(Account account);
 
     /**
      * Zmień dane pracownika firmy
      *
-     * @param login login pracownika
-     * @param version wersja
-     * @param newFirstName nowe imię
-     * @param newSecondName nowe nazwisko
-     * @param newPhoneNumber nowy numer telefonu
+     * @param account encja konta zawierająca zmiany
+     *
      */
-    void changeBusinessWorkerData(String login, Long version, String newFirstName, String newSecondName, String newPhoneNumber);
+    void changeBusinessWorkerData(Account account);
 
     /**
      * Zmień dane moderatora
      *
-     * @param login login moderatora
-     * @param version wersja
-     * @param newFirstName nowe imię
-     * @param newSecondName nowe nazwisko
+     * @param account encja konta zawierająca zmiany
      *
      */
-    void changeModeratorData(String login, Long version, String newFirstName, String newSecondName);
+    void changeModeratorData(Account account);
 
     /**
      * Zmień dane administratora
      *
-     * @param login login administratora
-     * @param version wersja
-     * @param newFirstName nowe imię
-     * @param newSecondName nowe nazwisko
+     * @param account encja konta zawierająca zmiany
      *
      */
-    void changeAdministratorData(String login, Long version, String newFirstName, String newSecondName);
+    void changeAdministratorData(Account account);
 }

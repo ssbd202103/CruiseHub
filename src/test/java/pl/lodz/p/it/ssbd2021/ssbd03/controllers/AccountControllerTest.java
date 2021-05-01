@@ -64,8 +64,8 @@ class AccountControllerTest {
     }
 
     @Test
-    public void changeClientDataTest() {
-        AddressChangeDto newAddress = new AddressChangeDto(100L, "Aleja Politechniki", "94-690", "Lodz", "Polska");
+    public void changeClientDataTest_SUCCESS() {
+        AddressChangeDto newAddress = new AddressChangeDto(100L, "Aleja Zmieniona", "94-690", "Lodz", "Polska");
         ClientChangeDataDto clientChangeDataDto = new ClientChangeDataDto("emusk",0L, "Elonczek", "Maseczek", "987654321", newAddress);
 
         given().baseUri(baseUri).contentType("application/json").body(clientChangeDataDto).when().put("account/client/changedata").then().statusCode(204);
@@ -73,21 +73,21 @@ class AccountControllerTest {
     }
 
     @Test
-    public void changeBusinessWorkerDataTest() {
+    public void changeBusinessWorkerDataTest_SUCCESS() {
         BusinessWorkerChangeDataDto businessWorkerChangeDataDto = new BusinessWorkerChangeDataDto("jbezos", 0L, "Jefus", "Besoses", "000000001");
 
         given().baseUri(baseUri).contentType("application/json").body(businessWorkerChangeDataDto).when().put("account/businessworker/changedata").then().statusCode(204);
     }
 
     @Test
-    public void changeModeratorDataTest() {
+    public void changeModeratorDataTest_SUCCESS() {
         ModeratorChangeDataDto moderatorChangeDataDto = new ModeratorChangeDataDto("mzuckerberg", 0L, "Marcus", "Sugarus");
 
         given().baseUri(baseUri).contentType("application/json").body(moderatorChangeDataDto).when().put("account/moderator/changedata").then().statusCode(204);
     }
 
     @Test
-    public void changeAdministratorDataTest() {
+    public void changeAdministratorDataTest_SUCCESS() {
         AdministratorChangeDataDto administratorChangeDataDto = new AdministratorChangeDataDto("rbranson", 0L, "Rubertiono", "Bransolino");
 
         given().baseUri(baseUri).contentType("application/json").body(administratorChangeDataDto).when().put("account/administrator/changedata").then().statusCode(204);
