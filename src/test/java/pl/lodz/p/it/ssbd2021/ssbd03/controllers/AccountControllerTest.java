@@ -2,21 +2,30 @@ package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import groovyjarjarasm.asm.TypeReference;
 import io.restassured.RestAssured;
+import io.restassured.http.Header;
+import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AddressDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.PasswordResetDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
 
+import javax.ws.rs.core.MediaType;
 import java.util.Set;
 
 
@@ -29,10 +38,10 @@ import java.util.List;
 
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 
 
@@ -46,17 +55,35 @@ class AccountControllerTest {
     }
 
     @Test
+    @Disabled
+    public void requestPasswordReset_SUCCESS() {
+        String login = "aradiuk";
+        given().baseUri(baseUri).contentType(MediaType.APPLICATION_JSON).post("/request-password-reset/" + login).then().statusCode(200);
+    }
+
+    @Test
+    @Disabled
+    public void resetPassword_SUCCESS() {
+        PasswordResetDto passwordResetDto = new PasswordResetDto(
+                "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhcmFkaXVrIiwiaXNzIjoiY3J1aXNlaHViIiwiZXhwIjoxNjE5ODU4NDA3LCJ2ZXJzaW9uIjo1LCJpYXQiOjE2MTk4NTcyMDcsImp0aSI6Ijk0M2EyMzM1LTFlZTctNGE4ZS1iNmFhLWU3Y2FiM2I3OWNmYSJ9.wI1xu7qZDCVrV-HYGCxgqbn9HVIr8mFW0JC0g_qZn3A",
+                "aradiuk", "password");
+        given().baseUri(baseUri).contentType(MediaType.APPLICATION_JSON).body(passwordResetDto).post("/reset-password").then().statusCode(200);
+    }
+
+    @Test
     public void registerClientTest_SUCCESS() {
         ClientForRegistrationDto client = getSampleClientForRegistrationDto();
-        given().baseUri(baseUri).contentType("application/json").body(client).when().post("/client/registration").then().statusCode(204);
+        given().baseUri(baseUri).contentType(MediaType.APPLICATION_JSON).body(client).when().post("/client/registration").then().statusCode(204);
         // todo implement remove method to clean created data
     }
 
     @Test
     public void registerBusinessWorkerTest_SUCCESS() {
-        BusinessWorkerForRegistrationDto businessWorker = new BusinessWorkerForRegistrationDto("Artur", "Radiuk", randomAlphanumeric(15), randomAlphanumeric(10) + "@gmail.com",
+        BusinessWorkerForRegistrationDto businessWorkerDto = new BusinessWorkerForRegistrationDto("Artur", "Radiuk", randomAlphanumeric(15), randomAlphanumeric(10) + "@gmail.com",
                 "123456789", LanguageType.ENG, "123456789", "FirmaJez");
-        given().baseUri(baseUri).contentType("application/json").body(businessWorker).when().post("/businessworker/registration").then().statusCode(204);
+        AccountDto accountDto = new AccountDto(businessWorkerDto.getLogin(), businessWorkerDto.getFirstName(), businessWorkerDto.getSecondName(),
+                businessWorkerDto.getEmail(), LanguageType.ENG, Set.of(AccessLevelType.BUSINESS_WORKER), 0l);
+        given().baseUri(baseUri).contentType(MediaType.APPLICATION_JSON).body(businessWorkerDto).when().post("/business-worker/registration").then().statusCode(204);
         // todo implement remove method to clean created data
     }
 
@@ -112,29 +139,25 @@ class AccountControllerTest {
     }
 
     @Test
-    public void getAllAccountsTest_SUCCESS() throws JsonProcessingException {
-        Response response = RestAssured.given().header("Content-Type", "application/json").baseUri(baseUri).get("/accounts");
-        String accountString = response.getBody().asString();
-        List<AccountDtoForList> accountDtoList = Arrays.asList(objectMapper.readValue(accountString, AccountDtoForList[].class));
+    public void getAllAccountsTest_SUCCESS() {
+        Response response = null;
+        List<AccountDto> accountDtoList = null;
+        try {
+            response = RestAssured.given().header("Content-Type", "application/json").baseUri(baseUri).get(new URI("account/accounts"));
+            String accountString = response.getBody().asString();
+            ObjectMapper mapper = new ObjectMapper();
+            accountDtoList = Arrays.asList(mapper.readValue(accountString, AccountDto[].class));
+        } catch (URISyntaxException | IOException e) {
+            e.printStackTrace();
+        }
 
-        int numberOfUsers = accountDtoList.size();
-        ClientForRegistrationDto client = getSampleClientForRegistrationDto();
+       assertEquals(response.getStatusCode(),javax.ws.rs.core.Response.Status.OK.getStatusCode());
+       assertEquals(accountDtoList.get(0).getEmail(),"rbranson@gmail.com");
+       assertEquals(accountDtoList.get(1).getEmail(),"emusk@gmail.com");
+       assertEquals(accountDtoList.get(2).getEmail(),"jbezos@gmail.com");
+       assertEquals(accountDtoList.get(0).getFirstName(),"Richard");
+       assertEquals(accountDtoList.get(0).getSecondName(),"Branson");
 
-        assertTrue(accountDtoList.stream().noneMatch(account -> account.getLogin().equals(client.getLogin())));
-
-        AccountDto account = registerClientAndGetAccountDto(client);
-
-        response = RestAssured.given().contentType(ContentType.JSON).baseUri(baseUri).get("/accounts");
-
-        accountString = response.getBody().asString();
-        accountDtoList = Arrays.asList(objectMapper.readValue(accountString, AccountDtoForList[].class));
-
-        int numberOfUsersAfterChanges = accountDtoList.size();
-
-        assertThat(response.getStatusCode()).isEqualTo(200);
-        assertEquals(numberOfUsers + 1, numberOfUsersAfterChanges);
-
-        assertTrue(accountDtoList.stream().anyMatch(newAccount -> newAccount.getLogin().equals(account.getLogin())));
 
     }
 

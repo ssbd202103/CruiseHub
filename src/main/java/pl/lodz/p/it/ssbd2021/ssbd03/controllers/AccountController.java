@@ -3,7 +3,8 @@ package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.IdDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.PasswordResetDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
@@ -13,15 +14,16 @@ import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
+import javax.print.attribute.standard.Media;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
-import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 import java.util.List;
+
+import static javax.ws.rs.core.Response.Status.*;
 
 
 /**
@@ -73,7 +75,7 @@ public class AccountController {
      * @param businessWorkerForRegistrationDto zbiór danych niezbędnych dla stworzenia konta z poziomem dostępu Pracownik firmy
      */
     @POST
-    @Path("/businessworker/registration")
+    @Path("/business-worker/registration")
     @Consumes(MediaType.APPLICATION_JSON)
     public void createBusinessWorker(@Valid @NotNull BusinessWorkerForRegistrationDto businessWorkerForRegistrationDto) {
         accountEndpoint.createBusinessWorkerAccount(businessWorkerForRegistrationDto);
@@ -120,5 +122,40 @@ public class AccountController {
         } catch (BaseAppException e) {
             return Response.status(BAD_REQUEST).entity(e.getMessage()).build();
         }
+    }
+
+
+    /**
+     * Metoda odpowiedzialna za resetowanie hasła
+     *
+     * @param passwordResetDto obiekt dto przechowujący niezbędne dane do resetowania hasła
+     * @return Odpowiedź serwera w postaci JSON
+     */
+    @POST
+    @Path("/reset-password")
+    public Response resetPassword(@Valid PasswordResetDto passwordResetDto) {
+        try {
+            this.accountEndpoint.resetPassword(passwordResetDto);
+        } catch (BaseAppException e) {
+            Response.status(FORBIDDEN).entity(e.getMessage()).build(); // todo send key
+        }
+        return Response.ok().build(); // todo appropriate condition
+    }
+
+    /**
+     * Metoda odpowiedzialna za zgłoszenia życzenia resetowania hasła
+     *
+     * @param login login użytkownika
+     * @return Odpowiedź serwera w postaci JSON
+     */
+    @POST
+    @Path("/request-password-reset/{login}")
+    public Response requestPasswordReset(@PathParam("login") @Login String login) {
+        try {
+            this.accountEndpoint.requestPasswordReset(login);
+        } catch (BaseAppException e) {
+            Response.status(NOT_FOUND).entity(e.getMessage()).build();
+        }
+        return Response.ok().build();
     }
 }

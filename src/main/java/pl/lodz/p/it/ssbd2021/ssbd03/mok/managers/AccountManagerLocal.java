@@ -66,6 +66,7 @@ public interface AccountManagerLocal {
 
     /**
      * Metoda odpowiedzialna za blokowanie konta
+     *
      * @param id ID użytkownika
      */
     void blockUser(long id);
@@ -77,4 +78,24 @@ public interface AccountManagerLocal {
      * @return lista kont
      */
     List<Account> getAllAccounts();
+
+
+    /**
+     * Metoda odpowiedzialna za wysyłania email z linkiem do resetowania hasła
+     *
+     * @param login login użytkonika
+     * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku gdy użytkownik o podanym loginie nie istnieje, albo gdy podczas wysyłania email został rzucony wyjątek przez metode klasy EmailService
+     */
+    void requestPasswordReset(String login) throws BaseAppException;
+
+    /**
+     * Metoda odpowiedzialna za resetowanie hasła użytkonwika.
+     *
+     * @param login        login użytkownika
+     * @param passwordHash zachaszowane hasło
+     * @param token        jwt token otrzymany przez email
+     * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku gdy token wygasł albo nie przeszedł walidacji oraz gdy login który znajduje się w tokenie jest rózny od przesłanego jawnie w dto oraz w sytuacj gdy został rzucony wyjątek blokady optymistycznej
+     */
+    void resetPassword(String login, String passwordHash, String token) throws BaseAppException;
+
 }

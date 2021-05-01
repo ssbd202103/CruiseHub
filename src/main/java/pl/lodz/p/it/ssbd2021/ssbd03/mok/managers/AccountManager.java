@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.managers;
 
+import com.auth0.jwt.interfaces.Claim;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
@@ -9,20 +10,25 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Administrator;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AccountManagerException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.JWTException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.CompanyFacadeMok;
+import pl.lodz.p.it.ssbd2021.ssbd03.security.JWTHandler;
+import pl.lodz.p.it.ssbd2021.ssbd03.services.EmailService;
+import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
-import java.util.ArrayList;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ACCESS_LEVEL_ALREADY_ASSIGNED_ERROR;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.PASSWORD_RESET_IDENTITY_ERROR;
 
 /**
  * Klasa która zarządza logiką biznesową kont
@@ -137,4 +143,29 @@ public class AccountManager implements AccountManagerLocal {
         this.accountFacade.blockUser(id);
     }
 
+    @Override
+    public void requestPasswordReset(String login) throws BaseAppException {
+        Account account = this.accountFacade.findByLogin(login);
+        Map<String, Object> claims = Map.of("version", account.getVersion());
+        String token = JWTHandler.createToken(claims, login);
+        String contentHtml = "<a href=\"http://" + PropertiesReader.getSecurityProperties().getProperty("app.baseurl") + "/reset/passwordReset/" + token + "\">Reset password</a>";
+        EmailService.sendEmailWithContent(account.getEmail().trim(), "hello", contentHtml);
+    }
+
+    @Override
+    public void resetPassword(String login, String passwordHash, String token) throws BaseAppException {
+        JWTHandler.validateToken(token);
+
+        Map<String, Claim> claims = JWTHandler.getClaimsFromToken(token);
+
+        if (claims.get("sub").asString().equals(login)) {
+            Account account = this.accountFacade.findByLogin(login);
+            account.setPasswordHash(passwordHash);
+            account.setVersion(claims.get("version").asLong());
+            account.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
+            account.setAlteredBy(account);
+        } else {
+            throw new AccountManagerException(PASSWORD_RESET_IDENTITY_ERROR);
+        }
+    }
 }
