@@ -56,7 +56,7 @@ class AccountControllerTest {
     public void registerBusinessWorkerTest_SUCCESS() {
         BusinessWorkerForRegistrationDto businessWorker = new BusinessWorkerForRegistrationDto("Artur", "Radiuk", randomAlphanumeric(15), randomAlphanumeric(10) + "@gmail.com",
                 "123456789", LanguageType.ENG, "123456789", "FirmaJez");
-        given().baseUri(baseUri).contentType("application/json").body(businessWorker).when().post("businessworker/registration").then().statusCode(204);
+        given().baseUri(baseUri).contentType("application/json").body(businessWorker).when().post("/businessworker/registration").then().statusCode(204);
         // todo implement remove method to clean created data
     }
 
@@ -115,7 +115,7 @@ class AccountControllerTest {
     public void getAllAccountsTest_SUCCESS() throws JsonProcessingException {
         Response response = RestAssured.given().header("Content-Type", "application/json").baseUri(baseUri).get("/accounts");
         String accountString = response.getBody().asString();
-        List<AccountDto> accountDtoList = Arrays.asList(objectMapper.readValue(accountString, AccountDto[].class));
+        List<AccountDtoForList> accountDtoList = Arrays.asList(objectMapper.readValue(accountString, AccountDtoForList[].class));
 
         int numberOfUsers = accountDtoList.size();
         ClientForRegistrationDto client = getSampleClientForRegistrationDto();
@@ -127,7 +127,7 @@ class AccountControllerTest {
         response = RestAssured.given().contentType(ContentType.JSON).baseUri(baseUri).get("/accounts");
 
         accountString = response.getBody().asString();
-        accountDtoList = Arrays.asList(objectMapper.readValue(accountString, AccountDto[].class));
+        accountDtoList = Arrays.asList(objectMapper.readValue(accountString, AccountDtoForList[].class));
 
         int numberOfUsersAfterChanges = accountDtoList.size();
 
