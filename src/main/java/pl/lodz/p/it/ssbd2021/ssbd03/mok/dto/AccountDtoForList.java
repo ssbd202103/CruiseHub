@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,7 +22,6 @@ public class AccountDtoForList implements SignableEntity {
     @Login
     private String login;
 
-
     @Email
     private String email;
 
@@ -34,8 +34,18 @@ public class AccountDtoForList implements SignableEntity {
     @NotNull
     private Set<AccessLevelType> accessLevels;
 
-    private String ETag;
+    private String etag;
 
+    public AccountDtoForList(@Login String login, @Email String email, @NotNull boolean active, @PositiveOrZero Long version, @NotNull Set<AccessLevelType> accessLevels, String etag) {
+        this.login = login;
+        this.email = email;
+        this.active = active;
+        this.version = version;
+        this.accessLevels = accessLevels;
+        this.etag = etag;
+    }
+
+    @JsonIgnore
     @Override
     public String getSignablePayload() {
         return login + "." + version;
@@ -47,7 +57,7 @@ public class AccountDtoForList implements SignableEntity {
         this.active = active;
         this.version = version;
         this.accessLevels = accessLevels;
-        this.ETag = EntityIdentitySignerVerifier.calculateEntitySignature(this);
+        this.etag = EntityIdentitySignerVerifier.calculateEntitySignature(this);
     }
 
 
