@@ -1,4 +1,4 @@
-package pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.account_list;
+package pl.lodz.p.it.ssbd2021.ssbd03.mok.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,7 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-public class AccountListDto {
+public class AccountDtoForList {
 
     @Login
     private String login;
