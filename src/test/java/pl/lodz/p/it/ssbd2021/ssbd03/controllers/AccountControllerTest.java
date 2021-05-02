@@ -14,10 +14,13 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AddressDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.ChangeAccessLevelStateDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccessLevelDetailsViewDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccountDetailsViewDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
 
+import java.util.Optional;
 import java.util.Set;
 
 
@@ -75,20 +78,25 @@ class AccountControllerTest {
         assertThat(updatedAccount.getAccessLevels()).contains(AccessLevelType.MODERATOR).containsAll(originalAccessLevels);
         // todo implement remove method to clean created data
     }
-//
-//    @Test
-//    void changeAccessLevelState_SUCCESS() throws JsonProcessingException {
-//        ClientForRegistrationDto client = getSampleClientForRegistrationDto();
-//        AccountDto account = registerClientAndGetAccountDto(client);
-//        grantAccessLevel(account, AccessLevelType.MODERATOR, account.getVersion());
-//        account = getAccountDto(account.getLogin());
-//
-//        assertThat()
-//        String etag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
-//
+
+    @Test
+    void changeAccessLevelState_SUCCESS() throws JsonProcessingException {
+        ClientForRegistrationDto client = getSampleClientForRegistrationDto();
+        AccountDto account = registerClientAndGetAccountDto(client);
+
+        grantAccessLevel(account, AccessLevelType.MODERATOR, account.getVersion());
+
+        AccountDetailsViewDto accountDetails = getAccountDetailsViewDto(account.getLogin());
+        Optional<AccessLevelDetailsViewDto> moderator = accountDetails.getAccessLevels().stream()
+                .filter(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.MODERATOR).findFirst();
+
+        assertThat(moderator).isPresent();
+        boolean enabled = moderator.get().isEnabled();
+        String etag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
+
 //        ChangeAccessLevelStateDto = new ChangeAccessLevelStateDto(account.getLogin(), )
 //        getBaseUriETagRequest(etag).contentType(ContentType.JSON).body(changeAccessLevelState)
-//    }
+    }
 
     @Test
     void grantAccessLevelTest_FAIL() throws JsonProcessingException {
@@ -162,6 +170,12 @@ class AccountControllerTest {
 
     private AccountDto getAccountDto(String login) throws JsonProcessingException {
         return objectMapper.readValue(given().baseUri(baseUri).get("/" + login).thenReturn().asString(), AccountDto.class);
+    }
+
+    private AccountDetailsViewDto getAccountDetailsViewDto(String login) throws JsonProcessingException {
+        String responseString = given().baseUri(baseUri).get("/details-view/" + login)
+                .thenReturn().asString();
+        return objectMapper.readValue(responseString, AccountDetailsViewDto.class);
     }
 
     private void grantAccessLevel(AccountDto account, AccessLevelType accessLevelType, Long accountVersion) {

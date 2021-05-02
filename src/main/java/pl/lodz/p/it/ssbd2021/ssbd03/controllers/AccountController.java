@@ -1,9 +1,11 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.IdDto;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.IdDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.ChangeAccessLevelStateDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccountDetailsViewDto;
@@ -20,11 +22,11 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
-
-import java.util.List;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.SERIALIZATION_PARSING_ERROR;
 
 
 /**
@@ -33,6 +35,8 @@ import java.util.List;
 @Path("/account")
 @RequestScoped
 public class AccountController {
+    private final ObjectMapper mapper = new ObjectMapper(); // for Jackson serialization,
+    // should not be used anymore once default JSON serializer is set to Jackson
 
     @EJB
     private AccountEndpointLocal accountEndpoint;
@@ -58,15 +62,23 @@ public class AccountController {
         }
     }
 
+    /**
+     * Pobiera dane użytkownika wraz z szczegółami i poziomami dostępu
+     *
+     * @param login użytkownika
+     * @return Odpowiedź serwera z reprezentacją JSON obiektu użytkownika
+     */
     @GET
-    @Path("/detailsView/{login}")
+    @Path("/details-view/{login}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAccountDetailsByLogin(@PathParam("login") String login) {
         try {
             AccountDetailsViewDto account = accountEndpoint.getAccountDetailsByLogin(login);
-            return Response.ok().entity(account).build();
+            return Response.ok().entity(mapper.writeValueAsString(account)).build();
         } catch (BaseAppException e) {
-            return Response.status(BAD_REQUEST).entity(e.getMessage()).build();
+            return Response.status(NOT_FOUND).entity(e.getMessage()).build();
+        } catch (JsonProcessingException e) {
+            return Response.status(BAD_REQUEST).entity(SERIALIZATION_PARSING_ERROR).build();
         }
     }
 

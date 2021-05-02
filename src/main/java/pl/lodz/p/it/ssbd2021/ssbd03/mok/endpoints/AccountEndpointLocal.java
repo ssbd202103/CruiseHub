@@ -45,6 +45,13 @@ public interface AccountEndpointLocal {
      */
     AccountDto getAccountByLogin(String login) throws BaseAppException;
 
+    /**
+     * Pobiera obiekt AccountDetailsViewDto szukanego użytkownika
+     *
+     * @param login użytkownika
+     * @return reprezentacja użytkownika po dokonanych zmianach w postaci AccountDetailsViewDto
+     * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku nieznalezienia użytkownika.
+     */
     AccountDetailsViewDto getAccountDetailsByLogin(String login) throws BaseAppException;
 
     /**
@@ -79,6 +86,7 @@ public interface AccountEndpointLocal {
 
     /**
      * Metoda odpowiedzialna za wywołanie metody odpowiedzialnej za blokowanie użytkownika
+     *
      * @param id ID użytkownika w postaci obiektu klasy IdDto
      */
     void blockUser(@Valid @NotNull IdDto id);
