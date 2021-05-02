@@ -9,14 +9,12 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.EndpointException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.IdDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters.AccountMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.managers.AccountManagerLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.mappers.IdMapper;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
@@ -54,13 +52,13 @@ public class AccountEndpoint implements AccountEndpointLocal {
     public AccountDto grantAccessLevel(GrantAccessLevelDto grantAccessLevelDto) throws BaseAppException {
         if (grantAccessLevelDto.getAccessLevel().equals(AccessLevelType.MODERATOR)) {
             return AccountMapper.toAccountDto(
-                    accountManager.grantModeratorAccessLevel(grantAccessLevelDto.getAccountLogin(), grantAccessLevelDto.getAccountVersion())
+                accountManager.grantModeratorAccessLevel(grantAccessLevelDto.getAccountLogin(), grantAccessLevelDto.getAccountVersion())
             );
         }
 
         if (grantAccessLevelDto.getAccessLevel().equals(AccessLevelType.ADMINISTRATOR)) {
             return AccountMapper.toAccountDto(
-                    accountManager.grantAdministratorAccessLevel(grantAccessLevelDto.getAccountLogin(), grantAccessLevelDto.getAccountVersion())
+                accountManager.grantAdministratorAccessLevel(grantAccessLevelDto.getAccountLogin(), grantAccessLevelDto.getAccountVersion())
             );
         }
         throw new EndpointException(ACCESS_LEVEL_NOT_ASSIGNABLE_ERROR);
@@ -82,7 +80,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
     }
 
     @Override
-    public void blockUser(@Valid @NotNull IdDto id) {
-        this.accountManager.blockUser(IdMapper.toLong(id));
+    public void blockUser(@Valid @NotNull String login) throws BaseAppException {
+        this.accountManager.blockUser(login);
     }
 }

@@ -9,7 +9,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Administrator;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AccountManagerException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
@@ -18,7 +17,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.CompanyFacadeMok;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
-import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDateTime;
 
@@ -133,8 +131,16 @@ public class AccountManager implements AccountManagerLocal {
     }
 
     @Override
-    public void blockUser(long id) {
-        this.accountFacade.blockUser(id);
+    public void blockUser(String login) throws BaseAppException {
+        Account account;
+        try {
+            account = this.accountFacade.findByLogin(login);
+        } catch (BaseAppException e) {
+            throw new AccountManagerException(e.getMessage());
+        }
+
+        account.setActive(false);
+        account.setAlteredBy(account);
     }
 
 }

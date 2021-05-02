@@ -156,4 +156,14 @@ class AccountControllerTest {
     private RequestSpecification getBaseUriETagRequest(String etag) {
         return given().baseUri(baseUri).header("If-Match", etag);
     }
+
+    @Test
+    void blockUser() throws JsonProcessingException {
+        ClientForRegistrationDto client = getSampleClientForRegistrationDto();
+        AccountDto account = registerClientAndGetAccountDto(client);
+        String etag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
+
+        Response response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).put("/block/rbanson");
+        assertThat(response.getStatusCode()).isEqualTo(200);
+    }
 }

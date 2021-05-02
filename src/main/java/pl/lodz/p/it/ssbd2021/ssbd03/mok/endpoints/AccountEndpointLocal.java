@@ -73,7 +73,7 @@ public interface AccountEndpointLocal {
 
     /**
      * Metoda odpowiedzialna za wywołanie metody odpowiedzialnej za blokowanie użytkownika
-     * @param id ID użytkownika w postaci obiektu klasy IdDto
+     * @param login Login użytkownika w postaci obiektu klasy IdDto
      */
-    void blockUser(@Valid @NotNull IdDto id);
+    void blockUser(@Valid @NotNull String login) throws BaseAppException;
 }

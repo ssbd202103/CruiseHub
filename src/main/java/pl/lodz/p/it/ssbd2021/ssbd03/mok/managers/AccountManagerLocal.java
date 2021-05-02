@@ -65,10 +65,10 @@ public interface AccountManagerLocal {
 
 
     /**
-     * Metoda odpowiedzialna za blokowanie konta
-     * @param id ID użytkownika
+     * Blokuje użytkownika o zadanym loginie
+     * @param login Login użytkownika
      */
-    void blockUser(long id);
+    void blockUser(String login) throws BaseAppException;
 
 
     /**

@@ -21,6 +21,7 @@ import javax.ws.rs.core.Response;
 
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
+
 import java.util.List;
 
 
@@ -93,10 +94,15 @@ public class AccountController {
 
 
     @POST
-    @Path("/block/{id}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void blockUser(@Valid @NotNull IdDto id) {
-        accountEndpoint.blockUser(id);
+    @Path("/block/{login}")
+    public Response blockUser(@PathParam("login") @NotNull String login) {
+        try {
+            accountEndpoint.blockUser(login);
+            return Response.ok().build();
+        } catch (BaseAppException e) {
+            return Response.status(BAD_REQUEST).entity(e.getMessage()).build();
+        }
+
     }
 
     /**
