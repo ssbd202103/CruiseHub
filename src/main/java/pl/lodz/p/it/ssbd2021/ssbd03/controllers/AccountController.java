@@ -1,11 +1,12 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountChangeEmailDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AccountChangeEmailDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.AdministratorForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ModeratorForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.AccountEndpointLocal;
+import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
@@ -14,7 +15,8 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
+import static javax.ws.rs.core.Response.Status.*;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ETAG_IDENTITY_INTEGRITY_ERROR;
 
 /**
  * Klasa która udostępnia api RESTowe do wykonania operacji na kontach użytkowników, oraz zajmuje się walidacją danych.
@@ -82,8 +84,13 @@ public class AccountController {
     @PUT
     @Path("/change_email")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response changeEmail(AccountChangeEmailDto accountChangeEmailDto) {
+    public Response changeEmail(AccountChangeEmailDto accountChangeEmailDto, @HeaderParam("If-Match") String etag) {
+        if (!EntityIdentitySignerVerifier.validateEntitySignature(etag)) {
+            return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
+        }
+
         accountEndpoint.changeEmail(accountChangeEmailDto);
+
         return Response.noContent().build();
     }
 

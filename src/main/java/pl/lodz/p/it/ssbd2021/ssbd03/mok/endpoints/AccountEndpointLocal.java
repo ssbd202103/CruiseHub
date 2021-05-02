@@ -1,6 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountChangeEmailDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AccountChangeEmailDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.AdministratorForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
