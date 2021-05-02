@@ -2,6 +2,9 @@ package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nimbusds.jose.shaded.json.JSONObject;
+import com.nimbusds.jose.shaded.json.parser.JSONParser;
+import com.nimbusds.jose.shaded.json.parser.ParseException;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -137,6 +140,33 @@ class AccountControllerTest {
         assertTrue(accountDtoList.stream().anyMatch(newAccount -> newAccount.getLogin().equals(account.getLogin())));
 
     }
+
+    @Test
+    public void unblockUserTest_SUCCESS() throws JsonProcessingException, ParseException {
+
+        ClientForRegistrationDto client = getSampleClientForRegistrationDto();
+        AccountDto account = registerClientAndGetAccountDto(client);
+
+        Response response = given().header("Content-Type", "application/json").baseUri(baseUri).get("/accounts");
+        String accountString = response.getBody().asString();
+        List<AccountDtoForList> accountDtoList = Arrays.asList(objectMapper.readValue(accountString, AccountDtoForList[].class));
+        String etag = accountDtoList.stream().filter(acc -> acc.getLogin().equals(account.getLogin())).findFirst().get().getEtag();
+        JSONParser toJson = new JSONParser();
+        String admin = "rbranson";
+        Response postResponse = given().contentType(ContentType.JSON).header("If-Match", etag).baseUri(baseUri).body(toJson.parse(admin)).put("/unblock/" + account.getLogin());
+
+        response = given().header("Content-Type", "application/json").baseUri(baseUri).get("/accounts");
+        accountString = response.getBody().asString();
+        accountDtoList = Arrays.asList(objectMapper.readValue(accountString, AccountDtoForList[].class));
+        AccountDtoForList accountDtoForList = accountDtoList.stream().filter(acc -> acc.getLogin().equals(account.getLogin())).findFirst().get();
+
+        assertEquals(true, accountDtoForList.isActive());
+        assertEquals(200, response.getStatusCode());
+
+
+    }
+
+
 
     private ClientForRegistrationDto getSampleClientForRegistrationDto() {
         AddressDto address = new AddressDto(1L, "Bortnyka", "30-302", "Pluzhne", "Ukraine");

@@ -9,11 +9,13 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegist
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.AccountEndpointLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.ETagFilterBinding;
+import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -121,4 +123,17 @@ public class AccountController {
             return Response.status(BAD_REQUEST).entity(e.getMessage()).build();
         }
     }
+
+    @ETagFilterBinding
+    @PUT
+    @Path("/unblock/{unblockedUserLogin}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response unblockUser(@PathParam("unblockedUserLogin") String unblockedUserLogin, @HeaderParam("If-Match") @NotNull @NotEmpty String tagValue,  @NotNull String adminLogin) throws BaseAppException {
+        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(tagValue, accountEndpoint.getAccountByLogin(unblockedUserLogin))) {
+            return Response.status(406).build();
+        }
+        accountEndpoint.unblockUser(unblockedUserLogin, adminLogin);
+        return Response.status(200).build();
+    }
+
 }

@@ -85,4 +85,9 @@ public class AccountEndpoint implements AccountEndpointLocal {
     public void blockUser(@Valid @NotNull IdDto id) {
         this.accountManager.blockUser(IdMapper.toLong(id));
     }
+
+    @Override
+    public void unblockUser(@NotNull String unblockedUserLogin, @NotNull String adminLogin) throws BaseAppException {
+        this.accountManager.unblockUser(unblockedUserLogin, adminLogin);
+    }
 }
