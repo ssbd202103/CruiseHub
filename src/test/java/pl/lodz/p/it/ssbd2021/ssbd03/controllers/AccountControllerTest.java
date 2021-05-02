@@ -163,7 +163,7 @@ class AccountControllerTest {
         AccountDto account = registerClientAndGetAccountDto(client);
         String etag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
 
-        Response response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).put("/block/rbanson");
+        Response response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).post("/block/rbanson");
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 }
