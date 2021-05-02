@@ -8,13 +8,18 @@ import io.restassured.specification.RequestSpecification;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.Test;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AddressDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters.AccountMapper;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacade;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.managers.AccountManager;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
 
 import java.util.Set;
@@ -155,15 +160,5 @@ class AccountControllerTest {
 
     private RequestSpecification getBaseUriETagRequest(String etag) {
         return given().baseUri(baseUri).header("If-Match", etag);
-    }
-
-    @Test
-    void blockUser() throws JsonProcessingException {
-        ClientForRegistrationDto client = getSampleClientForRegistrationDto();
-        AccountDto account = registerClientAndGetAccountDto(client);
-        String etag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
-
-        Response response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).post("/block/rbanson");
-        assertThat(response.getStatusCode()).isEqualTo(200);
     }
 }
