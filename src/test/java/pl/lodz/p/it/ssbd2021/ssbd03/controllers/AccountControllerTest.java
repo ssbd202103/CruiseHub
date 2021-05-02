@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountChangeEmailDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AddressDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.AdministratorForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
@@ -54,13 +53,5 @@ class AccountControllerTest {
                 "123456789", LanguageType.ENG);
         given().baseUri(baseUri).contentType("application/json").body(administrator).when().post("account/administrator/registration").then().statusCode(204);
         // todo implement remove method to clean created data
-    }
-
-    @Test
-    public void changeEmailTest() {
-        AccountChangeEmailDto accountChangeEmailDto = new AccountChangeEmailDto("rbranson", 0L,"zmieniony@gmail.com");
-
-        Response res = given().baseUri(baseUri).contentType("application/json").body(accountChangeEmailDto).when().put("account/change_email");
-        res.then().statusCode(204);
     }
 }
