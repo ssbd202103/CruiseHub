@@ -13,6 +13,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegist
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.AccountEndpointLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.ETagFilterBinding;
+import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 
 import javax.ejb.EJB;
@@ -24,8 +25,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
-import static javax.ws.rs.core.Response.Status.NOT_FOUND;
+import static javax.ws.rs.core.Response.Status.*;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ETAG_IDENTITY_INTEGRITY_ERROR;
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.SERIALIZATION_PARSING_ERROR;
 
 
@@ -35,7 +36,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.SERIALIZATION_PARSING_ERR
 @Path("/account")
 @RequestScoped
 public class AccountController {
-    private final ObjectMapper mapper = new ObjectMapper(); // for Jackson serialization,
+    private final ObjectMapper mapper = new ObjectMapper(); // for polymorphic Jackson serialization,
     // should not be used anymore once default JSON serializer is set to Jackson
 
     @EJB
@@ -47,12 +48,11 @@ public class AccountController {
      * @param login użytkownika
      * @return Odpowiedź serwera z reprezentacją JSON obiektu użytkownika
      * oraz nagłówkiem ETag wygenerowanym na podstawie obiektu
-     * @throws BaseAppException Bazowy wyjątek aplikacji
      */
     @GET
     @Path("/{login}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAccountByLogin(@PathParam("login") @Login String login) throws BaseAppException {
+    public Response getAccountByLogin(@PathParam("login") @Login String login) {
         try {
             AccountDto account = accountEndpoint.getAccountByLogin(login);
             String ETag = accountEndpoint.getETagFromSignableEntity(account);
@@ -130,7 +130,7 @@ public class AccountController {
      * Dodaj poziom dostępu do istniejącego konta
      *
      * @param grantAccessLevel Obiekt przesyłowy danych potrzebnych do nadania poziomu dostępu
-     * @return Odpowiedź serwera w postaci JSON
+     * @return Odpowiedź serwera reprezentująca obiekt AccountDto po zmianach w postaci JSON
      */
     @ETagFilterBinding
     @PUT
@@ -146,12 +146,21 @@ public class AccountController {
         }
     }
 
+    /**
+     * Zmień stan danego poziomu dostępu (włącz/wyłącz)
+     * @param changeAccessLevelStateDto Obiekt przesyłowy danych potrzebnych do zmiany stanu poziomu dostępu
+     * @param etag nagłówek If-Match żąania wymagany do potwierdzenia spójności danych
+     * @return Odpowiedź serwera reprezentująca obiekt AccountDto po zmianach w postaci JSON
+     */
     @ETagFilterBinding
     @PUT
     @Path("/change-access-level-state")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response changeAccessLevelState(ChangeAccessLevelStateDto changeAccessLevelStateDto) {
+    public Response changeAccessLevelState(ChangeAccessLevelStateDto changeAccessLevelStateDto, @HeaderParam("If-Match") String etag) {
+        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, changeAccessLevelStateDto)) {
+            return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
+        }
         try {
             AccountDto account = accountEndpoint.changeAccessLevelState(changeAccessLevelStateDto);
             return Response.ok().entity(account).build();

@@ -78,7 +78,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
     }
 
     @Override
-    public String getETagFromSignableEntity(SignableEntity entity) throws BaseAppException {
+    public String getETagFromSignableEntity(SignableEntity entity) {
         return EntityIdentitySignerVerifier.calculateEntitySignature(entity);
     }
 

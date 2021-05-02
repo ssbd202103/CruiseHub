@@ -7,7 +7,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.LanguageTypeWrapper;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AccountMapperException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AddressDto;
@@ -19,7 +18,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.accesslevels.ClientDetai
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.accesslevels.ModeratorDetailsViewDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
-
 
 import java.util.stream.Collectors;
 
@@ -89,6 +87,8 @@ public class AccountMapper {
     }
 
     /**
+     * Mapuje obiekt klasy Account na obiekt przesyłowy klasy AccountDto
+     *
      * @param account Konto poddawane konwersji
      * @return Reprezentacja obiektu przesyłowego DTO konta
      */
@@ -114,6 +114,12 @@ public class AccountMapper {
                         .collect(Collectors.toSet()));
     }
 
+    /**
+     * Mapuje obiekt klasy Account na obiekt przesyłowy klasy AccountDetailsViewDto
+     *
+     * @param account Konto poddawane konwersji
+     * @return Reprezentacja konta w postaci obiektu przesyłowego AccountDetailsViewDto
+     */
     public static AccountDetailsViewDto toAccountDetailsViewDto(Account account) {
         return new AccountDetailsViewDto(account.getFirstName(), account.getSecondName(), account.getLogin(),
                 account.getEmail(), account.isConfirmed(), account.isActive(), account.getLanguageType().getName(),
@@ -136,7 +142,7 @@ public class AccountMapper {
             case ADMINISTRATOR:
                 return new AdministratorDetailsViewDto(accessLevel.isEnabled());
             default:
-                return null;
+                return null; // Statement will never execute unless new AccessLevel ENUM is added to the model
         }
     }
 

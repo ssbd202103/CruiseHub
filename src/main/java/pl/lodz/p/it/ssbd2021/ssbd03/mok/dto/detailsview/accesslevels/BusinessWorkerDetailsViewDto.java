@@ -1,6 +1,5 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.accesslevels;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

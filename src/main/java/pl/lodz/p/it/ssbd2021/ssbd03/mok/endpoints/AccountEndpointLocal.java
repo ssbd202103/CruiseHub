@@ -64,6 +64,14 @@ public interface AccountEndpointLocal {
      */
     AccountDto grantAccessLevel(GrantAccessLevelDto grantAccessLevel) throws BaseAppException;
 
+    /**
+     * Zmienia stan poziomu dostępu użytkownika (włącza/wyłącza)
+     *
+     * @param changeAccessLevelState Obiekt przesyłowy danych potrzebnych do zmiany stanu poziomu dostępu
+     * @return reprezentacja użytkownika po dokonanych zmianach w postaci AccountDto
+     * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku gdy zmiana stanu poziomu dostepu jest niemożliwa,
+     *                          lub narusza zasady biznesowe aplikacji
+     */
     AccountDto changeAccessLevelState(ChangeAccessLevelStateDto changeAccessLevelState) throws BaseAppException;
 
     /**
@@ -71,9 +79,8 @@ public interface AccountEndpointLocal {
      *
      * @param entity Encja implementująca SignableEntity
      * @return ETag w postaci String
-     * @throws BaseAppException Bazowy wyjątek aplikacji rzucany w przypadku błędu tworzonia ETaga
      */
-    String getETagFromSignableEntity(SignableEntity entity) throws BaseAppException;
+    String getETagFromSignableEntity(SignableEntity entity);
 
 
     /**

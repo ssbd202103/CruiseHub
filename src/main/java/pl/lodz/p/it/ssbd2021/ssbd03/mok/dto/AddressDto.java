@@ -8,8 +8,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.validators.Country;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.PostCode;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Street;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 @Data

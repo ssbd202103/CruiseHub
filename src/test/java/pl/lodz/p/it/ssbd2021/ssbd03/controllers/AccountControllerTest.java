@@ -91,10 +91,10 @@ class AccountControllerTest {
         assertThat(moderator).isPresent();
         boolean enabled = moderator.get().isEnabled();
         assertThat(enabled).isTrue();
-        String etag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
 
         ChangeAccessLevelStateDto changeAccessLevelState = new ChangeAccessLevelStateDto(account.getLogin(),
                 moderator.get().getAccessLevelType(), account.getVersion(), false);
+        String etag = EntityIdentitySignerVerifier.calculateEntitySignature(changeAccessLevelState);
 
         Response response = getBaseUriETagRequest(etag).contentType(ContentType.JSON)
                 .body(changeAccessLevelState).put("/change-access-level-state");
@@ -124,13 +124,25 @@ class AccountControllerTest {
         assertThat(moderator).isPresent();
         boolean enabled = moderator.get().isEnabled();
         assertThat(enabled).isTrue();
-        String etag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
 
-        // Requesting enabling already enabled account
+        // Requesting change with invalid etag
         ChangeAccessLevelStateDto changeAccessLevelState = new ChangeAccessLevelStateDto(account.getLogin(),
                 moderator.get().getAccessLevelType(), account.getVersion(), true);
 
+        String etag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
+        changeAccessLevelState.setAccountVersion(account.getVersion() - 1);
+
         Response response = getBaseUriETagRequest(etag).contentType(ContentType.JSON)
+                .body(changeAccessLevelState).put("/change-access-level-state");
+
+        assertThat(response.getStatusCode()).isEqualTo(406);
+        assertThat(response.asString()).isEqualTo(ETAG_IDENTITY_INTEGRITY_ERROR);
+
+        // Requesting enabling already enabled account
+        changeAccessLevelState = new ChangeAccessLevelStateDto(account.getLogin(),
+                moderator.get().getAccessLevelType(), account.getVersion(), true);
+
+        response = getBaseUriETagRequest(etag).contentType(ContentType.JSON)
                 .body(changeAccessLevelState).put("/change-access-level-state");
 
         assertThat(response.getStatusCode()).isEqualTo(400);

@@ -81,7 +81,8 @@ const resources = {
             "error.account.accessLevels.alreadyDisabled": "Poziom dostępu jest już zablokowany",
             "error.account.accessLevels.alreadyEnabled": "Poziom dostępu nie jest zablokowany",
             "error.security.etag.empty": "Żądanie nie zawiera wymaganego nagłówka ETag",
-            "error.security.etag.invalid": "Nagłówek ETAG żądania nie przechodzi walidacji",
+            "error.security.etag.invalid": "Nagłówek ETag żądania nie przechodzi walidacji",
+            "error.security.etag.integrity": "Nagłówek ETag nie jest spójny z przekazanymi danymi",
             "error.parsing.serialization": "Błąd serializacji danych"
         }
     },
@@ -165,6 +166,7 @@ const resources = {
             "error.account.accessLevels.alreadyEnabled": "Access level is already enabled",
             "error.security.etag.empty": "Request does not contain necessary ETag header",
             "error.security.etag.invalid": "Request's ETag header does not pass validation",
+            "error.security.etag.integrity": "Request's ETag header does not match provided data",
             "error.parsing.serialization": "Received data could not be serialized properly"
         }
     }
