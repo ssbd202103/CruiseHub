@@ -1,12 +1,16 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AccountChangeEmailDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.AdministratorForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ModeratorForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.AccountEndpointLocal;
+import pl.lodz.p.it.ssbd2021.ssbd03.security.ETagFilterBinding;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
@@ -27,6 +31,19 @@ public class AccountController {
 
     @EJB
     private AccountEndpointLocal accountEndpoint;
+
+    @GET
+    @Path("/{login}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAccountByLogin(@PathParam("login") @Login String login) throws BaseAppException {
+            try {
+                AccountDto account = accountEndpoint.getAccountByLogin(login);
+                String ETag = accountEndpoint.getETagFromSignableEntity(account);
+                return Response.ok().entity(account).header("ETag", ETag).build();
+            } catch (BaseAppException e) {
+                return Response.status(NOT_FOUND).entity(e.getMessage()).build();
+            }
+        }
 
     /**
      * Stwórz nowe konto z poziomem dostępu Klient
@@ -83,9 +100,10 @@ public class AccountController {
      */
     @PUT
     @Path("/change_email")
+    @ETagFilterBinding
     @Consumes(MediaType.APPLICATION_JSON)
     public Response changeEmail(AccountChangeEmailDto accountChangeEmailDto, @HeaderParam("If-Match") String etag) {
-        if (!EntityIdentitySignerVerifier.validateEntitySignature(etag)) {
+        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, accountChangeEmailDto)) {
             return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
         }
 

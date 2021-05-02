@@ -1,21 +1,33 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.Test;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AddressDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AccountChangeEmailDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.AdministratorForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ModeratorForRegistrationDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacade;
+import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
+
 import static org.hamcrest.Matchers.containsString;
 
 import static io.restassured.RestAssured.given;
+import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 
 
 class AccountControllerTest {
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
     private static final String baseUri = "http://localhost:8080/cruisehub/api/";
 
     AccountControllerTest() {
@@ -53,5 +65,66 @@ class AccountControllerTest {
                 "123456789", LanguageType.ENG);
         given().baseUri(baseUri).contentType("application/json").body(administrator).when().post("account/administrator/registration").then().statusCode(204);
         // todo implement remove method to clean created data
+    }
+
+    private ClientForRegistrationDto getSampleClientForRegistrationDto() {
+        AddressDto address = new AddressDto(1L, "Bortnyka", "30-302", "Pluzhne", "Ukraine");
+        return new ClientForRegistrationDto("Artur", "Radiuk", randomAlphanumeric(15), randomAlphanumeric(10) + "@gmail.com",
+                "123456789", LanguageType.PL, address, "123456789");
+    }
+
+    private AccountDto registerClientAndGetAccountDto(ClientForRegistrationDto client) throws JsonProcessingException {
+        given().baseUri(baseUri).contentType("application/json").body(client).post("/client/registration");
+        return getAccountDto(client.getLogin());
+    }
+
+    private AccountDto getAccountDto(String login) throws JsonProcessingException {
+        return objectMapper.readValue(given().baseUri(baseUri).get("/" + login).thenReturn().asString(), AccountDto.class);
+    }
+
+    private RequestSpecification getBaseUriETagRequest(String etag) {
+        return given().baseUri(baseUri).header("Etag", etag);
+    }
+
+    @Test
+    public void changeEmailTest_SUCCESS() throws JsonProcessingException {
+        Response res = given().baseUri(baseUri).get("account/emusk");
+        System.out.println(res.thenReturn().asString());
+        AccountDto account = objectMapper.readValue(res.thenReturn().asString(), AccountDto.class);
+
+
+        String etag = res.getHeader("Etag");
+        System.out.println(etag);
+        AccountChangeEmailDto accountChangeEmailDto = new AccountChangeEmailDto(
+                account.getLogin(),
+                account.getVersion(),
+                "zmieniony_poprawnie@gmail.com");
+
+        given().baseUri(baseUri).header("If-Match", etag)
+                .contentType(ContentType.JSON)
+                .body(accountChangeEmailDto)
+                .when()
+                .put("account/change_email").then().statusCode(204);
+    }
+
+    @Test
+    public void changeEmailTest_FAIL() throws JsonProcessingException {
+        Response res = given().baseUri(baseUri).get("account/emusk");
+        System.out.println(res.thenReturn().asString());
+        AccountDto account = objectMapper.readValue(res.thenReturn().asString(), AccountDto.class);
+
+
+        String etag = res.getHeader("Etag");
+        System.out.println(etag);
+        AccountChangeEmailDto accountChangeEmailDto = new AccountChangeEmailDto(
+                account.getLogin(),
+                0L,
+                "zmieniony_poprawnie@gmail.com");
+
+        given().baseUri(baseUri).header("If-Match", etag)
+                .contentType(ContentType.JSON)
+                .body(accountChangeEmailDto)
+                .when()
+                .put("account/change_email").then().statusCode(500);
     }
 }

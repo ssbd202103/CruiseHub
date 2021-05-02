@@ -6,6 +6,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Administrator;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 
 import javax.ejb.Local;
 
@@ -14,6 +15,16 @@ import javax.ejb.Local;
  */
 @Local
 public interface AccountManagerLocal {
+
+    /**
+     * Pobiera z bazy danych obiekt szukanego użytkownika
+     *
+     * @param login użytkownika
+     * @return obiekt encji użytkownika
+     * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku nieznalezienia użytkownika.
+     */
+    Account getAccountByLogin(String login) throws BaseAppException;
+
     /**
      * Tworzy konto przypisując do niego odpowiedni poziom dostępu oraz adres
      *
