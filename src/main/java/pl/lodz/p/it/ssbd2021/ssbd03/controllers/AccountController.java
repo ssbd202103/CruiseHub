@@ -95,7 +95,6 @@ public class AccountController {
 
     @POST
     @Path("/block/{login}")
-    @Consumes(MediaType.APPLICATION_JSON)
     public Response blockUser(@PathParam("login") @NotNull String login) {
         try {
             accountEndpoint.blockUser(login);
