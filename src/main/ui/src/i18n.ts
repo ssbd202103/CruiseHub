@@ -82,7 +82,8 @@ const resources = {
             "error.security.etag.invalid": "Nagłówek ETAG żądania nie przechodzi walidacji",
             "error.password.reset.wrongIdentity": "Żądanie zawiera złą tożsamość",
             "error.email.incorrect": "Address email jest niepoprawny",
-            "error.emailService.inaccessible": "Serwis pocztowy jest niedostępny"
+            "error.emailService.inaccessible": "Serwis pocztowy jest niedostępny",
+            "error.password.reset.contentError": "Błędna zawartość tokenu do resetowania hasła"
 
         }
     },
@@ -165,7 +166,8 @@ const resources = {
             "error.security.etag.empty": "Request does not contain necessary ETag header",
             "error.security.etag.invalid": "Request's ETag header does not pass validation",
             "error.password.reset.wrongIdentity": "Request contains wrong identity",
-            "error.email.incorrect": "Email address is incorrect"
+            "error.email.incorrect": "Email address is incorrect",
+            "error.password.reset.contentError": "Błędna zawartość tokenu do resetowania hasła"
 
         }
     }

@@ -28,7 +28,7 @@ function PasswordReset(props: any) {
             "password": passwordRef?.current?.querySelector('input')?.value
         }
 
-        await axios.post('http://localhost:8080/api/account/reset-password', json, {
+        await axios.put('http://localhost:8080/api/account/reset-password', json, {
             headers: {
                 'Content-Type': 'application/json'
             }
