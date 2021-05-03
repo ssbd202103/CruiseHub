@@ -10,6 +10,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ModeratorForRegistratio
 import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
 
 import javax.ejb.Local;
+import javax.persistence.OptimisticLockException;
 
 
 /**
@@ -59,7 +60,7 @@ public interface AccountEndpointLocal {
      * Mapuje obiekt dto z nowym mailem do obiektu modelu oraz zmienia mail
      * @param accountChangeEmailDto dto z nowym mailem
      */
-    void changeEmail(AccountChangeEmailDto accountChangeEmailDto);
+    void changeEmail(AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException, OptimisticLockException;
 
     /**
      * Zwraca konto o podanym loginie

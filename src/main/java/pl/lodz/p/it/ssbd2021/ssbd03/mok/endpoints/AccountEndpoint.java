@@ -20,6 +20,8 @@ import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
+import javax.persistence.OptimisticLockException;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.OPTIMISTIC_EXCEPTION;
 
 /**
  * Klasa która zajmuje się growadzeniem zmapowanych obiektów klas Dto na obiekty klas modelu związanych z kontami użytkowników i poziomami dostępu, oraz wywołuje metody logiki przekazując zmapowane obiekty.
@@ -68,7 +70,13 @@ public class AccountEndpoint implements AccountEndpointLocal {
     }
 
     @Override
-    public void changeEmail(AccountChangeEmailDto accountChangeEmailDto) {
+    public void changeEmail(AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException, OptimisticLockException {
+        Long version = getAccountByLogin(accountChangeEmailDto.getLogin()).getVersion();
+
+        if (!version.equals(accountChangeEmailDto.getVersion())) {
+            throw new OptimisticLockException(OPTIMISTIC_EXCEPTION);
+        }
+
         accountManager.changeEmail(accountChangeEmailDto.getLogin(), accountChangeEmailDto.getVersion(), accountChangeEmailDto.getNewEmail());
     }
 }

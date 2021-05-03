@@ -89,16 +89,14 @@ class AccountControllerTest {
     @Test
     public void changeEmailTest_SUCCESS() throws JsonProcessingException {
         Response res = given().baseUri(baseUri).get("account/emusk");
-        System.out.println(res.thenReturn().asString());
         AccountDto account = objectMapper.readValue(res.thenReturn().asString(), AccountDto.class);
 
 
         String etag = res.getHeader("Etag");
-        System.out.println(etag);
         AccountChangeEmailDto accountChangeEmailDto = new AccountChangeEmailDto(
                 account.getLogin(),
                 account.getVersion(),
-                "zmieniony_poprawnie@gmail.com");
+                "zmienony_dobrze@gmail.com");
 
         given().baseUri(baseUri).header("If-Match", etag)
                 .contentType(ContentType.JSON)
@@ -110,21 +108,18 @@ class AccountControllerTest {
     @Test
     public void changeEmailTest_FAIL() throws JsonProcessingException {
         Response res = given().baseUri(baseUri).get("account/emusk");
-        System.out.println(res.thenReturn().asString());
         AccountDto account = objectMapper.readValue(res.thenReturn().asString(), AccountDto.class);
 
-
-        String etag = res.getHeader("Etag");
-        System.out.println(etag);
         AccountChangeEmailDto accountChangeEmailDto = new AccountChangeEmailDto(
                 account.getLogin(),
-                0L,
-                "zmieniony_poprawnie@gmail.com");
+                account.getVersion() - 1,
+                "zmieniony_zle@gmail.com");
+        String etag = EntityIdentitySignerVerifier.calculateEntitySignature(accountChangeEmailDto);
 
         given().baseUri(baseUri).header("If-Match", etag)
                 .contentType(ContentType.JSON)
                 .body(accountChangeEmailDto)
                 .when()
-                .put("account/change_email").then().statusCode(500);
+                .put("account/change_email").then().statusCode(406);
     }
 }
