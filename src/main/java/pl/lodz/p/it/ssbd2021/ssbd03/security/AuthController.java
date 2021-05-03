@@ -46,8 +46,8 @@ public class AuthController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response auth(@Valid @NotNull AuthenticateDto auth) throws Exception {
-        Credential fiut = auth.toCredential();
-        CredentialValidationResult result = identityStoreHandler.validate(fiut);
+        Credential credential = auth.toCredential();
+        CredentialValidationResult result = identityStoreHandler.validate(credential);
         String token;
 
         if (result.getStatus() != CredentialValidationResult.Status.VALID) {
