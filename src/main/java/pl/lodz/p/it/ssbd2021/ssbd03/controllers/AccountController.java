@@ -45,7 +45,7 @@ public class AccountController {
     /**
      * Pobiera użytkownika po loginie oraz tworzy ETaga na jego podstawie
      *
-     * @param login użytkownika
+     * @param login Login użytkownika
      * @return Odpowiedź serwera z reprezentacją JSON obiektu użytkownika
      * oraz nagłówkiem ETag wygenerowanym na podstawie obiektu
      */
@@ -65,7 +65,7 @@ public class AccountController {
     /**
      * Pobiera dane użytkownika wraz z szczegółami i poziomami dostępu
      *
-     * @param login użytkownika
+     * @param login Login użytkownika
      * @return Odpowiedź serwera z reprezentacją JSON obiektu użytkownika
      */
     @GET
@@ -85,7 +85,7 @@ public class AccountController {
     /**
      * Stwórz nowe konto z poziomem dostępu Klient
      *
-     * @param clientForRegistrationDto zbiór danych niezbędnych dla stworzenia konta z poziomem dostępu Klient
+     * @param clientForRegistrationDto Zbiór danych niezbędnych dla stworzenia konta z poziomem dostępu Klient
      */
     @POST
     @Path("/client/registration")
@@ -97,7 +97,7 @@ public class AccountController {
     /**
      * Stwórz nowe konto z poziomem dostępu Pracownik firmy
      *
-     * @param businessWorkerForRegistrationDto zbiór danych niezbędnych dla stworzenia konta z poziomem dostępu Pracownik firmy
+     * @param businessWorkerForRegistrationDto Zbiór danych niezbędnych dla stworzenia konta z poziomem dostępu Pracownik firmy
      */
     @POST
     @Path("/businessworker/registration")
@@ -109,7 +109,7 @@ public class AccountController {
     /**
      * Pobierz informacje o wszystkich kontach
      *
-     * @return lista kont
+     * @return Lista kont
      */
     @GET
     @Path("/accounts")
@@ -149,7 +149,7 @@ public class AccountController {
     /**
      * Zmień stan danego poziomu dostępu (włącz/wyłącz)
      * @param changeAccessLevelStateDto Obiekt przesyłowy danych potrzebnych do zmiany stanu poziomu dostępu
-     * @param etag nagłówek If-Match żąania wymagany do potwierdzenia spójności danych
+     * @param etag Nagłówek If-Match żąania wymagany do potwierdzenia spójności danych
      * @return Odpowiedź serwera reprezentująca obiekt AccountDto po zmianach w postaci JSON
      */
     @ETagFilterBinding
