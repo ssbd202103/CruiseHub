@@ -27,8 +27,7 @@ import java.util.List;
 import java.time.LocalDateTime;
 import java.util.Map;
 
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ACCESS_LEVEL_ALREADY_ASSIGNED_ERROR;
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.PASSWORD_RESET_IDENTITY_ERROR;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 
 /**
  * Klasa która zarządza logiką biznesową kont
@@ -157,14 +156,19 @@ public class AccountManager implements AccountManagerLocal {
 
         Map<String, Claim> claims = JWTHandler.getClaimsFromToken(token);
 
-        if (claims.get("sub").asString().equals(login)) {
-            Account account = this.accountFacade.findByLogin(login);
-            account.setPasswordHash(passwordHash);
-            account.setVersion(claims.get("version").asLong());
-            account.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
-            account.setAlteredBy(account);
+        if (claims.get("sub") != null && claims.get("version") != null) {
+            if (claims.get("sub").asString().equals(login)) {
+                Account account = this.accountFacade.findByLogin(login);
+                account.setPasswordHash(passwordHash);
+                account.setVersion(claims.get("version").asLong());
+                account.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
+                account.setAlteredBy(account);
+            } else {
+                throw new AccountManagerException(PASSWORD_RESET_IDENTITY_ERROR);
+            }
         } else {
-            throw new AccountManagerException(PASSWORD_RESET_IDENTITY_ERROR);
+            throw new AccountManagerException(PASSWORD_RESET_TOKEN_CONTENT_ERROR);
         }
+
     }
 }

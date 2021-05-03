@@ -2,21 +2,14 @@ package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import groovyjarjarasm.asm.TypeReference;
 import io.restassured.RestAssured;
-import io.restassured.http.Header;
-import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AddressDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.PasswordResetDto;
@@ -29,7 +22,6 @@ import javax.ws.rs.core.MediaType;
 import java.util.Set;
 
 
-import java.io.DataInput;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -38,7 +30,6 @@ import java.util.List;
 
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -55,14 +46,14 @@ class AccountControllerTest {
     }
 
     @Test
-    @Disabled
-    public void requestPasswordReset_SUCCESS() {
-        String login = "aradiuk";
-        given().baseUri(baseUri).contentType(MediaType.APPLICATION_JSON).post("/request-password-reset/" + login).then().statusCode(200);
+    public void requestPasswordReset_SUCCESS() throws JsonProcessingException {
+        AccountDto accountDto = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
+        given().baseUri(baseUri).contentType(MediaType.APPLICATION_JSON).post("/request-password-reset/" + accountDto.getLogin()).then().statusCode(200);
     }
 
     @Test
     @Disabled
+    // Potrzebna jest metoda to potwierdzenia konta żeby przeprowadzić logowania do nowoutworzonego użytkownika dla którego w teście będzie zmieniane hasło
     public void resetPassword_SUCCESS() {
         PasswordResetDto passwordResetDto = new PasswordResetDto(
                 "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhcmFkaXVrIiwiaXNzIjoiY3J1aXNlaHViIiwiZXhwIjoxNjE5ODU4NDA3LCJ2ZXJzaW9uIjo1LCJpYXQiOjE2MTk4NTcyMDcsImp0aSI6Ijk0M2EyMzM1LTFlZTctNGE4ZS1iNmFhLWU3Y2FiM2I3OWNmYSJ9.wI1xu7qZDCVrV-HYGCxgqbn9HVIr8mFW0JC0g_qZn3A",
@@ -151,12 +142,12 @@ class AccountControllerTest {
             e.printStackTrace();
         }
 
-       assertEquals(response.getStatusCode(),javax.ws.rs.core.Response.Status.OK.getStatusCode());
-       assertEquals(accountDtoList.get(0).getEmail(),"rbranson@gmail.com");
-       assertEquals(accountDtoList.get(1).getEmail(),"emusk@gmail.com");
-       assertEquals(accountDtoList.get(2).getEmail(),"jbezos@gmail.com");
-       assertEquals(accountDtoList.get(0).getFirstName(),"Richard");
-       assertEquals(accountDtoList.get(0).getSecondName(),"Branson");
+        assertEquals(response.getStatusCode(), javax.ws.rs.core.Response.Status.OK.getStatusCode());
+        assertEquals(accountDtoList.get(0).getEmail(), "rbranson@gmail.com");
+        assertEquals(accountDtoList.get(1).getEmail(), "emusk@gmail.com");
+        assertEquals(accountDtoList.get(2).getEmail(), "jbezos@gmail.com");
+        assertEquals(accountDtoList.get(0).getFirstName(), "Richard");
+        assertEquals(accountDtoList.get(0).getSecondName(), "Branson");
 
 
     }
