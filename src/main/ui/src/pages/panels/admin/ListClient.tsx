@@ -19,14 +19,20 @@ import ButtonGroup from '@material-ui/core/ButtonGroup'
 import axios from "axios";
 
 
-interface BlockAccountParams {
+interface UnblockAccountParams {
     admin: string;
     login: string;
     etag: string;
+    version: bigint
 }
 
-const unblockAccount = async ({admin, login, etag}: BlockAccountParams) => {
-    const response = await axios.put('http://localhost:8080/api/account/unblock/' + login, admin, {
+const unblockAccount = async ({admin, login, etag, version}: UnblockAccountParams) => {
+    const json = JSON.stringify({
+            login: login,
+            version: version,
+        }
+    );
+    const response = await axios.put('http://localhost:8080/api/account/unblock/' + admin, json, {
         headers:{
             'Content-Type': 'application/json',
             'If-Match': etag
@@ -64,6 +70,7 @@ function createData(
     active: boolean,
     accessLevels: string[],
     etag: string,
+    version: bigint,
 ) {
     return {
         login: login,
@@ -71,6 +78,7 @@ function createData(
         active: active,
         accessLevels: accessLevels,
         etag: etag,
+        version: version
     };
 }
 
@@ -130,7 +138,7 @@ function Row(props: RowProps) {
 
 
                                             <Button className={buttonClass.root} onClick={() => {unblockAccount({admin: String("rbranson"), etag: row.etag,
-                                                login: row.login})}}>{row.active ? t("block") : t("unblock")}</Button> //to do change admin on logged user
+                                                login: row.login, version: row.version})}}>{row.active ? t("block") : t("unblock")}</Button> //to do change admin on logged user
 
 
                                                 <Link to="/panels/adminPanel/GrantAccessLevel">
