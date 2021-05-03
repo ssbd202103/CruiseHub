@@ -4,6 +4,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.IdDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.UnblockAccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
@@ -126,13 +127,13 @@ public class AccountController {
 
     @ETagFilterBinding
     @PUT
-    @Path("/unblock/{unblockedUserLogin}")
+    @Path("/unblock/{adminLogin}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response unblockUser(@PathParam("unblockedUserLogin") String unblockedUserLogin, @HeaderParam("If-Match") @NotNull @NotEmpty String tagValue,  @NotNull String adminLogin) throws BaseAppException {
-        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(tagValue, accountEndpoint.getAccountByLogin(unblockedUserLogin))) {
+    public Response unblockUser(UnblockAccountDto unblockAccountDto, @HeaderParam("If-Match") @NotNull @NotEmpty String tagValue, @PathParam("adminLogin")  @NotNull String adminLogin) throws BaseAppException {
+        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(tagValue, unblockAccountDto)) {
             return Response.status(406).build();
         }
-        accountEndpoint.unblockUser(unblockedUserLogin, adminLogin);
+        accountEndpoint.unblockUser(unblockAccountDto.getLogin(), adminLogin);
         return Response.status(200).build();
     }
 
