@@ -138,12 +138,12 @@ public class AccountManager implements AccountManagerLocal {
     }
 
     @Override
-    public void unblockUser(String unblockedUserLogin, String adminLogin, Long version) throws BaseAppException {
+    public void unblockUser(String unblockedUserLogin,  Long version) throws BaseAppException {
         Account account =  this.accountFacade.findByLogin(unblockedUserLogin);
         account.setVersion(version);
         account.setActive(true);
         setAlterTypeAndAlterAccount(accountFacade.findByLogin(unblockedUserLogin), accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE),
-                accountFacade.findByLogin(adminLogin));
+                accountFacade.findByLogin("rbranson"));
     }
 
     private void setAlterTypeAndAlterAccount(Account account, AlterTypeWrapper alterTypeWrapper, Account alteredBy) {

@@ -127,13 +127,13 @@ public class AccountController {
 
     @ETagFilterBinding
     @PUT
-    @Path("/unblock/{adminLogin}")
+    @Path("/unblock")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response unblockUser(UnblockAccountDto unblockAccountDto, @HeaderParam("If-Match") @NotNull @NotEmpty String tagValue, @PathParam("adminLogin")  @NotNull String adminLogin) throws BaseAppException {
+    public Response unblockUser(UnblockAccountDto unblockAccountDto, @HeaderParam("If-Match") @NotNull @NotEmpty String tagValue) throws BaseAppException {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(tagValue, unblockAccountDto)) {
             return Response.status(406).build();
         }
-        accountEndpoint.unblockUser(unblockAccountDto.getLogin(), adminLogin, unblockAccountDto.getVersion());
+        accountEndpoint.unblockUser(unblockAccountDto.getLogin(), unblockAccountDto.getVersion());
         return Response.status(200).build();
     }
 
