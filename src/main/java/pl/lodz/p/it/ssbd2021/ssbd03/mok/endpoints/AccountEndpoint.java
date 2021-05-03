@@ -87,7 +87,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
     }
 
     @Override
-    public void unblockUser(@NotNull String unblockedUserLogin, @NotNull String adminLogin) throws BaseAppException {
-        this.accountManager.unblockUser(unblockedUserLogin, adminLogin);
+    public void unblockUser(@NotNull String unblockedUserLogin, @NotNull String adminLogin, @NotNull Long version) throws BaseAppException {
+        this.accountManager.unblockUser(unblockedUserLogin, adminLogin, version);
     }
 }

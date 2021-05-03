@@ -143,7 +143,7 @@ class AccountControllerTest {
     }
 
     @Test
-    public void unblockUserTest_SUCCESS() throws JsonProcessingException, ParseException {
+    public void unblockUserTest_SUCCESS() throws JsonProcessingException {
 
         ClientForRegistrationDto client = getSampleClientForRegistrationDto();
         AccountDto account = registerClientAndGetAccountDto(client);

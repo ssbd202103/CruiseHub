@@ -133,7 +133,7 @@ public class AccountController {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(tagValue, unblockAccountDto)) {
             return Response.status(406).build();
         }
-        accountEndpoint.unblockUser(unblockAccountDto.getLogin(), adminLogin);
+        accountEndpoint.unblockUser(unblockAccountDto.getLogin(), adminLogin, unblockAccountDto.getVersion());
         return Response.status(200).build();
     }
 

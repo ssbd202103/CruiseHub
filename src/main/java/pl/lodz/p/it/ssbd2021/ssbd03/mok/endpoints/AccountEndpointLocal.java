@@ -82,7 +82,8 @@ public interface AccountEndpointLocal {
      * Metoda odpowiedzialna za wywołanie metody odpowiedzialnej za odblokowanie użytkownika
      * @param unblockedUserLogin login konta odblokowywanego
      * @param adminLogin login konta wykonującego odblokowanie konta
+     * @param version wersja konta do weryfikacji
      * @throws BaseAppException Bazowy wyjątek aplikacji rzucany w przypadku błędu pobrania danych użytkownika
      */
-    void unblockUser(@NotNull String unblockedUserLogin, @NotNull String adminLogin) throws BaseAppException;
+    void unblockUser(@NotNull String unblockedUserLogin, @NotNull String adminLogin, @NotNull Long version) throws BaseAppException;
 }
