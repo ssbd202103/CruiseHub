@@ -20,27 +20,24 @@ import axios from "axios";
 
 
 interface UnblockAccountParams {
-    admin: string;
     login: string;
     etag: string;
     version: bigint
 }
 
-const unblockAccount = async ({admin, login, etag, version}: UnblockAccountParams) => {
+const unblockAccount = async ({login, etag, version}: UnblockAccountParams) => {
     const json = JSON.stringify({
             login: login,
             version: version,
         }
     );
-    const response = await axios.put('http://localhost:8080/api/account/unblock/' + admin, json, {
+    await axios.put('http://localhost:8080/api/account/unblock', json, {
         headers:{
             'Content-Type': 'application/json',
             'If-Match': etag
         }
 
     });
-
-    console.log(response.data)
 };
 
 const useRowStyles = makeStyles({
@@ -137,8 +134,8 @@ function Row(props: RowProps) {
                                                 <Button className={buttonClass.root}>{t("reset password")}</Button>
 
 
-                                            <Button className={buttonClass.root} onClick={() => {unblockAccount({admin: String("rbranson"), etag: row.etag,
-                                                login: row.login, version: row.version})}}>{row.active ? t("block") : t("unblock")}</Button> //to do change admin on logged user
+                                            <Button className={buttonClass.root} onClick={() => {unblockAccount({etag: row.etag,
+                                                login: row.login, version: row.version})}}>{row.active ? t("block") : t("unblock")}</Button>
 
 
                                                 <Link to="/panels/adminPanel/GrantAccessLevel">
