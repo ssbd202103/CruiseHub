@@ -1,8 +1,12 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AccountChangeEmailDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AddressDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
@@ -17,6 +21,7 @@ import static io.restassured.RestAssured.given;
 class AccountControllerTest {
 
     private static final String baseUri = "http://localhost:8080/cruisehub/api/";
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     AccountControllerTest() {
     }
@@ -64,32 +69,207 @@ class AccountControllerTest {
     }
 
     @Test
-    public void changeClientDataTest_SUCCESS() {
+    public void changeClientDataTest_SUCCESS() throws JsonProcessingException {
+        Response res = given().baseUri(baseUri).get("account/emusk");
+
+        AccountDto account = objectMapper.readValue(res.thenReturn().asString(), AccountDto.class);
+
+        String etag = res.header("Etag");
+
         AddressChangeDto newAddress = new AddressChangeDto(100L, "Aleja Zmieniona", "94-690", "Lodz", "Polska");
-        ClientChangeDataDto clientChangeDataDto = new ClientChangeDataDto("emusk",0L, "Elonczek", "Maseczek", "987654321", newAddress);
+        ClientChangeDataDto clientChangeDataDto = new ClientChangeDataDto(
+                account.getLogin(),
+                account.getVersion(),
+                "Elonczek",
+                "Maseczek",
+                "987654321",
+                newAddress);
 
-        given().baseUri(baseUri).contentType("application/json").body(clientChangeDataDto).when().put("account/client/changedata").then().statusCode(204);
-
+        given().baseUri(baseUri).header("If-Match", etag)
+                .contentType(ContentType.JSON)
+                .body(clientChangeDataDto)
+                .when()
+                .put("account/client/changedata")
+                .then()
+                .statusCode(204);
     }
 
     @Test
-    public void changeBusinessWorkerDataTest_SUCCESS() {
-        BusinessWorkerChangeDataDto businessWorkerChangeDataDto = new BusinessWorkerChangeDataDto("jbezos", 0L, "Jefus", "Besoses", "000000001");
+    public void changeClientDataTest_FAIL() throws JsonProcessingException {
+        Response res = given().baseUri(baseUri).get("account/emusk");
 
-        given().baseUri(baseUri).contentType("application/json").body(businessWorkerChangeDataDto).when().put("account/businessworker/changedata").then().statusCode(204);
+        AccountDto account = objectMapper.readValue(res.thenReturn().asString(), AccountDto.class);
+
+        String etag = res.header("Etag");
+
+        AddressChangeDto newAddress = new AddressChangeDto(100L, "Aleja Zmieniona", "94-690", "Lodz", "Polska");
+        ClientChangeDataDto clientChangeDataDto = new ClientChangeDataDto(
+                account.getLogin(),
+                account.getVersion() - 1,
+                "Zly Elonczek",
+                "Zly Maseczek",
+                "123456789",
+                newAddress);
+
+        given().baseUri(baseUri).header("If-Match", etag)
+                .contentType(ContentType.JSON)
+                .body(clientChangeDataDto)
+                .when()
+                .put("account/client/changedata")
+                .then()
+                .statusCode(406);
+    }
+
+
+    @Test
+    public void changeBusinessWorkerDataTest_SUCCESS() throws JsonProcessingException {
+        Response res = given().baseUri(baseUri).get("account/jbezos");
+
+        AccountDto account = objectMapper.readValue(res.thenReturn().asString(), AccountDto.class);
+
+        String etag = res.header("Etag");
+
+        BusinessWorkerChangeDataDto businessWorkerChangeDataDto = new BusinessWorkerChangeDataDto(
+                account.getLogin(),
+                account.getVersion(),
+                "Jefus",
+                "Besoses",
+                "000000001");
+
+        given()
+                .baseUri(baseUri)
+                .header("If-Match", etag)
+                .contentType("application/json")
+                .body(businessWorkerChangeDataDto)
+                .when()
+                .put("account/businessworker/changedata")
+                .then()
+                .statusCode(204);
     }
 
     @Test
-    public void changeModeratorDataTest_SUCCESS() {
-        ModeratorChangeDataDto moderatorChangeDataDto = new ModeratorChangeDataDto("mzuckerberg", 0L, "Marcus", "Sugarus");
+    public void changeBusinessWorkerDataTest_FAIL() throws JsonProcessingException {
+        Response res = given().baseUri(baseUri).get("account/jbezos");
 
-        given().baseUri(baseUri).contentType("application/json").body(moderatorChangeDataDto).when().put("account/moderator/changedata").then().statusCode(204);
+        AccountDto account = objectMapper.readValue(res.thenReturn().asString(), AccountDto.class);
+
+        String etag = res.header("Etag");
+
+        BusinessWorkerChangeDataDto businessWorkerChangeDataDto = new BusinessWorkerChangeDataDto(
+                account.getLogin(),
+                account.getVersion() - 1,
+                "Zly Jefus",
+                "Zly Besoses",
+                "100000000");
+
+        given()
+                .baseUri(baseUri)
+                .header("If-Match", etag)
+                .contentType("application/json")
+                .body(businessWorkerChangeDataDto)
+                .when()
+                .put("account/businessworker/changedata")
+                .then()
+                .statusCode(406);
     }
 
     @Test
-    public void changeAdministratorDataTest_SUCCESS() {
-        AdministratorChangeDataDto administratorChangeDataDto = new AdministratorChangeDataDto("rbranson", 0L, "Rubertiono", "Bransolino");
+    public void changeModeratorDataTest_SUCCESS() throws JsonProcessingException {
+        Response res = given().baseUri(baseUri).get("account/mzuckerberg");
 
-        given().baseUri(baseUri).contentType("application/json").body(administratorChangeDataDto).when().put("account/administrator/changedata").then().statusCode(204);
+        AccountDto account = objectMapper.readValue(res.thenReturn().asString(), AccountDto.class);
+
+        String etag = res.header("Etag");
+
+        ModeratorChangeDataDto moderatorChangeDataDto = new ModeratorChangeDataDto(
+                account.getLogin(),
+                account.getVersion(),
+                "Marcus",
+                "Sugarus");
+
+        given()
+                .baseUri(baseUri)
+                .header("If-Match", etag)
+                .contentType("application/json")
+                .body(moderatorChangeDataDto)
+                .when()
+                .put("account/moderator/changedata")
+                .then()
+                .statusCode(204);
+    }
+
+    @Test
+    public void changeModeratorDataTest_FAIL() throws JsonProcessingException {
+        Response res = given().baseUri(baseUri).get("account/mzuckerberg");
+
+        AccountDto account = objectMapper.readValue(res.thenReturn().asString(), AccountDto.class);
+
+        String etag = res.header("Etag");
+
+        ModeratorChangeDataDto moderatorChangeDataDto = new ModeratorChangeDataDto(
+                account.getLogin(),
+                account.getVersion() - 1,
+                "Zly Marcus",
+                "Zly Sugarus");
+
+        given()
+                .baseUri(baseUri)
+                .header("If-Match", etag)
+                .contentType("application/json")
+                .body(moderatorChangeDataDto)
+                .when()
+                .put("account/moderator/changedata")
+                .then()
+                .statusCode(406);
+    }
+
+    @Test
+    public void changeAdministratorDataTest_SUCCESS() throws JsonProcessingException {
+        Response res = given().baseUri(baseUri).get("account/rbranson");
+
+        AccountDto account = objectMapper.readValue(res.thenReturn().asString(), AccountDto.class);
+
+        String etag = res.header("Etag");
+
+        AdministratorChangeDataDto administratorChangeDataDto = new AdministratorChangeDataDto(
+                account.getLogin(),
+                account.getVersion(),
+                "Rubertiono",
+                "Bransolino");
+
+        given()
+                .baseUri(baseUri)
+                .header("If-Match", etag)
+                .contentType("application/json")
+                .body(administratorChangeDataDto)
+                .when()
+                .put("account/administrator/changedata")
+                .then()
+                .statusCode(204);
+    }
+
+    @Test
+    public void changeAdministratorDataTest_FAIL() throws JsonProcessingException {
+        Response res = given().baseUri(baseUri).get("account/rbranson");
+
+        AccountDto account = objectMapper.readValue(res.thenReturn().asString(), AccountDto.class);
+
+        String etag = res.header("Etag");
+
+        AdministratorChangeDataDto administratorChangeDataDto = new AdministratorChangeDataDto(
+                account.getLogin(),
+                account.getVersion(),
+                "Zly Rubertiono",
+                "Zly Bransolino");
+
+        given()
+                .baseUri(baseUri)
+                .header("If-Match", etag)
+                .contentType("application/json")
+                .body(administratorChangeDataDto)
+                .when()
+                .put("account/administrator/changedata")
+                .then()
+                .statusCode(406);
     }
 }

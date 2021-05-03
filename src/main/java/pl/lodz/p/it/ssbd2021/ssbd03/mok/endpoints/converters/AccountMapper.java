@@ -1,6 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters;
 
 import lombok.NoArgsConstructor;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Administrator;
@@ -8,6 +9,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.LanguageTypeWrapper;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.AdministratorForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
@@ -15,6 +17,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDt
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ModeratorForRegistrationDto;
 
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 
 /**
  * Klasa która zajmuje się mapowaniem obiektów klas dto na obiekty klas modelu
@@ -172,5 +175,17 @@ public class AccountMapper {
         setAccountChangeDataDtoFields(account, administratorChangeDataDto, now);
 
         return account;
+    }
+
+    /**
+     * @param account Konto poddawane konwersji
+     * @return Reprezentacja obiektu przesyłowego DTO konta
+     */
+    public static AccountDto toAccountDto(Account account) {
+        return new AccountDto(account.getLogin(), account.getFirstName(),
+                account.getSecondName(), account.getEmail(), account.getLanguageType().getName(),
+                account.getAccessLevels().stream()
+                        .map(AccessLevel::getAccessLevelType)
+                        .collect(Collectors.toSet()), account.getVersion());
     }
 }

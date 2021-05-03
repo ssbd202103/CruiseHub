@@ -1,5 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AccountChangeEmailDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AdministratorChangeDataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.BusinessWorkerChangeDataDto;
@@ -9,8 +11,10 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.AdministratorForRegistr
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ModeratorForRegistrationDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
 
 import javax.ejb.Local;
+import javax.persistence.OptimisticLockException;
 
 
 /**
@@ -57,26 +61,42 @@ public interface AccountEndpointLocal {
      *
      * @param clientChangeDataDto dto obiekt przechowujący informację o kliencie oraz zmienionych danych
      */
-    void changeClientData(ClientChangeDataDto clientChangeDataDto);
+    void changeClientData(ClientChangeDataDto clientChangeDataDto) throws OptimisticLockException, BaseAppException;
 
     /**
      * Zmienia dane pracownika o podanym loginie
      *
      * @param businessWorkerChangeDataDto dto obiekt przechowujący informację o procowniku oraz zmienionych danych
      */
-    void changeBusinessWorkerData(BusinessWorkerChangeDataDto businessWorkerChangeDataDto);
+    void changeBusinessWorkerData(BusinessWorkerChangeDataDto businessWorkerChangeDataDto) throws OptimisticLockException, BaseAppException;
 
     /**
      * Zmienia dane moderatora o podanym loginie
      *
      * @param moderatorChangeDataDto dto obiekt przechowujący informację o moderatorze oraz zmienionych danych
      */
-    void changeModeratorData(ModeratorChangeDataDto moderatorChangeDataDto);
+    void changeModeratorData(ModeratorChangeDataDto moderatorChangeDataDto) throws OptimisticLockException, BaseAppException;
 
     /**
      * Zmienia dane administratora o podanym loginie
      *
      * @param administratorChangeDataDto dto obiekt przechowujący informację o administratorze oraz zmienionych danych
      */
-    void changeAdministratorData(AdministratorChangeDataDto administratorChangeDataDto);
+    void changeAdministratorData(AdministratorChangeDataDto administratorChangeDataDto) throws OptimisticLockException, BaseAppException;
+
+    /**
+     * Zwraca konto o podanym loginie
+     * @param login login
+     * @return konto
+     */
+    AccountDto getAccountByLogin(String login) throws BaseAppException;
+
+    /**
+     * Pobira etag dla podanej encji
+     * @param entity encja o interfejsie SignableEntity
+     * @return etag
+     *
+     * @see SignableEntity
+     */
+    String getETagFromSignableEntity(SignableEntity entity);
 }

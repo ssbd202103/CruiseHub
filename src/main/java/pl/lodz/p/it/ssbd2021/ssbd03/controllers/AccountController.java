@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AccountChangeEmailDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AdministratorChangeDataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.BusinessWorkerChangeDataDto;
@@ -12,12 +13,22 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ModeratorForRegistratio
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.AccountEndpointLocal;
 
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.enterprise.context.RequestScoped;
+import javax.persistence.OptimisticLockException;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import static javax.ws.rs.core.Response.Status.*;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.security.ETagFilterBinding;
+import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
+
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ETAG_IDENTITY_INTEGRITY_ERROR;
 
 /**
  * Klasa która udostępnia api RESTowe do wykonania operacji na kontach użytkowników, oraz zajmuje się walidacją danych.
@@ -28,6 +39,19 @@ public class AccountController {
 
     @EJB
     private AccountEndpointLocal accountEndpoint;
+
+    @GET
+    @Path("/{login}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAccountByLogin(@PathParam("login") @Login String login) throws BaseAppException {
+        try {
+            AccountDto account = accountEndpoint.getAccountByLogin(login);
+            String ETag = accountEndpoint.getETagFromSignableEntity(account);
+            return Response.ok().entity(account).header("ETag", ETag).build();
+        } catch (BaseAppException e) {
+            return Response.status(NOT_FOUND).entity(e.getMessage()).build();
+        }
+    }
 
     /**
      * Stwórz nowe konto z poziomem dostępu Klient
@@ -97,8 +121,21 @@ public class AccountController {
     @PUT
     @Path("/client/changedata")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void changeClientData(ClientChangeDataDto clientChangeDataDto) {
-        accountEndpoint.changeClientData(clientChangeDataDto);
+    @ETagFilterBinding
+    public Response changeClientData(ClientChangeDataDto clientChangeDataDto, @HeaderParam("If-Match") String etag) {
+        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, clientChangeDataDto)) {
+            return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
+        }
+
+        try {
+            accountEndpoint.changeClientData(clientChangeDataDto);
+        } catch (EJBException | OptimisticLockException e) {
+            return Response.status(NOT_ACCEPTABLE).entity(e.getMessage()).build();
+        } catch (BaseAppException e) {
+            return  Response.status(NOT_FOUND).entity(e.getMessage()).build();
+        }
+
+        return Response.noContent().build();
     }
 
     /**
@@ -109,8 +146,21 @@ public class AccountController {
     @PUT
     @Path("/businessworker/changedata")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void changeBusinessWorkerData(BusinessWorkerChangeDataDto businessWorkerChangeDataDto) {
-        accountEndpoint.changeBusinessWorkerData(businessWorkerChangeDataDto);
+    @ETagFilterBinding
+    public Response changeBusinessWorkerData(BusinessWorkerChangeDataDto businessWorkerChangeDataDto, @HeaderParam("If-Match") String etag) {
+        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, businessWorkerChangeDataDto)) {
+            return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
+        }
+
+        try {
+            accountEndpoint.changeBusinessWorkerData(businessWorkerChangeDataDto);
+        } catch (EJBException | OptimisticLockException e) {
+            return Response.status(NOT_ACCEPTABLE).entity(e.getMessage()).build();
+        } catch (BaseAppException e) {
+            return  Response.status(NOT_FOUND).entity(e.getMessage()).build();
+        }
+
+        return Response.noContent().build();
     }
 
     /**
@@ -121,8 +171,21 @@ public class AccountController {
     @PUT
     @Path("/moderator/changedata")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void changeModeratorData(ModeratorChangeDataDto moderatorChangeDataDto) {
-        accountEndpoint.changeModeratorData(moderatorChangeDataDto);
+    @ETagFilterBinding
+    public Response changeModeratorData(ModeratorChangeDataDto moderatorChangeDataDto,  @HeaderParam("If-Match") String etag) {
+        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, moderatorChangeDataDto)) {
+            return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
+        }
+
+        try {
+            accountEndpoint.changeModeratorData(moderatorChangeDataDto);
+        } catch (EJBException | OptimisticLockException e) {
+            return Response.status(NOT_ACCEPTABLE).entity(e.getMessage()).build();
+        } catch (BaseAppException e) {
+            return  Response.status(NOT_FOUND).entity(e.getMessage()).build();
+        }
+
+        return Response.noContent().build();
     }
 
     /**
@@ -133,8 +196,21 @@ public class AccountController {
     @PUT
     @Path("/administrator/changedata")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void changeAdministratorData(AdministratorChangeDataDto administratorChangeDataDto) {
-        accountEndpoint.changeAdministratorData(administratorChangeDataDto);
+    @ETagFilterBinding
+    public Response changeAdministratorData(AdministratorChangeDataDto administratorChangeDataDto, @HeaderParam("If-Match") String etag) {
+        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, administratorChangeDataDto)) {
+            return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
+        }
+
+        try {
+            accountEndpoint.changeAdministratorData(administratorChangeDataDto);
+        } catch (EJBException | OptimisticLockException e) {
+            return Response.status(NOT_ACCEPTABLE).entity(e.getMessage()).build();
+        } catch (BaseAppException e) {
+            return  Response.status(NOT_FOUND).entity(e.getMessage()).build();
+        }
+
+        return Response.noContent().build();
     }
 
     @GET
