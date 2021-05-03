@@ -19,7 +19,26 @@ import ButtonGroup from '@material-ui/core/ButtonGroup'
 import axios from "axios";
 
 
+interface UnblockAccountParams {
+    login: string;
+    etag: string;
+    version: bigint
+}
 
+const unblockAccount = async ({login, etag, version}: UnblockAccountParams) => {
+    const json = JSON.stringify({
+            login: login,
+            version: version,
+        }
+    );
+    await axios.put('http://localhost:8080/api/account/unblock', json, {
+        headers:{
+            'Content-Type': 'application/json',
+            'If-Match': etag
+        }
+
+    });
+};
 
 const useRowStyles = makeStyles({
     root: {
@@ -47,12 +66,16 @@ function createData(
     email: string,
     active: boolean,
     accessLevels: string[],
+    etag: string,
+    version: bigint,
 ) {
     return {
         login: login,
         email: email,
         active: active,
         accessLevels: accessLevels,
+        etag: etag,
+        version: version
     };
 }
 
@@ -64,10 +87,13 @@ export interface RowProps {
 
 function Row(props: RowProps) {
     const {row} = props;
+    const {t} = useTranslation()
     const [open, setOpen] = React.useState(false);
+    const [buttonText, setButtonText] = useState("true");
+
     const classes = useRowStyles();
     const buttonClass = useButtonStyles();
-    const {t} = useTranslation()
+
     return (
 
         <React.Fragment>
@@ -107,7 +133,10 @@ function Row(props: RowProps) {
 
                                                 <Button className={buttonClass.root}>{t("reset password")}</Button>
 
-                                                <Button className={buttonClass.root}>{t("block")}</Button>
+
+                                            <Button className={buttonClass.root} onClick={() => {unblockAccount({etag: row.etag,
+                                                login: row.login, version: row.version})}}>{row.active ? t("block") : t("unblock")}</Button>
+
 
                                                 <Link to="/panels/adminPanel/GrantAccessLevel">
                                                     <Button className={buttonClass.root}>{t("grand access level")}</Button>
