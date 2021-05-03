@@ -149,7 +149,7 @@ public class AccountController {
     /**
      * Zmień stan danego poziomu dostępu (włącz/wyłącz)
      * @param changeAccessLevelStateDto Obiekt przesyłowy danych potrzebnych do zmiany stanu poziomu dostępu
-     * @param etag Nagłówek If-Match żąania wymagany do potwierdzenia spójności danych
+     * @param etag Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
      * @return Odpowiedź serwera reprezentująca obiekt AccountDto po zmianach w postaci JSON
      */
     @ETagFilterBinding
