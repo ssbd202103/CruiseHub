@@ -187,4 +187,18 @@ public class AccountManager implements AccountManagerLocal {
         account.setLastAlterDateTime(LocalDateTime.now());
     }
 
+    @Override
+    public void unblockUser(String unblockedUserLogin, String adminLogin) throws BaseAppException {
+        Account account =  this.accountFacade.findByLogin(unblockedUserLogin);
+        account.setActive(true);
+        setAlterTypeAndAlterAccount(accountFacade.findByLogin(unblockedUserLogin), accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE),
+                accountFacade.findByLogin(adminLogin));
+    }
+
+    private void setAlterTypeAndAlterAccount(Account account, AlterTypeWrapper alterTypeWrapper, Account alteredBy) {
+        account.setAlteredBy(alteredBy);
+        account.setAlterType(alterTypeWrapper);
+        account.setLastAlterDateTime(LocalDateTime.now());
+    }
+
 }
