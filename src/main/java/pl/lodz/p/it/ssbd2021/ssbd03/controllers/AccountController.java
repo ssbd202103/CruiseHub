@@ -211,6 +211,12 @@ public class AccountController {
         return Response.ok().build();
     }
 
+    /**
+     * @param unblockAccountDto  Obiekt posiadający login użytkownika którego mamy odblokować
+     * @param tagValue Wartość etaga
+     * @return Zwraca kod potwierdzający poprawne bądź niepoprawne wykoannie
+     * @throws BaseAppException Wyjątek rzucany w momencie kiedy nie znajdzie takich użytkowników
+     */
     @ETagFilterBinding
     @PUT
     @Path("/unblock")
@@ -223,17 +229,5 @@ public class AccountController {
         return Response.status(200).build();
     }
 
-
-    @ETagFilterBinding
-    @PUT
-    @Path("/unblock/{unblockedUserLogin}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response unblockUser(@PathParam("unblockedUserLogin") String unblockedUserLogin, @HeaderParam("If-Match") @NotNull @NotEmpty String tagValue,  @NotNull String adminLogin) throws BaseAppException {
-        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(tagValue, accountEndpoint.getAccountByLogin(unblockedUserLogin))) {
-            return Response.status(406).build();
-        }
-        accountEndpoint.unblockUser(unblockedUserLogin, adminLogin);
-        return Response.status(200).build();
-    }
 
 }

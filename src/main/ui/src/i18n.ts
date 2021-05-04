@@ -84,8 +84,7 @@ const resources = {
             "error.security.etag.empty": "Żądanie nie zawiera wymaganego nagłówka ETag",
             "error.security.etag.invalid": "Nagłówek ETag żądania nie przechodzi walidacji",
             "error.security.etag.integrity": "Nagłówek ETag nie jest spójny z przekazanymi danymi",
-            "error.parsing.serialization": "Błąd serializacji danych"
-            "error.security.etag.invalid": "Nagłówek ETAG żądania nie przechodzi walidacji",
+            "error.parsing.serialization": "Błąd serializacji danych",
             "error.password.reset.wrongIdentity": "Żądanie zawiera złą tożsamość",
             "error.email.incorrect": "Address email jest niepoprawny",
             "error.emailService.inaccessible": "Serwis pocztowy jest niedostępny",
@@ -175,8 +174,7 @@ const resources = {
             "error.security.etag.empty": "Request does not contain necessary ETag header",
             "error.security.etag.invalid": "Request's ETag header does not pass validation",
             "error.security.etag.integrity": "Request's ETag header does not match provided data",
-            "error.parsing.serialization": "Received data could not be serialized properly"
-            "error.security.etag.invalid": "Request's ETag header does not pass validation",
+            "error.parsing.serialization": "Received data could not be serialized properly",
             "error.password.reset.wrongIdentity": "Request contains wrong identity",
             "error.email.incorrect": "Email address is incorrect",
             "error.password.reset.contentError": "Błędna zawartość tokenu do resetowania hasła"

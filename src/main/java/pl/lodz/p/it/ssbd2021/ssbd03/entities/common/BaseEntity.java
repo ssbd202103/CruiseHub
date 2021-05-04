@@ -62,8 +62,4 @@ public abstract class BaseEntity {
         this.setLastAlterDateTime(LocalDateTime.now());
     }
 
-    @PreUpdate
-    private void preUpdate() {
-        lastAlterDateTime = LocalDateTime.now();
-    }
 }

@@ -267,6 +267,9 @@ class AccountControllerTest {
 
     }
 
+
+
+
     @Test
     public void unblockUserTest_SUCCESS() throws JsonProcessingException {
 
@@ -294,33 +297,6 @@ class AccountControllerTest {
         accountDtoForList = accountDtoList.stream().filter(acc -> acc.getLogin().equals(account.getLogin())).findFirst().get();
 
         assertTrue(accountDtoForList.isActive());
-        assertEquals(200, response.getStatusCode());
-
-
-    }
-
-
-
-    @Test
-    public void unblockUserTest_SUCCESS() throws JsonProcessingException, ParseException {
-
-        ClientForRegistrationDto client = getSampleClientForRegistrationDto();
-        AccountDto account = registerClientAndGetAccountDto(client);
-
-        Response response = given().header("Content-Type", "application/json").baseUri(baseUri).get("/accounts");
-        String accountString = response.getBody().asString();
-        List<AccountDtoForList> accountDtoList = Arrays.asList(objectMapper.readValue(accountString, AccountDtoForList[].class));
-        String etag = accountDtoList.stream().filter(acc -> acc.getLogin().equals(account.getLogin())).findFirst().get().getEtag();
-        JSONParser toJson = new JSONParser();
-        String admin = "rbranson";
-        Response postResponse = given().contentType(ContentType.JSON).header("If-Match", etag).baseUri(baseUri).body(toJson.parse(admin)).put("/unblock/" + account.getLogin());
-
-        response = given().header("Content-Type", "application/json").baseUri(baseUri).get("/accounts");
-        accountString = response.getBody().asString();
-        accountDtoList = Arrays.asList(objectMapper.readValue(accountString, AccountDtoForList[].class));
-        AccountDtoForList accountDtoForList = accountDtoList.stream().filter(acc -> acc.getLogin().equals(account.getLogin())).findFirst().get();
-
-        assertEquals(true, accountDtoForList.isActive());
         assertEquals(200, response.getStatusCode());
 
 
