@@ -97,4 +97,13 @@ public interface AccountEndpointLocal {
      * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku gdy token wygasł albo nie przeszedł walidacji oraz gdy login który znajduje się w tokenie jest rózny od przesłanego jawnie w dto oraz w sytuacj gdy został rzucony wyjątek blokady optymistycznej
      */
     void resetPassword(PasswordResetDto passwordResetDto) throws BaseAppException;
+
+
+    /**
+     * Metoda odpowiedzialna za wywołanie metody odpowiedzialnej za odblokowanie użytkownika
+     * @param unblockedUserLogin login konta odblokowywanego
+     * @param version wersja konta do weryfikacji
+     * @throws BaseAppException Bazowy wyjątek aplikacji rzucany w przypadku błędu pobrania danych użytkownika
+     */
+    void unblockUser(@NotNull String unblockedUserLogin, @NotNull Long version) throws BaseAppException;
 }

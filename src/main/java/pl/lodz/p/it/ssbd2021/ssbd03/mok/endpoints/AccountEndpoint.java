@@ -97,4 +97,9 @@ public class AccountEndpoint implements AccountEndpointLocal {
     public void resetPassword(PasswordResetDto passwordResetDto) throws BaseAppException {
         this.accountManager.resetPassword(passwordResetDto.getLogin(), DigestUtils.sha256Hex(passwordResetDto.getPassword()), passwordResetDto.getToken());
     }
+
+    @Override
+    public void unblockUser(@NotNull String unblockedUserLogin, @NotNull Long version) throws BaseAppException {
+        this.accountManager.unblockUser(unblockedUserLogin, version);
+    }
 }

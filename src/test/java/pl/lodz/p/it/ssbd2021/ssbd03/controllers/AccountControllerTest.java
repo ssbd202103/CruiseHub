@@ -2,6 +2,9 @@ package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nimbusds.jose.shaded.json.JSONObject;
+import com.nimbusds.jose.shaded.json.parser.JSONParser;
+import com.nimbusds.jose.shaded.json.parser.ParseException;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -14,6 +17,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AddressDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.PasswordResetDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.UnblockAccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
@@ -32,10 +36,9 @@ import java.util.List;
 
 
 import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 
 
@@ -158,6 +161,40 @@ class AccountControllerTest {
         assertTrue(accountDtoList.stream().anyMatch(newAccount -> newAccount.getLogin().equals(account.getLogin())));
 
     }
+
+    @Test
+    public void unblockUserTest_SUCCESS() throws JsonProcessingException {
+
+        ClientForRegistrationDto client = getSampleClientForRegistrationDto();
+        AccountDto account = registerClientAndGetAccountDto(client);
+
+        Response response = given().header("Content-Type", "application/json").baseUri(baseUri).get("/accounts");
+        String accountString = response.getBody().asString();
+        List<AccountDtoForList> accountDtoList = Arrays.asList(objectMapper.readValue(accountString, AccountDtoForList[].class));
+        AccountDtoForList accountDtoForList = accountDtoList.stream().filter(acc -> acc.getLogin().equals(account.getLogin())).findFirst().get();
+        UnblockAccountDto unblockAccountDto = new UnblockAccountDto(accountDtoForList.getLogin(), accountDtoForList.getVersion());
+
+        response = given().header("Content-Type", "application/json").baseUri(baseUri).get("/accounts");
+        accountString = response.getBody().asString();
+        accountDtoList = Arrays.asList(objectMapper.readValue(accountString, AccountDtoForList[].class));
+        accountDtoForList = accountDtoList.stream().filter(acc -> acc.getLogin().equals(account.getLogin())).findFirst().get();
+        assertFalse(accountDtoForList.isActive());
+
+        Response postResponse = given().contentType(ContentType.JSON).header("If-Match", accountDtoForList.getEtag()).
+                baseUri(baseUri).body(unblockAccountDto).put("/unblock");
+
+        response = given().header("Content-Type", "application/json").baseUri(baseUri).get("/accounts");
+        accountString = response.getBody().asString();
+        accountDtoList = Arrays.asList(objectMapper.readValue(accountString, AccountDtoForList[].class));
+        accountDtoForList = accountDtoList.stream().filter(acc -> acc.getLogin().equals(account.getLogin())).findFirst().get();
+
+        assertTrue(accountDtoForList.isActive());
+        assertEquals(200, response.getStatusCode());
+
+
+    }
+
+
 
     private ClientForRegistrationDto getSampleClientForRegistrationDto() {
         AddressDto address = new AddressDto(1L, "Bortnyka", "30-302", "Pluzhne", "Ukraine");

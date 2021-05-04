@@ -73,6 +73,16 @@ public interface AccountManagerLocal {
 
 
     /**
+     * Metoda odpowiedzialna za odblokowanie konta
+     * @param unblockedUserLogin login konta odblokowywanego
+     * @param version wersja obiektu do sprawdzenia
+     * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku gdy występuje błąd w p
+     *                          obraniu danych w fasadzie
+     */
+    void unblockUser(String unblockedUserLogin, Long version) throws BaseAppException;
+
+
+    /**
      * Pobiera liste kont z bazy danych
      *
      * @return lista kont
