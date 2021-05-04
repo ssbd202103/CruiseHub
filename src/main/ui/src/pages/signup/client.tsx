@@ -53,7 +53,7 @@ export default function ClientSignUp() {
             }
         );
 
-        await axios.post('http://localhost:8080/cruisehub/api/account/client/registration', json, {
+        await axios.post('http://localhost:8080/api/account/client/registration', json, {
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -83,7 +83,6 @@ export default function ClientSignUp() {
                         marginRight: 20
                     }}
                     ref={firstNameRef}
-
                 />
 
 
@@ -212,10 +211,11 @@ export default function ClientSignUp() {
                 }}
             >
                 <RoundedButton
-                    onClickListenerFun={clientSignUpFun}
+                    onClick={clientSignUpFun}
                     style={{width: '50%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
                     color="pink"
                 >{t("signup")} </RoundedButton>
+
                 <Link to="worker">
                     <a className={styles.link}> {t("i am a business worker")} </a>
                 </Link>

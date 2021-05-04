@@ -4,9 +4,9 @@ import 'normalize.css'
 import './styles/globals.css';
 
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route
+    BrowserRouter as Router,
+    Switch,
+    Route
 } from 'react-router-dom'
 
 import {I18nextProvider} from 'react-i18next';
@@ -22,54 +22,65 @@ import ModeratorPanel from "./pages/panels/moderatorPanel";
 
 import ClientPanel from './pages/panels/clientPanel'
 import WorkerPanel from './pages/panels/workerPanel'
+import PasswordReset from "./pages/reset/passwordReset";
+import RequestPasswordReset from './pages/reset/requestPasswordReset';
 
 function App() {
-  return (
-      <I18nextProvider i18n={i18n}>
+    return (
+        <I18nextProvider i18n={i18n}>
 
-        <Router basename={process.env.REACT_APP_ROUTER_BASE || ''}>
-          <Switch>
-            <Route exact path="/">
-              <Home/>
-            </Route>
+            <Router basename={process.env.REACT_APP_ROUTER_BASE || ''}>
+                <Switch>
+                    <Route exact path="/">
+                        <Home/>
+                    </Route>
 
-            <Route path="/signin">
-              <Signin/>
-            </Route>
+                    <Route path="/signin">
+                        <Signin/>
+                    </Route>
 
 
-            <Route path="/signup/client">
-              <SignUpClient/>
-            </Route>
+                    <Route path="/signup/client">
+                        <SignUpClient/>
+                    </Route>
 
-            <Route path="/signup/worker">
-              <SignUpWorker/>
-            </Route>
+                    <Route path="/signup/worker">
+                        <SignUpWorker/>
+                    </Route>
 
-            <Route path="/panels/workerPanel">
-              <WorkerPanel/>
-            </Route>
+                    <Route path="/panels/workerPanel">
+                        <WorkerPanel/>
+                    </Route>
 
-            <Route path="/panels/clientPanel">
-              <ClientPanel/>
-            </Route>
+                    <Route path="/panels/clientPanel">
+                        <ClientPanel/>
+                    </Route>
 
-            <Route path="/panels/adminPanel">
-              <AdminPanel/>
-            </Route>
-            <Route path="/panels/moderatorPanel">
-              <ModeratorPanel/>
-            </Route>
-           
+                    <Route path="/panels/adminPanel">
+                        <AdminPanel/>
+                    </Route>
 
-            <Route path="*">
-              <div>404 not found</div>
-            </Route>
+                    <Route path="/panels/moderatorPanel">
+                        <ModeratorPanel/>
+                    </Route>
 
-          </Switch>
-        </Router>
-      </I18nextProvider>
-  );
+                    <Route path="/reset/passwordReset/*">
+                        <PasswordReset/>
+                    </Route>
+
+                    <Route path="/reset/requestPassword">
+                        <RequestPasswordReset/>
+                    </Route>
+
+
+                    <Route path="*">
+                        <div>404 not found</div>
+                    </Route>
+
+                </Switch>
+            </Router>
+        </I18nextProvider>
+    );
 }
 
 export default App;

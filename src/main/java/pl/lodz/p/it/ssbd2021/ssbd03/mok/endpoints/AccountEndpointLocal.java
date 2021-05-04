@@ -50,7 +50,8 @@ public interface AccountEndpointLocal {
      *
      * @param grantAccessLevel Obiekt przesyłowy danych potrzebnych do nadania poziomu dostępu
      * @return reprezentacja użytkownika po dokonanych zmianach w postaci AccountDto
-     * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku gdy dodanie poziomu jest niemożliwe,                          lub narusza zasady biznesowe aplikacji
+     * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku gdy dodanie poziomu jest niemożliwe,
+     *                          lub narusza zasady biznesowe aplikacji
      */
     AccountDto grantAccessLevel(GrantAccessLevelDto grantAccessLevel) throws BaseAppException;
 
