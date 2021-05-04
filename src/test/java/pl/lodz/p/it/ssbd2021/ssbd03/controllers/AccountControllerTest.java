@@ -6,17 +6,20 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.RestAssured;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AddressDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.PasswordResetDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
 
+import javax.ws.rs.core.MediaType;
 import java.util.Set;
 
 
@@ -46,17 +49,35 @@ class AccountControllerTest {
     }
 
     @Test
+    public void requestPasswordReset_SUCCESS() throws JsonProcessingException {
+        AccountDto accountDto = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
+        given().baseUri(baseUri).contentType(MediaType.APPLICATION_JSON).post("/request-password-reset/" + accountDto.getLogin()).then().statusCode(200);
+    }
+
+    @Test
+    @Disabled
+    // Potrzebna jest metoda to potwierdzenia konta żeby przeprowadzić logowania do nowoutworzonego użytkownika dla którego w teście będzie zmieniane hasło
+    public void resetPassword_SUCCESS() {
+        PasswordResetDto passwordResetDto = new PasswordResetDto(
+                "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhcmFkaXVrIiwiaXNzIjoiY3J1aXNlaHViIiwiZXhwIjoxNjE5ODU4NDA3LCJ2ZXJzaW9uIjo1LCJpYXQiOjE2MTk4NTcyMDcsImp0aSI6Ijk0M2EyMzM1LTFlZTctNGE4ZS1iNmFhLWU3Y2FiM2I3OWNmYSJ9.wI1xu7qZDCVrV-HYGCxgqbn9HVIr8mFW0JC0g_qZn3A",
+                "aradiuk", "password");
+        given().baseUri(baseUri).contentType(MediaType.APPLICATION_JSON).body(passwordResetDto).post("/reset-password").then().statusCode(200);
+    }
+
+    @Test
     public void registerClientTest_SUCCESS() {
         ClientForRegistrationDto client = getSampleClientForRegistrationDto();
-        given().baseUri(baseUri).contentType("application/json").body(client).when().post("/client/registration").then().statusCode(204);
+        given().baseUri(baseUri).contentType(MediaType.APPLICATION_JSON).body(client).when().post("/client/registration").then().statusCode(204);
         // todo implement remove method to clean created data
     }
 
     @Test
     public void registerBusinessWorkerTest_SUCCESS() {
-        BusinessWorkerForRegistrationDto businessWorker = new BusinessWorkerForRegistrationDto("Artur", "Radiuk", randomAlphanumeric(15), randomAlphanumeric(10) + "@gmail.com",
+        BusinessWorkerForRegistrationDto businessWorkerDto = new BusinessWorkerForRegistrationDto("Artur", "Radiuk", randomAlphanumeric(15), randomAlphanumeric(10) + "@gmail.com",
                 "123456789", LanguageType.ENG, "123456789", "FirmaJez");
-        given().baseUri(baseUri).contentType("application/json").body(businessWorker).when().post("/businessworker/registration").then().statusCode(204);
+        AccountDto accountDto = new AccountDto(businessWorkerDto.getLogin(), businessWorkerDto.getFirstName(), businessWorkerDto.getSecondName(),
+                businessWorkerDto.getEmail(), LanguageType.ENG, Set.of(AccessLevelType.BUSINESS_WORKER), 0l);
+        given().baseUri(baseUri).contentType(MediaType.APPLICATION_JSON).body(businessWorkerDto).when().post("/business-worker/registration").then().statusCode(204);
         // todo implement remove method to clean created data
     }
 

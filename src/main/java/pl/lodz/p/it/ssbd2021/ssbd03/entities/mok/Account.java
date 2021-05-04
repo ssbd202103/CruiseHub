@@ -17,8 +17,8 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.*;
 
 @Entity(name = "accounts")
 @NamedQueries({
-    @NamedQuery(name = "Account.findByLogin", query = "SELECT acc FROM accounts acc WHERE acc.login = :login"),
-    @NamedQuery(name = "Account.findById", query = "SELECT acc FROM accounts acc WHERE acc.id = :id")
+        @NamedQuery(name = "Account.findByLogin", query = "SELECT acc FROM accounts acc WHERE acc.login = :login"),
+        @NamedQuery(name = "Account.findById", query = "SELECT acc FROM accounts acc WHERE acc.id = :id")
 })
 public class Account extends BaseEntity {
     @Getter
@@ -152,4 +152,6 @@ public class Account extends BaseEntity {
         this.setCreatedBy(this);
         this.setAlteredBy(this);
     }
+
+
 }

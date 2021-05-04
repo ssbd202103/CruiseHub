@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.JWTException;
 import pl.lodz.p.it.ssbd2021.ssbd03.testModel.mok.dto.TestAccountDto;
 
 import java.util.List;
@@ -22,7 +23,7 @@ class JWTHandlerTest {
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Test
-    void createTokenTest() {
+    void createTokenTest() throws JWTException {
         List<TestAccountDto> accounts = getSampleAccounts();
 
         for (TestAccountDto account : accounts) {

@@ -10,4 +10,8 @@ public class I18n {
     public static final String ACCESS_LEVEL_DOES_NOT_EXIST_ERROR = "error.account.accessLevels.doesNotExist";
     public static final String ETAG_EMPTY_ERROR = "error.security.etag.empty";
     public static final String ETAG_INVALID_ERROR = "error.security.etag.invalid";
+    public static final String PASSWORD_RESET_IDENTITY_ERROR = "error.password.reset.wrongIdentity";
+    public static final String EMAIL_SERVICE_INCORRECT_EMAIL = "error.email.incorrect";
+    public static final String EMAIL_SERVICE_INACCESSIBLE = "error.emailService.inaccessible";
+    public static final String PASSWORD_RESET_TOKEN_CONTENT_ERROR = "error.password.reset.contentError";
 }
