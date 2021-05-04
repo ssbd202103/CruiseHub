@@ -1,11 +1,16 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.UnblockAccountDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.IdDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.ChangeAccessLevelStateDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccountDetailsViewDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.AccountEndpointLocal;
@@ -27,6 +32,10 @@ import java.util.List;
 
 import static javax.ws.rs.core.Response.Status.*;
 
+import static javax.ws.rs.core.Response.Status.*;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ETAG_IDENTITY_INTEGRITY_ERROR;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.SERIALIZATION_PARSING_ERROR;
+
 
 /**
  * Klasa która udostępnia api RESTowe do wykonania operacji na kontach użytkowników, oraz zajmuje się walidacją danych.
@@ -34,6 +43,8 @@ import static javax.ws.rs.core.Response.Status.*;
 @Path("/account")
 @RequestScoped
 public class AccountController {
+    private final ObjectMapper mapper = new ObjectMapper(); // for polymorphic Jackson serialization,
+    // should not be used anymore once default JSON serializer is set to Jackson
 
     @EJB
     private AccountEndpointLocal accountEndpoint;
@@ -44,12 +55,11 @@ public class AccountController {
      * @param login użytkownika
      * @return Odpowiedź serwera z reprezentacją JSON obiektu użytkownika
      * oraz nagłówkiem ETag wygenerowanym na podstawie obiektu
-     * @throws BaseAppException Bazowy wyjątek aplikacji
      */
     @GET
     @Path("/{login}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAccountByLogin(@PathParam("login") @Login String login) throws BaseAppException {
+    public Response getAccountByLogin(@PathParam("login") @Login String login) {
         try {
             AccountDto account = accountEndpoint.getAccountByLogin(login);
             String ETag = accountEndpoint.getETagFromSignableEntity(account);
@@ -60,9 +70,29 @@ public class AccountController {
     }
 
     /**
+     * Pobiera dane użytkownika wraz z szczegółami i poziomami dostępu
+     *
+     * @param login Login użytkownika
+     * @return Odpowiedź serwera z reprezentacją JSON obiektu użytkownika
+     */
+    @GET
+    @Path("/details-view/{login}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAccountDetailsByLogin(@PathParam("login") String login) {
+        try {
+            AccountDetailsViewDto account = accountEndpoint.getAccountDetailsByLogin(login);
+            return Response.ok().entity(mapper.writeValueAsString(account)).build();
+        } catch (BaseAppException e) {
+            return Response.status(NOT_FOUND).entity(e.getMessage()).build();
+        } catch (JsonProcessingException e) {
+            return Response.status(BAD_REQUEST).entity(SERIALIZATION_PARSING_ERROR).build();
+        }
+    }
+
+    /**
      * Stwórz nowe konto z poziomem dostępu Klient
      *
-     * @param clientForRegistrationDto zbiór danych niezbędnych dla stworzenia konta z poziomem dostępu Klient
+     * @param clientForRegistrationDto Zbiór danych niezbędnych dla stworzenia konta z poziomem dostępu Klient
      */
     @POST
     @Path("/client/registration")
@@ -74,7 +104,7 @@ public class AccountController {
     /**
      * Stwórz nowe konto z poziomem dostępu Pracownik firmy
      *
-     * @param businessWorkerForRegistrationDto zbiór danych niezbędnych dla stworzenia konta z poziomem dostępu Pracownik firmy
+     * @param businessWorkerForRegistrationDto Zbiór danych niezbędnych dla stworzenia konta z poziomem dostępu Pracownik firmy
      */
     @POST
     @Path("/business-worker/registration")
@@ -86,7 +116,7 @@ public class AccountController {
     /**
      * Pobierz informacje o wszystkich kontach
      *
-     * @return lista kont
+     * @return Lista kont
      */
     @GET
     @Path("/accounts")
@@ -107,20 +137,40 @@ public class AccountController {
      * Dodaj poziom dostępu do istniejącego konta
      *
      * @param grantAccessLevel Obiekt przesyłowy danych potrzebnych do nadania poziomu dostępu
-     * @return Odpowiedź serwera w postaci JSON
-     * @throws BaseAppException bazowy wyjątek aplikacji
+     * @return Odpowiedź serwera reprezentująca obiekt AccountDto po zmianach w postaci JSON
      */
     @ETagFilterBinding
     @PUT
-    @Path("/grantAccessLevel")
+    @Path("/grant-access-level")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response grantAccessLevel(GrantAccessLevelDto grantAccessLevel) throws BaseAppException {
-
+    public Response grantAccessLevel(GrantAccessLevelDto grantAccessLevel) {
         try {
             AccountDto account = accountEndpoint.grantAccessLevel(grantAccessLevel);
             return Response.ok().entity(account).build();
+        } catch (BaseAppException e) {
+            return Response.status(BAD_REQUEST).entity(e.getMessage()).build();
+        }
+    }
 
+    /**
+     * Zmień stan danego poziomu dostępu (włącz/wyłącz)
+     * @param changeAccessLevelStateDto Obiekt przesyłowy danych potrzebnych do zmiany stanu poziomu dostępu
+     * @param etag Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
+     * @return Odpowiedź serwera reprezentująca obiekt AccountDto po zmianach w postaci JSON
+     */
+    @ETagFilterBinding
+    @PUT
+    @Path("/change-access-level-state")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response changeAccessLevelState(ChangeAccessLevelStateDto changeAccessLevelStateDto, @HeaderParam("If-Match") String etag) {
+        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, changeAccessLevelStateDto)) {
+            return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
+        }
+        try {
+            AccountDto account = accountEndpoint.changeAccessLevelState(changeAccessLevelStateDto);
+            return Response.ok().entity(account).build();
         } catch (BaseAppException e) {
             return Response.status(BAD_REQUEST).entity(e.getMessage()).build();
         }

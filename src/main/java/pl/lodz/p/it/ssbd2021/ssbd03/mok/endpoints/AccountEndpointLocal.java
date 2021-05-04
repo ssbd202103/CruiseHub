@@ -4,9 +4,11 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.IdDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.ChangeAccessLevelStateDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.PasswordResetDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccountDetailsViewDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
@@ -25,50 +27,68 @@ public interface AccountEndpointLocal {
     /**
      * Mapuje obiekt dto na obiekty modelu
      *
-     * @param clientForRegistrationDto obiekt klasy dto która przechowuje wszystkie niezbędne pola do stworzenia nowego konta użytkownika z przypisanym poziomem dostępu Klient
+     * @param clientForRegistrationDto Obiekt klasy dto która przechowuje wszystkie niezbędne pola do stworzenia nowego konta użytkownika z przypisanym poziomem dostępu Klient
      */
     void createClientAccount(ClientForRegistrationDto clientForRegistrationDto);
 
     /**
      * Mapuje obiekt dto na obiekty modelu
      *
-     * @param businessWorkerForRegistrationDto obiekt klasy dto która przechowuje wszystkie niezbędne pola do stworzenia nowego konta użytkownika z przypisanym poziomem dostępu Pracownik Firmy
+     * @param businessWorkerForRegistrationDto Obiekt klasy dto która przechowuje wszystkie niezbędne pola do stworzenia nowego konta użytkownika z przypisanym poziomem dostępu Pracownik Firmy
      */
     void createBusinessWorkerAccount(BusinessWorkerForRegistrationDto businessWorkerForRegistrationDto);
 
     /**
      * Pobiera obiekt AccountDto szukanego użytkownika
      *
-     * @param login użytkownika
-     * @return reprezentacja użytkownika po dokonanych zmianach w postaci AccountDto
+     * @param login Login użytkownika
+     * @return Reprezentacja użytkownika po dokonanych zmianach w postaci AccountDto
      * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku nieznalezienia użytkownika.
      */
     AccountDto getAccountByLogin(String login) throws BaseAppException;
 
     /**
+     * Pobiera obiekt AccountDetailsViewDto szukanego użytkownika
+     *
+     * @param login Login użytkownika
+     * @return Reprezentacja użytkownika po dokonanych zmianach w postaci AccountDetailsViewDto
+     * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku nieznalezienia użytkownika.
+     */
+    AccountDetailsViewDto getAccountDetailsByLogin(String login) throws BaseAppException;
+
+    /**
      * Dodaje poziom dostępu do użytkownika
      *
      * @param grantAccessLevel Obiekt przesyłowy danych potrzebnych do nadania poziomu dostępu
-     * @return reprezentacja użytkownika po dokonanych zmianach w postaci AccountDto
+     * @return Reprezentacja użytkownika po dokonanych zmianach w postaci AccountDto
      * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku gdy dodanie poziomu jest niemożliwe,
      *                          lub narusza zasady biznesowe aplikacji
      */
     AccountDto grantAccessLevel(GrantAccessLevelDto grantAccessLevel) throws BaseAppException;
 
     /**
+     * Zmienia stan poziomu dostępu użytkownika (włącza/wyłącza)
+     *
+     * @param changeAccessLevelState Obiekt przesyłowy danych potrzebnych do zmiany stanu poziomu dostępu
+     * @return Reprezentacja użytkownika po dokonanych zmianach w postaci AccountDto
+     * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku gdy zmiana stanu poziomu dostepu jest niemożliwa,
+     *                          lub narusza zasady biznesowe aplikacji
+     */
+    AccountDto changeAccessLevelState(ChangeAccessLevelStateDto changeAccessLevelState) throws BaseAppException;
+
+    /**
      * Oblicza ETag dla encji
      *
      * @param entity Encja implementująca SignableEntity
      * @return ETag w postaci String
-     * @throws BaseAppException Bazowy wyjątek aplikacji rzucany w przypadku błędu tworzonia ETaga
      */
-    String getETagFromSignableEntity(SignableEntity entity) throws BaseAppException;
+    String getETagFromSignableEntity(SignableEntity entity);
 
 
     /**
-     * Mapuje obiety kont dto na obiekty modelu
+     * Pobiera wszystkie konta w postaci obiektów przesyłowych DTO
      *
-     * @return obiekty kont dto
+     * @return Obiekty kont dto
      */
     List<AccountDtoForList> getAllAccounts();
 

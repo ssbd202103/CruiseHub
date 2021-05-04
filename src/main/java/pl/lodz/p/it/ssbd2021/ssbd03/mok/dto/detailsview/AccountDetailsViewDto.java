@@ -1,23 +1,20 @@
-package pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration;
+package pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AddressDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Name;
-import pl.lodz.p.it.ssbd2021.ssbd03.validators.PhoneNumber;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClientForRegistrationDto {
-
+public class AccountDetailsViewDto {
     @Name
     private String firstName;
 
@@ -30,15 +27,12 @@ public class ClientForRegistrationDto {
     @Email
     private String email;
 
-    @NotEmpty
-    private String password;
+    private boolean confirmed;
+
+    private boolean active;
 
     @NotNull
     private LanguageType languageType;
 
-    @NotNull
-    private AddressDto addressDto;
-
-    @PhoneNumber
-    private String phoneNumber;
+    private Set<AccessLevelDetailsViewDto> accessLevels;
 }
