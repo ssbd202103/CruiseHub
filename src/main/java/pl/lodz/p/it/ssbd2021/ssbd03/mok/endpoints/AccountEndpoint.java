@@ -7,11 +7,8 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.EndpointException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.PasswordResetDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.IdDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters.AccountMapper;
@@ -39,14 +36,14 @@ public class AccountEndpoint implements AccountEndpointLocal {
     private AccountManagerLocal accountManager;
 
     @Override
-    public void createClientAccount(ClientForRegistrationDto clientForRegistrationDto) {
+    public void createClientAccount(ClientForRegistrationDto clientForRegistrationDto) throws BaseAppException {
         Client client = AccountMapper.extractClientFromClientForRegistrationDto(clientForRegistrationDto);
         Account account = AccountMapper.extractAccountFromClientForRegistrationDto(clientForRegistrationDto);
         this.accountManager.createClientAccount(account, client);
     }
 
     @Override
-    public void createBusinessWorkerAccount(BusinessWorkerForRegistrationDto businessWorkerForRegistrationDto) {
+    public void createBusinessWorkerAccount(BusinessWorkerForRegistrationDto businessWorkerForRegistrationDto) throws BaseAppException {
         BusinessWorker businessWorker = AccountMapper.extractBusinessWorkerFromBusinessWorkerForRegistrationDto(businessWorkerForRegistrationDto);
         Account account = AccountMapper.extractAccountFromBusinessWorkerForRegistrationDto(businessWorkerForRegistrationDto);
         this.accountManager.createBusinessWorkerAccount(account, businessWorker, businessWorkerForRegistrationDto.getCompanyName());
@@ -96,5 +93,10 @@ public class AccountEndpoint implements AccountEndpointLocal {
     @Override
     public void resetPassword(PasswordResetDto passwordResetDto) throws BaseAppException {
         this.accountManager.resetPassword(passwordResetDto.getLogin(), DigestUtils.sha256Hex(passwordResetDto.getPassword()), passwordResetDto.getToken());
+    }
+
+    @Override
+    public void verifyAccount(AccountVerificationDto accountVerificationDto) throws BaseAppException {
+        this.accountManager.verifyAccount(accountVerificationDto.getToken());
     }
 }

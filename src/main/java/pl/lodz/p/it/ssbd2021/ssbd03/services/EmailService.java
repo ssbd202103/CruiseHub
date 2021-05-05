@@ -4,6 +4,7 @@ import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
 
+
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.EmailServiceException;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
 

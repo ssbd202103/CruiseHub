@@ -63,7 +63,7 @@ public class AccountController {
     @POST
     @Path("/client/registration")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void createClient(@Valid @NotNull ClientForRegistrationDto clientForRegistrationDto) {
+    public void createClient(@Valid @NotNull ClientForRegistrationDto clientForRegistrationDto) throws BaseAppException {
         accountEndpoint.createClientAccount(clientForRegistrationDto);
     }
 
@@ -75,7 +75,7 @@ public class AccountController {
     @POST
     @Path("/business-worker/registration")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void createBusinessWorker(@Valid @NotNull BusinessWorkerForRegistrationDto businessWorkerForRegistrationDto) {
+    public void createBusinessWorker(@Valid @NotNull BusinessWorkerForRegistrationDto businessWorkerForRegistrationDto) throws BaseAppException {
         accountEndpoint.createBusinessWorkerAccount(businessWorkerForRegistrationDto);
     }
 
@@ -155,5 +155,22 @@ public class AccountController {
             Response.status(NOT_FOUND).entity(e.getMessage()).build();
         }
         return Response.ok().build();
+    }
+
+    /**
+     * Metoda odpowiedzialna za weryfikowanie konta
+     *
+     * @param accountVerificationDto obiekt dto przechowujący niezbędne dane do resetowania hasła
+     * @return Odpowiedź serwera w postaci JSON
+     */
+    @PUT
+    @Path("/accountVerification")
+    public Response accountVerification(@Valid AccountVerificationDto accountVerificationDto) {
+        try {
+            this.accountEndpoint.verifyAccount(accountVerificationDto);
+        } catch (BaseAppException e) {
+            Response.status(FORBIDDEN).entity(e.getMessage()).build(); // todo send key
+        }
+        return Response.ok().build(); // todo appropriate condition
     }
 }
