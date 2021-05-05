@@ -19,8 +19,6 @@ import ButtonGroup from '@material-ui/core/ButtonGroup'
 import axios from "axios";
 
 
-
-
 const useRowStyles = makeStyles({
     root: {
         '& > *': {
@@ -57,9 +55,8 @@ function createData(
 }
 
 
-
 export interface RowProps {
-    row : ReturnType<typeof createData>
+    row: ReturnType<typeof createData>
 }
 
 function Row(props: RowProps) {
@@ -71,6 +68,11 @@ function Row(props: RowProps) {
 
     const setCurrentGrantAccessLevelAccount = () => {
         sessionStorage.setItem('grantAccessLevelAccount', JSON.stringify(row));
+    }
+
+    const setCurrentChangeAccessLevelStateAccount = async () => {
+        const result = await axios.get(`http://localhost:8080/api/account/details-view/${row.login}`);
+        sessionStorage.setItem("changeAccessLevelStateAccount", JSON.stringify(result.data));
     }
 
     return (
@@ -102,21 +104,27 @@ function Row(props: RowProps) {
                                 <TableBody>
                                     <TableRow>
                                         <TableCell align="center">
-                                                <Link to="/panels/adminPanel/ChangeAccountData">
-                                                    <Button className={buttonClass.root}>{t("edit")}</Button>
-                                                </Link>
+                                            <Link to="/panels/adminPanel/ChangeAccountData">
+                                                <Button className={buttonClass.root}>{t("edit")}</Button>
+                                            </Link>
 
-                                                <Link to="/panels/adminPanel/ChangeAccountPassword">
-                                                    <Button className={buttonClass.root}>{t("change password")}</Button>
-                                                </Link>
+                                            <Link to="/panels/adminPanel/ChangeAccountPassword">
+                                                <Button className={buttonClass.root}>{t("change password")}</Button>
+                                            </Link>
 
-                                                <Button className={buttonClass.root}>{t("reset password")}</Button>
+                                            <Button className={buttonClass.root}>{t("reset password")}</Button>
 
-                                                <Button className={buttonClass.root}>{t("block")}</Button>
+                                            <Button className={buttonClass.root}>{t("block")}</Button>
 
-                                                <Link to="/panels/adminPanel/GrantAccessLevel/">
-                                                    <Button onClick={setCurrentGrantAccessLevelAccount} className={buttonClass.root}>{t("grand access level")}</Button>
-                                                </Link>
+                                            <Link to="/panels/adminPanel/GrantAccessLevel/">
+                                                <Button onClick={setCurrentGrantAccessLevelAccount}
+                                                        className={buttonClass.root}>{t("grant access level")}</Button>
+                                            </Link>
+
+                                            <Link to="/panels/adminPanel/ChangeAccessLevelState/">
+                                                <Button onClick={setCurrentChangeAccessLevelStateAccount}
+                                                        className={buttonClass.root}>{t("change access level state")}</Button>
+                                            </Link>
                                         </TableCell>
                                     </TableRow>
                                 </TableBody>
@@ -130,12 +138,11 @@ function Row(props: RowProps) {
 }
 
 
-
 export default function AdminListClient() {
     const [users, setUsers] = useState([]);
     useEffect(() => {
         loadUsers();
-    },[]);
+    }, []);
 
 
     const loadUsers = async () => {

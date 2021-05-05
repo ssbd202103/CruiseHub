@@ -70,7 +70,8 @@ const resources = {
             "change password": "Zmień hasło",
             "reset password": "Resetuj hasło",
             "block": "Zablokuj konto",
-            "grand access level": "Przydziel poziom dostępu",
+            "grant access level": "Przydziel poziom dostępu",
+            "change access level state": "Zmień stan poziomu dostępu",
             //panels.clientPanel
             "client panel": "Panel klienta",
             //errors
@@ -154,7 +155,8 @@ const resources = {
             "change password": "Change password",
             "reset password": "Reset password",
             "block": "Block account",
-            "grand access level": "Grand access level",
+            "grant access level": "Grant access level",
+            "change access level state": "Change access level state",
             //panels.clientPanel
             "clientPanelH2": "Client panel",
             //errors
