@@ -50,6 +50,12 @@ class AccountControllerTest {
         AccountDto accountDto = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
         given().baseUri(baseUri).contentType(MediaType.APPLICATION_JSON).post("/request-password-reset/" + accountDto.getLogin()).then().statusCode(200);
     }
+   @Test
+    public void requestSomeonesPasswordReset_SUCCESS() throws JsonProcessingException {
+        AccountDto accountDto = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
+        given().baseUri(baseUri).contentType(MediaType.APPLICATION_JSON).post("/request-someones-password-reset/" + accountDto.getLogin() + "/" + accountDto.getEmail()).then().statusCode(200);
+    }
+
 
     @Test
     @Disabled

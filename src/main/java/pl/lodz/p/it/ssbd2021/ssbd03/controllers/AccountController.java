@@ -14,6 +14,7 @@ import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.print.attribute.standard.Media;
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -156,4 +157,22 @@ public class AccountController {
         }
         return Response.ok().build();
     }
+    /**
+     * Metoda odpowiedzialna za zgłoszenia życzenia resetowania hasła dla danego użytkownika
+     *
+     * @param login login użytkownika
+     * @param email e-mail użytkownika
+     * @return Odpowiedź serwera w postaci JSON
+     */
+    @POST
+    @Path("/request-someones-password-reset/{login}/{email}")
+    public Response requestSomeonesPasswordReset(@PathParam("login") @Login String login, @PathParam("email") @Email String email) {
+        try {
+            this.accountEndpoint.requestSomeonesPasswordReset(login, email);
+        } catch (BaseAppException e) {
+            Response.status(NOT_FOUND).entity(e.getMessage()).build();
+        }
+        return Response.ok().build();
+    }
+
 }

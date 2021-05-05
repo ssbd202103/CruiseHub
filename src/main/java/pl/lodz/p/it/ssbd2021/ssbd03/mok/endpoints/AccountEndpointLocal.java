@@ -97,4 +97,14 @@ public interface AccountEndpointLocal {
      * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku gdy token wygasł albo nie przeszedł walidacji oraz gdy login który znajduje się w tokenie jest rózny od przesłanego jawnie w dto oraz w sytuacj gdy został rzucony wyjątek blokady optymistycznej
      */
     void resetPassword(PasswordResetDto passwordResetDto) throws BaseAppException;
+
+    /**
+     * Metoda odpowiedzialna za wywołanie metody odpowiedzialnej za wysyłania email z linkiem do resetowania hasła dla danego użytkownika, który podał wybrany email
+     *
+     * @param login login użytkonika
+     * @param email email użytkonika
+     * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku gdy użytkownik o podanym loginie nie istnieje, albo gdy podczas wysyłania email został rzucony wyjątek przez metode klasy EmailService
+     */
+    void requestSomeonesPasswordReset(String login, String email) throws BaseAppException;
 }
+
