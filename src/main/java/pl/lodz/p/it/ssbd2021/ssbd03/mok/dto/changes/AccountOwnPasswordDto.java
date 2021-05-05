@@ -10,6 +10,8 @@ import pl.lodz.p.it.ssbd2021.ssbd03.validators.Password;
 import javax.validation.constraints.NotNull;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class AccountOwnPasswordDto extends AbstractAccountDto {
     @NotNull
     @Password
