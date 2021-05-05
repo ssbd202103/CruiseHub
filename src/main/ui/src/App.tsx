@@ -24,6 +24,7 @@ import ClientPanel from './pages/panels/clientPanel'
 import WorkerPanel from './pages/panels/workerPanel'
 import PasswordReset from "./pages/reset/passwordReset";
 import RequestPasswordReset from './pages/reset/requestPasswordReset';
+import RequestSomeonePasswordReset from './pages/reset/requestSomeonesPasswordReset';
 
 function App() {
     return (
@@ -38,7 +39,6 @@ function App() {
                     <Route path="/signin">
                         <Signin/>
                     </Route>
-
 
                     <Route path="/signup/client">
                         <SignUpClient/>
@@ -72,6 +72,9 @@ function App() {
                         <RequestPasswordReset/>
                     </Route>
 
+                    <Route path="/reset/resetSomebodyPassword">
+                        <RequestSomeonePasswordReset/>
+                    </Route>
 
                     <Route path="*">
                         <div>404 not found</div>
