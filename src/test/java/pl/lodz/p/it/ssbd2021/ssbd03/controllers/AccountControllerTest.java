@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
@@ -74,12 +75,12 @@ class AccountControllerTest {
     }
 
     private AccountDto registerClientAndGetAccountDto(ClientForRegistrationDto client) throws JsonProcessingException {
-        given().baseUri(baseUri).contentType("application/json").body(client).post("/client/registration");
+        given().baseUri(baseUri).contentType("application/json").body(client).post("account/client/registration");
         return getAccountDto(client.getLogin());
     }
 
     private AccountDto getAccountDto(String login) throws JsonProcessingException {
-        return objectMapper.readValue(given().baseUri(baseUri).get("/" + login).thenReturn().asString(), AccountDto.class);
+        return objectMapper.readValue(given().baseUri(baseUri).get("account/" + login).thenReturn().asString(), AccountDto.class);
     }
 
     private RequestSpecification getBaseUriETagRequest(String etag) {
@@ -88,11 +89,11 @@ class AccountControllerTest {
 
     @Test
     public void changeEmailTest_SUCCESS() throws JsonProcessingException {
-        Response res = given().baseUri(baseUri).get("account/emusk");
-        AccountDto account = objectMapper.readValue(res.thenReturn().asString(), AccountDto.class);
 
-
+        AccountDto account = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
+        Response res = given().baseUri(baseUri).get("account/" + account.getLogin());
         String etag = res.getHeader("Etag");
+
         AccountChangeEmailDto accountChangeEmailDto = new AccountChangeEmailDto(
                 account.getLogin(),
                 account.getVersion(),
@@ -103,12 +104,20 @@ class AccountControllerTest {
                 .body(accountChangeEmailDto)
                 .when()
                 .put("account/change_email").then().statusCode(204);
+
+
+        Response changedRes = given().baseUri(baseUri).get("account/" + account.getLogin());
+        changedRes.prettyPrint();
+        AccountDto changedAccount = objectMapper.readValue(changedRes.thenReturn().asString(), AccountDto.class);
+
+        Assertions.assertEquals(accountChangeEmailDto.getNewEmail(), changedAccount.getEmail());
     }
 
     @Test
     public void changeEmailTest_FAIL() throws JsonProcessingException {
-        Response res = given().baseUri(baseUri).get("account/emusk");
-        AccountDto account = objectMapper.readValue(res.thenReturn().asString(), AccountDto.class);
+
+        AccountDto account = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
+        Response res = given().baseUri(baseUri).get("account/" + account.getLogin());
 
         AccountChangeEmailDto accountChangeEmailDto = new AccountChangeEmailDto(
                 account.getLogin(),
