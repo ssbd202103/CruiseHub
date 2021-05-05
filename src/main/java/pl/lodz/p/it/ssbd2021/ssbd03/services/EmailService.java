@@ -5,12 +5,22 @@ import javax.mail.internet.*;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
 
+/**
+ * The type Email service.
+ */
 public class EmailService {
 
     private static final Properties emailProperties = PropertiesReader.getSecurityProperties();
     private static String EMAIL_USER = getAccount();
     private static String PASSWD = getPasswd();
 
+    /**
+     * Wysyła mail dla podanych odbiorców
+     *
+     * @param recipients lista emaili odbiorców
+     * @param subject   temat maila
+     * @param body   zawartość maila
+     */
     public static void sendFromGMail( String[] recipients, String subject, String body) {
         Properties properties = System.getProperties();
 
