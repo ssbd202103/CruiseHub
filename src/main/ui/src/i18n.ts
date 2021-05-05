@@ -88,7 +88,8 @@ const resources = {
             "error.password.reset.wrongIdentity": "Żądanie zawiera złą tożsamość",
             "error.email.incorrect": "Address email jest niepoprawny",
             "error.emailService.inaccessible": "Serwis pocztowy jest niedostępny",
-            "error.password.reset.contentError": "Błędna zawartość tokenu do resetowania hasła"
+            "error.password.reset.contentError": "Błędna zawartość tokenu do resetowania hasła",
+            "error.password.change.oldPasswordError": "Podane stare hasło jest niepoprawne"
 
         }
     },
@@ -177,7 +178,8 @@ const resources = {
             "error.parsing.serialization": "Received data could not be serialized properly",
             "error.password.reset.wrongIdentity": "Request contains wrong identity",
             "error.email.incorrect": "Email address is incorrect",
-            "error.password.reset.contentError": "Błędna zawartość tokenu do resetowania hasła"
+            "error.password.reset.contentError": "Błędna zawartość tokenu do resetowania hasła",
+            "error.password.change.oldPasswordError": "Inserted old password is invalid"
 
         }
     }

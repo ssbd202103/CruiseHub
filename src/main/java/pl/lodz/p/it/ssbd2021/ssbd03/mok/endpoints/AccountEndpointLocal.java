@@ -4,6 +4,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.IdDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.AccountOwnPasswordDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.ChangeAccessLevelStateDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.PasswordResetDto;
@@ -127,4 +128,10 @@ public interface AccountEndpointLocal {
      */
     void unblockUser(@NotNull String unblockedUserLogin, @NotNull Long version) throws BaseAppException;
 
+    /**
+     * Metoda odpowiedzialna za wywołanie metody odpowiedzialnej za zmianę hasła akutalnego użytkownika
+     * @param accountOwnPasswordDto obiekt dto posiadający niezbedne dane do zmienienia hasła aktualnego użytkownika
+     * @throws BaseAppException Bazowy wyjątek aplikacji rzucany w przypadku gdy stare hasło podane przez użytkownika nie jest zgodne z tym w bazie danych, bądź w przpadku blokady optymistycznej
+     */
+    void changeOwnPassword(AccountOwnPasswordDto accountOwnPasswordDto) throws BaseAppException;
 }

@@ -1,6 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.managers;
 
 import com.auth0.jwt.interfaces.Claim;
+import org.apache.commons.codec.digest.DigestUtils;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
@@ -14,6 +15,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AccountManagerException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.JWTException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.AccountOwnPasswordDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.CompanyFacadeMok;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.JWTHandler;
@@ -211,5 +213,19 @@ public class AccountManager implements AccountManagerLocal {
         account.setLastAlterDateTime(LocalDateTime.now());
     }
 
+
+    @Override
+    public void changeOwnPassword(AccountOwnPasswordDto accountOwnPasswordDto) throws BaseAppException {
+        Account account = accountFacade.findByLogin(accountOwnPasswordDto.getLogin());
+        if (account.getPasswordHash().equals(DigestUtils.sha256Hex(accountOwnPasswordDto.getOldPassword()))) {
+            account.setPasswordHash(DigestUtils.sha256Hex(accountOwnPasswordDto.getNewPassword()));
+            account.setLastAlterDateTime(LocalDateTime.now());
+            account.setAlteredBy(account);
+            account.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
+            account.setVersion(accountOwnPasswordDto.getVersion());
+        } else {
+            throw new AccountManagerException(PASSWORDS_DONT_MATCH_ERROR);
+        }
+    }
 
 }

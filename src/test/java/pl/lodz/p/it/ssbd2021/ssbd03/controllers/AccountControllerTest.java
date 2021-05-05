@@ -22,6 +22,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.PasswordResetDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.UnblockAccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.AccountOwnPasswordDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccessLevelDetailsViewDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccountDetailsViewDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
@@ -302,6 +303,67 @@ class AccountControllerTest {
 
     }
 
+    @Test
+    public void changePasswordTest_SUCCESS() throws JsonProcessingException {
+        Response res = given().baseUri(baseUri).get("rbranson");
+        AccountDto account = objectMapper.readValue(res.thenReturn().asString(), AccountDto.class);
+
+        String etag = res.getHeader("Etag");
+        AccountOwnPasswordDto accountOwnPasswordDto = new AccountOwnPasswordDto(
+                account.getLogin(),
+                account.getVersion(),
+                "12345678",     //aktualne haslo dla konta w bazie
+                "nowehaslo"
+        );
+
+        given().baseUri(baseUri).header("If-Match", etag)
+                .contentType(ContentType.JSON)
+                .body(accountOwnPasswordDto)
+                .when()
+                .put("change_own_password").then().statusCode(204);
+    }
+
+    @Test
+    public void changePasswordVersionTest_FAIL() throws JsonProcessingException {
+        // fail optimistic check (version)
+        Response res = given().baseUri(baseUri).get("rbranson");
+        AccountDto account = objectMapper.readValue(res.thenReturn().asString(), AccountDto.class);
+
+        String etag = res.getHeader("Etag");
+        AccountOwnPasswordDto accountOwnPasswordDto = new AccountOwnPasswordDto(
+                account.getLogin(),
+                account.getVersion() - 1,
+                "nowehaslo",
+                "12345678"
+        );
+
+        given().baseUri(baseUri).header("If-Match", etag)
+                .contentType(ContentType.JSON)
+                .body(accountOwnPasswordDto)
+                .when()
+                .put("change_own_password").then().statusCode(406);
+    }
+
+    @Test
+    public void changePasswordMatchTest_FAIL() throws JsonProcessingException {
+        // fail old password check
+        Response res = given().baseUri(baseUri).get("rbranson");
+        AccountDto account = objectMapper.readValue(res.thenReturn().asString(), AccountDto.class);
+
+        String etag = res.getHeader("Etag");
+        AccountOwnPasswordDto accountOwnPasswordDto = new AccountOwnPasswordDto(
+                account.getLogin(),
+                account.getVersion(),
+                "jakieshasloniewbazie",
+                "12345678"
+        );
+
+        given().baseUri(baseUri).header("If-Match", etag)
+                .contentType(ContentType.JSON)
+                .body(accountOwnPasswordDto)
+                .when()
+                .put("change_own_password").then().statusCode(403);
+    }
 
 
     private ClientForRegistrationDto getSampleClientForRegistrationDto() {

@@ -19,4 +19,6 @@ public class I18n {
     public static final String EMAIL_SERVICE_INCORRECT_EMAIL = "error.email.incorrect";
     public static final String EMAIL_SERVICE_INACCESSIBLE = "error.emailService.inaccessible";
     public static final String PASSWORD_RESET_TOKEN_CONTENT_ERROR = "error.password.reset.contentError";
+    public static final String PASSWORDS_DONT_MATCH_ERROR = "error.password.change.oldPasswordError";
+    public static final String OPTIMISTIC_EXCEPTION = "exception.optimistic";
 }

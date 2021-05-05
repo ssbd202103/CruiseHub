@@ -5,6 +5,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.AccountOwnPasswordDto;
 
 import javax.ejb.Local;
 import java.util.List;
@@ -112,4 +113,9 @@ public interface AccountManagerLocal {
      */
     void resetPassword(String login, String passwordHash, String token) throws BaseAppException;
 
+    /**
+     * Metoda odpowiedzialna za zmiane hasła akutalnego użytkownika
+     * @throws BaseAppException Bazowy wyjątek aplikacji rzucany w przypadku gdy stare hasło nie jest zgodne z tym z bazy danych
+     */
+    void changeOwnPassword(AccountOwnPasswordDto accountOwnPasswordDto) throws BaseAppException;
 }

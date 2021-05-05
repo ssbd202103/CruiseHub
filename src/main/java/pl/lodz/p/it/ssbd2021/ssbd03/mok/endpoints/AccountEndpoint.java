@@ -10,6 +10,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.EndpointException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.PasswordResetDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.AccountOwnPasswordDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.ChangeAccessLevelStateDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.IdDto;
@@ -24,12 +25,14 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.mappers.IdMapper;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
+import javax.persistence.OptimisticLockException;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ACCESS_LEVEL_NOT_ASSIGNABLE_ERROR;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.OPTIMISTIC_EXCEPTION;
 
 /**
  * Klasa która zajmuje się growadzeniem zmapowanych obiektów klas Dto na obiekty klas modelu związanych z kontami użytkowników i poziomami dostępu, oraz wywołuje metody logiki przekazując zmapowane obiekty.
@@ -119,4 +122,13 @@ public class AccountEndpoint implements AccountEndpointLocal {
         this.accountManager.unblockUser(unblockedUserLogin, version);
     }
 
+    @Override
+    public void changeOwnPassword(AccountOwnPasswordDto accountOwnPasswordDto) throws BaseAppException {
+        Long version = this.accountManager.getAccountByLogin(accountOwnPasswordDto.getLogin()).getVersion();
+
+        if (!version.equals(accountOwnPasswordDto.getVersion())) {
+            throw new OptimisticLockException(OPTIMISTIC_EXCEPTION);
+        }
+        this.accountManager.changeOwnPassword(accountOwnPasswordDto);
+    }
 }
