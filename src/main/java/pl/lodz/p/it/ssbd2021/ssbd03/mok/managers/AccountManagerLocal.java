@@ -3,9 +3,8 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.managers;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 
 import javax.ejb.Local;
 import java.util.List;
@@ -77,4 +76,33 @@ public interface AccountManagerLocal {
      * @return lista kont
      */
     List<Account> getAllAccounts();
+
+
+    /**
+     * Zmień dane wybranego klienta
+     *
+     * @param account encja konta zawierająca zmiany
+     * @param alterBy login konta dokonującego zmiany
+     * @return zmienone konto
+     */
+    Account changeOtherClientData(Account account, String alterBy) throws BaseAppException;
+
+    /**
+     * Zmień dane wybranego praconiwka firmy
+     *
+     * @param account encja konta zawierająca zmiany
+     * @param alterBy login konta dokonującego zmiany
+     * @return zmienone konto
+     */
+    Account changeOtherBusinessWorkerData(Account account, String alterBy) throws BaseAppException;
+
+    /**
+     * Zmień dane wybranego moderatora lub administratora
+     *
+     * @param account encja konta zawierająca zmiany
+     * @param alterBy login konta dokonującego zmiany
+     * @return zmienone konto
+     */
+    Account changeOtherAccountData(Account account, String alterBy) throws BaseAppException;
+
 }

@@ -8,6 +8,9 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.EndpointException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherAccountChangeDataDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherBusinessWorkerChangeDataDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherClientChangeDataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.IdDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
@@ -20,12 +23,14 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.mappers.IdMapper;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
+import javax.persistence.OptimisticLockException;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ACCESS_LEVEL_NOT_ASSIGNABLE_ERROR;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.OPTIMISTIC_EXCEPTION;
 
 /**
  * Klasa która zajmuje się growadzeniem zmapowanych obiektów klas Dto na obiekty klas modelu związanych z kontami użytkowników i poziomami dostępu, oraz wywołuje metody logiki przekazując zmapowane obiekty.
@@ -85,4 +90,46 @@ public class AccountEndpoint implements AccountEndpointLocal {
     public void blockUser(@Valid @NotNull IdDto id) {
         this.accountManager.blockUser(IdMapper.toLong(id));
     }
+
+
+    @Override
+    public OtherClientChangeDataDto changeOtherClientData(OtherClientChangeDataDto otherClientChangeDataDto) throws OptimisticLockException, BaseAppException {
+        Long version = getAccountByLogin(otherClientChangeDataDto.getLogin()).getVersion();
+
+        if (!version.equals(otherClientChangeDataDto.getVersion())) {
+            throw new OptimisticLockException(OPTIMISTIC_EXCEPTION);
+        }
+
+        Account account = AccountMapper.extractAccountFromClientOtherChangeDataDto(otherClientChangeDataDto);
+        String alterBy = AccountMapper.extractAlterByFromOtherClientDataChange(otherClientChangeDataDto);
+
+        return AccountMapper.accountDtoForClientDataChange(accountManager.changeOtherClientData(account,alterBy));
+    }
+
+    @Override
+    public OtherBusinessWorkerChangeDataDto changeOtherBusinessWorkerData(OtherBusinessWorkerChangeDataDto otherBusinessWorkerChangeDataDto) throws OptimisticLockException, BaseAppException {
+        Long version = getAccountByLogin(otherBusinessWorkerChangeDataDto.getLogin()).getVersion();
+
+        if (!version.equals(otherBusinessWorkerChangeDataDto.getVersion())) {
+            throw new OptimisticLockException(OPTIMISTIC_EXCEPTION);
+        }
+
+        Account account = AccountMapper.extractAccountFromOtherBusinessWorkerChangeDataDto(otherBusinessWorkerChangeDataDto);
+        String alterBy = AccountMapper.extractAlterByFromOtherBusinessWorkerDataChange(otherBusinessWorkerChangeDataDto);
+       return AccountMapper.accountDtoForBusinnesWorkerDataChange(accountManager.changeOtherBusinessWorkerData(account,alterBy));
+    }
+
+    @Override
+    public AccountDto changeOtherAccountData(OtherAccountChangeDataDto otherAccountChangeDataDto) throws OptimisticLockException, BaseAppException {
+        Long version = getAccountByLogin(otherAccountChangeDataDto.getLogin()).getVersion();
+
+        if (!version.equals(otherAccountChangeDataDto.getVersion())) {
+            throw new OptimisticLockException(OPTIMISTIC_EXCEPTION);
+        }
+
+        Account account = AccountMapper.extractAccountFromOtherAccountChangeDataDto(otherAccountChangeDataDto);
+        String alterBy = AccountMapper.extractAlterByFromAccount(otherAccountChangeDataDto);
+       return AccountMapper.toAccountDto(accountManager.changeOtherAccountData(account,alterBy));
+    }
+
 }

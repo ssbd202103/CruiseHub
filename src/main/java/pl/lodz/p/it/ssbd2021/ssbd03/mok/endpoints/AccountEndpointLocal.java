@@ -4,12 +4,16 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.IdDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherAccountChangeDataDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherBusinessWorkerChangeDataDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherClientChangeDataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
 
 import javax.ejb.Local;
+import javax.persistence.OptimisticLockException;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -73,7 +77,31 @@ public interface AccountEndpointLocal {
 
     /**
      * Metoda odpowiedzialna za wywołanie metody odpowiedzialnej za blokowanie użytkownika
+     *
      * @param id ID użytkownika w postaci obiektu klasy IdDto
      */
     void blockUser(@Valid @NotNull IdDto id);
+
+
+    /**
+     * Zmienia dane wybranego klienta
+     *
+     * @param otherClientChangeDataDto dto obiekt przechowujący informację o zmienionych danych
+     */
+    OtherClientChangeDataDto changeOtherClientData(OtherClientChangeDataDto otherClientChangeDataDto) throws OptimisticLockException, BaseAppException;
+
+    /**
+     * Zmienia dane wybranego pracownika
+     *
+     * @param otherBusinessWorkerChangeDataDto dto obiekt przechowujący informację o  zmienionych danych
+     */
+    OtherBusinessWorkerChangeDataDto changeOtherBusinessWorkerData(OtherBusinessWorkerChangeDataDto otherBusinessWorkerChangeDataDto) throws OptimisticLockException, BaseAppException;
+
+    /**
+     * Zmienia dane wybranego moderatora lub administratora
+     *
+     * @param otherAccountChangeDataDto dto obiekt przechowujący informację o zmienionych danych
+     */
+    AccountDto changeOtherAccountData(OtherAccountChangeDataDto otherAccountChangeDataDto) throws OptimisticLockException, BaseAppException;
+
 }

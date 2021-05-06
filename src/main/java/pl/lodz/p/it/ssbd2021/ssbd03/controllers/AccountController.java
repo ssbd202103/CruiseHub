@@ -4,11 +4,15 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.IdDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherAccountChangeDataDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherBusinessWorkerChangeDataDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherClientChangeDataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.AccountEndpointLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.ETagFilterBinding;
+import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 
 import javax.ejb.EJB;
@@ -19,8 +23,9 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
-import static javax.ws.rs.core.Response.Status.NOT_FOUND;
+import static javax.ws.rs.core.Response.Status.*;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ETAG_IDENTITY_INTEGRITY_ERROR;
+
 import java.util.List;
 
 
@@ -121,4 +126,83 @@ public class AccountController {
             return Response.status(BAD_REQUEST).entity(e.getMessage()).build();
         }
     }
+
+    /**
+     * Zmień dane wybranego konta o poziomie dostępu klient
+     *
+     * @param otherClientChangeDataDto obiekt dto z nowymi danymi
+     * @param etag Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
+     * @return Odpowiedź serwera w postaci JSON
+     */
+    @PUT
+    @Path("/changeOtherData/client")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @ETagFilterBinding
+    public Response changeOtherClientData(OtherClientChangeDataDto otherClientChangeDataDto, @HeaderParam("If-Match") String etag) {
+        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, otherClientChangeDataDto)) {
+            return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
+        }
+
+        try {
+            OtherClientChangeDataDto account = accountEndpoint.changeOtherClientData(otherClientChangeDataDto);
+            return Response.ok().entity(account).build();
+        } catch (BaseAppException e) {
+            return Response.status(BAD_REQUEST).entity(e.getMessage()).build();
+        }
+
+
+    }
+
+    /**
+     * Zmień dane wybranego konta o poziomie dostępu businnesWorker
+     *
+     * @param otherBusinessWorkerChangeDataDto obiekt dto z nowymi danymi
+     * @param etag Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
+     * @return Odpowiedź serwera w postaci JSON
+     */
+    @PUT
+    @Path("/changeOtherData/businessworker")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @ETagFilterBinding
+    public Response changeOtherBusinessWorkerData(OtherBusinessWorkerChangeDataDto otherBusinessWorkerChangeDataDto, @HeaderParam("If-Match") String etag) {
+        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, otherBusinessWorkerChangeDataDto)) {
+            return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
+        }
+
+        try {
+            OtherBusinessWorkerChangeDataDto account = accountEndpoint.changeOtherBusinessWorkerData(otherBusinessWorkerChangeDataDto);
+            return Response.ok().entity(account).build();
+        } catch (BaseAppException e) {
+            return Response.status(BAD_REQUEST).entity(e.getMessage()).build();
+        }
+    }
+
+    /**
+     * Zmień dane wybranego konta o poziomie dostępu moderator lub administrator
+     *
+     * @param otherAccountChangeDataDto obiekt dto z nowymi danymi
+     * @param etag Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
+     * @return Odpowiedź serwera w postaci JSON
+     */
+    @PUT
+    @Path("/changeOtherData")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @ETagFilterBinding
+    public Response changeOtherAccountData(OtherAccountChangeDataDto otherAccountChangeDataDto, @HeaderParam("If-Match") String etag) {
+        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, otherAccountChangeDataDto)) {
+            return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
+        }
+
+        try {
+            AccountDto account = accountEndpoint.changeOtherAccountData(otherAccountChangeDataDto);
+            return Response.ok().entity(account).build();
+        } catch (BaseAppException e) {
+            return Response.status(BAD_REQUEST).entity(e.getMessage()).build();
+        }
+    }
+
+
 }
