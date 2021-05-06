@@ -148,7 +148,8 @@ public class AccountManager implements AccountManagerLocal {
     }
 
     private void sendVerificationEmail(Account account) throws BaseAppException {
-        String token = JWTHandler.createTokenEmail(account.getLogin());
+        Map<String, Object> claims = Map.of("version", account.getVersion());
+        String token = JWTHandler.createTokenEmail(claims, account.getLogin());
         Locale locale = new Locale(account.getLanguageType().getName().name());
         String subject = ii18n.getMessage(VERIFICATION_EMAIL_SUBJECT, locale);
         String body = ii18n.getMessage(VERIFICATION_EMAIL_BODY, locale);
@@ -203,19 +204,25 @@ public class AccountManager implements AccountManagerLocal {
 
         Map<String, Claim> claims = JWTHandler.getClaimsFromToken(token);
         Date expire = JWTHandler.getExpiersTimeFromToken(token);
-        if (claims.get("sub") != null) {
+        if (claims.get("sub") != null && claims.get("version") != null) {
             String login = claims.get("sub").asString();
             if (!expire.before(new Date(System.currentTimeMillis()))) {
             Account account = this.accountFacade.findByLogin(login);
-                account.setConfirmed(true);
-                account.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
-                account.setAlteredBy(account);
+                if(!account.isConfirmed()) {
+                    account.setConfirmed(true);
+                    account.setVersion(claims.get("version").asLong());
+                    account.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
+                    account.setAlteredBy(account);
+                }
+            else {
+                throw new AccountManagerException(ACCOUNT_VERIFICATION_TOKEN_ALREADY_VERIFIED_ERROR);
+            }
             } else {
-                throw new AccountManagerException(PASSWORD_VERIFICATION_TOKEN_EXPIRE_ERROR);
+                throw new AccountManagerException(ACCOUNT_VERIFICATION_TOKEN_EXPIRE_ERROR);
            }
         }
         else {
-            throw new AccountManagerException(PASSWORD_VERIFICATION_TOKEN_CONTENT_ERROR);
+            throw new AccountManagerException(ACCOUNT_VERIFICATION_TOKEN_CONTENT_ERROR);
         }
     }
 }

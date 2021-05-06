@@ -46,10 +46,10 @@ public class JWTHandler {
                 .sign(algorithm);
     }
 
-    public static String createTokenEmail(String subject) {
+    public static String createTokenEmail(Map<String, ?> claims, String subject) {
         Algorithm algorithm = Algorithm.HMAC256(getJWTSecret());
         return JWT.create()
-                .withSubject(subject)
+                .withPayload(claims).withSubject(subject)
                 .withIssuedAt(new Date())
                 .withExpiresAt(Date.from(Instant.now().plus(getDefaultValidityInHours(), ChronoUnit.HOURS)))
                 .withJWTId(UUID.randomUUID().toString())
