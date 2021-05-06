@@ -71,7 +71,7 @@ export default function ModListClient() {
 
 
     const loadUsers = async () => {
-        const result = await axios.get('http://localhost:8080/cruisehub/api/account/accounts');
+        const result = await axios.get('http://localhost:8080/api/account/accounts');
         setUsers(result.data)
     }
 
