@@ -200,12 +200,11 @@ public class AccountManager implements AccountManagerLocal {
 
         Map<String, Claim> claims = JWTHandler.getClaimsFromToken(token);
         Date expire = JWTHandler.getExpiersTimeFromToken(token);
-        if (claims.get("sub") != null && claims.get("version") != null) {
+        if (claims.get("sub") != null) {
             String login = claims.get("sub").asString();
             if (expire.before(new Date(System.currentTimeMillis()))) {
                 Account account = this.accountFacade.findByLogin(login);
                 account.setConfirmed(true);
-                account.setVersion(claims.get("version").asLong());
                 account.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
                 account.setAlteredBy(account);
             } else {

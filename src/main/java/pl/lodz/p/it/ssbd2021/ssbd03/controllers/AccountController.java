@@ -164,7 +164,7 @@ public class AccountController {
      * @return Odpowiedź serwera w postaci JSON
      */
     @PUT
-    @Path("/accountVerification")
+    @Path("/account-verification")
     public Response accountVerification(@Valid AccountVerificationDto accountVerificationDto) {
         try {
             this.accountEndpoint.verifyAccount(accountVerificationDto);
