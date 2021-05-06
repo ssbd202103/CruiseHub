@@ -67,7 +67,9 @@ public class AccountManager implements AccountManagerLocal {
         client.getHomeAddress().setAlterType(insertAlterType);
 
         accountFacade.create(account);
-        sendVerificationEmail(account);
+        if(accountFacade.findByLogin(account.getLogin()) != null) {
+            sendVerificationEmail(account);
+        }
 
     }
 
@@ -78,7 +80,9 @@ public class AccountManager implements AccountManagerLocal {
         businessWorker.setCompany(companyFacadeMok.getCompanyByName(companyName));
 
         this.accountFacade.create(account);
-        sendVerificationEmail(account);
+        if(accountFacade.findByLogin(account.getLogin()) != null) {
+            sendVerificationEmail(account);
+        }
     }
 
     @Override
@@ -145,11 +149,12 @@ public class AccountManager implements AccountManagerLocal {
     }
 
     private void sendVerificationEmail(Account account) throws BaseAppException {
-        String token = JWTHandler.createTokenEmail(account.getLogin());
+        Map<String, Object> claims = Map.of("version", account.getVersion());
+        String token = JWTHandler.createTokenEmail(claims,account.getLogin());
         Locale locale = new Locale(account.getLanguageType().getName().name());
         String subject = ii18n.getMessage(VERIFICATION_EMAIL_SUBJECT, locale);
         String body = ii18n.getMessage(VERIFICATION_EMAIL_BODY, locale);
-        String contentHtml = "<a href=\"http://" + PropertiesReader.getSecurityProperties().getProperty("app.baseurl") + "/accountVerification/" + token + "\">" + body + "</a>";
+        String contentHtml = "<a href=\"http://" + PropertiesReader.getSecurityProperties().getProperty("app.baseurl") + "/verify/accountVerification/" + token + "\">" + body + "</a>";
         EmailService.sendEmailWithContent(account.getEmail().trim(), subject, contentHtml);
     }
 
@@ -200,11 +205,12 @@ public class AccountManager implements AccountManagerLocal {
 
         Map<String, Claim> claims = JWTHandler.getClaimsFromToken(token);
         Date expire = JWTHandler.getExpiersTimeFromToken(token);
-        if (claims.get("sub") != null) {
+        if (claims.get("sub") != null && claims.get("version") != null) {
             String login = claims.get("sub").asString();
-            if (expire.before(new Date(System.currentTimeMillis()))) {
+            if (!expire.before(new Date(System.currentTimeMillis()))) {
                 Account account = this.accountFacade.findByLogin(login);
                 account.setConfirmed(true);
+                account.setVersion(claims.get("version").asLong());
                 account.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
                 account.setAlteredBy(account);
             } else {
