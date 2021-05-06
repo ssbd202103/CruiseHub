@@ -131,9 +131,15 @@
             <version>9.4</version>
         </dependency>
 
-
+        <!--         https://mvnrepository.com/artifact/org.codehaus.cargo/cargo-maven3-plugin -->
+        <dependency>
+            <groupId>org.codehaus.cargo</groupId>
+            <artifactId>cargo-maven3-plugin</artifactId>
+            <version>1.9.3</version>
+        </dependency>
 
     </dependencies>
+
 
     <build>
         <plugins>
@@ -148,14 +154,6 @@
     <profiles>
         <profile>
             <id>dev-without-ui</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <build>
-                <plugins>
-
-                </plugins>
-            </build>
         </profile>
 
         <profile>
@@ -242,8 +240,54 @@
 
         <profile>
             <id>prod</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <build>
                 <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.cargo</groupId>
+                        <artifactId>cargo-maven3-plugin</artifactId>
+                        <version>1.9.3</version>
+                        <configuration>
+                            <container>
+                                <containerId>payara</containerId>
+                                <type>remote</type>
+                            </container>
+                            <configuration>
+                                <type>runtime</type>
+                                <properties>
+                                    <cargo.runtime.args>force=true</cargo.runtime.args>
+                                    <cargo.remote.username>admin</cargo.remote.username>
+                                    <cargo.remote.password>RirjEwWyg7</cargo.remote.password>
+                                    <cargo.glassfish.admin.port>4803</cargo.glassfish.admin.port>
+                                    <cargo.hostname>studapp.it.p.lodz.pl</cargo.hostname>
+                                </properties>
+                            </configuration>
+                        </configuration>
+                        <!-- provides JSR88 client API to deploy on Payara -->
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.glassfish.main.deployment</groupId>
+                                <artifactId>deployment-client</artifactId>
+                                <version>5.1.0</version>
+                            </dependency>
+                            <!-- API, java.xml.bind module -->
+                            <dependency>
+                                <groupId>jakarta.xml.bind</groupId>
+                                <artifactId>jakarta.xml.bind-api</artifactId>
+                                <version>2.3.2</version>
+                            </dependency>
+
+                            <!-- Runtime, com.sun.xml.bind module -->
+                            <dependency>
+                                <groupId>org.glassfish.jaxb</groupId>
+                                <artifactId>jaxb-runtime</artifactId>
+                                <version>2.3.2</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+
                     <!--            to clean build data in ui (react client)    -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
