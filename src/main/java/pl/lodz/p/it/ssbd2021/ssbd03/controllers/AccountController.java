@@ -1,7 +1,5 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
@@ -27,7 +25,6 @@ import java.util.List;
 
 import static javax.ws.rs.core.Response.Status.*;
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ETAG_IDENTITY_INTEGRITY_ERROR;
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.SERIALIZATION_PARSING_ERROR;
 
 
 /**
@@ -36,9 +33,6 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.SERIALIZATION_PARSING_ERR
 @Path("/account")
 @RequestScoped
 public class AccountController {
-    private final ObjectMapper mapper = new ObjectMapper(); // for polymorphic Jackson serialization,
-    // should not be used anymore once default JSON serializer is set to Jackson
-
     @EJB
     private AccountEndpointLocal accountEndpoint;
 
@@ -74,11 +68,10 @@ public class AccountController {
     public Response getAccountDetailsByLogin(@PathParam("login") String login) {
         try {
             AccountDetailsViewDto account = accountEndpoint.getAccountDetailsByLogin(login);
-            return Response.ok().entity(mapper.writeValueAsString(account)).build();
+//            return Response.ok().entity(mapper.writeValueAsString(account)).build();
+            return Response.ok().entity(account).build();
         } catch (BaseAppException e) {
             return Response.status(NOT_FOUND).entity(e.getMessage()).build();
-        } catch (JsonProcessingException e) {
-            return Response.status(BAD_REQUEST).entity(SERIALIZATION_PARSING_ERROR).build();
         }
     }
 
@@ -148,8 +141,9 @@ public class AccountController {
 
     /**
      * Zmień stan danego poziomu dostępu (włącz/wyłącz)
+     *
      * @param changeAccessLevelStateDto Obiekt przesyłowy danych potrzebnych do zmiany stanu poziomu dostępu
-     * @param etag Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
+     * @param etag                      Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
      * @return Odpowiedź serwera reprezentująca obiekt AccountDto po zmianach w postaci JSON
      */
     @ETagFilterBinding

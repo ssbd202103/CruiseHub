@@ -1,4 +1,4 @@
-package pl.lodz.p.it.ssbd2021.ssbd03;
+package pl.lodz.p.it.ssbd2021.ssbd03.app;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
