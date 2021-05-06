@@ -56,16 +56,6 @@
         <maven.clean.plugin>3.0.0</maven.clean.plugin>
         <maven.war.plugin>3.0.0</maven.war.plugin>
         <exec.maven.plugin>3.0.0</exec.maven.plugin>
-
-
-        <servlet.port>8080</servlet.port>
-        <payara.adminPort>4848</payara.adminPort>
-        <payara.username>admin</payara.username>
-        <payara.password>admin</payara.password>
-        <payara.hostname>localhost</payara.hostname>
-        <payara.domainName>domain1</payara.domainName>
-        <payara.home>/opt/payara5</payara.home>
-        <payara.domainDir>${payara.home}/glassfish/domains</payara.domainDir>
     </properties>
 
     <dependencies>
@@ -158,49 +148,12 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.3.0</version>
             </plugin>
-            <!--            <plugin>-->
-            <!--                <groupId>org.apache.maven.plugins</groupId>-->
-            <!--                <artifactId>maven-surefire-plugin</artifactId>-->
-            <!--                <version>3.0.0-M5</version>-->
-            <!--                <configuration>-->
-            <!--                    <statelessTestsetReporter-->
-            <!--                            implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5Xml30StatelessReporter">-->
-            <!--                        <disable>false</disable>-->
-            <!--                        <version>3.0</version>-->
-            <!--                        <usePhrasedFileName>false</usePhrasedFileName>-->
-            <!--                        <usePhrasedTestSuiteClassName>true</usePhrasedTestSuiteClassName>-->
-            <!--                        <usePhrasedTestCaseClassName>true</usePhrasedTestCaseClassName>-->
-            <!--                        <usePhrasedTestCaseMethodName>true</usePhrasedTestCaseMethodName>-->
-            <!--                    </statelessTestsetReporter>-->
-            <!--                </configuration>-->
-            <!--            </plugin>-->
-            <!--            <plugin>-->
-            <!--                <groupId>org.apache.maven.plugins</groupId>-->
-            <!--                <artifactId>maven-failsafe-plugin</artifactId>-->
-            <!--                <version>3.0.0-M5</version>-->
-            <!--                <executions>-->
-            <!--                    <execution>-->
-            <!--                        <goals>-->
-            <!--                            <goal>integration-test</goal>-->
-            <!--                            <goal>verify</goal>-->
-            <!--                        </goals>-->
-            <!--                    </execution>-->
-            <!--                </executions>-->
-            <!--            </plugin>-->
-
-
         </plugins>
     </build>
 
     <profiles>
         <profile>
             <id>dev-without-ui</id>
-
-            <build>
-                <plugins>
-
-                </plugins>
-            </build>
         </profile>
 
         <profile>
@@ -334,9 +287,6 @@
                             </dependency>
                         </dependencies>
                     </plugin>
-
-
-
 
                     <!--            to clean build data in ui (react client)    -->
                     <plugin>
