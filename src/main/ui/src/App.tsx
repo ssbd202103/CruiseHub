@@ -24,7 +24,7 @@ import ClientPanel from './pages/panels/clientPanel'
 import WorkerPanel from './pages/panels/workerPanel'
 import PasswordReset from "./pages/reset/passwordReset";
 import RequestPasswordReset from './pages/reset/requestPasswordReset';
-
+import VerifyAccount from './pages/verify/verifyAccount';
 function App() {
     return (
         <I18nextProvider i18n={i18n}>
@@ -72,6 +72,9 @@ function App() {
                         <RequestPasswordReset/>
                     </Route>
 
+                   <Route path="/verify/accountVerification/*">
+                        <VerifyAccount/>
+                    </Route>
 
                     <Route path="*">
                         <div>404 not found</div>

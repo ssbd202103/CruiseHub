@@ -73,6 +73,8 @@ const resources = {
             "grand access level": "Przydziel poziom dostępu",
             //panels.clientPanel
             "client panel": "Panel klienta",
+            //verify
+            "verifyAccount": "Zweryfikuj konto",
             //errors
             "error.facade.noSuchElement": "Nie znaleziono elementu w bazie danych",
             "error.account.accessLevels.alreadyAssigned": "Poziom dostępu jest już przydzielony do konta",
@@ -158,6 +160,8 @@ const resources = {
             "grand access level": "Grand access level",
             //panels.clientPanel
             "clientPanelH2": "Client panel",
+            //verify
+            "verifyAccount": "Verify account",
             //errors
             "error.facade.noSuchElement": "No such element found in the database",
             "error.account.accessLevels.alreadyAssigned": "Access level already assigned to account",
