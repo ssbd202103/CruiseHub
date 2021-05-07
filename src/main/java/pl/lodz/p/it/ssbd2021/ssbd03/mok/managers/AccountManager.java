@@ -24,6 +24,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
+import javax.persistence.OptimisticLockException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.time.LocalDateTime;
@@ -215,17 +216,21 @@ public class AccountManager implements AccountManagerLocal {
 
 
     @Override
-    public void changeOwnPassword(AccountOwnPasswordDto accountOwnPasswordDto) throws BaseAppException {
-        Account account = accountFacade.findByLogin(accountOwnPasswordDto.getLogin());
-        if (account.getPasswordHash().equals(DigestUtils.sha256Hex(accountOwnPasswordDto.getOldPassword()))) {
-            account.setPasswordHash(DigestUtils.sha256Hex(accountOwnPasswordDto.getNewPassword()));
+    public void changeOwnPassword(String login, Long version, String oldPassword, String newPassword) throws BaseAppException {
+        Account account = accountFacade.findByLogin(login);
+
+        if (!account.getVersion().equals(version)) {
+            throw new OptimisticLockException(OPTIMISTIC_EXCEPTION);
+        }
+
+        if (account.getPasswordHash().equals(DigestUtils.sha256Hex(oldPassword))) {
+            account.setPasswordHash(DigestUtils.sha256Hex(newPassword));
             account.setLastAlterDateTime(LocalDateTime.now());
             account.setAlteredBy(account);
             account.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
-            account.setVersion(accountOwnPasswordDto.getVersion());
+            account.setVersion(version);
         } else {
             throw new AccountManagerException(PASSWORDS_DONT_MATCH_ERROR);
         }
     }
-
 }

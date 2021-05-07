@@ -26,12 +26,4 @@ public class AccountOwnPasswordDto extends AbstractAccountDto {
         this.oldPassword = oldPassword;
         this.newPassword = newPassword;
     }
-
-    public String getNewPassword() {
-        return newPassword;
-    }
-
-    public String getOldPassword() {
-        return oldPassword;
-    }
 }

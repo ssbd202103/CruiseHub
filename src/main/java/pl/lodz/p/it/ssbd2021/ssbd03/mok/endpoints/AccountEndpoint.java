@@ -124,11 +124,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
 
     @Override
     public void changeOwnPassword(AccountOwnPasswordDto accountOwnPasswordDto) throws BaseAppException {
-        Long version = this.accountManager.getAccountByLogin(accountOwnPasswordDto.getLogin()).getVersion();
-
-        if (!version.equals(accountOwnPasswordDto.getVersion())) {
-            throw new OptimisticLockException(OPTIMISTIC_EXCEPTION);
-        }
-        this.accountManager.changeOwnPassword(accountOwnPasswordDto);
+        this.accountManager.changeOwnPassword(accountOwnPasswordDto.getLogin(), accountOwnPasswordDto.getVersion(),
+                accountOwnPasswordDto.getOldPassword(), accountOwnPasswordDto.getNewPassword());
     }
 }

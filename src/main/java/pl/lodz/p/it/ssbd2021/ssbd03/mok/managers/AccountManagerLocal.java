@@ -117,5 +117,5 @@ public interface AccountManagerLocal {
      * Metoda odpowiedzialna za zmiane hasła akutalnego użytkownika
      * @throws BaseAppException Bazowy wyjątek aplikacji rzucany w przypadku gdy stare hasło nie jest zgodne z tym z bazy danych
      */
-    void changeOwnPassword(AccountOwnPasswordDto accountOwnPasswordDto) throws BaseAppException;
+    void changeOwnPassword(String login, Long version, String oldPassword, String newPassword) throws BaseAppException;
 }
