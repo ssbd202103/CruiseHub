@@ -2,7 +2,6 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.IdDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
@@ -10,7 +9,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDt
 import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
 
 import javax.ejb.Local;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -73,7 +71,9 @@ public interface AccountEndpointLocal {
 
     /**
      * Metoda odpowiedzialna za wywołanie metody odpowiedzialnej za blokowanie użytkownika
-     * @param login Login użytkownika w postaci obiektu klasy IdDto
+     * @param login Login blokowanego użytkownika
+     * @param version wersja konta do weryfikacji
+     * @throws BaseAppException Wyjątek aplikacji rzucany w przypadku błędu pobrania danych użytkownika
      */
-    void blockUser(@Valid @NotNull String login) throws BaseAppException;
+    void blockUser(@NotNull String login, @NotNull Long version) throws BaseAppException;
 }

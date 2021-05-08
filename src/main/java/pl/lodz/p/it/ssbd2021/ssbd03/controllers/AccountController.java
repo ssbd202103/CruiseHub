@@ -1,19 +1,21 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.IdDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.BlockAccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.AccountEndpointLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.ETagFilterBinding;
+import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -41,12 +43,11 @@ public class AccountController {
      * @param login użytkownika
      * @return Odpowiedź serwera z reprezentacją JSON obiektu użytkownika
      * oraz nagłówkiem ETag wygenerowanym na podstawie obiektu
-     * @throws BaseAppException Bazowy wyjątek aplikacji
      */
     @GET
     @Path("/{login}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAccountByLogin(@PathParam("login") @Login String login) throws BaseAppException {
+    public Response getAccountByLogin(@PathParam("login") @Login String login) {
         try {
             AccountDto account = accountEndpoint.getAccountByLogin(login);
             String ETag = accountEndpoint.getETagFromSignableEntity(account);
@@ -93,16 +94,23 @@ public class AccountController {
     }
 
 
-    @POST
-    @Path("/block/{login}")
-    public Response blockUser(@PathParam("login") @NotNull String login) {
-        try {
-            accountEndpoint.blockUser(login);
-            return Response.ok().build();
-        } catch (BaseAppException e) {
-            return Response.status(BAD_REQUEST).entity(e.getMessage()).build();
+    /**
+     * Metoda pośrednio odpowiedzialna za blokowanie użytkownika
+     * @param blockAccountDto Obiekt z loginem użytkownika do zablokowania oraz wersją
+     * @param etagValue Wartość etaga
+     * @return Respons wraz z kodem
+     * @throws BaseAppException Wyjątek aplikacji rzucany w przypadku błędu pobrania danych użytkownika
+     */
+    @ETagFilterBinding
+    @PUT
+    @Path("/block")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response blockUser(BlockAccountDto blockAccountDto, @HeaderParam("If-Match") @NotNull @NotEmpty String etagValue) throws BaseAppException {
+        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etagValue, blockAccountDto)) {
+            return Response.status(406).build();
         }
-
+        accountEndpoint.blockUser(blockAccountDto.getLogin(), blockAccountDto.getVersion());
+        return Response.status(200).build();
     }
 
     /**
@@ -110,14 +118,13 @@ public class AccountController {
      *
      * @param grantAccessLevel Obiekt przesyłowy danych potrzebnych do nadania poziomu dostępu
      * @return Odpowiedź serwera w postaci JSON
-     * @throws BaseAppException bazowy wyjątek aplikacji
      */
     @ETagFilterBinding
     @PUT
     @Path("/grantAccessLevel")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response grantAccessLevel(GrantAccessLevelDto grantAccessLevel) throws BaseAppException {
+    public Response grantAccessLevel(GrantAccessLevelDto grantAccessLevel) {
 
         try {
             AccountDto account = accountEndpoint.grantAccessLevel(grantAccessLevel);

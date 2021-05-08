@@ -3,8 +3,6 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.managers;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 
 import javax.ejb.Local;
@@ -67,8 +65,10 @@ public interface AccountManagerLocal {
     /**
      * Blokuje użytkownika o zadanym loginie
      * @param login Login użytkownika
+     * @param version Wersja obiektu do sprawdzenia
+     * @throws BaseAppException Wyjątek aplikacji rzucany w przypadku błędu pobrania danych użytkownika
      */
-    void blockUser(String login) throws BaseAppException;
+    void blockUser(String login, Long version) throws BaseAppException;
 
 
     /**

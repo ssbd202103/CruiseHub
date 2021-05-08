@@ -65,7 +65,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
     }
 
     @Override
-    public String getETagFromSignableEntity(SignableEntity entity) throws BaseAppException {
+    public String getETagFromSignableEntity(SignableEntity entity) {
         return EntityIdentitySignerVerifier.calculateEntitySignature(entity);
     }
 
@@ -80,7 +80,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
     }
 
     @Override
-    public void blockUser(@Valid @NotNull String login) throws BaseAppException {
-        this.accountManager.blockUser(login);
+    public void blockUser(@NotNull String login, @NotNull Long version) throws BaseAppException {
+        this.accountManager.blockUser(login, version);
     }
 }
