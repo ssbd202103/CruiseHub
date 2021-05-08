@@ -128,7 +128,6 @@ public class AccountManager implements AccountManagerLocal {
     }
 
     private AccessLevel getAccessLevel(Account from, AccessLevelType target) {
-        System.out.println("SIZE: " + from.getAccessLevels().size());
         return from.getAccessLevels().stream().filter(accessLevel -> accessLevel.getAccessLevelType().equals(target)).collect(Collectors.toList()).get(0);
     }
 

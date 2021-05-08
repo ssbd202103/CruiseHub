@@ -7,7 +7,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AccountChangeEmailDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AdministratorChangeDataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.BusinessWorkerChangeDataDto;
@@ -125,4 +125,26 @@ public class AccountEndpoint implements AccountEndpointLocal {
     public AccountDto getAccountByLogin(String login) throws BaseAppException {
         return AccountMapper.toAccountDto(accountManager.getAccountByLogin(login));
     }
+
+    @Override
+    public ClientDto getClientByLogin(String login) throws BaseAppException {
+        return AccountMapper.toClientDto(accountManager.getAccountByLogin(login));
+    }
+
+    @Override
+    public BusinessWorkerDto getBusinessWorkerByLogin(String login) throws BaseAppException {
+        return AccountMapper.toBusinessWorkerDto(accountManager.getAccountByLogin(login));
+    }
+
+    @Override
+    public ModeratorDto getModeratorByLogin(String login) throws BaseAppException {
+        return AccountMapper.toModeratorDto(accountManager.getAccountByLogin(login));
+    }
+
+    @Override
+    public AdministratorDto getAdministratorByLogin(String login) throws BaseAppException {
+        return AccountMapper.toAdministratorDto(accountManager.getAccountByLogin(login));
+    }
+
+
 }

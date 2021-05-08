@@ -1,6 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AccountChangeEmailDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AdministratorChangeDataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.BusinessWorkerChangeDataDto;
@@ -48,6 +48,58 @@ public class AccountController {
             AccountDto account = accountEndpoint.getAccountByLogin(login);
             String ETag = accountEndpoint.getETagFromSignableEntity(account);
             return Response.ok().entity(account).header("ETag", ETag).build();
+        } catch (BaseAppException e) {
+            return Response.status(NOT_FOUND).entity(e.getMessage()).build();
+        }
+    }
+
+    @GET
+    @Path("/client/{login}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getClientByLogin(@PathParam("login") @Login String login) throws BaseAppException {
+        try {
+            ClientDto client = accountEndpoint.getClientByLogin(login);
+            String Etag = accountEndpoint.getETagFromSignableEntity(client);
+            return Response.ok().entity(client).header("ETag", Etag).build();
+        } catch (BaseAppException e) {
+            return Response.status(NOT_FOUND).entity(e.getMessage()).build();
+        }
+    }
+
+    @GET
+    @Path("/businessworker/{login}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getBusinessWorkerByLogin(@PathParam("login") @Login String login) throws BaseAppException {
+        try {
+            BusinessWorkerDto businessWorker = accountEndpoint.getBusinessWorkerByLogin(login);
+            String ETag = accountEndpoint.getETagFromSignableEntity(businessWorker);
+            return Response.ok().entity(businessWorker).header("ETag", ETag).build();
+        } catch (BaseAppException e) {
+            return Response.status(NOT_FOUND).entity(e.getMessage()).build();
+        }
+    }
+
+    @GET
+    @Path("/moderator/{login}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getModeratorByLogin(@PathParam("login") @Login String login) throws BaseAppException {
+        try {
+            ModeratorDto moderator = accountEndpoint.getModeratorByLogin(login);
+            String ETag = accountEndpoint.getETagFromSignableEntity(moderator);
+            return Response.ok().entity(moderator).header("ETag", ETag).build();
+        } catch (BaseAppException e) {
+            return Response.status(NOT_FOUND).entity(e.getMessage()).build();
+        }
+    }
+
+    @GET
+    @Path("/administrator/{login}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAdministratorByLogin(@PathParam("login") @Login String login) throws BaseAppException {
+        try {
+            AdministratorDto administrator = accountEndpoint.getAdministratorByLogin(login);
+            String ETag = accountEndpoint.getETagFromSignableEntity(administrator);
+            return Response.ok().entity(administrator).header("ETag", ETag).build();
         } catch (BaseAppException e) {
             return Response.status(NOT_FOUND).entity(e.getMessage()).build();
         }

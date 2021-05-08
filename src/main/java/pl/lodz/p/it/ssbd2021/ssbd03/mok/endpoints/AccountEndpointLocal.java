@@ -1,7 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AccountChangeEmailDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AdministratorChangeDataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.BusinessWorkerChangeDataDto;
@@ -90,6 +90,38 @@ public interface AccountEndpointLocal {
      * @return konto
      */
     AccountDto getAccountByLogin(String login) throws BaseAppException;
+
+    /**
+     * Zwraca dto konta clienta o podanym loginie
+     * @param login login
+     * @return dto konta clienta
+     * @throws BaseAppException
+     */
+    ClientDto getClientByLogin(String login) throws BaseAppException;
+
+    /**
+     * Zwraca dto konta pracownika firmy o podanym loginie
+     * @param login login
+     * @return dto konta pracownika firmy
+     * @throws BaseAppException
+     */
+    BusinessWorkerDto getBusinessWorkerByLogin(String login) throws BaseAppException;
+
+    /**
+     * Zwraca dto konta moderatora o podanym loginie
+     * @param login login
+     * @return dto konta moderatora
+     * @throws BaseAppException
+     */
+    ModeratorDto getModeratorByLogin(String login) throws BaseAppException;
+
+    /**
+     * Zwraca dto konta administratora o podanym loginie
+     * @param login login
+     * @return dto konta administratora
+     * @throws BaseAppException
+     */
+    AdministratorDto getAdministratorByLogin(String login) throws BaseAppException;
 
     /**
      * Pobira etag dla podanej encji
