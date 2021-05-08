@@ -7,10 +7,7 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AddressDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.BusinessWorkerDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.ClientDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.AdministratorForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
@@ -31,7 +28,7 @@ class AccountControllerTest {
     @Test
     public void registerClientTest_SUCCESS() {
         pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AddressDto address = new pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AddressDto(1L, "Bortnyka", "30-302", "Pluzhne", "Ukraine");
-        ClientForRegistrationDto client = new ClientForRegistrationDto("Artur", "Radiuk", "aradiuk", "aradiuk@gmail.com",
+        ClientForRegistrationDto client = new ClientForRegistrationDto("Artur", "Radiuk", "robert", "robert@gmail.com",
                 "123456789", LanguageType.PL, address, "123456789");
 
         given().baseUri(baseUri).contentType("application/json").body(client).when().post("account/client/registration").then().statusCode(204);
@@ -40,7 +37,7 @@ class AccountControllerTest {
 
     @Test
     public void registerBusinessWorkerTest_SUCCESS() {
-        BusinessWorkerForRegistrationDto businessWorker = new BusinessWorkerForRegistrationDto("Artur", "Radiuk", "aradiuk", "aradiuk@gmail.com",
+        BusinessWorkerForRegistrationDto businessWorker = new BusinessWorkerForRegistrationDto("Artur", "Radiuk", "pracownik", "pracownik@gmail.com",
                 "123456789", LanguageType.ENG, "123456789", "FirmaJez");
         given().baseUri(baseUri).contentType("application/json").body(businessWorker).when().post("account/businessworker/registration").then().statusCode(204);
         // todo implement remove method to clean created data
@@ -71,14 +68,14 @@ class AccountControllerTest {
     }
 
     private String registerSampleBusinessWorkerAndGetLogin() {
-        BusinessWorkerForRegistrationDto bs = new BusinessWorkerForRegistrationDto("Pracownik", "Kowalski", randomAlphanumeric(15), randomAlphanumeric(15), "1234567890", LanguageType.PL, "123456789", "BardzoBeautyCompany");
+        BusinessWorkerForRegistrationDto bs = new BusinessWorkerForRegistrationDto("Pracownikk", "Kowalskik",randomAlphanumeric(15),randomAlphanumeric(10)+"@gmail.com", "12345678",LanguageType.PL, "123654789","BeautifulCompany" );
 
         given().baseUri(baseUri).contentType("application/json").body(bs).when().post("account/businessworker/registration");
         return bs.getLogin();
     }
 
     private String registerSampleModeratorAndGetLogin() {
-        ModeratorForRegistrationDto moderator = new ModeratorForRegistrationDto("Moderator", "Kowalski", randomAlphanumeric(15), randomAlphanumeric(15), "0987654321", LanguageType.ENG);
+        ModeratorForRegistrationDto moderator = new ModeratorForRegistrationDto("Moderator", "Kowalski", randomAlphanumeric(15), randomAlphanumeric(10)+"@gmail.com", "0987654321", LanguageType.ENG);
 
         given().baseUri(baseUri).contentType("application/json").body(moderator).when().post("account/moderator/registration");
 
@@ -86,7 +83,7 @@ class AccountControllerTest {
     }
 
     private String registerSampleAdministratorAndGetLogin() {
-        AdministratorForRegistrationDto administrator = new AdministratorForRegistrationDto("Admin", "Kowalski", randomAlphanumeric(15), randomAlphanumeric(15), "0987654321", LanguageType.ENG);
+        AdministratorForRegistrationDto administrator = new AdministratorForRegistrationDto("Admin", "Kowalski", randomAlphanumeric(15),randomAlphanumeric(10)+"@gmail.com", "0987654321", LanguageType.ENG);
 
         given().baseUri(baseUri).contentType("application/json").body(administrator).when().post("account/administrator/registration");
 
@@ -96,6 +93,36 @@ class AccountControllerTest {
     @Test
     public void changeClientDataTest_SUCCESS() throws JsonProcessingException {
         String login = registerSampleClientAndGetLogin();
+
+        Response res = given().baseUri(baseUri).get("account/" + login);
+
+        AccountDto account = objectMapper.readValue(res.thenReturn().asString(), AccountDto.class);
+
+        String etag = res.header("Etag");
+
+        AddressDto newAddress = new AddressDto(100L, "Aleja Zmieniona", "94-690", "Lodz", "Polska");
+        ClientChangeDataDto clientChangeDataDto = new ClientChangeDataDto(
+                account.getLogin(),
+                account.getVersion(),
+                "Cdimię",
+                "Cdnazwisko",
+                "101010101",
+                newAddress);
+
+        Response r = given().baseUri(baseUri).header("If-Match", etag)
+                .contentType(ContentType.JSON)
+                .body(clientChangeDataDto)
+                .when()
+                .put("account/client/changedata");
+
+        Response changedRes = given().baseUri(baseUri).get("account/client/" + login);
+
+        ClientDto changedClient = objectMapper.readValue(changedRes.thenReturn().asString(), ClientDto.class);
+
+        Assertions.assertEquals(clientChangeDataDto.getNewFirstName(), changedClient.getFirstName());
+        Assertions.assertEquals(clientChangeDataDto.getNewSecondName(), changedClient.getSecondName());
+        Assertions.assertEquals(clientChangeDataDto.getNewPhoneNumber(), changedClient.getPhoneNumber());
+        Assertions.assertEquals(clientChangeDataDto.getNewAddress(), changedClient.getAddress());
     }
 
     @Test
@@ -129,10 +156,8 @@ class AccountControllerTest {
     @Test
     public void changeBusinessWorkerDataTest_SUCCESS() throws JsonProcessingException {
         String login = registerSampleBusinessWorkerAndGetLogin();
-        System.out.println(login);
-        Response res = given().baseUri(baseUri).get("account/" + login);
 
-        res.prettyPrint();
+        Response res = given().baseUri(baseUri).get("account/" + login);
 
         AccountDto account = objectMapper.readValue(res.thenReturn().asString(), AccountDto.class);
 
@@ -214,11 +239,20 @@ class AccountControllerTest {
                 .put("account/moderator/changedata")
                 .then()
                 .statusCode(204);
+
+        Response changedRes = given().baseUri(baseUri).get("account/moderator/" + login);
+
+        ModeratorDto changedModerator = objectMapper.readValue(changedRes.thenReturn().asString(), ModeratorDto.class);
+
+        Assertions.assertEquals(moderatorChangeDataDto.getNewFirstName(), changedModerator.getFirstName());
+        Assertions.assertEquals(moderatorChangeDataDto.getNewSecondName(), changedModerator.getSecondName());
     }
 
     @Test
     public void changeModeratorDataTest_FAIL() throws JsonProcessingException {
-        Response res = given().baseUri(baseUri).get("account/mzuckerberg");
+        String login = registerSampleModeratorAndGetLogin();
+
+        Response res = given().baseUri(baseUri).get("account/" + login);
 
         AccountDto account = objectMapper.readValue(res.thenReturn().asString(), AccountDto.class);
 
@@ -227,8 +261,8 @@ class AccountControllerTest {
         ModeratorChangeDataDto moderatorChangeDataDto = new ModeratorChangeDataDto(
                 account.getLogin(),
                 account.getVersion() - 1,
-                "Zly Marcus",
-                "Zly Sugarus");
+                "Marcus",
+                "Sugarus");
 
         given()
                 .baseUri(baseUri)
@@ -243,7 +277,9 @@ class AccountControllerTest {
 
     @Test
     public void changeAdministratorDataTest_SUCCESS() throws JsonProcessingException {
-        Response res = given().baseUri(baseUri).get("account/rbranson");
+        String login = registerSampleAdministratorAndGetLogin();
+
+        Response res = given().baseUri(baseUri).get("account/" + login);
 
         AccountDto account = objectMapper.readValue(res.thenReturn().asString(), AccountDto.class);
 
@@ -252,8 +288,8 @@ class AccountControllerTest {
         AdministratorChangeDataDto administratorChangeDataDto = new AdministratorChangeDataDto(
                 account.getLogin(),
                 account.getVersion(),
-                "Rubertiono",
-                "Bransolino");
+                "Adminus",
+                "Adminianus");
 
         given()
                 .baseUri(baseUri)
@@ -264,11 +300,20 @@ class AccountControllerTest {
                 .put("account/administrator/changedata")
                 .then()
                 .statusCode(204);
+
+        Response changedRes = given().baseUri(baseUri).get("account/administrator/" + login);
+
+        AdministratorDto changedAdministrator = objectMapper.readValue(changedRes.thenReturn().asString(), AdministratorDto.class);
+
+        Assertions.assertEquals(administratorChangeDataDto.getNewFirstName(), changedAdministrator.getFirstName());
+        Assertions.assertEquals(administratorChangeDataDto.getNewSecondName(), changedAdministrator.getSecondName());
     }
 
     @Test
     public void changeAdministratorDataTest_FAIL() throws JsonProcessingException {
-        Response res = given().baseUri(baseUri).get("account/rbranson");
+        String login = registerSampleAdministratorAndGetLogin();
+
+        Response res = given().baseUri(baseUri).get("account/" + login);
 
         AccountDto account = objectMapper.readValue(res.thenReturn().asString(), AccountDto.class);
 
@@ -276,9 +321,9 @@ class AccountControllerTest {
 
         AdministratorChangeDataDto administratorChangeDataDto = new AdministratorChangeDataDto(
                 account.getLogin(),
-                account.getVersion(),
-                "Zly Rubertiono",
-                "Zly Bransolino");
+                account.getVersion() - 1,
+                "Adminus",
+                "Adminianus");
 
         given()
                 .baseUri(baseUri)
