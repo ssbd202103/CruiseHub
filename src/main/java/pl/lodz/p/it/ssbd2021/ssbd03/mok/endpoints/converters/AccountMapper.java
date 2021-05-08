@@ -11,9 +11,15 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.LanguageTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AddressDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccessLevelDetailsViewDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccountDetailsViewDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.accesslevels.AdministratorDetailsViewDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.accesslevels.BusinessWorkerDetailsViewDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.accesslevels.ClientDetailsViewDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.accesslevels.ModeratorDetailsViewDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
-
 
 import java.util.stream.Collectors;
 
@@ -83,6 +89,8 @@ public class AccountMapper {
     }
 
     /**
+     * Mapuje obiekt klasy Account na obiekt przesyłowy klasy AccountDto
+     *
      * @param account Konto poddawane konwersji
      * @return Reprezentacja obiektu przesyłowego DTO konta
      */
@@ -225,5 +233,40 @@ public class AccountMapper {
         account.setAccessLevel(businessWorker);
 
         return account;
+	}
+     * Mapuje obiekt klasy Account na obiekt przesyłowy klasy AccountDetailsViewDto
+     *
+     * @param account Konto poddawane konwersji
+     * @return Reprezentacja konta w postaci obiektu przesyłowego AccountDetailsViewDto
+     */
+    public static AccountDetailsViewDto toAccountDetailsViewDto(Account account) {
+        return new AccountDetailsViewDto(account.getFirstName(), account.getSecondName(), account.getLogin(),
+                account.getEmail(), account.isConfirmed(), account.isActive(), account.getLanguageType().getName(),
+                account.getAccessLevels().stream()
+                        .map(AccountMapper::toAccessLevelDetailsViewDto)
+                        .collect(Collectors.toSet()));
+    }
+
+    private static AccessLevelDetailsViewDto toAccessLevelDetailsViewDto(AccessLevel accessLevel) {
+        switch (accessLevel.getAccessLevelType()) {
+            case CLIENT:
+                Client client = (Client) accessLevel;
+                return new ClientDetailsViewDto(accessLevel.isEnabled(), toAddressDto(client.getHomeAddress()), client.getPhoneNumber());
+            case BUSINESS_WORKER:
+                BusinessWorker businessWorker = (BusinessWorker) accessLevel;
+                return new BusinessWorkerDetailsViewDto(businessWorker.isEnabled(), businessWorker.getPhoneNumber(),
+                        businessWorker.getConfirmedByBusinessWorker(), businessWorker.getCompany().getName());
+            case MODERATOR:
+                return new ModeratorDetailsViewDto(accessLevel.isEnabled());
+            case ADMINISTRATOR:
+                return new AdministratorDetailsViewDto(accessLevel.isEnabled());
+            default:
+                return null; // Statement will never execute unless new AccessLevel ENUM is added to the model
+        }
+    }
+
+    private static AddressDto toAddressDto(Address address) {
+        return new AddressDto(address.getHouseNumber(), address.getStreet(),
+                address.getPostalCode(), address.getCity(), address.getCountry());
     }
 }

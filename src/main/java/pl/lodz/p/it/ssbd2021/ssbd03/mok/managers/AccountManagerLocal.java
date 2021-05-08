@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.managers;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
@@ -63,8 +64,12 @@ public interface AccountManagerLocal {
     Account grantAdministratorAccessLevel(String accountLogin, Long accountVersion) throws BaseAppException;
 
 
+    Account changeAccessLevelState(String accountLogin, AccessLevelType accessLevel,
+                                   boolean enabled, Long accountVersion) throws BaseAppException;
+
     /**
      * Metoda odpowiedzialna za blokowanie konta
+     *
      * @param id ID użytkownika
      */
     void blockUser(long id);

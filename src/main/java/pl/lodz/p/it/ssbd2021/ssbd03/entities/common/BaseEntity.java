@@ -56,4 +56,9 @@ public abstract class BaseEntity {
         creationDateTime = LocalDateTime.now();
         lastAlterDateTime = creationDateTime; //referencing creationDateTime as LDT is immutable
     }
+
+    @PreUpdate
+    private void preUpdate() {
+        lastAlterDateTime = LocalDateTime.now();
+    }
 }
