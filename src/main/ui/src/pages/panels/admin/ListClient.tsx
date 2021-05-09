@@ -94,8 +94,6 @@ function Row(props: RowProps) {
     const classes = useRowStyles();
     const buttonClass = useButtonStyles();
 
-    const {t} = useTranslation()
-
     const setCurrentGrantAccessLevelAccount = () => {
         sessionStorage.setItem('grantAccessLevelAccount', JSON.stringify(row));
     }
