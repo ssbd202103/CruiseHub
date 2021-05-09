@@ -98,5 +98,11 @@ public interface AccountManagerLocal {
      */
     void resetPassword(String login, String passwordHash, String token) throws BaseAppException;
 
+    /**
+     * Metoda odpowiedzialna za weryfikacje konta użytkonwika.
+     *
+     * @param token        jwt token otrzymany przez email
+     * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku gdy token wygasł albo nie przeszedł walidacji oraz gdy brak loginu lub wersji w tokenie oraz w wypadku kiedy konto zostało już wcześniej aktywowane oraz w sytuacj gdy został rzucony wyjątek blokady optymistycznej
+     */
     void verifyAccount(String token) throws BaseAppException;
 }
