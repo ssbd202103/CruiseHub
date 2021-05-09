@@ -97,7 +97,7 @@ class AccountControllerTest {
         AccountChangeEmailDto accountChangeEmailDto = new AccountChangeEmailDto(
                 account.getLogin(),
                 account.getVersion(),
-                "zmienony_dobrze@gmail.com");
+                randomAlphanumeric(10) + "@gmail.com");
 
         given().baseUri(baseUri).header("If-Match", etag)
                 .contentType(ContentType.JSON)
@@ -107,7 +107,6 @@ class AccountControllerTest {
 
 
         Response changedRes = given().baseUri(baseUri).get("account/" + account.getLogin());
-        changedRes.prettyPrint();
         AccountDto changedAccount = objectMapper.readValue(changedRes.thenReturn().asString(), AccountDto.class);
 
         Assertions.assertEquals(accountChangeEmailDto.getNewEmail(), changedAccount.getEmail());
@@ -122,7 +121,7 @@ class AccountControllerTest {
         AccountChangeEmailDto accountChangeEmailDto = new AccountChangeEmailDto(
                 account.getLogin(),
                 account.getVersion() - 1,
-                "zmieniony_zle@gmail.com");
+                randomAlphanumeric(10) + "@gmail.com");
         String etag = EntityIdentitySignerVerifier.calculateEntitySignature(accountChangeEmailDto);
 
         given().baseUri(baseUri).header("If-Match", etag)
@@ -130,5 +129,9 @@ class AccountControllerTest {
                 .body(accountChangeEmailDto)
                 .when()
                 .put("account/change_email").then().statusCode(406);
+
+        Response notChangedRes = given().baseUri(baseUri).get("account/" + account.getLogin());
+        AccountDto notChangedAccount = objectMapper.readValue(notChangedRes.thenReturn().asString(), AccountDto.class);
+        Assertions.assertEquals(account.getEmail(), notChangedAccount.getEmail());
     }
 }
