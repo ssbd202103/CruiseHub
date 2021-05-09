@@ -94,6 +94,12 @@ function Row(props: RowProps) {
     const classes = useRowStyles();
     const buttonClass = useButtonStyles();
 
+    const {t} = useTranslation()
+
+    const setCurrentGrantAccessLevelAccount = () => {
+        sessionStorage.setItem('grantAccessLevelAccount', JSON.stringify(row));
+    }
+
     return (
 
         <React.Fragment>
@@ -138,8 +144,8 @@ function Row(props: RowProps) {
                                                 login: row.login, version: row.version})}}>{row.active ? t("block") : t("unblock")}</Button>
 
 
-                                                <Link to="/panels/adminPanel/GrantAccessLevel">
-                                                    <Button className={buttonClass.root}>{t("grand access level")}</Button>
+                                                <Link to="/panels/adminPanel/GrantAccessLevel/">
+                                                    <Button onClick={setCurrentGrantAccessLevelAccount} className={buttonClass.root}>{t("grand access level")}</Button>
                                                 </Link>
                                         </TableCell>
                                     </TableRow>
