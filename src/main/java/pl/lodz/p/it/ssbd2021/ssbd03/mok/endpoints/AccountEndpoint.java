@@ -119,4 +119,9 @@ public class AccountEndpoint implements AccountEndpointLocal {
         this.accountManager.unblockUser(unblockedUserLogin, version);
     }
 
+
+    @Override
+    public void requestSomeonesPasswordReset(String login, String email) throws BaseAppException {
+        this.accountManager.requestSomeonesPasswordReset(login, email);
+    }
 }

@@ -112,4 +112,12 @@ public interface AccountManagerLocal {
      */
     void resetPassword(String login, String passwordHash, String token) throws BaseAppException;
 
+    /**
+     * Metoda odpowiedzialna za wysyłania email z linkiem do resetowania hasła na podany email
+     *
+     * @param login login użytkonika
+     * @param email email użytkonika
+     * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku gdy użytkownik o podanym loginie nie istnieje, albo gdy podczas wysyłania email został rzucony wyjątek przez metode klasy EmailService
+     */
+    void requestSomeonesPasswordReset(String login, String email) throws BaseAppException;
 }

@@ -1,6 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.managers;
 
 import com.auth0.jwt.interfaces.Claim;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
@@ -22,9 +23,11 @@ import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
+import javax.inject.Inject;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.time.LocalDateTime;
+import java.util.Locale;
 import java.util.Map;
 import java.util.List;
 import java.util.Optional;
@@ -42,6 +45,9 @@ public class AccountManager implements AccountManagerLocal {
 
     @EJB
     private CompanyFacadeMok companyFacadeMok;
+
+    @Inject
+    I18n ii18n;
 
     @Override
     public Account getAccountByLogin(String login) throws BaseAppException {
@@ -195,6 +201,17 @@ public class AccountManager implements AccountManagerLocal {
             throw new AccountManagerException(PASSWORD_RESET_TOKEN_CONTENT_ERROR);
         }
 
+    }
+    @Override
+    public void requestSomeonesPasswordReset(String login, String email) throws BaseAppException {
+        Account account = this.accountFacade.findByLogin(login);
+        Map<String, Object> claims = Map.of("version", account.getVersion());
+        Locale locale=new Locale( account.getLanguageType().getName().name());
+        String token = JWTHandler.createToken(claims, login);
+        String subject = ii18n.getMessage(REQUESTED_PASSWORD_RESET_SUBJECT,locale);
+        String body = ii18n.getMessage(REQUESTED_PASSWORD_RESET_BODY,locale);
+        String contentHtml = "<a href=\"http://" + PropertiesReader.getSecurityProperties().getProperty("app.baseurl") + "/reset/passwordReset/" + token + "\">" + body + "</a>";
+        EmailService.sendEmailWithContent(email, subject, contentHtml);
     }
     @Override
     public void unblockUser(String unblockedUserLogin,  Long version) throws BaseAppException {

@@ -98,6 +98,11 @@ function Row(props: RowProps) {
         sessionStorage.setItem('grantAccessLevelAccount', JSON.stringify(row));
     }
 
+
+    const setCurrentResetPasswordAccount = () => {
+        sessionStorage.setItem('resetPasswordAccount', JSON.stringify(row));
+    }
+
     return (
 
         <React.Fragment>
@@ -131,15 +136,18 @@ function Row(props: RowProps) {
                                                     <Button className={buttonClass.root}>{t("edit")}</Button>
                                                 </Link>
 
-                                                <Link to="/panels/adminPanel/ChangeAccountPassword">
+{/*                                                <Link to="/panels/adminPanel/ChangeAccountPassword">
                                                     <Button className={buttonClass.root}>{t("change password")}</Button>
-                                                </Link>
+                                                </Link>*/}
 
-                                                <Button className={buttonClass.root}>{t("reset password")}</Button>
-
+                                            <Link to="/reset/resetSomebodyPassword">
+                                                <Button onClick={setCurrentResetPasswordAccount} className={buttonClass.root}>{t("reset password")}</Button>
+                                            </Link>
 
                                             <Button className={buttonClass.root} onClick={() => {unblockAccount({etag: row.etag,
                                                 login: row.login, version: row.version})}}>{row.active ? t("block") : t("unblock")}</Button>
+
+
 
 
                                                 <Link to="/panels/adminPanel/GrantAccessLevel/">
