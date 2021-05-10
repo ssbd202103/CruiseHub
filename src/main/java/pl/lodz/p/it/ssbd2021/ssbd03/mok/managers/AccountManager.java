@@ -177,11 +177,6 @@ public class AccountManager implements AccountManagerLocal {
             accountFacade.findByLogin("rbranson"));
     }
 
-    private void setAlterTypeAndAlterAccount(Account account, AlterTypeWrapper alterTypeWrapper, Account alteredBy) {
-        account.setAlteredBy(alteredBy);
-        account.setAlterType(alterTypeWrapper);
-        account.setLastAlterDateTime(LocalDateTime.now());
-    }
 
     @Override
     public void requestPasswordReset(String login) throws BaseAppException {

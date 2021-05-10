@@ -14,13 +14,9 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AddressDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.ChangeAccessLevelStateDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.PasswordResetDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.UnblockAccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccessLevelDetailsViewDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccountDetailsViewDto;
@@ -96,6 +92,35 @@ class AccountControllerIT {
                 businessWorkerDto.getEmail(), LanguageType.ENG, Set.of(AccessLevelType.BUSINESS_WORKER), 0l);
         given().baseUri(baseUri).contentType(MediaType.APPLICATION_JSON).body(businessWorkerDto).when().post("/business-worker/registration").then().statusCode(204);
         // todo implement remove method to clean created data
+    }
+
+    @Test
+    public void blockUserTest() throws JsonProcessingException {
+
+        ClientForRegistrationDto client = getSampleClientForRegistrationDto();
+        AccountDto account = registerClientAndGetAccountDto(client);
+
+        Response response = given().header("Content-Type", "application/json").baseUri(baseUri).get("/accounts");
+        String accountString = response.getBody().asString();
+        List<AccountDtoForList> accountDtoList = Arrays.asList(objectMapper.readValue(accountString, AccountDtoForList[].class));
+        AccountDtoForList accountDtoForList = accountDtoList.stream().filter(acc -> acc.getLogin().equals(account.getLogin())).findFirst().get();
+        BlockAccountDto blockAccountDto = new BlockAccountDto(accountDtoForList.getLogin(), accountDtoForList.getVersion());
+
+        response = given().header("Content-Type", "application/json").baseUri(baseUri).get("/accounts");
+        accountString = response.getBody().asString();
+        accountDtoList = Arrays.asList(objectMapper.readValue(accountString, AccountDtoForList[].class));
+        accountDtoForList = accountDtoList.stream().filter(acc -> acc.getLogin().equals(account.getLogin())).findFirst().get();
+
+        Response postResponse = given().contentType(ContentType.JSON).header("If-Match", accountDtoForList.getEtag()).
+                baseUri(baseUri).body(blockAccountDto).put("/block");
+
+        response = given().header("Content-Type", "application/json").baseUri(baseUri).get("/accounts");
+        accountString = response.getBody().asString();
+        accountDtoList = Arrays.asList(objectMapper.readValue(accountString, AccountDtoForList[].class));
+        accountDtoForList = accountDtoList.stream().filter(acc -> acc.getLogin().equals(account.getLogin())).findFirst().get();
+
+        assertFalse(accountDtoForList.isActive());
+        assertEquals(200, response.getStatusCode());
     }
 
     @Test
