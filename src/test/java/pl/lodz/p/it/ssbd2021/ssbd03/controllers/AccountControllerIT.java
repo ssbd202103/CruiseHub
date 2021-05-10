@@ -37,9 +37,6 @@ import java.io.DataInput;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import static io.restassured.RestAssured.given;
@@ -276,9 +273,6 @@ class AccountControllerIT {
 
     }
 
-
-
-
     @Test
     public void unblockUserTest_SUCCESS() throws JsonProcessingException {
 
@@ -310,7 +304,6 @@ class AccountControllerIT {
 
 
     }
-
 
 
     private ClientForRegistrationDto getSampleClientForRegistrationDto() {
