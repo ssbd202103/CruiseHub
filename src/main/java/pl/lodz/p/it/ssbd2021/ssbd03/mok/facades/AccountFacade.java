@@ -38,14 +38,6 @@ public class AccountFacade extends AbstractFacade<Account> {
         return tq.getSingleResult();
     }
 
-    public void blockUser(long id) {
-        Query updateQuery = em.createQuery("UPDATE accounts SET accounts.active = :active WHERE accounts.id = :id");
-        updateQuery.setParameter("active", false);
-        updateQuery.setParameter("id", id);
-
-        updateQuery.getSingleResult();
-    }
-
 
     public Account findByLogin(String login) throws BaseAppException {
         TypedQuery<Account> tq = em.createNamedQuery("Account.findByLogin", Account.class);

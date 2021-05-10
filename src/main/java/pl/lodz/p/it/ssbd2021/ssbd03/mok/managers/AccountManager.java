@@ -168,8 +168,19 @@ public class AccountManager implements AccountManagerLocal {
     }
 
     @Override
-    public void blockUser(long id) {
-        this.accountFacade.blockUser(id);
+    public void blockUser(String login, Long version) throws BaseAppException {
+        Account account =  this.accountFacade.findByLogin(login);
+        account.setVersion(version);
+        account.setActive(false);
+        setAlterTypeAndAlterAccount(accountFacade.findByLogin(login), accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE),
+            // this is for now, will be changed in the upcoming feature
+            accountFacade.findByLogin("rbranson"));
+    }
+
+    private void setAlterTypeAndAlterAccount(Account account, AlterTypeWrapper alterTypeWrapper, Account alteredBy) {
+        account.setAlteredBy(alteredBy);
+        account.setAlterType(alterTypeWrapper);
+        account.setLastAlterDateTime(LocalDateTime.now());
     }
 
     @Override

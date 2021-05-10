@@ -20,7 +20,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters.AccountMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.managers.AccountManagerLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.mappers.IdMapper;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
@@ -100,8 +99,8 @@ public class AccountEndpoint implements AccountEndpointLocal {
     }
 
     @Override
-    public void blockUser(@Valid @NotNull IdDto id) {
-        this.accountManager.blockUser(IdMapper.toLong(id));
+    public void blockUser(@NotNull String login, @NotNull Long version) throws BaseAppException {
+        this.accountManager.blockUser(login, version);
     }
 
     @Override

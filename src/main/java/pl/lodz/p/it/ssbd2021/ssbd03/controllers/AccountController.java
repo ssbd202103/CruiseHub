@@ -9,6 +9,9 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.UnblockAccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.IdDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.ChangeAccessLevelStateDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.BlockAccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccountDetailsViewDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
@@ -24,10 +27,14 @@ import javax.print.attribute.standard.Media;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 
 import java.util.List;
 
@@ -127,11 +134,23 @@ public class AccountController {
     }
 
 
-    @POST
-    @Path("/block/{id}")
+    /**
+     * Metoda pośrednio odpowiedzialna za blokowanie użytkownika
+     * @param blockAccountDto Obiekt z loginem użytkownika do zablokowania oraz wersją
+     * @param etagValue Wartość etaga
+     * @return Respons wraz z kodem
+     * @throws BaseAppException Wyjątek aplikacji rzucany w przypadku błędu pobrania danych użytkownika
+     */
+    @ETagFilterBinding
+    @PUT
+    @Path("/block")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void blockUser(@Valid @NotNull IdDto id) {
-        accountEndpoint.blockUser(id);
+    public Response blockUser(BlockAccountDto blockAccountDto, @HeaderParam("If-Match") @NotNull @NotEmpty String etagValue) throws BaseAppException {
+        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etagValue, blockAccountDto)) {
+            return Response.status(406).build();
+        }
+        accountEndpoint.blockUser(blockAccountDto.getLogin(), blockAccountDto.getVersion());
+        return Response.status(200).build();
     }
 
     /**

@@ -70,8 +70,12 @@ public interface AccountManagerLocal {
      * Metoda odpowiedzialna za blokowanie konta
      *
      * @param id ID użytkownika
+     * Blokuje użytkownika o zadanym loginie
+     * @param login Login użytkownika
+     * @param version Wersja obiektu do sprawdzenia
+     * @throws BaseAppException Wyjątek aplikacji rzucany w przypadku błędu pobrania danych użytkownika
      */
-    void blockUser(long id);
+    void blockUser(String login, Long version) throws BaseAppException;
 
 
     /**
