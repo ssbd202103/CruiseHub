@@ -27,18 +27,16 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccountDetailsViewDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
+import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
 
 import javax.ws.rs.core.MediaType;
-import java.util.Set;
+import java.util.*;
 
 
 import java.io.DataInput;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import static io.restassured.RestAssured.given;
@@ -50,13 +48,15 @@ import static org.junit.jupiter.api.Assertions.*;
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 
 
-class AccountControllerTest {
+class AccountControllerIT {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    private static final String baseUri = "http://localhost:8080/api/account";
+    private final String baseUri;
 
-    AccountControllerTest() {
+    AccountControllerIT() {
+        Properties securityProperties = PropertiesReader.getSecurityProperties();
+        baseUri = securityProperties.getProperty("app.baseurl") + "/api/account";
     }
 
     @Test
@@ -267,9 +267,6 @@ class AccountControllerTest {
 
     }
 
-
-
-
     @Test
     public void unblockUserTest_SUCCESS() throws JsonProcessingException {
 
@@ -301,7 +298,6 @@ class AccountControllerTest {
 
 
     }
-
 
 
     private ClientForRegistrationDto getSampleClientForRegistrationDto() {
