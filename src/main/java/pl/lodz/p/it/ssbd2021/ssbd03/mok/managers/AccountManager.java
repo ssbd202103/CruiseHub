@@ -2,6 +2,8 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.managers;
 
 import com.auth0.jwt.interfaces.Claim;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
+import lombok.Data;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
@@ -25,6 +27,9 @@ import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.inject.Inject;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.List;
 import java.time.LocalDateTime;
 import java.util.Locale;
@@ -55,7 +60,7 @@ public class AccountManager implements AccountManagerLocal {
     }
 
     @Override
-    public void createClientAccount(Account account, Client client) {
+    public void createClientAccount(Account account, Client client) throws BaseAppException {
         AlterTypeWrapper insertAlterType = accountFacade.getAlterTypeWrapperByAlterType(AlterType.INSERT);
 
         setAccessLevelInitialMetadata(account, client, true);
@@ -65,16 +70,21 @@ public class AccountManager implements AccountManagerLocal {
         client.getHomeAddress().setAlterType(insertAlterType);
 
         accountFacade.create(account);
-
+        if(accountFacade.findByLogin(account.getLogin()) != null) {
+            sendVerificationEmail(account);
+        }
     }
 
     @Override
-    public void createBusinessWorkerAccount(Account account, BusinessWorker businessWorker, String companyName) {
+    public void createBusinessWorkerAccount(Account account, BusinessWorker businessWorker, String companyName) throws BaseAppException {
 
         setAccessLevelInitialMetadata(account, businessWorker, true);
         businessWorker.setCompany(companyFacadeMok.getCompanyByName(companyName));
 
         this.accountFacade.create(account);
+        if(accountFacade.findByLogin(account.getLogin()) != null) {
+            sendVerificationEmail(account);
+        }
     }
 
     @Override
@@ -162,6 +172,16 @@ public class AccountManager implements AccountManagerLocal {
         account.setAlteredBy(account);
     }
 
+    private void sendVerificationEmail(Account account) throws BaseAppException {
+        Map<String, Object> claims = Map.of("version", account.getVersion());
+        String token = JWTHandler.createTokenEmail(claims, account.getLogin());
+        Locale locale = new Locale(account.getLanguageType().getName().name());
+        String subject = ii18n.getMessage(VERIFICATION_EMAIL_SUBJECT, locale);
+        String body = ii18n.getMessage(VERIFICATION_EMAIL_BODY, locale);
+        String contentHtml = "<a href=\"http://" + PropertiesReader.getSecurityProperties().getProperty("app.baseurl") + "/verify/accountVerification/" + token + "\">" + body + "</a>";
+        EmailService.sendEmailWithContent(account.getEmail().trim(), subject, contentHtml);
+    }
+
     @Override
     public List<Account> getAllAccounts() {
         return accountFacade.findAll();
@@ -207,6 +227,34 @@ public class AccountManager implements AccountManagerLocal {
             throw new AccountManagerException(PASSWORD_RESET_TOKEN_CONTENT_ERROR);
         }
 
+    }
+
+    @Override
+    public void verifyAccount(String token) throws BaseAppException {
+        JWTHandler.validateToken(token);
+
+        Map<String, Claim> claims = JWTHandler.getClaimsFromToken(token);
+        Date expire = JWTHandler.getExpiersTimeFromToken(token);
+        if (claims.get("sub") != null && claims.get("version") != null) {
+            String login = claims.get("sub").asString();
+            if (!expire.before(new Date(System.currentTimeMillis()))) {
+            Account account = this.accountFacade.findByLogin(login);
+                if(!account.isConfirmed()) {
+                    account.setConfirmed(true);
+                    account.setVersion(claims.get("version").asLong());
+                    account.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
+                    account.setAlteredBy(account);
+                }
+            else {
+                throw new AccountManagerException(ACCOUNT_VERIFICATION_TOKEN_ALREADY_VERIFIED_ERROR);
+            }
+            } else {
+                throw new AccountManagerException(ACCOUNT_VERIFICATION_TOKEN_EXPIRE_ERROR);
+           }
+        }
+        else {
+            throw new AccountManagerException(ACCOUNT_VERIFICATION_TOKEN_CONTENT_ERROR);
+        }
     }
     @Override
     public void requestSomeonesPasswordReset(String login, String email) throws BaseAppException {

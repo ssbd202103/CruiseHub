@@ -1,5 +1,8 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.common;
 
+import javax.xml.transform.sax.SAXResult;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.Locale;
 import java.util.ResourceBundle;
 /**
@@ -23,6 +26,13 @@ public class I18n {
     public static final String PASSWORD_RESET_TOKEN_CONTENT_ERROR = "error.password.reset.contentError";
     public static final String REQUESTED_PASSWORD_RESET_SUBJECT = "account.request.reset.password.subject";
     public static final String REQUESTED_PASSWORD_RESET_BODY = "account.request.reset.password.body";
+    public static final String ACCOUNT_VERIFICATION_TOKEN_CONTENT_ERROR = "error.account.verification.contentError";
+    public static final String ACCOUNT_VERIFICATION_TOKEN_EXPIRE_ERROR = "error.account.verification.expireError";
+    public static final String ACCOUNT_VERIFICATION_TOKEN_ALREADY_VERIFIED_ERROR = "error.account.verification.alreadyVerifiedError";
+    public static final String REQUESTED_PASSWORD_RESET_SUBJECT = "account.request.reset.password.subject";
+    public static final String REQUESTED_PASSWORD_RESET_BODY = "account.request.reset.password.body";
+    public static final String VERIFICATION_EMAIL_SUBJECT = "account.verification.subject";
+    public static final String VERIFICATION_EMAIL_BODY = "account.verification.body";
 
         private ResourceBundle bundle;
         public String getMessage(String message, Locale locale) {

@@ -30,7 +30,7 @@ public interface AccountManagerLocal {
      * @param account obiekt prezentujący konto
      * @param client  obiekt prezentujący poziom dostępu klient
      */
-    void createClientAccount(Account account, Client client);
+    void createClientAccount(Account account, Client client) throws BaseAppException;
 
     /**
      * Tworzy konto przypisując do niego odpowiedni poziom dostępu
@@ -38,7 +38,7 @@ public interface AccountManagerLocal {
      * @param account        obiekt prezentujący konto
      * @param businessWorker obiekt prezentujący poziom dostępu pracownik firmy
      */
-    void createBusinessWorkerAccount(Account account, BusinessWorker businessWorker, String companyName);
+    void createBusinessWorkerAccount(Account account, BusinessWorker businessWorker, String companyName) throws BaseAppException;
 
     /**
      * Dodaje poziom dostępu administratora użytkownikowi
@@ -124,4 +124,11 @@ public interface AccountManagerLocal {
      * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku gdy użytkownik o podanym loginie nie istnieje, albo gdy podczas wysyłania email został rzucony wyjątek przez metode klasy EmailService
      */
     void requestSomeonesPasswordReset(String login, String email) throws BaseAppException;
+    /**
+     * Metoda odpowiedzialna za weryfikacje konta użytkonwika.
+     *
+     * @param token        jwt token otrzymany przez email
+     * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku gdy token wygasł albo nie przeszedł walidacji oraz gdy brak loginu lub wersji w tokenie oraz w wypadku kiedy konto zostało już wcześniej aktywowane oraz w sytuacj gdy został rzucony wyjątek blokady optymistycznej
+     */
+    void verifyAccount(String token) throws BaseAppException;
 }

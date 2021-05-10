@@ -46,6 +46,17 @@ public class JWTHandler {
                 .sign(algorithm);
     }
 
+    public static String createTokenEmail(Map<String, ?> claims, String subject) {
+        Algorithm algorithm = Algorithm.HMAC256(getJWTSecret());
+        return JWT.create()
+                .withPayload(claims).withSubject(subject)
+                .withIssuedAt(new Date())
+                .withExpiresAt(Date.from(Instant.now().plus(getDefaultValidityInHours(), ChronoUnit.HOURS)))
+                .withJWTId(UUID.randomUUID().toString())
+                .withIssuer(getJWTIssuer())
+                .sign(algorithm);
+    }
+
     /**
      * Metoda pozwalająca na stworzenie odświeżonego tokenu poprzez podanie już istniejącego.
      * W przypadku próby odświeżenia wygaśniętego tokenu rzucany jest wyjątek TokenExpiredException
@@ -82,7 +93,34 @@ public class JWTHandler {
             throw new JWTException("Provided token could not be decoded");
         }
     }
-
+    /**
+     * Metoda zwrająca issuera;
+     *
+     * @param token Token poddawany dekodowaniu
+     * @return issuer;
+     * @throws JWTDecodeException Wyjątek błędu dekodowania
+     */
+    public static String getIssuerFromToken(String token) throws JWTException {
+        try {
+            return JWT.decode(token).getIssuer();
+        } catch (JWTDecodeException e) {
+            throw new JWTException("Provided token could not be decoded");
+        }
+    }
+    /**
+     * Metoda zwrająca issuera;
+     *
+     * @param token Token poddawany dekodowaniu
+     * @return issuer;
+     * @throws JWTDecodeException Wyjątek błędu dekodowania
+     */
+    public static Date getExpiersTimeFromToken(String token) throws JWTException {
+        try {
+            return JWT.decode(token).getExpiresAt();
+        } catch (JWTDecodeException e) {
+            throw new JWTException("Provided token could not be decoded");
+        }
+    }
 
     /**
      * Metoda walidująca istniejący token na podstawie użytego algorytmu oraz sekretu.
@@ -110,6 +148,13 @@ public class JWTHandler {
         }
     }
 
+    private static Long getDefaultValidityInHours() {
+        try {
+            return Long.parseLong(securityProperties.getProperty("jwt.validityInHours"));
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException("jwt.validityInHours value: {" + securityProperties.getProperty("jwt.validityInHours") + "} could not be parsed to Long, verify properties data");
+        }
+    }
     private static String getJWTSecret() {
         return securityProperties.getProperty("jwt.secret");
     }
