@@ -75,7 +75,6 @@ public interface AccountManagerLocal {
     /**
      * Metoda odpowiedzialna za blokowanie konta
      *
-     * @param id ID użytkownika
      * Blokuje użytkownika o zadanym loginie
      * @param login Login użytkownika
      * @param version Wersja obiektu do sprawdzenia
@@ -130,6 +129,12 @@ public interface AccountManagerLocal {
      * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku gdy użytkownik o podanym loginie nie istnieje, albo gdy podczas wysyłania email został rzucony wyjątek przez metode klasy EmailService
      */
     void requestSomeonesPasswordReset(String login, String email) throws BaseAppException;
+    /**
+     * Metoda odpowiedzialna za weryfikacje konta użytkonwika.
+     *
+     * @param token        jwt token otrzymany przez email
+     * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku gdy token wygasł albo nie przeszedł walidacji oraz gdy brak loginu lub wersji w tokenie oraz w wypadku kiedy konto zostało już wcześniej aktywowane oraz w sytuacj gdy został rzucony wyjątek blokady optymistycznej
+     */
     /**
      * Metoda odpowiedzialna za weryfikacje konta użytkonwika.
      *
