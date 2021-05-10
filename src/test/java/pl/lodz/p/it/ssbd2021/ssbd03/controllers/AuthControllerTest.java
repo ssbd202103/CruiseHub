@@ -12,14 +12,22 @@ class AuthControllerTest {
 
     @Test
     void auth() {
+        // correct test
         AuthenticateDto authInfo = new AuthenticateDto("emusk", "12345678");
         Response response = given().baseUri(baseUri).contentType("application/json").body(authInfo).post("signin/auth");
         assertFalse(response.getBody().asPrettyString().isEmpty());
         assertEquals(response.getStatusCode(), 200);
 
-        AuthenticateDto authInfoFalse = new AuthenticateDto("emusk", "2115");
+        // a test with an incorrect password
+        AuthenticateDto authInfoFalse = new AuthenticateDto("emusk", "IncorrectPassword");
         Response responseFalse = given().baseUri(baseUri).contentType("application/json").body(authInfoFalse).post("signin/auth");
         assertTrue(responseFalse.getBody().asPrettyString().contains("#badassfish"));
         assertEquals(responseFalse.getStatusCode(), 401);
+
+        // a test with an incorrect login
+        AuthenticateDto authInfoFalse2 = new AuthenticateDto("IncorrectLogin", "AndARandomPassword");
+        Response responseFalse2 = given().baseUri(baseUri).contentType("application/json").body(authInfoFalse2).post("signin/auth");
+        assertTrue(responseFalse2.getBody().asPrettyString().contains("#badassfish"));
+        assertEquals(responseFalse2.getStatusCode(), 401);
     }
 }

@@ -40,14 +40,19 @@ public class AccountFacade extends AbstractFacade<Account> {
     public Account updateAuthenticateInfo(String login, String ipAddr, LocalDateTime time, boolean isAuthValid) {
         TypedQuery<Account> tq = em.createNamedQuery("Account.findByLogin", Account.class);
         tq.setParameter("login", login);
-        Account account = tq.getSingleResult();
+        Account account;
+        try {
+            account = tq.getSingleResult();
+            if (isAuthValid) {
+                account.setLastCorrectAuthenticationDateTime(time);
+                account.setLastCorrectAuthenticationLogicalAddress(ipAddr);
+            } else {
+                account.setLastIncorrectAuthenticationDateTime(time);
+                account.setLastIncorrectAuthenticationLogicalAddress(ipAddr);
+            }
 
-        if (isAuthValid) {
-            account.setLastCorrectAuthenticationDateTime(time);
-            account.setLastCorrectAuthenticationLogicalAddress(ipAddr);
-        } else {
-            account.setLastIncorrectAuthenticationDateTime(time);
-            account.setLastIncorrectAuthenticationLogicalAddress(ipAddr);
+        } catch (NoResultException e) {
+            return new Account();
         }
 
         return account;
