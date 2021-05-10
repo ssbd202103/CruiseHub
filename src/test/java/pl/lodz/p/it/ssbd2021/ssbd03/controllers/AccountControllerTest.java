@@ -25,39 +25,9 @@ class AccountControllerTest {
     AccountControllerTest() {
     }
 
-    @Test
-    public void registerClientTest_SUCCESS() {
-        pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AddressDto address = new pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AddressDto(1L, "Bortnyka", "30-302", "Pluzhne", "Ukraine");
-        ClientForRegistrationDto client = new ClientForRegistrationDto("Artur", "Radiuk", "robert", "robert@gmail.com",
-                "123456789", LanguageType.PL, address, "123456789");
 
-        given().baseUri(baseUri).contentType("application/json").body(client).when().post("account/client/registration").then().statusCode(204);
-        // todo implement remove method to clean created data
-    }
 
-    @Test
-    public void registerBusinessWorkerTest_SUCCESS() {
-        BusinessWorkerForRegistrationDto businessWorker = new BusinessWorkerForRegistrationDto("Artur", "Radiuk", "pracownik", "pracownik@gmail.com",
-                "123456789", LanguageType.ENG, "123456789", "FirmaJez");
-        given().baseUri(baseUri).contentType("application/json").body(businessWorker).when().post("account/businessworker/registration").then().statusCode(204);
-        // todo implement remove method to clean created data
-    }
 
-    @Test
-    public void registerModeratorTest_SUCCESS() {
-        ModeratorForRegistrationDto moderator = new ModeratorForRegistrationDto("Artur", "Radiuk", "aradiuk_moderator", "aradiuk@gmail.com",
-                "123456789", LanguageType.ENG);
-        given().baseUri(baseUri).contentType("application/json").body(moderator).when().post("account/moderator/registration").then().statusCode(204);
-        // todo implement remove method to clean created data
-    }
-
-    @Test
-    public void registerAdministratorTest_SUCCESS() {
-        AdministratorForRegistrationDto administrator = new AdministratorForRegistrationDto("Artur", "Radiuk", "aradiuk_administrator", "aradiuk@gmail.com",
-                "123456789", LanguageType.ENG);
-        given().baseUri(baseUri).contentType("application/json").body(administrator).when().post("account/administrator/registration").then().statusCode(204);
-        // todo implement remove method to clean created data
-    }
 
     private String registerSampleClientAndGetLogin() {
         AddressDto address = new AddressDto(1L, "Bortnyka", "30-302", "Pluzhne", "Ukraine");

@@ -25,7 +25,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AdministratorChangeDataDt
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.BusinessWorkerChangeDataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.ClientChangeDataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.ModeratorChangeDataDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.AdministratorForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AccountChangeEmailDto;
@@ -65,10 +64,6 @@ public class AccountEndpoint implements AccountEndpointLocal {
         return EntityIdentitySignerVerifier.calculateEntitySignature(entity);
     }
 
-    @Override
-    public AccountDto getAccountByLogin(String login) throws BaseAppException {
-        return AccountMapper.toAccountDto(accountManager.getAccountByLogin(login));
-    }
 
     @Override
     public void createClientAccount(ClientForRegistrationDto clientForRegistrationDto) throws BaseAppException {
@@ -254,10 +249,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
         accountManager.changeAdministratorData(account);
     }
 
-    @Override
-    public String getETagFromSignableEntity(SignableEntity entity) {
-        return EntityIdentitySignerVerifier.calculateEntitySignature(entity);
-    }
+
 
     @Override
     public AccountDto getAccountByLogin(String login) throws BaseAppException {

@@ -28,7 +28,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.security.JWTHandler;
 import pl.lodz.p.it.ssbd2021.ssbd03.services.EmailService;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.CompanyFacade;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import java.time.LocalDateTime;
@@ -61,10 +60,6 @@ public class AccountManager implements AccountManagerLocal {
     @Inject
     I18n ii18n;
 
-    @Override
-    public Account getAccountByLogin(String login) throws BaseAppException {
-        return accountFacade.findByLogin(login);
-    }
 
 
     @Override
@@ -292,13 +287,6 @@ public class AccountManager implements AccountManagerLocal {
 
 
 
-    private AccessLevel getAccessLevel(Account from, AccessLevelType target) {
-        return from.getAccessLevels().stream().filter(accessLevel -> accessLevel.getAccessLevelType().equals(target)).collect(Collectors.toList()).get(0);
-    }
-
-    private <T> T getAccessLevel(Account from) {
-        return (T) new ArrayList<>(from.getAccessLevels()).get(0);
-    }
 
 
     @Override
@@ -403,7 +391,7 @@ public class AccountManager implements AccountManagerLocal {
     }
 
     @Override
-    public void changeClientData(Account fromAccount) {
+    public void changeClientData(Account fromAccount) throws BaseAppException {
         Account targetAccount = accountFacade.findByLogin(fromAccount.getLogin());
         setAccountChanges(targetAccount, fromAccount);
 
@@ -427,7 +415,7 @@ public class AccountManager implements AccountManagerLocal {
     }
 
     @Override
-    public void changeBusinessWorkerData(Account fromAccount) {
+    public void changeBusinessWorkerData(Account fromAccount) throws BaseAppException {
         Account targetAccount = accountFacade.findByLogin(fromAccount.getLogin());
         setAccountChanges(targetAccount, fromAccount);
 
@@ -439,7 +427,7 @@ public class AccountManager implements AccountManagerLocal {
     }
 
     @Override
-    public void changeModeratorData(Account fromAccount) {
+    public void changeModeratorData(Account fromAccount) throws BaseAppException {
         Account targetAccount = accountFacade.findByLogin(fromAccount.getLogin());
         setAccountChanges(targetAccount, fromAccount);
 
@@ -448,7 +436,7 @@ public class AccountManager implements AccountManagerLocal {
     }
 
     @Override
-    public void changeAdministratorData(Account fromAccount) {
+    public void changeAdministratorData(Account fromAccount) throws BaseAppException {
         Account targetAccount = accountFacade.findByLogin(fromAccount.getLogin());
 
         setAccountChanges(targetAccount, fromAccount);

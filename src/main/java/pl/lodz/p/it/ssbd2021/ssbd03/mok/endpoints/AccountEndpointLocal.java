@@ -21,12 +21,10 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AdministratorChangeDataDt
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.BusinessWorkerChangeDataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.ClientChangeDataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.ModeratorChangeDataDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.AdministratorForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ModeratorForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
 
 import javax.ejb.Local;
@@ -58,14 +56,7 @@ public interface AccountEndpointLocal {
      */
     void createBusinessWorkerAccount(BusinessWorkerForRegistrationDto businessWorkerForRegistrationDto) throws BaseAppException;
 
-    /**
-     * Pobiera obiekt AccountDto szukanego użytkownika
-     *
-     * @param login Login użytkownika
-     * @return Reprezentacja użytkownika po dokonanych zmianach w postaci AccountDto
-     * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku nieznalezienia użytkownika.
-     */
-    AccountDto getAccountByLogin(String login) throws BaseAppException;
+
 
     /**
      * Pobiera obiekt AccountDetailsViewDto szukanego użytkownika
@@ -96,13 +87,6 @@ public interface AccountEndpointLocal {
      */
     AccountDto changeAccessLevelState(ChangeAccessLevelStateDto changeAccessLevelState) throws BaseAppException;
 
-    /**
-     * Oblicza ETag dla encji
-     *
-     * @param entity Encja implementująca SignableEntity
-     * @return ETag w postaci String
-     */
-    String getETagFromSignableEntity(SignableEntity entity);
 
 
     /**

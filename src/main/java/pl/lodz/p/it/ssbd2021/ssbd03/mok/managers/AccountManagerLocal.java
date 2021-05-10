@@ -183,7 +183,7 @@ public interface AccountManagerLocal {
      * @param account encja konta zawierająca zmiany
      *
      */
-    void changeClientData(Account account);
+    void changeClientData(Account account) throws BaseAppException;
 
     /**
      * Zmień dane pracownika firmy
@@ -191,7 +191,7 @@ public interface AccountManagerLocal {
      * @param account encja konta zawierająca zmiany
      *
      */
-    void changeBusinessWorkerData(Account account);
+    void changeBusinessWorkerData(Account account) throws BaseAppException;
 
     /**
      * Zmień dane moderatora
@@ -199,7 +199,7 @@ public interface AccountManagerLocal {
      * @param account encja konta zawierająca zmiany
      *
      */
-    void changeModeratorData(Account account);
+    void changeModeratorData(Account account) throws BaseAppException;
 
     /**
      * Zmień dane administratora
@@ -207,14 +207,7 @@ public interface AccountManagerLocal {
      * @param account encja konta zawierająca zmiany
      *
      */
-    void changeAdministratorData(Account account);
+    void changeAdministratorData(Account account) throws BaseAppException;
 
-    /**
-     * Pobiera z bazy danych obiekt szukanego użytkownika
-     *
-     * @param login użytkownika
-     * @return obiekt encji użytkownika
-     * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku nieznalezienia użytkownika.
-     */
-    Account getAccountByLogin(String login) throws BaseAppException;
+
 }

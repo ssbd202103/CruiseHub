@@ -19,7 +19,6 @@ public class I18n {
     public static final String ACCESS_LEVEL_ALREADY_DISABLED_ERROR = "error.account.accessLevels.alreadyEnabled";
     public static final String ETAG_EMPTY_ERROR = "error.security.etag.empty";
     public static final String ETAG_INVALID_ERROR = "error.security.etag.invalid";
-    public static final String ETAG_IDENTITY_INTEGRITY_ERROR = "error.security.etag.integrity";
     public static final String SERIALIZATION_PARSING_ERROR = "error.parsing.serialization";
     public static final String ACCESS_LEVEL_DOES_NOT_EXIST_ERROR = "error.account.accessLevels.doesNotExist";
     public static final String PASSWORD_RESET_IDENTITY_ERROR = "error.password.reset.wrongIdentity";
@@ -33,7 +32,6 @@ public class I18n {
     public static final String ACCOUNT_VERIFICATION_TOKEN_ALREADY_VERIFIED_ERROR = "error.account.verification.alreadyVerifiedError";
     public static final String VERIFICATION_EMAIL_SUBJECT = "account.verification.subject";
     public static final String VERIFICATION_EMAIL_BODY = "account.verification.body";
-    public static final String OPTIMISTIC_EXCEPTION = "exception.optimistic";
 
         private ResourceBundle bundle;
         public String getMessage(String message, Locale locale) {
