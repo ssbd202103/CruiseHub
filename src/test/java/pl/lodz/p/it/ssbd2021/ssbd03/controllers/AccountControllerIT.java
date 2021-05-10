@@ -15,6 +15,10 @@ import org.junit.jupiter.api.Test;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherAccountChangeDataDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherAddressChangeDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherBusinessWorkerChangeDataDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherClientChangeDataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.ChangeAccessLevelStateDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
@@ -342,9 +346,12 @@ class AccountControllerIT {
         return getAccountDto(client.getLogin());
     }
 
+
+
     private AccountDto getAccountDto(String login) throws JsonProcessingException {
         return objectMapper.readValue(given().baseUri(baseUri).get("/" + login).thenReturn().asString(), AccountDto.class);
     }
+
 
     private AccountDetailsViewDto getAccountDetailsViewDto(String login) throws JsonProcessingException {
         String responseString = given().baseUri(baseUri).get("/details-view/" + login)
@@ -360,8 +367,77 @@ class AccountControllerIT {
             getBaseUriETagRequest(etag).contentType(ContentType.JSON).body(grantAccessLevel).put("/grant-access-level");
         }
     }
-
     private RequestSpecification getBaseUriETagRequest(String etag) {
         return given().baseUri(baseUri).header("If-Match", etag);
     }
+
+    @Test
+    public void changeClientDataTest_SUCCESS() throws JsonProcessingException {
+        ClientForRegistrationDto client = getSampleClientForRegistrationDto();
+        AccountDto account = registerClientAndGetAccountDto(client);
+        String etag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
+        OtherAddressChangeDto newAddress = new OtherAddressChangeDto(100L, "Aleja Zmieniona", "94-690", "Lodz", "Polska", "rbranson");
+        OtherClientChangeDataDto otherClientChangeDataDto = new OtherClientChangeDataDto(account.getLogin(), account.getVersion(),
+                "Damian",
+                "Bednarek",
+                "888888888",
+                newAddress,
+                "rbranson");
+        Response response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).body(otherClientChangeDataDto).put("/changeOtherData/client");
+        assertThat(response.getStatusCode()).isEqualTo(200);
+        OtherClientChangeDataDto updatedAccount = objectMapper.readValue(response.asString(), OtherClientChangeDataDto.class);
+        assertThat(updatedAccount.getNewFirstName()).isEqualTo("Damian");
+        assertThat(updatedAccount.getNewSecondName()).isEqualTo("Bednarek");
+        assertThat(updatedAccount.getNewAddress().getNewStreet()).isEqualTo("Aleja Zmieniona");
+        assertThat(updatedAccount.getNewPhoneNumber()).isEqualTo("888888888");
+        assertThat(updatedAccount.getAlteredBy()).isEqualTo("rbranson");
+
+    }
+
+    @Test
+    public void changeBusinessWorkerDataTest_SUCCESS() throws JsonProcessingException {
+        BusinessWorkerForRegistrationDto worker = getSampleBusinessWorkerForRegistrationDto();
+        AccountDto account = registerBusinessWorkerAndGetAccountDto(worker);
+        String etag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
+        OtherBusinessWorkerChangeDataDto otherBusinessWorkerChangeDataDto = new OtherBusinessWorkerChangeDataDto(account.getLogin(), account.getVersion(),
+                "Damian",
+                "Bednarek",
+                "888888888",
+                "rbranson");
+        Response response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).body(otherBusinessWorkerChangeDataDto).put("/changeOtherData/businessworker");
+        assertThat(response.getStatusCode()).isEqualTo(200);
+        OtherBusinessWorkerChangeDataDto updatedAccount = objectMapper.readValue(response.asString(), OtherBusinessWorkerChangeDataDto.class);
+        assertThat(updatedAccount.getNewFirstName()).isEqualTo("Damian");
+        assertThat(updatedAccount.getNewSecondName()).isEqualTo("Bednarek");
+        assertThat(updatedAccount.getNewPhoneNumber()).isEqualTo("888888888");
+        assertThat(updatedAccount.getAlteredBy()).isEqualTo("rbranson");
+    }
+
+    @Test
+    public void changeModeratorOrAdministratorDataTest_SUCCESS() throws JsonProcessingException {
+        AccountDto account = getAccountDto("rbranson");
+        String etag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
+        OtherAccountChangeDataDto otherAccountChangeDataDto = new OtherAccountChangeDataDto(account.getLogin(), account.getVersion(),
+                "Damian",
+                "Bednarek",
+                "rbranson");
+        Response response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).body(otherAccountChangeDataDto).put("/changeOtherData");
+        assertThat(response.getStatusCode()).isEqualTo(200);
+        AccountDto updatedAccount = objectMapper.readValue(response.asString(), AccountDto.class);
+        assertThat(updatedAccount.getFirstName()).isEqualTo("Damian");
+        assertThat(updatedAccount.getSecondName()).isEqualTo("Bednarek");
+    }
+
+    private BusinessWorkerForRegistrationDto getSampleBusinessWorkerForRegistrationDto() {
+        return new BusinessWorkerForRegistrationDto("Artur", "Radiuk", randomAlphanumeric(15), randomAlphanumeric(10) + "@gmail.com",
+                "123456789", LanguageType.PL, "123456789", "FirmaJez");
+    }
+    private AccountDto registerBusinessWorkerAndGetAccountDto(BusinessWorkerForRegistrationDto worker) throws JsonProcessingException {
+        given().baseUri(baseUri).contentType("application/json").body(worker).post("/business-worker/registration").then().statusCode(204);
+        return getAccountDto(worker.getLogin());
+    }
+
+
+
+
 }
