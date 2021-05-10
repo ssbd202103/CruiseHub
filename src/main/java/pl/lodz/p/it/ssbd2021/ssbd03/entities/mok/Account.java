@@ -18,7 +18,8 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.*;
 @Entity(name = "accounts")
 @NamedQueries({
         @NamedQuery(name = "Account.findByLogin", query = "SELECT acc FROM accounts acc WHERE acc.login = :login"),
-        @NamedQuery(name = "Account.findById", query = "SELECT acc FROM accounts acc WHERE acc.id = :id")
+        @NamedQuery(name = "Account.findById", query = "SELECT acc FROM accounts acc WHERE acc.id = :id"),
+        @NamedQuery(name = "Account.findUnconfirmedAccount", query = "SELECT acc FROM accounts acc WHERE acc.confirmed = false")
 })
 public class Account extends BaseEntity {
     @Getter
@@ -99,7 +100,7 @@ public class Account extends BaseEntity {
     private int numberOfAuthenticationFailures;
 
     @Getter
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE}, mappedBy = "account")
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "account")
     @ToString.Exclude
     private final Set<AccessLevel> accessLevels = new HashSet<>();
 

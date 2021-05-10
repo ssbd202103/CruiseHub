@@ -11,6 +11,8 @@ import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.EMAIL_SERVICE_INACCESSIBLE;
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.EMAIL_SERVICE_INCORRECT_EMAIL;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
+
 /**
  * The type Email service.
  */
@@ -105,7 +107,56 @@ public class EmailService {
             me.printStackTrace();
         }
     }
+    /**
+     * Wysyła mail dla podanych odbiorców
+     *
+     * @param recipients lista emaili odbiorców
+     * @param subject   temat maila
+     * @param body   zawartość maila
+     */
+    public static void sendFromGMail( String[] recipients, String subject, String body) {
+        Properties properties = System.getProperties();
 
+        String host = "smtp.gmail.com";
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.ssl.trust", host);
+        properties.put("mail.smtp.user", EMAIL_USER);
+        properties.put("mail.smtp.password", PASSWD);
+        properties.put("mail.smtp.port", "587");
+        properties.put("mail.smtp.auth", "true");
+
+        Session session = Session.getDefaultInstance(properties);
+        MimeMessage message = new MimeMessage(session);
+
+        try {
+            message.setFrom(new InternetAddress(EMAIL_USER));
+            InternetAddress[] toAddress = new InternetAddress[recipients.length];
+
+            // To get the array of addresses
+            for( int i = 0; i < recipients.length; i++ ) {
+                toAddress[i] = new InternetAddress(recipients[i]);
+            }
+
+            for( int i = 0; i < toAddress.length; i++) {
+                message.addRecipient(Message.RecipientType.TO, toAddress[i]);
+            }
+
+            message.setSubject(subject);
+            message.setText(body);
+
+            Transport transport = session.getTransport("smtp");
+
+            transport.connect(host, EMAIL_USER, PASSWD);
+            transport.sendMessage(message, message.getAllRecipients());
+            transport.close();
+        }
+        catch (AddressException ae) {
+            ae.printStackTrace();
+        }
+        catch (MessagingException me) {
+            me.printStackTrace();
+        }
+    }
     private static String getAccount() {
         return emailProperties.getProperty("email.user");
     }

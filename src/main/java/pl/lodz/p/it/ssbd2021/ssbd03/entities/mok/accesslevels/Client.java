@@ -17,7 +17,7 @@ public class Client extends AccessLevel {
     @Getter
     @Setter
     @NotNull
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE,CascadeType.REMOVE})
     @JoinColumn(name = "home_address_id")
     private Address homeAddress;
 

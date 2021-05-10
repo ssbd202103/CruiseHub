@@ -13,6 +13,8 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.*;
+import java.util.List;
+import java.util.List;
 
 @Stateless
 @TransactionAttribute(TransactionAttributeType.MANDATORY)
@@ -54,4 +56,10 @@ public class AccountFacade extends AbstractFacade<Account> {
     }
 
 
+
+    public List<Account> getUnconfirmedAccounts() {
+        TypedQuery<Account> tqq = em.createNamedQuery("Account.findUnconfirmedAccount", Account.class);
+        return tqq.getResultList();
+
+    }
 }
