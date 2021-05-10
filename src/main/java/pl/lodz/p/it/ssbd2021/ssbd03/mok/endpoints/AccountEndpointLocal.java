@@ -11,8 +11,14 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherBusinessWorkerChange
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherClientChangeDataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccountDetailsViewDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AccountChangeEmailDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.AdministratorForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ModeratorForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
 
 import javax.ejb.Local;
@@ -20,6 +26,7 @@ import javax.persistence.OptimisticLockException;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import javax.persistence.OptimisticLockException;
 
 
 /**
@@ -27,6 +34,7 @@ import java.util.List;
  */
 @Local
 public interface AccountEndpointLocal {
+
     /**
      * Mapuje obiekt dto na obiekty modelu
      *
@@ -163,6 +171,18 @@ public interface AccountEndpointLocal {
      * @param otherAccountChangeDataDto dto obiekt przechowujący informację o zmienionych danych
      */
     AccountDto changeOtherAccountData(OtherAccountChangeDataDto otherAccountChangeDataDto) throws OptimisticLockException, BaseAppException;
+    /**
+     * Mapuje obiekt dto z nowym mailem do obiektu modelu oraz zmienia mail
+     * @param accountChangeEmailDto dto z nowym mailem
+     */
+    void changeEmail(AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException, OptimisticLockException;
+
+    /**
+     * Zwraca konto o podanym loginie
+     * @param login login
+     * @return konto
+     */
+    AccountDto getAccountByLogin(String login) throws BaseAppException;
 
 }
 

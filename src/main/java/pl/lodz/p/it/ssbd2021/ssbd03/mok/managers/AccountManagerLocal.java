@@ -6,6 +6,8 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 
 import javax.ejb.Local;
 import java.util.List;
@@ -161,4 +163,14 @@ public interface AccountManagerLocal {
      */
     Account changeOtherAccountData(Account account, String alterBy) throws BaseAppException;
 
+
+    /**
+     * Zmienia email konta o podanym loginie
+     *
+     * @param login login konta
+     * @param version wersja
+     * @param newEmail nowy email
+     */
+
+    void changeEmail(String login, Long version, String newEmail);
 }

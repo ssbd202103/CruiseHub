@@ -11,6 +11,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Name;
 
+import javax.persistence.Version;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.util.Set;

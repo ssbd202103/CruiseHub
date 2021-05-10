@@ -19,6 +19,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.JWTException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.CompanyFacadeMok;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.JWTHandler;
@@ -37,6 +38,7 @@ import java.util.stream.Collectors;
 import java.util.List;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
+import java.time.LocalDateTime;
 
 /**
  * Klasa która zarządza logiką biznesową kont
@@ -57,6 +59,7 @@ public class AccountManager implements AccountManagerLocal {
     public Account getAccountByLogin(String login) throws BaseAppException {
         return accountFacade.findByLogin(login);
     }
+
 
     @Override
     public void createClientAccount(Account account, Client client) throws BaseAppException {
@@ -358,5 +361,14 @@ public class AccountManager implements AccountManagerLocal {
         return targetAccount;
     }
 
+    @Override
+    public void changeEmail(String login, Long version, String newEmail) {
+        Account account = accountFacade.findByLogin(login);
+        account.setVersion(version);
+        account.setEmail(newEmail);
 
+        account.setLastAlterDateTime(LocalDateTime.now());
+        account.setAlteredBy(account);
+        account.setAlterType(account.getAlterType());
+    }
 }

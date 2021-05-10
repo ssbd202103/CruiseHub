@@ -17,6 +17,11 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherBusinessWorkerChange
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherClientChangeDataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccountDetailsViewDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AccountChangeEmailDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.AdministratorForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters.AccountMapper;
@@ -34,6 +39,8 @@ import java.util.stream.Collectors;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ACCESS_LEVEL_NOT_ASSIGNABLE_ERROR;
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.OPTIMISTIC_EXCEPTION;
+import javax.persistence.OptimisticLockException;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.OPTIMISTIC_EXCEPTION;
 
 /**
  * Klasa która zajmuje się growadzeniem zmapowanych obiektów klas Dto na obiekty klas modelu związanych z kontami użytkowników i poziomami dostępu, oraz wywołuje metody logiki przekazując zmapowane obiekty.
@@ -43,6 +50,16 @@ public class AccountEndpoint implements AccountEndpointLocal {
 
     @EJB
     private AccountManagerLocal accountManager;
+
+    @Override
+    public String getETagFromSignableEntity(SignableEntity entity) {
+        return EntityIdentitySignerVerifier.calculateEntitySignature(entity);
+    }
+
+    @Override
+    public AccountDto getAccountByLogin(String login) throws BaseAppException {
+        return AccountMapper.toAccountDto(accountManager.getAccountByLogin(login));
+    }
 
     @Override
     public void createClientAccount(ClientForRegistrationDto clientForRegistrationDto) throws BaseAppException {
@@ -175,4 +192,15 @@ public class AccountEndpoint implements AccountEndpointLocal {
        return AccountMapper.toAccountDto(accountManager.changeOtherAccountData(account,alterBy));
     }
 
+
+    @Override
+    public void changeEmail(AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException, OptimisticLockException {
+        Long version = getAccountByLogin(accountChangeEmailDto.getLogin()).getVersion();
+
+        if (!version.equals(accountChangeEmailDto.getVersion())) {
+            throw new OptimisticLockException(OPTIMISTIC_EXCEPTION);
+        }
+
+        accountManager.changeEmail(accountChangeEmailDto.getLogin(), accountChangeEmailDto.getVersion(), accountChangeEmailDto.getNewEmail());
+    }
 }

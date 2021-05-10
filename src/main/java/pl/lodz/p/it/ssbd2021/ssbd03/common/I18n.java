@@ -32,6 +32,8 @@ public class I18n {
     public static final String VERIFICATION_EMAIL_SUBJECT = "account.verification.subject";
     public static final String VERIFICATION_EMAIL_BODY = "account.verification.body";
     public static final String OPTIMISTIC_EXCEPTION = "exception.optimistic";
+    public static final String ETAG_IDENTITY_INTEGRITY_ERROR = "error.security.etag.integrity";
+    public static final String OPTIMISTIC_EXCEPTION = "exception.optimistic";
 
         private ResourceBundle bundle;
         public String getMessage(String message, Locale locale) {

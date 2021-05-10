@@ -16,6 +16,10 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherBusinessWorkerChange
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherClientChangeDataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccountDetailsViewDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AccountChangeEmailDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.AdministratorForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.AccountEndpointLocal;
@@ -24,8 +28,10 @@ import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.enterprise.context.RequestScoped;
 import javax.print.attribute.standard.Media;
+import javax.persistence.OptimisticLockException;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Email;
@@ -34,6 +40,8 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import static javax.ws.rs.core.Response.Status.*;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ETAG_IDENTITY_INTEGRITY_ERROR;
 
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
@@ -365,5 +373,29 @@ public class AccountController {
         } catch (BaseAppException e) {
             return Response.status(BAD_REQUEST).entity(e.getMessage()).build();
         }
+    }
+    /**
+     * Zmień hasło według podanych w dto danych
+     *
+     * @param accountChangeEmailDto obiekt dto z loginem, nowym mailem oraz wersją
+     */
+    @PUT
+    @Path("/change_email")
+    @ETagFilterBinding
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response changeEmail(AccountChangeEmailDto accountChangeEmailDto, @HeaderParam("If-Match") String etag) {
+        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, accountChangeEmailDto)) {
+            return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
+        }
+
+        try {
+            accountEndpoint.changeEmail(accountChangeEmailDto);
+        } catch (EJBException | OptimisticLockException e) {
+            return Response.status(NOT_ACCEPTABLE).entity(e.getMessage()).build();
+        } catch (BaseAppException e) {
+            return Response.status(NOT_FOUND).entity(e.getMessage()).build();
+        }
+
+        return Response.noContent().build();
     }
 }

@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters;
 import org.apache.commons.codec.digest.DigestUtils;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
@@ -18,9 +19,16 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.accesslevels.BusinessWor
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.accesslevels.ClientDetailsViewDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.accesslevels.ModeratorDetailsViewDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.AdministratorForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 
+import java.util.stream.Collectors;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ModeratorForRegistrationDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+
+import javax.validation.constraints.PositiveOrZero;
 import java.util.stream.Collectors;
 
 /**
@@ -269,5 +277,22 @@ public class AccountMapper {
         account.setAccessLevel(businessWorker);
 
         return account;
+    }
+    /**
+     * Mapuje obiekt klasy Account na obiekt przesyłowy klasy AccountDto
+     *
+     * @param account Konto poddawane konwersji
+     * @return Reprezentacja obiektu przesyłowego DTO konta
+     */
+    public static AccountDto toAccountDto(Account account) {
+        return new AccountDto(
+                account.getLogin(),
+                account.getFirstName(),
+                account.getSecondName(),
+                account.getEmail(),
+                account.getLanguageType().getName(),
+                account.getAccessLevels().stream().map(AccessLevel::getAccessLevelType).collect(Collectors.toSet()),
+                account.getVersion()
+        );
     }
 }
