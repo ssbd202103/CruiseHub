@@ -8,9 +8,12 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+
 
 import javax.ejb.Local;
 import java.util.List;
+
 
 /**
  * Klasa która zarządza logiką biznesową kont
@@ -173,4 +176,45 @@ public interface AccountManagerLocal {
      */
 
     void changeEmail(String login, Long version, String newEmail) throws BaseAppException;
+
+    /**
+     * Zmień dane klienta
+     *
+     * @param account encja konta zawierająca zmiany
+     *
+     */
+    void changeClientData(Account account);
+
+    /**
+     * Zmień dane pracownika firmy
+     *
+     * @param account encja konta zawierająca zmiany
+     *
+     */
+    void changeBusinessWorkerData(Account account);
+
+    /**
+     * Zmień dane moderatora
+     *
+     * @param account encja konta zawierająca zmiany
+     *
+     */
+    void changeModeratorData(Account account);
+
+    /**
+     * Zmień dane administratora
+     *
+     * @param account encja konta zawierająca zmiany
+     *
+     */
+    void changeAdministratorData(Account account);
+
+    /**
+     * Pobiera z bazy danych obiekt szukanego użytkownika
+     *
+     * @param login użytkownika
+     * @return obiekt encji użytkownika
+     * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku nieznalezienia użytkownika.
+     */
+    Account getAccountByLogin(String login) throws BaseAppException;
 }

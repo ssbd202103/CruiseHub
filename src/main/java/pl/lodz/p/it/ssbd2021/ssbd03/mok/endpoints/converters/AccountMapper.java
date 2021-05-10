@@ -4,10 +4,15 @@ import org.apache.commons.codec.digest.DigestUtils;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
+import lombok.NoArgsConstructor;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Administrator;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.LanguageTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
@@ -20,6 +25,10 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.accesslevels.ClientDetai
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.accesslevels.ModeratorDetailsViewDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AddressDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.AdministratorForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 
@@ -27,6 +36,9 @@ import java.util.stream.Collectors;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 
 import javax.validation.constraints.PositiveOrZero;
+import java.util.stream.Collectors;
+
+import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 /**
@@ -276,5 +288,148 @@ public class AccountMapper {
 
         return account;
     }
+    private static void setAccountChangeDataDtoFields(Account account, AccountChangeDataDto accountChangeDataDto, LocalDateTime time) {
+        account.setLogin(accountChangeDataDto.getLogin());
+        account.setVersion(accountChangeDataDto.getVersion());
+        account.setFirstName(accountChangeDataDto.getNewFirstName());
+        account.setSecondName(accountChangeDataDto.getNewSecondName());
+        account.setAlteredBy(account);
+        account.setAlterType(account.getAlterType());
+        account.setLastAlterDateTime(time);
+    }
 
+    private static LocalDateTime getNowLocalDateTime() {
+        return LocalDateTime.now();
+    }
+
+    public static Account extractAccountFromClientChangeDataDto(ClientChangeDataDto clientChangeDataDto) {
+        LocalDateTime now = getNowLocalDateTime();
+
+        Account account = new Account();
+        setAccountChangeDataDtoFields(account, clientChangeDataDto, now);
+
+        Address address = new Address(
+                clientChangeDataDto.getNewAddress().getHouseNumber(),
+                clientChangeDataDto.getNewAddress().getStreet(),
+                clientChangeDataDto.getNewAddress().getPostalCode(),
+                clientChangeDataDto.getNewAddress().getCity(),
+                clientChangeDataDto.getNewAddress().getCountry()
+        );
+
+        Client client = new Client(address, clientChangeDataDto.getNewPhoneNumber());
+
+        account.setAccessLevel(client);
+
+        return account;
+    }
+
+    public static Account extractAccountFromBusinessWorkerChangeDataDto(BusinessWorkerChangeDataDto businessWorkerChangeDataDto) {
+        LocalDateTime now = getNowLocalDateTime();
+
+        Account account = new Account();
+
+        setAccountChangeDataDtoFields(account, businessWorkerChangeDataDto, now);
+
+        BusinessWorker businessWorker = new BusinessWorker(businessWorkerChangeDataDto.getNewPhoneNumber(), true);
+
+        account.setAccessLevel(businessWorker);
+
+        return account;
+    }
+
+    public static Account extractAccountFromModeratorChangeDataDto(ModeratorChangeDataDto moderatorChangeDataDto) {
+        LocalDateTime now = getNowLocalDateTime();
+
+        Account account = new Account();
+
+        setAccountChangeDataDtoFields(account, moderatorChangeDataDto, now);
+
+        return account;
+    }
+
+    public static Account extractAccountFromAdministratorChangeDataDto(AdministratorChangeDataDto administratorChangeDataDto) {
+        LocalDateTime now = getNowLocalDateTime();
+
+        Account account = new Account();
+
+        setAccountChangeDataDtoFields(account, administratorChangeDataDto, now);
+
+        return account;
+    }
+
+    /**
+     * @param account Konto poddawane konwersji
+     * @return Reprezentacja obiektu przesyłowego DTO konta
+     */
+    public static AccountDto toAccountDto(Account account) {
+        return new AccountDto(account.getLogin(), account.getFirstName(),
+                account.getSecondName(), account.getEmail(), account.getLanguageType().getName(),
+                account.getAccessLevels().stream()
+                        .map(AccessLevel::getAccessLevelType)
+                        .collect(Collectors.toSet()), account.getVersion());
+    }
+
+    public static AddressDto toAddressDto(Address address) {
+        return new AddressDto(
+                address.getHouseNumber(),
+                address.getStreet(),
+                address.getPostalCode(),
+                address.getCity(),
+                address.getCountry()
+        );
+    }
+
+    private static <T> T getAccessLevel(Account from, AccessLevelType target) {
+        return (T) from.getAccessLevels().stream().filter(accessLevel -> accessLevel.getAccessLevelType().equals(target)).collect(Collectors.toList()).get(0);
+    }
+
+    public static ClientDto toClientDto(Account account) {
+        Client client = getAccessLevel(account, AccessLevelType.CLIENT);
+
+        return new ClientDto(
+                account.getLogin(),
+                account.getFirstName(),
+                account.getSecondName(),
+                account.getEmail(),
+                account.getLanguageType().getName(),
+                toAddressDto(client.getHomeAddress()),
+                client.getPhoneNumber(),
+                account.getVersion());
+    }
+
+    public static BusinessWorkerDto toBusinessWorkerDto(Account account) {
+        BusinessWorker businessWorker = getAccessLevel(account, AccessLevelType.BUSINESS_WORKER);
+
+        return new BusinessWorkerDto(
+                account.getLogin(),
+                account.getFirstName(),
+                account.getSecondName(),
+                account.getEmail(),
+                account.getLanguageType().getName(),
+                businessWorker.getPhoneNumber(),
+                account.getVersion()
+        );
+    }
+
+    public static ModeratorDto toModeratorDto(Account account) {
+        return new ModeratorDto(
+                account.getLogin(),
+                account.getFirstName(),
+                account.getSecondName(),
+                account.getEmail(),
+                account.getLanguageType().getName(),
+                account.getVersion()
+        );
+    }
+
+    public static AdministratorDto toAdministratorDto(Account account) {
+        return new AdministratorDto(
+                account.getLogin(),
+                account.getFirstName(),
+                account.getSecondName(),
+                account.getEmail(),
+                account.getLanguageType().getName(),
+                account.getVersion()
+        );
+    }
 }

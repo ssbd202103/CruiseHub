@@ -20,14 +20,20 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.JWTException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters.AccountMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.CompanyFacadeMok;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.JWTHandler;
 import pl.lodz.p.it.ssbd2021.ssbd03.services.EmailService;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.CompanyFacade;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 import javax.inject.Inject;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
@@ -370,5 +376,90 @@ public class AccountManager implements AccountManagerLocal {
         account.setLastAlterDateTime(LocalDateTime.now());
         account.setAlteredBy(account);
         account.setAlterType(account.getAlterType());
+    }
+
+    private AccessLevel getAccessLevel(Account from, AccessLevelType target) {
+        return from.getAccessLevels().stream().filter(accessLevel -> accessLevel.getAccessLevelType().equals(target)).collect(Collectors.toList()).get(0);
+    }
+
+    private <T> T getAccessLevel(Account from) {
+        return (T) new ArrayList<>(from.getAccessLevels()).get(0);
+    }
+
+    private void setAccountChanges(Account target, Account from) {
+        target.setVersion(from.getVersion());
+        target.setFirstName(from.getFirstName());
+        target.setSecondName(from.getSecondName());
+        target.setAlteredBy(target);
+        target.setAlterType(target.getAlterType());
+        target.setLastAlterDateTime(from.getLastAlterDateTime());
+    }
+
+    private void setAccessLevelChanges(AccessLevel target, Account from) {
+        target.setVersion(from.getVersion());
+        target.setAlteredBy(from);
+        target.setAlterType(from.getAlterType());
+        target.setLastAlterDateTime(from.getLastAlterDateTime());
+    }
+
+    @Override
+    public void changeClientData(Account fromAccount) {
+        Account targetAccount = accountFacade.findByLogin(fromAccount.getLogin());
+        setAccountChanges(targetAccount, fromAccount);
+
+        Client targetClient = (Client) getAccessLevel(targetAccount, AccessLevelType.CLIENT);
+        setAccessLevelChanges(targetClient, targetAccount);
+
+        Client fromClient = getAccessLevel(fromAccount);
+
+        targetClient.setPhoneNumber(fromClient.getPhoneNumber());
+
+        Address targetAddress = targetClient.getHomeAddress();
+        Address fromAddress = fromClient.getHomeAddress();
+        targetAddress.setHouseNumber(fromAddress.getHouseNumber());
+        targetAddress.setStreet(fromAddress.getStreet());
+        targetAddress.setPostalCode(fromAddress.getPostalCode());
+        targetAddress.setCity(fromAddress.getCity());
+        targetAddress.setCountry(fromAddress.getCountry());
+        targetAddress.setAlteredBy(targetAccount);
+        targetAddress.setAlterType(targetAccount.getAlterType());
+        targetAddress.setLastAlterDateTime(fromAccount.getLastAlterDateTime());
+    }
+
+    @Override
+    public void changeBusinessWorkerData(Account fromAccount) {
+        Account targetAccount = accountFacade.findByLogin(fromAccount.getLogin());
+        setAccountChanges(targetAccount, fromAccount);
+
+        BusinessWorker targetBusinessWorker = (BusinessWorker) getAccessLevel(targetAccount, AccessLevelType.BUSINESS_WORKER);
+        setAccessLevelChanges(targetBusinessWorker, targetAccount);
+
+        BusinessWorker fromBusinessWorker = getAccessLevel(fromAccount);
+        targetBusinessWorker.setPhoneNumber(fromBusinessWorker.getPhoneNumber());
+    }
+
+    @Override
+    public void changeModeratorData(Account fromAccount) {
+        Account targetAccount = accountFacade.findByLogin(fromAccount.getLogin());
+        setAccountChanges(targetAccount, fromAccount);
+
+        Moderator targetModerator = (Moderator) getAccessLevel(targetAccount, AccessLevelType.MODERATOR);
+        setAccessLevelChanges(targetModerator, targetAccount);
+    }
+
+    @Override
+    public void changeAdministratorData(Account fromAccount) {
+        Account targetAccount = accountFacade.findByLogin(fromAccount.getLogin());
+
+        setAccountChanges(targetAccount, fromAccount);
+
+        Administrator targetAdministrator = (Administrator) getAccessLevel(targetAccount, AccessLevelType.ADMINISTRATOR);
+
+        setAccessLevelChanges(targetAdministrator, targetAccount);
+    }
+
+    @Override
+    public Account getAccountByLogin(String login) throws BaseAppException {
+        return accountFacade.findByLogin(login);
     }
 }
