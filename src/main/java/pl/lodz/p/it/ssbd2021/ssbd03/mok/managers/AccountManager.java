@@ -9,6 +9,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Administrator;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
@@ -17,6 +18,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AccountManagerException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.JWTException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.CompanyFacadeMok;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.JWTHandler;
@@ -32,6 +34,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 import java.util.Locale;
 import java.util.Map;
 import java.util.List;
@@ -280,6 +283,83 @@ public class AccountManager implements AccountManagerLocal {
         account.setAlteredBy(alteredBy);
         account.setAlterType(alterTypeWrapper);
         account.setLastAlterDateTime(LocalDateTime.now());
+    }
+
+
+
+    private AccessLevel getAccessLevel(Account from, AccessLevelType target) {
+        return from.getAccessLevels().stream().filter(accessLevel -> accessLevel.getAccessLevelType().equals(target)).collect(Collectors.toList()).get(0);
+    }
+
+    private <T> T getAccessLevel(Account from) {
+        return (T) new ArrayList<>(from.getAccessLevels()).get(0);
+    }
+
+
+    @Override
+    public Account changeOtherClientData(Account fromAccount, String alterBy) throws BaseAppException {
+        Account targetAccount = accountFacade.findByLogin(fromAccount.getLogin());
+
+        targetAccount.setVersion(fromAccount.getVersion());
+        targetAccount.setFirstName(fromAccount.getFirstName());
+        targetAccount.setSecondName(fromAccount.getSecondName());
+        targetAccount.setAlteredBy(accountFacade.findByLogin(alterBy));
+        targetAccount.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
+        targetAccount.setLastAlterDateTime(LocalDateTime.now());
+
+        Client targetClient = (Client) getAccessLevel(targetAccount, AccessLevelType.CLIENT);
+        targetClient.setVersion(targetAccount.getVersion());
+        targetClient.setAlteredBy(accountFacade.findByLogin(alterBy));
+        targetClient.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
+        targetClient.setLastAlterDateTime(LocalDateTime.now());
+
+        Client fromClient = getAccessLevel(fromAccount);
+
+        targetClient.setPhoneNumber(fromClient.getPhoneNumber());
+
+        Address targetAddress = targetClient.getHomeAddress();
+        Address fromAddress = fromClient.getHomeAddress();
+        targetAddress.setHouseNumber(fromAddress.getHouseNumber());
+        targetAddress.setStreet(fromAddress.getStreet());
+        targetAddress.setPostalCode(fromAddress.getPostalCode());
+        targetAddress.setCity(fromAddress.getCity());
+        targetAddress.setCountry(fromAddress.getCountry());
+        targetAddress.setAlteredBy(accountFacade.findByLogin(alterBy));
+        targetAddress.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
+        targetAddress.setLastAlterDateTime(LocalDateTime.now());
+        return targetAccount;
+    }
+
+    @Override
+    public Account changeOtherBusinessWorkerData(Account fromAccount, String alterBy) throws BaseAppException {
+        Account targetAccount = accountFacade.findByLogin(fromAccount.getLogin());
+        targetAccount.setVersion(fromAccount.getVersion());
+        targetAccount.setFirstName(fromAccount.getFirstName());
+        targetAccount.setSecondName(fromAccount.getSecondName());
+        targetAccount.setAlteredBy(accountFacade.findByLogin(alterBy));
+        targetAccount.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
+        targetAccount.setLastAlterDateTime(LocalDateTime.now());
+        BusinessWorker targetBusinessWorker = (BusinessWorker) getAccessLevel(targetAccount, AccessLevelType.BUSINESS_WORKER);
+        targetBusinessWorker.setVersion(targetAccount.getVersion());
+        targetBusinessWorker.setAlteredBy(accountFacade.findByLogin(alterBy));
+        targetBusinessWorker.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
+        targetBusinessWorker.setLastAlterDateTime(LocalDateTime.now());
+
+        BusinessWorker fromBusinessWorker = getAccessLevel(fromAccount);
+        targetBusinessWorker.setPhoneNumber(fromBusinessWorker.getPhoneNumber());
+        return targetAccount;
+    }
+
+    @Override
+    public Account changeOtherAccountData(Account fromAccount, String alterBy) throws BaseAppException {
+        Account targetAccount = accountFacade.findByLogin(fromAccount.getLogin());
+        targetAccount.setVersion(fromAccount.getVersion());
+        targetAccount.setFirstName(fromAccount.getFirstName());
+        targetAccount.setSecondName(fromAccount.getSecondName());
+        targetAccount.setAlteredBy(accountFacade.findByLogin(alterBy));
+        targetAccount.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
+        targetAccount.setLastAlterDateTime(LocalDateTime.now());
+        return targetAccount;
     }
 
 

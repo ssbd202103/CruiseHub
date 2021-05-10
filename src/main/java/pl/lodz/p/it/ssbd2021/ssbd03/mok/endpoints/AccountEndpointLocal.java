@@ -6,6 +6,9 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.ChangeAccessLevelStateDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherAccountChangeDataDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherBusinessWorkerChangeDataDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherClientChangeDataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccountDetailsViewDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
@@ -13,6 +16,8 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDt
 import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
 
 import javax.ejb.Local;
+import javax.persistence.OptimisticLockException;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -138,5 +143,26 @@ public interface AccountEndpointLocal {
     void requestSomeonesPasswordReset(String login, String email) throws BaseAppException;
 
     void verifyAccount(AccountVerificationDto accountVerificationDto) throws BaseAppException;
+    /**
+     * Zmienia dane wybranego klienta
+     *
+     * @param otherClientChangeDataDto dto obiekt przechowujący informację o zmienionych danych
+     */
+    OtherClientChangeDataDto changeOtherClientData(OtherClientChangeDataDto otherClientChangeDataDto) throws OptimisticLockException, BaseAppException;
+
+    /**
+     * Zmienia dane wybranego pracownika
+     *
+     * @param otherBusinessWorkerChangeDataDto dto obiekt przechowujący informację o  zmienionych danych
+     */
+    OtherBusinessWorkerChangeDataDto changeOtherBusinessWorkerData(OtherBusinessWorkerChangeDataDto otherBusinessWorkerChangeDataDto) throws OptimisticLockException, BaseAppException;
+
+    /**
+     * Zmienia dane wybranego moderatora lub administratora
+     *
+     * @param otherAccountChangeDataDto dto obiekt przechowujący informację o zmienionych danych
+     */
+    AccountDto changeOtherAccountData(OtherAccountChangeDataDto otherAccountChangeDataDto) throws OptimisticLockException, BaseAppException;
+
 }
 
