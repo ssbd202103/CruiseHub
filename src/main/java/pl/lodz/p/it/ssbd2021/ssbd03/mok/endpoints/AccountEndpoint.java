@@ -21,7 +21,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AccountChangeEmailDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.AdministratorForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters.AccountMapper;
@@ -100,15 +99,8 @@ public class AccountEndpoint implements AccountEndpointLocal {
         );
     }
 
-    @Override
-    public String getETagFromSignableEntity(SignableEntity entity) {
-        return EntityIdentitySignerVerifier.calculateEntitySignature(entity);
-    }
 
-    @Override
-    public AccountDto getAccountByLogin(String login) throws BaseAppException {
-        return AccountMapper.toAccountDto(accountManager.getAccountByLogin(login));
-    }
+
 
     @Override
     public AccountDetailsViewDto getAccountDetailsByLogin(String login) throws BaseAppException {

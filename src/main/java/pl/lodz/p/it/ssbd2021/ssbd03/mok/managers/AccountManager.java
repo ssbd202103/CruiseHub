@@ -362,7 +362,7 @@ public class AccountManager implements AccountManagerLocal {
     }
 
     @Override
-    public void changeEmail(String login, Long version, String newEmail) {
+    public void changeEmail(String login, Long version, String newEmail) throws BaseAppException {
         Account account = accountFacade.findByLogin(login);
         account.setVersion(version);
         account.setEmail(newEmail);

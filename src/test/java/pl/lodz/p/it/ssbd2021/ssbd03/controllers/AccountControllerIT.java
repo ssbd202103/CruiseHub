@@ -10,15 +10,13 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.RestAssured;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherAccountChangeDataDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherAddressChangeDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherBusinessWorkerChangeDataDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherClientChangeDataDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.ChangeAccessLevelStateDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
@@ -346,7 +344,53 @@ class AccountControllerIT {
         return getAccountDto(client.getLogin());
     }
 
+    @Test
+    public void changeEmailTest_SUCCESS() throws JsonProcessingException {
 
+        AccountDto account = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
+        Response res = given().baseUri(baseUri).get("/" + account.getLogin());
+        String etag = res.getHeader("Etag");
+
+        AccountChangeEmailDto accountChangeEmailDto = new AccountChangeEmailDto(
+                account.getLogin(),
+                account.getVersion(),
+                randomAlphanumeric(10) + "@gmail.com");
+
+        given().baseUri(baseUri).header("If-Match", etag)
+                .contentType(ContentType.JSON)
+                .body(accountChangeEmailDto)
+                .when()
+                .put("/change_email").then().statusCode(204);
+
+
+        Response changedRes = given().baseUri(baseUri).get("/" + account.getLogin());
+        AccountDto changedAccount = objectMapper.readValue(changedRes.thenReturn().asString(), AccountDto.class);
+
+        Assertions.assertEquals(accountChangeEmailDto.getNewEmail(), changedAccount.getEmail());
+    }
+
+    @Test
+    public void changeEmailTest_FAIL() throws JsonProcessingException {
+
+        AccountDto account = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
+        Response res = given().baseUri(baseUri).get("/" + account.getLogin());
+
+        AccountChangeEmailDto accountChangeEmailDto = new AccountChangeEmailDto(
+                account.getLogin(),
+                account.getVersion() - 1,
+                randomAlphanumeric(10) + "@gmail.com");
+        String etag = EntityIdentitySignerVerifier.calculateEntitySignature(accountChangeEmailDto);
+
+        given().baseUri(baseUri).header("If-Match", etag)
+                .contentType(ContentType.JSON)
+                .body(accountChangeEmailDto)
+                .when()
+                .put("/change_email").then().statusCode(406);
+
+        Response notChangedRes = given().baseUri(baseUri).get("/" + account.getLogin());
+        AccountDto notChangedAccount = objectMapper.readValue(notChangedRes.thenReturn().asString(), AccountDto.class);
+        Assertions.assertEquals(account.getEmail(), notChangedAccount.getEmail());
+    }
 
     private AccountDto getAccountDto(String login) throws JsonProcessingException {
         return objectMapper.readValue(given().baseUri(baseUri).get("/" + login).thenReturn().asString(), AccountDto.class);

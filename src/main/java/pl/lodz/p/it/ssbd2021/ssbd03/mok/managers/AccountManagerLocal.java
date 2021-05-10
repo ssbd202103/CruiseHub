@@ -172,5 +172,5 @@ public interface AccountManagerLocal {
      * @param newEmail nowy email
      */
 
-    void changeEmail(String login, Long version, String newEmail);
+    void changeEmail(String login, Long version, String newEmail) throws BaseAppException;
 }
