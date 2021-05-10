@@ -124,7 +124,7 @@ public class AccountManager implements AccountManagerLocal {
         Account account = this.accountFacade.updateAuthenticateInfo(login, IpAddr, time, true);
 
         Map<String, Object> map = Map.of("login", login, "accessLevels", account.getAccessLevels()
-            .stream().map(AccessLevel::getAccessLevelType).collect(Collectors.toSet()));
+            .stream().map(accessLevel -> accessLevel.getAccessLevelType().name()).collect(Collectors.toList()));
         return JWTHandler.createToken(map, account.getId().toString());
     }
 }
