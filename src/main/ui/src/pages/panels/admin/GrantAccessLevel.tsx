@@ -33,8 +33,8 @@ export default function Checkboxes() {
         //     }
         // })
 
-        /// above axios code java backend does not see set headers, most likely CORS issue,
-        //  no-cors mode does not resolve issue for axios, it works with fetch though
+        /// above axios code results in java backend not seeing headers, most likely CORS issue,
+        //  no-cors mode does not resolve it for axios, it works with fetch though
 
         await fetch("http://localhost:8080/api/account/grant-access-level", {
             method: "PUT",

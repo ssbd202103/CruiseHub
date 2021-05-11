@@ -69,6 +69,16 @@ public interface AccountManagerLocal {
     Account grantAdministratorAccessLevel(String accountLogin, Long accountVersion) throws BaseAppException;
 
 
+    /**
+     * Zmienia stan poziomu dostępu użytkownika (włącza/wyłącza)
+     * @param accountLogin Login użytkownika
+     * @param accessLevel Poziom dostępu użytkownika
+     * @param enabled Boolean określający oczekiwany stan poziomu dostępu
+     * @param accountVersion Wersja obiektu przed wywołaniem metody
+     * @return Obiekt użytkownika po dokonanych zmianach
+     * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku gdy zmiana stanu poziomu dostepu jest niemożliwa,
+     *                          lub narusza zasady biznesowe aplikacji
+     */
     Account changeAccessLevelState(String accountLogin, AccessLevelType accessLevel,
                                    boolean enabled, Long accountVersion) throws BaseAppException;
 
