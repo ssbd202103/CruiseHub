@@ -17,13 +17,14 @@ import {Link} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import ButtonGroup from '@material-ui/core/ButtonGroup'
 import axios from "axios";
-
+import { useLocation } from 'react-router-dom';
 
 interface UnblockAccountParams {
     login: string;
     etag: string;
     version: bigint
 }
+
 
 const unblockAccount = async ({login, etag, version}: UnblockAccountParams) => {
     const json = JSON.stringify({
@@ -37,7 +38,31 @@ const unblockAccount = async ({login, etag, version}: UnblockAccountParams) => {
             'If-Match': etag
         }
 
+    }).then(response => {
+        return response.status == 200;
     });
+
+};
+function refresh() {
+    window.location.reload();
+}
+
+const blockAccount = async ({login, etag, version}: UnblockAccountParams) => {
+    const json = JSON.stringify({
+            login: login,
+            version: version,
+        }
+    );
+    await axios.put('http://localhost:8080/api/account/block', json, {
+        headers:{
+            'Content-Type': 'application/json',
+            'If-Match': etag
+        }
+
+    }).then(response => {
+        return response.status == 200;
+    });
+
 };
 
 const useRowStyles = makeStyles({
@@ -104,7 +129,6 @@ function Row(props: RowProps) {
     }
 
     return (
-
         <React.Fragment>
             <TableRow className={classes.root}>
                 <TableCell>
@@ -144,11 +168,20 @@ function Row(props: RowProps) {
                                                 <Button onClick={setCurrentResetPasswordAccount} className={buttonClass.root}>{t("reset password")}</Button>
                                             </Link>
 
-                                            <Button className={buttonClass.root} onClick={() => {unblockAccount({etag: row.etag,
-                                                login: row.login, version: row.version})}}>{row.active ? t("block") : t("unblock")}</Button>
+                                            <Button className={buttonClass.root} onClick={() => {
+                                                if(row.active) {
+                                                    if (blockAccount({etag: row.etag,
+                                                        login: row.login, version: row.version})) {
+                                                       refresh()
+                                                    }
+                                                } else {
+                                                    if (unblockAccount({etag: row.etag,
+                                                        login: row.login, version: row.version})) {
+                                                        refresh()
 
-
-
+                                                    }
+                                                }
+                                            }}>{row.active ? t("block") : t("unblock")}</Button>
 
                                                 <Link to="/panels/adminPanel/GrantAccessLevel/">
                                                     <Button onClick={setCurrentGrantAccessLevelAccount} className={buttonClass.root}>{t("grand access level")}</Button>
