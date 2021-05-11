@@ -40,7 +40,7 @@ const resources = {
             "phone number": "Numer telefonu",
             "personal data change btn": "Edytuj dane personalne",
             "personal data change": "Edycja danych personalnych",
-            "address": "Adres",
+            "address": "Dane adresowe",
             "street": "Ulica",
             "house number": "Numer domu",
             "postal code": "Kod pocztowy",
@@ -83,7 +83,8 @@ const resources = {
             "error.security.etag.empty": "Żądanie nie zawiera wymaganego nagłówka ETag",
             "error.security.etag.invalid": "Nagłówek ETag żądania nie przechodzi walidacji",
             "error.security.etag.integrity": "Nagłówek ETag nie jest spójny z przekazanymi danymi",
-            "error.parsing.serialization": "Błąd serializacji danych"
+            "error.parsing.serialization": "Błąd serializacji danych",
+            "phone change btn": "Zmień numer telefonu"
         }
     },
     en: {
@@ -124,14 +125,14 @@ const resources = {
             "phone number": "Phone Number",
             "personal data change btn": "Edit personal data",
             "personal data change": "Editing personal data",
-            "address": "Address",
+            "address": "Address data",
             "street": "Street",
             "house number": "House number",
             "postal code": "Postal code",
             "city": "City",
             "country": "Country",
             "address change btn": "Edit address",
-            "address change": "Editing address",
+            "address change": "Editing address data",
             "email change btn": "Change e-mail",
             "email change": "Editing e-mail",
             "new email": "Insert a new e-mail",
@@ -167,7 +168,8 @@ const resources = {
             "error.security.etag.empty": "Request does not contain necessary ETag header",
             "error.security.etag.invalid": "Request's ETag header does not pass validation",
             "error.security.etag.integrity": "Request's ETag header does not match provided data",
-            "error.parsing.serialization": "Received data could not be serialized properly"
+            "error.parsing.serialization": "Received data could not be serialized properly",
+            "phone change btn": "Change phone number"
         }
     }
 }

@@ -128,7 +128,7 @@ public class AccountMapper {
         OtherAddressChangeDto addressChangeDto = new OtherAddressChangeDto(fromClient.getHomeAddress().getHouseNumber(), fromClient.getHomeAddress().getStreet(),
                 fromClient.getHomeAddress().getPostalCode(), fromClient.getHomeAddress().getCity(), fromClient.getHomeAddress().getCountry(), fromClient.getHomeAddress().getAlteredBy().getLogin());
         return new OtherClientChangeDataDto(account.getLogin(), account.getVersion(), account.getFirstName(), account.getSecondName(),
-                fromClient.getPhoneNumber(), addressChangeDto, account.getAlteredBy().getLogin()
+               account.getEmail(), fromClient.getPhoneNumber(), addressChangeDto, account.getAlteredBy().getLogin()
         );
 
     }
@@ -142,7 +142,7 @@ public class AccountMapper {
 
         BusinessWorker fromBusinessWorker = (BusinessWorker) account.getAccessLevels().stream().filter(accessLevel -> accessLevel.getAccessLevelType().equals(AccessLevelType.BUSINESS_WORKER)).collect(Collectors.toList()).get(0);
         return new OtherBusinessWorkerChangeDataDto(account.getLogin(), account.getVersion(), account.getFirstName(), account.getSecondName(),
-                fromBusinessWorker.getPhoneNumber(), account.getAlteredBy().getLogin()
+                account.getEmail(),fromBusinessWorker.getPhoneNumber(), account.getAlteredBy().getLogin()
         );
 
     }
@@ -159,6 +159,7 @@ public class AccountMapper {
         account.setVersion(otherAccountChangeDataDto.getVersion());
         account.setFirstName(otherAccountChangeDataDto.getNewFirstName());
         account.setSecondName(otherAccountChangeDataDto.getNewSecondName());
+        account.setEmail(otherAccountChangeDataDto.getNewEmail());
         return account;
     }
     /**
@@ -174,6 +175,7 @@ public class AccountMapper {
         account.setVersion(otherClientChangeDataDto.getVersion());
         account.setFirstName(otherClientChangeDataDto.getNewFirstName());
         account.setSecondName(otherClientChangeDataDto.getNewSecondName());
+        account.setEmail(otherClientChangeDataDto.getNewEmail());
 
         Address address = new Address(
                 otherClientChangeDataDto.getNewAddress().getNewHouseNumber(),
@@ -227,6 +229,7 @@ public class AccountMapper {
         account.setVersion(otherBusinessWorkerChangeDataDto.getVersion());
         account.setFirstName(otherBusinessWorkerChangeDataDto.getNewFirstName());
         account.setSecondName(otherBusinessWorkerChangeDataDto.getNewSecondName());
+        account.setEmail(otherBusinessWorkerChangeDataDto.getNewEmail());
 
         BusinessWorker businessWorker = new BusinessWorker(otherBusinessWorkerChangeDataDto.getNewPhoneNumber(), true);
 
@@ -234,6 +237,7 @@ public class AccountMapper {
 
         return account;
 	}
+	/**
      * Mapuje obiekt klasy Account na obiekt przesyłowy klasy AccountDetailsViewDto
      *
      * @param account Konto poddawane konwersji
@@ -244,7 +248,7 @@ public class AccountMapper {
                 account.getEmail(), account.isConfirmed(), account.isActive(), account.getLanguageType().getName(),
                 account.getAccessLevels().stream()
                         .map(AccountMapper::toAccessLevelDetailsViewDto)
-                        .collect(Collectors.toSet()));
+                        .collect(Collectors.toSet()), account.getVersion());
     }
 
     private static AccessLevelDetailsViewDto toAccessLevelDetailsViewDto(AccessLevel accessLevel) {

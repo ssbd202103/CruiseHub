@@ -16,8 +16,8 @@ public class OtherClientChangeDataDto extends OtherAccountChangeDataDto {
     @PhoneNumber
     private String newPhoneNumber;
 
-    public OtherClientChangeDataDto(String login, Long version, String newFirstName, String newSecondName, String newPhoneNumber, OtherAddressChangeDto newAddress, String alteredBy) {
-        super(login, version, newFirstName, newSecondName, alteredBy);
+    public OtherClientChangeDataDto(String login, Long version, String newFirstName, String newSecondName,String newEmail, String newPhoneNumber, OtherAddressChangeDto newAddress, String alteredBy) {
+        super(login, version, newFirstName, newSecondName,newEmail, alteredBy);
         this.newPhoneNumber = newPhoneNumber;
         this.newAddress = newAddress;
     }

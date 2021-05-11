@@ -20,6 +20,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.CompanyFacadeMok;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.List;
 import java.util.Optional;
@@ -178,6 +179,7 @@ public class AccountManager implements AccountManagerLocal {
         targetAccount.setVersion(fromAccount.getVersion());
         targetAccount.setFirstName(fromAccount.getFirstName());
         targetAccount.setSecondName(fromAccount.getSecondName());
+        targetAccount.setEmail(fromAccount.getEmail());
         targetAccount.setAlteredBy(accountFacade.findByLogin(alterBy));
         targetAccount.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
         targetAccount.setLastAlterDateTime(LocalDateTime.now());
@@ -211,6 +213,7 @@ public class AccountManager implements AccountManagerLocal {
         targetAccount.setVersion(fromAccount.getVersion());
         targetAccount.setFirstName(fromAccount.getFirstName());
         targetAccount.setSecondName(fromAccount.getSecondName());
+        targetAccount.setEmail(fromAccount.getEmail());
         targetAccount.setAlteredBy(accountFacade.findByLogin(alterBy));
         targetAccount.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
         targetAccount.setLastAlterDateTime(LocalDateTime.now());
@@ -231,6 +234,7 @@ public class AccountManager implements AccountManagerLocal {
         targetAccount.setVersion(fromAccount.getVersion());
         targetAccount.setFirstName(fromAccount.getFirstName());
         targetAccount.setSecondName(fromAccount.getSecondName());
+        targetAccount.setEmail(fromAccount.getEmail());
         targetAccount.setAlteredBy(accountFacade.findByLogin(alterBy));
         targetAccount.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
         targetAccount.setLastAlterDateTime(LocalDateTime.now());

@@ -289,6 +289,7 @@ class AccountControllerTest {
         OtherClientChangeDataDto otherClientChangeDataDto = new OtherClientChangeDataDto(account.getLogin(), account.getVersion(),
                 "Damian",
                 "Bednarek",
+                "zmienony@gmail.com",
                 "888888888",
                 newAddress,
                 "rbranson");
@@ -311,6 +312,7 @@ class AccountControllerTest {
         OtherBusinessWorkerChangeDataDto otherBusinessWorkerChangeDataDto = new OtherBusinessWorkerChangeDataDto(account.getLogin(), account.getVersion(),
                 "Damian",
                 "Bednarek",
+                "zmienony@gmail.com",
                 "888888888",
                 "rbranson");
         Response response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).body(otherBusinessWorkerChangeDataDto).put("/changeOtherData/businessworker");
@@ -329,6 +331,7 @@ class AccountControllerTest {
         OtherAccountChangeDataDto otherAccountChangeDataDto = new OtherAccountChangeDataDto(account.getLogin(), account.getVersion(),
                 "Damian",
                 "Bednarek",
+                "zmienony@gmail.com",
                 "rbranson");
         Response response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).body(otherAccountChangeDataDto).put("/changeOtherData");
         assertThat(response.getStatusCode()).isEqualTo(200);
