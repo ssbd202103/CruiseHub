@@ -1,10 +1,12 @@
-import {useState} from 'react'
+import {createRef, useState} from 'react'
 
 import Grid from '@material-ui/core/Grid'
 
 import {Link} from 'react-router-dom'
 
 import {useTranslation} from 'react-i18next';
+
+import { changeEmail as changeEmailService } from '../../../Services/changeEmailService'
 
 import styles from '../../../styles/ManageAccount.module.css'
 import RoundedButton from '../../../components/RoundedButton';
@@ -16,6 +18,10 @@ export default function ChangeAccountData() {
     const [ChangePerData, setPerData] = useState(false)
     const [ChangAddress, setChangChangAddress] = useState(false)
     const [ChangEmail, setChangEmail] = useState(false)
+
+    const emailRef = createRef<HTMLDivElement>()
+    const emailConfirmRef = createRef<HTMLDivElement>()
+
 
     //Functions for personal data change
     const handleChangePerData = () => {
@@ -46,7 +52,7 @@ export default function ChangeAccountData() {
         setChangChangAddress( false)
     }
     const changeEmail = () => {
-        //Place for transfer function (change email in database)
+        // changeEmailService()
         handleChangEmail()
     }
 
@@ -179,11 +185,13 @@ export default function ChangeAccountData() {
                         <DarkedTextField 
                             type="text"
                             label={t("new email")} 
-                            placeholder={t("new email")} />
+                            placeholder={t("new email")}
+                            ref={emailRef} />
                         <DarkedTextField 
                             type="text" 
                             label={t("new email confirm")}
-                            placeholder={t("new email confirm")} />
+                            placeholder={t("new email confirm")}
+                            ref={emailConfirmRef} />
                     </div>
                     <RoundedButton 
                         color="blue"

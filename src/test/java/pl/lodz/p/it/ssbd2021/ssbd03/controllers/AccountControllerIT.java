@@ -50,6 +50,11 @@ class AccountControllerIT {
     }
 
     @Test
+    public void baseUriTest() {
+        System.out.println(PropertiesReader.getSecurityProperties().getProperty("app.baseurl"));
+    }
+
+    @Test
     public void requestPasswordReset_SUCCESS() throws JsonProcessingException {
         AccountDto accountDto = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
         given().baseUri(baseUri).contentType(MediaType.APPLICATION_JSON).post("/request-password-reset/" + accountDto.getLogin()).then().statusCode(200);
