@@ -35,6 +35,12 @@ public class I18n {
     public static final String VERIFICATION_EMAIL_BODY = "account.verification.body";
     public static final String REMOVE_UNCONFIRMED_ACCOUNT_SUBJECT ="account.remove.unconfirmed.subject";
     public static final String REMOVE_UNCONFIRMED_ACCOUNT_BODY ="account.remove.unconfirmed.body";
+    public static final String BLOCKED_ACCOUNT_SUBJECT = "account.block.subject";
+    public static final String UNBLOCKED_ACCOUNT_SUBJECT = "account.unblock.subject";
+    public static final String ACTIVATE_ACCOUNT_SUBJECT = "account.activate.subject";
+    public static final String BLOCKED_ACCOUNT_BODY = "account.block.body";
+    public static final String UNBLOCKED_ACCOUNT_BODY = "account.unblock.body";
+    public static final String ACTIVATE_ACCOUNT_BODY = "account.activate.body";
 
     private ResourceBundle bundle;
         public String getMessage(String message, Locale locale) {

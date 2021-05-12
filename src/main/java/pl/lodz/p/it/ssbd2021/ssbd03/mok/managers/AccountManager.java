@@ -198,6 +198,10 @@ public class AccountManager implements AccountManagerLocal {
         setAlterTypeAndAlterAccount(accountFacade.findByLogin(login), accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE),
             // this is for now, will be changed in the upcoming feature
             accountFacade.findByLogin("rbranson"));
+        Locale locale = new Locale(account.getLanguageType().getName().name());
+        String body = ii18n.getMessage(BLOCKED_ACCOUNT_BODY, locale);
+        String subject = ii18n.getMessage(BLOCKED_ACCOUNT_SUBJECT, locale);
+        EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
     }
 
 
@@ -247,6 +251,10 @@ public class AccountManager implements AccountManagerLocal {
                     account.setVersion(claims.get("version").asLong());
                     account.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
                     account.setAlteredBy(account);
+                    Locale locale = new Locale(account.getLanguageType().getName().name());
+                    String body = ii18n.getMessage(ACTIVATE_ACCOUNT_BODY, locale);
+                    String subject = ii18n.getMessage(ACTIVATE_ACCOUNT_SUBJECT, locale);
+                    EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
                 }
             else {
                 throw new AccountManagerException(ACCOUNT_VERIFICATION_TOKEN_ALREADY_VERIFIED_ERROR);
@@ -277,6 +285,10 @@ public class AccountManager implements AccountManagerLocal {
         account.setActive(true);
         setAlterTypeAndAlterAccount(accountFacade.findByLogin(unblockedUserLogin), accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE),
                 accountFacade.findByLogin("rbranson"));
+        Locale locale = new Locale(account.getLanguageType().getName().name());
+        String body = ii18n.getMessage(UNBLOCKED_ACCOUNT_BODY, locale);
+        String subject = ii18n.getMessage(UNBLOCKED_ACCOUNT_SUBJECT, locale);
+        EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
     }
 
     private void setAlterTypeAndAlterAccount(Account account, AlterTypeWrapper alterTypeWrapper, Account alteredBy) {
