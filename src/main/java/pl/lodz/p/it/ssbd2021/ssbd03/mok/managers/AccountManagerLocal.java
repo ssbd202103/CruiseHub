@@ -4,6 +4,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AuthUnauthorizedException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
@@ -222,7 +223,7 @@ public interface AccountManagerLocal {
      * @param IpAddr Adres IP użytkownika
      * @param time Czas
      */
-    void updateIncorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time);
+    void updateIncorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws AuthUnauthorizedException;
 
     /**
      * Metoda odpowiedzialna za edycję pól w bazie danych w przypadku poprawnego logowania.
@@ -231,5 +232,5 @@ public interface AccountManagerLocal {
      * @param time Czas
      * @return Token JWT
      */
-    String updateCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time);
+    String updateCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws AuthUnauthorizedException;
 }

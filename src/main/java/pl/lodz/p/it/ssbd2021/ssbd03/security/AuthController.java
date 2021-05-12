@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.security;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AuthUnauthorizedException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AuthenticateDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.AuthenticateEndpointLocal;
 
@@ -45,14 +46,19 @@ public class AuthController {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response auth(@Valid @NotNull AuthenticateDto auth) throws Exception {
+    public Response auth(@Valid @NotNull AuthenticateDto auth) throws AuthUnauthorizedException {
         Credential credential = auth.toCredential();
         CredentialValidationResult result = identityStoreHandler.validate(credential);
         String token;
 
         if (result.getStatus() != CredentialValidationResult.Status.VALID) {
-            authEndpoint.updateIncorrectAuthenticateInfo(auth.getLogin(), httpServletRequest.getRemoteAddr(), LocalDateTime.now());
-            return Response.status(Response.Status.UNAUTHORIZED)
+            try {
+                authEndpoint.updateIncorrectAuthenticateInfo(auth.getLogin(), httpServletRequest.getRemoteAddr(), LocalDateTime.now());
+            } catch (AuthUnauthorizedException e) {
+                return Response.status(Response.Status.UNAUTHORIZED).entity(e.getMessage())
+                    .build();
+            }
+            return Response.status(Response.Status.UNAUTHORIZED).entity("Incorrect password")
                 .build();
         }
 
