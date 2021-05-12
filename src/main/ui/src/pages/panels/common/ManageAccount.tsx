@@ -8,9 +8,13 @@ import {useTranslation} from 'react-i18next';
 import styles from '../../../styles/ManageAccount.module.css'
 import RoundedButton from '../../../components/RoundedButton';
 import DarkedTextField from '../../../components/DarkedTextField';
+import {useSelector} from "react-redux";
+import {selectColor} from "../../../redux/slices/colorSlice";
 
 export default function ManageAccount() {
     const {t} = useTranslation()
+
+    const {color} = useSelector(selectColor)
 
     const [ChangePerData, setPerData] = useState(false)
     const [ChangAddress, setChangChangAddress] = useState(false)
@@ -66,7 +70,7 @@ export default function ManageAccount() {
     }
 
     return (
-        <Grid container className={styles.wrapper}>
+        <Grid container className={styles.wrapper + ' ' + styles[`text-${color ? 'white' : 'dark'}`]} >
                 <Grid item style={{display: ChangePerData ? "none" : "block"}} className={styles.item}>
                     <h3>{t("personal data")}</h3>
                     <div>

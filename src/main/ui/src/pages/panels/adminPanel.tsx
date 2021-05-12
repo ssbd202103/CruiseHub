@@ -2,6 +2,7 @@ import {useTranslation} from 'react-i18next'
 import React, {useState} from "react";
 import ListClient from "./admin/ListClient";
 
+
 import {
     Grid,
     Button, 
@@ -30,7 +31,10 @@ import ChangeAccountPassword from "./admin/ChangeAccountPassword"
 import GrantAccessLevel from "./admin/GrantAccessLevel"
 
 import styles from '../../styles/moderatorPanel.module.css'
+import AppColorSetter from "../../components/AppColorSetter";
 
+import {selectColor} from "../../redux/slices/colorSlice";
+import {useSelector} from "react-redux";
 
 export default function AdminPanel() {
     const {t} = useTranslation()
@@ -39,6 +43,8 @@ export default function AdminPanel() {
         setListClient(state => !state)
         setManage(true)
     }
+
+    const {color} = useSelector(selectColor)
 
     const [manageAccount, setManage] = useState(true)
     const handleManageAccount = () => {
@@ -49,12 +55,12 @@ export default function AdminPanel() {
         <Grid container className={styles.wrapper}>
             <Redirect to="/panels/adminPanel/accounts" />
             <Grid item xs={2} md={3} xl={2}>
-                <PanelMenu color="dark">
-                    <List className={styles.menu} component="nav" aria-label="panel menu">
+                <PanelMenu color={color ? 'yellow-dark' : 'white-light'}>
+                    <List className={styles.menu + ' ' + styles['menu-' + (color ? 'light' : 'dark')]} component="nav" aria-label="panel menu">
                         <Link to="/panels/adminPanel/accounts">
                             <ListItem button>
                                 <ListItemIcon>
-                                    <AccountsListIcon style={{ fill: 'var(--white)' }} />
+                                    <AccountsListIcon style={{ fill: `var(--${color ? 'white' : 'dark'})` }} />
                                 </ListItemIcon>
                                 <ListItemText> {t("list accounts")} </ListItemText>
                             </ListItem>
@@ -62,7 +68,7 @@ export default function AdminPanel() {
                         <Link to="/panels/adminPanel/settings">
                             <ListItem button>
                                 <ListItemIcon>
-                                    <SettingsIcon style={{ fill: 'var(--white)' }} />
+                                    <SettingsIcon style={{ fill: `var(--${color ? 'white' : 'dark'})` }} />
                                 </ListItemIcon>
                                 <ListItemText>{t("settings")}</ListItemText>
                             </ListItem>
@@ -70,16 +76,19 @@ export default function AdminPanel() {
                         <Link to="/">
                             <ListItem button>
                                 <ListItemIcon>
-                                    <GoBackIcon style={{fill: 'var(--white)'}} />
+                                    <GoBackIcon style={{fill: `var(--${color ? 'white' : 'dark'})` }} />
                                 </ListItemIcon>
                                 <ListItemText>{t("go back")}</ListItemText>
                             </ListItem>
                         </Link>
+                        <ListItem button>
+                            <AppColorSetter />
+                        </ListItem>
                     </List>
                 </PanelMenu>
             </Grid>
 
-            <Grid item className={styles.content} xs={10} md={9} xl={10}>
+            <Grid item className={styles.content + ' ' + styles[`content-${color ? 'light' : 'dark'}`]} xs={10} md={9} xl={10}>
                 <Route exact path="/panels/adminPanel/accounts">
                     <h3> {t("list accounts")} </h3>
                     <ListClient />

@@ -8,12 +8,16 @@ import styles from '../styles/Header.module.css'
 import RoundedButton from './RoundedButton'
 
 import {useTranslation} from 'react-i18next'
+import {useSelector} from "react-redux";
+import {selectColor} from "../redux/slices/colorSlice";
 
 function Header() {
     const {t} = useTranslation()
 
+    const {color} = useSelector(selectColor)
+
     return (
-        <Box className={styles.wrapper}>
+        <Box className={styles.wrapper + ' ' + styles[`wrapper-${color ? 'light' : 'dark'}`]}>
             <Brand/>
             <Box>
                 <Link to="signin">

@@ -76,6 +76,10 @@ const resources = {
             "client panel": "Panel klienta",
             //verify
             "verifyAccount": "Zweryfikuj konto",
+            //color
+            "color": "Kolor",
+            "color.light": "Jasny",
+            "color.dark": "Ciemny",
             //errors
             "error.facade.noSuchElement": "Nie znaleziono elementu w bazie danych",
             "error.account.accessLevels.alreadyAssigned": "Poziom dostępu jest już przydzielony do konta",
@@ -168,6 +172,10 @@ const resources = {
             "clientPanelH2": "Client panel",
             //verify
             "verifyAccount": "Verify account",
+            //color
+            "color": "Color",
+            "color.light": "Light",
+            "color.dark": "Dark",
             //errors
             "error.facade.noSuchElement": "No such element found in the database",
             "error.account.accessLevels.alreadyAssigned": "Access level already assigned to the account",

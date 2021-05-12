@@ -24,20 +24,25 @@ import PanelMenu from '../../components/PanelMenu'
 import RoundedButton from '../../components/RoundedButton'
 
 import styles from '../../styles/workerPanel.module.css'
+import {useSelector} from "react-redux";
+import {selectColor} from "../../redux/slices/colorSlice";
+import AppColorSetter from "../../components/AppColorSetter";
 
 export default function WorkerPanel() {
     const {t} = useTranslation()
 
+    const {color} = useSelector(selectColor)
+
     return (
         <Grid container className={styles.wrapper}>
             <Redirect to="/panels/workerPanel/cruises" />
-            <Grid item xs={2} md={3}>
-                <PanelMenu color="green-dark">
-                    <List className={styles.menu} component="nav" aria-label="panel menu">
+            <Grid item xs={2} md={3} xl={2}>
+                <PanelMenu color={color ? 'green-dark' : 'white'}>
+                    <List className={styles.menu + ' ' + styles['menu-' + (color ? 'light' : 'dark')]} component="nav" aria-label="panel menu">
                         <Link to="/panels/workerPanel/cruises">
                             <ListItem button>
                                 <ListItemIcon>
-                                    <CruiseIcon style={{ fill: 'var(--white)' }} />
+                                    <CruiseIcon style={{ fill: `var(--${color ? 'white' : 'dark'})` }} />
                                 </ListItemIcon>
                                 <ListItemText> {t("cruises")} </ListItemText>
                             </ListItem>
@@ -45,7 +50,7 @@ export default function WorkerPanel() {
                         <Link to="/panels/workerPanel/settings">
                             <ListItem button>
                                 <ListItemIcon>
-                                    <SettingsIcon style={{ fill: 'var(--white)' }} />
+                                    <SettingsIcon style={{ fill: `var(--${color ? 'white' : 'dark'})` }} />
                                 </ListItemIcon>
                                 <ListItemText>{t("settings")}</ListItemText>
                             </ListItem>
@@ -53,16 +58,19 @@ export default function WorkerPanel() {
                         <Link to="/">
                             <ListItem button>
                                 <ListItemIcon>
-                                    <GoBackIcon style={{fill: 'var(--white)'}} />
+                                    <GoBackIcon style={{fill: `var(--${color ? 'white' : 'dark'})` }} />
                                 </ListItemIcon>
                                 <ListItemText>{t("go back")}</ListItemText>
                             </ListItem>
                         </Link>
+                        <ListItem button>
+                            <AppColorSetter />
+                        </ListItem>
                     </List>
                 </PanelMenu>
             </Grid>
 
-            <Grid item className={styles.content} xs={10} md={9}>
+            <Grid item className={styles.content + ' ' + styles[`content-${color ? 'light' : 'dark'}`]} xs={10} md={9} xl={10}>
                 <Route exact path="/panels/workerPanel/cruises">
                     <div> {t("my cruises")} </div>
                 </Route>

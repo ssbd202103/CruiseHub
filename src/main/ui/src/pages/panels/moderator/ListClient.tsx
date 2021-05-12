@@ -17,6 +17,8 @@ import {Button} from "@material-ui/core";
 import {Link} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import axios from "axios";
+import {useSelector} from "react-redux";
+import {selectColor} from "../../../redux/slices/colorSlice";
 
 const useRowStyles = makeStyles({
     root: {
@@ -41,22 +43,24 @@ function createData(
 }
 
 export interface RowProps {
-    row : ReturnType<typeof createData>
+    row: ReturnType<typeof createData>,
+    style: React.CSSProperties
 }
 
 function Row(props: RowProps) {
     const { row } = props;
+    const { style } = props;
     const [open, setOpen] = React.useState(false);
     const classes = useRowStyles();
 
     return (
         <TableRow className={classes.root}>
-            <TableCell component="th" scope="row">
+            <TableCell component="th" scope="row" style={style}>
             {row.login}
             </TableCell>
-            <TableCell>{row.email}</TableCell>
-            <TableCell>{row.active.toString()}</TableCell>
-            <TableCell>{row.accessLevels.toString()}</TableCell>
+            <TableCell style={style}>{row.email}</TableCell>
+            <TableCell style={style}>{row.active.toString()}</TableCell>
+            <TableCell style={style}>{row.accessLevels.toString()}</TableCell>
         </TableRow>
     );
 }
@@ -65,6 +69,9 @@ function Row(props: RowProps) {
 
 export default function ModListClient() {
     const [users, setUsers] = useState([]);
+
+    const {color} = useSelector(selectColor)
+
     useEffect(() => {
         loadUsers();
     },[]);
@@ -82,15 +89,15 @@ export default function ModListClient() {
             <Table aria-label="Clients">
                 <TableHead>
                     <TableRow>
-                        <TableCell>{t("login")}</TableCell>
-                        <TableCell>{t("email")}</TableCell>
-                        <TableCell>{t("active")}</TableCell>
-                        <TableCell>{t("access level")}</TableCell>
+                        <TableCell style={{backgroundColor: `var(--${color ? 'white' : 'dark-light'}`, color: `var(--${color ? 'dark' : 'white-light'}`}}>{t("login")}</TableCell>
+                        <TableCell style={{backgroundColor: `var(--${color ? 'white' : 'dark-light'}`, color: `var(--${color ? 'dark' : 'white-light'}`}}>{t("email")}</TableCell>
+                        <TableCell style={{backgroundColor: `var(--${color ? 'white' : 'dark-light'}`, color: `var(--${color ? 'dark' : 'white-light'}`}}>{t("active")}</TableCell>
+                        <TableCell style={{backgroundColor: `var(--${color ? 'white' : 'dark-light'}`, color: `var(--${color ? 'dark' : 'white-light'}`}}>{t("access level")}</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {users.map((user, index) => (
-                        <Row key={index} row={user}/>
+                        <Row key={index} row={user} style={{backgroundColor: `var(--${color ? 'white' : 'dark-light'}`, color: `var(--${color ? 'dark' : 'white-light'}`}} />
                     ))}
                 </TableBody>
             </Table>

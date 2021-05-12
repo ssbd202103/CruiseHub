@@ -13,6 +13,13 @@
 .change-item h4,
 .item p {
     font-family: "Montserrat", sans-serif;
+}
+
+.text-dark {
+    color: var(--white);
+}
+
+.text-light {
     color: var(--dark);
 }
 
