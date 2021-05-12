@@ -54,7 +54,7 @@ class AccountMapperTest {
         account3.setAccessLevel(new Administrator(true));
         account3.setAccessLevel(new Client(new Address(174L, "Wallstreet", "123-1382", "New York", "USA"), "473-173-183", true));
 
-        return Arrays.asList(account1, account2, account3);
+        return Arrays.asList(null, null, null);
     }
 
 }

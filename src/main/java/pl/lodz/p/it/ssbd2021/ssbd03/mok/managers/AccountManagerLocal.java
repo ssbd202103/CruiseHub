@@ -12,8 +12,10 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 
 
 import javax.ejb.Local;
+import java.time.LocalDateTime;
 import java.util.List;
 
+import java.time.LocalDateTime;
 
 /**
  * Klasa która zarządza logiką biznesową kont
@@ -214,5 +216,20 @@ public interface AccountManagerLocal {
      */
     void changeAdministratorData(Account account) throws BaseAppException;
 
+    /**
+     * Metoda odpowiedzialna za edycję pól w bazie danych w przypadku niepoprawnego logowania.
+     * @param login Login użytkownika
+     * @param IpAddr Adres IP użytkownika
+     * @param time Czas
+     */
+    void updateIncorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time);
 
+    /**
+     * Metoda odpowiedzialna za edycję pól w bazie danych w przypadku poprawnego logowania.
+     * @param login Login użytkownika
+     * @param IpAddr Adres IP użytkownika
+     * @param time Czas
+     * @return Token JWT
+     */
+    String updateCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time);
 }
