@@ -8,7 +8,7 @@ import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AuthControllerTest {
-    private static final String baseUri = "http://localhost:8080/cruisehub/api/";
+    private static final String baseUri = "http://localhost:8080/api/";
 
     @Test
     void auth() {

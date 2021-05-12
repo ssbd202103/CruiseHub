@@ -423,10 +423,6 @@ public class AccountManager implements AccountManagerLocal {
     public void changeBusinessWorkerData(Account fromAccount) throws BaseAppException {
         Account targetAccount = accountFacade.findByLogin(fromAccount.getLogin());
         setAccountChanges(targetAccount, fromAccount);
-    @Override
-    public void updateIncorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) {
-        this.accountFacade.updateAuthenticateInfo(login, IpAddr, time, false);
-    }
 
         BusinessWorker targetBusinessWorker = (BusinessWorker) getAccessLevel(targetAccount, AccessLevelType.BUSINESS_WORKER);
         setAccessLevelChanges(targetBusinessWorker, targetAccount);
@@ -434,6 +430,11 @@ public class AccountManager implements AccountManagerLocal {
         BusinessWorker fromBusinessWorker = getAccessLevel(fromAccount);
         targetBusinessWorker.setPhoneNumber(fromBusinessWorker.getPhoneNumber());
     }
+    @Override
+    public void updateIncorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) {
+        this.accountFacade.updateAuthenticateInfo(login, IpAddr, time, false);
+    }
+
 
     @Override
     public void changeModeratorData(Account fromAccount) throws BaseAppException {
