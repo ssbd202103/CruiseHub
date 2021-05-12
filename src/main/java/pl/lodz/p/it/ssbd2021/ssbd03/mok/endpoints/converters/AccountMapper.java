@@ -131,7 +131,7 @@ public class AccountMapper {
                 account.getEmail(), account.isConfirmed(), account.isActive(), account.getLanguageType().getName(),
                 account.getAccessLevels().stream()
                         .map(AccountMapper::toAccessLevelDetailsViewDto)
-                        .collect(Collectors.toSet()));
+                        .collect(Collectors.toSet()), account.getVersion());
     }
 
     private static AccessLevelDetailsViewDto toAccessLevelDetailsViewDto(AccessLevel accessLevel) {
