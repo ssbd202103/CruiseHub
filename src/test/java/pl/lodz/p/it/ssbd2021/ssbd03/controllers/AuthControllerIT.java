@@ -7,7 +7,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AuthenticateDto;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.*;
 
-class AuthControllerTest {
+class AuthControllerIT {
     private static final String baseUri = "http://localhost:8080/api/";
 
     @Test

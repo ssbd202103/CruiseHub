@@ -75,8 +75,6 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ETAG_IDENTITY_INTEGRITY_E
 @Path("/account")
 @RequestScoped
 public class AccountController {
-    private final ObjectMapper mapper = new ObjectMapper(); // for polymorphic Jackson serialization,
-    // should not be used anymore once default JSON serializer is set to Jackson
 
     @EJB
     private AccountEndpointLocal accountEndpoint;
