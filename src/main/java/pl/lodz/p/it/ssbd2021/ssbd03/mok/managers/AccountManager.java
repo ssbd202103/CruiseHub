@@ -181,7 +181,7 @@ public class AccountManager implements AccountManagerLocal {
         Locale locale = new Locale(account.getLanguageType().getName().name());
         String subject = ii18n.getMessage(VERIFICATION_EMAIL_SUBJECT, locale);
         String body = ii18n.getMessage(VERIFICATION_EMAIL_BODY, locale);
-        String contentHtml = "<a href=\"http://" + PropertiesReader.getSecurityProperties().getProperty("app.baseurl") + "/verify/accountVerification/" + token + "\">" + body + "</a>";
+        String contentHtml = "<a href=\"" + PropertiesReader.getSecurityProperties().getProperty("app.baseurl") + "/verify/accountVerification/" + token + "\">" + body + "</a>";
         EmailService.sendEmailWithContent(account.getEmail().trim(), subject, contentHtml);
     }
 
@@ -198,6 +198,10 @@ public class AccountManager implements AccountManagerLocal {
         setAlterTypeAndAlterAccount(accountFacade.findByLogin(login), accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE),
             // this is for now, will be changed in the upcoming feature
             accountFacade.findByLogin("rbranson"));
+        Locale locale = new Locale(account.getLanguageType().getName().name());
+        String body = ii18n.getMessage(BLOCKED_ACCOUNT_BODY, locale);
+        String subject = ii18n.getMessage(BLOCKED_ACCOUNT_SUBJECT, locale);
+        EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
     }
 
 
@@ -206,7 +210,7 @@ public class AccountManager implements AccountManagerLocal {
         Account account = this.accountFacade.findByLogin(login);
         Map<String, Object> claims = Map.of("version", account.getVersion());
         String token = JWTHandler.createToken(claims, login);
-        String contentHtml = "<a href=\"http://" + PropertiesReader.getSecurityProperties().getProperty("app.baseurl") + "/reset/passwordReset/" + token + "\">Reset password</a>";
+        String contentHtml = "<a href=\"" + PropertiesReader.getSecurityProperties().getProperty("app.baseurl") + "/reset/passwordReset/" + token + "\">Reset password</a>";
         EmailService.sendEmailWithContent(account.getEmail().trim(), "hello", contentHtml);
     }
 
@@ -247,6 +251,10 @@ public class AccountManager implements AccountManagerLocal {
                     account.setVersion(claims.get("version").asLong());
                     account.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
                     account.setAlteredBy(account);
+                    Locale locale = new Locale(account.getLanguageType().getName().name());
+                    String body = ii18n.getMessage(ACTIVATE_ACCOUNT_BODY, locale);
+                    String subject = ii18n.getMessage(ACTIVATE_ACCOUNT_SUBJECT, locale);
+                    EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
                 }
             else {
                 throw new AccountManagerException(ACCOUNT_VERIFICATION_TOKEN_ALREADY_VERIFIED_ERROR);
@@ -267,7 +275,7 @@ public class AccountManager implements AccountManagerLocal {
         String token = JWTHandler.createToken(claims, login);
         String subject = ii18n.getMessage(REQUESTED_PASSWORD_RESET_SUBJECT,locale);
         String body = ii18n.getMessage(REQUESTED_PASSWORD_RESET_BODY,locale);
-        String contentHtml = "<a href=\"http://" + PropertiesReader.getSecurityProperties().getProperty("app.baseurl") + "/reset/passwordReset/" + token + "\">" + body + "</a>";
+        String contentHtml = "<a href=\"" + PropertiesReader.getSecurityProperties().getProperty("app.baseurl") + "/reset/passwordReset/" + token + "\">" + body + "</a>";
         EmailService.sendEmailWithContent(email, subject, contentHtml);
     }
     @Override
@@ -277,6 +285,10 @@ public class AccountManager implements AccountManagerLocal {
         account.setActive(true);
         setAlterTypeAndAlterAccount(accountFacade.findByLogin(unblockedUserLogin), accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE),
                 accountFacade.findByLogin("rbranson"));
+        Locale locale = new Locale(account.getLanguageType().getName().name());
+        String body = ii18n.getMessage(UNBLOCKED_ACCOUNT_BODY, locale);
+        String subject = ii18n.getMessage(UNBLOCKED_ACCOUNT_SUBJECT, locale);
+        EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
     }
 
     private void setAlterTypeAndAlterAccount(Account account, AlterTypeWrapper alterTypeWrapper, Account alteredBy) {

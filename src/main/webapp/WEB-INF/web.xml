@@ -111,7 +111,7 @@
         <web-resource-collection>
             <web-resource-name>PublicResources</web-resource-name>
             <url-pattern>/account/client/registration</url-pattern>
-            <url-pattern>/account/businessworker/registration</url-pattern>
+            <url-pattern>/account/business-worker/registration</url-pattern>
         </web-resource-collection>
         <user-data-constraint>
             <description/>
