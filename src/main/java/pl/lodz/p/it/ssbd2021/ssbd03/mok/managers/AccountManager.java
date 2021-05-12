@@ -181,7 +181,7 @@ public class AccountManager implements AccountManagerLocal {
         Locale locale = new Locale(account.getLanguageType().getName().name());
         String subject = ii18n.getMessage(VERIFICATION_EMAIL_SUBJECT, locale);
         String body = ii18n.getMessage(VERIFICATION_EMAIL_BODY, locale);
-        String contentHtml = "<a href=\"http://" + PropertiesReader.getSecurityProperties().getProperty("app.baseurl") + "/verify/accountVerification/" + token + "\">" + body + "</a>";
+        String contentHtml = "<a href=\"" + PropertiesReader.getSecurityProperties().getProperty("app.baseurl") + "/verify/accountVerification/" + token + "\">" + body + "</a>";
         EmailService.sendEmailWithContent(account.getEmail().trim(), subject, contentHtml);
     }
 
@@ -206,7 +206,7 @@ public class AccountManager implements AccountManagerLocal {
         Account account = this.accountFacade.findByLogin(login);
         Map<String, Object> claims = Map.of("version", account.getVersion());
         String token = JWTHandler.createToken(claims, login);
-        String contentHtml = "<a href=\"http://" + PropertiesReader.getSecurityProperties().getProperty("app.baseurl") + "/reset/passwordReset/" + token + "\">Reset password</a>";
+        String contentHtml = "<a href=\"" + PropertiesReader.getSecurityProperties().getProperty("app.baseurl") + "/reset/passwordReset/" + token + "\">Reset password</a>";
         EmailService.sendEmailWithContent(account.getEmail().trim(), "hello", contentHtml);
     }
 
@@ -267,7 +267,7 @@ public class AccountManager implements AccountManagerLocal {
         String token = JWTHandler.createToken(claims, login);
         String subject = ii18n.getMessage(REQUESTED_PASSWORD_RESET_SUBJECT,locale);
         String body = ii18n.getMessage(REQUESTED_PASSWORD_RESET_BODY,locale);
-        String contentHtml = "<a href=\"http://" + PropertiesReader.getSecurityProperties().getProperty("app.baseurl") + "/reset/passwordReset/" + token + "\">" + body + "</a>";
+        String contentHtml = "<a href=\"" + PropertiesReader.getSecurityProperties().getProperty("app.baseurl") + "/reset/passwordReset/" + token + "\">" + body + "</a>";
         EmailService.sendEmailWithContent(email, subject, contentHtml);
     }
     @Override
