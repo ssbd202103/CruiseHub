@@ -38,9 +38,9 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.time.LocalDateTime;
-import java.util.stream.Collectors;
 import java.util.List;
+import java.util.Optional;
+
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 import java.time.LocalDateTime;
@@ -308,6 +308,7 @@ public class AccountManager implements AccountManagerLocal {
         targetAccount.setVersion(fromAccount.getVersion());
         targetAccount.setFirstName(fromAccount.getFirstName());
         targetAccount.setSecondName(fromAccount.getSecondName());
+        targetAccount.setEmail(fromAccount.getEmail());
         targetAccount.setAlteredBy(accountFacade.findByLogin(alterBy));
         targetAccount.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
         targetAccount.setLastAlterDateTime(LocalDateTime.now());
@@ -341,6 +342,7 @@ public class AccountManager implements AccountManagerLocal {
         targetAccount.setVersion(fromAccount.getVersion());
         targetAccount.setFirstName(fromAccount.getFirstName());
         targetAccount.setSecondName(fromAccount.getSecondName());
+        targetAccount.setEmail(fromAccount.getEmail());
         targetAccount.setAlteredBy(accountFacade.findByLogin(alterBy));
         targetAccount.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
         targetAccount.setLastAlterDateTime(LocalDateTime.now());
@@ -361,6 +363,7 @@ public class AccountManager implements AccountManagerLocal {
         targetAccount.setVersion(fromAccount.getVersion());
         targetAccount.setFirstName(fromAccount.getFirstName());
         targetAccount.setSecondName(fromAccount.getSecondName());
+        targetAccount.setEmail(fromAccount.getEmail());
         targetAccount.setAlteredBy(accountFacade.findByLogin(alterBy));
         targetAccount.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
         targetAccount.setLastAlterDateTime(LocalDateTime.now());

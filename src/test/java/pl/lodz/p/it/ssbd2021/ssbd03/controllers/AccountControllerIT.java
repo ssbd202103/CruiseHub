@@ -15,6 +15,8 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.ChangeAccessLevelStateDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AddressDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccessLevelDetailsViewDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccountDetailsViewDto;
@@ -28,6 +30,12 @@ import java.util.*;
 
 
 import java.util.Set;
+
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
 
 import static io.restassured.RestAssured.given;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
@@ -416,6 +424,7 @@ class AccountControllerIT {
         OtherClientChangeDataDto otherClientChangeDataDto = new OtherClientChangeDataDto(account.getLogin(), account.getVersion(),
                 "Damian",
                 "Bednarek",
+                "zmienony@gmail.com",
                 "888888888",
                 newAddress,
                 "rbranson");
@@ -438,6 +447,7 @@ class AccountControllerIT {
         OtherBusinessWorkerChangeDataDto otherBusinessWorkerChangeDataDto = new OtherBusinessWorkerChangeDataDto(account.getLogin(), account.getVersion(),
                 "Damian",
                 "Bednarek",
+                "zmienony@gmail.com",
                 "888888888",
                 "rbranson");
         Response response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).body(otherBusinessWorkerChangeDataDto).put("/changeOtherData/businessworker");
@@ -456,6 +466,7 @@ class AccountControllerIT {
         OtherAccountChangeDataDto otherAccountChangeDataDto = new OtherAccountChangeDataDto(account.getLogin(), account.getVersion(),
                 "Damian",
                 "Bednarek",
+                "zmienony@gmail.com",
                 "rbranson");
         Response response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).body(otherAccountChangeDataDto).put("/changeOtherData");
         assertThat(response.getStatusCode()).isEqualTo(200);

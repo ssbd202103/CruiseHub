@@ -40,7 +40,7 @@ const resources = {
             "phone number": "Numer telefonu",
             "personal data change btn": "Edytuj dane personalne",
             "personal data change": "Edycja danych personalnych",
-            "address": "Adres",
+            "address": "Dane adresowe",
             "street": "Ulica",
             "house number": "Numer domu",
             "postal code": "Kod pocztowy",
@@ -90,8 +90,8 @@ const resources = {
             "error.password.reset.wrongIdentity": "Żądanie zawiera złą tożsamość",
             "error.email.incorrect": "Address email jest niepoprawny",
             "error.emailService.inaccessible": "Serwis pocztowy jest niedostępny",
-            "error.password.reset.contentError": "Błędna zawartość tokenu do resetowania hasła"
-
+            "error.password.reset.contentError": "Błędna zawartość tokenu do resetowania hasła",
+            "phone change btn": "Zmień numer telefonu"
         }
     },
     en: {
@@ -132,14 +132,14 @@ const resources = {
             "phone number": "Phone Number",
             "personal data change btn": "Edit personal data",
             "personal data change": "Editing personal data",
-            "address": "Address",
+            "address": "Address data",
             "street": "Street",
             "house number": "House number",
             "postal code": "Postal code",
             "city": "City",
             "country": "Country",
             "address change btn": "Edit address",
-            "address change": "Editing address",
+            "address change": "Editing address data",
             "email change btn": "Change e-mail",
             "email change": "Editing e-mail",
             "new email": "Insert a new e-mail",
@@ -181,8 +181,8 @@ const resources = {
             "error.parsing.serialization": "Received data could not be serialized properly",
             "error.password.reset.wrongIdentity": "Request contains wrong identity",
             "error.email.incorrect": "Email address is incorrect",
-            "error.password.reset.contentError": "Błędna zawartość tokenu do resetowania hasła"
-
+            "error.password.reset.contentError": "Błędna zawartość tokenu do resetowania hasła",
+            "phone change btn": "Change phone number"
         }
     }
 }

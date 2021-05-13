@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useReducer, useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Collapse from '@material-ui/core/Collapse';
@@ -119,6 +119,12 @@ function Row(props: RowProps) {
     const classes = useRowStyles();
     const buttonClass = useButtonStyles();
 
+    const handleSetOpen = async () => {
+        const result = await axios.get(`http://localhost:8080/api/account/details-view/${row.login}`);
+        sessionStorage.setItem("changeAccountData", JSON.stringify(result.data));
+        setOpen(state => !state);
+    }
+
     const setCurrentGrantAccessLevelAccount = () => {
         sessionStorage.setItem('grantAccessLevelAccount', JSON.stringify(row));
     }
@@ -132,7 +138,7 @@ function Row(props: RowProps) {
         <React.Fragment>
             <TableRow className={classes.root}>
                 <TableCell>
-                    <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
+                    <IconButton aria-label="expand row" size="small" onClick={handleSetOpen}>
                         {open ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
                     </IconButton>
                 </TableCell>
@@ -157,7 +163,7 @@ function Row(props: RowProps) {
                                     <TableRow>
                                         <TableCell align="center">
                                                 <Link to="/panels/adminPanel/ChangeAccountData">
-                                                    <Button className={buttonClass.root}>{t("edit")}</Button>
+                                                    <Button className={buttonClass.root} >{t("edit")}</Button>
                                                 </Link>
 
 {/*                                                <Link to="/panels/adminPanel/ChangeAccountPassword">

@@ -13,8 +13,8 @@ public class OtherBusinessWorkerChangeDataDto extends OtherAccountChangeDataDto 
     @PhoneNumber
     private String newPhoneNumber;
 
-    public OtherBusinessWorkerChangeDataDto(String login, Long version, String newFirstName, String newSecondName, String newPhoneNumber, String alteredBy) {
-        super(login, version, newFirstName, newSecondName, alteredBy);
+    public OtherBusinessWorkerChangeDataDto(String login, Long version, String newFirstName, String newSecondName,String newEmail, String newPhoneNumber, String alteredBy) {
+        super(login, version, newFirstName, newSecondName,newEmail, alteredBy);
         this.newPhoneNumber = newPhoneNumber;
     }
 }
