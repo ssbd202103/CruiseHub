@@ -10,6 +10,7 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.RestAssured;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
@@ -305,14 +306,14 @@ class AccountControllerTest {
 
     @Test
     public void changePasswordTest_SUCCESS() throws JsonProcessingException {
-        Response res = given().baseUri(baseUri).get("rbranson");
-        AccountDto account = objectMapper.readValue(res.thenReturn().asString(), AccountDto.class);
+        AccountDto account = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
+        Response res = given().baseUri(baseUri).get("/" + account.getLogin());
 
         String etag = res.getHeader("Etag");
         AccountOwnPasswordDto accountOwnPasswordDto = new AccountOwnPasswordDto(
                 account.getLogin(),
                 account.getVersion(),
-                "12345678",     //aktualne haslo dla konta w bazie
+                "123456789",
                 "nowehaslo"
         );
 
@@ -321,20 +322,25 @@ class AccountControllerTest {
                 .body(accountOwnPasswordDto)
                 .when()
                 .put("change_own_password").then().statusCode(204);
+
+        Response changedRes = given().baseUri(baseUri).get("/" + account.getLogin());
+        AccountDto changedAccount = objectMapper.readValue(changedRes.thenReturn().asString(), AccountDto.class);
+        Assertions.assertEquals(account.getVersion() + 1, changedAccount.getVersion());
+        // potrzebna jest metoda do logowania, by sprawdzic zmienianie hasla
     }
 
     @Test
     public void changePasswordVersionTest_FAIL() throws JsonProcessingException {
         // fail optimistic check (version)
-        Response res = given().baseUri(baseUri).get("rbranson");
-        AccountDto account = objectMapper.readValue(res.thenReturn().asString(), AccountDto.class);
+        AccountDto account = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
+        Response res = given().baseUri(baseUri).get("/" + account.getLogin());
 
         String etag = res.getHeader("Etag");
         AccountOwnPasswordDto accountOwnPasswordDto = new AccountOwnPasswordDto(
                 account.getLogin(),
                 account.getVersion() - 1,
                 "nowehaslo",
-                "12345678"
+                randomAlphanumeric(15)
         );
 
         given().baseUri(baseUri).header("If-Match", etag)
@@ -342,20 +348,24 @@ class AccountControllerTest {
                 .body(accountOwnPasswordDto)
                 .when()
                 .put("change_own_password").then().statusCode(406);
+
+        Response notChangedRes = given().baseUri(baseUri).get("/" + account.getLogin());
+        AccountDto notChangedAccount = objectMapper.readValue(notChangedRes.thenReturn().asString(), AccountDto.class);
+        Assertions.assertEquals(account.getVersion(), notChangedAccount.getVersion());
     }
 
     @Test
     public void changePasswordMatchTest_FAIL() throws JsonProcessingException {
         // fail old password check
-        Response res = given().baseUri(baseUri).get("rbranson");
-        AccountDto account = objectMapper.readValue(res.thenReturn().asString(), AccountDto.class);
+        AccountDto account = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
+        Response res = given().baseUri(baseUri).get("/" + account.getLogin());
 
         String etag = res.getHeader("Etag");
         AccountOwnPasswordDto accountOwnPasswordDto = new AccountOwnPasswordDto(
                 account.getLogin(),
                 account.getVersion(),
-                "jakieshasloniewbazie",
-                "12345678"
+                randomAlphanumeric(16),
+                randomAlphanumeric(15)
         );
 
         given().baseUri(baseUri).header("If-Match", etag)
@@ -363,6 +373,10 @@ class AccountControllerTest {
                 .body(accountOwnPasswordDto)
                 .when()
                 .put("change_own_password").then().statusCode(403);
+
+        Response notChangedRes = given().baseUri(baseUri).get("/" + account.getLogin());
+        AccountDto notChangedAccount = objectMapper.readValue(notChangedRes.thenReturn().asString(), AccountDto.class);
+        Assertions.assertEquals(account.getVersion(), notChangedAccount.getVersion());
     }
 
 
