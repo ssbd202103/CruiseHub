@@ -339,8 +339,8 @@ class AccountControllerTest {
         AccountOwnPasswordDto accountOwnPasswordDto = new AccountOwnPasswordDto(
                 account.getLogin(),
                 account.getVersion() - 1,
-                "nowehaslo",
-                randomAlphanumeric(15)
+                "123456789",
+                "nowehaslo"
         );
 
         given().baseUri(baseUri).header("If-Match", etag)
@@ -364,8 +364,8 @@ class AccountControllerTest {
         AccountOwnPasswordDto accountOwnPasswordDto = new AccountOwnPasswordDto(
                 account.getLogin(),
                 account.getVersion(),
-                randomAlphanumeric(16),
-                randomAlphanumeric(15)
+                randomAlphanumeric(15),     // stare haslo w bazie to: 123456789
+                "nowehaslo"
         );
 
         given().baseUri(baseUri).header("If-Match", etag)
