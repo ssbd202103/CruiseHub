@@ -1,7 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
@@ -15,7 +14,6 @@ import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Data
-//@AllArgsConstructor
 @NoArgsConstructor
 public class AccountDetailsViewDto implements SignableEntity {
     @Name

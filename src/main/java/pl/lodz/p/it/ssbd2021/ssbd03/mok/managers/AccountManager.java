@@ -2,13 +2,10 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.managers;
 
 import com.auth0.jwt.interfaces.Claim;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
-import lombok.Data;
-import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Administrator;
@@ -18,37 +15,23 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AccountManagerException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.JWTException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters.AccountMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.CompanyFacadeMok;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.JWTHandler;
 import pl.lodz.p.it.ssbd2021.ssbd03.services.EmailService;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
-import pl.lodz.p.it.ssbd2021.ssbd03.security.JWTHandler;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 import javax.inject.Inject;
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.time.LocalDateTime;
-import java.util.stream.Collectors;
 import java.util.List;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
-import java.time.LocalDateTime;
 
 /**
  * Klasa która zarządza logiką biznesową kont
@@ -63,9 +46,7 @@ public class AccountManager implements AccountManagerLocal {
     private CompanyFacadeMok companyFacadeMok;
 
     @Inject
-    I18n ii18n;
-
-
+    I18n i18n;
 
     @Override
     public void createClientAccount(Account account, Client client) throws BaseAppException {
@@ -184,8 +165,8 @@ public class AccountManager implements AccountManagerLocal {
         Map<String, Object> claims = Map.of("version", account.getVersion());
         String token = JWTHandler.createTokenEmail(claims, account.getLogin());
         Locale locale = new Locale(account.getLanguageType().getName().name());
-        String subject = ii18n.getMessage(VERIFICATION_EMAIL_SUBJECT, locale);
-        String body = ii18n.getMessage(VERIFICATION_EMAIL_BODY, locale);
+        String subject = i18n.getMessage(VERIFICATION_EMAIL_SUBJECT, locale);
+        String body = i18n.getMessage(VERIFICATION_EMAIL_BODY, locale);
         String contentHtml = "<a href=\"" + PropertiesReader.getSecurityProperties().getProperty("app.baseurl") + "/verify/accountVerification/" + token + "\">" + body + "</a>";
         EmailService.sendEmailWithContent(account.getEmail().trim(), subject, contentHtml);
     }
@@ -196,17 +177,15 @@ public class AccountManager implements AccountManagerLocal {
     }
 
     @Override
-    public void blockUser(String login, Long version) throws BaseAppException {
+    public Account blockUser(String login, Long version) throws BaseAppException {
         Account account =  this.accountFacade.findByLogin(login);
         account.setVersion(version);
         account.setActive(false);
-        setAlterTypeAndAlterAccount(accountFacade.findByLogin(login), accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE),
+        setAlterTypeAndAlterAccount(account, accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE),
             // this is for now, will be changed in the upcoming feature
-            accountFacade.findByLogin("rbranson"));
-        Locale locale = new Locale(account.getLanguageType().getName().name());
-        String body = ii18n.getMessage(BLOCKED_ACCOUNT_BODY, locale);
-        String subject = ii18n.getMessage(BLOCKED_ACCOUNT_SUBJECT, locale);
-        EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
+                account);
+        accountFacade.edit(account);
+        return account;
     }
 
 
@@ -257,8 +236,8 @@ public class AccountManager implements AccountManagerLocal {
                     account.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
                     account.setAlteredBy(account);
                     Locale locale = new Locale(account.getLanguageType().getName().name());
-                    String body = ii18n.getMessage(ACTIVATE_ACCOUNT_BODY, locale);
-                    String subject = ii18n.getMessage(ACTIVATE_ACCOUNT_SUBJECT, locale);
+                    String body = i18n.getMessage(ACTIVATE_ACCOUNT_BODY, locale);
+                    String subject = i18n.getMessage(ACTIVATE_ACCOUNT_SUBJECT, locale);
                     EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
                 }
             else {
@@ -278,32 +257,26 @@ public class AccountManager implements AccountManagerLocal {
         Map<String, Object> claims = Map.of("version", account.getVersion());
         Locale locale=new Locale( account.getLanguageType().getName().name());
         String token = JWTHandler.createToken(claims, login);
-        String subject = ii18n.getMessage(REQUESTED_PASSWORD_RESET_SUBJECT,locale);
-        String body = ii18n.getMessage(REQUESTED_PASSWORD_RESET_BODY,locale);
+        String subject = i18n.getMessage(REQUESTED_PASSWORD_RESET_SUBJECT,locale);
+        String body = i18n.getMessage(REQUESTED_PASSWORD_RESET_BODY,locale);
         String contentHtml = "<a href=\"" + PropertiesReader.getSecurityProperties().getProperty("app.baseurl") + "/reset/passwordReset/" + token + "\">" + body + "</a>";
         EmailService.sendEmailWithContent(email, subject, contentHtml);
     }
     @Override
-    public void unblockUser(String unblockedUserLogin,  Long version) throws BaseAppException {
+    public Account unblockUser(String unblockedUserLogin,  Long version) throws BaseAppException {
         Account account =  this.accountFacade.findByLogin(unblockedUserLogin);
         account.setVersion(version);
         account.setActive(true);
-        setAlterTypeAndAlterAccount(accountFacade.findByLogin(unblockedUserLogin), accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE),
-                accountFacade.findByLogin("rbranson"));
-        Locale locale = new Locale(account.getLanguageType().getName().name());
-        String body = ii18n.getMessage(UNBLOCKED_ACCOUNT_BODY, locale);
-        String subject = ii18n.getMessage(UNBLOCKED_ACCOUNT_SUBJECT, locale);
-        EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
+        setAlterTypeAndAlterAccount(account, accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE),
+        //needs to be changed as in blockUser method
+                account);
+        return account;
     }
 
     private void setAlterTypeAndAlterAccount(Account account, AlterTypeWrapper alterTypeWrapper, Account alteredBy) {
         account.setAlteredBy(alteredBy);
         account.setAlterType(alterTypeWrapper);
-        account.setLastAlterDateTime(LocalDateTime.now());
     }
-
-
-
 
 
     @Override

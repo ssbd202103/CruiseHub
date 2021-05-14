@@ -92,7 +92,7 @@ public interface AccountManagerLocal {
      * @param version Wersja obiektu do sprawdzenia
      * @throws BaseAppException Wyjątek aplikacji rzucany w przypadku błędu pobrania danych użytkownika
      */
-    void blockUser(String login, Long version) throws BaseAppException;
+    Account blockUser(String login, Long version) throws BaseAppException;
 
 
     /**
@@ -102,10 +102,7 @@ public interface AccountManagerLocal {
      * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku gdy występuje błąd w p
      *                          obraniu danych w fasadzie
      */
-    void unblockUser(String unblockedUserLogin, Long version) throws BaseAppException;
-
-
-
+    Account unblockUser(String unblockedUserLogin, Long version) throws BaseAppException;
 
     /**
      * Pobiera liste kont z bazy danych
