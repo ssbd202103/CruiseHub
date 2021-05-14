@@ -26,7 +26,6 @@
     animation-name: arrow-movements;
     animation-timing-function: ease-in-out;
     animation-iteration-count: infinite;
-    ;
 }
 
 @keyframes arrow-movements {
