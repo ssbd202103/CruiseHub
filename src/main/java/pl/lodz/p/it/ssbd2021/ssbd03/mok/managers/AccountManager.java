@@ -2,8 +2,6 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.managers;
 
 import com.auth0.jwt.interfaces.Claim;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
-import lombok.Data;
-import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
@@ -17,11 +15,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AccountManagerException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.JWTException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters.AccountMapper;
+import pl.lodz.p.it.ssbd2021.ssbd03.interceptors.FacadeExceptionInterceptor;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.CompanyFacadeMok;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.JWTHandler;
@@ -34,21 +28,18 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
+import javax.interceptor.Interceptors;
 import java.util.*;
-import java.time.LocalDateTime;
-import java.util.stream.Collectors;
 import java.util.List;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
-import java.time.LocalDateTime;
 
 /**
  * Klasa która zarządza logiką biznesową kont
  */
+
 @Stateful
+@Interceptors({FacadeExceptionInterceptor.class})
 public class AccountManager implements AccountManagerLocal {
 
     @EJB

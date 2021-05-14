@@ -11,7 +11,7 @@ import java.util.ResourceBundle;
  */
 public class I18n {
     public static final String ETAG_IDENTITY_INTEGRITY_ERROR = "error.security.etag.integrity";
-    public static final String OPTIMISTIC_EXCEPTION = "exception.optimistic";
+    public static final String OPTIMISTIC_LOCK_EXCEPTION = "exception.optimistic";
     public static final String NO_SUCH_ELEMENT_ERROR = "error.facade.noSuchElement";
     public static final String ACCESS_LEVEL_ALREADY_ASSIGNED_ERROR = "error.account.accessLevels.alreadyAssigned";
     public static final String ACCESS_LEVEL_NOT_ASSIGNED_ERROR = "error.account.accessLevels.notAssigned";

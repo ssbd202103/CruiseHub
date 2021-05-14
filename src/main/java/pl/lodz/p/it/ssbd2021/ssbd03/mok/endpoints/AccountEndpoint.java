@@ -17,17 +17,11 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherBusinessWorkerChange
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherClientChangeDataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccountDetailsViewDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AccountChangeEmailDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AdministratorChangeDataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.BusinessWorkerChangeDataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.ClientChangeDataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.ModeratorChangeDataDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AccountChangeEmailDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters.AccountMapper;
@@ -38,17 +32,13 @@ import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.persistence.OptimisticLockException;
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.OPTIMISTIC_EXCEPTION;
-import javax.persistence.OptimisticLockException;
-import javax.validation.Valid;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.OPTIMISTIC_LOCK_EXCEPTION;
+
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ACCESS_LEVEL_NOT_ASSIGNABLE_ERROR;
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.OPTIMISTIC_EXCEPTION;
-import javax.persistence.OptimisticLockException;
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.OPTIMISTIC_EXCEPTION;
 
 /**
  * Klasa która zajmuje się growadzeniem zmapowanych obiektów klas Dto na obiekty klas modelu związanych z kontami użytkowników i poziomami dostępu, oraz wywołuje metody logiki przekazując zmapowane obiekty.
@@ -154,7 +144,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
         Long version = getAccountByLogin(otherClientChangeDataDto.getLogin()).getVersion();
 
         if (!version.equals(otherClientChangeDataDto.getVersion())) {
-            throw new OptimisticLockException(OPTIMISTIC_EXCEPTION);
+            throw new OptimisticLockException(OPTIMISTIC_LOCK_EXCEPTION);
         }
 
         Account account = AccountMapper.extractAccountFromClientOtherChangeDataDto(otherClientChangeDataDto);
@@ -168,7 +158,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
         Long version = getAccountByLogin(otherBusinessWorkerChangeDataDto.getLogin()).getVersion();
 
         if (!version.equals(otherBusinessWorkerChangeDataDto.getVersion())) {
-            throw new OptimisticLockException(OPTIMISTIC_EXCEPTION);
+            throw new OptimisticLockException(OPTIMISTIC_LOCK_EXCEPTION);
         }
 
         Account account = AccountMapper.extractAccountFromOtherBusinessWorkerChangeDataDto(otherBusinessWorkerChangeDataDto);
@@ -181,7 +171,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
         Long version = getAccountByLogin(otherAccountChangeDataDto.getLogin()).getVersion();
 
         if (!version.equals(otherAccountChangeDataDto.getVersion())) {
-            throw new OptimisticLockException(OPTIMISTIC_EXCEPTION);
+            throw new OptimisticLockException(OPTIMISTIC_LOCK_EXCEPTION);
         }
 
         Account account = AccountMapper.extractAccountFromOtherAccountChangeDataDto(otherAccountChangeDataDto);
@@ -195,7 +185,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
         Long version = getAccountByLogin(accountChangeEmailDto.getLogin()).getVersion();
 
         if (!version.equals(accountChangeEmailDto.getVersion())) {
-            throw new OptimisticLockException(OPTIMISTIC_EXCEPTION);
+            throw new OptimisticLockException(OPTIMISTIC_LOCK_EXCEPTION);
         }
 
         accountManager.changeEmail(accountChangeEmailDto.getLogin(), accountChangeEmailDto.getVersion(), accountChangeEmailDto.getNewEmail());
@@ -206,7 +196,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
         Long version = getAccountByLogin(clientChangeDataDto.getLogin()).getVersion();
 
         if (!version.equals(clientChangeDataDto.getVersion())) {
-            throw new OptimisticLockException(OPTIMISTIC_EXCEPTION);
+            throw new OptimisticLockException(OPTIMISTIC_LOCK_EXCEPTION);
         }
 
         Account account = AccountMapper.extractAccountFromClientChangeDataDto(clientChangeDataDto);
@@ -218,7 +208,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
         Long version = getAccountByLogin(businessWorkerChangeDataDto.getLogin()).getVersion();
 
         if (!version.equals(businessWorkerChangeDataDto.getVersion())) {
-            throw new OptimisticLockException(OPTIMISTIC_EXCEPTION);
+            throw new OptimisticLockException(OPTIMISTIC_LOCK_EXCEPTION);
         }
 
         Account account = AccountMapper.extractAccountFromBusinessWorkerChangeDataDto(businessWorkerChangeDataDto);
@@ -230,7 +220,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
         Long version = getAccountByLogin(moderatorChangeDataDto.getLogin()).getVersion();
 
         if (!version.equals(moderatorChangeDataDto.getVersion())) {
-            throw new OptimisticLockException(OPTIMISTIC_EXCEPTION);
+            throw new OptimisticLockException(OPTIMISTIC_LOCK_EXCEPTION);
         }
 
         Account account = AccountMapper.extractAccountFromModeratorChangeDataDto(moderatorChangeDataDto);
@@ -242,7 +232,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
         Long version = getAccountByLogin(administratorChangeDataDto.getLogin()).getVersion();
 
         if (!version.equals(administratorChangeDataDto.getVersion())) {
-            throw new OptimisticLockException(OPTIMISTIC_EXCEPTION);
+            throw new OptimisticLockException(OPTIMISTIC_LOCK_EXCEPTION);
         }
 
         Account account = AccountMapper.extractAccountFromAdministratorChangeDataDto(administratorChangeDataDto);
