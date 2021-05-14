@@ -8,6 +8,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Administrator;
@@ -27,9 +28,13 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.CompanyFacadeMok;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.JWTHandler;
 import pl.lodz.p.it.ssbd2021.ssbd03.services.EmailService;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
+import pl.lodz.p.it.ssbd2021.ssbd03.security.JWTHandler;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
+import java.time.LocalDateTime;
+import java.util.Map;
+import java.util.stream.Collectors;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -437,6 +442,11 @@ public class AccountManager implements AccountManagerLocal {
         BusinessWorker fromBusinessWorker = getAccessLevel(fromAccount);
         targetBusinessWorker.setPhoneNumber(fromBusinessWorker.getPhoneNumber());
     }
+    @Override
+    public void updateIncorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) {
+        this.accountFacade.updateAuthenticateInfo(login, IpAddr, time, false);
+    }
+
 
     @Override
     public void changeModeratorData(Account fromAccount) throws BaseAppException {
@@ -461,5 +471,13 @@ public class AccountManager implements AccountManagerLocal {
     @Override
     public Account getAccountByLogin(String login) throws BaseAppException {
         return accountFacade.findByLogin(login);
+    }
+    @Override
+    public String updateCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) {
+        Account account = this.accountFacade.updateAuthenticateInfo(login, IpAddr, time, true);
+
+        Map<String, Object> map = Map.of("login", login, "accessLevels", account.getAccessLevels()
+            .stream().map(accessLevel -> accessLevel.getAccessLevelType().name()).collect(Collectors.toList()));
+        return JWTHandler.createToken(map, account.getId().toString());
     }
 }

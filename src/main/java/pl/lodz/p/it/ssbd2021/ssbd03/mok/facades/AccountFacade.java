@@ -15,6 +15,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.persistence.*;
 import java.util.List;
 import java.util.List;
+import java.time.LocalDateTime;
 
 @Stateless
 @TransactionAttribute(TransactionAttributeType.MANDATORY)
@@ -61,5 +62,26 @@ public class AccountFacade extends AbstractFacade<Account> {
         TypedQuery<Account> tqq = em.createNamedQuery("Account.findUnconfirmedAccount", Account.class);
         return tqq.getResultList();
 
+    }
+
+    public Account updateAuthenticateInfo(String login, String ipAddr, LocalDateTime time, boolean isAuthValid) {
+        TypedQuery<Account> tq = em.createNamedQuery("Account.findByLogin", Account.class);
+        tq.setParameter("login", login);
+        Account account;
+        try {
+            account = tq.getSingleResult();
+            if (isAuthValid) {
+                account.setLastCorrectAuthenticationDateTime(time);
+                account.setLastCorrectAuthenticationLogicalAddress(ipAddr);
+            } else {
+                account.setLastIncorrectAuthenticationDateTime(time);
+                account.setLastIncorrectAuthenticationLogicalAddress(ipAddr);
+            }
+
+        } catch (NoResultException e) {
+            return new Account();
+        }
+
+        return account;
     }
 }

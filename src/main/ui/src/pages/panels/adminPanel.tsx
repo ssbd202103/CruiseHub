@@ -28,6 +28,7 @@ import RoundedButton from '../../components/RoundedButton'
 import ChangeAccountData from "./admin/ChangeAccountData"
 import ChangeAccountPassword from "./admin/ChangeAccountPassword"
 import GrantAccessLevel from "./admin/GrantAccessLevel"
+import ChangeAccessLevelState from "./admin/ChangeAccessLevelState"
 
 import styles from '../../styles/moderatorPanel.module.css'
 
@@ -99,6 +100,9 @@ export default function AdminPanel() {
                 </Route>
                 <Route path="/panels/adminPanel/GrantAccessLevel">
                     <GrantAccessLevel/>
+                </Route>
+                <Route path="/panels/adminPanel/ChangeAccessLevelState">
+                    <ChangeAccessLevelState/>
                 </Route>
             </Grid>
         </Grid>
