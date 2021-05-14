@@ -276,6 +276,7 @@ public class AccountManager implements AccountManagerLocal {
         account.setActive(true);
         setAlterTypeAndAlterAccount(accountFacade.findByLogin(unblockedUserLogin), accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE),
                 accountFacade.findByLogin("rbranson"));
+        accountFacade.edit(account);
         Locale locale = new Locale(account.getLanguageType().getName().name());
         String body = ii18n.getMessage(UNBLOCKED_ACCOUNT_BODY, locale);
         String subject = ii18n.getMessage(UNBLOCKED_ACCOUNT_SUBJECT, locale);
