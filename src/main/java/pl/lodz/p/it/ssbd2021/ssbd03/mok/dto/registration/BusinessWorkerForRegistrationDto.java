@@ -4,9 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
-import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
-import pl.lodz.p.it.ssbd2021.ssbd03.validators.Name;
-import pl.lodz.p.it.ssbd2021.ssbd03.validators.PhoneNumber;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -29,7 +27,7 @@ public class BusinessWorkerForRegistrationDto {
     @Email
     private String email;
 
-    @NotEmpty
+    @Password
     private String password;
 
     @NotNull
@@ -38,6 +36,6 @@ public class BusinessWorkerForRegistrationDto {
     @PhoneNumber
     private String phoneNumber;
 
-    @NotEmpty
+    @CompanyName
     private String companyName;
 }

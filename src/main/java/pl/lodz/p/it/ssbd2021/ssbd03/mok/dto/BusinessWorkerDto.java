@@ -11,9 +11,9 @@ import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Name;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.PhoneNumber;
 
-import javax.persistence.Version;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -38,8 +38,8 @@ public class BusinessWorkerDto implements SignableEntity {
     @PhoneNumber
     private String phoneNumber;
 
-    @Version
-    Long version;
+    @PositiveOrZero
+    private Long version;
 
     @Override
     @JsonIgnore

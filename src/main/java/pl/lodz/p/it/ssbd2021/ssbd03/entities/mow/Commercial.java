@@ -31,7 +31,6 @@ public class Commercial extends BaseEntity {
     @OneToOne
     private CommercialTypeWrapper commercialType;
 
-
     @Getter
     @Setter
     @NotNull

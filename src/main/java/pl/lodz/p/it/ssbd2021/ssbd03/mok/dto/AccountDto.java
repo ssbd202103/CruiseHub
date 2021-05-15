@@ -11,9 +11,10 @@ import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Name;
 
-import javax.persistence.Version;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -36,9 +37,10 @@ public class AccountDto implements SignableEntity {
     @NotNull
     private LanguageType languageType;
 
-    @NotNull
+    @NotEmpty
     private Set<AccessLevelType> accessLevels;
 
+    @PositiveOrZero
     private Long version;
 
     @JsonIgnore

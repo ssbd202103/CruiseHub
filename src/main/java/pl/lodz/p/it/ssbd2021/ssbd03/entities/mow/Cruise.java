@@ -4,9 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
 
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Entity(name = "cruises")
@@ -39,7 +39,7 @@ public class Cruise extends BaseEntity {
 
     @Getter
     @Setter
-    @NotNull
+    @Size(min = 30)
     @Column(name = "description")
     private String description;
 
@@ -56,8 +56,8 @@ public class Cruise extends BaseEntity {
     @JoinColumn(name = "cruises_group_id")
     private CruiseGroup cruisesGroup;
 
-    public Cruise(Long id, @NotNull LocalDateTime startDate, @NotNull LocalDateTime endDate, @NotNull boolean active, @NotNull String description, @NotNull Boolean available, @NotNull CruiseGroup cruisesGroup) {
-        this.id = id;
+    public Cruise(LocalDateTime startDate, LocalDateTime endDate, boolean active,
+                  String description, Boolean available, CruiseGroup cruisesGroup) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.active = active;

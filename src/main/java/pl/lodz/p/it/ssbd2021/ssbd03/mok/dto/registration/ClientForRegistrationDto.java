@@ -7,6 +7,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AddressDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Name;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.Password;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.PhoneNumber;
 
 import javax.validation.constraints.Email;
@@ -30,7 +31,7 @@ public class ClientForRegistrationDto {
     @Email
     private String email;
 
-    @NotEmpty
+    @Password
     private String password;
 
     @NotNull

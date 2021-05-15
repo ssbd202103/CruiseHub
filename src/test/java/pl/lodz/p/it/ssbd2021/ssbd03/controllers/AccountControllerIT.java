@@ -69,7 +69,7 @@ class AccountControllerIT {
 
     @Test
     public void requestSomeonesPasswordReset_SUCCESS() throws JsonProcessingException {
-        String adminToken = this.getAuthToken("rbranson", "12345678");
+        String adminToken = this.getAuthToken("rbranson", "abcABC123*");
         AccountDto accountDto = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
         given().baseUri(accountBaseUri).contentType(MediaType.APPLICATION_JSON).header(new Header("Authorization", "Bearer " + adminToken)).post("/request-someones-password-reset/" + accountDto.getLogin() + "/" + accountDto.getEmail()).then().statusCode(200);
     }
@@ -95,16 +95,16 @@ class AccountControllerIT {
     @Test
     public void registerBusinessWorkerTest_SUCCESS() {
         BusinessWorkerForRegistrationDto businessWorkerDto = new BusinessWorkerForRegistrationDto("Artur", "Radiuk", randomAlphanumeric(15), randomAlphanumeric(10) + "@gmail.com",
-                "123456789", LanguageType.ENG, "123456789", "FirmaJez");
+                "abcABC123*", LanguageType.ENG, "123456789", "FirmaJez");
         AccountDto accountDto = new AccountDto(businessWorkerDto.getLogin(), businessWorkerDto.getFirstName(), businessWorkerDto.getSecondName(),
-                businessWorkerDto.getEmail(), LanguageType.ENG, Set.of(AccessLevelType.BUSINESS_WORKER), 0l);
+                businessWorkerDto.getEmail(), LanguageType.ENG, Set.of(AccessLevelType.BUSINESS_WORKER), 0L);
         given().baseUri(accountBaseUri).contentType(MediaType.APPLICATION_JSON).body(businessWorkerDto).when().post("/business-worker/registration").then().statusCode(204);
         // todo implement remove method to clean created data
     }
 
     @Test
     public void blockUserTest() throws JsonProcessingException {
-        String adminToken = this.getAuthToken("rbranson", "12345678");
+        String adminToken = this.getAuthToken("rbranson", "abcABC123*");
 
         ClientForRegistrationDto client = getSampleClientForRegistrationDto();
         AccountDto account = registerClientAndGetAccountDto(client);
@@ -134,7 +134,7 @@ class AccountControllerIT {
 
     @Test
     void grantAccessLevelTest_SUCCESS() throws JsonProcessingException {
-        String adminToken = this.getAuthToken("rbranson", "12345678");
+        String adminToken = this.getAuthToken("rbranson", "abcABC123*");
 
         ClientForRegistrationDto client = getSampleClientForRegistrationDto();
         AccountDto account = registerClientAndGetAccountDto(client);
@@ -155,7 +155,7 @@ class AccountControllerIT {
 
     @Test
     void changeAccessLevelState_SUCCESS() throws JsonProcessingException {
-        String adminToken = this.getAuthToken("rbranson", "12345678");
+        String adminToken = this.getAuthToken("rbranson", "abcABC123*");
 
         ClientForRegistrationDto client = getSampleClientForRegistrationDto();
         AccountDto account = registerClientAndGetAccountDto(client);
@@ -193,7 +193,7 @@ class AccountControllerIT {
 
     @Test
     void changeAccessLevelState_FAIL() throws JsonProcessingException {
-        String adminToken = this.getAuthToken("rbranson", "12345678");
+        String adminToken = this.getAuthToken("rbranson", "abcABC123*");
         ClientForRegistrationDto client = getSampleClientForRegistrationDto();
         AccountDto account = registerClientAndGetAccountDto(client);
 
@@ -257,7 +257,7 @@ class AccountControllerIT {
 
     @Test
     void grantAccessLevelTest_FAIL() throws JsonProcessingException {
-        String adminToken = this.getAuthToken("rbranson","12345678");
+        String adminToken = this.getAuthToken("rbranson","abcABC123*");
         ClientForRegistrationDto client = getSampleClientForRegistrationDto();
         AccountDto account = registerClientAndGetAccountDto(client);
         GrantAccessLevelDto grantAccessLevel = new GrantAccessLevelDto(account.getLogin(), AccessLevelType.MODERATOR, account.getVersion());
@@ -290,7 +290,7 @@ class AccountControllerIT {
 
     @Test
     public void getAllAccountsTest_SUCCESS() throws JsonProcessingException {
-        String adminToken = this.getAuthToken("rbranson","12345678");
+        String adminToken = this.getAuthToken("rbranson","abcABC123*");
 
         Response response = RestAssured.given().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken)).baseUri(accountBaseUri).get("/accounts");
         String accountString = response.getBody().asString();
@@ -319,7 +319,7 @@ class AccountControllerIT {
 
     @Test
     public void unblockUserTest_SUCCESS() throws JsonProcessingException { // todo fix this test
-        String adminToken = this.getAuthToken("rbranson","12345678");
+        String adminToken = this.getAuthToken("rbranson","abcABC123*");
 
         ClientForRegistrationDto client = getSampleClientForRegistrationDto();
         AccountDto account = registerClientAndGetAccountDto(client);
@@ -347,15 +347,13 @@ class AccountControllerIT {
 
         assertTrue(accountDtoForList.isActive());
         assertEquals(200, response.getStatusCode());
-
-
     }
 
 
     private ClientForRegistrationDto getSampleClientForRegistrationDto() {
         AddressDto address = new AddressDto(1L, "Bortnyka", "30-302", "Pluzhne", "Ukraine");
         return new ClientForRegistrationDto("Artur", "Radiuk", randomAlphanumeric(15), randomAlphanumeric(10) + "@gmail.com",
-                "123456789", LanguageType.PL, address, "123456789");
+                "abcABC123*", LanguageType.PL, address, "123456789");
     }
 
     private AccountDto registerClientAndGetAccountDto(ClientForRegistrationDto client) throws JsonProcessingException {
@@ -365,7 +363,7 @@ class AccountControllerIT {
 
     @Test
     public void changeEmailTest_SUCCESS() throws JsonProcessingException {
-        String adminToken = this.getAuthToken("rbranson","12345678");
+        String adminToken = this.getAuthToken("rbranson","abcABC123*");
         AccountDto account = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
         Response res = given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + adminToken)).get("/" + account.getLogin());
         String etag = res.getHeader("Etag");
@@ -390,7 +388,7 @@ class AccountControllerIT {
 
     @Test
     public void changeEmailTest_FAIL() throws JsonProcessingException {
-        String adminToken = this.getAuthToken("rbranson","12345678");
+        String adminToken = this.getAuthToken("rbranson","abcABC123*");
 
         AccountDto account = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
         Response res = given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + adminToken)).get("/" + account.getLogin());
@@ -413,20 +411,20 @@ class AccountControllerIT {
     }
 
     private AccountDto getAccountDto(String login) throws JsonProcessingException {
-        String authToken = this.getAuthToken("rbranson", "12345678");
+        String authToken = this.getAuthToken("rbranson", "abcABC123*");
         return objectMapper.readValue(given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + authToken)).get("/" + login).thenReturn().asString(), AccountDto.class);
     }
 
 
     private AccountDetailsViewDto getAccountDetailsViewDto(String login) throws JsonProcessingException {
-        String authToken = this.getAuthToken("rbranson", "12345678");
+        String authToken = this.getAuthToken("rbranson", "abcABC123*");
         String responseString = given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + authToken)).get("/details-view/" + login)
                 .thenReturn().asString();
         return objectMapper.readValue(responseString, AccountDetailsViewDto.class);
     }
 
     private void grantAccessLevel(AccountDto account, AccessLevelType accessLevelType, Long accountVersion) {
-        String authToken = this.getAuthToken("rbranson", "12345678");
+        String authToken = this.getAuthToken("rbranson", "abcABC123*");
         if (!account.getAccessLevels().contains(accessLevelType)) {
             GrantAccessLevelDto grantAccessLevel = new GrantAccessLevelDto(account.getLogin(), accessLevelType, accountVersion);
             String etag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
@@ -441,7 +439,7 @@ class AccountControllerIT {
 
     @Test
     public void changeClientDataTest_SUCCESS() throws JsonProcessingException {
-        String adminToken = this.getAuthToken("rbranson","12345678");
+        String adminToken = this.getAuthToken("rbranson","abcABC123*");
 
         ClientForRegistrationDto client = getSampleClientForRegistrationDto();
         AccountDto account = registerClientAndGetAccountDto(client);
@@ -467,7 +465,7 @@ class AccountControllerIT {
 
     @Test
     public void changeBusinessWorkerDataTest_SUCCESS() throws JsonProcessingException {
-        String adminToken = this.getAuthToken("rbranson","12345678");
+        String adminToken = this.getAuthToken("rbranson","abcABC123*");
 
         BusinessWorkerForRegistrationDto worker = getSampleBusinessWorkerForRegistrationDto();
         AccountDto account = registerBusinessWorkerAndGetAccountDto(worker);
@@ -489,7 +487,7 @@ class AccountControllerIT {
 
     @Test
     public void changeModeratorOrAdministratorDataTest_SUCCESS() throws JsonProcessingException {
-        String adminToken = this.getAuthToken("rbranson","12345678");
+        String adminToken = this.getAuthToken("rbranson","abcABC123*");
 
         AccountDto account = getAccountDto("rbranson");
         String etag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
@@ -507,7 +505,7 @@ class AccountControllerIT {
 
     private BusinessWorkerForRegistrationDto getSampleBusinessWorkerForRegistrationDto() {
         return new BusinessWorkerForRegistrationDto("Artur", "Radiuk", randomAlphanumeric(15), randomAlphanumeric(10) + "@gmail.com",
-                "123456789", LanguageType.PL, "123456789", "FirmaJez");
+                "abcABC123*", LanguageType.PL, "123456789", "FirmaJez");
     }
 
     private AccountDto registerBusinessWorkerAndGetAccountDto(BusinessWorkerForRegistrationDto worker) throws JsonProcessingException {
@@ -526,6 +524,5 @@ class AccountControllerIT {
         assertEquals(HttpStatus.SC_OK, response.getStatusCode());
         return response.getBody().asString();
     }
-
 
 }

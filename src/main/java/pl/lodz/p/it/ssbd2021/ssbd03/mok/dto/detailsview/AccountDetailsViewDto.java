@@ -11,7 +11,9 @@ import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Name;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.Set;
 
 @Data
@@ -36,10 +38,13 @@ public class AccountDetailsViewDto implements SignableEntity {
     @NotNull
     private LanguageType languageType;
 
+    @NotEmpty
     private Set<AccessLevelDetailsViewDto> accessLevels;
 
+    @PositiveOrZero
     private Long version;
 
+    @NotEmpty
     private String etag;
 
     public AccountDetailsViewDto(String firstName, String secondName, String login, String email, boolean confirmed, boolean active, LanguageType languageType, Set<AccessLevelDetailsViewDto> accessLevels, Long version) {

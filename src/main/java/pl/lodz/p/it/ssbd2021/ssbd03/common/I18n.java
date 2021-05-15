@@ -1,8 +1,5 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.common;
 
-import javax.xml.transform.sax.SAXResult;
-import java.util.Locale;
-import java.util.ResourceBundle;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -29,12 +26,23 @@ public class I18n {
     public static final String ACCOUNT_VERIFICATION_TOKEN_CONTENT_ERROR = "error.account.verification.contentError";
     public static final String ACCOUNT_VERIFICATION_TOKEN_EXPIRE_ERROR = "error.account.verification.expireError";
     public static final String ACCOUNT_VERIFICATION_TOKEN_ALREADY_VERIFIED_ERROR = "error.account.verification.alreadyVerifiedError";
+    public static final String REGEX_INVALID_POST_CODE = "error.regex.postCode";
+    public static final String REGEX_INVALID_CITY = "error.regex.city";
+    public static final String REGEX_INVALID_COUNTRY = "error.regex.country";
+    public static final String REGEX_INVALID_STREET = "error.regex.street";
+    public static final String REGEX_INVALID_PHONE_NUMBER = "error.regex.phoneNumber";
+    public static final String REGEX_INVALID_LOGIN = "error.regex.login";
+    public static final String REGEX_INVALID_PASSWORD = "error.regex.password";
+    public static final String REGEX_INVALID_NAME = "error.regex.name";
+    public static final String REGEX_INVALID_COMPANY_NAME = "error.regex.companyName";
+
+
     public static final String REQUESTED_PASSWORD_RESET_SUBJECT = "account.request.reset.password.subject";
     public static final String REQUESTED_PASSWORD_RESET_BODY = "account.request.reset.password.body";
     public static final String VERIFICATION_EMAIL_SUBJECT = "account.verification.subject";
     public static final String VERIFICATION_EMAIL_BODY = "account.verification.body";
-    public static final String REMOVE_UNCONFIRMED_ACCOUNT_SUBJECT ="account.remove.unconfirmed.subject";
-    public static final String REMOVE_UNCONFIRMED_ACCOUNT_BODY ="account.remove.unconfirmed.body";
+    public static final String REMOVE_UNCONFIRMED_ACCOUNT_SUBJECT = "account.remove.unconfirmed.subject";
+    public static final String REMOVE_UNCONFIRMED_ACCOUNT_BODY = "account.remove.unconfirmed.body";
     public static final String BLOCKED_ACCOUNT_SUBJECT = "account.block.subject";
     public static final String UNBLOCKED_ACCOUNT_SUBJECT = "account.unblock.subject";
     public static final String ACTIVATE_ACCOUNT_SUBJECT = "account.activate.subject";
@@ -45,8 +53,9 @@ public class I18n {
     public static final String INCORRECT_PASSWORD = "auth.incorrect.password";
 
     private ResourceBundle bundle;
-        public String getMessage(String message, Locale locale) {
-            bundle= ResourceBundle.getBundle("messages",locale);
-            return bundle.getString(message);
-        }
+
+    public String getMessage(String message, Locale locale) {
+        bundle = ResourceBundle.getBundle("messages", locale);
+        return bundle.getString(message);
+    }
 }

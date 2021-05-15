@@ -1,10 +1,12 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.PhoneNumber;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class ConsumerChangeDataDto extends AccountChangeDataDto {
     @PhoneNumber
