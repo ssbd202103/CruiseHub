@@ -3,6 +3,8 @@ import {Link} from 'react-router-dom'
 import Box from '@material-ui/core/Box'
 import PasswordIcon from '@material-ui/icons/VpnKeyRounded'
 
+import { useHistory } from 'react-router-dom'
+
 import AuthLayout from '../layouts/AuthLayout'
 import DarkedTextField from '../components/DarkedTextField'
 import RoundedButton from '../components/RoundedButton'
@@ -13,8 +15,16 @@ import styles from '../styles/auth.global.module.css'
 import axios from "axios"
 import React, {createRef} from "react"
 
+import {useDispatch} from "react-redux";
+import {update} from '../redux/slices/tokenSlice'
+import {setUser} from '../redux/slices/userSlice'
+
 export default function SignIn() {
     const {t} = useTranslation();
+
+    const history = useHistory();
+
+    const dispatch = useDispatch();
 
     const loginRef = createRef() as React.RefObject<HTMLDivElement>
     const passwordRef = createRef() as React.RefObject<HTMLDivElement>
@@ -25,13 +35,23 @@ export default function SignIn() {
             password: passwordRef?.current?.querySelector('input')?.value
         })
 
-        let response = await axios.post('http://localhost:8080/cruisehub/api/signin', json, {
+        let response = await axios.post('http://localhost:8080/api/signin/auth', json, {
             headers: {
                 'Content-Type': 'application/json'
             }
         })
 
-        window.localStorage.setItem('token', response.data)
+        const accountDetails = await axios.get('http://localhost:8080/api/self/account-details', {
+            headers: {
+                'Authorization': `Bearer ${response.data}`
+            }
+        })
+
+        // window.localStorage.setItem('token', response.data)
+        dispatch(update(response.data))
+        dispatch(setUser(accountDetails.data))
+
+        history.push('/')
     }
 
 

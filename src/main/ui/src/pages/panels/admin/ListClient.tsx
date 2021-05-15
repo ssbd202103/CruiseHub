@@ -18,6 +18,8 @@ import {useTranslation} from "react-i18next";
 import ButtonGroup from '@material-ui/core/ButtonGroup'
 import axios from "axios";
 import { useLocation } from 'react-router-dom';
+import {useSelector} from "react-redux";
+import {selectColor} from "../../../redux/slices/colorSlice";
 
 interface UnblockAccountParams {
     login: string;
@@ -107,12 +109,14 @@ function createData(
 
 
 export interface RowProps {
-    row : ReturnType<typeof createData>
+    row : ReturnType<typeof createData>,
+    style: React.CSSProperties
 }
 
 function Row(props: RowProps) {
     const {row} = props;
-    const {t} = useTranslation()
+    const {style} = props;
+    const {t} = useTranslation();
     const [open, setOpen] = React.useState(false);
     const [buttonText, setButtonText] = useState("true");
 
@@ -136,18 +140,18 @@ function Row(props: RowProps) {
     return (
         <React.Fragment>
             <TableRow className={classes.root}>
-                <TableCell>
+                <TableCell style={style}>
                     <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
                         {open ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
                     </IconButton>
                 </TableCell>
 
-                <TableCell component="th" scope="row">
+                <TableCell component="th" scope="row" style={style}>
                     {row.login}
                 </TableCell>
-                <TableCell>{row.email}</TableCell>
-                <TableCell>{row.active.toString()}</TableCell>
-                <TableCell>{row.accessLevels.toString()}</TableCell>
+                <TableCell style={style}>{row.email}</TableCell>
+                <TableCell style={style}>{row.active.toString()}</TableCell>
+                <TableCell style={style}>{row.accessLevels.toString()}</TableCell>
 
             </TableRow>
             <TableRow>
@@ -212,6 +216,9 @@ function Row(props: RowProps) {
 
 export default function AdminListClient() {
     const [users, setUsers] = useState([]);
+
+    const color = useSelector(selectColor)
+
     useEffect(() => {
         loadUsers();
     },[]);
@@ -225,20 +232,22 @@ export default function AdminListClient() {
 
     const {t} = useTranslation()
     return (
-        <TableContainer component={Paper}>
+        <TableContainer component={Paper} style={{
+            backgroundColor: `var(--${color ? 'white' : 'dark-light'}`
+        }}>
             <Table aria-label="collapsible table">
                 <TableHead>
                     <TableRow>
                         <TableCell/>
-                        <TableCell>{t("login")}</TableCell>
-                        <TableCell>{t("email")}</TableCell>
-                        <TableCell>{t("active")}</TableCell>
-                        <TableCell>{t("access level")}</TableCell>
+                        <TableCell style={{color: `var(--${color ? 'dark' : 'white'})`}}>{t("login")}</TableCell>
+                        <TableCell style={{color: `var(--${color ? 'dark' : 'white'})`}}>{t("email")}</TableCell>
+                        <TableCell style={{color: `var(--${color ? 'dark' : 'white'})`}}>{t("active")}</TableCell>
+                        <TableCell style={{color: `var(--${color ? 'dark' : 'white'})`}}>{t("access level")}</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {users.map((user, index) => (
-                        <Row key={index} row={user}/>
+                        <Row key={index} row={user} style={{color: `var(--${color ? 'dark' : 'white'})`}} />
                     ))}
                 </TableBody>
             </Table>

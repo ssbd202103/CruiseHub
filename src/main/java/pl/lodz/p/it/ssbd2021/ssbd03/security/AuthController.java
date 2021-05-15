@@ -1,5 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.security;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AuthUnauthorizedException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AuthenticateDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.AuthenticateEndpointLocal;
 
@@ -38,6 +40,7 @@ public class AuthController {
 
     /**
      * Metoda służąca do logowania
+     *
      * @param auth Login oraz hasło użytkownika
      * @return Token JWT
      */
@@ -45,14 +48,25 @@ public class AuthController {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response auth(@Valid @NotNull AuthenticateDto auth) throws Exception {
+    public Response auth(@Valid @NotNull AuthenticateDto auth) throws AuthUnauthorizedException {
         Credential credential = auth.toCredential();
         CredentialValidationResult result = identityStoreHandler.validate(credential);
         String token;
 
         if (result.getStatus() != CredentialValidationResult.Status.VALID) {
-            authEndpoint.updateIncorrectAuthenticateInfo(auth.getLogin(), httpServletRequest.getRemoteAddr(), LocalDateTime.now());
-            return Response.status(Response.Status.UNAUTHORIZED)
+            try {
+                authEndpoint.updateIncorrectAuthenticateInfo(auth.getLogin(), httpServletRequest.getRemoteAddr(), LocalDateTime.now());
+            } catch (AuthUnauthorizedException e) {
+                return Response.status(Response.Status.UNAUTHORIZED).entity(e.getMessage()).
+                    header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+                    .header("Access-Control-Allow-Credentials", "true")
+                    .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+                    .header("Access-Control-Allow-Origin", "*")
+                    .build();
+            }
+            return Response.status(Response.Status.UNAUTHORIZED).entity(I18n.INCORRECT_PASSWORD).header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+                .header("Access-Control-Allow-Credentials", "true")
+                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD").header("Access-Control-Allow-Origin", "*")
                 .build();
         }
 
@@ -60,6 +74,9 @@ public class AuthController {
 
         return Response.ok()
             .entity(token)
+            .header("Access-Control-Allow-Origin", "*").header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+            .header("Access-Control-Allow-Credentials", "true")
+            .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
             .build();
     }
 }

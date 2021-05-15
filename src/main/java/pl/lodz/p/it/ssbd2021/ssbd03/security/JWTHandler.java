@@ -93,6 +93,7 @@ public class JWTHandler {
             throw new JWTException("Provided token could not be decoded");
         }
     }
+
     /**
      * Metoda zwrająca issuera;
      *
@@ -107,6 +108,7 @@ public class JWTHandler {
             throw new JWTException("Provided token could not be decoded");
         }
     }
+
     /**
      * Metoda zwrająca issuera;
      *
@@ -129,14 +131,15 @@ public class JWTHandler {
      * @param token Przekazany token
      * @throws JWTVerificationException Wyjątek błędu walidacji
      */
-    public static void validateToken(String token) {
+    public static void validateToken(String token) throws JWTException {
         Algorithm algorithm = Algorithm.HMAC256(getJWTSecret());
         JWTVerifier verifier = JWT.require(algorithm).build();
 
         try {
             verifier.verify(token);
         } catch (JWTVerificationException exception) {
-            throw new JWTVerificationException("Token validation failed");
+//            throw new JWTVerificationException("Token validation failed");
+            throw new JWTException("Provided token invalidate");
         }
     }
 
@@ -155,6 +158,7 @@ public class JWTHandler {
             throw new NumberFormatException("jwt.validityInHours value: {" + securityProperties.getProperty("jwt.validityInHours") + "} could not be parsed to Long, verify properties data");
         }
     }
+
     private static String getJWTSecret() {
         return securityProperties.getProperty("jwt.secret");
     }
