@@ -61,7 +61,7 @@ class AccountControllerIT {
         authBaseUri = securityProperties.getProperty("app.baseurl") + "/api/signin";
     }
 
-    @Test // todo
+    @Test
     public void requestPasswordReset_SUCCESS() throws JsonProcessingException {
         AccountDto accountDto = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
         given().baseUri(accountBaseUri).contentType(MediaType.APPLICATION_JSON).post("/request-password-reset/" + accountDto.getLogin()).then().statusCode(200);

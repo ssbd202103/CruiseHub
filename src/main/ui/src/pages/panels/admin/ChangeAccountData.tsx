@@ -1,4 +1,4 @@
-import React, {createRef, useReducer, useState} from 'react'
+import {createRef, useReducer, useState} from 'react'
 
 import Grid from '@material-ui/core/Grid'
 

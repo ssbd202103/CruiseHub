@@ -1,4 +1,4 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit'
+import {createSelector, createSlice, PayloadAction} from '@reduxjs/toolkit'
 
 export interface IUserSliceState {
     firstName: string,
@@ -36,10 +36,20 @@ const userSlice = createSlice({
         version: 0
     } as IUserSliceState,
     reducers: {
-        setUser: (state: IUserSliceState, {payload}: PayloadAction<IUserSliceState>) => payload
+        setUser: (state: IUserSliceState, {payload}: PayloadAction<IUserSliceState>) => payload,
+        changeEmail: (state: IUserSliceState, {payload}: PayloadAction<string>) => {
+            state.email = payload
+        }
     }
 })
 
-export const {setUser} = userSlice.actions
+export const {setUser, changeEmail} = userSlice.actions
+
+const selectSelf = (state: { user: IUserSliceState }) => state
+
+export const selectEmail = createSelector(selectSelf, state => state.user.email)
+export const selectEtag = createSelector(selectSelf, state => state.user.etag)
+export const selectLogin = createSelector(selectSelf, state => state.user.login)
+export const selectVersion = createSelector(selectSelf, state => state.user.version)
 
 export default userSlice.reducer

@@ -1,18 +1,29 @@
-import {useState} from 'react'
+import React, {createRef, useState} from 'react'
 
 import Grid from '@material-ui/core/Grid'
-import Button from "@material-ui/core/Button";
 
 import {useTranslation} from 'react-i18next';
 
 import styles from '../../../styles/ManageAccount.module.css'
 import RoundedButton from '../../../components/RoundedButton';
 import DarkedTextField from '../../../components/DarkedTextField';
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {selectColor} from "../../../redux/slices/colorSlice";
+import {
+    changeEmail as changeEmailAction,
+    selectEmail,
+} from "../../../redux/slices/userSlice";
+import { changeEmail as changeEmailService } from '../../../Services/changeEmailService';
 
 export default function ManageAccount() {
     const {t} = useTranslation()
+
+    const dispatch = useDispatch()
+
+    const email = useSelector(selectEmail)
+
+    const emailRef = createRef() as React.RefObject<HTMLDivElement>
+    const confirmEmailRef = createRef() as React.RefObject<HTMLDivElement>
 
     const color = useSelector(selectColor)
 
@@ -48,13 +59,33 @@ export default function ManageAccount() {
     //Functions for email data change
     const handleChangEmail = () => {
         setChangEmail(state => !state)
-        setPerData( false)
-        setChangChangAddress( false)
+        setPerData(false)
+        setChangChangAddress(false)
         setChangPasswd(false)
     }
     const changeEmail = () => {
-        //Place for transfer function (change email in database)
-        handleChangEmail()
+        const emailValue = emailRef?.current?.querySelector('input')?.value
+        const confirmEmailValue = confirmEmailRef?.current?.querySelector('input')?.value
+
+        if (!emailValue || !confirmEmailValue) {
+            //TODO
+            return alert("FATAL: fields or values are missing")
+        }
+
+        if (emailValue !== confirmEmailValue) {
+            //TODO
+            return alert("FATAL: emails are not equal")
+        }
+
+        changeEmailService(emailValue).then(res => {
+            dispatch(changeEmailAction(emailValue))
+        }).catch(error => {
+            //TODO
+            alert('ERROR. Go to the console')
+            console.log(error)
+        })
+
+        setChangEmail(state => !state)
     }
 
     //Functions for password
@@ -185,7 +216,7 @@ export default function ManageAccount() {
                 <Grid item  style={{display: ChangEmail ? "none" : "block"}} className={styles.item}>
                     <h3>{t("email")}</h3>
                     <div>
-                        <p>BigMIke@gmail.com</p>
+                        <p>{email}</p>
                         <RoundedButton 
                             color="blue"
                             onClick={handleChangEmail}
@@ -198,11 +229,13 @@ export default function ManageAccount() {
                         <DarkedTextField 
                             type="text"
                             label={t("new email")} 
-                            placeholder={t("new email")} />
+                            placeholder={t("new email")}
+                            ref={emailRef} />
                         <DarkedTextField 
                             type="text" 
                             label={t("new email confirm")}
-                            placeholder={t("new email confirm")} />
+                            placeholder={t("new email confirm")}
+                            ref={confirmEmailRef} />
                     </div>
                     <RoundedButton 
                         color="blue"
