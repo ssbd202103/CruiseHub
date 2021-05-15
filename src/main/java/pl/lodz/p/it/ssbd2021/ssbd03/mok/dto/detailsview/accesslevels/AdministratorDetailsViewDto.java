@@ -10,6 +10,5 @@ public class AdministratorDetailsViewDto extends AccessLevelDetailsViewDto {
     }
 
     public AdministratorDetailsViewDto() {
-
     }
 }

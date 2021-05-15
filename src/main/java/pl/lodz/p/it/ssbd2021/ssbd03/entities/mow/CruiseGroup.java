@@ -5,8 +5,11 @@ import lombok.Setter;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "cruises_groups")
@@ -34,49 +37,46 @@ public class CruiseGroup extends BaseEntity {
     @JoinColumn(name = "start_address_id")
     private CruiseAddress address;
 
-
     @Getter
     @Setter
-    @NotNull
+    @NotEmpty
     @Column(name = "name")
     private String name;
 
     @Getter
     @Setter
-    @NotNull
+    @PositiveOrZero
     @Column(name = "number_of_seats")
     private Long numberOfSeats;
 
     @Getter
     @Setter
-    @NotNull
+    @Positive
     @Column(name = "price")
-    private BigDecimal price;
+    private Double price;
 
     @Getter
-    @NotNull
     @ManyToMany
     @JoinTable(name = "cruises_group_pictures",
             joinColumns = @JoinColumn(name = "cruise_picture_id"),
             inverseJoinColumns = @JoinColumn(name = "cruises_group_id")
     )
-    private List<CruisePicture> cruisePicture;
+    private final List<CruisePicture> cruisePictures = new ArrayList<>();
 
     @Getter
     @Setter
-    @NotNull
+    @PositiveOrZero
     @Column(name = "average_rating")
-    private BigDecimal averageRating;
+    private Double averageRating;
 
 
-    public CruiseGroup(Long id, @NotNull Company company, @NotNull CruiseAddress address, @NotNull String name, @NotNull Long numberOfSeats, @NotNull BigDecimal price, @NotNull List<CruisePicture> cruisePicture, @NotNull BigDecimal averageRating) {
-        this.id = id;
+    public CruiseGroup(Company company, CruiseAddress address, String name, Long numberOfSeats,
+                       Double price, Double averageRating) {
         this.company = company;
         this.address = address;
         this.name = name;
         this.numberOfSeats = numberOfSeats;
         this.price = price;
-        this.cruisePicture = cruisePicture;
         this.averageRating = averageRating;
     }
 

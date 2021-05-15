@@ -1,16 +1,15 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.entities.mow;
 
-
 import lombok.Getter;
 import lombok.Setter;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Entity(name = "cruise_pictures")
 public class CruisePicture extends BaseEntity {
-
 
     @Getter
     @Id
@@ -21,12 +20,13 @@ public class CruisePicture extends BaseEntity {
 
     @Getter
     @Setter
+    @NotEmpty
     @Column(name = "img")
     private Byte[] img;
 
     @Getter
     @Setter
-    @NotNull
+    @NotEmpty
     @Column(name = "img_name")
     private String imgName;
 

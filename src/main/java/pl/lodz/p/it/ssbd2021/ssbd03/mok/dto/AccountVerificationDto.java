@@ -1,16 +1,16 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.dto;
 
-import lombok.*;
-import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
-import javax.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.validation.constraints.NotEmpty;
 
 @Data
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class AccountVerificationDto {
 
+    @NotEmpty
     private String token;
-
 }

@@ -100,6 +100,16 @@ const resources = {
             "error.email.incorrect": "Address email jest niepoprawny",
             "error.emailService.inaccessible": "Serwis pocztowy jest niedostępny",
             "error.password.reset.contentError": "Błędna zawartość tokenu do resetowania hasła",
+            ////regex errors
+            "error.regex.postCode": "Niepoprawny format kodu pocztowego",
+            "error.regex.city": "Niepoprawny format miasta",
+            "error.regex.country": "Niepoprawny format państwa",
+            "error.regex.street": "Niepoprawny format ulicy",
+            "error.regex.phoneNumber": "Niepoprawny format numeru telefonu",
+            "error.regex.login": "Niepoprawny format loginu",
+            "error.regex.password": "Niepoprawny format hasła",
+            "error.regex.name": "Niepoprawny format imienia",
+            "error.regex.companyName": "Niepoprawny format nazwy firmy",
             "phone change btn": "Zmień numer telefonu"
         }
     },
@@ -199,7 +209,18 @@ const resources = {
             "error.parsing.serialization": "Received data could not be serialized properly",
             "error.password.reset.wrongIdentity": "Request contains wrong identity",
             "error.email.incorrect": "Email address is incorrect",
-            "error.password.reset.contentError": "Błędna zawartość tokenu do resetowania hasła",
+            "error.password.reset.contentError": "Invalid password reset token content",
+
+            ////regex errors
+            "error.regex.postCode": "Invalid post code format",
+            "error.regex.city": "Invalid city format",
+            "error.regex.country": "Invalid country format",
+            "error.regex.street": "Invalid street format",
+            "error.regex.phoneNumber": "Invalid phone number format",
+            "error.regex.login": "Invalid login format",
+            "error.regex.password": "Invalid password format",
+            "error.regex.name": "Invalid name format",
+            "error.regex.companyName": "Invalid company name format",
             "phone change btn": "Change phone number"
         }
     }

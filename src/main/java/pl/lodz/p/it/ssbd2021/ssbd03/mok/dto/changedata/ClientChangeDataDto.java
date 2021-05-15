@@ -1,12 +1,17 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AddressDto;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AddressDto;
 
-@Data
+import javax.validation.constraints.NotNull;
+
+@Getter
+@Setter
 @NoArgsConstructor
 public class ClientChangeDataDto extends ConsumerChangeDataDto {
+    @NotNull
     private AddressDto newAddress;
 
     public ClientChangeDataDto(String login, Long version, String newFirstName, String newSecondName, String newPhoneNumber, AddressDto newAddress) {

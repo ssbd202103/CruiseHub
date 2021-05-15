@@ -4,9 +4,13 @@ package pl.lodz.p.it.ssbd2021.ssbd03.entities.mow;
 import lombok.Getter;
 import lombok.Setter;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.City;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.Country;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.Street;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Positive;
 
 
 @Entity(name = "cruise_addresses")
@@ -21,42 +25,40 @@ public class CruiseAddress extends BaseEntity {
 
     @Getter
     @Setter
-    @NotNull
+    @Street
     @Column(name = "street")
     private String street;
 
     @Getter
     @Setter
-    @NotNull
+    @Positive
     @Column(name = "street_number")
     private Integer streetNumber;
 
     @Getter
     @Setter
-    @NotNull
+    @NotEmpty
     @Column(name = "harbor_name")
     private String harborName;
 
     @Getter
     @Setter
-    @NotNull
+    @City
     @Column(name = "city_name")
-    private String city_name;
+    private String cityName;
 
     @Getter
     @Setter
-    @NotNull
+    @Country
     @Column(name = "country_name")
-    private String country_name;
+    private String countryName;
 
-
-    public CruiseAddress(Integer id, @NotNull String street, @NotNull Integer streetNumber, @NotNull String harborName, @NotNull String city_name, @NotNull String country_name) {
-        this.id = id;
+    public CruiseAddress(String street, Integer streetNumber, String harborName, String cityName, String countryName) {
         this.street = street;
         this.streetNumber = streetNumber;
         this.harborName = harborName;
-        this.city_name = city_name;
-        this.country_name = country_name;
+        this.cityName = cityName;
+        this.countryName = countryName;
     }
 
     public CruiseAddress() {

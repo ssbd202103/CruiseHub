@@ -10,14 +10,15 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AuthUnauthorizedException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 
-import javax.ejb.Stateful;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.persistence.*;
-import java.util.List;
-import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Stateless
 @TransactionAttribute(TransactionAttributeType.MANDATORY)
@@ -59,7 +60,6 @@ public class AccountFacade extends AbstractFacade<Account> {
     }
 
 
-
     public List<Account> getUnconfirmedAccounts() {
         TypedQuery<Account> tqq = em.createNamedQuery("Account.findUnconfirmedAccount", Account.class);
         return tqq.getResultList();
@@ -75,6 +75,7 @@ public class AccountFacade extends AbstractFacade<Account> {
             if (isAuthValid) {
                 account.setLastCorrectAuthenticationDateTime(time);
                 account.setLastCorrectAuthenticationLogicalAddress(ipAddr);
+                account.setNumberOfAuthenticationFailures(account.getNumberOfAuthenticationFailures() + 1);
             } else {
                 account.setLastIncorrectAuthenticationDateTime(time);
                 account.setLastIncorrectAuthenticationLogicalAddress(ipAddr);

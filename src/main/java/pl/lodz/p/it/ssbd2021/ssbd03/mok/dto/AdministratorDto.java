@@ -10,9 +10,9 @@ import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Name;
 
-import javax.persistence.Version;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -34,8 +34,8 @@ public class AdministratorDto implements SignableEntity {
     @NotNull
     private LanguageType languageType;
 
-    @Version
-    Long version;
+    @PositiveOrZero
+    private Long version;
 
     @Override
     @JsonIgnore

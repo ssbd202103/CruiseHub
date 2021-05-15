@@ -5,8 +5,8 @@ import lombok.Setter;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 
-
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Entity(name = "comments")
@@ -18,7 +18,6 @@ public class Comment extends BaseEntity {
     @Column(name = "id")
     private Long id;
 
-
     @Getter
     @Setter
     @NotNull
@@ -28,7 +27,7 @@ public class Comment extends BaseEntity {
 
     @Getter
     @Setter
-    @NotNull
+    @NotEmpty
     @Column(name = "comment")
     private String content;
 
@@ -39,9 +38,7 @@ public class Comment extends BaseEntity {
     @JoinColumn(name = "cruise_id")
     private Cruise cruise;
 
-
-    public Comment(Long id, @NotNull Account account, @NotNull String content, @NotNull Cruise cruise) {
-        this.id = id;
+    public Comment(Account account, String content, Cruise cruise) {
         this.account = account;
         this.content = content;
         this.cruise = cruise;

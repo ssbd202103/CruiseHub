@@ -4,9 +4,12 @@ import lombok.Getter;
 import lombok.Setter;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address;
-
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.PhoneNumber;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Entity(name = "companies")
@@ -33,24 +36,24 @@ public class Company extends BaseEntity {
 
     @Getter
     @Setter
-    @NotNull
+    @NotEmpty
     @Column(name = "name", unique = true)
     private String name;
 
     @Getter
     @Setter
-    @NotNull
+    @PhoneNumber
     @Column(name = "phone_number")
     private String phoneNumber;
 
     @Getter
     @Setter
-    @NotNull
+    @Min(value = 1000000000L)
+    @Max(value = 9999999999L)
     @Column(name = "nip")
     private Long NIP;
 
-    public Company(Long id, @NotNull Address address, @NotNull String name, @NotNull String phoneNumber, @NotNull Long NIP) {
-        this.id = id;
+    public Company(Address address, String name, String phoneNumber, Long NIP) {
         this.address = address;
         this.name = name;
         this.phoneNumber = phoneNumber;

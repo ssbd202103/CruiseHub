@@ -1,14 +1,14 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AbstractAccountDTO;
-import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Name;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class AccountChangeDataDto extends AbstractAccountDTO {

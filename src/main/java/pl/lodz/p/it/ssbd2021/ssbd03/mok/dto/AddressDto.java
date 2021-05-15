@@ -14,7 +14,6 @@ import javax.validation.constraints.Positive;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AddressDto {
-
     @Positive
     private Long houseNumber;
 

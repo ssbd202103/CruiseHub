@@ -8,6 +8,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 
 @Entity(name = "ratings")
 public class Rating extends BaseEntity {
@@ -33,7 +34,7 @@ public class Rating extends BaseEntity {
 
     @Getter
     @Setter
-    @NotNull
+    @PositiveOrZero
     @Column(name = "rating")
     private double rating;
 

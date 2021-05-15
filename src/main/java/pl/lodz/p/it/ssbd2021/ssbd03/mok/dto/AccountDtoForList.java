@@ -10,6 +10,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.Set;
@@ -25,15 +26,15 @@ public class AccountDtoForList implements SignableEntity {
     @Email
     private String email;
 
-    @NotNull
     private boolean active;
 
     @PositiveOrZero
     private Long version;
 
-    @NotNull
+    @NotEmpty
     private Set<AccessLevelType> accessLevels;
 
+    @NotEmpty
     private String etag;
 
     public AccountDtoForList(@Login String login, @Email String email, @NotNull boolean active, @PositiveOrZero Long version, @NotNull Set<AccessLevelType> accessLevels, String etag) {
