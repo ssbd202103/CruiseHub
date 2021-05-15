@@ -40,6 +40,7 @@ public class AuthController {
 
     /**
      * Metoda służąca do logowania
+     *
      * @param auth Login oraz hasło użytkownika
      * @return Token JWT
      */
@@ -56,10 +57,16 @@ public class AuthController {
             try {
                 authEndpoint.updateIncorrectAuthenticateInfo(auth.getLogin(), httpServletRequest.getRemoteAddr(), LocalDateTime.now());
             } catch (AuthUnauthorizedException e) {
-                return Response.status(Response.Status.UNAUTHORIZED).entity(e.getMessage())
+                return Response.status(Response.Status.UNAUTHORIZED).entity(e.getMessage()).
+                    header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+                    .header("Access-Control-Allow-Credentials", "true")
+                    .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+                    .header("Access-Control-Allow-Origin", "*")
                     .build();
             }
-            return Response.status(Response.Status.UNAUTHORIZED).entity(I18n.INCORRECT_PASSWORD)
+            return Response.status(Response.Status.UNAUTHORIZED).entity(I18n.INCORRECT_PASSWORD).header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+                .header("Access-Control-Allow-Credentials", "true")
+                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD").header("Access-Control-Allow-Origin", "*")
                 .build();
         }
 
@@ -67,6 +74,9 @@ public class AuthController {
 
         return Response.ok()
             .entity(token)
+            .header("Access-Control-Allow-Origin", "*").header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+            .header("Access-Control-Allow-Credentials", "true")
+            .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
             .build();
     }
 }
