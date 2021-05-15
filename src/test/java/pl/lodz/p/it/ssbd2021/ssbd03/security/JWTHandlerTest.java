@@ -54,7 +54,7 @@ class JWTHandlerTest {
             assertDoesNotThrow(() -> JWTHandler.validateToken(token));
 
             String editedToken = token.replaceAll(".{3}(?=$)", "zzz"); //changing last 3 signs of token's signature
-            assertThrows(JWTVerificationException.class, () -> JWTHandler.validateToken(editedToken));
+            assertThrows(JWTException.class, () -> JWTHandler.validateToken(editedToken));
         }
     }
 

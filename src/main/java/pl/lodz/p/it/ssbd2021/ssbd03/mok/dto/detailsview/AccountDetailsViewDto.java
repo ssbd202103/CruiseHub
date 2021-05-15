@@ -15,7 +15,6 @@ import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class AccountDetailsViewDto implements SignableEntity {
     @Name
@@ -38,6 +37,7 @@ public class AccountDetailsViewDto implements SignableEntity {
     private LanguageType languageType;
 
     private Set<AccessLevelDetailsViewDto> accessLevels;
+
     private Long version;
 
     private String etag;

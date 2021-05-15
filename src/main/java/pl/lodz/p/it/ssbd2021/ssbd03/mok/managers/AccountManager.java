@@ -2,8 +2,6 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.managers;
 
 import com.auth0.jwt.interfaces.Claim;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
-import lombok.Data;
-import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
@@ -17,7 +15,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AccountManagerException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.JWTException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
@@ -30,9 +28,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.stream.Collectors;
 import javax.inject.Inject;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
@@ -40,10 +35,10 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.List;
 import java.util.Optional;
-
+import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
-import java.time.LocalDateTime;
 
 /**
  * Klasa która zarządza logiką biznesową kont
@@ -58,9 +53,7 @@ public class AccountManager implements AccountManagerLocal {
     private CompanyFacadeMok companyFacadeMok;
 
     @Inject
-    I18n ii18n;
-
-
+    I18n i18n;
 
     @Override
     public void createClientAccount(Account account, Client client) throws BaseAppException {
@@ -73,7 +66,7 @@ public class AccountManager implements AccountManagerLocal {
         client.getHomeAddress().setAlterType(insertAlterType);
 
         accountFacade.create(account);
-        if(accountFacade.findByLogin(account.getLogin()) != null) {
+        if (accountFacade.findByLogin(account.getLogin()) != null) {
             sendVerificationEmail(account);
         }
     }
@@ -85,7 +78,7 @@ public class AccountManager implements AccountManagerLocal {
         businessWorker.setCompany(companyFacadeMok.getCompanyByName(companyName));
 
         this.accountFacade.create(account);
-        if(accountFacade.findByLogin(account.getLogin()) != null) {
+        if (accountFacade.findByLogin(account.getLogin()) != null) {
             sendVerificationEmail(account);
         }
     }
@@ -179,8 +172,8 @@ public class AccountManager implements AccountManagerLocal {
         Map<String, Object> claims = Map.of("version", account.getVersion());
         String token = JWTHandler.createTokenEmail(claims, account.getLogin());
         Locale locale = new Locale(account.getLanguageType().getName().name());
-        String subject = ii18n.getMessage(VERIFICATION_EMAIL_SUBJECT, locale);
-        String body = ii18n.getMessage(VERIFICATION_EMAIL_BODY, locale);
+        String subject = i18n.getMessage(VERIFICATION_EMAIL_SUBJECT, locale);
+        String body = i18n.getMessage(VERIFICATION_EMAIL_BODY, locale);
         String contentHtml = "<a href=\"" + PropertiesReader.getSecurityProperties().getProperty("app.baseurl") + "/verify/accountVerification/" + token + "\">" + body + "</a>";
         EmailService.sendEmailWithContent(account.getEmail().trim(), subject, contentHtml);
     }
@@ -191,17 +184,15 @@ public class AccountManager implements AccountManagerLocal {
     }
 
     @Override
-    public void blockUser(String login, Long version) throws BaseAppException {
-        Account account =  this.accountFacade.findByLogin(login);
+    public Account blockUser(String login, Long version) throws BaseAppException {
+        Account account = this.accountFacade.findByLogin(login);
         account.setVersion(version);
         account.setActive(false);
-        setAlterTypeAndAlterAccount(accountFacade.findByLogin(login), accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE),
-            // this is for now, will be changed in the upcoming feature
-            accountFacade.findByLogin("rbranson"));
-        Locale locale = new Locale(account.getLanguageType().getName().name());
-        String body = ii18n.getMessage(BLOCKED_ACCOUNT_BODY, locale);
-        String subject = ii18n.getMessage(BLOCKED_ACCOUNT_SUBJECT, locale);
-        EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
+        setAlterTypeAndAlterAccount(account, accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE),
+                // this is for now, will be changed in the upcoming feature
+                account);
+        accountFacade.edit(account);
+        return account;
     }
 
 
@@ -245,60 +236,54 @@ public class AccountManager implements AccountManagerLocal {
         if (claims.get("sub") != null && claims.get("version") != null) {
             String login = claims.get("sub").asString();
             if (!expire.before(new Date(System.currentTimeMillis()))) {
-            Account account = this.accountFacade.findByLogin(login);
-                if(!account.isConfirmed()) {
+                Account account = this.accountFacade.findByLogin(login);
+                if (!account.isConfirmed()) {
                     account.setConfirmed(true);
                     account.setVersion(claims.get("version").asLong());
                     account.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
                     account.setAlteredBy(account);
                     Locale locale = new Locale(account.getLanguageType().getName().name());
-                    String body = ii18n.getMessage(ACTIVATE_ACCOUNT_BODY, locale);
-                    String subject = ii18n.getMessage(ACTIVATE_ACCOUNT_SUBJECT, locale);
+                    String body = i18n.getMessage(ACTIVATE_ACCOUNT_BODY, locale);
+                    String subject = i18n.getMessage(ACTIVATE_ACCOUNT_SUBJECT, locale);
                     EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
+                } else {
+                    throw new AccountManagerException(ACCOUNT_VERIFICATION_TOKEN_ALREADY_VERIFIED_ERROR);
                 }
-            else {
-                throw new AccountManagerException(ACCOUNT_VERIFICATION_TOKEN_ALREADY_VERIFIED_ERROR);
-            }
             } else {
                 throw new AccountManagerException(ACCOUNT_VERIFICATION_TOKEN_EXPIRE_ERROR);
-           }
-        }
-        else {
+            }
+        } else {
             throw new AccountManagerException(ACCOUNT_VERIFICATION_TOKEN_CONTENT_ERROR);
         }
     }
+
     @Override
     public void requestSomeonesPasswordReset(String login, String email) throws BaseAppException {
         Account account = this.accountFacade.findByLogin(login);
         Map<String, Object> claims = Map.of("version", account.getVersion());
-        Locale locale=new Locale( account.getLanguageType().getName().name());
+        Locale locale = new Locale(account.getLanguageType().getName().name());
         String token = JWTHandler.createToken(claims, login);
-        String subject = ii18n.getMessage(REQUESTED_PASSWORD_RESET_SUBJECT,locale);
-        String body = ii18n.getMessage(REQUESTED_PASSWORD_RESET_BODY,locale);
+        String subject = i18n.getMessage(REQUESTED_PASSWORD_RESET_SUBJECT, locale);
+        String body = i18n.getMessage(REQUESTED_PASSWORD_RESET_BODY, locale);
         String contentHtml = "<a href=\"" + PropertiesReader.getSecurityProperties().getProperty("app.baseurl") + "/reset/passwordReset/" + token + "\">" + body + "</a>";
         EmailService.sendEmailWithContent(email, subject, contentHtml);
     }
+
     @Override
-    public void unblockUser(String unblockedUserLogin,  Long version) throws BaseAppException {
-        Account account =  this.accountFacade.findByLogin(unblockedUserLogin);
+    public Account unblockUser(String unblockedUserLogin, Long version) throws BaseAppException {
+        Account account = this.accountFacade.findByLogin(unblockedUserLogin);
         account.setVersion(version);
         account.setActive(true);
-        setAlterTypeAndAlterAccount(accountFacade.findByLogin(unblockedUserLogin), accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE),
-                accountFacade.findByLogin("rbranson"));
-        Locale locale = new Locale(account.getLanguageType().getName().name());
-        String body = ii18n.getMessage(UNBLOCKED_ACCOUNT_BODY, locale);
-        String subject = ii18n.getMessage(UNBLOCKED_ACCOUNT_SUBJECT, locale);
-        EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
+        setAlterTypeAndAlterAccount(account, accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE),
+                //needs to be changed as in blockUser method
+                account);
+        return account;
     }
 
     private void setAlterTypeAndAlterAccount(Account account, AlterTypeWrapper alterTypeWrapper, Account alteredBy) {
         account.setAlteredBy(alteredBy);
         account.setAlterType(alterTypeWrapper);
-        account.setLastAlterDateTime(LocalDateTime.now());
     }
-
-
-
 
 
     @Override
@@ -312,6 +297,7 @@ public class AccountManager implements AccountManagerLocal {
         targetAccount.setAlteredBy(accountFacade.findByLogin(alterBy));
         targetAccount.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
         targetAccount.setLastAlterDateTime(LocalDateTime.now());
+        Account targetAccount = updateAccount(fromAccount, alterBy);
 
         Client targetClient = (Client) getAccessLevel(targetAccount, AccessLevelType.CLIENT);
         targetClient.setVersion(targetAccount.getVersion());
@@ -319,8 +305,17 @@ public class AccountManager implements AccountManagerLocal {
         targetClient.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
         targetClient.setLastAlterDateTime(LocalDateTime.now());
 
-        Client fromClient = getAccessLevel(fromAccount);
+        Client fromClient = (Client) getAccessLevel(fromAccount, AccessLevelType.CLIENT);
+        updateClient(fromClient, targetClient);
 
+        Address targetAddress = targetClient.getHomeAddress();
+        targetAddress.setAlteredBy(accountFacade.findByLogin(alterBy));
+        targetAddress.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
+        targetAddress.setLastAlterDateTime(LocalDateTime.now());
+        return targetAccount;
+    }
+
+    private void updateClient(Client fromClient, Client targetClient) {
         targetClient.setPhoneNumber(fromClient.getPhoneNumber());
 
         Address targetAddress = targetClient.getHomeAddress();
@@ -330,9 +325,17 @@ public class AccountManager implements AccountManagerLocal {
         targetAddress.setPostalCode(fromAddress.getPostalCode());
         targetAddress.setCity(fromAddress.getCity());
         targetAddress.setCountry(fromAddress.getCountry());
-        targetAddress.setAlteredBy(accountFacade.findByLogin(alterBy));
-        targetAddress.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
-        targetAddress.setLastAlterDateTime(LocalDateTime.now());
+    }
+
+    private Account updateAccount(Account updatedAccount, String alteredBy) throws BaseAppException {
+        Account targetAccount = accountFacade.findByLogin(updatedAccount.getLogin());
+
+        targetAccount.setVersion(updatedAccount.getVersion());
+        targetAccount.setFirstName(updatedAccount.getFirstName());
+        targetAccount.setSecondName(updatedAccount.getSecondName());
+        targetAccount.setAlteredBy(accountFacade.findByLogin(alteredBy));
+        targetAccount.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
+        targetAccount.setLastAlterDateTime(LocalDateTime.now());
         return targetAccount;
     }
 
@@ -346,13 +349,14 @@ public class AccountManager implements AccountManagerLocal {
         targetAccount.setAlteredBy(accountFacade.findByLogin(alterBy));
         targetAccount.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
         targetAccount.setLastAlterDateTime(LocalDateTime.now());
+        Account targetAccount = updateAccount(fromAccount, alterBy);
         BusinessWorker targetBusinessWorker = (BusinessWorker) getAccessLevel(targetAccount, AccessLevelType.BUSINESS_WORKER);
         targetBusinessWorker.setVersion(targetAccount.getVersion());
         targetBusinessWorker.setAlteredBy(accountFacade.findByLogin(alterBy));
         targetBusinessWorker.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
         targetBusinessWorker.setLastAlterDateTime(LocalDateTime.now());
 
-        BusinessWorker fromBusinessWorker = getAccessLevel(fromAccount);
+        BusinessWorker fromBusinessWorker = (BusinessWorker) getAccessLevel(fromAccount, AccessLevelType.BUSINESS_WORKER);
         targetBusinessWorker.setPhoneNumber(fromBusinessWorker.getPhoneNumber());
         return targetAccount;
     }
@@ -368,6 +372,7 @@ public class AccountManager implements AccountManagerLocal {
         targetAccount.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
         targetAccount.setLastAlterDateTime(LocalDateTime.now());
         return targetAccount;
+
     }
 
     @Override
@@ -381,12 +386,14 @@ public class AccountManager implements AccountManagerLocal {
         account.setAlterType(account.getAlterType());
     }
 
-    private AccessLevel getAccessLevel(Account from, AccessLevelType target) {
-        return from.getAccessLevels().stream().filter(accessLevel -> accessLevel.getAccessLevelType().equals(target)).collect(Collectors.toList()).get(0);
-    }
+    private AccessLevel getAccessLevel(Account from, AccessLevelType target) throws AccountManagerException {
+        Optional<AccessLevel> optionalAccessLevel = from.getAccessLevels().stream()
+                .filter(accessLevel -> accessLevel.getAccessLevelType().equals(target)).findAny();
 
-    private <T> T getAccessLevel(Account from) {
-        return (T) new ArrayList<>(from.getAccessLevels()).get(0);
+        if (optionalAccessLevel.isEmpty()) {
+            throw new AccountManagerException(ACCESS_LEVEL_DOES_NOT_EXIST_ERROR);
+        }
+        return optionalAccessLevel.get();
     }
 
     private void setAccountChanges(Account target, Account from) {
@@ -413,17 +420,10 @@ public class AccountManager implements AccountManagerLocal {
         Client targetClient = (Client) getAccessLevel(targetAccount, AccessLevelType.CLIENT);
         setAccessLevelChanges(targetClient, targetAccount);
 
-        Client fromClient = getAccessLevel(fromAccount);
-
-        targetClient.setPhoneNumber(fromClient.getPhoneNumber());
+        Client fromClient = (Client) getAccessLevel(fromAccount, AccessLevelType.CLIENT);
+        updateClient(fromClient, targetClient);
 
         Address targetAddress = targetClient.getHomeAddress();
-        Address fromAddress = fromClient.getHomeAddress();
-        targetAddress.setHouseNumber(fromAddress.getHouseNumber());
-        targetAddress.setStreet(fromAddress.getStreet());
-        targetAddress.setPostalCode(fromAddress.getPostalCode());
-        targetAddress.setCity(fromAddress.getCity());
-        targetAddress.setCountry(fromAddress.getCountry());
         targetAddress.setAlteredBy(targetAccount);
         targetAddress.setAlterType(targetAccount.getAlterType());
         targetAddress.setLastAlterDateTime(fromAccount.getLastAlterDateTime());
@@ -437,9 +437,15 @@ public class AccountManager implements AccountManagerLocal {
         BusinessWorker targetBusinessWorker = (BusinessWorker) getAccessLevel(targetAccount, AccessLevelType.BUSINESS_WORKER);
         setAccessLevelChanges(targetBusinessWorker, targetAccount);
 
-        BusinessWorker fromBusinessWorker = getAccessLevel(fromAccount);
+        BusinessWorker fromBusinessWorker = (BusinessWorker) getAccessLevel(fromAccount, AccessLevelType.BUSINESS_WORKER);
         targetBusinessWorker.setPhoneNumber(fromBusinessWorker.getPhoneNumber());
     }
+
+    @Override
+    public void updateIncorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws AuthUnauthorizedException {
+        this.accountFacade.updateAuthenticateInfo(login, IpAddr, time, false);
+    }
+
 
     @Override
     public void changeModeratorData(Account fromAccount) throws BaseAppException {
@@ -464,5 +470,14 @@ public class AccountManager implements AccountManagerLocal {
     @Override
     public Account getAccountByLogin(String login) throws BaseAppException {
         return accountFacade.findByLogin(login);
+    }
+
+    @Override
+    public String updateCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws AuthUnauthorizedException {
+        Account account = this.accountFacade.updateAuthenticateInfo(login, IpAddr, time, true);
+
+        Map<String, Object> map = Map.of("login", login, "accessLevels", account.getAccessLevels()
+                .stream().map(accessLevel -> accessLevel.getAccessLevelType().name()).collect(Collectors.toList()));
+        return JWTHandler.createToken(map, account.getId().toString());
     }
 }

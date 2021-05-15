@@ -121,6 +121,42 @@ public class AccountMapper {
     }
 
     /**
+     * Mapuje obiekt klasy Account na obiekt przesyłowy klasy AccountDetailsViewDto
+     *
+     * @param account Konto poddawane konwersji
+     * @return Reprezentacja konta w postaci obiektu przesyłowego AccountDetailsViewDto
+     */
+    public static AccountDetailsViewDto toAccountDetailsViewDto(Account account) {
+        return new AccountDetailsViewDto(account.getFirstName(), account.getSecondName(), account.getLogin(),
+                account.getEmail(), account.isConfirmed(), account.isActive(), account.getLanguageType().getName(),
+                account.getAccessLevels().stream()
+                        .map(AccountMapper::toAccessLevelDetailsViewDto)
+                        .collect(Collectors.toSet()), account.getVersion());
+    }
+
+    private static AccessLevelDetailsViewDto toAccessLevelDetailsViewDto(AccessLevel accessLevel) {
+        switch (accessLevel.getAccessLevelType()) {
+            case CLIENT:
+                Client client = (Client) accessLevel;
+                return new ClientDetailsViewDto(accessLevel.isEnabled(), toAddressDto(client.getHomeAddress()), client.getPhoneNumber());
+            case BUSINESS_WORKER:
+                BusinessWorker businessWorker = (BusinessWorker) accessLevel;
+                return new BusinessWorkerDetailsViewDto(businessWorker.isEnabled(), businessWorker.getPhoneNumber(),
+                        businessWorker.getConfirmedByBusinessWorker(), businessWorker.getCompany().getName());
+            case MODERATOR:
+                return new ModeratorDetailsViewDto(accessLevel.isEnabled());
+            case ADMINISTRATOR:
+                return new AdministratorDetailsViewDto(accessLevel.isEnabled());
+            default:
+                return null; // Statement will never execute unless new AccessLevel ENUM is added to the model
+        }
+    }
+
+    private static AddressDto toAddressDto(Address address) {
+        return new AddressDto(address.getHouseNumber(), address.getStreet(),
+                address.getPostalCode(), address.getCity(), address.getCountry());
+    }
+    /**
      * Mapuje obiekt klasy account na obiekt DTO
      * @param account Konto poddawane konwersji
      * @return Reprezentacja obiektu przesyłowego DTO konta zawierający login, wersje, imię, nazwisko, numer telefonu, adres oraz konto modyfikujące
@@ -363,6 +399,7 @@ public class AccountMapper {
                 account.getVersion()
         );
 	}
+	/* 
 	/**
      * Mapuje obiekt klasy Account na obiekt przesyłowy klasy AccountDetailsViewDto
      *
@@ -398,5 +435,5 @@ public class AccountMapper {
     private static AddressDto toAddressDto(Address address) {
         return new AddressDto(address.getHouseNumber(), address.getStreet(),
                 address.getPostalCode(), address.getCity(), address.getCountry());
-    }
+    } */
 }

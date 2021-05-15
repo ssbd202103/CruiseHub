@@ -10,11 +10,18 @@
     align-items: center;
 }
 
+.profile-light {
+    color: var(--white);
+}
+
+.profile-dark {
+    color: var(--dark);
+}
+
 .name {
     font-family: 'Montserrat Alternates', sans-serif;
     font-weight: 700;
     font-size: 1.5rem;
-    color: var(--white);
 }
 
 .email {
@@ -22,5 +29,5 @@
     font-family: 'Montserrat', sans-serif;
     font-weight: 500;
     font-size: 1.2rem;
-    color: var(--white);
+
 }

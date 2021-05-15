@@ -1,10 +1,12 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.facades;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.LanguageTypeWrapper;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AuthUnauthorizedException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 
@@ -15,6 +17,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.persistence.*;
 import java.util.List;
 import java.util.List;
+import java.time.LocalDateTime;
 
 @Stateless
 @TransactionAttribute(TransactionAttributeType.MANDATORY)
@@ -61,5 +64,26 @@ public class AccountFacade extends AbstractFacade<Account> {
         TypedQuery<Account> tqq = em.createNamedQuery("Account.findUnconfirmedAccount", Account.class);
         return tqq.getResultList();
 
+    }
+
+    public Account updateAuthenticateInfo(String login, String ipAddr, LocalDateTime time, boolean isAuthValid) throws AuthUnauthorizedException {
+        TypedQuery<Account> tq = em.createNamedQuery("Account.findByLogin", Account.class);
+        tq.setParameter("login", login);
+        Account account;
+        try {
+            account = tq.getSingleResult();
+            if (isAuthValid) {
+                account.setLastCorrectAuthenticationDateTime(time);
+                account.setLastCorrectAuthenticationLogicalAddress(ipAddr);
+            } else {
+                account.setLastIncorrectAuthenticationDateTime(time);
+                account.setLastIncorrectAuthenticationLogicalAddress(ipAddr);
+            }
+
+        } catch (NoResultException e) {
+            throw new AuthUnauthorizedException(I18n.INCORRECT_LOGIN);
+        }
+
+        return account;
     }
 }

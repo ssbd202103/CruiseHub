@@ -7,9 +7,17 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: var(--blue);
+
     padding: 20px 60px;
     z-index: 3001;
+}
+
+.wrapper-light {
+    background-color: var(--blue);
+}
+
+.wrapper-dark {
+    background-color: var(--dark-dark);
 }
 
 .link {

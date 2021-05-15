@@ -12,16 +12,32 @@
     font-weight: 700;
     font-size: 1.5rem;
     margin-bottom: 16px;
-    color: var(--dark);
 }
 
 .menu.menu * {
     font-family: 'Montserrat', sans-serif !important;
     font-size: 1.2rem;
+}
+
+.menu-light * {
     color: var(--white);
+}
+
+.menu-dark * {
+    color: var(--dark);
 }
 
 .content {
     overflow-y: scroll;
     padding: 30px;
+}
+
+.content-light {
+    color: var(--dark);
+    background-color: var(--white);
+}
+
+.content-dark {
+    color: var(--white);
+    background-color: var(--dark);
 }

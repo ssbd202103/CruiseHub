@@ -26,20 +26,25 @@ import RoundedButton from '../../components/RoundedButton'
 import { useTranslation } from 'react-i18next'
 
 import styles from '../../styles/clientPanel.module.css'
+import AppColorSetter from "../../components/AppColorSetter";
+import {useSelector} from "react-redux";
+import {selectColor} from "../../redux/slices/colorSlice";
 
 export default function ClientPanel() {
     const { t } = useTranslation()
 
+    const color = useSelector(selectColor)
+
     return (
         <Grid container className={styles.wrapper}>
             <Redirect to="/panels/clientPanel/cruises" />
-            <Grid item xs={2} md={3}>
-                <PanelMenu color="blue">
-                    <List className={styles.menu} component="nav" aria-label="panel menu">
+            <Grid item xs={2} md={3} xl={2}>
+                <PanelMenu color={color ? 'blue' : 'white-dark'}>
+                    <List className={styles.menu + ' ' + styles['menu-' + (color ? 'light' : 'dark')]} component="nav" aria-label="panel menu">
                         <Link to="/panels/clientPanel/cruises">
                             <ListItem button>
                                 <ListItemIcon>
-                                    <CruiseIcon style={{ fill: 'var(--white)' }} />
+                                    <CruiseIcon style={{ fill: `var(--${color ? 'white' : 'dark'})` }} />
                                 </ListItemIcon>
                                 <ListItemText> {t("cruises")} </ListItemText>
                             </ListItem>
@@ -47,24 +52,27 @@ export default function ClientPanel() {
                         <Link to="/panels/clientPanel/settings">
                             <ListItem button>
                                 <ListItemIcon>
-                                    <SettingsIcon style={{ fill: 'var(--white)' }} />
+                                    <SettingsIcon style={{ fill: `var(--${color ? 'white' : 'dark'})` }} />
                                 </ListItemIcon>
                                 <ListItemText>{t("settings")}</ListItemText>
                             </ListItem>
                         </Link>
                         <Link to="/">
                             <ListItem button>
-                                <ListItemIcon style={{fill: 'var(--white)'}}>
+                                <ListItemIcon style={{fill: `var(--${color ? 'white' : 'dark'})` }}>
                                     <GoBackIcon />
                                 </ListItemIcon>
                                 <ListItemText>{t("go back")}</ListItemText>
                             </ListItem>
                         </Link>
+                        <ListItem button>
+                            <AppColorSetter />
+                        </ListItem>
                     </List>
                 </PanelMenu>
             </Grid>
 
-            <Grid item className={styles.content} xs={10} md={9}>
+            <Grid item className={styles.content + ' ' + styles[`content-${color ? 'light' : 'dark'}`]} xs={10} md={9} xl={10}>
                 <Route exact path="/panels/clientPanel/cruises">
                     <div> {t("my cruises")} </div>
                 </Route>

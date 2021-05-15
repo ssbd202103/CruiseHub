@@ -4,6 +4,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AuthUnauthorizedException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
@@ -12,8 +13,10 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 
 
 import javax.ejb.Local;
+import java.time.LocalDateTime;
 import java.util.List;
 
+import java.time.LocalDateTime;
 
 /**
  * Klasa która zarządza logiką biznesową kont
@@ -90,7 +93,7 @@ public interface AccountManagerLocal {
      * @param version Wersja obiektu do sprawdzenia
      * @throws BaseAppException Wyjątek aplikacji rzucany w przypadku błędu pobrania danych użytkownika
      */
-    void blockUser(String login, Long version) throws BaseAppException;
+    Account blockUser(String login, Long version) throws BaseAppException;
 
 
     /**
@@ -100,10 +103,7 @@ public interface AccountManagerLocal {
      * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku gdy występuje błąd w p
      *                          obraniu danych w fasadzie
      */
-    void unblockUser(String unblockedUserLogin, Long version) throws BaseAppException;
-
-
-
+    Account unblockUser(String unblockedUserLogin, Long version) throws BaseAppException;
 
     /**
      * Pobiera liste kont z bazy danych
@@ -224,5 +224,20 @@ public interface AccountManagerLocal {
      */
     void changeAdministratorData(Account account) throws BaseAppException;
 
+    /**
+     * Metoda odpowiedzialna za edycję pól w bazie danych w przypadku niepoprawnego logowania.
+     * @param login Login użytkownika
+     * @param IpAddr Adres IP użytkownika
+     * @param time Czas
+     */
+    void updateIncorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws AuthUnauthorizedException;
 
+    /**
+     * Metoda odpowiedzialna za edycję pól w bazie danych w przypadku poprawnego logowania.
+     * @param login Login użytkownika
+     * @param IpAddr Adres IP użytkownika
+     * @param time Czas
+     * @return Token JWT
+     */
+    String updateCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws AuthUnauthorizedException;
 }

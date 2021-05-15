@@ -4,12 +4,49 @@ import {
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import * as React from 'react'
+import {useSelector} from "react-redux";
+import {selectColor} from "../redux/slices/colorSlice";
 
 const useStyles = makeStyles(theme => ({
-    root: {
+    light: {
         borderColor: 'var(--dark)',
+        color: 'var(--dark)',
         '& input:focus:focus + fieldset': {
             borderColor: 'var(--dark)'
+        },
+        '& input': {
+            color: 'var(--dark)'
+        },
+        '& input + fieldset': {
+            borderColor: 'var(--dark)'
+        },
+        '&:hover input + fieldset': {
+            borderColor: 'var(--dark)'
+        },
+        '& .MuiInputLabel-root': {
+            color: 'var(--dark-light)'
+        }
+    },
+    dark: {
+        borderColor: 'var(--white)',
+        color: 'var(--white)',
+        '& input:focus:focus + fieldset': {
+            borderColor: 'var(--white)'
+        },
+        '& input + fieldset': {
+            borderColor: 'var(--white)'
+        },
+        '& input': {
+            color: 'var(--white)'
+        },
+        '& input::placeholder': {
+            color: 'var(--white)'
+        },
+        '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'var(--white)'
+        },
+        '& .MuiInputLabel-root': {
+            color: 'var(--white-dark)'
         }
     }
 }))
@@ -23,7 +60,6 @@ const labelStyle = {
     style: {
         fontFamily: "'Montserrat', sans-serif",
         fontSize: '1.1rem',
-        color: 'var(--dark)'
     }
 }
 
@@ -49,9 +85,11 @@ const DarkedTextField = React.forwardRef((props: DarkedTextFieldProps, ref) => {
             style,
         } = props
 
+        const color = useSelector(selectColor)
+
         return (<TextField
             type={type || "text"}
-            className={classes.root + ' ' + (styles || "")}
+            className={classes[color ? 'light' : 'dark'] + ' ' + (styles || "")}
             variant="outlined"
             label={label || ""}
             InputProps={{

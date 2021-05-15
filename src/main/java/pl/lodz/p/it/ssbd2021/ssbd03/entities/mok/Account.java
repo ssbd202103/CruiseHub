@@ -119,7 +119,7 @@ public class Account extends BaseEntity {
         this.email = email;
         this.passwordHash = passwordHash;
         this.confirmed = false;
-        this.active = false;
+        this.active = true;
         this.languageType = languageType;
         this.setCreatedBy(this); // Account is set as self-owner by default
         this.setAlteredBy(this);

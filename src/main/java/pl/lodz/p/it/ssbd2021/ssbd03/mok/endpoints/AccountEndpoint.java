@@ -1,20 +1,16 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.EndpointException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.PasswordResetDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.ChangeAccessLevelStateDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherAccountChangeDataDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherBusinessWorkerChangeDataDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherClientChangeDataDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.ChangeAccessLevelStateDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccountDetailsViewDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
@@ -29,21 +25,20 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters.AccountMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.managers.AccountManagerLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
+import pl.lodz.p.it.ssbd2021.ssbd03.services.EmailService;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
+import javax.inject.Inject;
 import javax.persistence.OptimisticLockException;
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.OPTIMISTIC_EXCEPTION;
-import javax.persistence.OptimisticLockException;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.SecurityContext;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ACCESS_LEVEL_NOT_ASSIGNABLE_ERROR;
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.OPTIMISTIC_EXCEPTION;
-import javax.persistence.OptimisticLockException;
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.OPTIMISTIC_EXCEPTION;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 
 /**
  * Klasa która zajmuje się growadzeniem zmapowanych obiektów klas Dto na obiekty klas modelu związanych z kontami użytkowników i poziomami dostępu, oraz wywołuje metody logiki przekazując zmapowane obiekty.
@@ -53,6 +48,12 @@ public class AccountEndpoint implements AccountEndpointLocal {
 
     @EJB
     private AccountManagerLocal accountManager;
+
+    @Context
+    private SecurityContext securityContext;
+
+    @Inject
+    I18n i18n;
 
     @Override
     public String getETagFromSignableEntity(SignableEntity entity) {
@@ -99,9 +100,6 @@ public class AccountEndpoint implements AccountEndpointLocal {
         );
     }
 
-
-
-
     @Override
     public AccountDetailsViewDto getAccountDetailsByLogin(String login) throws BaseAppException {
         return AccountMapper.toAccountDetailsViewDto(accountManager.getAccountByLogin(login));
@@ -114,7 +112,11 @@ public class AccountEndpoint implements AccountEndpointLocal {
 
     @Override
     public void blockUser(@NotNull String login, @NotNull Long version) throws BaseAppException {
-        this.accountManager.blockUser(login, version);
+        Account account = this.accountManager.blockUser(login, version);
+        Locale locale = new Locale(account.getLanguageType().getName().name());
+        String body = i18n.getMessage(BLOCKED_ACCOUNT_BODY, locale);
+        String subject = i18n.getMessage(BLOCKED_ACCOUNT_SUBJECT, locale);
+        EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
     }
 
     @Override
@@ -129,7 +131,12 @@ public class AccountEndpoint implements AccountEndpointLocal {
 
     @Override
     public void unblockUser(@NotNull String unblockedUserLogin, @NotNull Long version) throws BaseAppException {
-        this.accountManager.unblockUser(unblockedUserLogin, version);
+        Account account = this.accountManager.unblockUser(unblockedUserLogin, version);
+
+        Locale locale = new Locale(account.getLanguageType().getName().name());
+        String body = i18n.getMessage(UNBLOCKED_ACCOUNT_BODY, locale);
+        String subject = i18n.getMessage(UNBLOCKED_ACCOUNT_SUBJECT, locale);
+        EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
     }
 
 
@@ -155,7 +162,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
         Account account = AccountMapper.extractAccountFromClientOtherChangeDataDto(otherClientChangeDataDto);
         String alterBy = AccountMapper.extractAlterByFromOtherClientDataChange(otherClientChangeDataDto);
 
-        return AccountMapper.accountDtoForClientDataChange(accountManager.changeOtherClientData(account,alterBy));
+        return AccountMapper.accountDtoForClientDataChange(accountManager.changeOtherClientData(account, alterBy));
     }
 
     @Override
@@ -168,7 +175,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
 
         Account account = AccountMapper.extractAccountFromOtherBusinessWorkerChangeDataDto(otherBusinessWorkerChangeDataDto);
         String alterBy = AccountMapper.extractAlterByFromOtherBusinessWorkerDataChange(otherBusinessWorkerChangeDataDto);
-       return AccountMapper.accountDtoForBusinnesWorkerDataChange(accountManager.changeOtherBusinessWorkerData(account,alterBy));
+        return AccountMapper.accountDtoForBusinnesWorkerDataChange(accountManager.changeOtherBusinessWorkerData(account, alterBy));
     }
 
     @Override
@@ -181,7 +188,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
 
         Account account = AccountMapper.extractAccountFromOtherAccountChangeDataDto(otherAccountChangeDataDto);
         String alterBy = AccountMapper.extractAlterByFromAccount(otherAccountChangeDataDto);
-       return AccountMapper.toAccountDto(accountManager.changeOtherAccountData(account,alterBy));
+        return AccountMapper.toAccountDto(accountManager.changeOtherAccountData(account, alterBy));
     }
 
 
@@ -245,7 +252,6 @@ public class AccountEndpoint implements AccountEndpointLocal {
     }
 
 
-
     @Override
     public AccountDto getAccountByLogin(String login) throws BaseAppException {
         return AccountMapper.toAccountDto(accountManager.getAccountByLogin(login));
@@ -271,5 +277,8 @@ public class AccountEndpoint implements AccountEndpointLocal {
         return AccountMapper.toAdministratorDto(accountManager.getAccountByLogin(login));
     }
 
-
+    @Override
+    public String getCurrentUserLogin() {
+        return securityContext.getUserPrincipal().getName();
+    }
 }
