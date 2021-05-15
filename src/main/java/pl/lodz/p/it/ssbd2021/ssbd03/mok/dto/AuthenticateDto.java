@@ -1,21 +1,22 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.Password;
 
 import javax.security.enterprise.credential.Credential;
 import javax.security.enterprise.credential.UsernamePasswordCredential;
-import javax.validation.constraints.NotNull;
 
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
 public class AuthenticateDto {
-    @NotNull
     @Login
     private String login;
 
-    @NotNull
+    @Password
     private String password;
 
     public Credential toCredential() {

@@ -8,13 +8,14 @@ import java.lang.annotation.Target;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.REGEX_INVALID_COUNTRY;
 
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
 @Constraint(validatedBy = {})
 @Pattern(regexp = ValidationRegex.COUNTRY)
 public @interface Country {
-    String message() default "Invalid Country format"; //should be later replaced with resource bundle
+    String message() default REGEX_INVALID_COUNTRY;
 
     Class<?>[] groups() default {};
 
