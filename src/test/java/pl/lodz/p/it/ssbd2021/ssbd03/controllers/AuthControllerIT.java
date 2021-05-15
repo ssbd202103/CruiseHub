@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class AuthControllerIT {
-    private static final String baseUri = "http://localhost:8080/cruisehub/api/";
+    private static final String baseUri = "http://localhost:8080/api/";
 
     @Test
     void auth() {
