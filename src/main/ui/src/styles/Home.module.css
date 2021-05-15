@@ -26,7 +26,6 @@
     animation-name: arrow-movements;
     animation-timing-function: ease-in-out;
     animation-iteration-count: infinite;
-    ;
 }
 
 @keyframes arrow-movements {
@@ -64,6 +63,7 @@
     font-weight: 500;
     font-size: 1.8rem;
     color: var(--dark);
+    margin-bottom: 2rem;
 }
 
 .cruises-grid {

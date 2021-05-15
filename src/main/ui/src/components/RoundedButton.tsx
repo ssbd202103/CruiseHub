@@ -4,7 +4,7 @@ import * as React from 'react'
 
 export interface RoundedButtonProps {
     readonly className?: string,
-    readonly color: "pink" | "yellow" | "green" | "blue"
+    readonly color: "pink" | "yellow" | "green" | "blue" | "white"
     readonly children?: any,
     readonly style?: React.CSSProperties,
     readonly onClick?: React.MouseEventHandler<any>

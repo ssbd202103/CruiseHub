@@ -4,7 +4,9 @@
     --pink-light: #FF9FA2;
     --pink: #FE6D73;
     --pink-dark: #C63A48;
+    --white-light: #FFFFFF;
     --white: #FEF9FF;
+    --white-dark: #efebef;
     --yellow-light: #fffea7;
     --yellow: #FFCB77;
     --yellow-dark: #C99A49;
@@ -14,7 +16,9 @@
     --blue-light: 5DABCE;
     --blue: #227C9D;
     --blue-dark: #00506F;
+    --dark-light: #5a5959;
     --dark: #474646;
+    --dark-dark: #111111;
     --header-height: 76px;
 }
 
