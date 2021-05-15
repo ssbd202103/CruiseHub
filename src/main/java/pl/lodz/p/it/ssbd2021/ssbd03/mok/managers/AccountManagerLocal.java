@@ -6,17 +6,10 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AuthUnauthorizedException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-
 
 import javax.ejb.Local;
 import java.time.LocalDateTime;
 import java.util.List;
-
-import java.time.LocalDateTime;
 
 /**
  * Klasa która zarządza logiką biznesową kont
@@ -74,9 +67,10 @@ public interface AccountManagerLocal {
 
     /**
      * Zmienia stan poziomu dostępu użytkownika (włącza/wyłącza)
-     * @param accountLogin Login użytkownika
-     * @param accessLevel Poziom dostępu użytkownika
-     * @param enabled Boolean określający oczekiwany stan poziomu dostępu
+     *
+     * @param accountLogin   Login użytkownika
+     * @param accessLevel    Poziom dostępu użytkownika
+     * @param enabled        Boolean określający oczekiwany stan poziomu dostępu
      * @param accountVersion Wersja obiektu przed wywołaniem metody
      * @return Obiekt użytkownika po dokonanych zmianach
      * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku gdy zmiana stanu poziomu dostepu jest niemożliwa,
@@ -87,9 +81,10 @@ public interface AccountManagerLocal {
 
     /**
      * Metoda odpowiedzialna za blokowanie konta
-     *
+     * <p>
      * Blokuje użytkownika o zadanym loginie
-     * @param login Login użytkownika
+     *
+     * @param login   Login użytkownika
      * @param version Wersja obiektu do sprawdzenia
      * @throws BaseAppException Wyjątek aplikacji rzucany w przypadku błędu pobrania danych użytkownika
      */
@@ -98,8 +93,9 @@ public interface AccountManagerLocal {
 
     /**
      * Metoda odpowiedzialna za odblokowanie konta
+     *
      * @param unblockedUserLogin login konta odblokowywanego
-     * @param version wersja obiektu do sprawdzenia
+     * @param version            wersja obiektu do sprawdzenia
      * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku gdy występuje błąd w p
      *                          obraniu danych w fasadzie
      */
@@ -148,20 +144,28 @@ public interface AccountManagerLocal {
     /**
      * Metoda odpowiedzialna za weryfikacje konta użytkonwika.
      *
-     * @param token        jwt token otrzymany przez email
+     * @param token jwt token otrzymany przez email
      * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku gdy token wygasł albo nie przeszedł walidacji oraz gdy brak loginu lub wersji w tokenie oraz w wypadku kiedy konto zostało już wcześniej aktywowane oraz w sytuacj gdy został rzucony wyjątek blokady optymistycznej
      */
     void verifyAccount(String token) throws BaseAppException;
 
 
+    //todo correct
     /**
      * Zmień dane wybranego klienta
      *
      * @param account encja konta zawierająca zmiany
-     * @param alterBy login konta dokonującego zmiany
      * @return zmienone konto
      */
-    Account changeOtherClientData(Account account, String alterBy) throws BaseAppException;
+    Account changeClientData(String login,
+                             String newFirstName,
+                             String newSecondName,
+                             String newEmail,
+                             String newPhoneNumber,
+                             String newCountry,
+                             String newCity,
+                             Long newHouseNumber,
+                             String newPostalCode) throws BaseAppException;
 
     /**
      * Zmień dane wybranego praconiwka firmy
@@ -170,41 +174,25 @@ public interface AccountManagerLocal {
      * @param alterBy login konta dokonującego zmiany
      * @return zmienone konto
      */
-    Account changeOtherBusinessWorkerData(Account account, String alterBy) throws BaseAppException;
+    Account changeOtherBusinessWorkerData(String login, String newFirstName, String newSecondName, String newEmail, String newPhoneNumber) throws BaseAppException;
 
-    /**
-     * Zmień dane wybranego moderatora lub administratora
-     *
-     * @param account encja konta zawierająca zmiany
-     * @param alterBy login konta dokonującego zmiany
-     * @return zmienone konto
-     */
-    Account changeOtherAccountData(Account account, String alterBy) throws BaseAppException;
 
+    Account changeOtherAccountData(String login, String newFirstName, String newSecondName, String newEmail) throws BaseAppException;
 
     /**
      * Zmienia email konta o podanym loginie
      *
-     * @param login login konta
-     * @param version wersja
+     * @param login    login konta
+     * @param version  wersja
      * @param newEmail nowy email
      */
 
     void changeEmail(String login, Long version, String newEmail) throws BaseAppException;
 
     /**
-     * Zmień dane klienta
-     *
-     * @param account encja konta zawierająca zmiany
-     *
-     */
-    void changeClientData(Account account) throws BaseAppException;
-
-    /**
      * Zmień dane pracownika firmy
      *
      * @param account encja konta zawierająca zmiany
-     *
      */
     void changeBusinessWorkerData(Account account) throws BaseAppException;
 
@@ -212,7 +200,6 @@ public interface AccountManagerLocal {
      * Zmień dane moderatora
      *
      * @param account encja konta zawierająca zmiany
-     *
      */
     void changeModeratorData(Account account) throws BaseAppException;
 
@@ -220,23 +207,24 @@ public interface AccountManagerLocal {
      * Zmień dane administratora
      *
      * @param account encja konta zawierająca zmiany
-     *
      */
     void changeAdministratorData(Account account) throws BaseAppException;
 
     /**
      * Metoda odpowiedzialna za edycję pól w bazie danych w przypadku niepoprawnego logowania.
-     * @param login Login użytkownika
+     *
+     * @param login  Login użytkownika
      * @param IpAddr Adres IP użytkownika
-     * @param time Czas
+     * @param time   Czas
      */
     void updateIncorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws AuthUnauthorizedException;
 
     /**
      * Metoda odpowiedzialna za edycję pól w bazie danych w przypadku poprawnego logowania.
-     * @param login Login użytkownika
+     *
+     * @param login  Login użytkownika
      * @param IpAddr Adres IP użytkownika
-     * @param time Czas
+     * @param time   Czas
      * @return Token JWT
      */
     String updateCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws AuthUnauthorizedException;

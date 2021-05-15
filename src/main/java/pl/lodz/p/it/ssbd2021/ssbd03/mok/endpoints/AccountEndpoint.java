@@ -13,12 +13,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.ChangeAccessLevelStateDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccountDetailsViewDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AccountChangeEmailDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AdministratorChangeDataDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.BusinessWorkerChangeDataDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.ClientChangeDataDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.ModeratorChangeDataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters.AccountMapper;
@@ -152,17 +146,23 @@ public class AccountEndpoint implements AccountEndpointLocal {
 
 
     @Override
-    public OtherClientChangeDataDto changeOtherClientData(OtherClientChangeDataDto otherClientChangeDataDto) throws OptimisticLockException, BaseAppException {
+    public ClientChangeDataDto changeOtherClientData(OtherClientChangeDataDto otherClientChangeDataDto) throws OptimisticLockException, BaseAppException {
         Long version = getAccountByLogin(otherClientChangeDataDto.getLogin()).getVersion();
 
         if (!version.equals(otherClientChangeDataDto.getVersion())) {
             throw new OptimisticLockException(OPTIMISTIC_EXCEPTION);
         }
 
-        Account account = AccountMapper.extractAccountFromClientOtherChangeDataDto(otherClientChangeDataDto);
-        String alterBy = AccountMapper.extractAlterByFromOtherClientDataChange(otherClientChangeDataDto);
-
-        return AccountMapper.accountDtoForClientDataChange(accountManager.changeOtherClientData(account, alterBy));
+        return AccountMapper.accountDtoForClientDataChange(accountManager.changeClientData(otherClientChangeDataDto.getLogin(),
+                otherClientChangeDataDto.getNewFirstName(),
+                otherClientChangeDataDto.getNewSecondName(),
+                otherClientChangeDataDto.getNewEmail(),
+                otherClientChangeDataDto.getNewPhoneNumber(),
+                otherClientChangeDataDto.getNewAddress().getNewCountry(),
+                otherClientChangeDataDto.getNewAddress().getNewCity(),
+                otherClientChangeDataDto.getNewAddress().getNewHouseNumber(),
+                otherClientChangeDataDto.getNewAddress().getNewPostalCode()
+));
     }
 
     @Override
@@ -173,9 +173,11 @@ public class AccountEndpoint implements AccountEndpointLocal {
             throw new OptimisticLockException(OPTIMISTIC_EXCEPTION);
         }
 
-        Account account = AccountMapper.extractAccountFromOtherBusinessWorkerChangeDataDto(otherBusinessWorkerChangeDataDto);
-        String alterBy = AccountMapper.extractAlterByFromOtherBusinessWorkerDataChange(otherBusinessWorkerChangeDataDto);
-        return AccountMapper.accountDtoForBusinnesWorkerDataChange(accountManager.changeOtherBusinessWorkerData(account, alterBy));
+        return AccountMapper.accountDtoForBusinnesWorkerDataChange(accountManager.changeOtherBusinessWorkerData(otherBusinessWorkerChangeDataDto.getLogin(),
+                otherBusinessWorkerChangeDataDto.getNewFirstName(),
+                otherBusinessWorkerChangeDataDto.getNewSecondName(),
+                otherBusinessWorkerChangeDataDto.getNewEmail(),
+                otherBusinessWorkerChangeDataDto.getNewPhoneNumber()));
     }
 
     @Override
@@ -186,9 +188,10 @@ public class AccountEndpoint implements AccountEndpointLocal {
             throw new OptimisticLockException(OPTIMISTIC_EXCEPTION);
         }
 
-        Account account = AccountMapper.extractAccountFromOtherAccountChangeDataDto(otherAccountChangeDataDto);
-        String alterBy = AccountMapper.extractAlterByFromAccount(otherAccountChangeDataDto);
-        return AccountMapper.toAccountDto(accountManager.changeOtherAccountData(account, alterBy));
+        return AccountMapper.toAccountDto(accountManager.changeOtherAccountData(otherAccountChangeDataDto.getLogin(),
+                otherAccountChangeDataDto.getNewFirstName(),
+                otherAccountChangeDataDto.getNewSecondName(),
+                otherAccountChangeDataDto.getNewEmail()));
     }
 
 
@@ -211,7 +214,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
             throw new OptimisticLockException(OPTIMISTIC_EXCEPTION);
         }
 
-        Account account = AccountMapper.extractAccountFromClientChangeDataDto(clientChangeDataDto);
+        Account account = accountManager.getAccountByLogin(clientChangeDataDto.getLogin());
         accountManager.changeClientData(account);
     }
 
@@ -223,7 +226,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
             throw new OptimisticLockException(OPTIMISTIC_EXCEPTION);
         }
 
-        Account account = AccountMapper.extractAccountFromBusinessWorkerChangeDataDto(businessWorkerChangeDataDto);
+        Account account = accountManager.getAccountByLogin(businessWorkerChangeDataDto.getLogin());
         accountManager.changeBusinessWorkerData(account);
     }
 
@@ -235,7 +238,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
             throw new OptimisticLockException(OPTIMISTIC_EXCEPTION);
         }
 
-        Account account = AccountMapper.extractAccountFromModeratorChangeDataDto(moderatorChangeDataDto);
+        Account account = accountManager.getAccountByLogin(moderatorChangeDataDto.getLogin());
         accountManager.changeModeratorData(account);
     }
 
@@ -247,7 +250,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
             throw new OptimisticLockException(OPTIMISTIC_EXCEPTION);
         }
 
-        Account account = AccountMapper.extractAccountFromAdministratorChangeDataDto(administratorChangeDataDto);
+        Account account = accountManager.getAccountByLogin(administratorChangeDataDto.getLogin());
         accountManager.changeAdministratorData(account);
     }
 

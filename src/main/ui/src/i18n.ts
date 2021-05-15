@@ -101,7 +101,6 @@ const resources = {
             "error.emailService.inaccessible": "Serwis pocztowy jest niedostępny",
             "error.password.reset.contentError": "Błędna zawartość tokenu do resetowania hasła",
             "phone change btn": "Zmień numer telefonu",
-            "error.password.reset.contentError": "Błędna zawartość tokenu do resetowania hasła",
             ////regex errors
             "error.regex.postCode": "Niepoprawny format kodu pocztowego",
             "error.regex.city": "Niepoprawny format miasta",
@@ -210,7 +209,6 @@ const resources = {
             "error.parsing.serialization": "Received data could not be serialized properly",
             "error.password.reset.wrongIdentity": "Request contains wrong identity",
             "error.email.incorrect": "Email address is incorrect",
-            "error.password.reset.contentError": "Błędna zawartość tokenu do resetowania hasła",
             "phone change btn": "Change phone number",
             "error.password.reset.contentError": "Invalid password reset token content",
 

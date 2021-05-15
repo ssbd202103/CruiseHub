@@ -13,13 +13,9 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AccountManagerException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AuthUnauthorizedException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.*;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters.AccountMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.CompanyFacadeMok;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.JWTHandler;
@@ -29,13 +25,8 @@ import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.inject.Inject;
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import java.util.*;
-import java.util.List;
-import java.util.Optional;
 import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
@@ -287,69 +278,58 @@ public class AccountManager implements AccountManagerLocal {
 
 
     @Override
-    public Account changeOtherClientData(Account fromAccount, String alterBy) throws BaseAppException {
-        Account targetAccount = updateAccount(fromAccount, alterBy);
+    public Account changeClientData(String login,
+                                    String newFirstName,
+                                    String newSecondName,
+                                    String newEmail,
+                                    String newPhoneNumber,
+                                    String newCountry,
+                                    String newCity,
+                                    Long newHouseNumber,
+                                    String newPostalCode) throws BaseAppException {
 
-        Client targetClient = (Client) getAccessLevel(targetAccount, AccessLevelType.CLIENT);
-        targetClient.setVersion(targetAccount.getVersion());
-        targetClient.setAlteredBy(accountFacade.findByLogin(alterBy));
-        targetClient.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
-        targetClient.setLastAlterDateTime(LocalDateTime.now());
+        Account account = getAccountByLogin(login);
 
-        Client fromClient = (Client) getAccessLevel(fromAccount, AccessLevelType.CLIENT);
-        updateClient(fromClient, targetClient);
+        account.setFirstName(newFirstName);
+        account.setSecondName(newSecondName);
+        account.setEmail(newEmail);
 
-        Address targetAddress = targetClient.getHomeAddress();
-        targetAddress.setAlteredBy(accountFacade.findByLogin(alterBy));
-        targetAddress.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
-        targetAddress.setLastAlterDateTime(LocalDateTime.now());
-        return targetAccount;
+        Client client = (Client) getAccessLevel(account, AccessLevelType.CLIENT);
+        client.setPhoneNumber(newPhoneNumber);
+        client.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
+
+        Address address = client.getHomeAddress();
+        address.setCountry(newCountry);
+        address.setCity(newCity);
+        address.setHouseNumber(newHouseNumber);
+        address.setPostalCode(newPostalCode);
+        address.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
+        return account;
     }
 
-    private void updateClient(Client fromClient, Client targetClient) {
-        targetClient.setPhoneNumber(fromClient.getPhoneNumber());
-
-        Address targetAddress = targetClient.getHomeAddress();
-        Address fromAddress = fromClient.getHomeAddress();
-        targetAddress.setHouseNumber(fromAddress.getHouseNumber());
-        targetAddress.setStreet(fromAddress.getStreet());
-        targetAddress.setPostalCode(fromAddress.getPostalCode());
-        targetAddress.setCity(fromAddress.getCity());
-        targetAddress.setCountry(fromAddress.getCountry());
-    }
-
-    private Account updateAccount(Account updatedAccount, String alteredBy) throws BaseAppException {
-        Account targetAccount = accountFacade.findByLogin(updatedAccount.getLogin());
-
-        targetAccount.setVersion(updatedAccount.getVersion());
-        targetAccount.setFirstName(updatedAccount.getFirstName());
-        targetAccount.setSecondName(updatedAccount.getSecondName());
-        targetAccount.setEmail(updatedAccount.getEmail());
-        targetAccount.setAlteredBy(accountFacade.findByLogin(alteredBy));
-        targetAccount.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
-        targetAccount.setLastAlterDateTime(LocalDateTime.now());
-        return targetAccount;
-    }
 
     @Override
-    public Account changeOtherBusinessWorkerData(Account fromAccount, String alterBy) throws BaseAppException {
-        Account targetAccount = updateAccount(fromAccount, alterBy);
-        BusinessWorker targetBusinessWorker = (BusinessWorker) getAccessLevel(targetAccount, AccessLevelType.BUSINESS_WORKER);
-        targetBusinessWorker.setVersion(targetAccount.getVersion());
-        targetBusinessWorker.setAlteredBy(accountFacade.findByLogin(alterBy));
+    public Account changeOtherBusinessWorkerData(String login, String newFirstName, String newSecondName, String newEmail, String newPhoneNumber) throws BaseAppException {
+        Account account = changeOtherAccountData(login, newFirstName, newSecondName, newEmail);
+
+        BusinessWorker targetBusinessWorker = (BusinessWorker) getAccessLevel(account, AccessLevelType.BUSINESS_WORKER);
+        targetBusinessWorker.setPhoneNumber(newPhoneNumber);
+
         targetBusinessWorker.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
         targetBusinessWorker.setLastAlterDateTime(LocalDateTime.now());
 
-        BusinessWorker fromBusinessWorker = (BusinessWorker) getAccessLevel(fromAccount, AccessLevelType.BUSINESS_WORKER);
-        targetBusinessWorker.setPhoneNumber(fromBusinessWorker.getPhoneNumber());
-        return targetAccount;
+        return account;
     }
 
     @Override
-    public Account changeOtherAccountData(Account fromAccount, String alterBy) throws BaseAppException {
-        return updateAccount(fromAccount, alterBy);
-
+    public Account changeOtherAccountData(String login, String newFirstName, String newSecondName, String newEmail) throws BaseAppException {
+        Account account = getAccountByLogin(login);
+        account.setFirstName(newFirstName);
+        account.setSecondName(newSecondName);
+        account.setEmail(newEmail);
+        return account;
     }
+
 
     @Override
     public void changeEmail(String login, Long version, String newEmail) throws BaseAppException {

@@ -8,6 +8,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.LanguageTypeWrapper;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AccountManagerException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
@@ -22,9 +23,12 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import java.time.LocalDateTime;
+
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ACCESS_LEVEL_DOES_NOT_EXIST_ERROR;
 
 /**
  * Klasa która zajmuje się mapowaniem obiektów klas dto na obiekty klas modelu
@@ -255,27 +259,6 @@ public class AccountMapper {
         return otherAccountChangeDataDto.getAlteredBy();
     }
 
-    /**
-     * Mapuje obiekt klasy dto na obiekt klasy modelu Account który jest wykorzystany do utrwalenia danych w bazie
-     *
-     * @param otherBusinessWorkerChangeDataDto obiekt klasy DTO
-     * @return obiekt klasy modelu który prezentuje konto z poziomem dostępu businessWorker
-     */
-    public static Account extractAccountFromOtherBusinessWorkerChangeDataDto(OtherBusinessWorkerChangeDataDto otherBusinessWorkerChangeDataDto) {
-
-        Account account = new Account();
-        account.setLogin(otherBusinessWorkerChangeDataDto.getLogin());
-        account.setVersion(otherBusinessWorkerChangeDataDto.getVersion());
-        account.setFirstName(otherBusinessWorkerChangeDataDto.getNewFirstName());
-        account.setSecondName(otherBusinessWorkerChangeDataDto.getNewSecondName());
-        account.setEmail(otherBusinessWorkerChangeDataDto.getNewEmail());
-
-        BusinessWorker businessWorker = new BusinessWorker(otherBusinessWorkerChangeDataDto.getNewPhoneNumber(), true);
-
-        account.setAccessLevel(businessWorker);
-
-        return account;
-    }
     private static void setAccountChangeDataDtoFields(Account account, AccountChangeDataDto accountChangeDataDto, LocalDateTime time) {
         account.setLogin(accountChangeDataDto.getLogin());
         account.setVersion(accountChangeDataDto.getVersion());
@@ -290,68 +273,74 @@ public class AccountMapper {
         return LocalDateTime.now();
     }
 
-    public static Account extractAccountFromClientChangeDataDto(ClientChangeDataDto clientChangeDataDto) {
-        LocalDateTime now = getNowLocalDateTime();
+//    public static Account extractAccountFromClientChangeDataDto(ClientChangeDataDto clientChangeDataDto) {
+//        LocalDateTime now = getNowLocalDateTime();
+//
+//        Account account = new Account();
+//        setAccountChangeDataDtoFields(account, clientChangeDataDto, now);
+//
+//        Address address = new Address(
+//                clientChangeDataDto.getNewAddress().getHouseNumber(),
+//                clientChangeDataDto.getNewAddress().getStreet(),
+//                clientChangeDataDto.getNewAddress().getPostalCode(),
+//                clientChangeDataDto.getNewAddress().getCity(),
+//                clientChangeDataDto.getNewAddress().getCountry()
+//        );
+//
+//        Client client = new Client(address, clientChangeDataDto.getNewPhoneNumber());
+//
+//        account.setAccessLevel(client);
+//
+//        return account;
+//    }
 
-        Account account = new Account();
-        setAccountChangeDataDtoFields(account, clientChangeDataDto, now);
+//    public static Account extractAccountFromBusinessWorkerChangeDataDto(BusinessWorkerChangeDataDto businessWorkerChangeDataDto) {
+//        LocalDateTime now = getNowLocalDateTime();
+//
+//        Account account = new Account();
+//
+//        setAccountChangeDataDtoFields(account, businessWorkerChangeDataDto, now);
+//
+//        BusinessWorker businessWorker = new BusinessWorker(businessWorkerChangeDataDto.getNewPhoneNumber(), true);
+//
+//        account.setAccessLevel(businessWorker);
+//
+//        return account;
+//    }
 
-        Address address = new Address(
-                clientChangeDataDto.getNewAddress().getHouseNumber(),
-                clientChangeDataDto.getNewAddress().getStreet(),
-                clientChangeDataDto.getNewAddress().getPostalCode(),
-                clientChangeDataDto.getNewAddress().getCity(),
-                clientChangeDataDto.getNewAddress().getCountry()
-        );
+//    public static Account extractAccountFromModeratorChangeDataDto(ModeratorChangeDataDto moderatorChangeDataDto) {
+//        LocalDateTime now = getNowLocalDateTime();
+//
+//        Account account = new Account();
+//
+//        setAccountChangeDataDtoFields(account, moderatorChangeDataDto, now);
+//
+//        return account;
+//    }
 
-        Client client = new Client(address, clientChangeDataDto.getNewPhoneNumber());
+//    public static Account extractAccountFromAdministratorChangeDataDto(AdministratorChangeDataDto administratorChangeDataDto) {
+//        LocalDateTime now = getNowLocalDateTime();
+//
+//        Account account = new Account();
+//
+//        setAccountChangeDataDtoFields(account, administratorChangeDataDto, now);
+//
+//        return account;
+//    }
 
-        account.setAccessLevel(client);
 
-        return account;
+    private static AccessLevel getAccessLevel(Account from, AccessLevelType target) throws AccountManagerException {
+        Optional<AccessLevel> optionalAccessLevel = from.getAccessLevels().stream()
+                .filter(accessLevel -> accessLevel.getAccessLevelType().equals(target)).findAny();
+
+        if (optionalAccessLevel.isEmpty()) {
+            throw new AccountManagerException(ACCESS_LEVEL_DOES_NOT_EXIST_ERROR);
+        }
+        return optionalAccessLevel.get();
     }
 
-    public static Account extractAccountFromBusinessWorkerChangeDataDto(BusinessWorkerChangeDataDto businessWorkerChangeDataDto) {
-        LocalDateTime now = getNowLocalDateTime();
-
-        Account account = new Account();
-
-        setAccountChangeDataDtoFields(account, businessWorkerChangeDataDto, now);
-
-        BusinessWorker businessWorker = new BusinessWorker(businessWorkerChangeDataDto.getNewPhoneNumber(), true);
-
-        account.setAccessLevel(businessWorker);
-
-        return account;
-    }
-
-    public static Account extractAccountFromModeratorChangeDataDto(ModeratorChangeDataDto moderatorChangeDataDto) {
-        LocalDateTime now = getNowLocalDateTime();
-
-        Account account = new Account();
-
-        setAccountChangeDataDtoFields(account, moderatorChangeDataDto, now);
-
-        return account;
-    }
-
-    public static Account extractAccountFromAdministratorChangeDataDto(AdministratorChangeDataDto administratorChangeDataDto) {
-        LocalDateTime now = getNowLocalDateTime();
-
-        Account account = new Account();
-
-        setAccountChangeDataDtoFields(account, administratorChangeDataDto, now);
-
-        return account;
-    }
-
-
-    private static <T> T getAccessLevel(Account from, AccessLevelType target) {
-        return (T) from.getAccessLevels().stream().filter(accessLevel -> accessLevel.getAccessLevelType().equals(target)).collect(Collectors.toList()).get(0);
-    }
-
-    public static ClientDto toClientDto(Account account) {
-        Client client = getAccessLevel(account, AccessLevelType.CLIENT);
+    public static ClientDto toClientDto(Account account) throws AccountManagerException {
+        Client client = (Client) getAccessLevel(account, AccessLevelType.CLIENT);
 
         return new ClientDto(
                 account.getLogin(),
@@ -364,8 +353,8 @@ public class AccountMapper {
                 account.getVersion());
     }
 
-    public static BusinessWorkerDto toBusinessWorkerDto(Account account) {
-        BusinessWorker businessWorker = getAccessLevel(account, AccessLevelType.BUSINESS_WORKER);
+    public static BusinessWorkerDto toBusinessWorkerDto(Account account) throws AccountManagerException {
+        BusinessWorker businessWorker = (BusinessWorker) getAccessLevel(account, AccessLevelType.BUSINESS_WORKER);
 
         return new BusinessWorkerDto(
                 account.getLogin(),

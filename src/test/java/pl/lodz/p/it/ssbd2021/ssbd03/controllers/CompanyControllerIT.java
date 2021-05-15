@@ -29,13 +29,12 @@ class CompanyControllerIT {
         Properties securityProperties = PropertiesReader.getSecurityProperties();
         baseUri = securityProperties.getProperty("app.baseurl") + "/api";
         authBaseUri = securityProperties.getProperty("app.baseurl") + "/api/signin";
-
     }
 
 
     @Test
     void getAllCompaniesInfo_SUCCESS() {
-        String adminToken = getAuthToken("rbranson","12345678");
+        String adminToken = getAuthToken("rbranson","abcABC123*");
         List<CompanyLightDto> companies = Arrays.asList(new CompanyLightDto("FirmaJez", 1265485965L),
                 new CompanyLightDto("GroveStreetFamilly", 2354685748L),
                 new CompanyLightDto("BeautifulCompany", 9568545875L));

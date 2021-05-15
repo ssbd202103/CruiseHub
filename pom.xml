@@ -182,7 +182,7 @@
         <profile>
             <id>dev-without-ui</id>
             <properties>
-
+                <app.baseurl>http://localhost:8080</app.baseurl>
             </properties>
             <activation>
                 <property>
