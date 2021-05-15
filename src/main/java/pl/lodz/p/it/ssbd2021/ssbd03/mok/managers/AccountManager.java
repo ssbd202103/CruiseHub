@@ -287,7 +287,16 @@ public class AccountManager implements AccountManagerLocal {
         targetClient.setLastAlterDateTime(LocalDateTime.now());
 
         Client fromClient = (Client) getAccessLevel(fromAccount, AccessLevelType.CLIENT);
+        updateClient(fromClient, targetClient);
 
+        Address targetAddress = targetClient.getHomeAddress();
+        targetAddress.setAlteredBy(accountFacade.findByLogin(alterBy));
+        targetAddress.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
+        targetAddress.setLastAlterDateTime(LocalDateTime.now());
+        return targetAccount;
+    }
+
+    private void updateClient(Client fromClient, Client targetClient) {
         targetClient.setPhoneNumber(fromClient.getPhoneNumber());
 
         Address targetAddress = targetClient.getHomeAddress();
@@ -297,10 +306,6 @@ public class AccountManager implements AccountManagerLocal {
         targetAddress.setPostalCode(fromAddress.getPostalCode());
         targetAddress.setCity(fromAddress.getCity());
         targetAddress.setCountry(fromAddress.getCountry());
-        targetAddress.setAlteredBy(accountFacade.findByLogin(alterBy));
-        targetAddress.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
-        targetAddress.setLastAlterDateTime(LocalDateTime.now());
-        return targetAccount;
     }
 
     private Account updateAccount(Account updatedAccount, String alteredBy) throws BaseAppException {
@@ -380,16 +385,9 @@ public class AccountManager implements AccountManagerLocal {
         setAccessLevelChanges(targetClient, targetAccount);
 
         Client fromClient = (Client) getAccessLevel(fromAccount, AccessLevelType.CLIENT);
-
-        targetClient.setPhoneNumber(fromClient.getPhoneNumber());
+        updateClient(fromClient, targetClient);
 
         Address targetAddress = targetClient.getHomeAddress();
-        Address fromAddress = fromClient.getHomeAddress();
-        targetAddress.setHouseNumber(fromAddress.getHouseNumber());
-        targetAddress.setStreet(fromAddress.getStreet());
-        targetAddress.setPostalCode(fromAddress.getPostalCode());
-        targetAddress.setCity(fromAddress.getCity());
-        targetAddress.setCountry(fromAddress.getCountry());
         targetAddress.setAlteredBy(targetAccount);
         targetAddress.setAlterType(targetAccount.getAlterType());
         targetAddress.setLastAlterDateTime(fromAccount.getLastAlterDateTime());
