@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.security;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AuthUnauthorizedException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AuthenticateDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.AuthenticateEndpointLocal;
@@ -58,7 +59,7 @@ public class AuthController {
                 return Response.status(Response.Status.UNAUTHORIZED).entity(e.getMessage())
                     .build();
             }
-            return Response.status(Response.Status.UNAUTHORIZED).entity("Incorrect password")
+            return Response.status(Response.Status.UNAUTHORIZED).entity(I18n.INCORRECT_PASSWORD)
                 .build();
         }
 

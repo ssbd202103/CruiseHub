@@ -35,6 +35,8 @@ public class I18n {
     public static final String VERIFICATION_EMAIL_BODY = "account.verification.body";
     public static final String REMOVE_UNCONFIRMED_ACCOUNT_SUBJECT ="account.remove.unconfirmed.subject";
     public static final String REMOVE_UNCONFIRMED_ACCOUNT_BODY ="account.remove.unconfirmed.body";
+    public static final String INCORRECT_LOGIN = "auth.incorrect.login";
+    public static final String INCORRECT_PASSWORD = "auth.incorrect.password";
 
     private ResourceBundle bundle;
         public String getMessage(String message, Locale locale) {

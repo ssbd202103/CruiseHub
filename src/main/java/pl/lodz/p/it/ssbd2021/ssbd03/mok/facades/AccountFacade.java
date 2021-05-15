@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.facades;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
@@ -80,7 +81,7 @@ public class AccountFacade extends AbstractFacade<Account> {
             }
 
         } catch (NoResultException e) {
-            throw new AuthUnauthorizedException("Incorrect login");
+            throw new AuthUnauthorizedException(I18n.INCORRECT_LOGIN);
         }
 
         return account;
