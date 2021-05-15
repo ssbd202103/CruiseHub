@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.ArrayList;
 import javax.inject.Inject;
+import javax.ws.rs.core.SecurityContext;
 import java.util.*;
 import java.util.List;
 
@@ -276,6 +277,7 @@ public class AccountManager implements AccountManagerLocal {
     private void setAlterTypeAndAlterAccount(Account account, AlterTypeWrapper alterTypeWrapper, Account alteredBy) {
         account.setAlteredBy(alteredBy);
         account.setAlterType(alterTypeWrapper);
+        account.setLastAlterDateTime(LocalDateTime.now());
     }
 
 

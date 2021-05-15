@@ -44,8 +44,7 @@ public class Commercial extends BaseEntity {
     @Column(name = "end_date")
     private LocalDateTime endDate;
 
-    public Commercial(Long id, @NotNull CruiseGroup cruisesGroup, CommercialTypeWrapper commercialType, @NotNull LocalDateTime startDate, @NotNull LocalDateTime endDate) {
-        this.id = id;
+    public Commercial(@NotNull CruiseGroup cruisesGroup, CommercialTypeWrapper commercialType, @NotNull LocalDateTime startDate, @NotNull LocalDateTime endDate) {
         this.cruisesGroup = cruisesGroup;
         this.commercialType = commercialType;
         this.startDate = startDate;

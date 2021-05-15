@@ -56,8 +56,7 @@ public class Cruise extends BaseEntity {
     @JoinColumn(name = "cruises_group_id")
     private CruiseGroup cruisesGroup;
 
-    public Cruise(Long id, @NotNull LocalDateTime startDate, @NotNull LocalDateTime endDate, @NotNull boolean active, @NotNull String description, @NotNull Boolean available, @NotNull CruiseGroup cruisesGroup) {
-        this.id = id;
+    public Cruise(@NotNull LocalDateTime startDate, @NotNull LocalDateTime endDate, @NotNull boolean active, @NotNull String description, @NotNull Boolean available, @NotNull CruiseGroup cruisesGroup) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.active = active;

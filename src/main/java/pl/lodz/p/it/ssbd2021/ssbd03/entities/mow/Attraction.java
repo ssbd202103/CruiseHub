@@ -56,8 +56,7 @@ public class Attraction extends BaseEntity {
     @JoinColumn(name = "cruise_id")
     private CruiseGroup cruise;
 
-    public Attraction(Long id, @NotNull String name, @NotNull String description, @NotNull double price, @NotNull Long numberOfSeats, @NotNull Boolean available, @NotNull CruiseGroup cruise) {
-        this.id = id;
+    public Attraction(@NotNull String name, @NotNull String description, @NotNull double price, @NotNull Long numberOfSeats, @NotNull Boolean available, @NotNull CruiseGroup cruise) {
         this.name = name;
         this.description = description;
         this.price = price;

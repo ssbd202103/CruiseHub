@@ -49,8 +49,7 @@ public class Company extends BaseEntity {
     @Column(name = "nip")
     private Long NIP;
 
-    public Company(Long id, @NotNull Address address, @NotNull String name, @NotNull String phoneNumber, @NotNull Long NIP) {
-        this.id = id;
+    public Company(@NotNull Address address, @NotNull String name, @NotNull String phoneNumber, @NotNull Long NIP) {
         this.address = address;
         this.name = name;
         this.phoneNumber = phoneNumber;

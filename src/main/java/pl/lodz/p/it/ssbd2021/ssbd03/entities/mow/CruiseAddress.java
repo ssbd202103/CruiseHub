@@ -17,7 +17,7 @@ public class CruiseAddress extends BaseEntity {
     @SequenceGenerator(name = "CRUISE_ADDRESS_SEQ_GEN", sequenceName = "cruise_addresses_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CRUISE_ADDRESS_SEQ_GEN")
     @Column(name = "id")
-    private Integer id;
+    private Long id;
 
     @Getter
     @Setter
@@ -50,8 +50,7 @@ public class CruiseAddress extends BaseEntity {
     private String country_name;
 
 
-    public CruiseAddress(Integer id, @NotNull String street, @NotNull Integer streetNumber, @NotNull String harborName, @NotNull String city_name, @NotNull String country_name) {
-        this.id = id;
+    public CruiseAddress( @NotNull String street, @NotNull Integer streetNumber, @NotNull String harborName, @NotNull String city_name, @NotNull String country_name) {
         this.street = street;
         this.streetNumber = streetNumber;
         this.harborName = harborName;

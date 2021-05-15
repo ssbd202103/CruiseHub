@@ -69,8 +69,7 @@ public class CruiseGroup extends BaseEntity {
     private BigDecimal averageRating;
 
 
-    public CruiseGroup(Long id, @NotNull Company company, @NotNull CruiseAddress address, @NotNull String name, @NotNull Long numberOfSeats, @NotNull BigDecimal price, @NotNull List<CruisePicture> cruisePicture, @NotNull BigDecimal averageRating) {
-        this.id = id;
+    public CruiseGroup(@NotNull Company company, @NotNull CruiseAddress address, @NotNull String name, @NotNull Long numberOfSeats, @NotNull BigDecimal price, @NotNull List<CruisePicture> cruisePicture, @NotNull BigDecimal averageRating) {
         this.company = company;
         this.address = address;
         this.name = name;

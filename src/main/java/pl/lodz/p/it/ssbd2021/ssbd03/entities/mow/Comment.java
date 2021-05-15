@@ -40,8 +40,7 @@ public class Comment extends BaseEntity {
     private Cruise cruise;
 
 
-    public Comment(Long id, @NotNull Account account, @NotNull String content, @NotNull Cruise cruise) {
-        this.id = id;
+    public Comment(@NotNull Account account, @NotNull String content, @NotNull Cruise cruise) {
         this.account = account;
         this.content = content;
         this.cruise = cruise;

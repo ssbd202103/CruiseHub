@@ -48,8 +48,7 @@ public class Reservation extends BaseEntity {
     )
     private List<Attraction> attractions = new ArrayList<>();
 
-    public Reservation(Long id, @NotNull Long numberOfSeats, @NotNull Cruise cruise, @NotNull Client client, @NotNull List<Attraction> attractions) {
-        this.id = id;
+    public Reservation(@NotNull Long numberOfSeats, @NotNull Cruise cruise, @NotNull Client client, @NotNull List<Attraction> attractions) {
         this.numberOfSeats = numberOfSeats;
         this.cruise = cruise;
         this.client = client;
