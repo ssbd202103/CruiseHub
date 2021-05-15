@@ -1,7 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.security;
 
 import com.auth0.jwt.interfaces.Claim;
-import com.nimbusds.jwt.SignedJWT;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.JWTException;
 
 import javax.enterprise.context.RequestScoped;
@@ -10,7 +9,10 @@ import javax.security.enterprise.authentication.mechanism.http.HttpAuthenticatio
 import javax.security.enterprise.authentication.mechanism.http.HttpMessageContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.*;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 
 @RequestScoped
 public class CustomJWTAuthenticationMechanism implements HttpAuthenticationMechanism {
@@ -20,9 +22,9 @@ public class CustomJWTAuthenticationMechanism implements HttpAuthenticationMecha
 
     @Override
     public AuthenticationStatus validateRequest(HttpServletRequest request, HttpServletResponse response, HttpMessageContext httpMessageContext) {
-        if (request.getRequestURL().toString().endsWith("/api/account/client/registration") ||
-                request.getRequestURL().toString().endsWith("/api/account/business-worker/registration") ||
-                request.getRequestURL().toString().endsWith("/api/signin/auth")
+        if (
+                !request.getRequestURL().toString().contains("/api/") ||
+                        request.getRequestURL().toString().matches(".*/(?:registration|auth)(?:\\?.*)?$")
         ) {
             return httpMessageContext.doNothing();
         }
