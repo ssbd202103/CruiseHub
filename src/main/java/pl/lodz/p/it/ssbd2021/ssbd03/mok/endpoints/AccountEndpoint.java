@@ -163,7 +163,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
         Long version = getAccountByLogin(otherClientChangeDataDto.getLogin()).getVersion();
 
         if (!version.equals(otherClientChangeDataDto.getVersion())) {
-            throw new OptimisticLockException(OPTIMISTIC_EXCEPTION);
+            throw new OptimisticLockException(OPTIMISTIC_LOCK_EXCEPTION);
         }
 
         Account account = AccountMapper.extractAccountFromClientOtherChangeDataDto(otherClientChangeDataDto);
@@ -177,7 +177,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
         Long version = getAccountByLogin(otherBusinessWorkerChangeDataDto.getLogin()).getVersion();
 
         if (!version.equals(otherBusinessWorkerChangeDataDto.getVersion())) {
-            throw new OptimisticLockException(OPTIMISTIC_EXCEPTION);
+            throw new OptimisticLockException(OPTIMISTIC_LOCK_EXCEPTION);
         }
 
         Account account = AccountMapper.extractAccountFromOtherBusinessWorkerChangeDataDto(otherBusinessWorkerChangeDataDto);
@@ -190,7 +190,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
         Long version = getAccountByLogin(otherAccountChangeDataDto.getLogin()).getVersion();
 
         if (!version.equals(otherAccountChangeDataDto.getVersion())) {
-            throw new OptimisticLockException(OPTIMISTIC_EXCEPTION);
+            throw new OptimisticLockException(OPTIMISTIC_LOCK_EXCEPTION);
         }
 
         Account account = AccountMapper.extractAccountFromOtherAccountChangeDataDto(otherAccountChangeDataDto);
@@ -204,7 +204,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
         Long version = getAccountByLogin(accountChangeEmailDto.getLogin()).getVersion();
 
         if (!version.equals(accountChangeEmailDto.getVersion())) {
-            throw new OptimisticLockException(OPTIMISTIC_EXCEPTION);
+            throw new OptimisticLockException(OPTIMISTIC_LOCK_EXCEPTION);
         }
 
         accountManager.changeEmail(accountChangeEmailDto.getLogin(), accountChangeEmailDto.getVersion(), accountChangeEmailDto.getNewEmail());
@@ -215,7 +215,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
         Long version = getAccountByLogin(clientChangeDataDto.getLogin()).getVersion();
 
         if (!version.equals(clientChangeDataDto.getVersion())) {
-            throw new OptimisticLockException(OPTIMISTIC_EXCEPTION);
+            throw new OptimisticLockException(OPTIMISTIC_LOCK_EXCEPTION);
         }
 
         Account account = AccountMapper.extractAccountFromClientChangeDataDto(clientChangeDataDto);
@@ -227,7 +227,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
         Long version = getAccountByLogin(businessWorkerChangeDataDto.getLogin()).getVersion();
 
         if (!version.equals(businessWorkerChangeDataDto.getVersion())) {
-            throw new OptimisticLockException(OPTIMISTIC_EXCEPTION);
+            throw new OptimisticLockException(OPTIMISTIC_LOCK_EXCEPTION);
         }
 
         Account account = AccountMapper.extractAccountFromBusinessWorkerChangeDataDto(businessWorkerChangeDataDto);
@@ -239,7 +239,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
         Long version = getAccountByLogin(moderatorChangeDataDto.getLogin()).getVersion();
 
         if (!version.equals(moderatorChangeDataDto.getVersion())) {
-            throw new OptimisticLockException(OPTIMISTIC_EXCEPTION);
+            throw new OptimisticLockException(OPTIMISTIC_LOCK_EXCEPTION);
         }
 
         Account account = AccountMapper.extractAccountFromModeratorChangeDataDto(moderatorChangeDataDto);
@@ -251,7 +251,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
         Long version = getAccountByLogin(administratorChangeDataDto.getLogin()).getVersion();
 
         if (!version.equals(administratorChangeDataDto.getVersion())) {
-            throw new OptimisticLockException(OPTIMISTIC_EXCEPTION);
+            throw new OptimisticLockException(OPTIMISTIC_LOCK_EXCEPTION);
         }
 
         Account account = AccountMapper.extractAccountFromAdministratorChangeDataDto(administratorChangeDataDto);

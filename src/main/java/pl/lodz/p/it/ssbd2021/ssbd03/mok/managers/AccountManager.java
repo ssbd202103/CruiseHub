@@ -396,7 +396,7 @@ public class AccountManager implements AccountManagerLocal {
         return optionalAccessLevel.get();
     }
 
-    private void setAccountChanges(Account target, Account from) {
+    private void setAccountChanges(Account target, Account from) throws BaseAppException {
         if(!target.getVersion().equals(from.getVersion())) {
             throw FacadeException.optimisticLock();
         }
