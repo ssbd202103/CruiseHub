@@ -23,7 +23,7 @@ public class CustomJWTAuthenticationMechanism implements HttpAuthenticationMecha
     @Override
     public AuthenticationStatus validateRequest(HttpServletRequest request, HttpServletResponse response, HttpMessageContext httpMessageContext) {
         if (
-                !request.getRequestURL().toString().contains("/api") ||
+                !request.getRequestURL().toString().contains("/api/") ||
                         request.getRequestURL().toString().matches(".*/(?:registration|auth)(?:\\?.*)?$")
         ) {
             return httpMessageContext.doNothing();
