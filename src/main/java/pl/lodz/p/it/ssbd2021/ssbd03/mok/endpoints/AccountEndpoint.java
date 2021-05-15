@@ -26,6 +26,8 @@ import javax.ejb.Stateful;
 import javax.inject.Inject;
 import javax.persistence.OptimisticLockException;
 import javax.validation.constraints.NotNull;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.SecurityContext;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -40,6 +42,9 @@ public class AccountEndpoint implements AccountEndpointLocal {
 
     @EJB
     private AccountManagerLocal accountManager;
+
+    @Context
+    private SecurityContext securityContext;
 
     @Inject
     I18n i18n;
@@ -266,5 +271,8 @@ public class AccountEndpoint implements AccountEndpointLocal {
         return AccountMapper.toAdministratorDto(accountManager.getAccountByLogin(login));
     }
 
-
+    @Override
+    public String getCurrentUserLogin() {
+        return securityContext.getUserPrincipal().getName();
+    }
 }
