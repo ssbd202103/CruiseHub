@@ -41,6 +41,8 @@ public class I18n {
     public static final String BLOCKED_ACCOUNT_BODY = "account.block.body";
     public static final String UNBLOCKED_ACCOUNT_BODY = "account.unblock.body";
     public static final String ACTIVATE_ACCOUNT_BODY = "account.activate.body";
+    public static final String INCORRECT_LOGIN = "auth.incorrect.login";
+    public static final String INCORRECT_PASSWORD = "auth.incorrect.password";
 
     private ResourceBundle bundle;
         public String getMessage(String message, Locale locale) {

@@ -1,31 +1,11 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AccountChangeEmailDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AdministratorChangeDataDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.BusinessWorkerChangeDataDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.ClientChangeDataDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.ModeratorChangeDataDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.UnblockAccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.ChangeAccessLevelStateDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.BlockAccountDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherAccountChangeDataDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherBusinessWorkerChangeDataDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherClientChangeDataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccountDetailsViewDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AccountChangeEmailDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.AccountEndpointLocal;
@@ -36,37 +16,17 @@ import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.enterprise.context.RequestScoped;
-import javax.print.attribute.standard.Media;
-import javax.persistence.OptimisticLockException;
 import javax.persistence.OptimisticLockException;
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import static javax.ws.rs.core.Response.Status.*;
-import static javax.ws.rs.core.Response.Status.*;
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ETAG_IDENTITY_INTEGRITY_ERROR;
-
-import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
-import static javax.ws.rs.core.Response.Status.NOT_FOUND;
-
-import static javax.ws.rs.core.Response.Status.*;
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ETAG_IDENTITY_INTEGRITY_ERROR;
-
 import java.util.List;
 
 import static javax.ws.rs.core.Response.Status.*;
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ETAG_IDENTITY_INTEGRITY_ERROR;
-
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.security.ETagFilterBinding;
-import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
-import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
-
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ETAG_IDENTITY_INTEGRITY_ERROR;
 
 /**

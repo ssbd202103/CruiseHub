@@ -33,13 +33,13 @@ public class Client extends AccessLevel {
     }
 
     public Client() {
-        this.enabled = false;
+        this.enabled = true;
     }
 
     public Client(Address homeAddress, String phoneNumber) {
         this.homeAddress = homeAddress;
         this.phoneNumber = phoneNumber;
-        this.enabled = false;
+        this.enabled = true;
     }
 
     public Client(Address homeAddress, String phoneNumber, boolean enabled) {
@@ -50,6 +50,6 @@ public class Client extends AccessLevel {
 
     public Client(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-        this.enabled = false;
+        this.enabled = true;
     }
 }

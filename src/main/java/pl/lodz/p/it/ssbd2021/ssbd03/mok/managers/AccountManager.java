@@ -15,6 +15,11 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AccountManagerException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.*;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters.AccountMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.CompanyFacadeMok;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.JWTHandler;
@@ -406,7 +411,7 @@ public class AccountManager implements AccountManagerLocal {
     }
 
     @Override
-    public void updateIncorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) {
+    public void updateIncorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws AuthUnauthorizedException {
         this.accountFacade.updateAuthenticateInfo(login, IpAddr, time, false);
     }
 
@@ -437,7 +442,7 @@ public class AccountManager implements AccountManagerLocal {
     }
 
     @Override
-    public String updateCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) {
+    public String updateCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws AuthUnauthorizedException {
         Account account = this.accountFacade.updateAuthenticateInfo(login, IpAddr, time, true);
 
         Map<String, Object> map = Map.of("login", login, "accessLevels", account.getAccessLevels()
