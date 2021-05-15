@@ -54,7 +54,7 @@ export default function WorkerSignUp() {
             }
         );
 
-        await axios.post('http://localhost:8080/api/account/businessworker/registration', json, {
+        await axios.post('http://localhost:8080/api/account/business-worker/registration', json, {
             headers: {
                 'Content-Type': 'application/json'
             }

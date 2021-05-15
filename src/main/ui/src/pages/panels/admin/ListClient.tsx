@@ -128,6 +128,11 @@ function Row(props: RowProps) {
         sessionStorage.setItem('resetPasswordAccount', JSON.stringify(row));
     }
 
+    const setCurrentChangeAccessLevelStateAccount = async () => {
+        const result = await axios.get(`http://localhost:8080/api/account/details-view/${row.login}`);
+        sessionStorage.setItem("changeAccessLevelStateAccount", JSON.stringify(result.data));
+    }
+
     return (
         <React.Fragment>
             <TableRow className={classes.root}>
@@ -183,9 +188,15 @@ function Row(props: RowProps) {
                                                 }
                                             }}>{row.active ? t("block") : t("unblock")}</Button>
 
-                                                <Link to="/panels/adminPanel/GrantAccessLevel/">
-                                                    <Button onClick={setCurrentGrantAccessLevelAccount} className={buttonClass.root}>{t("grand access level")}</Button>
-                                                </Link>
+                                            <Link to="/panels/adminPanel/GrantAccessLevel/">
+                                                <Button onClick={setCurrentGrantAccessLevelAccount}
+                                                        className={buttonClass.root}>{t("grant access level")}</Button>
+                                            </Link>
+
+                                            <Link to="/panels/adminPanel/ChangeAccessLevelState/">
+                                                <Button onClick={setCurrentChangeAccessLevelStateAccount}
+                                                        className={buttonClass.root}>{t("change access level state")}</Button>
+                                            </Link>
                                         </TableCell>
                                     </TableRow>
                                 </TableBody>
@@ -197,7 +208,6 @@ function Row(props: RowProps) {
         </React.Fragment>
     );
 }
-
 
 
 export default function AdminListClient() {

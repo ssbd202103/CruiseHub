@@ -24,6 +24,7 @@ const resources = {
             "signin.welcome": "Witamy ponownie",
             "signin.subtitle": "Bardzo się cieszymy, że znów jesteś z nami",
             "i don't have an account": "Nie mam konta",
+            "refresh": "Odśwież",
             //signup
             "signup": "Zarejestruj",
             "signup.welcome": "Witamy",
@@ -72,6 +73,10 @@ const resources = {
             "block": "Zablokuj konto",
             "unblock": "Odblokuj konto",
             "grand access level": "Przydziel poziom dostępu",
+            "enable": "Aktywuj",
+            "disable": "Dezaktywuj",
+            "grant access level": "Przydziel poziom dostępu",
+            "change access level state": "Zmień stan poziomu dostępu",
             //panels.clientPanel
             "client panel": "Panel klienta",
             //verify
@@ -116,6 +121,7 @@ const resources = {
             "signin.welcome": "Welcome back",
             "signin.subtitle": "We are very glad to see you again",
             "i don't have an account": "I don't have an account",
+            "refresh": "Refresh",
             //signup
             "signup": "Sign up",
             "signup.welcome": "Welcome",
@@ -162,6 +168,10 @@ const resources = {
             "change password": "Change password",
             "reset password": "Reset password",
             "block": "Block account",
+            "enable": "Enable",
+            "disable": "Disable",
+            "grant access level": "Grant access level",
+            "change access level state": "Change access level state",
             "unblock": "Unblock account",
             "grand access level": "Grand access level",
             //panels.clientPanel
