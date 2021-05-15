@@ -19,7 +19,6 @@ public class BusinessWorker extends AccessLevel {
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
-
     @Getter
     @Setter
     @Column(name = "confirmed_by_business_worker", nullable = false)

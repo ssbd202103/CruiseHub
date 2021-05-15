@@ -6,7 +6,8 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
 
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
+
 @Entity (name = "attractions")
 public class Attraction extends BaseEntity {
 
@@ -19,27 +20,25 @@ public class Attraction extends BaseEntity {
 
     @Getter
     @Setter
-    @NotNull
+    @NotEmpty
     @Column(name = "name")
     private String name;
 
-
-
     @Getter
     @Setter
-    @NotNull
+    @Size(min = 20)
     @Column(name = "description")
     private String description;
 
     @Getter
     @Setter
-    @NotNull
+    @Positive
     @Column(name = "price")
     private double price;
 
     @Getter
     @Setter
-    @NotNull
+    @PositiveOrZero
     @Column(name = "number_of_seats")
     private Long numberOfSeats;
 
@@ -56,8 +55,8 @@ public class Attraction extends BaseEntity {
     @JoinColumn(name = "cruise_id")
     private CruiseGroup cruise;
 
-    public Attraction(Long id, @NotNull String name, @NotNull String description, @NotNull double price, @NotNull Long numberOfSeats, @NotNull Boolean available, @NotNull CruiseGroup cruise) {
-        this.id = id;
+    public Attraction(String name, String description,
+                      double price, Long numberOfSeats, Boolean available, CruiseGroup cruise) {
         this.name = name;
         this.description = description;
         this.price = price;
