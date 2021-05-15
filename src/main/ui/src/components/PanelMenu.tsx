@@ -18,7 +18,7 @@ export interface PanelMenuProps {
 
 export default function PanelMenu(props: PanelMenuProps) {
 
-    const {color} = useSelector(selectColor)
+    const color = useSelector(selectColor)
 
     return (
         <Box className={styles.wrapper} style={{backgroundColor: `var(--${props.color})`}}>

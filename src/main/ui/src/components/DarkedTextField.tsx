@@ -85,7 +85,7 @@ const DarkedTextField = React.forwardRef((props: DarkedTextFieldProps, ref) => {
             style,
         } = props
 
-        const {color} = useSelector(selectColor)
+        const color = useSelector(selectColor)
 
         return (<TextField
             type={type || "text"}

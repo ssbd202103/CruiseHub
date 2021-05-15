@@ -39,7 +39,7 @@ export default function ModeratorPanel() {
         setManage(true)
     }
 
-    const {color} = useSelector(selectColor)
+    const color = useSelector(selectColor)
 
     const [manageAccount, setManage] = useState(true)
     const handleManageAccount = () => {

@@ -1,19 +1,21 @@
-import { createSlice, createSelector } from '@reduxjs/toolkit'
+import {createSlice, createDraftSafeSelector, createSelector} from '@reduxjs/toolkit'
 
 const colorSlice = createSlice({
     name: 'color',
-    initialState: {
-        color: true
-    },
+    initialState: true,
     reducers: {
-        change: state => {
-            state.color = !state.color
-        }
+        change: state => !state
     }
 })
 
+export interface ColorSliceState {
+    color: boolean
+}
+
 export const {change} = colorSlice.actions
 
-export const selectColor= (state: any) => state.color
+const selectSelf = (state: ColorSliceState) => state
+
+export const selectColor = createSelector(selectSelf, state => state.color)
 
 export default colorSlice.reducer

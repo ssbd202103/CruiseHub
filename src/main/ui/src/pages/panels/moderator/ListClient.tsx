@@ -70,7 +70,7 @@ function Row(props: RowProps) {
 export default function ModListClient() {
     const [users, setUsers] = useState([]);
 
-    const {color} = useSelector(selectColor)
+    const color = useSelector(selectColor)
 
     useEffect(() => {
         loadUsers();

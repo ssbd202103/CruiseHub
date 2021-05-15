@@ -7,7 +7,7 @@ import {selectColor} from "../redux/slices/colorSlice";
 
 export default function HeaderFooterLayout({children}: LayoutProps) {
 
-    const {color} = useSelector(selectColor)
+    const color = useSelector(selectColor)
 
     return (
         <Box style={{backgroundColor: `var(--${color ? 'white' : 'dark'}`}}>

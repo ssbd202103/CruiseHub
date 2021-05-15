@@ -1,9 +1,15 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import colorReducer from "./slices/colorSlice";
 
-export default configureStore({
-    reducer: {
-        color: colorReducer
-    }
+const reducer = {
+    color: colorReducer
+}
+
+const store = configureStore({
+    reducer
 })
 
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispath = typeof store.dispatch
+
+export default store

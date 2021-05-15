@@ -31,7 +31,7 @@ import AppColorSetter from "../../components/AppColorSetter";
 export default function WorkerPanel() {
     const {t} = useTranslation()
 
-    const {color} = useSelector(selectColor)
+    const color = useSelector(selectColor)
 
     return (
         <Grid container className={styles.wrapper}>

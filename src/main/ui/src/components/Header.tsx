@@ -14,7 +14,7 @@ import {selectColor} from "../redux/slices/colorSlice";
 function Header() {
     const {t} = useTranslation()
 
-    const {color} = useSelector(selectColor)
+    const color = useSelector(selectColor)
 
     return (
         <Box className={styles.wrapper + ' ' + styles[`wrapper-${color ? 'light' : 'dark'}`]}>

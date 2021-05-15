@@ -11,7 +11,10 @@ import {change} from '../redux/slices/colorSlice'
 export default function AppColorSetter() {
     const {t} = useTranslation();
 
-    const {color} = useSelector(selectColor)
+    const color = useSelector(selectColor)
+
+    console.log(color)
+
     const dispatch = useDispatch()
 
     const handleClick = () => {

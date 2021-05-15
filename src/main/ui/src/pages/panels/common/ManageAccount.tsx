@@ -14,7 +14,7 @@ import {selectColor} from "../../../redux/slices/colorSlice";
 export default function ManageAccount() {
     const {t} = useTranslation()
 
-    const {color} = useSelector(selectColor)
+    const color = useSelector(selectColor)
 
     const [ChangePerData, setPerData] = useState(false)
     const [ChangAddress, setChangChangAddress] = useState(false)

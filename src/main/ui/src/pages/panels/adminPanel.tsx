@@ -44,7 +44,7 @@ export default function AdminPanel() {
         setManage(true)
     }
 
-    const {color} = useSelector(selectColor)
+    const color = useSelector(selectColor)
 
     const [manageAccount, setManage] = useState(true)
     const handleManageAccount = () => {

@@ -8,7 +8,7 @@ import {selectColor} from "../redux/slices/colorSlice";
 
 function Footer() {
 
-    const {color} = useSelector(selectColor)
+    const color = useSelector(selectColor)
 
     return (
         <Box component="footer" className={styles.wrapper + ' ' + styles[`wrapper-${color ? 'light' : 'dark'}`]}>

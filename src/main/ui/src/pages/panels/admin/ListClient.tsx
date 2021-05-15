@@ -207,7 +207,7 @@ function Row(props: RowProps) {
 export default function AdminListClient() {
     const [users, setUsers] = useState([]);
 
-    const {color} = useSelector(selectColor)
+    const color = useSelector(selectColor)
 
     useEffect(() => {
         loadUsers();

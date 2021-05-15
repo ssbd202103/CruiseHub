@@ -33,7 +33,7 @@ import {selectColor} from "../../redux/slices/colorSlice";
 export default function ClientPanel() {
     const { t } = useTranslation()
 
-    const {color} = useSelector(selectColor)
+    const color = useSelector(selectColor)
 
     return (
         <Grid container className={styles.wrapper}>

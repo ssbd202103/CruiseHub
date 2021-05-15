@@ -14,7 +14,7 @@ import {selectColor} from "../redux/slices/colorSlice";
 export default function Home() {
     const {t} = useTranslation()
 
-    const {color} = useSelector(selectColor)
+    const color = useSelector(selectColor)
 
     return (
         <HeaderFooterLayout>
