@@ -14,7 +14,7 @@ class AuthControllerIT {
     @Test
     void auth() {
         String correctLogin = "emusk";
-        String correctPassword = "12345678";
+        String correctPassword = "abcABC123*";
 
         // correct test
         AuthenticateDto authInfo = new AuthenticateDto(correctLogin, correctPassword);
