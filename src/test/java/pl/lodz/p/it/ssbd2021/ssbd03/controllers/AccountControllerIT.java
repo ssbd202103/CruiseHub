@@ -450,7 +450,7 @@ class AccountControllerIT {
         OtherClientChangeDataDto otherClientChangeDataDto = new OtherClientChangeDataDto(account.getLogin(), account.getVersion(),
                 "Damian",
                 "Bednarek",
-                "zmienony@gmail.com",
+                randomAlphanumeric(10) + "@gmail.com",
                 "888888888",
                 newAddress,
                 "rbranson");
@@ -475,7 +475,7 @@ class AccountControllerIT {
         OtherBusinessWorkerChangeDataDto otherBusinessWorkerChangeDataDto = new OtherBusinessWorkerChangeDataDto(account.getLogin(), account.getVersion(),
                 "Damian",
                 "Bednarek",
-                "zmienony@gmail.com",
+                randomAlphanumeric(10) + "@gmail.com",
                 "888888888",
                 "rbranson");
         Response response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken)).body(otherBusinessWorkerChangeDataDto).put("/changeOtherData/businessworker");
@@ -496,7 +496,7 @@ class AccountControllerIT {
         OtherAccountChangeDataDto otherAccountChangeDataDto = new OtherAccountChangeDataDto(account.getLogin(), account.getVersion(),
                 "Damian",
                 "Bednarek",
-                "zmienony@gmail.com",
+                randomAlphanumeric(10) + "@gmail.com",
                 "rbranson");
         Response response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken)).body(otherAccountChangeDataDto).put("/changeOtherData");
         assertThat(response.getStatusCode()).isEqualTo(200);

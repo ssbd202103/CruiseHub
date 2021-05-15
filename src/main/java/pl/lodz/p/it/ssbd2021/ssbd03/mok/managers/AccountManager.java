@@ -288,15 +288,6 @@ public class AccountManager implements AccountManagerLocal {
 
     @Override
     public Account changeOtherClientData(Account fromAccount, String alterBy) throws BaseAppException {
-        Account targetAccount = accountFacade.findByLogin(fromAccount.getLogin());
-
-        targetAccount.setVersion(fromAccount.getVersion());
-        targetAccount.setFirstName(fromAccount.getFirstName());
-        targetAccount.setSecondName(fromAccount.getSecondName());
-        targetAccount.setEmail(fromAccount.getEmail());
-        targetAccount.setAlteredBy(accountFacade.findByLogin(alterBy));
-        targetAccount.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
-        targetAccount.setLastAlterDateTime(LocalDateTime.now());
         Account targetAccount = updateAccount(fromAccount, alterBy);
 
         Client targetClient = (Client) getAccessLevel(targetAccount, AccessLevelType.CLIENT);
@@ -333,6 +324,7 @@ public class AccountManager implements AccountManagerLocal {
         targetAccount.setVersion(updatedAccount.getVersion());
         targetAccount.setFirstName(updatedAccount.getFirstName());
         targetAccount.setSecondName(updatedAccount.getSecondName());
+        targetAccount.setEmail(updatedAccount.getEmail());
         targetAccount.setAlteredBy(accountFacade.findByLogin(alteredBy));
         targetAccount.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
         targetAccount.setLastAlterDateTime(LocalDateTime.now());
@@ -341,14 +333,6 @@ public class AccountManager implements AccountManagerLocal {
 
     @Override
     public Account changeOtherBusinessWorkerData(Account fromAccount, String alterBy) throws BaseAppException {
-        Account targetAccount = accountFacade.findByLogin(fromAccount.getLogin());
-        targetAccount.setVersion(fromAccount.getVersion());
-        targetAccount.setFirstName(fromAccount.getFirstName());
-        targetAccount.setSecondName(fromAccount.getSecondName());
-        targetAccount.setEmail(fromAccount.getEmail());
-        targetAccount.setAlteredBy(accountFacade.findByLogin(alterBy));
-        targetAccount.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
-        targetAccount.setLastAlterDateTime(LocalDateTime.now());
         Account targetAccount = updateAccount(fromAccount, alterBy);
         BusinessWorker targetBusinessWorker = (BusinessWorker) getAccessLevel(targetAccount, AccessLevelType.BUSINESS_WORKER);
         targetBusinessWorker.setVersion(targetAccount.getVersion());
@@ -363,15 +347,7 @@ public class AccountManager implements AccountManagerLocal {
 
     @Override
     public Account changeOtherAccountData(Account fromAccount, String alterBy) throws BaseAppException {
-        Account targetAccount = accountFacade.findByLogin(fromAccount.getLogin());
-        targetAccount.setVersion(fromAccount.getVersion());
-        targetAccount.setFirstName(fromAccount.getFirstName());
-        targetAccount.setSecondName(fromAccount.getSecondName());
-        targetAccount.setEmail(fromAccount.getEmail());
-        targetAccount.setAlteredBy(accountFacade.findByLogin(alterBy));
-        targetAccount.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
-        targetAccount.setLastAlterDateTime(LocalDateTime.now());
-        return targetAccount;
+        return updateAccount(fromAccount, alterBy);
 
     }
 
