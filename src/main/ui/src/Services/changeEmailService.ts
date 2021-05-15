@@ -2,7 +2,7 @@ import { ChangeEmail } from '../interfaces/changeInterfaces'
 import axios from './URL'
 
 export function changeEmail(etag: string, dto: ChangeEmail) {
-    axios.put('/account/change_email',
+    axios.put('account/change_email',
         {
             dto
         }, {
