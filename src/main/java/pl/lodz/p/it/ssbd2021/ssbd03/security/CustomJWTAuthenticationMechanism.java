@@ -22,6 +22,7 @@ public class CustomJWTAuthenticationMechanism implements HttpAuthenticationMecha
     public AuthenticationStatus validateRequest(HttpServletRequest request, HttpServletResponse response, HttpMessageContext httpMessageContext) {
         if (request.getRequestURL().toString().endsWith("/api/account/client/registration") ||
                 request.getRequestURL().toString().endsWith("/api/account/business-worker/registration") ||
+                request.getRequestURL().toString().contains("/api/account/request-password-reset/") ||
                 request.getRequestURL().toString().endsWith("/api/signin/auth")
         ) {
             return httpMessageContext.doNothing();

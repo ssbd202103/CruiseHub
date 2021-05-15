@@ -221,7 +221,7 @@ public class AccountController {
             return Response.status(406).build();
         }
         accountEndpoint.blockUser(blockAccountDto.getLogin(), blockAccountDto.getVersion());
-        return Response.status(200).build();
+        return Response.ok().build();
     }
 
     /**
