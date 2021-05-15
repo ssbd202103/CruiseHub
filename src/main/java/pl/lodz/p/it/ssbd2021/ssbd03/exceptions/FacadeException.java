@@ -20,7 +20,7 @@ public class FacadeException extends BaseAppException {
     public static FacadeException noSuchElement() throws BaseAppException {
         throw new FacadeException(NO_SUCH_ELEMENT_ERROR);
     }
-    public static FacadeException optimisticLock(Exception cause) throws BaseAppException {
-        throw new FacadeException(OPTIMISTIC_LOCK_EXCEPTION, cause);
+    public static FacadeException optimisticLock() throws BaseAppException {
+        throw new FacadeException(OPTIMISTIC_LOCK_EXCEPTION);
     }
 }

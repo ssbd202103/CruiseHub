@@ -249,7 +249,7 @@ class AccountControllerIT {
         response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).body(grantAccessLevel).put("/grant-access-level");
         assertThat(response.getStatusCode()).isEqualTo(200);
 
-
+        grantAccessLevel.setAccountVersion(grantAccessLevel.getAccountVersion() + 1);
         response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).body(grantAccessLevel).put("/grant-access-level");
         assertThat(response.getStatusCode()).isEqualTo(400);
         assertThat(response.asString()).isEqualTo(ACCESS_LEVEL_ALREADY_ASSIGNED_ERROR);
@@ -318,8 +318,9 @@ class AccountControllerIT {
         accountDtoList = Arrays.asList(objectMapper.readValue(accountString, AccountDtoForList[].class));
         accountDtoForList = accountDtoList.stream().filter(acc -> acc.getLogin().equals(account.getLogin())).findFirst().get();
 
+
+        assertEquals(200, postResponse.getStatusCode());
         assertTrue(accountDtoForList.isActive());
-        assertEquals(200, response.getStatusCode());
 
 
     }
