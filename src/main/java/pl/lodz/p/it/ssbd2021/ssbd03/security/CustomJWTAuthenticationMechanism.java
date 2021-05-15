@@ -1,6 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.security;
 
 import com.auth0.jwt.interfaces.Claim;
+import com.nimbusds.jwt.SignedJWT;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.JWTException;
 
 import javax.enterprise.context.RequestScoped;
@@ -9,10 +10,7 @@ import javax.security.enterprise.authentication.mechanism.http.HttpAuthenticatio
 import javax.security.enterprise.authentication.mechanism.http.HttpMessageContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RequestScoped
 public class CustomJWTAuthenticationMechanism implements HttpAuthenticationMechanism {
@@ -24,7 +22,7 @@ public class CustomJWTAuthenticationMechanism implements HttpAuthenticationMecha
     public AuthenticationStatus validateRequest(HttpServletRequest request, HttpServletResponse response, HttpMessageContext httpMessageContext) {
         if (
                 !request.getRequestURL().toString().contains("/api/") ||
-                        request.getRequestURL().toString().matches(".*/(?:registration|auth)(?:\\?.*)?$")
+                        request.getRequestURL().toString().matches(".*/(?:registration|auth|request-password-reset)(?:\\?.*)?$")
         ) {
             return httpMessageContext.doNothing();
         }
