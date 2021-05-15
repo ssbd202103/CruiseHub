@@ -274,6 +274,8 @@ class AccountControllerIT {
 
 
         response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken)).body(grantAccessLevel).put("/grant-access-level");
+        grantAccessLevel.setAccountVersion(grantAccessLevel.getAccountVersion() + 1);
+        response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).body(grantAccessLevel).put("/grant-access-level");
         assertThat(response.getStatusCode()).isEqualTo(400);
         assertThat(response.asString()).isEqualTo(ACCESS_LEVEL_ALREADY_ASSIGNED_ERROR);
 
@@ -336,7 +338,7 @@ class AccountControllerIT {
         accountDtoForList = accountDtoList.stream().filter(acc -> acc.getLogin().equals(account.getLogin())).findFirst().get();
         assertTrue(accountDtoForList.isActive());
 
-        given().contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken))
+        Response postResponse =  given().contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken))
                 .header("If-Match", accountDtoForList.getEtag())
                 .baseUri(accountBaseUri).body(unblockAccountDto).put("/unblock");
 
@@ -345,8 +347,11 @@ class AccountControllerIT {
         accountDtoList = Arrays.asList(objectMapper.readValue(accountString, AccountDtoForList[].class));
         accountDtoForList = accountDtoList.stream().filter(acc -> acc.getLogin().equals(account.getLogin())).findFirst().get();
 
+
+        assertEquals(200, postResponse.getStatusCode());
         assertTrue(accountDtoForList.isActive());
-        assertEquals(200, response.getStatusCode());
+
+
     }
 
 

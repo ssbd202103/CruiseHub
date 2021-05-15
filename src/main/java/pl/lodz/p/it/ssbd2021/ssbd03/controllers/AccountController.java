@@ -1,6 +1,16 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.*;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AccountChangeEmailDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AdministratorChangeDataDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.BusinessWorkerChangeDataDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.ClientChangeDataDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.ModeratorChangeDataDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.UnblockAccountDto;
@@ -33,12 +43,21 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import static javax.ws.rs.core.Response.Status.*;
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ETAG_IDENTITY_INTEGRITY_ERROR;
 
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 
+import static javax.ws.rs.core.Response.Status.*;
+
 import java.util.List;
+
+import static javax.ws.rs.core.Response.Status.*;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
+
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.security.ETagFilterBinding;
+import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 
 /**
  * Klasa która udostępnia api RESTowe do wykonania operacji na kontach użytkowników, oraz zajmuje się walidacją danych.
@@ -191,7 +210,12 @@ public class AccountController {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etagValue, blockAccountDto)) {
             return Response.status(406).build();
         }
-        accountEndpoint.blockUser(blockAccountDto.getLogin(), blockAccountDto.getVersion());
+        try{
+            accountEndpoint.blockUser(blockAccountDto.getLogin(), blockAccountDto.getVersion());
+        } catch(FacadeException e) {
+            return Response.status(FORBIDDEN).entity(e.getMessage()).build();
+        }
+
         return Response.ok().build();
     }
 
@@ -210,6 +234,8 @@ public class AccountController {
         try {
             AccountDto account = accountEndpoint.grantAccessLevel(grantAccessLevel);
             return Response.ok().entity(account).build();
+        } catch(FacadeException e) {
+            return Response.status(FORBIDDEN).entity(e.getMessage()).build();
         } catch (BaseAppException e) {
             return Response.status(BAD_REQUEST).entity(e.getMessage()).build();
         }
@@ -234,6 +260,8 @@ public class AccountController {
         try {
             AccountDto account = accountEndpoint.changeAccessLevelState(changeAccessLevelStateDto);
             return Response.ok().entity(account).build();
+        } catch(FacadeException e) {
+            return Response.status(FORBIDDEN).entity(e.getMessage()).build();
         } catch (BaseAppException e) {
             return Response.status(BAD_REQUEST).entity(e.getMessage()).build();
         }
@@ -251,6 +279,8 @@ public class AccountController {
     public Response resetPassword(@Valid PasswordResetDto passwordResetDto) {
         try {
             this.accountEndpoint.resetPassword(passwordResetDto);
+        } catch(FacadeException e) {
+            return Response.status(FORBIDDEN).entity(e.getMessage()).build();
         } catch (BaseAppException e) {
             Response.status(FORBIDDEN).entity(e.getMessage()).build(); // todo send key
         }
@@ -288,7 +318,14 @@ public class AccountController {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(tagValue, unblockAccountDto)) {
             return Response.status(406).build();
         }
-        accountEndpoint.unblockUser(unblockAccountDto.getLogin(), unblockAccountDto.getVersion());
+        try {
+            accountEndpoint.unblockUser(unblockAccountDto.getLogin(), unblockAccountDto.getVersion());
+        } catch (FacadeException e) {
+            return Response.status(FORBIDDEN).entity(e.getMessage()).build();
+        }
+
+
+
         return Response.status(200).build();
     }
 
@@ -323,12 +360,13 @@ public class AccountController {
     public Response accountVerification(@Valid AccountVerificationDto accountVerificationDto) {
         try {
             this.accountEndpoint.verifyAccount(accountVerificationDto);
+        } catch (FacadeException e) {
+            return Response.status(FORBIDDEN).entity(e.getMessage()).build();
         } catch (BaseAppException e) {
             Response.status(FORBIDDEN).entity(e.getMessage()).build(); // todo send key
         }
         return Response.ok().build(); // todo appropriate condition
     }
-
     /**
      * Zmień dane wybranego konta o poziomie dostępu klient
      *
@@ -349,6 +387,8 @@ public class AccountController {
         try {
             OtherClientChangeDataDto account = accountEndpoint.changeOtherClientData(otherClientChangeDataDto);
             return Response.ok().entity(account).build();
+        } catch (FacadeException e) {
+            return Response.status(FORBIDDEN).entity(e.getMessage()).build();
         } catch (BaseAppException e) {
             return Response.status(BAD_REQUEST).entity(e.getMessage()).build();
         }
@@ -376,6 +416,8 @@ public class AccountController {
         try {
             OtherBusinessWorkerChangeDataDto account = accountEndpoint.changeOtherBusinessWorkerData(otherBusinessWorkerChangeDataDto);
             return Response.ok().entity(account).build();
+        } catch (FacadeException e) {
+            return Response.status(FORBIDDEN).entity(e.getMessage()).build();
         } catch (BaseAppException e) {
             return Response.status(BAD_REQUEST).entity(e.getMessage()).build();
         }
@@ -401,6 +443,8 @@ public class AccountController {
         try {
             AccountDto account = accountEndpoint.changeOtherAccountData(otherAccountChangeDataDto);
             return Response.ok().entity(account).build();
+        }  catch (FacadeException e) {
+            return Response.status(FORBIDDEN).entity(e.getMessage()).build();
         } catch (BaseAppException e) {
             return Response.status(BAD_REQUEST).entity(e.getMessage()).build();
         }
@@ -421,6 +465,8 @@ public class AccountController {
 
         try {
             accountEndpoint.changeEmail(accountChangeEmailDto);
+        }  catch (FacadeException e) {
+            return Response.status(FORBIDDEN).entity(e.getMessage()).build();
         } catch (EJBException | OptimisticLockException e) {
             return Response.status(NOT_ACCEPTABLE).entity(e.getMessage()).build();
         } catch (BaseAppException e) {
@@ -445,6 +491,8 @@ public class AccountController {
 
         try {
             accountEndpoint.changeClientData(clientChangeDataDto);
+        } catch (FacadeException e) {
+            return Response.status(FORBIDDEN).entity(e.getMessage()).build();
         } catch (EJBException | OptimisticLockException e) {
             return Response.status(NOT_ACCEPTABLE).entity(e.getMessage()).build();
         } catch (BaseAppException e) {
@@ -470,6 +518,8 @@ public class AccountController {
 
         try {
             accountEndpoint.changeBusinessWorkerData(businessWorkerChangeDataDto);
+        } catch (FacadeException e) {
+            return Response.status(FORBIDDEN).entity(e.getMessage()).build();
         } catch (EJBException | OptimisticLockException e) {
             return Response.status(NOT_ACCEPTABLE).entity(e.getMessage()).build();
         } catch (BaseAppException e) {
@@ -495,6 +545,8 @@ public class AccountController {
 
         try {
             accountEndpoint.changeModeratorData(moderatorChangeDataDto);
+        } catch (FacadeException e) {
+            return Response.status(FORBIDDEN).entity(e.getMessage()).build();
         } catch (EJBException | OptimisticLockException e) {
             return Response.status(NOT_ACCEPTABLE).entity(e.getMessage()).build();
         } catch (BaseAppException e) {
@@ -520,6 +572,8 @@ public class AccountController {
 
         try {
             accountEndpoint.changeAdministratorData(administratorChangeDataDto);
+        } catch (FacadeException e) {
+            return Response.status(FORBIDDEN).entity(e.getMessage()).build();
         } catch (EJBException | OptimisticLockException e) {
             return Response.status(NOT_ACCEPTABLE).entity(e.getMessage()).build();
         } catch (BaseAppException e) {

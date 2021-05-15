@@ -31,6 +31,9 @@ import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.inject.Inject;
 import javax.persistence.OptimisticLockException;
+import javax.persistence.OptimisticLockException;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.OPTIMISTIC_LOCK_EXCEPTION;
+
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
@@ -38,6 +41,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ACCESS_LEVEL_NOT_ASSIGNABLE_ERROR;
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 
 /**
@@ -99,6 +103,9 @@ public class AccountEndpoint implements AccountEndpointLocal {
                         changeAccessLevelStateDto.getAccountVersion())
         );
     }
+
+
+
 
     @Override
     public AccountDetailsViewDto getAccountDetailsByLogin(String login) throws BaseAppException {
@@ -250,6 +257,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
         Account account = AccountMapper.extractAccountFromAdministratorChangeDataDto(administratorChangeDataDto);
         accountManager.changeAdministratorData(account);
     }
+
 
 
     @Override
