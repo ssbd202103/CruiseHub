@@ -1,4 +1,4 @@
-import {createSlice, createDraftSafeSelector, createSelector} from '@reduxjs/toolkit'
+import {createSlice, createSelector} from '@reduxjs/toolkit'
 
 const colorSlice = createSlice({
     name: 'color',
