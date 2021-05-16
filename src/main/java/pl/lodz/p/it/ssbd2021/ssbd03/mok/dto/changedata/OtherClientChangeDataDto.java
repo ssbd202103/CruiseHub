@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AbstractAccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.PhoneNumber;
 
 import javax.validation.constraints.NotNull;
@@ -13,14 +14,14 @@ import javax.validation.constraints.NotNull;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class OtherClientChangeDataDto extends OtherAccountChangeDataDto {
+public class OtherClientChangeDataDto extends AbstractAccountDto {
     @NotNull
     private OtherAddressChangeDto newAddress;
     @PhoneNumber
     private String newPhoneNumber;
 
-    public OtherClientChangeDataDto(String login, Long version, String newFirstName, String newSecondName,String newEmail, String newPhoneNumber, OtherAddressChangeDto newAddress, String alteredBy) {
-        super(login, version, newFirstName, newSecondName,newEmail, alteredBy);
+    public OtherClientChangeDataDto(String login, Long version, String newPhoneNumber, OtherAddressChangeDto newAddress) {
+        super(login, version);
         this.newPhoneNumber = newPhoneNumber;
         this.newAddress = newAddress;
     }

@@ -22,6 +22,4 @@ public class OtherAddressChangeDto {
     private String newCity;
     @Country
     private String newCountry;
-    @Name
-    private String alteredBy; //todo needs to be deleted
 }

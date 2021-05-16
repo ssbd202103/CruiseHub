@@ -422,22 +422,20 @@ class AccountControllerIT {
         ClientForRegistrationDto client = getSampleClientForRegistrationDto();
         AccountDto account = registerClientAndGetAccountDto(client);
         String etag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
-        OtherAddressChangeDto newAddress = new OtherAddressChangeDto(100L, "Aleja Zmieniona", "94-690", "Lodz", "Polska", "rbranson");
+        OtherAddressChangeDto newAddress = new OtherAddressChangeDto(100L, "Aleja Zmieniona", "94-690", "Lodz", "Polska");
         OtherClientChangeDataDto otherClientChangeDataDto = new OtherClientChangeDataDto(account.getLogin(), account.getVersion(),
-                "Damian",
-                "Bednarek",
-                randomAlphanumeric(10) + "@gmail.com",
+
                 "888888888",
-                newAddress,
-                "rbranson");
+                newAddress);
         Response response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken)).body(otherClientChangeDataDto).put("/changeOtherData/client");
         assertThat(response.getStatusCode()).isEqualTo(200);
         OtherClientChangeDataDto updatedAccount = objectMapper.readValue(response.asString(), OtherClientChangeDataDto.class);
-        assertThat(updatedAccount.getNewFirstName()).isEqualTo("Damian");
-        assertThat(updatedAccount.getNewSecondName()).isEqualTo("Bednarek");
         assertThat(updatedAccount.getNewAddress().getNewStreet()).isEqualTo("Aleja Zmieniona");
+        assertThat(updatedAccount.getNewAddress().getNewPostalCode()).isEqualTo("94-690");
+        assertThat(updatedAccount.getNewAddress().getNewCity()).isEqualTo("Lodz");
+        assertThat(updatedAccount.getNewAddress().getNewCity()).isEqualTo("Polska");
         assertThat(updatedAccount.getNewPhoneNumber()).isEqualTo("888888888");
-        assertThat(updatedAccount.getAlteredBy()).isEqualTo("rbranson");
+
 
     }
 
@@ -449,18 +447,13 @@ class AccountControllerIT {
         AccountDto account = registerBusinessWorkerAndGetAccountDto(worker);
         String etag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
         OtherBusinessWorkerChangeDataDto otherBusinessWorkerChangeDataDto = new OtherBusinessWorkerChangeDataDto(account.getLogin(), account.getVersion(),
-                "Damian",
-                "Bednarek",
-                randomAlphanumeric(10) + "@gmail.com",
-                "888888888",
-                "rbranson");
+                "888888888");
         Response response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken)).body(otherBusinessWorkerChangeDataDto).put("/changeOtherData/businessworker");
         assertThat(response.getStatusCode()).isEqualTo(200);
         OtherBusinessWorkerChangeDataDto updatedAccount = objectMapper.readValue(response.asString(), OtherBusinessWorkerChangeDataDto.class);
-        assertThat(updatedAccount.getNewFirstName()).isEqualTo("Damian");
-        assertThat(updatedAccount.getNewSecondName()).isEqualTo("Bednarek");
+        
         assertThat(updatedAccount.getNewPhoneNumber()).isEqualTo("888888888");
-        assertThat(updatedAccount.getAlteredBy()).isEqualTo("rbranson");
+
     }
 
     @Test
@@ -472,8 +465,7 @@ class AccountControllerIT {
         OtherAccountChangeDataDto otherAccountChangeDataDto = new OtherAccountChangeDataDto(account.getLogin(), account.getVersion(),
                 "Damian",
                 "Bednarek",
-                randomAlphanumeric(10) + "@gmail.com",
-                "rbranson");
+                randomAlphanumeric(10) + "@gmail.com");
         Response response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken)).body(otherAccountChangeDataDto).put("/changeOtherData");
         assertThat(response.getStatusCode()).isEqualTo(200);
         AccountDto updatedAccount = objectMapper.readValue(response.asString(), AccountDto.class);

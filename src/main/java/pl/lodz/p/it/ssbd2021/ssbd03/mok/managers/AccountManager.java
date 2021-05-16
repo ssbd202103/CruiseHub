@@ -18,6 +18,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacade;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.ClientFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.CompanyFacadeMok;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.JWTHandler;
 import pl.lodz.p.it.ssbd2021.ssbd03.services.EmailService;
@@ -47,6 +48,9 @@ public class AccountManager implements AccountManagerLocal {
 
     @EJB
     private CompanyFacadeMok companyFacadeMok;
+
+    @EJB
+    private ClientFacade clientFacade;
 
     @Inject
     I18n i18n;
@@ -298,20 +302,23 @@ public class AccountManager implements AccountManagerLocal {
     }
 
     @Override
-    public Account changeOtherClientData(Account fromAccount, String alterBy) throws BaseAppException {
-        Account targetAccount = updateAccount(fromAccount, alterBy);
+    public Account changeOtherClientData(String login, String phoneNumber, Address addr,Long version) throws BaseAppException {
+        Account targetAccount = accountFacade.findByLogin(login);
+        if(!targetAccount.getVersion().equals(version)) { //this need to check if client version has changed, not account version
+            throw FacadeException.optimisticLock();
+        }
 
         Client targetClient = (Client) getAccessLevel(targetAccount, AccessLevelType.CLIENT);
-
-        targetClient.setAlteredBy(accountFacade.findByLogin(alterBy));
         targetClient.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
         targetClient.setLastAlterDateTime(LocalDateTime.now());
-
-        Client fromClient = (Client) getAccessLevel(fromAccount, AccessLevelType.CLIENT);
-        updateClient(fromClient, targetClient);
+        targetClient.setPhoneNumber(phoneNumber);
 
         Address targetAddress = targetClient.getHomeAddress();
-        targetAddress.setAlteredBy(accountFacade.findByLogin(alterBy));
+        targetAddress.setHouseNumber(addr.getHouseNumber());
+        targetAddress.setStreet(addr.getStreet());
+        targetAddress.setPostalCode(addr.getPostalCode());
+        targetAddress.setCity(addr.getCity());
+        targetAddress.setCountry(addr.getCountry());
         targetAddress.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
         targetAddress.setLastAlterDateTime(LocalDateTime.now());
         return targetAccount;
@@ -345,22 +352,21 @@ public class AccountManager implements AccountManagerLocal {
     }
 
     @Override
-    public Account changeOtherBusinessWorkerData(Account fromAccount, String alterBy) throws BaseAppException {
-        Account targetAccount = updateAccount(fromAccount, alterBy);
+    public Account changeOtherBusinessWorkerData(String login, String phoneNumber,Long version) throws BaseAppException {
+        Account targetAccount = accountFacade.findByLogin(login);
+        if(!targetAccount.getVersion().equals(version)) {//this need to check if businessWorker version has changed, not account version
+            throw FacadeException.optimisticLock();
+        }
         BusinessWorker targetBusinessWorker = (BusinessWorker) getAccessLevel(targetAccount, AccessLevelType.BUSINESS_WORKER);
-
-        targetBusinessWorker.setAlteredBy(accountFacade.findByLogin(alterBy));
         targetBusinessWorker.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
         targetBusinessWorker.setLastAlterDateTime(LocalDateTime.now());
-
-        BusinessWorker fromBusinessWorker = (BusinessWorker) getAccessLevel(fromAccount, AccessLevelType.BUSINESS_WORKER);
-        targetBusinessWorker.setPhoneNumber(fromBusinessWorker.getPhoneNumber());
+        targetBusinessWorker.setPhoneNumber(phoneNumber);
         return targetAccount;
     }
 
     @Override
-    public Account changeOtherAccountData(Account fromAccount, String alterBy) throws BaseAppException {
-        return updateAccount(fromAccount, alterBy);
+    public Account changeOtherAccountData(Account fromAccount) throws BaseAppException {
+        return updateAccount(fromAccount, "rbranson");
 
     }
 

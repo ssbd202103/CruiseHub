@@ -4,6 +4,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
@@ -156,11 +157,11 @@ public class AccountEndpoint implements AccountEndpointLocal {
         if (!version.equals(otherClientChangeDataDto.getVersion())) {
             throw FacadeException.optimisticLock();
         }
+        Address  addr= new Address(otherClientChangeDataDto.getNewAddress().getNewHouseNumber(),otherClientChangeDataDto.getNewAddress().getNewStreet(),otherClientChangeDataDto.getNewAddress().getNewPostalCode(),
+                otherClientChangeDataDto.getNewAddress().getNewCity(),otherClientChangeDataDto.getNewAddress().getNewCountry());
 
-        Account account = AccountMapper.extractAccountFromClientOtherChangeDataDto(otherClientChangeDataDto);
-        String alterBy = AccountMapper.extractAlterByFromOtherClientDataChange(otherClientChangeDataDto);
 
-        return AccountMapper.accountDtoForClientDataChange(accountManager.changeOtherClientData(account, alterBy));
+        return AccountMapper.accountDtoForClientDataChange(accountManager.changeOtherClientData(otherClientChangeDataDto.getLogin(),otherClientChangeDataDto.getNewPhoneNumber(),addr,otherClientChangeDataDto.getVersion()));
     }
 
     @Override
@@ -171,9 +172,8 @@ public class AccountEndpoint implements AccountEndpointLocal {
             throw FacadeException.optimisticLock();
         }
 
-        Account account = AccountMapper.extractAccountFromOtherBusinessWorkerChangeDataDto(otherBusinessWorkerChangeDataDto);
-        String alterBy = AccountMapper.extractAlterByFromOtherBusinessWorkerDataChange(otherBusinessWorkerChangeDataDto);
-        return AccountMapper.accountDtoForBusinnesWorkerDataChange(accountManager.changeOtherBusinessWorkerData(account, alterBy));
+
+        return AccountMapper.accountDtoForBusinnesWorkerDataChange(accountManager.changeOtherBusinessWorkerData(otherBusinessWorkerChangeDataDto.getLogin(),otherBusinessWorkerChangeDataDto.getNewPhoneNumber(),otherBusinessWorkerChangeDataDto.getVersion()));
     }
 
     @Override
@@ -185,8 +185,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
         }
 
         Account account = AccountMapper.extractAccountFromOtherAccountChangeDataDto(otherAccountChangeDataDto);
-        String alterBy = AccountMapper.extractAlterByFromAccount(otherAccountChangeDataDto);
-        return AccountMapper.toAccountDto(accountManager.changeOtherAccountData(account, alterBy));
+        return AccountMapper.toAccountDto(accountManager.changeOtherAccountData(account));
     }
 
 

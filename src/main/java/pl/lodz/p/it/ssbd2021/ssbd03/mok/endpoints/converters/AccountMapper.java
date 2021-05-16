@@ -165,10 +165,8 @@ public class AccountMapper {
 
         Client fromClient = (Client) account.getAccessLevels().stream().filter(accessLevel -> accessLevel.getAccessLevelType().equals(AccessLevelType.CLIENT)).collect(Collectors.toList()).get(0);
         OtherAddressChangeDto addressChangeDto = new OtherAddressChangeDto(fromClient.getHomeAddress().getHouseNumber(), fromClient.getHomeAddress().getStreet(),
-                fromClient.getHomeAddress().getPostalCode(), fromClient.getHomeAddress().getCity(), fromClient.getHomeAddress().getCountry(), fromClient.getHomeAddress().getAlteredBy().getLogin());
-        return new OtherClientChangeDataDto(account.getLogin(), account.getVersion(), account.getFirstName(), account.getSecondName(),
-               account.getEmail(), fromClient.getPhoneNumber(), addressChangeDto, account.getAlteredBy().getLogin()
-        );
+                fromClient.getHomeAddress().getPostalCode(), fromClient.getHomeAddress().getCity(), fromClient.getHomeAddress().getCountry());
+        return new OtherClientChangeDataDto(account.getLogin(), account.getVersion(), fromClient.getPhoneNumber(), addressChangeDto);
 
     }
 
@@ -180,8 +178,8 @@ public class AccountMapper {
     public static OtherBusinessWorkerChangeDataDto accountDtoForBusinnesWorkerDataChange(Account account) {
 
         BusinessWorker fromBusinessWorker = (BusinessWorker) account.getAccessLevels().stream().filter(accessLevel -> accessLevel.getAccessLevelType().equals(AccessLevelType.BUSINESS_WORKER)).collect(Collectors.toList()).get(0);
-        return new OtherBusinessWorkerChangeDataDto(account.getLogin(), account.getVersion(), account.getFirstName(), account.getSecondName(),
-                account.getEmail(),fromBusinessWorker.getPhoneNumber(), account.getAlteredBy().getLogin()
+        return new OtherBusinessWorkerChangeDataDto(account.getLogin(), account.getVersion(),
+                fromBusinessWorker.getPhoneNumber()
         );
 
     }
@@ -201,81 +199,7 @@ public class AccountMapper {
         account.setEmail(otherAccountChangeDataDto.getNewEmail());
         return account;
     }
-    /**
-     * Mapuje obiekt klasy dto na obiekt klasy modelu Account który jest wykorzystany do utrwalenia danych w bazie
-     *
-     * @param otherClientChangeDataDto obiekt klasy DTO
-     * @return obiekt klasy modelu który prezentuje konto o poziomie dostępu client
-     */
-    public static Account extractAccountFromClientOtherChangeDataDto(OtherClientChangeDataDto otherClientChangeDataDto) {
 
-        Account account = new Account();
-        account.setLogin(otherClientChangeDataDto.getLogin());
-        account.setVersion(otherClientChangeDataDto.getVersion());
-        account.setFirstName(otherClientChangeDataDto.getNewFirstName());
-        account.setSecondName(otherClientChangeDataDto.getNewSecondName());
-        account.setEmail(otherClientChangeDataDto.getNewEmail());
-
-        Address address = new Address(
-                otherClientChangeDataDto.getNewAddress().getNewHouseNumber(),
-                otherClientChangeDataDto.getNewAddress().getNewStreet(),
-                otherClientChangeDataDto.getNewAddress().getNewPostalCode(),
-                otherClientChangeDataDto.getNewAddress().getNewCity(),
-                otherClientChangeDataDto.getNewAddress().getNewCountry()
-        );
-        Client client = new Client(address, otherClientChangeDataDto.getNewPhoneNumber());
-        account.setAccessLevel(client);
-
-        return account;
-    }
-
-    /**
-     *  Mapuje pole AlteredBy obiektu DTO na String
-     * @param otherClientChangeDataDto dto zawierjące pole AlteredBy
-     * @return String -login konta modyfikującego dane
-     */
-    public static String extractAlterByFromOtherClientDataChange(OtherClientChangeDataDto otherClientChangeDataDto) {
-        return otherClientChangeDataDto.getAlteredBy();
-    }
-
-    /**
-     *  Mapuje pole AlteredBy obiektu DTO na String
-     * @param otherBusinessWorkerChangeDataDto dto zawierjące pole AlteredBy
-     * @return String -login konta modyfikującego dane
-     */
-    public static String extractAlterByFromOtherBusinessWorkerDataChange(OtherBusinessWorkerChangeDataDto otherBusinessWorkerChangeDataDto) {
-        return otherBusinessWorkerChangeDataDto.getAlteredBy();
-    }
-    /**
-     *  Mapuje pole AlteredBy obiektu DTO na String
-     * @param otherAccountChangeDataDto dto zawierjące pole AlteredBy
-     * @return String -login konta modyfikującego dane
-     */
-    public static String extractAlterByFromAccount(OtherAccountChangeDataDto otherAccountChangeDataDto) {
-        return otherAccountChangeDataDto.getAlteredBy();
-    }
-
-    /**
-     * Mapuje obiekt klasy dto na obiekt klasy modelu Account który jest wykorzystany do utrwalenia danych w bazie
-     *
-     * @param otherBusinessWorkerChangeDataDto obiekt klasy DTO
-     * @return obiekt klasy modelu który prezentuje konto z poziomem dostępu businessWorker
-     */
-    public static Account extractAccountFromOtherBusinessWorkerChangeDataDto(OtherBusinessWorkerChangeDataDto otherBusinessWorkerChangeDataDto) {
-
-        Account account = new Account();
-        account.setLogin(otherBusinessWorkerChangeDataDto.getLogin());
-        account.setVersion(otherBusinessWorkerChangeDataDto.getVersion());
-        account.setFirstName(otherBusinessWorkerChangeDataDto.getNewFirstName());
-        account.setSecondName(otherBusinessWorkerChangeDataDto.getNewSecondName());
-        account.setEmail(otherBusinessWorkerChangeDataDto.getNewEmail());
-
-        BusinessWorker businessWorker = new BusinessWorker(otherBusinessWorkerChangeDataDto.getNewPhoneNumber(), true);
-
-        account.setAccessLevel(businessWorker);
-
-        return account;
-    }
     private static void setAccountChangeDataDtoFields(Account account, AccountChangeDataDto accountChangeDataDto, LocalDateTime time) {
         account.setLogin(accountChangeDataDto.getLogin());
         account.setVersion(accountChangeDataDto.getVersion());

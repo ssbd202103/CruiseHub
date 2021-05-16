@@ -57,7 +57,6 @@ export default function ChangeAccountData() {
             newSecondName: secondName,
             newEmail: email,
             version: currentAccount.version,
-            alteredBy: currentAccount.login //temporary until roles are implemented.
 
         })
         await fetch("http://localhost:8080/api/account/changeOtherData", {
@@ -81,9 +80,7 @@ export default function ChangeAccountData() {
         const json = JSON.stringify({
             login: currentAccount.login,
             version: currentAccount.version,
-            newFirstName: currentAccount.firstName,
-            newSecondName: currentAccount.secondName,
-            newEmail: currentAccount.email,
+
             newPhoneNumber: phoneNumber,
             newAddress: {
                 newHouseNumber: houseNumber,
@@ -91,10 +88,7 @@ export default function ChangeAccountData() {
                 newPostalCode: postalCode,
                 newCity: city,
                 newCountry: country,
-                alteredBy: currentAccount.login //temporary until roles are implemented.
-            },
-            alteredBy: currentAccount.login //temporary until roles are implemented.
-
+            }
         })
         await fetch("http://localhost:8080/api/account/changeOtherData/client", {
             method: "PUT",
@@ -115,11 +109,7 @@ export default function ChangeAccountData() {
         const json = JSON.stringify({
             login: currentAccount.login,
             version: currentAccount.version,
-            newFirstName: currentAccount.firstName,
-            newSecondName: currentAccount.secondName,
-            newEmail: currentAccount.email,
             newPhoneNumber: businessPhoneNumber,
-            alteredBy: currentAccount.login //temporary until roles are implemented.
 
         })
         await fetch("http://localhost:8080/api/account/changeOtherData/businessworker", {
@@ -200,6 +190,9 @@ export default function ChangeAccountData() {
                 <RoundedButton color="blue"
                                onClick={changePersonalData}
                 >{t("confirm")}</RoundedButton>
+                <RoundedButton color="pink"
+                               onClick={handleChangePerData}
+                >{t("cancel")}</RoundedButton>
             </Grid>
             <Grid item style={{display: acLevel.includes('CLIENT') ? "block" : "none"}} className={styles.item}>
                 <Grid item style={{display: ChangAddress ? "none" : "block"}} className={styles.item}>
@@ -279,7 +272,11 @@ export default function ChangeAccountData() {
                     <RoundedButton
                         color="blue"
                         onClick={changeAddress}
-                    >{t("confirm")}</RoundedButton>
+                    >{t("confirm")}</RoundedButton><RoundedButton
+                    color="pink"
+                    onClick={handleChangAddress}
+                >{t("cancel")}</RoundedButton>
+
                 </Grid>
             </Grid>
             <Grid item style={{display: acLevel.includes('BUSINESS_WORKER') ? "block" : "none"}}
@@ -310,6 +307,10 @@ export default function ChangeAccountData() {
                         color="blue"
                         onClick={changeBusinessPhone}
                     >{t("confirm")}</RoundedButton>
+                    <RoundedButton
+                        color="pink"
+                        onClick={handleChangePhone}
+                    >{t("cancel")}</RoundedButton>
                 </Grid>
 
             </Grid>

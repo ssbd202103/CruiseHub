@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.managers;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AuthUnauthorizedException;
@@ -143,31 +144,33 @@ public interface AccountManagerLocal {
 
 
     /**
-     * Zmień dane wybranego klienta
-     *
-     * @param account encja konta zawierająca zmiany
-     * @param alterBy login konta dokonującego zmiany
-     * @return zmienone konto
+     * Zmienia dane wybranego klienta
+     * @param login login klienta
+     * @param phoneNumber zmieniony numer telefonu
+     * @param addr zmieniony adres
+     * @paramm version wersja
+     * @return zmienione konto
+     * @throws BaseAppException  Bazowy wyjątek aplikacji, zwracany w przypadku gdy token wygasł albo nie przeszedł walidacji oraz gdy brak loginu lub wersji w tokenie oraz w wypadku kiedy konto zostało już wcześniej aktywowane oraz w sytuacj gdy został rzucony wyjątek blokady optymistycznej
      */
-    Account changeOtherClientData(Account account, String alterBy) throws BaseAppException;
+    Account changeOtherClientData(String login, String phoneNumber, Address addr,Long version) throws BaseAppException;
 
     /**
-     * Zmień dane wybranego praconiwka firmy
-     *
-     * @param account encja konta zawierająca zmiany
-     * @param alterBy login konta dokonującego zmiany
-     * @return zmienone konto
+     * Zmienia dane wybranego pracownika firmy
+     * @param login login pracownika
+     * @param phoneNumber nowy numer telefonu
+     * @param version wersja
+     * @return zmienione konto
+     * @throws BaseAppException  Bazowy wyjątek aplikacji, zwracany w przypadku gdy token wygasł albo nie przeszedł walidacji oraz gdy brak loginu lub wersji w tokenie oraz w wypadku kiedy konto zostało już wcześniej aktywowane oraz w sytuacj gdy został rzucony wyjątek blokady optymistycznej
      */
-    Account changeOtherBusinessWorkerData(Account account, String alterBy) throws BaseAppException;
+    Account changeOtherBusinessWorkerData(String login, String phoneNumber,Long version) throws BaseAppException;
 
     /**
      * Zmień dane wybranego moderatora lub administratora
      *
      * @param account encja konta zawierająca zmiany
-     * @param alterBy login konta dokonującego zmiany
      * @return zmienone konto
      */
-    Account changeOtherAccountData(Account account, String alterBy) throws BaseAppException;
+    Account changeOtherAccountData(Account account) throws BaseAppException;
 
 
     /**
