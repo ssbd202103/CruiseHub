@@ -19,7 +19,7 @@ insert into alter_types(id, name)
 values (-3, 'DELETE');
 --alter_types end
 
--- accounts start ||| password is abcABC123*
+-- accounts start ||| password is 12345678
 insert into accounts(id, first_name, second_name, login, email, password_hash, confirmed, active,
                      last_incorrect_authentication_date_time, last_incorrect_authentication_logical_address,
                      last_correct_authentication_date_time, last_correct_authentication_logical_address,

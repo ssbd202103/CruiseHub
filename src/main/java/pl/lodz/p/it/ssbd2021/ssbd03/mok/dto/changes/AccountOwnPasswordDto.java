@@ -1,16 +1,18 @@
-package pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata;
+package pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AbstractAccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Password;
 
 import javax.validation.constraints.NotNull;
 
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
 @NoArgsConstructor
-public class AccountChangeOwnPasswordDto extends AbstractAccountDto {
+public class AccountOwnPasswordDto extends AbstractAccountDto {
     @NotNull
     @Password
     private String oldPassword;
@@ -19,7 +21,7 @@ public class AccountChangeOwnPasswordDto extends AbstractAccountDto {
     @Password
     private String newPassword;
 
-    public AccountChangeOwnPasswordDto(String login, Long version, String oldPassword, String newPassword) {
+    public AccountOwnPasswordDto(String login, Long version, String oldPassword, String newPassword) {
         super(login, version);
         this.oldPassword = oldPassword;
         this.newPassword = newPassword;
