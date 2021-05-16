@@ -15,7 +15,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.AccountOwnPasswordDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AccountChangeOwnPasswordDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.ChangeAccessLevelStateDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
@@ -538,7 +538,7 @@ class AccountControllerIT {
         Response res = given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + adminToken)).get("/" + account.getLogin());
         String etag = res.getHeader("Etag");
 
-        AccountOwnPasswordDto accountOwnPasswordDto = new AccountOwnPasswordDto(
+        AccountChangeOwnPasswordDto accountChangeOwnPasswordDto = new AccountChangeOwnPasswordDto(
                 account.getLogin(),
                 account.getVersion(),
                 "abcABC123*",
@@ -547,7 +547,7 @@ class AccountControllerIT {
 
         given().baseUri(accountBaseUri).header("If-Match", etag)
                 .contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken))
-                .body(accountOwnPasswordDto)
+                .body(accountChangeOwnPasswordDto)
                 .when()
                 .put("change_own_password").then().statusCode(204);
 
@@ -565,7 +565,7 @@ class AccountControllerIT {
         Response res = given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + adminToken)).get("/" + account.getLogin());
         String etag = res.getHeader("Etag");
 
-        AccountOwnPasswordDto accountOwnPasswordDto = new AccountOwnPasswordDto(
+        AccountChangeOwnPasswordDto accountChangeOwnPasswordDto = new AccountChangeOwnPasswordDto(
                 account.getLogin(),
                 account.getVersion() - 1,
                 "abcABC123*",
@@ -574,7 +574,7 @@ class AccountControllerIT {
 
         given().baseUri(accountBaseUri).header("If-Match", etag)
                 .contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken))
-                .body(accountOwnPasswordDto)
+                .body(accountChangeOwnPasswordDto)
                 .when()
                 .put("change_own_password").then().statusCode(406);
 
@@ -591,7 +591,7 @@ class AccountControllerIT {
         Response res = given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + adminToken)).get("/" + account.getLogin());
         String etag = res.getHeader("Etag");
 
-        AccountOwnPasswordDto accountOwnPasswordDto = new AccountOwnPasswordDto(
+        AccountChangeOwnPasswordDto accountChangeOwnPasswordDto = new AccountChangeOwnPasswordDto(
                 account.getLogin(),
                 account.getVersion(),
                 "CBAcba123*",
@@ -600,9 +600,9 @@ class AccountControllerIT {
 
         given().baseUri(accountBaseUri).header("If-Match", etag)
                 .contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken))
-                .body(accountOwnPasswordDto)
+                .body(accountChangeOwnPasswordDto)
                 .when()
-                .put("change_own_password").then().statusCode(403);
+                .put("change_own_password").then().statusCode(404);
 
         Response notChangedRes = given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + adminToken)).get("/" + account.getLogin());
         AccountDto notChangedAccount = objectMapper.readValue(notChangedRes.thenReturn().asString(), AccountDto.class);

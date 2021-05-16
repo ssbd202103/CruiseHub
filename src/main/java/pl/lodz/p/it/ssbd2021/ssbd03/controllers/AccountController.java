@@ -11,7 +11,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.ModeratorChangeDataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.UnblockAccountDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.AccountOwnPasswordDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AccountChangeOwnPasswordDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.ChangeAccessLevelStateDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.BlockAccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherAccountChangeDataDto;
@@ -43,17 +43,9 @@ import static javax.ws.rs.core.Response.Status.*;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 
-import static javax.ws.rs.core.Response.Status.*;
-
 import java.util.List;
 
-import static javax.ws.rs.core.Response.Status.*;
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
-
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.security.ETagFilterBinding;
-import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
-import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 
 /**
  * Klasa która udostępnia api RESTowe do wykonania operacji na kontach użytkowników, oraz zajmuje się walidacją danych.
@@ -327,7 +319,7 @@ public class AccountController {
 
     /**
      * Zmienia hasło aktualnego użytkownika wedle danych podanych w dto, gdy operacja się powiedzie zwraca 204
-     * @param accountOwnPasswordDto obiekt ktory przechowuje login, wersję, stare oraz nowe hasło podane przez użytkownika
+     * @param accountChangeOwnPasswordDto obiekt ktory przechowuje login, wersję, stare oraz nowe hasło podane przez użytkownika
      * @param etag Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
      * @return Zwraca kod kod potwierdzający poprawne bądź nieporawne wykonanie
      */
@@ -335,17 +327,19 @@ public class AccountController {
     @PUT
     @Path("/change_own_password")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response changeOwnPassword(@NotNull @Valid AccountOwnPasswordDto accountOwnPasswordDto, @HeaderParam("If-Match") String etag) {
-        if(!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, accountOwnPasswordDto)) {
+    public Response changeOwnPassword(@NotNull @Valid AccountChangeOwnPasswordDto accountChangeOwnPasswordDto, @HeaderParam("If-Match") String etag) {
+        if(!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, accountChangeOwnPasswordDto)) {
             return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
         }
 
         try {
-            accountEndpoint.changeOwnPassword(accountOwnPasswordDto);
+            accountEndpoint.changeOwnPassword(accountChangeOwnPasswordDto);
+        } catch (FacadeException e) {
+            return Response.status(FORBIDDEN).entity(e.getMessage()).build();
         } catch (EJBException | OptimisticLockException e) {
             return Response.status(NOT_ACCEPTABLE).entity(e.getMessage()).build();
         } catch (BaseAppException e) {
-            return Response.status(FORBIDDEN).entity(e.getMessage()).build();
+            return Response.status(NOT_FOUND).entity(e.getMessage()).build();
         }
 
      return Response.noContent().build();
