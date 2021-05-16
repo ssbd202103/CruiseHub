@@ -22,9 +22,7 @@ import {
     Redirect
 } from 'react-router-dom'
 
-import ManageAccount from "./common/ManageAccount"
 import PanelMenu from '../../components/PanelMenu'
-import RoundedButton from '../../components/RoundedButton'
 
 import ChangeAccountData from "./admin/ChangeAccountData"
 import ChangeAccountPassword from "./admin/ChangeAccountPassword"

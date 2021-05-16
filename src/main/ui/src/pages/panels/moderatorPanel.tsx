@@ -21,14 +21,11 @@ import {
 } from 'react-router-dom'
 
 import PanelMenu from '../../components/PanelMenu'
-import RoundedButton from '../../components/RoundedButton'
-
 import styles from '../../styles/moderatorPanel.module.css'
 import {useSelector} from "react-redux";
 import {selectColor} from "../../redux/slices/colorSlice";
 import AppColorSetter from "../../components/AppColorSetter";
 import LogOutRoundedButton from "../../components/LogOutRoundedButton";
-import ChangeBusinessWorkerData from "../../components/changeData/ChangeBusinessWorkerData";
 import ChangeEmail from "../../components/changeData/ChangeEmail";
 import ChangePassword from "../../components/changeData/ChangePassword";
 import ChangeModeratorData from "../../components/changeData/ChangeModeratorData";
