@@ -301,12 +301,47 @@
 
             <build>
                 <plugins>
+                    <!--            to clean build data in ui (react client)    -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-clean-plugin</artifactId>
+                        <version>${maven.clean.plugin}</version>
+                        <configuration>
+                            <filesets>
+                                <fileset>
+                                    <directory>${ui.build.dir}</directory>
+                                    <includes>
+                                        <include>**/*</include>
+                                    </includes>
+                                </fileset>
+                            </filesets>
+                        </configuration>
+                    </plugin>
+
+                    <!--            to copy build data from ui (react client) to the war    -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>${maven.war.plugin}</version>
+                        <configuration>
+                            <webResources>
+                                <resource>
+                                    <directory>${ui.build.dir}</directory>
+                                </resource>
+                            </webResources>
+                        </configuration>
+                    </plugin>
+
 
                     <plugin>
                         <groupId>com.github.eirslett</groupId>
                         <artifactId>frontend-maven-plugin</artifactId>
                         <!-- NB! Set <version> to the latest released version of frontend-maven-plugin, like in README.md -->
                         <version>1.11.3</version>
+
+                        <configuration>
+                            <installDirectory>target</installDirectory>
+                        </configuration>
 
                         <executions>
 
@@ -317,13 +352,38 @@
                                 </goals>
                                 <configuration>
                                     <!-- See https://nodejs.org/en/download/ for latest node and npm (lts) versions -->
-                                    <nodeVersion>v8.11.1</nodeVersion>
-                                    <npmVersion>5.6.0</npmVersion>
+                                    <nodeVersion>v15.14.0</nodeVersion>
+                                    <npmVersion>7.11.1</npmVersion>
+                                </configuration>
+                            </execution>
+
+                            <execution>
+                                <id>npm install</id>
+                                <goals>
+                                    <goal>npm</goal>
+                                </goals>
+                                <!-- Optional configuration which provides for running any npm command -->
+                                <configuration>
+                                    <arguments>install</arguments>
+                                    <environmentVariables>
+                                        <REACT_APP_ROUTER_BASE>/${project.artifactId}</REACT_APP_ROUTER_BASE>
+                                        <NPM_CONFIG_PREFIX>${project.build.directory}</NPM_CONFIG_PREFIX>
+                                    </environmentVariables>
+                                    <workingDirectory>${ui.dir}</workingDirectory>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>npm run build</id>
+                                <goals>
+                                    <goal>npm</goal>
+                                </goals>
+                                <configuration>
+                                    <arguments>run build</arguments>
+                                    <workingDirectory>${ui.dir}</workingDirectory>
                                 </configuration>
                             </execution>
                         </executions>
                     </plugin>
-
 
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
