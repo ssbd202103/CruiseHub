@@ -1,5 +1,6 @@
 import store from "../redux/store";
 import axios from './URL'
+import getUser from "./userService";
 
 export function changeEmail(newEmail: string) {
 
@@ -21,5 +22,7 @@ export function changeEmail(newEmail: string) {
                 "If-Match": etag,
                 "Authorization": `Bearer ${token}`
             }
-        })
+        }).then(res => {
+            return getUser(token)
+    })
 }

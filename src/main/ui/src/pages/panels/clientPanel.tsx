@@ -18,7 +18,6 @@ import CruiseIcon from '@material-ui/icons/CardTravelRounded'
 import GoBackIcon from '@material-ui/icons/ArrowBackRounded'
 
 import PanelMenu from '../../components/PanelMenu'
-import RoundedButton from '../../components/RoundedButton'
 
 import { useTranslation } from 'react-i18next'
 

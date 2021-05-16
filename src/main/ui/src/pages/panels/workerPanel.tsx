@@ -1,6 +1,5 @@
 import {useTranslation} from 'react-i18next'
 
-import ManageAccount from "./common/ManageAccount"
 import {
     Grid,
     List,

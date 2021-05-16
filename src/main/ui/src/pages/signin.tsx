@@ -18,6 +18,7 @@ import React, {useState} from "react"
 import {useDispatch} from "react-redux";
 import {update} from '../redux/slices/tokenSlice'
 import {setUser} from '../redux/slices/userSlice'
+import getUser from "../Services/userService";
 
 export default function SignIn() {
     const {t} = useTranslation();
@@ -41,15 +42,7 @@ export default function SignIn() {
             }
         })
 
-        const accountDetails = await axios.get('http://localhost:8080/api/self/account-details', {
-            headers: {
-                'Authorization': `Bearer ${response.data}`
-            }
-        })
-
-        // window.localStorage.setItem('token', response.data)
-        dispatch(update(response.data))
-        dispatch(setUser(accountDetails.data))
+        await getUser(response.data)
 
         history.push('/')
     }

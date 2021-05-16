@@ -24,7 +24,7 @@ export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeD
     const [confirmEmailValue, setConfirmEmailValue] = useState('')
 
     const changeEmail = () => {
-        if (emailValue || confirmEmailValue) {
+        if (!emailValue || !confirmEmailValue) {
             return alert("Fill up required fields")
         }
 
@@ -34,8 +34,10 @@ export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeD
         }
 
         changeEmailService(emailValue).then(res => {
-            dispatch(changeEmailAction(emailValue))
-        }).catch(error => {
+            setEmailValue('')
+            setConfirmEmailValue('')
+        })
+            .catch(error => {
             //TODO
             alert('ERROR. Go to the console')
             console.log(error)

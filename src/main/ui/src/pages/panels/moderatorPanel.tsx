@@ -20,7 +20,6 @@ import {
     Route
 } from 'react-router-dom'
 
-import ManageAccount from "./common/ManageAccount"
 import PanelMenu from '../../components/PanelMenu'
 import RoundedButton from '../../components/RoundedButton'
 
