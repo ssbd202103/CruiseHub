@@ -25,6 +25,7 @@ export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}:
     }, [firstName, secondName])
 
     const changeData = () => {
+        //TODO
         if (!firstNameValue || !secondNameValue) {
             return alert("Values are missing")
         }

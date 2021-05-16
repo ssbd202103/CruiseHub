@@ -9,6 +9,7 @@ import {useTranslation} from "react-i18next";
 import {useSelector} from "react-redux";
 import {selectAddress} from "../../redux/slices/userSlice";
 import {ConfirmCancelButtonGroup} from "../ConfirmCancelButtonGroup";
+import {changeClientAddress} from "../../Services/changeDataService";
 
 export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: ChangeDataComponentProps) {
     const {t} = useTranslation()
@@ -20,10 +21,29 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
     const [postalCode, setPostalCode] = useState('')
     const [city, setCity] = useState('')
     const [country, setCountry] = useState('')
-    const [phoneNumber, setPhoneNumber] = useState('')
 
     const changeAddress = () => {
+        //TODO
+        if (!houseNumber || !street || !postalCode || !city || !country) {
+            return alert("Values are missing")
+        }
 
+        if (isNaN(Number(houseNumber))) {
+            return alert('house number must be number')
+        }
+
+        changeClientAddress({
+            houseNumber: Number(houseNumber),
+            street,
+            postalCode,
+            city,
+            country
+        }).then(res => {
+            onConfirm()
+        }).catch(error => {
+            alert("ERROR: go to console")
+            console.log(error)
+        })
     }
 
     return (

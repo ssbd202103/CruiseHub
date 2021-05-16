@@ -32,6 +32,7 @@ export default function ChangeClientData({open, onOpen, onConfirm, onCancel}: Ch
     }, [firstName, secondName, phoneNumber])
 
     const changeData = () => {
+        //TODO
         if (!firstNameValue || !secondNameValue || !phoneNumberValue) {
             return alert("Values are missing")
         }

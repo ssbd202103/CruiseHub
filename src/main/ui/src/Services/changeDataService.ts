@@ -40,6 +40,39 @@ export function changeClientData(newFirstName: string, newSecondName: string, ne
     })
 }
 
+export function changeClientAddress(newAddress: ChangeAddress) {
+    const {
+        user: {
+            firstName: newFirstName,
+            secondName: newSecondName,
+            login,
+            version,
+            etag
+        },
+        token
+    } = store.getState()
+
+    const newPhoneNumber = store.getState().user.accessLevels.find(accessLevel => accessLevel.accessLevelType === "CLIENT")?.phoneNumber || "000000000"
+
+    const changeAccountDataDto: ClientChangeData = {
+        newFirstName,
+        newSecondName,
+        newPhoneNumber,
+        newAddress,
+        login,
+        version
+    }
+
+    return axios.put('account/client/changedata', changeAccountDataDto, {
+        headers: {
+            "If-Match": etag,
+            "Authorization": `Bearer ${token}`
+        }
+    }).then(res => {
+        return getUser(token)
+    })
+}
+
 export function changeBusinessWorkerData(newFirstName: string, newSecondName: string, newPhoneNumber: string) {
     const {
         user: {

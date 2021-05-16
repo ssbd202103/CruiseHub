@@ -25,6 +25,7 @@ export default function ChangeAdministratorData({open, onOpen, onConfirm, onCanc
     }, [firstName, secondName])
 
     const changeData = () => {
+        //TODO
         if (!firstNameValue || !secondNameValue) {
             return alert("Values are missing")
         }
