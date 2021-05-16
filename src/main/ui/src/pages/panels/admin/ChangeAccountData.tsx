@@ -1,4 +1,4 @@
-import {createRef, useReducer, useState} from 'react'
+import {useReducer, useState} from 'react'
 
 import Grid from '@material-ui/core/Grid'
 
@@ -20,11 +20,7 @@ export default function ChangeAccountData() {
 
     const [firstName, setFirstName] = useState('')
     const [secondName, setSecondName] = useState('')
-    const [login, setLogin] = useState('')
     const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [confirmPassword, setConfirmPassword] = useState('')
-    const [languageType, setLanguageType] = useState('')
 
     const [houseNumber, setHouseNumber] = useState('')
     const [street, setStreet] = useState('')

@@ -8,7 +8,6 @@ import GoBackIcon from '@material-ui/icons/ArrowBackRounded'
 
 import {
     Grid,
-    Button, 
     List,
     ListItem, 
     ListItemIcon,

@@ -1,5 +1,4 @@
 import {createSelector, createSlice, PayloadAction} from '@reduxjs/toolkit'
-import {create} from "domain";
 
 export interface IUserSliceState {
     firstName: string,

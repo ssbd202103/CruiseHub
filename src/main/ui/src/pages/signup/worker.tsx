@@ -11,7 +11,7 @@ import RoundedButton from '../../components/RoundedButton'
 import styles from '../../styles/auth.global.module.css'
 
 import {useTranslation} from 'react-i18next'
-import {createRef, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
 
 export default function WorkerSignUp() {
@@ -169,7 +169,6 @@ export default function WorkerSignUp() {
                     onChange={event => {setLanguageType(event.target.value)}}
                 />
             </Box>
-
 
             <Box
                 style={{

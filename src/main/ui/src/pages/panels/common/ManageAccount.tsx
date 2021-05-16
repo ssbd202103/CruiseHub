@@ -25,6 +25,8 @@ export default function ManageAccount() {
     const [ChangPasswd, setChangPasswd] = useState(false)
 
 
+
+
     //Functions for address data change
     const handleChangAddress = () => {
         setChangChangAddress(state => !state)

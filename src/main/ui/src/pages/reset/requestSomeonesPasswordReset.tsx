@@ -1,4 +1,4 @@
-import React, {createRef, useState} from 'react';
+import React, {useState} from 'react';
 import axios from "axios";
 import AuthLayout from "../../layouts/AuthLayout";
 import DarkedTextField from "../../components/DarkedTextField";
@@ -6,7 +6,6 @@ import styles from "../../styles/auth.global.module.css";
 import {useTranslation} from "react-i18next";
 import RoundedButton from "../../components/RoundedButton";
 import {Link} from "react-router-dom";
-import TableCell from "@material-ui/core/TableCell";
 
 const RequestSomeonePasswordReset = () => {
     const {t} = useTranslation()
@@ -17,8 +16,6 @@ const RequestSomeonePasswordReset = () => {
 
     let login = currentAccount.login;
     const onFormSubmit = () => {
-        // event.preventDefault()
-        // console.log("hello world")
         axios.post(`http://localhost:8080/api/account/request-someones-password-reset/${login}/${email}/`, {});
     }
     return (

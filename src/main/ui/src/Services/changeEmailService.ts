@@ -1,4 +1,3 @@
-import { ChangeEmail } from '../interfaces/changeInterfaces'
 import store from "../redux/store";
 import axios from './URL'
 
