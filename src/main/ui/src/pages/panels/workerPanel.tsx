@@ -26,6 +26,7 @@ import styles from '../../styles/workerPanel.module.css'
 import {useSelector} from "react-redux";
 import {selectColor} from "../../redux/slices/colorSlice";
 import AppColorSetter from "../../components/AppColorSetter";
+import LogOutRoundedButton from "../../components/LogOutRoundedButton";
 
 export default function WorkerPanel() {
     const {t} = useTranslation()
@@ -75,10 +76,7 @@ export default function WorkerPanel() {
                 </Route>
                 <Route exact path="/panels/workerPanel/settings">
                     <ManageAccount />
-                    <RoundedButton
-                        color="pink">
-                    {t("logout")}
-                    </RoundedButton>
+                    <LogOutRoundedButton />
                 </Route>
             </Grid>
         </Grid>

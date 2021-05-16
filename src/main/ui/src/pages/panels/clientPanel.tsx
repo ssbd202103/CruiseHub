@@ -32,6 +32,7 @@ import {useState} from "react";
 import ChangeClientData from "../../components/changeData/ChangeClientData";
 import ChangePassword from "../../components/changeData/ChangePassword";
 import ChangeAddress from "../../components/changeData/ChangeAddress";
+import LogOutRoundedButton from "../../components/LogOutRoundedButton";
 
 export default function ClientPanel() {
     const { t } = useTranslation()
@@ -135,10 +136,7 @@ export default function ClientPanel() {
                             onConfirm={() => {setIsPasswordEdit(false)}}
                             onCancel={() => {setIsPasswordEdit(false)}} />
                     </Grid>
-                    <RoundedButton
-                        color="pink">
-                    {t("logout")}
-                    </RoundedButton>
+                    <LogOutRoundedButton />
                 </Route>
             </Grid>
         </Grid>

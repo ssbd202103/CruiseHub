@@ -36,6 +36,7 @@ import AppColorSetter from "../../components/AppColorSetter";
 
 import {selectColor} from "../../redux/slices/colorSlice";
 import {useSelector} from "react-redux";
+import LogOutRoundedButton from "../../components/LogOutRoundedButton";
 
 export default function AdminPanel() {
     const {t} = useTranslation()
@@ -96,10 +97,7 @@ export default function AdminPanel() {
                 </Route>
                 <Route exact path="/panels/adminPanel/settings">
                     <ManageAccount />
-                    <RoundedButton
-                        color="pink">
-                    {t("logout")}
-                    </RoundedButton>
+                    <LogOutRoundedButton />
                 </Route>
                 <Route path="/panels/adminPanel/ChangeAccountData">
                     <ChangeAccountData/>
@@ -115,39 +113,5 @@ export default function AdminPanel() {
                 </Route>
             </Grid>
         </Grid>
-        // <div>
-        //     <header >
-        //         <h1>{t('admin panel')}</h1>
-        //     </header>
-        //     <div >
-        //         <div>
-        //             <ListItem button
-        //                       onClick={handleListClient}>
-        //                 <ListItemText primary={t("list accounts")} />
-        //             </ListItem>
-
-        //             <ListItem button  onClick={handleManageAccount}>
-        //                 <ListItemText primary={t("manage account")} />
-        //             </ListItem>
-        //         </div>
-        //     </div>
-
-        //     <div style={{display: listClient ? "none" : "block"}}>
-        //          <ListClient />
-        //     </div>
-
-        //     <div style={{display: manageAccount ? "none" : "block"}}>
-        //         <ManageAccount/>
-        //     </div>
-
-
-        //     <div>
-        //         <Button variant="contained">
-        //             {t("logout")}
-        //         </Button>
-        //     </div>
-        // </div>
-
-
     )
 }
