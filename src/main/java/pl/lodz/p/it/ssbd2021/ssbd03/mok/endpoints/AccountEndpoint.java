@@ -8,6 +8,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.EndpointException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.ChangeAccessLevelStateDto;
@@ -19,19 +20,19 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters.AccountMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.managers.AccountManagerLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
+import pl.lodz.p.it.ssbd2021.ssbd03.services.EmailService;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.inject.Inject;
-import javax.persistence.OptimisticLockException;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ACCESS_LEVEL_NOT_ASSIGNABLE_ERROR;
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.OPTIMISTIC_LOCK_EXCEPTION;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 
 /**
  * Klasa która zajmuje się growadzeniem zmapowanych obiektów klas Dto na obiekty klas modelu związanych z kontami użytkowników i poziomami dostępu, oraz wywołuje metody logiki przekazując zmapowane obiekty.
@@ -109,10 +110,10 @@ public class AccountEndpoint implements AccountEndpointLocal {
         Account account = this.accountManager.blockUser(login, version);
 
         //todo uncomment it when needed
-//        Locale locale = new Locale(account.getLanguageType().getName().name());
-//        String body = i18n.getMessage(BLOCKED_ACCOUNT_BODY, locale);
-//        String subject = i18n.getMessage(BLOCKED_ACCOUNT_SUBJECT, locale);
-//        EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
+        Locale locale = new Locale(account.getLanguageType().getName().name());
+        String body = i18n.getMessage(BLOCKED_ACCOUNT_BODY, locale);
+        String subject = i18n.getMessage(BLOCKED_ACCOUNT_SUBJECT, locale);
+        EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
     }
 
     @Override
@@ -130,10 +131,10 @@ public class AccountEndpoint implements AccountEndpointLocal {
         Account account = this.accountManager.unblockUser(unblockedUserLogin, version);
 
         //todo uncomment it when needed
-//        Locale locale = new Locale(account.getLanguageType().getName().name());
-//        String body = i18n.getMessage(UNBLOCKED_ACCOUNT_BODY, locale);
-//        String subject = i18n.getMessage(UNBLOCKED_ACCOUNT_SUBJECT, locale);
-//        EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
+        Locale locale = new Locale(account.getLanguageType().getName().name());
+        String body = i18n.getMessage(UNBLOCKED_ACCOUNT_BODY, locale);
+        String subject = i18n.getMessage(UNBLOCKED_ACCOUNT_SUBJECT, locale);
+        EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
     }
 
 
@@ -149,11 +150,11 @@ public class AccountEndpoint implements AccountEndpointLocal {
 
 
     @Override
-    public OtherClientChangeDataDto changeOtherClientData(OtherClientChangeDataDto otherClientChangeDataDto) throws OptimisticLockException, BaseAppException {
+    public OtherClientChangeDataDto changeOtherClientData(OtherClientChangeDataDto otherClientChangeDataDto) throws BaseAppException {
         Long version = getAccountByLogin(otherClientChangeDataDto.getLogin()).getVersion();
 
         if (!version.equals(otherClientChangeDataDto.getVersion())) {
-            throw new OptimisticLockException(OPTIMISTIC_LOCK_EXCEPTION);
+            throw FacadeException.optimisticLock();
         }
 
         Account account = AccountMapper.extractAccountFromClientOtherChangeDataDto(otherClientChangeDataDto);
@@ -163,11 +164,11 @@ public class AccountEndpoint implements AccountEndpointLocal {
     }
 
     @Override
-    public OtherBusinessWorkerChangeDataDto changeOtherBusinessWorkerData(OtherBusinessWorkerChangeDataDto otherBusinessWorkerChangeDataDto) throws OptimisticLockException, BaseAppException {
+    public OtherBusinessWorkerChangeDataDto changeOtherBusinessWorkerData(OtherBusinessWorkerChangeDataDto otherBusinessWorkerChangeDataDto) throws BaseAppException {
         Long version = getAccountByLogin(otherBusinessWorkerChangeDataDto.getLogin()).getVersion();
 
         if (!version.equals(otherBusinessWorkerChangeDataDto.getVersion())) {
-            throw new OptimisticLockException(OPTIMISTIC_LOCK_EXCEPTION);
+            throw FacadeException.optimisticLock();
         }
 
         Account account = AccountMapper.extractAccountFromOtherBusinessWorkerChangeDataDto(otherBusinessWorkerChangeDataDto);
@@ -176,11 +177,11 @@ public class AccountEndpoint implements AccountEndpointLocal {
     }
 
     @Override
-    public AccountDto changeOtherAccountData(OtherAccountChangeDataDto otherAccountChangeDataDto) throws OptimisticLockException, BaseAppException {
+    public AccountDto changeOtherAccountData(OtherAccountChangeDataDto otherAccountChangeDataDto) throws BaseAppException {
         Long version = getAccountByLogin(otherAccountChangeDataDto.getLogin()).getVersion();
 
         if (!version.equals(otherAccountChangeDataDto.getVersion())) {
-            throw new OptimisticLockException(OPTIMISTIC_LOCK_EXCEPTION);
+            throw FacadeException.optimisticLock();
         }
 
         Account account = AccountMapper.extractAccountFromOtherAccountChangeDataDto(otherAccountChangeDataDto);
@@ -190,22 +191,22 @@ public class AccountEndpoint implements AccountEndpointLocal {
 
 
     @Override
-    public void changeEmail(AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException, OptimisticLockException {
+    public void changeEmail(AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException {
         Long version = getAccountByLogin(accountChangeEmailDto.getLogin()).getVersion();
 
         if (!version.equals(accountChangeEmailDto.getVersion())) {
-            throw new OptimisticLockException(OPTIMISTIC_LOCK_EXCEPTION);
+            throw FacadeException.optimisticLock();
         }
 
         accountManager.changeEmail(accountChangeEmailDto.getLogin(), accountChangeEmailDto.getVersion(), accountChangeEmailDto.getNewEmail());
     }
 
     @Override
-    public void changeClientData(ClientChangeDataDto clientChangeDataDto) throws OptimisticLockException, BaseAppException {
+    public void changeClientData(ClientChangeDataDto clientChangeDataDto) throws BaseAppException {
         Long version = getAccountByLogin(clientChangeDataDto.getLogin()).getVersion();
 
         if (!version.equals(clientChangeDataDto.getVersion())) {
-            throw new OptimisticLockException(OPTIMISTIC_LOCK_EXCEPTION);
+            throw FacadeException.optimisticLock();
         }
 
         Account account = AccountMapper.extractAccountFromClientChangeDataDto(clientChangeDataDto);
@@ -213,11 +214,11 @@ public class AccountEndpoint implements AccountEndpointLocal {
     }
 
     @Override
-    public void changeBusinessWorkerData(BusinessWorkerChangeDataDto businessWorkerChangeDataDto) throws OptimisticLockException, BaseAppException {
+    public void changeBusinessWorkerData(BusinessWorkerChangeDataDto businessWorkerChangeDataDto) throws BaseAppException {
         Long version = getAccountByLogin(businessWorkerChangeDataDto.getLogin()).getVersion();
 
         if (!version.equals(businessWorkerChangeDataDto.getVersion())) {
-            throw new OptimisticLockException(OPTIMISTIC_LOCK_EXCEPTION);
+            throw FacadeException.optimisticLock();
         }
 
         Account account = AccountMapper.extractAccountFromBusinessWorkerChangeDataDto(businessWorkerChangeDataDto);
@@ -225,11 +226,11 @@ public class AccountEndpoint implements AccountEndpointLocal {
     }
 
     @Override
-    public void changeModeratorData(ModeratorChangeDataDto moderatorChangeDataDto) throws OptimisticLockException, BaseAppException {
+    public void changeModeratorData(ModeratorChangeDataDto moderatorChangeDataDto) throws BaseAppException {
         Long version = getAccountByLogin(moderatorChangeDataDto.getLogin()).getVersion();
 
         if (!version.equals(moderatorChangeDataDto.getVersion())) {
-            throw new OptimisticLockException(OPTIMISTIC_LOCK_EXCEPTION);
+            throw FacadeException.optimisticLock();
         }
 
         Account account = AccountMapper.extractAccountFromModeratorChangeDataDto(moderatorChangeDataDto);
@@ -237,11 +238,11 @@ public class AccountEndpoint implements AccountEndpointLocal {
     }
 
     @Override
-    public void changeAdministratorData(AdministratorChangeDataDto administratorChangeDataDto) throws OptimisticLockException, BaseAppException {
+    public void changeAdministratorData(AdministratorChangeDataDto administratorChangeDataDto) throws BaseAppException {
         Long version = getAccountByLogin(administratorChangeDataDto.getLogin()).getVersion();
 
         if (!version.equals(administratorChangeDataDto.getVersion())) {
-            throw new OptimisticLockException(OPTIMISTIC_LOCK_EXCEPTION);
+            throw FacadeException.optimisticLock();
         }
 
         Account account = AccountMapper.extractAccountFromAdministratorChangeDataDto(administratorChangeDataDto);
@@ -278,11 +279,11 @@ public class AccountEndpoint implements AccountEndpointLocal {
         return securityContext.getUserPrincipal().getName();
     }
 
-    public void changeOwnPassword(AccountChangeOwnPasswordDto accountChangeOwnPasswordDto) throws BaseAppException, OptimisticLockException {
+    public void changeOwnPassword(AccountChangeOwnPasswordDto accountChangeOwnPasswordDto) throws BaseAppException {
         Long version = getAccountByLogin(accountChangeOwnPasswordDto.getLogin()).getVersion();
 
         if (!version.equals(accountChangeOwnPasswordDto.getVersion())) {
-            throw new OptimisticLockException(OPTIMISTIC_LOCK_EXCEPTION);
+            throw FacadeException.optimisticLock();
         }
 
         this.accountManager.changeOwnPassword(accountChangeOwnPasswordDto.getLogin(), accountChangeOwnPasswordDto.getVersion(),

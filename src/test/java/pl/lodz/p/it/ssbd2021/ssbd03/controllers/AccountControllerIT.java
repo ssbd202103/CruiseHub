@@ -95,27 +95,21 @@ class AccountControllerIT {
         ClientForRegistrationDto client = getSampleClientForRegistrationDto();
         AccountDto account = registerClientAndGetAccountDto(client);
 
-        Response response = given().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken)).baseUri(accountBaseUri).get("/accounts");
-        String accountString = response.getBody().asString();
-        List<AccountDtoForList> accountDtoList = Arrays.asList(objectMapper.readValue(accountString, AccountDtoForList[].class));
-        AccountDtoForList accountDtoForList = accountDtoList.stream().filter(acc -> acc.getLogin().equals(account.getLogin())).findFirst().get();
-        BlockAccountDto blockAccountDto = new BlockAccountDto(accountDtoForList.getLogin(), accountDtoForList.getVersion());
+        Response response = given().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken))
+                .baseUri(accountBaseUri).get("/details-view/" + account.getLogin());
 
-        response = given().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken)).baseUri(accountBaseUri).get("/accounts");
-        accountString = response.getBody().asString();
-        accountDtoList = Arrays.asList(objectMapper.readValue(accountString, AccountDtoForList[].class));
-        accountDtoForList = accountDtoList.stream().filter(acc -> acc.getLogin().equals(account.getLogin())).findFirst().get();
+        AccountDetailsViewDto accountDetailsViewDto = objectMapper.readValue(response.asString(), AccountDetailsViewDto.class);
+        assertTrue(accountDetailsViewDto.isActive());
 
-        given().contentType(ContentType.JSON).header("If-Match", accountDtoForList.getEtag()).header(new Header("Authorization", "Bearer " + adminToken))
+        BlockAccountDto blockAccountDto = new BlockAccountDto(accountDetailsViewDto.getLogin(), accountDetailsViewDto.getVersion());
+        given().contentType(ContentType.JSON).header("If-Match", accountDetailsViewDto.getEtag()).header(new Header("Authorization", "Bearer " + adminToken))
                 .baseUri(accountBaseUri).body(blockAccountDto).put("/block").then().statusCode(HttpStatus.SC_OK);
 
-        response = given().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken)).baseUri(accountBaseUri).get("/accounts");
-        accountString = response.getBody().asString();
-        accountDtoList = Arrays.asList(objectMapper.readValue(accountString, AccountDtoForList[].class));
-        accountDtoForList = accountDtoList.stream().filter(acc -> acc.getLogin().equals(account.getLogin())).findFirst().get();
+        response = given().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken))
+                .baseUri(accountBaseUri).get("/details-view/" + account.getLogin());
 
-        assertFalse(accountDtoForList.isActive());
-        assertEquals(200, response.getStatusCode());
+        accountDetailsViewDto = objectMapper.readValue(response.asString(), AccountDetailsViewDto.class);
+        assertFalse(accountDetailsViewDto.isActive());
     }
 
     @Test
@@ -298,7 +292,7 @@ class AccountControllerIT {
         int numberOfUsersAfterChanges = accountDtoList.size();
 
         assertThat(response.getStatusCode()).isEqualTo(200);
-        assertEquals(numberOfUsers + 1, numberOfUsersAfterChanges);
+        assertTrue(numberOfUsersAfterChanges > numberOfUsers);
 
         assertTrue(accountDtoList.stream().anyMatch(newAccount -> newAccount.getLogin().equals(account.getLogin())));
 
@@ -308,33 +302,26 @@ class AccountControllerIT {
     public void unblockUserTest_SUCCESS() throws JsonProcessingException { // todo fix this test
         String adminToken = this.getAuthToken("rbranson", "abcABC123*");
 
-        ClientForRegistrationDto client = getSampleClientForRegistrationDto();
-        AccountDto account = registerClientAndGetAccountDto(client);
+        AccountDto account = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
+        BlockAccountDto blockAccountDto = new BlockAccountDto(account.getLogin(), account.getVersion());
+        String etag = EntityIdentitySignerVerifier.calculateEntitySignature(blockAccountDto);
+        given().contentType(ContentType.JSON).header("If-Match", etag).header(new Header("Authorization", "Bearer " + adminToken))
+                .baseUri(accountBaseUri).body(blockAccountDto).put("/block");
 
-        Response response = given().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken)).baseUri(accountBaseUri).get("/accounts");
-        String accountString = response.getBody().asString();
-        List<AccountDtoForList> accountDtoList = Arrays.asList(objectMapper.readValue(accountString, AccountDtoForList[].class));
-        AccountDtoForList accountDtoForList = accountDtoList.stream().filter(acc -> acc.getLogin().equals(account.getLogin())).findFirst().get();
-        UnblockAccountDto unblockAccountDto = new UnblockAccountDto(accountDtoForList.getLogin(), accountDtoForList.getVersion());
+        Response response = given().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken))
+                .baseUri(accountBaseUri).get("/details-view/" + account.getLogin());
+        AccountDetailsViewDto accountDetailsViewDto = objectMapper.readValue(response.asString(), AccountDetailsViewDto.class);
+        assertFalse(accountDetailsViewDto.isActive());
 
-        response = given().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken)).baseUri(accountBaseUri).get("/accounts");
-        accountString = response.getBody().asString();
-        accountDtoList = Arrays.asList(objectMapper.readValue(accountString, AccountDtoForList[].class));
-        accountDtoForList = accountDtoList.stream().filter(acc -> acc.getLogin().equals(account.getLogin())).findFirst().get();
-        assertTrue(accountDtoForList.isActive());
+        UnblockAccountDto unblockAccountDto = new UnblockAccountDto(accountDetailsViewDto.getLogin(), accountDetailsViewDto.getVersion());
+        given().contentType(ContentType.JSON).header("If-Match", accountDetailsViewDto.getEtag()).header(new Header("Authorization", "Bearer " + adminToken))
+                .baseUri(accountBaseUri).body(unblockAccountDto).put("/unblock").then().statusCode(HttpStatus.SC_OK);
 
-        Response postResponse = given().contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken))
-                .header("If-Match", accountDtoForList.getEtag())
-                .baseUri(accountBaseUri).body(unblockAccountDto).put("/unblock");
+        response = given().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken))
+                .baseUri(accountBaseUri).get("/details-view/" + account.getLogin());
 
-        response = given().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken)).baseUri(accountBaseUri).get("/accounts");
-        accountString = response.getBody().asString();
-        accountDtoList = Arrays.asList(objectMapper.readValue(accountString, AccountDtoForList[].class));
-        accountDtoForList = accountDtoList.stream().filter(acc -> acc.getLogin().equals(account.getLogin())).findFirst().get();
-
-
-        assertEquals(200, postResponse.getStatusCode());
-        assertTrue(accountDtoForList.isActive());
+        accountDetailsViewDto = objectMapper.readValue(response.asString(), AccountDetailsViewDto.class);
+        assertTrue(accountDetailsViewDto.isActive());
     }
 
 
@@ -387,11 +374,14 @@ class AccountControllerIT {
                 randomAlphanumeric(10) + "@gmail.com");
         String etag = EntityIdentitySignerVerifier.calculateEntitySignature(accountChangeEmailDto);
 
-        given().baseUri(accountBaseUri).header("If-Match", etag)
+        Response response = given().baseUri(accountBaseUri).header("If-Match", etag)
                 .contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken))
                 .body(accountChangeEmailDto)
                 .when()
-                .put("/change_email").then().statusCode(406);
+                .put("/change_email");
+
+        assertEquals(403, response.getStatusCode());
+        assertEquals(OPTIMISTIC_LOCK_EXCEPTION, response.asString());
 
         Response notChangedRes = given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + adminToken)).get("/" + account.getLogin());
         AccountDto notChangedAccount = objectMapper.readValue(notChangedRes.thenReturn().asString(), AccountDto.class);

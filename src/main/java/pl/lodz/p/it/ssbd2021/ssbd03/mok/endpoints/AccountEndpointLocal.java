@@ -2,18 +2,10 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AccountChangeOwnPasswordDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.ChangeAccessLevelStateDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherAccountChangeDataDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherBusinessWorkerChangeDataDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherClientChangeDataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccountDetailsViewDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AccountChangeEmailDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AdministratorChangeDataDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.BusinessWorkerChangeDataDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.ClientChangeDataDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.ModeratorChangeDataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
@@ -135,56 +127,56 @@ public interface AccountEndpointLocal {
      *
      * @param otherClientChangeDataDto dto obiekt przechowujący informację o zmienionych danych
      */
-    OtherClientChangeDataDto changeOtherClientData(OtherClientChangeDataDto otherClientChangeDataDto) throws OptimisticLockException, BaseAppException;
+    OtherClientChangeDataDto changeOtherClientData(OtherClientChangeDataDto otherClientChangeDataDto) throws BaseAppException;
 
     /**
      * Zmienia dane wybranego pracownika
      *
      * @param otherBusinessWorkerChangeDataDto dto obiekt przechowujący informację o  zmienionych danych
      */
-    OtherBusinessWorkerChangeDataDto changeOtherBusinessWorkerData(OtherBusinessWorkerChangeDataDto otherBusinessWorkerChangeDataDto) throws OptimisticLockException, BaseAppException;
+    OtherBusinessWorkerChangeDataDto changeOtherBusinessWorkerData(OtherBusinessWorkerChangeDataDto otherBusinessWorkerChangeDataDto) throws BaseAppException;
 
     /**
      * Zmienia dane wybranego moderatora lub administratora
      *
      * @param otherAccountChangeDataDto dto obiekt przechowujący informację o zmienionych danych
      */
-    AccountDto changeOtherAccountData(OtherAccountChangeDataDto otherAccountChangeDataDto) throws OptimisticLockException, BaseAppException;
+    AccountDto changeOtherAccountData(OtherAccountChangeDataDto otherAccountChangeDataDto) throws BaseAppException;
 
     /**
      * Mapuje obiekt dto z nowym mailem do obiektu modelu oraz zmienia mail
      *
      * @param accountChangeEmailDto dto z nowym mailem
      */
-    void changeEmail(AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException, OptimisticLockException;
+    void changeEmail(AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException;
 
     /**
      * Zmienia dane clienta o podanym loginie
      *
      * @param clientChangeDataDto dto obiekt przechowujący informację o kliencie oraz zmienionych danych
      */
-    void changeClientData(ClientChangeDataDto clientChangeDataDto) throws OptimisticLockException, BaseAppException;
+    void changeClientData(ClientChangeDataDto clientChangeDataDto) throws BaseAppException;
 
     /**
      * Zmienia dane pracownika o podanym loginie
      *
      * @param businessWorkerChangeDataDto dto obiekt przechowujący informację o procowniku oraz zmienionych danych
      */
-    void changeBusinessWorkerData(BusinessWorkerChangeDataDto businessWorkerChangeDataDto) throws OptimisticLockException, BaseAppException;
+    void changeBusinessWorkerData(BusinessWorkerChangeDataDto businessWorkerChangeDataDto) throws BaseAppException;
 
     /**
      * Zmienia dane moderatora o podanym loginie
      *
      * @param moderatorChangeDataDto dto obiekt przechowujący informację o moderatorze oraz zmienionych danych
      */
-    void changeModeratorData(ModeratorChangeDataDto moderatorChangeDataDto) throws OptimisticLockException, BaseAppException;
+    void changeModeratorData(ModeratorChangeDataDto moderatorChangeDataDto) throws BaseAppException;
 
     /**
      * Zmienia dane administratora o podanym loginie
      *
      * @param administratorChangeDataDto dto obiekt przechowujący informację o administratorze oraz zmienionych danych
      */
-    void changeAdministratorData(AdministratorChangeDataDto administratorChangeDataDto) throws OptimisticLockException, BaseAppException;
+    void changeAdministratorData(AdministratorChangeDataDto administratorChangeDataDto) throws BaseAppException;
 
     /**
      * Zwraca konto o podanym loginie
@@ -248,10 +240,10 @@ public interface AccountEndpointLocal {
 
     /**
      * Metoda odpowiedzialna za wywołanie metody odpowiedzialnej za zmianę hasła akutalnego użytkownika
+     *
      * @param accountChangeOwnPasswordDto obiekt dto posiadający niezbedne dane do zmienienia hasła aktualnego użytkownika
-     * @throws BaseAppException bazowy wyjątek aplikacji rzucany w przypadku gdy stare hasło podane przez użytkownika nie jest zgodne z tym w bazie danych
-     * @throws OptimisticLockException wyjątek blokady optymistycznej
+     * @throws BaseAppException        bazowy wyjątek aplikacji rzucany w przypadku gdy stare hasło podane przez użytkownika nie jest zgodne z tym w bazie danych
      */
-    void changeOwnPassword(AccountChangeOwnPasswordDto accountChangeOwnPasswordDto) throws BaseAppException, OptimisticLockException;
+    void changeOwnPassword(AccountChangeOwnPasswordDto accountChangeOwnPasswordDto) throws BaseAppException;
 }
 

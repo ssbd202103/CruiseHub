@@ -63,9 +63,9 @@ public class AccountManager implements AccountManagerLocal {
 
         accountFacade.create(account);
         //todo uncomment it when it's needed
-//        if (accountFacade.findByLogin(account.getLogin()) != null) {
-//            sendVerificationEmail(account);
-//        }
+        if (accountFacade.findByLogin(account.getLogin()) != null) {
+            sendVerificationEmail(account);
+        }
     }
 
     @Override
@@ -76,9 +76,9 @@ public class AccountManager implements AccountManagerLocal {
 
         this.accountFacade.create(account);
         //todo uncomment it when it's needed
-//        if (accountFacade.findByLogin(account.getLogin()) != null) {
-//            sendVerificationEmail(account);
-//        }
+        if (accountFacade.findByLogin(account.getLogin()) != null) {
+            sendVerificationEmail(account);
+        }
     }
 
     @Override
