@@ -141,7 +141,6 @@
         </dependency>
 
 
-
     </dependencies>
 
 
@@ -399,11 +398,25 @@
                         </executions>
                     </plugin>
 
-
-
                     <plugin>
                         <groupId>org.codehaus.cargo</groupId>
                         <artifactId>cargo-maven3-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>undeploy</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>undeploy</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>deploy</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>deploy</goal>
+                                </goals>
+                            </execution>
+                        </executions>
                         <version>1.9.3</version>
                         <configuration>
                             <container>
