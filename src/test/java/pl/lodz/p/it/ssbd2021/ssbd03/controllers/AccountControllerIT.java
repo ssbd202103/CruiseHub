@@ -15,6 +15,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.AccountOwnPasswordDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.ChangeAccessLevelStateDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
@@ -530,4 +531,81 @@ class AccountControllerIT {
         return response.getBody().asString();
     }
 
+    @Test
+    public void changePasswordTest_SUCCESS() throws JsonProcessingException {
+        String adminToken = this.getAuthToken("rbranson","abcABC123*");
+        AccountDto account = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
+        Response res = given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + adminToken)).get("/" + account.getLogin());
+        String etag = res.getHeader("Etag");
+
+        AccountOwnPasswordDto accountOwnPasswordDto = new AccountOwnPasswordDto(
+                account.getLogin(),
+                account.getVersion(),
+                "abcABC123*",
+                "ABCabc123*"
+        );
+
+        given().baseUri(accountBaseUri).header("If-Match", etag)
+                .contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken))
+                .body(accountOwnPasswordDto)
+                .when()
+                .put("change_own_password").then().statusCode(204);
+
+        Response changedRes = given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + adminToken)).get("/" + account.getLogin());
+        AccountDto changedAccount = objectMapper.readValue(changedRes.thenReturn().asString(), AccountDto.class);
+        Assertions.assertEquals(account.getVersion() + 1, changedAccount.getVersion());
+        // potrzebna jest metoda do logowania, by sprawdzic zmienianie hasla
+    }
+
+    @Test
+    public void changePasswordVersionTest_FAIL() throws JsonProcessingException {
+        // fail optimistic check (version)
+        String adminToken = this.getAuthToken("rbranson","abcABC123*");
+        AccountDto account = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
+        Response res = given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + adminToken)).get("/" + account.getLogin());
+        String etag = res.getHeader("Etag");
+
+        AccountOwnPasswordDto accountOwnPasswordDto = new AccountOwnPasswordDto(
+                account.getLogin(),
+                account.getVersion() - 1,
+                "abcABC123*",
+                "ABCabc123*"
+        );
+
+        given().baseUri(accountBaseUri).header("If-Match", etag)
+                .contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken))
+                .body(accountOwnPasswordDto)
+                .when()
+                .put("change_own_password").then().statusCode(406);
+
+        Response notChangedRes = given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + adminToken)).get("/" + account.getLogin());
+        AccountDto notChangedAccount = objectMapper.readValue(notChangedRes.thenReturn().asString(), AccountDto.class);
+        Assertions.assertEquals(account.getVersion(), notChangedAccount.getVersion());
+    }
+
+    @Test
+    public void changePasswordMatchTest_FAIL() throws JsonProcessingException {
+        // fail old password check
+        String adminToken = this.getAuthToken("rbranson","abcABC123*");
+        AccountDto account = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
+        Response res = given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + adminToken)).get("/" + account.getLogin());
+        String etag = res.getHeader("Etag");
+
+        AccountOwnPasswordDto accountOwnPasswordDto = new AccountOwnPasswordDto(
+                account.getLogin(),
+                account.getVersion(),
+                "CBAcba123*",
+                "ABCabc123*"
+        );
+
+        given().baseUri(accountBaseUri).header("If-Match", etag)
+                .contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken))
+                .body(accountOwnPasswordDto)
+                .when()
+                .put("change_own_password").then().statusCode(403);
+
+        Response notChangedRes = given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + adminToken)).get("/" + account.getLogin());
+        AccountDto notChangedAccount = objectMapper.readValue(notChangedRes.thenReturn().asString(), AccountDto.class);
+        Assertions.assertEquals(account.getVersion(), notChangedAccount.getVersion());
+    }
 }

@@ -4,14 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AbstractAccountDTO;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AbstractAccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Name;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class OtherAccountChangeDataDto extends AbstractAccountDTO {
+public class OtherAccountChangeDataDto extends AbstractAccountDto {
     @Name
     private String newFirstName;
     @Name

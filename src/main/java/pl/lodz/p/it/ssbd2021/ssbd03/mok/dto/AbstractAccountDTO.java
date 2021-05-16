@@ -5,17 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
-import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
-
-import javax.validation.constraints.PositiveOrZero;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public abstract class AbstractAccountDTO implements SignableEntity {
-    @Login
+public abstract class AbstractAccountDto implements SignableEntity {
     private String login;
-    @PositiveOrZero
     private Long version;
 
     @Override
