@@ -11,21 +11,20 @@ import RoundedButton from '../../components/RoundedButton'
 import styles from '../../styles/auth.global.module.css'
 
 import {useTranslation} from 'react-i18next'
-import {createRef, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
 
 export default function WorkerSignUp() {
     const {t} = useTranslation()
 
-    const firstNameRef = createRef() as React.RefObject<HTMLDivElement>
-    const secondNameRef = createRef() as React.RefObject<HTMLDivElement>
-    const loginRef = createRef() as React.RefObject<HTMLDivElement>
-    const emailRef = createRef() as React.RefObject<HTMLDivElement>
-    const passwordRef = createRef() as React.RefObject<HTMLDivElement>
-    const confirmPasswordRef = createRef() as React.RefObject<HTMLDivElement>
-
-    const languageTypeRef = createRef() as React.RefObject<HTMLDivElement>
-    const phoneNumberRef = createRef() as React.RefObject<HTMLDivElement>
+    const [firstName, setFirstName] = useState('')
+    const [secondName, setSecondName] = useState('')
+    const [login, setLogin] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
+    const [languageType, setLanguageType] = useState('')
+    const [phoneNumber, setPhoneNumber] = useState('')
 
     const [company, setCompany] = useState("");
 
@@ -43,16 +42,15 @@ export default function WorkerSignUp() {
     const workerSignUpFun = async () => {
 
         const json = JSON.stringify({
-            firstName: firstNameRef?.current?.querySelector('input')?.value,
-            secondName: secondNameRef?.current?.querySelector('input')?.value,
-            login: loginRef?.current?.querySelector('input')?.value,
-            email: emailRef?.current?.querySelector('input')?.value,
-            password: passwordRef?.current?.querySelector('input')?.value,
-            languageType: languageTypeRef?.current?.querySelector('input')?.value,
-                phoneNumber: phoneNumberRef?.current?.querySelector('input')?.value,
-                companyName: company
-            }
-        );
+            firstName,
+            secondName,
+            login,
+            email,
+            password,
+            languageType,
+            phoneNumber,
+            companyName: company
+        });
 
         await axios.post('http://localhost:8080/api/account/business-worker/registration', json, {
             headers: {
@@ -81,7 +79,8 @@ export default function WorkerSignUp() {
                     style={{
                         marginRight: 20
                     }}
-                    ref={firstNameRef}
+                    value={firstName}
+                    onChange={event => {setFirstName(event.target.value)}}
                 />
 
 
@@ -89,7 +88,8 @@ export default function WorkerSignUp() {
                     label={t("surname") + ' *'}
                     placeholder="Doe"
                     className={styles.input}
-                    ref={secondNameRef}
+                    value={secondName}
+                    onChange={event => {setSecondName(event.target.value)}}
                 />
             </Box>
 
@@ -117,7 +117,8 @@ export default function WorkerSignUp() {
                     placeholder="example@email.com"
                     className={styles.input}
                     icon={(<EmailIcon/>)}
-                    ref={emailRef}
+                    value={email}
+                    onChange={event => {setEmail(event.target.value)}}
                 />
 
 
@@ -139,14 +140,16 @@ export default function WorkerSignUp() {
                     style={{
                         marginRight: 20
                     }}
-                    ref={loginRef}
+                    value={login}
+                    onChange={event => {setLogin(event.target.value)}}
                 />
 
                 <DarkedTextField
                     label={t("phoneNumber") + ' *'}
                     placeholder="examplenumber"
                     className={styles.input}
-                    ref={phoneNumberRef}
+                    value={phoneNumber}
+                    onChange={event => {setPhoneNumber(event.target.value)}}
                 />
 
             </Box>
@@ -162,11 +165,10 @@ export default function WorkerSignUp() {
                     label={t("languageType") + ' *'}
                     placeholder="language type"
                     className={styles.input}
-                    ref={languageTypeRef}
-
+                    value={languageType}
+                    onChange={event => {setLanguageType(event.target.value)}}
                 />
             </Box>
-
 
             <Box
                 style={{
@@ -182,7 +184,8 @@ export default function WorkerSignUp() {
                     className={styles.input}
                     style={{marginRight: 20}}
                     icon={(<PasswordIcon/>)}
-                    ref={passwordRef}
+                    value={password}
+                    onChange={event => {setPassword(event.target.value)}}
                 />
 
                 <DarkedTextField
@@ -191,7 +194,8 @@ export default function WorkerSignUp() {
                     placeholder="1234567890"
                     className={styles.input}
                     icon={(<PasswordIcon/>)}
-                    ref={confirmPasswordRef}
+                    value={confirmPassword}
+                    onChange={event => {setConfirmPassword(event.target.value)}}
                 />
             </Box>
 

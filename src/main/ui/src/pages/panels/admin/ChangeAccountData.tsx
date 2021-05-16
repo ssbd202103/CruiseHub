@@ -1,4 +1,4 @@
-import {createRef, useReducer, useState} from 'react'
+import {useReducer, useState} from 'react'
 
 import Grid from '@material-ui/core/Grid'
 
@@ -18,17 +18,18 @@ export default function ChangeAccountData() {
     const [ChangAddress, setChangChangAddress] = useState(false)
     const [ChangePhone, setChangePhone] = useState(false)
 
-    const firstNameRef = createRef() as React.RefObject<HTMLDivElement>
-    const secondNameRef = createRef() as React.RefObject<HTMLDivElement>
-    const emailRef = createRef() as React.RefObject<HTMLDivElement>
-    const phoneNumberRef = createRef() as React.RefObject<HTMLDivElement>
-    const businnesPhoneNumberRef = createRef() as React.RefObject<HTMLDivElement>
-    const streetRef = createRef() as React.RefObject<HTMLDivElement>
-    const houseNumberRef = createRef() as React.RefObject<HTMLDivElement>
-    const postalCodeRef = createRef() as React.RefObject<HTMLDivElement>
-    const cityRef = createRef() as React.RefObject<HTMLDivElement>
-    const countryRef = createRef() as React.RefObject<HTMLDivElement>
+    const [firstName, setFirstName] = useState('')
+    const [secondName, setSecondName] = useState('')
+    const [email, setEmail] = useState('')
 
+    const [houseNumber, setHouseNumber] = useState('')
+    const [street, setStreet] = useState('')
+    const [postalCode, setPostalCode] = useState('')
+    const [city, setCity] = useState('')
+    const [country, setCountry] = useState('')
+    const [phoneNumber, setPhoneNumber] = useState('')
+
+    const [businessPhoneNumber, setBusinessPhoneNumber] = useState('')
 
     //Functions for personal data change
     const handleChangePerData = () => {
@@ -52,9 +53,9 @@ export default function ChangeAccountData() {
     const changePersonalData = async () => {
         const json = JSON.stringify({
             login: currentAccount.login,
-            newFirstName: firstNameRef?.current?.querySelector('input')?.value,
-            newSecondName: secondNameRef?.current?.querySelector('input')?.value,
-            newEmail: emailRef?.current?.querySelector('input')?.value,
+            newFirstName: firstName,
+            newSecondName: secondName,
+            newEmail: email,
             version: currentAccount.version,
             alteredBy: currentAccount.login //temporary until roles are implemented.
 
@@ -83,13 +84,13 @@ export default function ChangeAccountData() {
             newFirstName: currentAccount.firstName,
             newSecondName: currentAccount.secondName,
             newEmail: currentAccount.email,
-            newPhoneNumber: phoneNumberRef?.current?.querySelector('input')?.value,
+            newPhoneNumber: phoneNumber,
             newAddress: {
-                newHouseNumber: houseNumberRef?.current?.querySelector('input')?.value,
-                newStreet: streetRef?.current?.querySelector('input')?.value,
-                newPostalCode: postalCodeRef?.current?.querySelector('input')?.value,
-                newCity: cityRef?.current?.querySelector('input')?.value,
-                newCountry: countryRef?.current?.querySelector('input')?.value,
+                newHouseNumber: houseNumber,
+                newStreet: street,
+                newPostalCode: postalCode,
+                newCity: city,
+                newCountry: country,
                 alteredBy: currentAccount.login //temporary until roles are implemented.
             },
             alteredBy: currentAccount.login //temporary until roles are implemented.
@@ -117,7 +118,7 @@ export default function ChangeAccountData() {
             newFirstName: currentAccount.firstName,
             newSecondName: currentAccount.secondName,
             newEmail: currentAccount.email,
-            newPhoneNumber: businnesPhoneNumberRef?.current?.querySelector('input')?.value,
+            newPhoneNumber: businessPhoneNumber,
             alteredBy: currentAccount.login //temporary until roles are implemented.
 
         })
@@ -179,18 +180,21 @@ export default function ChangeAccountData() {
                         type="text"
                         label={t("name")}
                         placeholder={currentAccount.firstName}
-                        ref={firstNameRef}/>
+                        value={firstName}
+                        onChange={event => {setFirstName(event.target.value)}}/>
                     <DarkedTextField
                         type="text"
                         label={t("surname")}
                         placeholder={currentAccount.secondName}
-                        ref={secondNameRef}/>
+                        value={secondName}
+                        onChange={event => {setSecondName(event.target.value)}}/>
 
                     <DarkedTextField
                         type="text"
                         label={t("new email")}
                         placeholder={t(currentAccount.email)}
-                        ref={emailRef}/>
+                        value={email}
+                        onChange={event => {setEmail(event.target.value)}}/>
 
                 </div>
                 <RoundedButton color="blue"
@@ -239,32 +243,38 @@ export default function ChangeAccountData() {
                             type="text"
                             label={t("street")}
                             placeholder={clientAddr ? clientAddr.address.street : ""}
-                            ref={streetRef}/>
+                            value={street}
+                            onChange={event => {setStreet(event.target.value)}}/>
                         <DarkedTextField
                             type="text"
                             label={t("house number")}
                             placeholder={clientAddr ? clientAddr.address.houseNumber : ""}
-                            ref={houseNumberRef}/>
+                            value={houseNumber}
+                            onChange={event => {setHouseNumber(event.target.value)}}/>
                         <DarkedTextField
                             type="text"
                             label={t("postal code")}
                             placeholder={clientAddr ? clientAddr.address.postalCode : ""}
-                            ref={postalCodeRef}/>
+                            value={postalCode}
+                            onChange={event => {setPostalCode(event.target.value)}}/>
                         <DarkedTextField
                             type="text"
                             label={t("city")}
                             placeholder={clientAddr ? clientAddr.address.city : ""}
-                            ref={cityRef}/>
+                            value={city}
+                            onChange={event => {setCity(event.target.value)}}/>
                         <DarkedTextField
                             type="text"
                             label={t("country")}
                             placeholder={clientAddr ? clientAddr.address.country : ""}
-                            ref={countryRef}/>
+                            value={country}
+                            onChange={event => {setCountry(event.target.value)}}/>
                         <DarkedTextField
                             type="text"
                             label={t("phone number")}
                             placeholder={clientAddr ? clientAddr.phoneNumber : ""}
-                            ref={phoneNumberRef}/>
+                            value={phoneNumber}
+                            onChange={event => {setPhoneNumber(event.target.value)}}/>
                     </div>
                     <RoundedButton
                         color="blue"
@@ -293,7 +303,8 @@ export default function ChangeAccountData() {
                             type="text"
                             label={t("phone number")}
                             placeholder={businnesPhone ? businnesPhone.phoneNumber : ""}
-                            ref={businnesPhoneNumberRef}/>
+                            value={businessPhoneNumber}
+                            onChange={event => {setBusinessPhoneNumber(event.target.value)}}/>
                     </div>
                     <RoundedButton
                         color="blue"

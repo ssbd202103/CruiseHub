@@ -19,6 +19,7 @@ const resources = {
             "cruises": "Wycieczki",
             "my cruises": "Moje wycieczki",
             "phone": "Telefon",
+            "cancel": "Anuluj",
             //signin
             "signin": "Zaloguj się",
             "signin.welcome": "Witamy ponownie",
@@ -132,6 +133,7 @@ const resources = {
             "cruises": "Cruises",
             "my cruises": "My cruises",
             "phone": "Phone",
+            "cancel": "Cancel",
             //signin
             "signin": "Sign in",
             "signin.welcome": "Welcome back",

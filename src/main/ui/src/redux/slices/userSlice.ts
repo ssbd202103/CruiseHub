@@ -47,9 +47,26 @@ export const {setUser, changeEmail} = userSlice.actions
 
 const selectSelf = (state: { user: IUserSliceState }) => state
 
+export const selectFirstName = createSelector(selectSelf, state => state.user.firstName)
+export const selectSecondName = createSelector(selectSelf, state => state.user.secondName)
 export const selectEmail = createSelector(selectSelf, state => state.user.email)
 export const selectEtag = createSelector(selectSelf, state => state.user.etag)
 export const selectLogin = createSelector(selectSelf, state => state.user.login)
 export const selectVersion = createSelector(selectSelf, state => state.user.version)
+
+export const selectPhoneNumber = (accessLevelLabel: "CLIENT" | "BUSINESS_WORKER") =>
+    createSelector(selectSelf,
+            state => state.user.accessLevels.find(accessLevel => accessLevel.accessLevelType === accessLevelLabel)?.phoneNumber || "-1")
+
+export const selectAddress =
+    createSelector(selectSelf,
+        state => state.user.accessLevels.find(accessLevel => accessLevel.accessLevelType === "CLIENT")?.address ||
+            {
+                houseNumber: 0,
+                street: "",
+                postalCode: "",
+                city: "",
+                country: ""
+            })
 
 export default userSlice.reducer
