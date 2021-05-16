@@ -28,3 +28,11 @@ export interface ClientChangeData extends ConsumerChangeData {
 export interface BusinessWorkerChangeData extends ConsumerChangeData {
 
 }
+
+export interface ModeratorChangeData extends AccountChangeData {
+
+}
+
+export interface AdministratorChangeData extends AccountChangeData {
+
+}

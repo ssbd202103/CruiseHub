@@ -8,6 +8,7 @@ import RoundedButton from "../RoundedButton";
 import DarkedTextField from "../DarkedTextField";
 import { ChangeDataComponentProps } from '../interfaces'
 import {ConfirmCancelButtonGroup} from "../ConfirmCancelButtonGroup";
+import {changeAdministratorData} from "../../Services/changeDataService";
 
 export default function ChangeAdministratorData({open, onOpen, onConfirm, onCancel}: ChangeDataComponentProps) {
     const {t} = useTranslation()
@@ -24,7 +25,16 @@ export default function ChangeAdministratorData({open, onOpen, onConfirm, onCanc
     }, [firstName, secondName])
 
     const changeData = () => {
-        onConfirm()
+        if (!firstNameValue || !secondNameValue) {
+            return alert("Values are missing")
+        }
+
+        changeAdministratorData(firstNameValue, secondNameValue).then(res => {
+            onConfirm()
+        }).catch(error => {
+            alert("ERROR: go to console")
+            console.log(error)
+        })
     }
 
     return (

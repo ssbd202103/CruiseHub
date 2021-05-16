@@ -12,6 +12,7 @@ import {
 } from '../../redux/slices/userSlice'
 import {ChangeDataComponentProps} from "../interfaces";
 import {ConfirmCancelButtonGroup} from "../ConfirmCancelButtonGroup";
+import {changeClientData} from "../../Services/changeDataService";
 
 export default function ChangeClientData({open, onOpen, onConfirm, onCancel}: ChangeDataComponentProps) {
     const {t} = useTranslation()
@@ -31,7 +32,16 @@ export default function ChangeClientData({open, onOpen, onConfirm, onCancel}: Ch
     }, [firstName, secondName, phoneNumber])
 
     const changeData = () => {
+        if (!firstNameValue || !secondNameValue || !phoneNumberValue) {
+            return alert("Values are missing")
+        }
 
+        changeClientData(firstNameValue, secondNameValue, phoneNumberValue).then(res => {
+                onConfirm()
+            }).catch(error => {
+                alert("ERROR: go to console")
+                console.log(error)
+        })
     }
 
     return (
