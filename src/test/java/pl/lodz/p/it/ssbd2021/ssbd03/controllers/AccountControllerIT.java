@@ -15,11 +15,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AccountChangeOwnPasswordDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.ChangeAccessLevelStateDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AddressDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccessLevelDetailsViewDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccountDetailsViewDto;
@@ -31,20 +27,9 @@ import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
 import javax.ws.rs.core.MediaType;
 import java.util.*;
 
-
-import java.util.Set;
-
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
-
 import static io.restassured.RestAssured.given;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 
@@ -172,8 +157,8 @@ class AccountControllerIT {
         boolean enabled = moderator.get().isEnabled();
         assertThat(enabled).isTrue();
 
-        ChangeAccessLevelStateDto changeAccessLevelState = new ChangeAccessLevelStateDto(account.getLogin(),
-                moderator.get().getAccessLevelType(), account.getVersion(), false);
+        ChangeAccessLevelStateDto changeAccessLevelState = new ChangeAccessLevelStateDto(accountDetails.getLogin(),
+                moderator.get().getAccessLevelType(), accountDetails.getVersion(), false);
         String etag = EntityIdentitySignerVerifier.calculateEntitySignature(changeAccessLevelState);
 
         Response response = getBaseUriETagRequest(etag)
@@ -222,8 +207,8 @@ class AccountControllerIT {
         assertThat(response.asString()).isEqualTo(ETAG_IDENTITY_INTEGRITY_ERROR);
 
         // Requesting enabling already enabled account
-        changeAccessLevelState = new ChangeAccessLevelStateDto(account.getLogin(),
-                moderator.get().getAccessLevelType(), account.getVersion(), true);
+        changeAccessLevelState.setAccountVersion(account.getVersion() + 1);
+        etag = EntityIdentitySignerVerifier.calculateEntitySignature(changeAccessLevelState);
 
         response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken))
                 .body(changeAccessLevelState).put("/change-access-level-state");
@@ -258,7 +243,7 @@ class AccountControllerIT {
 
     @Test
     void grantAccessLevelTest_FAIL() throws JsonProcessingException {
-        String adminToken = this.getAuthToken("rbranson","abcABC123*");
+        String adminToken = this.getAuthToken("rbranson", "abcABC123*");
         ClientForRegistrationDto client = getSampleClientForRegistrationDto();
         AccountDto account = registerClientAndGetAccountDto(client);
         GrantAccessLevelDto grantAccessLevel = new GrantAccessLevelDto(account.getLogin(), AccessLevelType.MODERATOR, account.getVersion());
@@ -274,9 +259,8 @@ class AccountControllerIT {
         assertThat(response.getStatusCode()).isEqualTo(200);
 
 
-        response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken)).body(grantAccessLevel).put("/grant-access-level");
         grantAccessLevel.setAccountVersion(grantAccessLevel.getAccountVersion() + 1);
-        response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).body(grantAccessLevel).put("/grant-access-level");
+        response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken)).body(grantAccessLevel).put("/grant-access-level");
         assertThat(response.getStatusCode()).isEqualTo(400);
         assertThat(response.asString()).isEqualTo(ACCESS_LEVEL_ALREADY_ASSIGNED_ERROR);
 
@@ -293,7 +277,7 @@ class AccountControllerIT {
 
     @Test
     public void getAllAccountsTest_SUCCESS() throws JsonProcessingException {
-        String adminToken = this.getAuthToken("rbranson","abcABC123*");
+        String adminToken = this.getAuthToken("rbranson", "abcABC123*");
 
         Response response = RestAssured.given().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken)).baseUri(accountBaseUri).get("/accounts");
         String accountString = response.getBody().asString();
@@ -322,7 +306,7 @@ class AccountControllerIT {
 
     @Test
     public void unblockUserTest_SUCCESS() throws JsonProcessingException { // todo fix this test
-        String adminToken = this.getAuthToken("rbranson","abcABC123*");
+        String adminToken = this.getAuthToken("rbranson", "abcABC123*");
 
         ClientForRegistrationDto client = getSampleClientForRegistrationDto();
         AccountDto account = registerClientAndGetAccountDto(client);
@@ -339,7 +323,7 @@ class AccountControllerIT {
         accountDtoForList = accountDtoList.stream().filter(acc -> acc.getLogin().equals(account.getLogin())).findFirst().get();
         assertTrue(accountDtoForList.isActive());
 
-        Response postResponse =  given().contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken))
+        Response postResponse = given().contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken))
                 .header("If-Match", accountDtoForList.getEtag())
                 .baseUri(accountBaseUri).body(unblockAccountDto).put("/unblock");
 
@@ -369,7 +353,7 @@ class AccountControllerIT {
 
     @Test
     public void changeEmailTest_SUCCESS() throws JsonProcessingException {
-        String adminToken = this.getAuthToken("rbranson","abcABC123*");
+        String adminToken = this.getAuthToken("rbranson", "abcABC123*");
         AccountDto account = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
         Response res = given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + adminToken)).get("/" + account.getLogin());
         String etag = res.getHeader("Etag");
@@ -394,7 +378,7 @@ class AccountControllerIT {
 
     @Test
     public void changeEmailTest_FAIL() throws JsonProcessingException {
-        String adminToken = this.getAuthToken("rbranson","abcABC123*");
+        String adminToken = this.getAuthToken("rbranson", "abcABC123*");
 
         AccountDto account = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
         Response res = given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + adminToken)).get("/" + account.getLogin());
@@ -445,7 +429,7 @@ class AccountControllerIT {
 
     @Test
     public void changeClientDataTest_SUCCESS() throws JsonProcessingException {
-        String adminToken = this.getAuthToken("rbranson","abcABC123*");
+        String adminToken = this.getAuthToken("rbranson", "abcABC123*");
 
         ClientForRegistrationDto client = getSampleClientForRegistrationDto();
         AccountDto account = registerClientAndGetAccountDto(client);
@@ -471,7 +455,7 @@ class AccountControllerIT {
 
     @Test
     public void changeBusinessWorkerDataTest_SUCCESS() throws JsonProcessingException {
-        String adminToken = this.getAuthToken("rbranson","abcABC123*");
+        String adminToken = this.getAuthToken("rbranson", "abcABC123*");
 
         BusinessWorkerForRegistrationDto worker = getSampleBusinessWorkerForRegistrationDto();
         AccountDto account = registerBusinessWorkerAndGetAccountDto(worker);
@@ -493,7 +477,7 @@ class AccountControllerIT {
 
     @Test
     public void changeModeratorOrAdministratorDataTest_SUCCESS() throws JsonProcessingException {
-        String adminToken = this.getAuthToken("rbranson","abcABC123*");
+        String adminToken = this.getAuthToken("rbranson", "abcABC123*");
 
         AccountDto account = getAccountDto("rbranson");
         String etag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
@@ -533,7 +517,7 @@ class AccountControllerIT {
 
     @Test
     public void changePasswordTest_SUCCESS() throws JsonProcessingException {
-        String adminToken = this.getAuthToken("rbranson","abcABC123*");
+        String adminToken = this.getAuthToken("rbranson", "abcABC123*");
         AccountDto account = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
         Response res = given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + adminToken)).get("/" + account.getLogin());
         String etag = res.getHeader("Etag");
@@ -560,7 +544,7 @@ class AccountControllerIT {
     @Test
     public void changePasswordVersionTest_FAIL() throws JsonProcessingException {
         // fail optimistic check (version)
-        String adminToken = this.getAuthToken("rbranson","abcABC123*");
+        String adminToken = this.getAuthToken("rbranson", "abcABC123*");
         AccountDto account = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
         Response res = given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + adminToken)).get("/" + account.getLogin());
         String etag = res.getHeader("Etag");
@@ -586,7 +570,7 @@ class AccountControllerIT {
     @Test
     public void changePasswordMatchTest_FAIL() throws JsonProcessingException {
         // fail old password check
-        String adminToken = this.getAuthToken("rbranson","abcABC123*");
+        String adminToken = this.getAuthToken("rbranson", "abcABC123*");
         AccountDto account = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
         Response res = given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + adminToken)).get("/" + account.getLogin());
         String etag = res.getHeader("Etag");
