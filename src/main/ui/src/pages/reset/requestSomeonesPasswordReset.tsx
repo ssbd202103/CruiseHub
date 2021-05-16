@@ -13,12 +13,13 @@ const RequestSomeonePasswordReset = () => {
 
     const currentAccount = JSON.parse(sessionStorage.getItem("resetPasswordAccount") as string)
 
-    const emailRef = createRef() as React.RefObject<HTMLDivElement>
+    const [email, setEmail] = useState('')
+
     let login = currentAccount.login;
     const onFormSubmit = () => {
         // event.preventDefault()
         // console.log("hello world")
-        axios.post(`http://localhost:8080/api/account/request-someones-password-reset/${login}/${emailRef?.current?.querySelector('input')?.value}/`, {});
+        axios.post(`http://localhost:8080/api/account/request-someones-password-reset/${login}/${email}/`, {});
     }
     return (
         <AuthLayout>
@@ -27,7 +28,8 @@ const RequestSomeonePasswordReset = () => {
                 label={t("email") + ' *'}
                 placeholder="email"
                 className={styles.input}
-                ref={emailRef}
+                value={email}
+                onChange={event => {setEmail(event.target.value)}}
             />
             <Link to="/panels/adminPanel/accounts">
             <RoundedButton

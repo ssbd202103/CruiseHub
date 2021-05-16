@@ -11,45 +11,44 @@ import styles from '../../styles/auth.global.module.css'
 
 import {useTranslation} from 'react-i18next'
 import axios from "axios";
-import {createRef} from "react";
+import {useState} from "react";
 
 
 export default function ClientSignUp() {
     const {t} = useTranslation()
 
-    const firstNameRef = createRef() as React.RefObject<HTMLDivElement>
-    const secondNameRef = createRef() as React.RefObject<HTMLDivElement>
-    const loginRef = createRef() as React.RefObject<HTMLDivElement>
-    const emailRef = createRef() as React.RefObject<HTMLDivElement>
-    const passwordRef = createRef() as React.RefObject<HTMLDivElement>
-    const confirmPasswordRef = createRef() as React.RefObject<HTMLDivElement>
-    const languageTypeRef = createRef() as React.RefObject<HTMLDivElement>
+    const [firstName, setFirstName] = useState('')
+    const [secondName, setSecondName] = useState('')
+    const [login, setLogin] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
+    const [languageType, setLanguageType] = useState('')
 
-    const houseNumberRef = createRef() as React.RefObject<HTMLDivElement>
-    const streetRef = createRef() as React.RefObject<HTMLDivElement>
-    const postalCodeRef = createRef() as React.RefObject<HTMLDivElement>
-    const cityRef = createRef() as React.RefObject<HTMLDivElement>
-    const countryRef = createRef() as React.RefObject<HTMLDivElement>
-    const phoneNumberRef = createRef() as React.RefObject<HTMLDivElement>
+    const [houseNumber, setHouseNumber] = useState('')
+    const [street, setStreet] = useState('')
+    const [postalCode, setPostalCode] = useState('')
+    const [city, setCity] = useState('')
+    const [country, setCountry] = useState('')
+    const [phoneNumber, setPhoneNumber] = useState('')
 
     const clientSignUpFun = async () => {
 
-
         const json = JSON.stringify({
-                firstName: firstNameRef?.current?.querySelector('input')?.value,
-                secondName: secondNameRef?.current?.querySelector('input')?.value,
-                login: loginRef?.current?.querySelector('input')?.value,
-                email: emailRef?.current?.querySelector('input')?.value,
-                password: passwordRef?.current?.querySelector('input')?.value,
-                languageType: languageTypeRef?.current?.querySelector('input')?.value,
+                firstName,
+                secondName,
+                login,
+                email,
+                password,
+                languageType,
                 addressDto: {
-                    houseNumber: houseNumberRef?.current?.querySelector('input')?.value,
-                    street: streetRef?.current?.querySelector('input')?.value,
-                    postalCode: postalCodeRef?.current?.querySelector('input')?.value,
-                    city: cityRef?.current?.querySelector('input')?.value,
-                    country: countryRef?.current?.querySelector('input')?.value
+                    houseNumber,
+                    street,
+                    postalCode,
+                    city,
+                    country
                 },
-                phoneNumber: phoneNumberRef?.current?.querySelector('input')?.value
+                phoneNumber
             }
         );
 
@@ -82,7 +81,8 @@ export default function ClientSignUp() {
                     style={{
                         marginRight: 20
                     }}
-                    ref={firstNameRef}
+                    value={firstName}
+                    onChange={event => {setFirstName(event.target.value)}}
                 />
 
 
@@ -90,9 +90,8 @@ export default function ClientSignUp() {
                     label={t("surname") + ' *'}
                     placeholder="Doe"
                     className={styles.input}
-                    ref={secondNameRef}
-
-
+                    value={secondName}
+                    onChange={event => {setSecondName(event.target.value)}}
                 />
             </Box>
 
@@ -102,17 +101,16 @@ export default function ClientSignUp() {
                 placeholder="example@email.com"
                 className={styles.input}
                 icon={(<EmailIcon/>)}
-
-                ref={emailRef}
-
-
+                value={email}
+                onChange={event => {setEmail(event.target.value)}}
             />
 
             <DarkedTextField
                 label={t("login") + ' *'}
                 placeholder="examplelogin"
                 className={styles.input}
-                ref={loginRef}
+                value={login}
+                onChange={event => {setLogin(event.target.value)}}
             />
 
 
@@ -120,8 +118,8 @@ export default function ClientSignUp() {
                 label={t("languageType") + ' *'}
                 placeholder="language type"
                 className={styles.input}
-                ref={languageTypeRef}
-
+                value={languageType}
+                onChange={event => {setLanguageType(event.target.value)}}
             />
 
 
@@ -129,46 +127,46 @@ export default function ClientSignUp() {
                 label={t("houseNumber") + ' *'}
                 placeholder="house number"
                 className={styles.input}
-                ref={houseNumberRef}
-
+                value={houseNumber}
+                onChange={event => {setHouseNumber(event.target.value)}}
             />
+
             <DarkedTextField
                 label={t("street") + ' *'}
                 placeholder="street"
                 className={styles.input}
-                ref={streetRef}
-
+                value={street}
+                onChange={event => {setStreet(event.target.value)}}
             />
             <DarkedTextField
                 label={t("postalCode") + ' *'}
                 placeholder="postal code"
                 className={styles.input}
-                ref={postalCodeRef}
-
+                value={postalCode}
+                onChange={event => {setPostalCode(event.target.value)}}
             />
             <DarkedTextField
                 label={t("city") + ' *'}
                 placeholder="city"
                 className={styles.input}
-                ref={cityRef}
-
+                value={city}
+                onChange={event => {setCity(event.target.value)}}
             />
             <DarkedTextField
                 label={t("country") + ' *'}
                 placeholder="country"
                 className={styles.input}
-                ref={countryRef}
-
+                value={country}
+                onChange={event => {setCountry(event.target.value)}}
             />
 
             <DarkedTextField
                 label={t("phoneNumber") + ' *'}
                 placeholder="phone number"
                 className={styles.input}
-                ref={phoneNumberRef}
-
+                value={phoneNumber}
+                onChange={event => {setPhoneNumber(event.target.value)}}
             />
-
 
             <Box
                 style={{
@@ -184,9 +182,8 @@ export default function ClientSignUp() {
                     className={styles.input}
                     style={{marginRight: 20}}
                     icon={(<PasswordIcon/>)}
-
-                    ref={passwordRef}
-
+                    value={password}
+                    onChange={event => {setPassword(event.target.value)}}
                 />
 
                 <DarkedTextField
@@ -195,8 +192,8 @@ export default function ClientSignUp() {
                     placeholder="1234567890"
                     className={styles.input}
                     icon={(<PasswordIcon/>)}
-
-                    ref={confirmPasswordRef}
+                    value={confirmPassword}
+                    onChange={event => {setConfirmPassword(event.target.value)}}
                 />
             </Box>
 

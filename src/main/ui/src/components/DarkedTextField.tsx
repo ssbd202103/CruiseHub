@@ -69,10 +69,12 @@ export interface DarkedTextFieldProps {
     readonly icon?: JSX.Element,
     readonly placeholder?: string,
     readonly label?: string,
-    readonly style?: React.CSSProperties
+    readonly style?: React.CSSProperties,
+    readonly value?: any,
+    onChange?(event: React.ChangeEvent<HTMLInputElement>): void
 }
 
-const DarkedTextField = React.forwardRef((props: DarkedTextFieldProps, ref) => {
+const DarkedTextField = (props: DarkedTextFieldProps) => {
 
         const classes = useStyles()
 
@@ -83,6 +85,8 @@ const DarkedTextField = React.forwardRef((props: DarkedTextFieldProps, ref) => {
             placeholder,
             label,
             style,
+            value,
+            onChange
         } = props
 
         const color = useSelector(selectColor)
@@ -103,8 +107,9 @@ const DarkedTextField = React.forwardRef((props: DarkedTextFieldProps, ref) => {
             InputLabelProps={labelStyle}
             placeholder={placeholder || ""}
             style={style || undefined}
-            ref={ref as React.RefObject<HTMLDivElement>}
+            value={value}
+            onChange={onChange}
         />)
-    });
+    };
 
 export default DarkedTextField;

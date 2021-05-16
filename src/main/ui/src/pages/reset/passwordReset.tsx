@@ -14,9 +14,9 @@ function PasswordReset(props: any) {
     const location = useLocation();
     const {t} = useTranslation()
 
-    const loginRef = createRef() as React.RefObject<HTMLDivElement>
-    const passwordRef = createRef() as React.RefObject<HTMLDivElement>
-    const confirmPasswordRef = createRef() as React.RefObject<HTMLDivElement>
+    const [login, setLogin] = useState('')
+    const [password, setPassword] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
 
 
     const submitPasswordReset = async (event: any) => {
@@ -24,8 +24,8 @@ function PasswordReset(props: any) {
 
         const json = {
             "token": location.pathname.toString().substring('/reset/passwordReset/'.length),
-            "login": loginRef?.current?.querySelector('input')?.value,
-            "password": passwordRef?.current?.querySelector('input')?.value
+            login,
+            password
         }
 
         await axios.put('http://localhost:8080/api/account/reset-password', json, {
@@ -44,7 +44,8 @@ function PasswordReset(props: any) {
                         label={t("login") + ' *'}
                         placeholder="login"
                         className={styles.input}
-                        ref={loginRef}
+                        value={login}
+                        onChange={event => {setLogin(event.target.value)}}
                     />
 
                     <DarkedTextField
@@ -54,8 +55,8 @@ function PasswordReset(props: any) {
                         className={styles.input}
                         style={{marginRight: 20}}
                         icon={(<PasswordIcon/>)}
-
-                        ref={passwordRef}
+                        value={password}
+                        onChange={event => {setPassword(event.target.value)}}
 
                     />
 
@@ -65,8 +66,8 @@ function PasswordReset(props: any) {
                         placeholder="1234567890"
                         className={styles.input}
                         icon={(<PasswordIcon/>)}
-
-                        ref={confirmPasswordRef}
+                        value={confirmPassword}
+                        onChange={event => {setConfirmPassword(event.target.value)}}
                     />
 
                     <RoundedButton

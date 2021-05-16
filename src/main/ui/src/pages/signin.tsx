@@ -13,7 +13,7 @@ import {useTranslation} from 'react-i18next'
 
 import styles from '../styles/auth.global.module.css'
 import axios from "axios"
-import React, {createRef} from "react"
+import React, {useState} from "react"
 
 import {useDispatch} from "react-redux";
 import {update} from '../redux/slices/tokenSlice'
@@ -26,13 +26,13 @@ export default function SignIn() {
 
     const dispatch = useDispatch();
 
-    const loginRef = createRef() as React.RefObject<HTMLDivElement>
-    const passwordRef = createRef() as React.RefObject<HTMLDivElement>
+    const [login, setLogin] = useState('')
+    const [password, setPassword] = useState('')
 
     const auth = async () => {
         const json = JSON.stringify({
-            login: loginRef?.current?.querySelector('input')?.value,
-            password: passwordRef?.current?.querySelector('input')?.value
+            login: login,
+            password: password
         })
 
         let response = await axios.post('http://localhost:8080/api/signin/auth', json, {
@@ -68,7 +68,8 @@ export default function SignIn() {
                             margin: '20px 0'
                         }}
                         placeholder="login"
-                        ref={loginRef}
+                        value={login}
+                        onChange={event => {setLogin(event.target.value)}}
                     />
 
                     <DarkedTextField 
@@ -80,7 +81,8 @@ export default function SignIn() {
                         }} 
                         icon={(<PasswordIcon />)}
                         placeholder="1234567890"
-                        ref={passwordRef}
+                        value={password}
+                        onChange={event => {setPassword(event.target.value)}}
                     />
 
                     <Box style={{
