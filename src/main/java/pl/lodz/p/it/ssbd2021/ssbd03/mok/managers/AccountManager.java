@@ -62,6 +62,7 @@ public class AccountManager implements AccountManagerLocal {
         client.getHomeAddress().setAlterType(insertAlterType);
 
         accountFacade.create(account);
+        //todo uncomment it when it's needed
         if (accountFacade.findByLogin(account.getLogin()) != null) {
             sendVerificationEmail(account);
         }
@@ -74,6 +75,7 @@ public class AccountManager implements AccountManagerLocal {
         businessWorker.setCompany(companyFacadeMok.getCompanyByName(companyName));
 
         this.accountFacade.create(account);
+        //todo uncomment it when it's needed
         if (accountFacade.findByLogin(account.getLogin()) != null) {
             sendVerificationEmail(account);
         }
@@ -300,9 +302,7 @@ public class AccountManager implements AccountManagerLocal {
         Account targetAccount = updateAccount(fromAccount, alterBy);
 
         Client targetClient = (Client) getAccessLevel(targetAccount, AccessLevelType.CLIENT);
-        if(!targetClient.getVersion().equals(targetAccount.getVersion())) {
-            throw FacadeException.optimisticLock();
-        }
+
         targetClient.setAlteredBy(accountFacade.findByLogin(alterBy));
         targetClient.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
         targetClient.setLastAlterDateTime(LocalDateTime.now());
@@ -348,9 +348,7 @@ public class AccountManager implements AccountManagerLocal {
     public Account changeOtherBusinessWorkerData(Account fromAccount, String alterBy) throws BaseAppException {
         Account targetAccount = updateAccount(fromAccount, alterBy);
         BusinessWorker targetBusinessWorker = (BusinessWorker) getAccessLevel(targetAccount, AccessLevelType.BUSINESS_WORKER);
-        if(!targetBusinessWorker.getVersion().equals(targetAccount.getVersion())) {
-            throw FacadeException.optimisticLock();
-        }
+
         targetBusinessWorker.setAlteredBy(accountFacade.findByLogin(alterBy));
         targetBusinessWorker.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
         targetBusinessWorker.setLastAlterDateTime(LocalDateTime.now());
