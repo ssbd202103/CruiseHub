@@ -51,7 +51,7 @@ export default function ClientPanel() {
         setIsPasswordEdit(false)
     }
 
-    const handeIsDataEdit = () => {
+    const handleIsDataEdit = () => {
         setIsDataEdit(true)
         setIsEmailEdit(false)
         setIsAddressEdit(false)
@@ -117,7 +117,7 @@ export default function ClientPanel() {
                     <Grid container className={manageStyles.wrapper + ' ' + manageStyles[`text-${color ? 'white' : 'dark'}`]} >
                         <ChangeClientData
                             open={isDataEdit}
-                            onOpen={handeIsDataEdit}
+                            onOpen={handleIsDataEdit}
                             onConfirm={() => {setIsDataEdit(false)}}
                             onCancel={() => {setIsDataEdit(false)}} />
                         <ChangeAddress
