@@ -100,6 +100,8 @@ const resources = {
             "error.email.incorrect": "Address email jest niepoprawny",
             "error.emailService.inaccessible": "Serwis pocztowy jest niedostępny",
             "error.password.reset.contentError": "Błędna zawartość tokenu do resetowania hasła",
+			"error.password.change.oldPasswordError": "Podane stare hasło jest niepoprawne",
+
             ////regex errors
             "error.regex.postCode": "Niepoprawny format kodu pocztowego",
             "error.regex.city": "Niepoprawny format miasta",
@@ -210,6 +212,7 @@ const resources = {
             "error.password.reset.wrongIdentity": "Request contains wrong identity",
             "error.email.incorrect": "Email address is incorrect",
             "error.password.reset.contentError": "Invalid password reset token content",
+            "error.password.change.oldPasswordError": "Inserted old password is invalid",
 
             ////regex errors
             "error.regex.postCode": "Invalid post code format",

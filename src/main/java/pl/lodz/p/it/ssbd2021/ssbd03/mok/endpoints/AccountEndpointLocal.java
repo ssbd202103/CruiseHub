@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.AccountOwnPasswordDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.ChangeAccessLevelStateDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherAccountChangeDataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherBusinessWorkerChangeDataDto;
@@ -118,7 +119,6 @@ public interface AccountEndpointLocal {
      * @throws BaseAppException Bazowy wyjątek aplikacji rzucany w przypadku błędu pobrania danych użytkownika
      */
     void unblockUser(@NotNull String unblockedUserLogin, @NotNull Long version) throws BaseAppException;
-
 
     /**
      * Metoda odpowiedzialna za wywołanie metody odpowiedzialnej za wysyłania email z linkiem do resetowania hasła dla danego użytkownika, który podał wybrany email
@@ -246,5 +246,12 @@ public interface AccountEndpointLocal {
      * @return Login użytkownika
      */
     String getCurrentUserLogin();
+
+    /**
+     * Metoda odpowiedzialna za wywołanie metody odpowiedzialnej za zmianę hasła akutalnego użytkownika
+     * @param accountOwnPasswordDto obiekt dto posiadający niezbedne dane do zmienienia hasła aktualnego użytkownika
+     * @throws BaseAppException Bazowy wyjątek aplikacji rzucany w przypadku gdy stare hasło podane przez użytkownika nie jest zgodne z tym w bazie danych, bądź w przpadku blokady optymistycznej
+     */
+    void changeOwnPassword(AccountOwnPasswordDto accountOwnPasswordDto) throws BaseAppException;
 }
 

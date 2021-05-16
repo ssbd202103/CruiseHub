@@ -10,7 +10,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.AccountOwnPasswordDto;
 
 import javax.ejb.Local;
 import java.time.LocalDateTime;
@@ -139,12 +139,7 @@ public interface AccountManagerLocal {
      * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku gdy użytkownik o podanym loginie nie istnieje, albo gdy podczas wysyłania email został rzucony wyjątek przez metode klasy EmailService
      */
     void requestSomeonesPasswordReset(String login, String email) throws BaseAppException;
-    /**
-     * Metoda odpowiedzialna za weryfikacje konta użytkonwika.
-     *
-     * @param token        jwt token otrzymany przez email
-     * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku gdy token wygasł albo nie przeszedł walidacji oraz gdy brak loginu lub wersji w tokenie oraz w wypadku kiedy konto zostało już wcześniej aktywowane oraz w sytuacj gdy został rzucony wyjątek blokady optymistycznej
-     */
+
     /**
      * Metoda odpowiedzialna za weryfikacje konta użytkonwika.
      *
@@ -240,4 +235,10 @@ public interface AccountManagerLocal {
      * @return Token JWT
      */
     String updateCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws AuthUnauthorizedException;
+
+	/**
+     * Metoda odpowiedzialna za zmiane hasła akutalnego użytkownika
+     * @throws BaseAppException Bazowy wyjątek aplikacji rzucany w przypadku gdy stare hasło nie jest zgodne z tym z bazy danych
+     */
+    void changeOwnPassword(String login, Long version, String oldPassword, String newPassword) throws BaseAppException;
 }

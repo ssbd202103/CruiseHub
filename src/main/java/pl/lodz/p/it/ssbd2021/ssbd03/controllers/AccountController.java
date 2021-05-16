@@ -8,19 +8,15 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AdministratorChangeDataDt
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.BusinessWorkerChangeDataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.ClientChangeDataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.ModeratorChangeDataDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.UnblockAccountDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.AccountOwnPasswordDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.ChangeAccessLevelStateDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.BlockAccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherAccountChangeDataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherBusinessWorkerChangeDataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherClientChangeDataDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccountDetailsViewDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
@@ -329,7 +325,32 @@ public class AccountController {
         return Response.status(200).build();
     }
 
+    /**
+     * Zmienia hasło aktualnego użytkownika wedle danych podanych w dto, gdy operacja się powiedzie zwraca 204
+     * @param accountOwnPasswordDto obiekt ktory przechowuje login, wersję, stare oraz nowe hasło podane przez użytkownika
+     * @param etag Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
+     * @return Zwraca kod kod potwierdzający poprawne bądź nieporawne wykonanie
+     */
+    @ETagFilterBinding
+    @PUT
+    @Path("/change_own_password")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response changeOwnPassword(@NotNull @Valid AccountOwnPasswordDto accountOwnPasswordDto, @HeaderParam("If-Match") String etag) {
+        if(!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, accountOwnPasswordDto)) {
+            return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
+        }
 
+        try {
+            accountEndpoint.changeOwnPassword(accountOwnPasswordDto);
+        } catch (EJBException | OptimisticLockException e) {
+            return Response.status(NOT_ACCEPTABLE).entity(e.getMessage()).build();
+        } catch (BaseAppException e) {
+            return Response.status(FORBIDDEN).entity(e.getMessage()).build();
+        }
+
+     return Response.noContent().build();
+    }
+	
     /**
      * Metoda odpowiedzialna za zgłoszenia życzenia resetowania hasła dla danego użytkownika
      *
@@ -582,5 +603,4 @@ public class AccountController {
 
         return Response.noContent().build();
     }
-
 }

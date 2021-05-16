@@ -35,8 +35,6 @@ public class I18n {
     public static final String REGEX_INVALID_PASSWORD = "error.regex.password";
     public static final String REGEX_INVALID_NAME = "error.regex.name";
     public static final String REGEX_INVALID_COMPANY_NAME = "error.regex.companyName";
-
-
     public static final String REQUESTED_PASSWORD_RESET_SUBJECT = "account.request.reset.password.subject";
     public static final String REQUESTED_PASSWORD_RESET_BODY = "account.request.reset.password.body";
     public static final String VERIFICATION_EMAIL_SUBJECT = "account.verification.subject";
@@ -51,6 +49,7 @@ public class I18n {
     public static final String ACTIVATE_ACCOUNT_BODY = "account.activate.body";
     public static final String INCORRECT_LOGIN = "auth.incorrect.login";
     public static final String INCORRECT_PASSWORD = "auth.incorrect.password";
+	public static final String PASSWORDS_DONT_MATCH_ERROR = "error.password.change.oldPasswordError";
 
     private ResourceBundle bundle;
 

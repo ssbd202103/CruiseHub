@@ -10,6 +10,10 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.EndpointException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.PasswordResetDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.AccountOwnPasswordDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.ChangeAccessLevelStateDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccountDetailsViewDto;
@@ -26,14 +30,11 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.managers.AccountManagerLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.services.EmailService;
-
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.inject.Inject;
 import javax.persistence.OptimisticLockException;
-import javax.persistence.OptimisticLockException;
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.OPTIMISTIC_LOCK_EXCEPTION;
-
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
@@ -258,8 +259,6 @@ public class AccountEndpoint implements AccountEndpointLocal {
         accountManager.changeAdministratorData(account);
     }
 
-
-
     @Override
     public AccountDto getAccountByLogin(String login) throws BaseAppException {
         return AccountMapper.toAccountDto(accountManager.getAccountByLogin(login));
@@ -288,5 +287,10 @@ public class AccountEndpoint implements AccountEndpointLocal {
     @Override
     public String getCurrentUserLogin() {
         return securityContext.getUserPrincipal().getName();
+	}
+	
+    public void changeOwnPassword(AccountOwnPasswordDto accountOwnPasswordDto) throws BaseAppException {
+        this.accountManager.changeOwnPassword(accountOwnPasswordDto.getLogin(), accountOwnPasswordDto.getVersion(),
+                accountOwnPasswordDto.getOldPassword(), accountOwnPasswordDto.getNewPassword());
     }
 }

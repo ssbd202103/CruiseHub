@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.managers;
 
 import com.auth0.jwt.interfaces.Claim;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
+import org.apache.commons.codec.digest.DigestUtils;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
@@ -20,6 +21,8 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters.AccountMapper;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.JWTException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.AccountOwnPasswordDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.CompanyFacadeMok;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.JWTHandler;
@@ -30,6 +33,8 @@ import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.inject.Inject;
 import java.util.*;
+import javax.persistence.OptimisticLockException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 import java.time.LocalDateTime;
@@ -298,10 +303,6 @@ public class AccountManager implements AccountManagerLocal {
         account.setLastAlterDateTime(LocalDateTime.now());
     }
 
-
-
-
-
     @Override
     public Account changeOtherClientData(Account fromAccount, String alterBy) throws BaseAppException {
         Account targetAccount = updateAccount(fromAccount, alterBy);
@@ -481,5 +482,24 @@ public class AccountManager implements AccountManagerLocal {
         Map<String, Object> map = Map.of("login", login, "accessLevels", account.getAccessLevels()
                 .stream().map(accessLevel -> accessLevel.getAccessLevelType().name()).collect(Collectors.toList()));
         return JWTHandler.createToken(map, account.getId().toString());
+	}
+	
+    @Override
+    public void changeOwnPassword(String login, Long version, String oldPassword, String newPassword) throws BaseAppException {
+        Account account = accountFacade.findByLogin(login);
+
+        if (!account.getVersion().equals(version)) {
+            throw new OptimisticLockException(OPTIMISTIC_LOCK_EXCEPTION);
+        }
+
+        if (account.getPasswordHash().equals(DigestUtils.sha256Hex(oldPassword))) {
+            account.setPasswordHash(DigestUtils.sha256Hex(newPassword));
+            account.setLastAlterDateTime(LocalDateTime.now());
+            account.setAlteredBy(account);
+            account.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
+            account.setVersion(version);
+        } else {
+            throw new AccountManagerException(PASSWORDS_DONT_MATCH_ERROR);
+        }
     }
 }
