@@ -17,12 +17,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AccountManagerException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.*;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters.AccountMapper;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.JWTException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.AccountOwnPasswordDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.CompanyFacadeMok;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.JWTHandler;
@@ -34,12 +28,10 @@ import javax.ejb.Stateful;
 import javax.inject.Inject;
 import java.util.*;
 import javax.persistence.OptimisticLockException;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
-import java.util.List;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 
@@ -488,8 +480,8 @@ public class AccountManager implements AccountManagerLocal {
     public void changeOwnPassword(String login, Long version, String oldPassword, String newPassword) throws BaseAppException {
         Account account = accountFacade.findByLogin(login);
 
-        if (!account.getVersion().equals(version)) {
-            throw new OptimisticLockException(OPTIMISTIC_LOCK_EXCEPTION);
+        if(!account.getVersion().equals(version)) {
+            throw FacadeException.optimisticLock();
         }
 
         if (account.getPasswordHash().equals(DigestUtils.sha256Hex(oldPassword))) {

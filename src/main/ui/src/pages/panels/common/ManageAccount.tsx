@@ -14,6 +14,7 @@ import {
     selectEmail,
 } from "../../../redux/slices/userSlice";
 import { changeEmail as changeEmailService } from '../../../Services/changeEmailService';
+import { changeOwnPassword as changeOwnPasswordService } from "../../../Services/changePasswordService";
 
 export default function ManageAccount() {
     const {t} = useTranslation()
@@ -24,6 +25,9 @@ export default function ManageAccount() {
 
     const emailRef = createRef() as React.RefObject<HTMLDivElement>
     const confirmEmailRef = createRef() as React.RefObject<HTMLDivElement>
+    const oldPasswordRef = createRef() as React.RefObject<HTMLDivElement>
+    const newPasswordRef = createRef() as React.RefObject<HTMLDivElement>
+    const newPasswordConfirmRef = createRef() as React.RefObject<HTMLDivElement>
 
     const color = useSelector(selectColor)
 
@@ -95,8 +99,23 @@ export default function ManageAccount() {
         setChangChangAddress(false)
         setChangEmail( false)
     }
-    const changePassword = () => {
-        //Place for transfer function (change password in database)
+    const changePassword = async () => {
+        const oldPasswordValue = oldPasswordRef?.current?.querySelector('input')?.value
+        const newPasswordValue = newPasswordRef?.current?.querySelector('input')?.value
+        const newPasswordConfirmValue = newPasswordConfirmRef?.current?.querySelector('input')?.value
+
+        if (!oldPasswordValue || !newPasswordValue || !newPasswordConfirmValue) {
+            //TODO
+            return alert("FATAL: fields or values are missing")
+        }
+
+        if (newPasswordValue != newPasswordConfirmValue) {
+            //TODO
+            return alert("FATAL: new passwords are not equal")
+        }
+
+        await changeOwnPasswordService(oldPasswordValue, newPasswordValue)
+
         handleChangPasswd()
     }
 
@@ -255,17 +274,20 @@ export default function ManageAccount() {
                         <DarkedTextField 
                             type="password"
                             label={t("old password")}
-                            placeholder={t("old password")} />
+                            placeholder={t("old password")}
+                            ref={oldPasswordRef} />
 
                         <DarkedTextField
                             type="password" 
                             label={t("new password")}
-                            placeholder={t("new password")} />
+                            placeholder={t("new password")}
+                            ref={newPasswordRef} />
 
                         <DarkedTextField 
                             type="password" 
                             label={t("new password confirm")}
-                            placeholder={t("new password confirm")} />
+                            placeholder={t("new password confirm")}
+                            ref={newPasswordConfirmRef} />
                     </div>
                     <RoundedButton 
                         color="blue"
