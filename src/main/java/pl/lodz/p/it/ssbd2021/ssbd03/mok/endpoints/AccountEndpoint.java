@@ -106,7 +106,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
 
     @Override
     public void blockUser(@NotNull String login, @NotNull Long version) throws BaseAppException {
-        Account account = this.accountManager.blockUser(login, version);
+        Account account = this.accountManager.blockUser(login, version, getCurrentUserLogin());
         Locale locale = new Locale(account.getLanguageType().getName().name());
         String body = i18n.getMessage(BLOCKED_ACCOUNT_BODY, locale);
         String subject = i18n.getMessage(BLOCKED_ACCOUNT_SUBJECT, locale);
@@ -125,7 +125,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
 
     @Override
     public void unblockUser(@NotNull String unblockedUserLogin, @NotNull Long version) throws BaseAppException {
-        Account account = this.accountManager.unblockUser(unblockedUserLogin, version);
+        Account account = this.accountManager.unblockUser(unblockedUserLogin, version, getCurrentUserLogin());
 
         Locale locale = new Locale(account.getLanguageType().getName().name());
         String body = i18n.getMessage(UNBLOCKED_ACCOUNT_BODY, locale);

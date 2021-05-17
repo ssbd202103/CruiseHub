@@ -119,7 +119,7 @@ public class AccountManager implements AccountManagerLocal {
         account.setVersion(accountVersion); //to assure optimistic lock mechanism
 
         Optional<AccessLevel> accountAccessLevel = account.getAccessLevels().stream()
-                .filter(accessLevel -> accessLevel.getAccessLevelType() == accessLevelType).findFirst();
+            .filter(accessLevel -> accessLevel.getAccessLevelType() == accessLevelType).findFirst();
 
         if (accountAccessLevel.isEmpty()) {
             throw new AccountManagerException(ACCESS_LEVEL_NOT_ASSIGNED_ERROR);
@@ -179,13 +179,13 @@ public class AccountManager implements AccountManagerLocal {
     }
 
     @Override
-    public Account blockUser(String login, Long version) throws BaseAppException {
+    public Account blockUser(String login, Long version, String currentUserLogin) throws BaseAppException {
         Account account = this.accountFacade.findByLogin(login);
         account.setVersion(version);
         account.setActive(false);
-        setAlterTypeAndAlterAccount(account, accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE),
-                // this is for now, will be changed in the upcoming feature
-                account);
+        Account blockingAccount = this.accountFacade.findByLogin(currentUserLogin);
+        setAlterTypeAndAlterAccount(blockingAccount, accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE),
+            blockingAccount);
         accountFacade.edit(account);
         return account;
     }
@@ -265,13 +265,13 @@ public class AccountManager implements AccountManagerLocal {
     }
 
     @Override
-    public Account unblockUser(String unblockedUserLogin, Long version) throws BaseAppException {
+    public Account unblockUser(String unblockedUserLogin, Long version, String currentUserLogin) throws BaseAppException {
         Account account = this.accountFacade.findByLogin(unblockedUserLogin);
         account.setVersion(version);
         account.setActive(true);
-        setAlterTypeAndAlterAccount(account, accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE),
-                //needs to be changed as in blockUser method
-                account);
+        Account blockingAccount = this.accountFacade.findByLogin(currentUserLogin);
+        setAlterTypeAndAlterAccount(blockingAccount, accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE),
+            blockingAccount);
         return account;
     }
 
@@ -357,7 +357,7 @@ public class AccountManager implements AccountManagerLocal {
 
     private AccessLevel getAccessLevel(Account from, AccessLevelType target) throws AccountManagerException {
         Optional<AccessLevel> optionalAccessLevel = from.getAccessLevels().stream()
-                .filter(accessLevel -> accessLevel.getAccessLevelType().equals(target)).findAny();
+            .filter(accessLevel -> accessLevel.getAccessLevelType().equals(target)).findAny();
 
         if (optionalAccessLevel.isEmpty()) {
             throw new AccountManagerException(ACCESS_LEVEL_DOES_NOT_EXIST_ERROR);
@@ -446,7 +446,7 @@ public class AccountManager implements AccountManagerLocal {
         Account account = this.accountFacade.updateAuthenticateInfo(login, IpAddr, time, true);
 
         Map<String, Object> map = Map.of("login", login, "accessLevels", account.getAccessLevels()
-                .stream().map(accessLevel -> accessLevel.getAccessLevelType().name()).collect(Collectors.toList()));
+            .stream().map(accessLevel -> accessLevel.getAccessLevelType().name()).collect(Collectors.toList()));
         return JWTHandler.createToken(map, account.getId().toString());
     }
 }
