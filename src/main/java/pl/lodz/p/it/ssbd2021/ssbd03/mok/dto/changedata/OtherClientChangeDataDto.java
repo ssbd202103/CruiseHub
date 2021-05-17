@@ -19,10 +19,12 @@ public class OtherClientChangeDataDto extends AbstractAccountDto {
     private OtherAddressChangeDto newAddress;
     @PhoneNumber
     private String newPhoneNumber;
+    private Long accVersion;
 
-    public OtherClientChangeDataDto(String login, Long version, String newPhoneNumber, OtherAddressChangeDto newAddress) {
+    public OtherClientChangeDataDto(String login, Long version, String newPhoneNumber, OtherAddressChangeDto newAddress,Long accVersion) {
         super(login, version);
         this.newPhoneNumber = newPhoneNumber;
         this.newAddress = newAddress;
+        this.accVersion= accVersion;
     }
 }

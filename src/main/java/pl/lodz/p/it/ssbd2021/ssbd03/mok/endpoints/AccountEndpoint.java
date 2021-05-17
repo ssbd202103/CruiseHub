@@ -152,28 +152,19 @@ public class AccountEndpoint implements AccountEndpointLocal {
 
     @Override
     public OtherClientChangeDataDto changeOtherClientData(OtherClientChangeDataDto otherClientChangeDataDto) throws BaseAppException {
-        Long version = getAccountByLogin(otherClientChangeDataDto.getLogin()).getVersion();
 
-        if (!version.equals(otherClientChangeDataDto.getVersion())) {
-            throw FacadeException.optimisticLock();
-        }
         Address  addr= new Address(otherClientChangeDataDto.getNewAddress().getNewHouseNumber(),otherClientChangeDataDto.getNewAddress().getNewStreet(),otherClientChangeDataDto.getNewAddress().getNewPostalCode(),
                 otherClientChangeDataDto.getNewAddress().getNewCity(),otherClientChangeDataDto.getNewAddress().getNewCountry());
 
 
-        return AccountMapper.accountDtoForClientDataChange(accountManager.changeOtherClientData(otherClientChangeDataDto.getLogin(),otherClientChangeDataDto.getNewPhoneNumber(),addr,otherClientChangeDataDto.getVersion()));
+        return AccountMapper.accountDtoForClientDataChange(accountManager.changeOtherClientData(otherClientChangeDataDto.getLogin(),otherClientChangeDataDto.getNewPhoneNumber(),addr,otherClientChangeDataDto.getAccVersion()));
     }
 
     @Override
     public OtherBusinessWorkerChangeDataDto changeOtherBusinessWorkerData(OtherBusinessWorkerChangeDataDto otherBusinessWorkerChangeDataDto) throws BaseAppException {
-        Long version = getAccountByLogin(otherBusinessWorkerChangeDataDto.getLogin()).getVersion();
-
-        if (!version.equals(otherBusinessWorkerChangeDataDto.getVersion())) {
-            throw FacadeException.optimisticLock();
-        }
 
 
-        return AccountMapper.accountDtoForBusinnesWorkerDataChange(accountManager.changeOtherBusinessWorkerData(otherBusinessWorkerChangeDataDto.getLogin(),otherBusinessWorkerChangeDataDto.getNewPhoneNumber(),otherBusinessWorkerChangeDataDto.getVersion()));
+        return AccountMapper.accountDtoForBusinnesWorkerDataChange(accountManager.changeOtherBusinessWorkerData(otherBusinessWorkerChangeDataDto.getLogin(),otherBusinessWorkerChangeDataDto.getNewPhoneNumber(),otherBusinessWorkerChangeDataDto.getAccVersion()));
     }
 
     @Override

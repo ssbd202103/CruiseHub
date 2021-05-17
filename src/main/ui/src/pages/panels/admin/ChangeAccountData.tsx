@@ -56,7 +56,7 @@ export default function ChangeAccountData() {
             newFirstName: firstName,
             newSecondName: secondName,
             newEmail: email,
-            version: currentAccount.version,
+            version: currentAccount.version
 
         })
         await fetch("http://localhost:8080/api/account/changeOtherData", {
@@ -88,7 +88,8 @@ export default function ChangeAccountData() {
                 newPostalCode: postalCode,
                 newCity: city,
                 newCountry: country,
-            }
+            },
+            accVersion: clientAddr.accVersion
         })
         await fetch("http://localhost:8080/api/account/changeOtherData/client", {
             method: "PUT",
@@ -110,6 +111,7 @@ export default function ChangeAccountData() {
             login: currentAccount.login,
             version: currentAccount.version,
             newPhoneNumber: businessPhoneNumber,
+            accVersion: businnesPhone.accVersion
 
         })
         await fetch("http://localhost:8080/api/account/changeOtherData/businessworker", {

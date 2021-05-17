@@ -15,9 +15,11 @@ import pl.lodz.p.it.ssbd2021.ssbd03.validators.PhoneNumber;
 public class OtherBusinessWorkerChangeDataDto extends AbstractAccountDto {
     @PhoneNumber
     private String newPhoneNumber;
+    private Long accVersion;
 
-    public OtherBusinessWorkerChangeDataDto(String login, Long version, String newPhoneNumber) {
+    public OtherBusinessWorkerChangeDataDto(String login, Long version, String newPhoneNumber,Long accVersion) {
         super(login, version);
         this.newPhoneNumber = newPhoneNumber;
+        this.accVersion=accVersion;
     }
 }

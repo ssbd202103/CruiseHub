@@ -29,9 +29,11 @@ import javax.validation.constraints.NotNull;
 public abstract class AccessLevelDetailsViewDto {
     private boolean enabled;
 
+
     @NotNull
     private AccessLevelType accessLevelType;
 
+    private Long accVersion;
     @Override
     public int hashCode() {
         return this.getClass().hashCode();

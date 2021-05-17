@@ -23,8 +23,9 @@ public class BusinessWorkerDetailsViewDto extends AccessLevelDetailsViewDto {
     @CompanyName
     private String companyName;
 
-    public BusinessWorkerDetailsViewDto(boolean enabled, String phoneNumber, boolean confirmed, String companyName) {
-        super(enabled, AccessLevelType.BUSINESS_WORKER);
+
+    public BusinessWorkerDetailsViewDto(boolean enabled, String phoneNumber, boolean confirmed, String companyName,Long accLevelVersion) {
+        super(enabled, AccessLevelType.BUSINESS_WORKER,accLevelVersion);
         this.phoneNumber = phoneNumber;
         this.confirmed = confirmed;
         this.companyName = companyName;

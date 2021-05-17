@@ -421,19 +421,24 @@ class AccountControllerIT {
 
         ClientForRegistrationDto client = getSampleClientForRegistrationDto();
         AccountDto account = registerClientAndGetAccountDto(client);
+        AccountDetailsViewDto dto =getAccountDetailsViewDto(account.getLogin());
+        Long version =  dto.getAccessLevels().stream()
+                .filter(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.CLIENT).findFirst().get().getAccVersion();
+
         String etag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
         OtherAddressChangeDto newAddress = new OtherAddressChangeDto(100L, "Aleja Zmieniona", "94-690", "Lodz", "Polska");
         OtherClientChangeDataDto otherClientChangeDataDto = new OtherClientChangeDataDto(account.getLogin(), account.getVersion(),
 
                 "888888888",
-                newAddress);
+                newAddress,
+                version);
         Response response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken)).body(otherClientChangeDataDto).put("/changeOtherData/client");
         assertThat(response.getStatusCode()).isEqualTo(200);
         OtherClientChangeDataDto updatedAccount = objectMapper.readValue(response.asString(), OtherClientChangeDataDto.class);
         assertThat(updatedAccount.getNewAddress().getNewStreet()).isEqualTo("Aleja Zmieniona");
         assertThat(updatedAccount.getNewAddress().getNewPostalCode()).isEqualTo("94-690");
         assertThat(updatedAccount.getNewAddress().getNewCity()).isEqualTo("Lodz");
-        assertThat(updatedAccount.getNewAddress().getNewCity()).isEqualTo("Polska");
+        assertThat(updatedAccount.getNewAddress().getNewCountry()).isEqualTo("Polska");
         assertThat(updatedAccount.getNewPhoneNumber()).isEqualTo("888888888");
 
 
@@ -445,9 +450,13 @@ class AccountControllerIT {
 
         BusinessWorkerForRegistrationDto worker = getSampleBusinessWorkerForRegistrationDto();
         AccountDto account = registerBusinessWorkerAndGetAccountDto(worker);
+        AccountDetailsViewDto dto =getAccountDetailsViewDto(account.getLogin());
+        Long version =  dto.getAccessLevels().stream()
+                .filter(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.BUSINESS_WORKER).findFirst().get().getAccVersion();
+
         String etag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
         OtherBusinessWorkerChangeDataDto otherBusinessWorkerChangeDataDto = new OtherBusinessWorkerChangeDataDto(account.getLogin(), account.getVersion(),
-                "888888888");
+                "888888888",version);
         Response response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken)).body(otherBusinessWorkerChangeDataDto).put("/changeOtherData/businessworker");
         assertThat(response.getStatusCode()).isEqualTo(200);
         OtherBusinessWorkerChangeDataDto updatedAccount = objectMapper.readValue(response.asString(), OtherBusinessWorkerChangeDataDto.class);

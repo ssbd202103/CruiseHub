@@ -304,11 +304,12 @@ public class AccountManager implements AccountManagerLocal {
     @Override
     public Account changeOtherClientData(String login, String phoneNumber, Address addr,Long version) throws BaseAppException {
         Account targetAccount = accountFacade.findByLogin(login);
-        if(!targetAccount.getVersion().equals(version)) { //this need to check if client version has changed, not account version
+        Client targetClient = (Client) getAccessLevel(targetAccount, AccessLevelType.CLIENT);
+        if(!targetClient.getVersion().equals(version)) { //this need to check if client version has changed, not account version
             throw FacadeException.optimisticLock();
         }
 
-        Client targetClient = (Client) getAccessLevel(targetAccount, AccessLevelType.CLIENT);
+
         targetClient.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
         targetClient.setLastAlterDateTime(LocalDateTime.now());
         targetClient.setPhoneNumber(phoneNumber);
@@ -354,10 +355,11 @@ public class AccountManager implements AccountManagerLocal {
     @Override
     public Account changeOtherBusinessWorkerData(String login, String phoneNumber,Long version) throws BaseAppException {
         Account targetAccount = accountFacade.findByLogin(login);
-        if(!targetAccount.getVersion().equals(version)) {//this need to check if businessWorker version has changed, not account version
+        BusinessWorker targetBusinessWorker = (BusinessWorker) getAccessLevel(targetAccount, AccessLevelType.BUSINESS_WORKER);
+        if(!targetBusinessWorker.getVersion().equals(version)) {//this need to check if businessWorker version has changed, not account version
             throw FacadeException.optimisticLock();
         }
-        BusinessWorker targetBusinessWorker = (BusinessWorker) getAccessLevel(targetAccount, AccessLevelType.BUSINESS_WORKER);
+
         targetBusinessWorker.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
         targetBusinessWorker.setLastAlterDateTime(LocalDateTime.now());
         targetBusinessWorker.setPhoneNumber(phoneNumber);

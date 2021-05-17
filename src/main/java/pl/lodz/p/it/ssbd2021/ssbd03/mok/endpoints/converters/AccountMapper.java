@@ -138,15 +138,15 @@ public class AccountMapper {
         switch (accessLevel.getAccessLevelType()) {
             case CLIENT:
                 Client client = (Client) accessLevel;
-                return new ClientDetailsViewDto(accessLevel.isEnabled(), toAddressDto(client.getHomeAddress()), client.getPhoneNumber());
+                return new ClientDetailsViewDto(accessLevel.isEnabled(), toAddressDto(client.getHomeAddress()), client.getPhoneNumber(),client.getVersion());
             case BUSINESS_WORKER:
                 BusinessWorker businessWorker = (BusinessWorker) accessLevel;
                 return new BusinessWorkerDetailsViewDto(businessWorker.isEnabled(), businessWorker.getPhoneNumber(),
-                        businessWorker.getConfirmedByBusinessWorker(), businessWorker.getCompany().getName());
+                        businessWorker.getConfirmedByBusinessWorker(), businessWorker.getCompany().getName(),businessWorker.getVersion());
             case MODERATOR:
-                return new ModeratorDetailsViewDto(accessLevel.isEnabled());
+                return new ModeratorDetailsViewDto(accessLevel.isEnabled(),accessLevel.getVersion());
             case ADMINISTRATOR:
-                return new AdministratorDetailsViewDto(accessLevel.isEnabled());
+                return new AdministratorDetailsViewDto(accessLevel.isEnabled(),accessLevel.getVersion());
             default:
                 return null; // Statement will never execute unless new AccessLevel ENUM is added to the model
         }
@@ -166,7 +166,7 @@ public class AccountMapper {
         Client fromClient = (Client) account.getAccessLevels().stream().filter(accessLevel -> accessLevel.getAccessLevelType().equals(AccessLevelType.CLIENT)).collect(Collectors.toList()).get(0);
         OtherAddressChangeDto addressChangeDto = new OtherAddressChangeDto(fromClient.getHomeAddress().getHouseNumber(), fromClient.getHomeAddress().getStreet(),
                 fromClient.getHomeAddress().getPostalCode(), fromClient.getHomeAddress().getCity(), fromClient.getHomeAddress().getCountry());
-        return new OtherClientChangeDataDto(account.getLogin(), account.getVersion(), fromClient.getPhoneNumber(), addressChangeDto);
+        return new OtherClientChangeDataDto(account.getLogin(), account.getVersion(), fromClient.getPhoneNumber(), addressChangeDto,fromClient.getVersion());
 
     }
 
@@ -179,7 +179,7 @@ public class AccountMapper {
 
         BusinessWorker fromBusinessWorker = (BusinessWorker) account.getAccessLevels().stream().filter(accessLevel -> accessLevel.getAccessLevelType().equals(AccessLevelType.BUSINESS_WORKER)).collect(Collectors.toList()).get(0);
         return new OtherBusinessWorkerChangeDataDto(account.getLogin(), account.getVersion(),
-                fromBusinessWorker.getPhoneNumber()
+                fromBusinessWorker.getPhoneNumber(),fromBusinessWorker.getVersion()
         );
 
     }
