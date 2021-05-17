@@ -7,6 +7,7 @@ import styles from "../../styles/ManageAccount.module.css";
 import RoundedButton from "../RoundedButton";
 import DarkedTextField from "../DarkedTextField";
 import {ConfirmCancelButtonGroup} from "../ConfirmCancelButtonGroup";
+import {changeBusinessWorkerData} from "../../Services/changeDataService";
 
 export interface ChangeBusinessWorkerProps {
     open: boolean,
@@ -33,7 +34,17 @@ export default function ChangeBusinessWorkerData({open, onOpen, onConfirm, onCan
     }, [firstName, secondName, phoneNumber])
 
     const changeData = () => {
+        //TODO
+        if (!firstNameValue || !secondNameValue || !phoneNumberValue) {
+            return alert("Values are missing")
+        }
 
+        changeBusinessWorkerData(firstNameValue, secondNameValue, phoneNumberValue).then(res => {
+            onConfirm()
+        }).catch(error => {
+            alert("ERROR: go to console")
+            console.log(error)
+        })
     }
 
     return (
