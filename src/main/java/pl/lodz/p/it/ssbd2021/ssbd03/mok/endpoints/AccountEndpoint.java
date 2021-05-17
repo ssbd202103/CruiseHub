@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.TokenWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address;
@@ -10,6 +11,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.EndpointException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.JWTException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.ChangeAccessLevelStateDto;
@@ -18,6 +20,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccountDetailsViewDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters.AccountMapper;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.TokenWrapperFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.managers.AccountManagerLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
@@ -46,6 +49,9 @@ public class AccountEndpoint implements AccountEndpointLocal {
 
     @Context
     private SecurityContext securityContext;
+
+    @EJB
+    private TokenWrapperFacade tokenWrapperFacade;
 
     @Inject
     I18n i18n;
@@ -124,6 +130,11 @@ public class AccountEndpoint implements AccountEndpointLocal {
 
     @Override
     public void resetPassword(PasswordResetDto passwordResetDto) throws BaseAppException {
+        TokenWrapper tokenWrapper = this.tokenWrapperFacade.findByToken(passwordResetDto.getToken());
+        if (tokenWrapper.getUsed()) {
+            throw new JWTException(PASSWORD_RESET_USED_TOKEN_ERROR);
+        }
+
         this.accountManager.resetPassword(passwordResetDto.getLogin(), DigestUtils.sha256Hex(passwordResetDto.getPassword()), passwordResetDto.getToken());
     }
 
@@ -153,18 +164,18 @@ public class AccountEndpoint implements AccountEndpointLocal {
     @Override
     public OtherClientChangeDataDto changeOtherClientData(OtherClientChangeDataDto otherClientChangeDataDto) throws BaseAppException {
 
-        Address  addr= new Address(otherClientChangeDataDto.getNewAddress().getNewHouseNumber(),otherClientChangeDataDto.getNewAddress().getNewStreet(),otherClientChangeDataDto.getNewAddress().getNewPostalCode(),
-                otherClientChangeDataDto.getNewAddress().getNewCity(),otherClientChangeDataDto.getNewAddress().getNewCountry());
+        Address addr = new Address(otherClientChangeDataDto.getNewAddress().getNewHouseNumber(), otherClientChangeDataDto.getNewAddress().getNewStreet(), otherClientChangeDataDto.getNewAddress().getNewPostalCode(),
+                otherClientChangeDataDto.getNewAddress().getNewCity(), otherClientChangeDataDto.getNewAddress().getNewCountry());
 
 
-        return AccountMapper.accountDtoForClientDataChange(accountManager.changeOtherClientData(otherClientChangeDataDto.getLogin(),otherClientChangeDataDto.getNewPhoneNumber(),addr,otherClientChangeDataDto.getAccVersion()));
+        return AccountMapper.accountDtoForClientDataChange(accountManager.changeOtherClientData(otherClientChangeDataDto.getLogin(), otherClientChangeDataDto.getNewPhoneNumber(), addr, otherClientChangeDataDto.getAccVersion()));
     }
 
     @Override
     public OtherBusinessWorkerChangeDataDto changeOtherBusinessWorkerData(OtherBusinessWorkerChangeDataDto otherBusinessWorkerChangeDataDto) throws BaseAppException {
 
 
-        return AccountMapper.accountDtoForBusinnesWorkerDataChange(accountManager.changeOtherBusinessWorkerData(otherBusinessWorkerChangeDataDto.getLogin(),otherBusinessWorkerChangeDataDto.getNewPhoneNumber(),otherBusinessWorkerChangeDataDto.getAccVersion()));
+        return AccountMapper.accountDtoForBusinnesWorkerDataChange(accountManager.changeOtherBusinessWorkerData(otherBusinessWorkerChangeDataDto.getLogin(), otherBusinessWorkerChangeDataDto.getNewPhoneNumber(), otherBusinessWorkerChangeDataDto.getAccVersion()));
     }
 
     @Override

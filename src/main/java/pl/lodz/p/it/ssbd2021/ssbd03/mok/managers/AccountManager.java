@@ -1,10 +1,12 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.managers;
 
+import antlr.Token;
 import com.auth0.jwt.interfaces.Claim;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
 import org.apache.commons.codec.digest.DigestUtils;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.TokenWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
@@ -20,6 +22,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.ClientFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.CompanyFacadeMok;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.TokenWrapperFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.JWTHandler;
 import pl.lodz.p.it.ssbd2021.ssbd03.services.EmailService;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
@@ -51,6 +54,9 @@ public class AccountManager implements AccountManagerLocal {
 
     @EJB
     private ClientFacade clientFacade;
+
+    @EJB
+    private TokenWrapperFacade tokenWrapperFacade;
 
     @Inject
     I18n i18n;
@@ -90,7 +96,7 @@ public class AccountManager implements AccountManagerLocal {
         Account account;
         try {
             account = accountFacade.findByLogin(accountLogin);
-            if(!account.getVersion().equals(accountVersion)) {
+            if (!account.getVersion().equals(accountVersion)) {
                 throw FacadeException.optimisticLock();
             }
             if (account.getAccessLevels().stream().anyMatch(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.MODERATOR)) {
@@ -109,7 +115,7 @@ public class AccountManager implements AccountManagerLocal {
     @Override
     public Account grantAdministratorAccessLevel(String accountLogin, Long accountVersion) throws BaseAppException {
         Account account = accountFacade.findByLogin(accountLogin);
-        if(!account.getVersion().equals(accountVersion)) {
+        if (!account.getVersion().equals(accountVersion)) {
             throw FacadeException.optimisticLock();
         }
         if (account.getAccessLevels().stream().anyMatch(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.ADMINISTRATOR)) {
@@ -126,7 +132,7 @@ public class AccountManager implements AccountManagerLocal {
     public Account changeAccessLevelState(String accountLogin, AccessLevelType accessLevelType,
                                           boolean enabled, Long accountVersion) throws BaseAppException {
         Account account = accountFacade.findByLogin(accountLogin);
-        if(!account.getVersion().equals(accountVersion)) {
+        if (!account.getVersion().equals(accountVersion)) {
             throw FacadeException.optimisticLock();
         }
 
@@ -192,8 +198,8 @@ public class AccountManager implements AccountManagerLocal {
 
     @Override
     public Account blockUser(String login, Long version) throws BaseAppException {
-        Account account =  this.accountFacade.findByLogin(login);
-        if(!account.getVersion().equals(version)) {
+        Account account = this.accountFacade.findByLogin(login);
+        if (!account.getVersion().equals(version)) {
             throw FacadeException.optimisticLock();
         }
         account.setActive(false);
@@ -210,6 +216,8 @@ public class AccountManager implements AccountManagerLocal {
         Account account = this.accountFacade.findByLogin(login);
         Map<String, Object> claims = Map.of("version", account.getVersion());
         String token = JWTHandler.createToken(claims, login);
+        TokenWrapper tokenWrapper = TokenWrapper.builder().token(token).account(account).used(false).build();
+        this.tokenWrapperFacade.create(tokenWrapper);
         String contentHtml = "<a href=\"" + PropertiesReader.getSecurityProperties().getProperty("app.baseurl") + "/reset/passwordReset/" + token + "\">Reset password</a>";
         EmailService.sendEmailWithContent(account.getEmail().trim(), "hello", contentHtml);
     }
@@ -224,11 +232,17 @@ public class AccountManager implements AccountManagerLocal {
             if (claims.get("sub").asString().equals(login)) {
                 Account account = this.accountFacade.findByLogin(login);
                 account.setPasswordHash(passwordHash);
-                if(!account.getVersion().equals(claims.get("version").asLong())) {
+                if (!account.getVersion().equals(claims.get("version").asLong())) {
                     throw FacadeException.optimisticLock();
                 }
                 account.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
                 account.setAlteredBy(account);
+                this.accountFacade.edit(account);
+
+                TokenWrapper tokenWrapper = this.tokenWrapperFacade.findByToken(token);
+                tokenWrapper.setUsed(true);
+                this.tokenWrapperFacade.edit(tokenWrapper);
+
             } else {
                 throw new AccountManagerException(PASSWORD_RESET_IDENTITY_ERROR);
             }
@@ -250,7 +264,7 @@ public class AccountManager implements AccountManagerLocal {
                 Account account = this.accountFacade.findByLogin(login);
                 if (!account.isConfirmed()) {
                     account.setConfirmed(true);
-                    if(!account.getVersion().equals(claims.get("version").asLong())) {
+                    if (!account.getVersion().equals(claims.get("version").asLong())) {
                         throw FacadeException.optimisticLock();
                     }
                     account.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
@@ -283,9 +297,9 @@ public class AccountManager implements AccountManagerLocal {
     }
 
     @Override
-    public Account unblockUser(String unblockedUserLogin,  Long version) throws BaseAppException {
-        Account account =  this.accountFacade.findByLogin(unblockedUserLogin);
-        if(!version.equals(account.getVersion())) {
+    public Account unblockUser(String unblockedUserLogin, Long version) throws BaseAppException {
+        Account account = this.accountFacade.findByLogin(unblockedUserLogin);
+        if (!version.equals(account.getVersion())) {
             throw FacadeException.optimisticLock();
         }
         account.setActive(true);
@@ -302,10 +316,10 @@ public class AccountManager implements AccountManagerLocal {
     }
 
     @Override
-    public Account changeOtherClientData(String login, String phoneNumber, Address addr,Long version) throws BaseAppException {
+    public Account changeOtherClientData(String login, String phoneNumber, Address addr, Long version) throws BaseAppException {
         Account targetAccount = accountFacade.findByLogin(login);
         Client targetClient = (Client) getAccessLevel(targetAccount, AccessLevelType.CLIENT);
-        if(!targetClient.getVersion().equals(version)) { //this need to check if client version has changed, not account version
+        if (!targetClient.getVersion().equals(version)) { //this need to check if client version has changed, not account version
             throw FacadeException.optimisticLock();
         }
 
@@ -340,7 +354,7 @@ public class AccountManager implements AccountManagerLocal {
     private Account updateAccount(Account updatedAccount, String alteredBy) throws BaseAppException {
         Account targetAccount = accountFacade.findByLogin(updatedAccount.getLogin());
 
-        if(!targetAccount.getVersion().equals(updatedAccount.getVersion())) {
+        if (!targetAccount.getVersion().equals(updatedAccount.getVersion())) {
             throw FacadeException.optimisticLock();
         }
         targetAccount.setFirstName(updatedAccount.getFirstName());
@@ -353,10 +367,10 @@ public class AccountManager implements AccountManagerLocal {
     }
 
     @Override
-    public Account changeOtherBusinessWorkerData(String login, String phoneNumber,Long version) throws BaseAppException {
+    public Account changeOtherBusinessWorkerData(String login, String phoneNumber, Long version) throws BaseAppException {
         Account targetAccount = accountFacade.findByLogin(login);
         BusinessWorker targetBusinessWorker = (BusinessWorker) getAccessLevel(targetAccount, AccessLevelType.BUSINESS_WORKER);
-        if(!targetBusinessWorker.getVersion().equals(version)) {//this need to check if businessWorker version has changed, not account version
+        if (!targetBusinessWorker.getVersion().equals(version)) {//this need to check if businessWorker version has changed, not account version
             throw FacadeException.optimisticLock();
         }
 
@@ -375,7 +389,7 @@ public class AccountManager implements AccountManagerLocal {
     @Override
     public void changeEmail(String login, Long version, String newEmail) throws BaseAppException {
         Account account = accountFacade.findByLogin(login);
-        if(!account.getVersion().equals(version)) {
+        if (!account.getVersion().equals(version)) {
             throw FacadeException.optimisticLock();
         }
         account.setEmail(newEmail);
@@ -396,7 +410,7 @@ public class AccountManager implements AccountManagerLocal {
     }
 
     private void setAccountChanges(Account target, Account from) throws BaseAppException {
-        if(!target.getVersion().equals(from.getVersion())) {
+        if (!target.getVersion().equals(from.getVersion())) {
             throw FacadeException.optimisticLock();
         }
         target.setFirstName(from.getFirstName());
@@ -480,13 +494,13 @@ public class AccountManager implements AccountManagerLocal {
         Map<String, Object> map = Map.of("login", login, "accessLevels", account.getAccessLevels()
                 .stream().map(accessLevel -> accessLevel.getAccessLevelType().name()).collect(Collectors.toList()));
         return JWTHandler.createToken(map, account.getId().toString());
-	}
-	
+    }
+
     @Override
     public void changeOwnPassword(String login, Long version, String oldPassword, String newPassword) throws BaseAppException {
         Account account = accountFacade.findByLogin(login);
 
-        if(!account.getVersion().equals(version)) {
+        if (!account.getVersion().equals(version)) {
             throw FacadeException.optimisticLock();
         }
 

@@ -54,6 +54,24 @@ create sequence account_id_seq
     START WITH 1
     INCREMENT BY 1;
 
+
+create table used_tokens
+(
+    id                 bigint    not null,
+    token              varchar   not null,
+    creation_date_time timestamp not null,
+    used               bool      not null,
+    account_id         bigint    not null,
+
+    CONSTRAINT used_tokens_token_unique_constraint UNIQUE (token),
+    CONSTRAINT used_tokens_account_id_fk_constraint FOREIGN KEY (account_id) REFERENCES accounts (id)
+);
+create sequence used_tokens_id_seq
+    START WITH 1
+    INCREMENT BY 1;
+
+
+
 create table access_levels
 (
     id                   bigint                              not null,
@@ -455,6 +473,9 @@ WHERE accounts.confirmed
   AND access_levels.enabled;
 
 -- Table owner --
+ALTER TABLE used_tokens
+    OWNER TO ssbd03admin;
+
 ALTER TABLE accounts
     OWNER TO ssbd03admin;
 ALTER TABLE access_levels
@@ -530,6 +551,10 @@ ALTER
     VIEW glassfish_auth_view OWNER TO ssbd03admin;
 
 --Table sequence--
+ALTER TABLE used_tokens
+    ALTER COLUMN id
+        SET DEFAULT nextval('used_tokens_id_seq');
+
 ALTER TABLE accounts
     ALTER COLUMN id
         SET DEFAULT nextval('account_id_seq');
@@ -583,6 +608,9 @@ ALTER TABLE cruises
         SET DEFAULT nextval('cruises_id_seq');
 
 -- Table permissions --
+GRANT SELECT, INSERT, UPDATE, DELETE
+    ON used_tokens TO ssbd03mok;
+
 GRANT SELECT, INSERT, UPDATE, DELETE
     ON access_levels TO ssbd03mok;
 
@@ -676,6 +704,9 @@ GRANT SELECT, INSERT, UPDATE, DELETE
 
 GRANT SELECT, INSERT, UPDATE, DELETE
     ON reservation_attractions TO ssbd03mow;
+
+GRANT SELECT, UPDATE
+    ON used_tokens_id_seq TO ssbd03mok;
 
 GRANT SELECT, UPDATE
     ON SEQUENCE cruise_addresses_id_seq TO ssbd03mow;

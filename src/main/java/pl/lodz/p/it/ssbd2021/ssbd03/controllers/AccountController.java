@@ -262,7 +262,7 @@ public class AccountController {
         } catch (FacadeException e) {
             return Response.status(FORBIDDEN).entity(e.getMessage()).build();
         } catch (BaseAppException e) {
-            Response.status(FORBIDDEN).entity(e.getMessage()).build(); // todo send key
+            return Response.status(BAD_REQUEST).entity(e.getMessage()).build(); // todo send key
         }
         return Response.ok().build(); // todo appropriate condition
     }
