@@ -22,12 +22,16 @@ const useRowStyles = makeStyles({
 
 function createData(
     login: string,
+    firstName: string,
+    secondName: string,
     email: string,
     active: boolean,
     accessLevels: string[],
 ) {
     return {
         login: login,
+        firstName: firstName,
+        secondName: secondName,
         email: email,
         active: active,
         accessLevels: accessLevels,
@@ -49,6 +53,8 @@ function Row(props: RowProps) {
             <TableCell component="th" scope="row" style={style}>
             {row.login}
             </TableCell>
+            <TableCell style={style}>{row.firstName}</TableCell>
+            <TableCell style={style}>{row.secondName}</TableCell>
             <TableCell style={style}>{row.email}</TableCell>
             <TableCell style={style}>{row.active.toString()}</TableCell>
             <TableCell style={style}>{row.accessLevels.toString()}</TableCell>
@@ -60,6 +66,7 @@ function Row(props: RowProps) {
 
 export default function ModListClient() {
     const [users, setUsers] = useState([]);
+    const [searchInput, setSearchInput] = useState("");
 
     const color = useSelector(selectColor)
 
@@ -73,25 +80,42 @@ export default function ModListClient() {
         setUsers(result.data)
     }
 
+    function search(rows: any[]) {
+        if (Array.isArray(rows) && rows.length) {
+            return rows.filter(
+                row => row.props.row.firstName.toLowerCase().indexOf(searchInput.toLowerCase()) > -1 ||
+                    row.props.row.secondName.toLowerCase().indexOf(searchInput.toLowerCase()) > -1
+            );
+        } else {
+            return rows;
+        }
+    }
 
     const {t} = useTranslation()
     return (
-        <TableContainer component={Paper}>
-            <Table aria-label="Clients">
-                <TableHead>
-                    <TableRow>
-                        <TableCell style={{backgroundColor: `var(--${color ? 'white' : 'dark-light'}`, color: `var(--${color ? 'dark' : 'white-light'}`}}>{t("login")}</TableCell>
-                        <TableCell style={{backgroundColor: `var(--${color ? 'white' : 'dark-light'}`, color: `var(--${color ? 'dark' : 'white-light'}`}}>{t("email")}</TableCell>
-                        <TableCell style={{backgroundColor: `var(--${color ? 'white' : 'dark-light'}`, color: `var(--${color ? 'dark' : 'white-light'}`}}>{t("active")}</TableCell>
-                        <TableCell style={{backgroundColor: `var(--${color ? 'white' : 'dark-light'}`, color: `var(--${color ? 'dark' : 'white-light'}`}}>{t("access level")}</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {users.map((user, index) => (
-                        <Row key={index} row={user} style={{backgroundColor: `var(--${color ? 'white' : 'dark-light'}`, color: `var(--${color ? 'dark' : 'white-light'}`}} />
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
+        <div>
+            <div>
+                <input type="text" value={searchInput} onChange={(e) => setSearchInput(e.target.value)} />
+            </div>
+            <TableContainer component={Paper}>
+                <Table aria-label="Clients">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell style={{backgroundColor: `var(--${color ? 'white' : 'dark-light'}`, color: `var(--${color ? 'dark' : 'white-light'}`}}>{t("login")}</TableCell>
+                            <TableCell style={{backgroundColor: `var(--${color ? 'white' : 'dark-light'}`, color: `var(--${color ? 'dark' : 'white-light'}`}}>{t("first name")}</TableCell>
+                            <TableCell style={{backgroundColor: `var(--${color ? 'white' : 'dark-light'}`, color: `var(--${color ? 'dark' : 'white-light'}`}}>{t("last name")}</TableCell>
+                            <TableCell style={{backgroundColor: `var(--${color ? 'white' : 'dark-light'}`, color: `var(--${color ? 'dark' : 'white-light'}`}}>{t("email")}</TableCell>
+                            <TableCell style={{backgroundColor: `var(--${color ? 'white' : 'dark-light'}`, color: `var(--${color ? 'dark' : 'white-light'}`}}>{t("active")}</TableCell>
+                            <TableCell style={{backgroundColor: `var(--${color ? 'white' : 'dark-light'}`, color: `var(--${color ? 'dark' : 'white-light'}`}}>{t("access level")}</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {search(users.map((user, index) => (
+                            <Row key={index} row={user} style={{backgroundColor: `var(--${color ? 'white' : 'dark-light'}`, color: `var(--${color ? 'dark' : 'white-light'}`}} />
+                        )))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </div>
     );
 }

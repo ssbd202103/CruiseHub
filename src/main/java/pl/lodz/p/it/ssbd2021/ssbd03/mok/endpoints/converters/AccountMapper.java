@@ -113,6 +113,7 @@ public class AccountMapper {
      */
     public static AccountDtoForList toAccountListDto(Account account) {
         return new AccountDtoForList(account.getLogin(),
+                account.getFirstName(), account.getSecondName(),
                 account.getEmail(), account.isActive(),
                 account.getVersion(),
                 account.getAccessLevels().stream()
