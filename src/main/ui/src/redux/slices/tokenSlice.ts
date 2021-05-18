@@ -1,4 +1,4 @@
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {createSelector, createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 const tokenSlice = createSlice({
     name: 'token',
@@ -9,5 +9,9 @@ const tokenSlice = createSlice({
 })
 
 export const {update} = tokenSlice.actions
+
+const selectSelf = (state: {token: string}) => state
+
+export const selectToken = createSelector(selectSelf, state => state.token)
 
 export default tokenSlice.reducer
