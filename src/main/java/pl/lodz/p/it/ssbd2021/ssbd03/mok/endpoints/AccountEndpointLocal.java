@@ -120,6 +120,7 @@ public interface AccountEndpointLocal {
      */
     void requestSomeonesPasswordReset(String login, String email) throws BaseAppException;
 
+    //todo add javadoc
     void verifyAccount(AccountVerificationDto accountVerificationDto) throws BaseAppException;
 
     /**

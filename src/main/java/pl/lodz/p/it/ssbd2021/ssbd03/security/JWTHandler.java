@@ -116,7 +116,7 @@ public class JWTHandler {
      * @return issuer;
      * @throws JWTDecodeException Wyjątek błędu dekodowania
      */
-    public static Date getExpiersTimeFromToken(String token) throws JWTException {
+    public static Date getExpirationTimeFromToken(String token) throws JWTException {
         try {
             return JWT.decode(token).getExpiresAt();
         } catch (JWTDecodeException e) {

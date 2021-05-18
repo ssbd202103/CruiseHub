@@ -148,7 +148,7 @@ public interface AccountManagerLocal {
      * @param login login klienta
      * @param phoneNumber zmieniony numer telefonu
      * @param addr zmieniony adres
-     * @paramm version wersja
+     * @param version wersja
      * @return zmienione konto
      * @throws BaseAppException  Bazowy wyjątek aplikacji, zwracany w przypadku gdy token wygasł albo nie przeszedł walidacji oraz gdy brak loginu lub wersji w tokenie oraz w wypadku kiedy konto zostało już wcześniej aktywowane oraz w sytuacj gdy został rzucony wyjątek blokady optymistycznej
      */
@@ -170,7 +170,7 @@ public interface AccountManagerLocal {
      * @param account encja konta zawierająca zmiany
      * @return zmienone konto
      */
-    Account changeOtherAccountData(Account account) throws BaseAppException;
+    Account updateOtherAccount(Account account) throws BaseAppException;
 
 
     /**

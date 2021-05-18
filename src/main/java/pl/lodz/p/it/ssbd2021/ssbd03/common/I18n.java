@@ -25,7 +25,7 @@ public class I18n {
     public static final String PASSWORD_RESET_TOKEN_CONTENT_ERROR = "error.password.reset.contentError";
     public static final String PASSWORD_RESET_USED_TOKEN_ERROR = "error.password.reset.tokenUsed";
     public static final String ACCOUNT_VERIFICATION_TOKEN_CONTENT_ERROR = "error.account.verification.contentError";
-    public static final String ACCOUNT_VERIFICATION_TOKEN_EXPIRE_ERROR = "error.account.verification.expireError";
+    public static final String ACCOUNT_VERIFICATION_TOKEN_EXPIRED_ERROR = "error.account.verification.expireError";
     public static final String ACCOUNT_VERIFICATION_TOKEN_ALREADY_VERIFIED_ERROR = "error.account.verification.alreadyVerifiedError";
     public static final String REGEX_INVALID_POST_CODE = "error.regex.postCode";
     public static final String REGEX_INVALID_CITY = "error.regex.city";

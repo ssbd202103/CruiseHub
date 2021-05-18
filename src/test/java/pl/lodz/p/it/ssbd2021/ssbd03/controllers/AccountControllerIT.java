@@ -201,7 +201,7 @@ class AccountControllerIT {
         assertThat(response.asString()).isEqualTo(ETAG_IDENTITY_INTEGRITY_ERROR);
 
         // Requesting enabling already enabled account
-        changeAccessLevelState.setAccountVersion(account.getVersion() + 1);
+        changeAccessLevelState.setAccountVersion(account.getVersion() + 2);
         etag = EntityIdentitySignerVerifier.calculateEntitySignature(changeAccessLevelState);
 
         response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken))
@@ -253,7 +253,7 @@ class AccountControllerIT {
         assertThat(response.getStatusCode()).isEqualTo(200);
 
 
-        grantAccessLevel.setAccountVersion(grantAccessLevel.getAccountVersion() + 1);
+        grantAccessLevel.setAccountVersion(grantAccessLevel.getAccountVersion() + 2);
         response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken)).body(grantAccessLevel).put("/grant-access-level");
         assertThat(response.getStatusCode()).isEqualTo(400);
         assertThat(response.asString()).isEqualTo(ACCESS_LEVEL_ALREADY_ASSIGNED_ERROR);
@@ -421,8 +421,8 @@ class AccountControllerIT {
 
         ClientForRegistrationDto client = getSampleClientForRegistrationDto();
         AccountDto account = registerClientAndGetAccountDto(client);
-        AccountDetailsViewDto dto =getAccountDetailsViewDto(account.getLogin());
-        Long version =  dto.getAccessLevels().stream()
+        AccountDetailsViewDto dto = getAccountDetailsViewDto(account.getLogin());
+        Long version = dto.getAccessLevels().stream()
                 .filter(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.CLIENT).findFirst().get().getAccVersion();
 
         String etag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
@@ -450,17 +450,17 @@ class AccountControllerIT {
 
         BusinessWorkerForRegistrationDto worker = getSampleBusinessWorkerForRegistrationDto();
         AccountDto account = registerBusinessWorkerAndGetAccountDto(worker);
-        AccountDetailsViewDto dto =getAccountDetailsViewDto(account.getLogin());
-        Long version =  dto.getAccessLevels().stream()
+        AccountDetailsViewDto dto = getAccountDetailsViewDto(account.getLogin());
+        Long version = dto.getAccessLevels().stream()
                 .filter(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.BUSINESS_WORKER).findFirst().get().getAccVersion();
 
         String etag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
         OtherBusinessWorkerChangeDataDto otherBusinessWorkerChangeDataDto = new OtherBusinessWorkerChangeDataDto(account.getLogin(), account.getVersion(),
-                "888888888",version);
+                "888888888", version);
         Response response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken)).body(otherBusinessWorkerChangeDataDto).put("/changeOtherData/businessworker");
         assertThat(response.getStatusCode()).isEqualTo(200);
         OtherBusinessWorkerChangeDataDto updatedAccount = objectMapper.readValue(response.asString(), OtherBusinessWorkerChangeDataDto.class);
-        
+
         assertThat(updatedAccount.getNewPhoneNumber()).isEqualTo("888888888");
 
     }
@@ -526,7 +526,7 @@ class AccountControllerIT {
 
         Response changedRes = given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + adminToken)).get("/" + account.getLogin());
         AccountDto changedAccount = objectMapper.readValue(changedRes.thenReturn().asString(), AccountDto.class);
-        Assertions.assertEquals(account.getVersion() + 1, changedAccount.getVersion());
+        assertTrue(changedAccount.getVersion() > account.getVersion());
         // potrzebna jest metoda do logowania, by sprawdzic zmienianie hasla
     }
 
