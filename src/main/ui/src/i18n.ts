@@ -64,6 +64,8 @@ const resources = {
             //adminPanel
             "admin panel": "Panel administracyjny",
             "login": "Login",
+            "first name": "Imię",
+            "last name": "Nazwisko",
             "active": "Aktywny",
             "access level": "Poziom dostępu",
             "moderator panel": "Panel moderatora",
@@ -178,6 +180,8 @@ const resources = {
             //adminPanel
             "admin panel": "Administrator panel",
             "login": "Login",
+            "first name": "First name",
+            "last name": "Last name",
             "active": "Active",
             "access level": "Access level",
             "list accounts": "Accounts list",

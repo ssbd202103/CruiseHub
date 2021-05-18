@@ -95,6 +95,8 @@ const useButtonStyles = makeStyles({
 
 function createData(
     login: string,
+    firstName: string,
+    secondName: string,
     email: string,
     active: boolean,
     accessLevels: string[],
@@ -103,6 +105,8 @@ function createData(
 ) {
     return {
         login: login,
+        firstName: firstName,
+        secondName: secondName,
         email: email,
         active: active,
         accessLevels: accessLevels,
@@ -161,6 +165,8 @@ function Row(props: RowProps) {
                 <TableCell component="th" scope="row" style={style}>
                     {row.login}
                 </TableCell>
+                <TableCell style={style}>{row.firstName}</TableCell>
+                <TableCell style={style}>{row.secondName}</TableCell>
                 <TableCell style={style}>{row.email}</TableCell>
                 <TableCell style={style}>{row.active.toString()}</TableCell>
                 <TableCell style={style}>{row.accessLevels.toString()}</TableCell>
@@ -228,6 +234,7 @@ function Row(props: RowProps) {
 
 export default function AdminListClient() {
     const [users, setUsers] = useState([]);
+    const [searchInput, setSearchInput] = useState("");
 
     const color = useSelector(selectColor)
 
@@ -237,27 +244,45 @@ export default function AdminListClient() {
         })
     },[]);
 
+    function search(rows: any[]) {
+        if (Array.isArray(rows) && rows.length) {
+            return rows.filter(
+                row => row.props.row.firstName.toLowerCase().indexOf(searchInput.toLowerCase()) > -1 ||
+                       row.props.row.secondName.toLowerCase().indexOf(searchInput.toLowerCase()) > -1
+            );
+        } else {
+            return rows;
+        }
+    }
+
     const {t} = useTranslation()
     return (
-        <TableContainer component={Paper} style={{
-            backgroundColor: `var(--${color ? 'white' : 'dark-light'}`
-        }}>
-            <Table aria-label="collapsible table">
-                <TableHead>
-                    <TableRow>
-                        <TableCell/>
-                        <TableCell style={{color: `var(--${color ? 'dark' : 'white'})`}}>{t("login")}</TableCell>
-                        <TableCell style={{color: `var(--${color ? 'dark' : 'white'})`}}>{t("email")}</TableCell>
-                        <TableCell style={{color: `var(--${color ? 'dark' : 'white'})`}}>{t("active")}</TableCell>
-                        <TableCell style={{color: `var(--${color ? 'dark' : 'white'})`}}>{t("access level")}</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {users.map((user, index) => (
-                        <Row key={index} row={user} style={{color: `var(--${color ? 'dark' : 'white'})`}} />
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
+        <div>
+            <div>
+                <input type="text" value={searchInput} onChange={(e) => setSearchInput(e.target.value)} />
+            </div>
+            <TableContainer component={Paper} style={{
+                backgroundColor: `var(--${color ? 'white' : 'dark-light'}`
+            }}>
+                <Table aria-label="collapsible table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell/>
+                            <TableCell style={{color: `var(--${color ? 'dark' : 'white'})`}}>{t("login")}</TableCell>
+                            <TableCell style={{color: `var(--${color ? 'dark' : 'white'})`}}>{t("first name")}</TableCell>
+                            <TableCell style={{color: `var(--${color ? 'dark' : 'white'})`}}>{t("last name")}</TableCell>
+                            <TableCell style={{color: `var(--${color ? 'dark' : 'white'})`}}>{t("email")}</TableCell>
+                            <TableCell style={{color: `var(--${color ? 'dark' : 'white'})`}}>{t("active")}</TableCell>
+                            <TableCell style={{color: `var(--${color ? 'dark' : 'white'})`}}>{t("access level")}</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {search(users.map((user, index) => (
+                            <Row key={index} row={user} style={{color: `var(--${color ? 'dark' : 'white'})`}} />
+                        )))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </div>
     );
 }
