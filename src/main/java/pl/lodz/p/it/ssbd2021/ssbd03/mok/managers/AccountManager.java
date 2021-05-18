@@ -1,9 +1,8 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.managers;
 
-import antlr.Token;
 import com.auth0.jwt.interfaces.Claim;
-import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
 import org.apache.commons.codec.digest.DigestUtils;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.TokenWrapper;
@@ -16,9 +15,9 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AccountManagerException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AuthUnauthorizedException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.ClientFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.CompanyFacadeMok;
@@ -30,11 +29,8 @@ import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.inject.Inject;
-import java.util.*;
-import javax.persistence.OptimisticLockException;
-import java.util.List;
-import java.util.Optional;
 import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
@@ -257,31 +253,33 @@ public class AccountManager implements AccountManagerLocal {
         JWTHandler.validateToken(token);
 
         Map<String, Claim> claims = JWTHandler.getClaimsFromToken(token);
-        Date expire = JWTHandler.getExpiersTimeFromToken(token);
-        if (claims.get("sub") != null && claims.get("version") != null) {
-            String login = claims.get("sub").asString();
-            if (!expire.before(new Date(System.currentTimeMillis()))) {
-                Account account = this.accountFacade.findByLogin(login);
-                if (!account.isConfirmed()) {
-                    account.setConfirmed(true);
-                    if (!account.getVersion().equals(claims.get("version").asLong())) {
-                        throw FacadeException.optimisticLock();
-                    }
-                    account.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
-                    account.setAlteredBy(account);
-                    Locale locale = new Locale(account.getLanguageType().getName().name());
-                    String body = i18n.getMessage(ACTIVATE_ACCOUNT_BODY, locale);
-                    String subject = i18n.getMessage(ACTIVATE_ACCOUNT_SUBJECT, locale);
-                    EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
-                } else {
-                    throw new AccountManagerException(ACCOUNT_VERIFICATION_TOKEN_ALREADY_VERIFIED_ERROR);
-                }
-            } else {
-                throw new AccountManagerException(ACCOUNT_VERIFICATION_TOKEN_EXPIRE_ERROR);
-            }
-        } else {
+        Date expire = JWTHandler.getExpirationTimeFromToken(token);
+
+        if (claims.get("sub").isNull() || claims.get("version").isNull()) {
             throw new AccountManagerException(ACCOUNT_VERIFICATION_TOKEN_CONTENT_ERROR);
         }
+
+        String login = claims.get("sub").asString();
+        if (expire.before(new Date())) {
+            throw new AccountManagerException(ACCOUNT_VERIFICATION_TOKEN_EXPIRED_ERROR);
+        }
+
+        Account account = this.accountFacade.findByLogin(login);
+        if (account.isConfirmed()) {
+            throw new AccountManagerException(ACCOUNT_VERIFICATION_TOKEN_ALREADY_VERIFIED_ERROR);
+        }
+
+        if (!account.getVersion().equals(claims.get("version").asLong())) {
+            throw FacadeException.optimisticLock();
+        }
+
+        account.setConfirmed(true);
+        account.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
+        account.setAlteredBy(account);
+        Locale locale = new Locale(account.getLanguageType().getName().name());
+        String body = i18n.getMessage(ACTIVATE_ACCOUNT_BODY, locale);
+        String subject = i18n.getMessage(ACTIVATE_ACCOUNT_SUBJECT, locale);
+        EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
     }
 
     @Override
