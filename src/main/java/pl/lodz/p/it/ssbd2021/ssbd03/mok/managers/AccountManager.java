@@ -187,6 +187,8 @@ public class AccountManager implements AccountManagerLocal {
         Locale locale = new Locale(account.getLanguageType().getName().name());
         String subject = i18n.getMessage(VERIFICATION_EMAIL_SUBJECT, locale);
         String body = i18n.getMessage(VERIFICATION_EMAIL_BODY, locale);
+        TokenWrapper tokenWrapper = TokenWrapper.builder().token(token).account(account).used(false).build();
+        this.tokenWrapperFacade.create(tokenWrapper);
         String contentHtml = "<a href=\"" + PropertiesReader.getSecurityProperties().getProperty("app.baseurl") + "/verify/accountVerification/" + token + "\">" + body + "</a>";
         EmailService.sendEmailWithContent(account.getEmail().trim(), subject, contentHtml);
     }
@@ -263,10 +265,13 @@ public class AccountManager implements AccountManagerLocal {
             if (!expire.before(new Date(System.currentTimeMillis()))) {
                 Account account = this.accountFacade.findByLogin(login);
                 if (!account.isConfirmed()) {
-                    account.setConfirmed(true);
                     if (!account.getVersion().equals(claims.get("version").asLong())) {
                         throw FacadeException.optimisticLock();
                     }
+                    account.setConfirmed(true);
+                    TokenWrapper tokenWrapper = this.tokenWrapperFacade.findByToken(token);
+                    tokenWrapper.setUsed(true);
+                    this.tokenWrapperFacade.edit(tokenWrapper);
                     account.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
                     account.setAlteredBy(account);
                     Locale locale = new Locale(account.getLanguageType().getName().name());
