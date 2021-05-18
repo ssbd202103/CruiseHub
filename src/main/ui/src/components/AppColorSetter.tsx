@@ -13,8 +13,6 @@ export default function AppColorSetter() {
 
     const color = useSelector(selectColor)
 
-    console.log(color)
-
     const dispatch = useDispatch()
 
     const handleClick = () => {
