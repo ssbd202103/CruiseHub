@@ -20,16 +20,18 @@ import axios from "axios";
 import { useLocation } from 'react-router-dom';
 import {useSelector} from "react-redux";
 import {selectColor} from "../../../redux/slices/colorSlice";
-import getAllAccounts from "../../../Services/accountsService";
+import {getAccountDetailsAbout, getAllAccounts} from "../../../Services/accountsService";
+import {selectToken} from "../../../redux/slices/tokenSlice";
 
 interface UnblockAccountParams {
     login: string;
     etag: string;
-    version: bigint
+    version: bigint,
+    token: string
 }
 
 
-const unblockAccount = async ({login, etag, version}: UnblockAccountParams) => {
+const unblockAccount = async ({login, etag, version, token}: UnblockAccountParams) => {
     const json = JSON.stringify({
             login: login,
             version: version,
@@ -38,7 +40,8 @@ const unblockAccount = async ({login, etag, version}: UnblockAccountParams) => {
     await axios.put('http://localhost:8080/api/account/unblock', json, {
         headers:{
             'Content-Type': 'application/json',
-            'If-Match': etag
+            'If-Match': etag,
+            'Authorization': `Bearer ${token}`
         }
 
     }).then(response => {
@@ -50,7 +53,7 @@ function refresh() {
     window.location.reload();
 }
 
-const blockAccount = async ({login, etag, version}: UnblockAccountParams) => {
+const blockAccount = async ({login, etag, version, token}: UnblockAccountParams) => {
     const json = JSON.stringify({
             login: login,
             version: version,
@@ -59,7 +62,8 @@ const blockAccount = async ({login, etag, version}: UnblockAccountParams) => {
     await axios.put('http://localhost:8080/api/account/block', json, {
         headers:{
             'Content-Type': 'application/json',
-            'If-Match': etag
+            'If-Match': etag,
+            'Authorization': `Bearer ${token}`
         }
 
     }).then(response => {
@@ -120,12 +124,13 @@ function Row(props: RowProps) {
     const {t} = useTranslation();
     const [open, setOpen] = React.useState(false);
     const [buttonText, setButtonText] = useState("true");
+    const token = useSelector(selectToken)
 
     const classes = useRowStyles();
     const buttonClass = useButtonStyles();
 
     const handleSetOpen = async () => {
-        const result = await axios.get(`http://localhost:8080/api/account/details-view/${row.login}`);
+        const result = await getAccountDetailsAbout(row.login);
         sessionStorage.setItem("changeAccountData", JSON.stringify(result.data));
         setOpen(state => !state);
     }
@@ -140,7 +145,7 @@ function Row(props: RowProps) {
     }
 
     const setCurrentChangeAccessLevelStateAccount = async () => {
-        const result = await axios.get(`http://localhost:8080/api/account/details-view/${row.login}`);
+        const result = await getAccountDetailsAbout(row.login);
         sessionStorage.setItem("changeAccessLevelStateAccount", JSON.stringify(result.data));
     }
 
@@ -187,12 +192,12 @@ function Row(props: RowProps) {
                                             <Button className={buttonClass.root} onClick={() => {
                                                 if(row.active) {
                                                     if (blockAccount({etag: row.etag,
-                                                        login: row.login, version: row.version})) {
+                                                        login: row.login, version: row.version, token: token})) {
                                                        refresh()
                                                     }
                                                 } else {
                                                     if (unblockAccount({etag: row.etag,
-                                                        login: row.login, version: row.version})) {
+                                                        login: row.login, version: row.version, token: token})) {
                                                         refresh()
 
                                                     }

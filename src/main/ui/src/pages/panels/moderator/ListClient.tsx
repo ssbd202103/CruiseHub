@@ -8,10 +8,9 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import {useTranslation} from "react-i18next";
-import axios from "axios";
 import {useSelector} from "react-redux";
 import {selectColor} from "../../../redux/slices/colorSlice";
-import getAllAccounts from "../../../Services/accountsService";
+import {getAllAccounts} from "../../../Services/accountsService";
 
 const useRowStyles = makeStyles({
     root: {
