@@ -65,11 +65,11 @@ public class AccountManager implements AccountManagerLocal {
 
     @Override
     public void createClientAccount(Account account, Client client) throws BaseAppException {
-
+        account.setLanguageType(accountFacade.getLanguageTypeWrapperByLanguageType(account.getLanguageType().getName()));
         setAccessLevelInitialMetadata(account, client, true);
         Address address = client.getHomeAddress();
 
-        setCreatedMetadata(account, address);
+        setCreatedMetadata(account, account, address);
         accountFacade.create(account);
 
         //todo uncomment it when it's needed
@@ -80,11 +80,12 @@ public class AccountManager implements AccountManagerLocal {
 
     @Override
     public void createBusinessWorkerAccount(Account account, BusinessWorker businessWorker, String companyName) throws BaseAppException {
-
+        account.setLanguageType(accountFacade.getLanguageTypeWrapperByLanguageType(account.getLanguageType().getName()));
         setAccessLevelInitialMetadata(account, businessWorker, true);
         businessWorker.setCompany(companyFacadeMok.getCompanyByName(companyName));
 
-        this.accountFacade.create(account);
+        setCreatedMetadata(account, account);
+        accountFacade.create(account);
         //todo uncomment it when it's needed
         if (accountFacade.findByLogin(account.getLogin()) != null) {
             sendVerificationEmail(account);
@@ -108,7 +109,7 @@ public class AccountManager implements AccountManagerLocal {
 
         Moderator moderator = new Moderator(true);
         setAccessLevelInitialMetadata(account, moderator, false);
-        setUpdatedMetadata(account, moderator);
+        setUpdatedMetadata(account);
         return account;
     }
 
@@ -124,7 +125,7 @@ public class AccountManager implements AccountManagerLocal {
 
         Administrator administrator = new Administrator(true);
         setAccessLevelInitialMetadata(account, administrator, false);
-
+        setUpdatedMetadata(account);
         return account;
     }
 
@@ -156,16 +157,10 @@ public class AccountManager implements AccountManagerLocal {
 
 
     private void setAccessLevelInitialMetadata(Account account, AccessLevel accessLevel, boolean newAccount) throws BaseAppException {
+        setCreatedMetadata(newAccount ? account : getCurrentUser(), accessLevel);
 
-        accessLevel.setAccount(account);
         account.setAccessLevel(accessLevel);
-
-        // alters Account properties depending of weather that is newly created or modified account
-        if (newAccount) {
-            setCreatedMetadata(account, accessLevel);
-        } else {
-            setCreatedMetadata(getCurrentUser(), accessLevel);
-        }
+        accessLevel.setAccount(account);
     }
 
     private void sendVerificationEmail(Account account) throws BaseAppException {
@@ -480,9 +475,8 @@ public class AccountManager implements AccountManagerLocal {
         }
     }
 
-    private void setCreatedMetadata(Account creator, BaseEntity... entities) throws BaseAppException {
-        AlterTypeWrapper insert = accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE);
-
+    private void setCreatedMetadata(Account creator, BaseEntity... entities) {
+        AlterTypeWrapper insert = accountFacade.getAlterTypeWrapperByAlterType(AlterType.INSERT);
         for (BaseEntity e : entities) {
             e.setAlterType(insert);
             e.setAlteredBy(creator);
