@@ -180,20 +180,6 @@ values (-3, 'PearlHarbort.jpg', null, now(), now(), -2, -1, -1, 0);
 --
 --
 --
---commercial_types start
---commercial_types 1
-insert into commercial_types(id, name)
-values (-1, 'None');
---commercial_types 2
-insert into commercial_types(id, name)
-values (-2, 'Normal');
---commercial_types 3
-insert into commercial_types(id, name)
-values (-3, 'Premium');
---commercial_types end
---
---
---
 --cruises_groups start
 insert into cruises_groups(id, company_id, name, number_of_seats, price, start_address_id, average_rating,
                            creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id,
@@ -294,23 +280,6 @@ insert into comments (id, account_id, cruise_id, comment, creation_date_time, la
                       altered_by_id, version)
 values (-3, -3, -3, 'It is the most beatufiul travel in the the Wolrd', now(), now(), -2, -1, -1, 0);
 --comments end
---
---
---
---commercials start
-insert into commercials (id, commercial_type_id, cruises_group_id, start_date, end_date, creation_date_time,
-                         last_alter_date_time, alter_type_id, created_by_id,
-                         altered_by_id, version)
-values (-1, -1, -1, now(), now(), now(), now(), -2, -1, -1, 0);
-insert into commercials (id, commercial_type_id, cruises_group_id, start_date, end_date, creation_date_time,
-                         last_alter_date_time, alter_type_id, created_by_id,
-                         altered_by_id, version)
-values (-2, -2, -2, now(), now(), now(), now(), -2, -1, -1, 0);
-insert into commercials (id, commercial_type_id, cruises_group_id, start_date, end_date, creation_date_time,
-                         last_alter_date_time, alter_type_id, created_by_id,
-                         altered_by_id, version)
-values (-3, -3, -3, now(), now(), now(), now(), -2, -1, -1, 0);
---commercials end
 --
 --
 --
