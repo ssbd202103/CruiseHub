@@ -4,6 +4,7 @@ import com.auth0.jwt.interfaces.Claim;
 import org.apache.commons.codec.digest.DigestUtils;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.TokenWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
@@ -29,6 +30,8 @@ import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.inject.Inject;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.SecurityContext;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -54,20 +57,21 @@ public class AccountManager implements AccountManagerLocal {
     @EJB
     private TokenWrapperFacade tokenWrapperFacade;
 
+    @Context
+    private SecurityContext context;
+
     @Inject
     I18n i18n;
 
     @Override
     public void createClientAccount(Account account, Client client) throws BaseAppException {
-        AlterTypeWrapper insertAlterType = accountFacade.getAlterTypeWrapperByAlterType(AlterType.INSERT);
 
         setAccessLevelInitialMetadata(account, client, true);
+        Address address = client.getHomeAddress();
 
-        client.getHomeAddress().setCreatedBy(account);
-        client.getHomeAddress().setAlteredBy(account);
-        client.getHomeAddress().setAlterType(insertAlterType);
-
+        setCreatedMetadata(account, address);
         accountFacade.create(account);
+
         //todo uncomment it when it's needed
         if (accountFacade.findByLogin(account.getLogin()) != null) {
             sendVerificationEmail(account);
@@ -104,7 +108,7 @@ public class AccountManager implements AccountManagerLocal {
 
         Moderator moderator = new Moderator(true);
         setAccessLevelInitialMetadata(account, moderator, false);
-
+        setUpdatedMetadata(account, moderator);
         return account;
     }
 
@@ -146,35 +150,22 @@ public class AccountManager implements AccountManagerLocal {
         }
 
         accessLevel.setEnabled(enabled);
-        AlterTypeWrapper updateAlterType = accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE);
-        account.setAlterType(updateAlterType);
-        accessLevel.setAlterType(updateAlterType);
+        setUpdatedMetadata(account, accessLevel);
         return account;
     }
 
 
-    private void setAccessLevelInitialMetadata(Account account, AccessLevel accessLevel, boolean newAccount) {
+    private void setAccessLevelInitialMetadata(Account account, AccessLevel accessLevel, boolean newAccount) throws BaseAppException {
 
-        AlterTypeWrapper insertAlterType = accountFacade.getAlterTypeWrapperByAlterType(AlterType.INSERT);
-        AlterTypeWrapper updateAlterType = accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE);
-
-        accessLevel.setAlteredBy(account);
-        accessLevel.setCreatedBy(account);
-        accessLevel.setAlterType(insertAlterType);
         accessLevel.setAccount(account);
-
         account.setAccessLevel(accessLevel);
 
         // alters Account properties depending of weather that is newly created or modified account
         if (newAccount) {
-            account.setAlterType(insertAlterType);
-            account.setLanguageType(accountFacade.getLanguageTypeWrapperByLanguageType(account.getLanguageType().getName()));
-            account.setCreatedBy(account);
+            setCreatedMetadata(account, accessLevel);
         } else {
-            account.setAlterType(updateAlterType);
-            account.setLastAlterDateTime(LocalDateTime.now());
+            setCreatedMetadata(getCurrentUser(), accessLevel);
         }
-        account.setAlteredBy(account);
     }
 
     private void sendVerificationEmail(Account account) throws BaseAppException {
@@ -199,9 +190,7 @@ public class AccountManager implements AccountManagerLocal {
             throw FacadeException.optimisticLock();
         }
         account.setActive(false);
-        setAlterTypeAndAlterAccount(account, accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE),
-                // this is for now, will be changed in the upcoming feature
-                account);
+        setUpdatedMetadata(account);
         accountFacade.edit(account);
         return account;
     }
@@ -224,27 +213,27 @@ public class AccountManager implements AccountManagerLocal {
 
         Map<String, Claim> claims = JWTHandler.getClaimsFromToken(token);
 
-        if (claims.get("sub") != null && claims.get("version") != null) {
-            if (claims.get("sub").asString().equals(login)) {
-                Account account = this.accountFacade.findByLogin(login);
-                account.setPasswordHash(passwordHash);
-                if (!account.getVersion().equals(claims.get("version").asLong())) {
-                    throw FacadeException.optimisticLock();
-                }
-                account.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
-                account.setAlteredBy(account);
-                this.accountFacade.edit(account);
-
-                TokenWrapper tokenWrapper = this.tokenWrapperFacade.findByToken(token);
-                tokenWrapper.setUsed(true);
-                this.tokenWrapperFacade.edit(tokenWrapper);
-
-            } else {
-                throw new AccountManagerException(PASSWORD_RESET_IDENTITY_ERROR);
-            }
-        } else {
+        if (claims.get("sub").isNull() || claims.get("version").isNull()) {
             throw new AccountManagerException(PASSWORD_RESET_TOKEN_CONTENT_ERROR);
         }
+        if (!claims.get("sub").asString().equals(login)) {
+            throw new AccountManagerException(PASSWORD_RESET_IDENTITY_ERROR);
+
+        }
+
+        Account account = this.accountFacade.findByLogin(login);
+        if (!account.getVersion().equals(claims.get("version").asLong())) {
+            throw FacadeException.optimisticLock();
+        }
+
+        account.setPasswordHash(passwordHash);
+
+        setUpdatedMetadata(account);
+        this.accountFacade.edit(account);
+
+        TokenWrapper tokenWrapper = this.tokenWrapperFacade.findByToken(token);
+        tokenWrapper.setUsed(true);
+        this.tokenWrapperFacade.edit(tokenWrapper);
 
     }
 
@@ -274,8 +263,8 @@ public class AccountManager implements AccountManagerLocal {
         }
 
         account.setConfirmed(true);
-        account.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
-        account.setAlteredBy(account);
+
+        setUpdatedMetadata(account);
         Locale locale = new Locale(account.getLanguageType().getName().name());
         String body = i18n.getMessage(ACTIVATE_ACCOUNT_BODY, locale);
         String subject = i18n.getMessage(ACTIVATE_ACCOUNT_SUBJECT, locale);
@@ -301,16 +290,9 @@ public class AccountManager implements AccountManagerLocal {
             throw FacadeException.optimisticLock();
         }
         account.setActive(true);
-        setAlterTypeAndAlterAccount(account, accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE),
-                //needs to be changed as in blockUser method
-                account);
-        return account;
-    }
 
-    private void setAlterTypeAndAlterAccount(Account account, AlterTypeWrapper alterTypeWrapper, Account alteredBy) {
-        account.setAlteredBy(alteredBy);
-        account.setAlterType(alterTypeWrapper);
-        account.setLastAlterDateTime(LocalDateTime.now());
+        setUpdatedMetadata(account);
+        return account;
     }
 
     @Override
@@ -321,9 +303,6 @@ public class AccountManager implements AccountManagerLocal {
             throw FacadeException.optimisticLock();
         }
 
-
-        targetClient.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
-        targetClient.setLastAlterDateTime(LocalDateTime.now());
         targetClient.setPhoneNumber(phoneNumber);
 
         Address targetAddress = targetClient.getHomeAddress();
@@ -332,8 +311,8 @@ public class AccountManager implements AccountManagerLocal {
         targetAddress.setPostalCode(addr.getPostalCode());
         targetAddress.setCity(addr.getCity());
         targetAddress.setCountry(addr.getCountry());
-        targetAddress.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
-        targetAddress.setLastAlterDateTime(LocalDateTime.now());
+
+        setUpdatedMetadata(targetClient, targetAddress);
         return targetAccount;
     }
 
@@ -349,7 +328,7 @@ public class AccountManager implements AccountManagerLocal {
         targetAddress.setCountry(fromAddress.getCountry());
     }
 
-    private Account updateAccount(Account updatedAccount, String alteredBy) throws BaseAppException {
+    public Account updateOtherAccount(Account updatedAccount) throws BaseAppException {
         Account targetAccount = accountFacade.findByLogin(updatedAccount.getLogin());
 
         if (!targetAccount.getVersion().equals(updatedAccount.getVersion())) {
@@ -358,9 +337,8 @@ public class AccountManager implements AccountManagerLocal {
         targetAccount.setFirstName(updatedAccount.getFirstName());
         targetAccount.setSecondName(updatedAccount.getSecondName());
         targetAccount.setEmail(updatedAccount.getEmail());
-        targetAccount.setAlteredBy(accountFacade.findByLogin(alteredBy));
-        targetAccount.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
-        targetAccount.setLastAlterDateTime(LocalDateTime.now());
+
+        setUpdatedMetadata(targetAccount);
         return targetAccount;
     }
 
@@ -371,18 +349,11 @@ public class AccountManager implements AccountManagerLocal {
         if (!targetBusinessWorker.getVersion().equals(version)) {//this need to check if businessWorker version has changed, not account version
             throw FacadeException.optimisticLock();
         }
-
-        targetBusinessWorker.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
-        targetBusinessWorker.setLastAlterDateTime(LocalDateTime.now());
         targetBusinessWorker.setPhoneNumber(phoneNumber);
+        setUpdatedMetadata(targetBusinessWorker);
         return targetAccount;
     }
 
-    @Override
-    public Account changeOtherAccountData(Account fromAccount) throws BaseAppException {
-        return updateAccount(fromAccount, "rbranson");
-
-    }
 
     @Override
     public void changeEmail(String login, Long version, String newEmail) throws BaseAppException {
@@ -392,9 +363,7 @@ public class AccountManager implements AccountManagerLocal {
         }
         account.setEmail(newEmail);
 
-        account.setLastAlterDateTime(LocalDateTime.now());
-        account.setAlteredBy(account);
-        account.setAlterType(account.getAlterType());
+        setUpdatedMetadata(account);
     }
 
     private AccessLevel getAccessLevel(Account from, AccessLevelType target) throws AccountManagerException {
@@ -413,17 +382,8 @@ public class AccountManager implements AccountManagerLocal {
         }
         target.setFirstName(from.getFirstName());
         target.setSecondName(from.getSecondName());
-        target.setAlteredBy(target);
-        target.setAlterType(target.getAlterType());
-        target.setLastAlterDateTime(from.getLastAlterDateTime());
     }
 
-    private void setAccessLevelChanges(AccessLevel target, Account from) {
-        target.setVersion(from.getVersion());
-        target.setAlteredBy(from);
-        target.setAlterType(from.getAlterType());
-        target.setLastAlterDateTime(from.getLastAlterDateTime());
-    }
 
     @Override
     public void changeClientData(Account fromAccount) throws BaseAppException {
@@ -431,15 +391,13 @@ public class AccountManager implements AccountManagerLocal {
         setAccountChanges(targetAccount, fromAccount);
 
         Client targetClient = (Client) getAccessLevel(targetAccount, AccessLevelType.CLIENT);
-        setAccessLevelChanges(targetClient, targetAccount);
 
         Client fromClient = (Client) getAccessLevel(fromAccount, AccessLevelType.CLIENT);
         updateClient(fromClient, targetClient);
 
         Address targetAddress = targetClient.getHomeAddress();
-        targetAddress.setAlteredBy(targetAccount);
-        targetAddress.setAlterType(targetAccount.getAlterType());
-        targetAddress.setLastAlterDateTime(fromAccount.getLastAlterDateTime());
+
+        setUpdatedMetadata(targetClient, targetAddress, targetAccount);
     }
 
     @Override
@@ -448,10 +406,10 @@ public class AccountManager implements AccountManagerLocal {
         setAccountChanges(targetAccount, fromAccount);
 
         BusinessWorker targetBusinessWorker = (BusinessWorker) getAccessLevel(targetAccount, AccessLevelType.BUSINESS_WORKER);
-        setAccessLevelChanges(targetBusinessWorker, targetAccount);
 
         BusinessWorker fromBusinessWorker = (BusinessWorker) getAccessLevel(fromAccount, AccessLevelType.BUSINESS_WORKER);
         targetBusinessWorker.setPhoneNumber(fromBusinessWorker.getPhoneNumber());
+        setUpdatedMetadata(targetBusinessWorker, targetAccount);
     }
 
     @Override
@@ -466,7 +424,7 @@ public class AccountManager implements AccountManagerLocal {
         setAccountChanges(targetAccount, fromAccount);
 
         Moderator targetModerator = (Moderator) getAccessLevel(targetAccount, AccessLevelType.MODERATOR);
-        setAccessLevelChanges(targetModerator, targetAccount);
+        setUpdatedMetadata(targetModerator, targetAccount);
     }
 
     @Override
@@ -477,7 +435,7 @@ public class AccountManager implements AccountManagerLocal {
 
         Administrator targetAdministrator = (Administrator) getAccessLevel(targetAccount, AccessLevelType.ADMINISTRATOR);
 
-        setAccessLevelChanges(targetAdministrator, targetAccount);
+        setUpdatedMetadata(targetAdministrator, targetAccount);
     }
 
     @Override
@@ -502,14 +460,33 @@ public class AccountManager implements AccountManagerLocal {
             throw FacadeException.optimisticLock();
         }
 
-        if (account.getPasswordHash().equals(DigestUtils.sha256Hex(oldPassword))) {
-            account.setPasswordHash(DigestUtils.sha256Hex(newPassword));
-            account.setLastAlterDateTime(LocalDateTime.now());
-            account.setAlteredBy(account);
-            account.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
-            account.setVersion(version);
-        } else {
+        if (!account.getPasswordHash().equals(DigestUtils.sha256Hex(oldPassword))) {
             throw new AccountManagerException(PASSWORDS_DONT_MATCH_ERROR);
+        }
+
+        account.setPasswordHash(DigestUtils.sha256Hex(newPassword));
+        setUpdatedMetadata(account);
+    }
+
+    private Account getCurrentUser() throws BaseAppException {
+        return accountFacade.findByLogin(context.getUserPrincipal().getName());
+    }
+
+    private void setUpdatedMetadata(BaseEntity... entities) throws BaseAppException {
+        AlterTypeWrapper update = accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE);
+        for (BaseEntity e : entities) {
+            e.setAlterType(update);
+            e.setAlteredBy(getCurrentUser());
+        }
+    }
+
+    private void setCreatedMetadata(Account creator, BaseEntity... entities) throws BaseAppException {
+        AlterTypeWrapper insert = accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE);
+
+        for (BaseEntity e : entities) {
+            e.setAlterType(insert);
+            e.setAlteredBy(creator);
+            e.setCreatedBy(creator);
         }
     }
 }

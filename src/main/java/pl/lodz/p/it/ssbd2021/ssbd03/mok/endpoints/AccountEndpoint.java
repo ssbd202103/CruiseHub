@@ -167,14 +167,11 @@ public class AccountEndpoint implements AccountEndpointLocal {
         Address addr = new Address(otherClientChangeDataDto.getNewAddress().getNewHouseNumber(), otherClientChangeDataDto.getNewAddress().getNewStreet(), otherClientChangeDataDto.getNewAddress().getNewPostalCode(),
                 otherClientChangeDataDto.getNewAddress().getNewCity(), otherClientChangeDataDto.getNewAddress().getNewCountry());
 
-
         return AccountMapper.accountDtoForClientDataChange(accountManager.changeOtherClientData(otherClientChangeDataDto.getLogin(), otherClientChangeDataDto.getNewPhoneNumber(), addr, otherClientChangeDataDto.getAccVersion()));
     }
 
     @Override
     public OtherBusinessWorkerChangeDataDto changeOtherBusinessWorkerData(OtherBusinessWorkerChangeDataDto otherBusinessWorkerChangeDataDto) throws BaseAppException {
-
-
         return AccountMapper.accountDtoForBusinnesWorkerDataChange(accountManager.changeOtherBusinessWorkerData(otherBusinessWorkerChangeDataDto.getLogin(), otherBusinessWorkerChangeDataDto.getNewPhoneNumber(), otherBusinessWorkerChangeDataDto.getAccVersion()));
     }
 
@@ -187,7 +184,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
         }
 
         Account account = AccountMapper.extractAccountFromOtherAccountChangeDataDto(otherAccountChangeDataDto);
-        return AccountMapper.toAccountDto(accountManager.changeOtherAccountData(account));
+        return AccountMapper.toAccountDto(accountManager.updateOtherAccount(account));
     }
 
 
