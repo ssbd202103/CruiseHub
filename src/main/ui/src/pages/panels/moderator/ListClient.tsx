@@ -11,6 +11,7 @@ import {useTranslation} from "react-i18next";
 import axios from "axios";
 import {useSelector} from "react-redux";
 import {selectColor} from "../../../redux/slices/colorSlice";
+import getAllAccounts from "../../../Services/accountsService";
 
 const useRowStyles = makeStyles({
     root: {
@@ -64,14 +65,11 @@ export default function ModListClient() {
     const color = useSelector(selectColor)
 
     useEffect(() => {
-        loadUsers();
+        getAllAccounts().then(res => {
+            setUsers(res.data)
+        })
     },[]);
 
-
-    const loadUsers = async () => {
-        const result = await axios.get('http://localhost:8080/api/account/accounts');
-        setUsers(result.data)
-    }
 
 
     const {t} = useTranslation()
