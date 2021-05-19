@@ -15,13 +15,31 @@ import java.util.Set;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.*;
 
+import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account.EMAIL_CONSTRAINT;
+import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account.LOGIN_CONSTRAINT;
+
 @Entity(name = "accounts")
 @NamedQueries({
         @NamedQuery(name = "Account.findByLogin", query = "SELECT acc FROM accounts acc WHERE acc.login = :login"),
         @NamedQuery(name = "Account.findById", query = "SELECT acc FROM accounts acc WHERE acc.id = :id"),
-        @NamedQuery(name = "Account.findUnconfirmedAccount", query = "SELECT acc FROM accounts acc WHERE acc.confirmed = false")
+        @NamedQuery(name = "Account.findUnconfirmedAccounts", query = "SELECT acc FROM accounts acc WHERE acc.confirmed = false"),
 })
+@Table(
+        indexes = {
+                @Index(name = "accounts_language_type_id_index", columnList = "language_type_id"),
+                @Index(name = "accounts_created_by_id_index", columnList = "created_by_id"),
+                @Index(name = "accounts_altered_by_id_index", columnList = "altered_by_id"),
+                @Index(name = "accounts_alter_type_id_index", columnList = "alter_type_id")
+        },
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "login", name = LOGIN_CONSTRAINT),
+                @UniqueConstraint(columnNames = "email", name = EMAIL_CONSTRAINT)}
+)
+
 public class Account extends BaseEntity {
+    public static final String LOGIN_CONSTRAINT = "accounts_login_unique_constraint";
+    public static final String EMAIL_CONSTRAINT = "accounts_email_unique_constraint";
+
     @Getter
     @Id
     @SequenceGenerator(name = "ACCOUNT_SEQ_GEN", sequenceName = "account_id_seq", allocationSize = 1)

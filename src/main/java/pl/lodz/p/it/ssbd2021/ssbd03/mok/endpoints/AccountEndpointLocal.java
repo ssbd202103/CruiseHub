@@ -71,7 +71,7 @@ public interface AccountEndpointLocal {
      *
      * @return Obiekty kont dto
      */
-    List<AccountDtoForList> getAllAccounts();
+    List<AccountDtoForList> getAllAccounts() throws BaseAppException;
 
 
     /**

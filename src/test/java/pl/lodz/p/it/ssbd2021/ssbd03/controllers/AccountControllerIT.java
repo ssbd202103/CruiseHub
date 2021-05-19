@@ -79,6 +79,14 @@ class AccountControllerIT {
     }
 
     @Test
+    public void registerClientTest_FAIL() {
+        ClientForRegistrationDto client = getSampleClientForRegistrationDto();
+        client.setLogin("j");
+        given().baseUri(accountBaseUri).contentType(MediaType.APPLICATION_JSON).body(client).when().post("/client/registration").then().statusCode(204);
+        // todo implement remove method to clean created data
+    }
+
+    @Test
     public void registerBusinessWorkerTest_SUCCESS() {
         BusinessWorkerForRegistrationDto businessWorkerDto = new BusinessWorkerForRegistrationDto("Artur", "Radiuk", randomAlphanumeric(15), randomAlphanumeric(10) + "@gmail.com",
                 "abcABC123*", LanguageType.ENG, "123456789", "FirmaJez");

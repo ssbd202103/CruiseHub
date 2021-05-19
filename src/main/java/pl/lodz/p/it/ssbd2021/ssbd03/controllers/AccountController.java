@@ -170,7 +170,7 @@ public class AccountController {
     @GET
     @Path("/accounts")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<AccountDtoForList> getAllAccounts() {
+    public List<AccountDtoForList> getAllAccounts() throws BaseAppException {
         return accountEndpoint.getAllAccounts();
     }
 

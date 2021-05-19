@@ -108,7 +108,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
     }
 
     @Override
-    public List<AccountDtoForList> getAllAccounts() {
+    public List<AccountDtoForList> getAllAccounts() throws BaseAppException {
         return accountManager.getAllAccounts().stream().map(AccountMapper::toAccountListDto).collect(Collectors.toList());
     }
 

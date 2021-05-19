@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CompanyLightDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.CompanyEndpointLocal;
 
@@ -21,7 +22,7 @@ public class CompanyController {
     @GET
     @Path("/companiesinfo")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<CompanyLightDto> getAllCompaniesInfo() {
+    public List<CompanyLightDto> getAllCompaniesInfo() throws BaseAppException {
         return companyEndpoint.getCompaniesInfo();
     }
 }

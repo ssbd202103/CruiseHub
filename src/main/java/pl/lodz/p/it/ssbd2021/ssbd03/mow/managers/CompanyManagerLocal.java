@@ -1,6 +1,8 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.managers;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 
 import java.util.List;
 
@@ -13,5 +15,5 @@ public interface CompanyManagerLocal {
      *
      * @return the all companies
      */
-    List<Company> getAllCompanies();
+    List<Company> getAllCompanies() throws FacadeException, BaseAppException;
 }

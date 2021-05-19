@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.managers;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.TokenWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.EmailServiceException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.TokenWrapperFacade;
@@ -41,7 +42,7 @@ public class RemoveUnconfirmedAccountManager {
      * Pobiera i usuwa niezatwierdzone konta, dla których minął 24-godzinny okres potwierdzenia
      */
     @Schedule(persistent = false)
-    private void removeUnconfirmedAccounts() {
+    private void removeUnconfirmedAccounts() throws BaseAppException {
 
         List<Account> unconfirmed = accountFacade.getUnconfirmedAccounts();
         for (Account acc : unconfirmed
@@ -56,16 +57,15 @@ public class RemoveUnconfirmedAccountManager {
     }
 
     @Schedule(hour = "*/12", minute = "*", second = "*", persistent = false)
-    private void removeUsedTokens() {
+    private void removeUsedTokens() throws BaseAppException {
         List<TokenWrapper> tokens = tokenWrapperFacade.getUsedToken();
-        for (TokenWrapper tw :
-                tokens) {
+        for (TokenWrapper tw : tokens) {
             tokenWrapperFacade.remove(tw);
         }
     }
 
     @Schedule(hour = "*/12", minute = "*", second = "*", persistent = false)
-    private void sendActivationEmailWithToken() throws EmailServiceException { // todo handle this exception
+    private void sendActivationEmailWithToken() throws BaseAppException { // todo handle this exception
         List<Account> unconfirmed = accountFacade.getUnconfirmedAccounts();
         for (Account acc : unconfirmed
         ) {

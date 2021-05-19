@@ -9,10 +9,33 @@ import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class GrantAccessLevelDto {
+    public void setAccountLogin(String accountLogin) {
+        this.accountLogin = accountLogin;
+    }
+
+    public void setAccessLevel(AccessLevelType accessLevel) {
+        this.accessLevel = accessLevel;
+    }
+
+    public void setAccountVersion(Long accountVersion) {
+        this.accountVersion = accountVersion;
+    }
+
+    public String getAccountLogin() {
+        return accountLogin;
+    }
+
+    public AccessLevelType getAccessLevel() {
+        return accessLevel;
+    }
+
+    public Long getAccountVersion() {
+        return accountVersion;
+    }
+
     @Login
     private String accountLogin;
 

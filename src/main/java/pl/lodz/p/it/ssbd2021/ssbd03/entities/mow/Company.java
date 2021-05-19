@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
         @NamedQuery(name = "Company.findByName", query = "SELECT company FROM companies company WHERE company.name = :name")
 })
 @Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"nip", "name"})
+        @UniqueConstraint(columnNames = {"nip", "name"},name = "companies_name_unique_constraint")
 })
 public class Company extends BaseEntity {
     @Getter
