@@ -4,6 +4,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.TokenWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.EmailServiceException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.JWTException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.TokenWrapperFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.JWTHandler;
@@ -14,6 +15,7 @@ import javax.ejb.*;
 import javax.inject.Inject;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -61,6 +63,17 @@ public class RemoveUnconfirmedAccountManager {
         for (TokenWrapper tw :
                 tokens) {
             tokenWrapperFacade.remove(tw);
+        }
+    }
+
+    @Schedule(hour = "*/12", minute = "*", second = "*", persistent = false)
+    private void removeUnUsedTokens() throws JWTException {
+        List<TokenWrapper> tokens = tokenWrapperFacade.getUnUsedToken();
+        for (TokenWrapper tw :
+                tokens) {
+            if(JWTHandler.getExpirationTimeFromToken(tw.getToken()).before(new Date(System.currentTimeMillis()))){
+                tokenWrapperFacade.remove(tw);
+            }
         }
     }
 
