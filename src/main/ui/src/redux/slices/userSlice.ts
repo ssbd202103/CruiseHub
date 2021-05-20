@@ -9,19 +9,21 @@ export interface IUserSliceState {
     darkMode: boolean,
     version: number,
     languageType: string,
-    accessLevels: Array<{
-        '@type': "client" | "businessWorker" | "moderator" | "administrator",
-        accessLevelType: "CLIENT" | "BUSINESS_WORKER" | "MODERATOR" | "ADMINISTRATOR",
-        address?: {
-            houseNumber: number,
-            street: string,
-            postalCode: string,
-            city: string,
-            country: string
-        },
-        phoneNumber?: string,
-        companyName?: string
-    }>
+    accessLevels: Array<IAccessLevel>
+}
+
+export interface IAccessLevel {
+    '@type': "client" | "businessWorker" | "moderator" | "administrator",
+    accessLevelType: "CLIENT" | "BUSINESS_WORKER" | "MODERATOR" | "ADMINISTRATOR",
+    address?: {
+        houseNumber: number,
+        street: string,
+        postalCode: string,
+        city: string,
+        country: string
+    },
+    phoneNumber?: string,
+    companyName?: string
 }
 
 const userSlice = createSlice({
@@ -33,7 +35,7 @@ const userSlice = createSlice({
         darkMode: false,
         email: '',
         languageType: 'PL',
-        accessLevels: [],
+        accessLevels: [] as Array<IAccessLevel>,
         etag: '',
         version: 0
     } as IUserSliceState,
@@ -41,11 +43,22 @@ const userSlice = createSlice({
         setUser: (state: IUserSliceState, {payload}: PayloadAction<IUserSliceState>) => payload,
         changeEmail: (state: IUserSliceState, {payload}: PayloadAction<string>) => {
             state.email = payload
-        }
+        },
+        emptyUser: (state: IUserSliceState) => ({
+            firstName: '',
+            secondName: '',
+            login: '',
+            darkMode: false,
+            email: '',
+            languageType: 'PL',
+            accessLevels: [] as Array<IAccessLevel>,
+            etag: '',
+            version: 0
+        })
     }
 })
 
-export const {setUser, changeEmail} = userSlice.actions
+export const {setUser, changeEmail, emptyUser} = userSlice.actions
 
 const selectSelf = (state: { user: IUserSliceState }) => state
 
@@ -56,6 +69,18 @@ export const selectEtag = createSelector(selectSelf, state => state.user.etag)
 export const selectLogin = createSelector(selectSelf, state => state.user.login)
 export const selectVersion = createSelector(selectSelf, state => state.user.version)
 export const selectDarkMode = createSelector(selectSelf, state => state.user.darkMode)
+export const isUserEmpty = createSelector(selectSelf, state => {
+    const {
+        firstName,
+        secondName,
+        login,
+        email,
+        accessLevels,
+        etag
+    } = state.user
+
+    return firstName && secondName && login && email && accessLevels.length && etag
+})
 
 export const selectPhoneNumber = (accessLevelLabel: "CLIENT" | "BUSINESS_WORKER") =>
     createSelector(selectSelf,
