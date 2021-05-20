@@ -30,13 +30,13 @@ export default function WorkerSignUp() {
 
     const [companiesList, setCompaniesList] = useState([]);
 
-    // useEffect(() => {
-    //     const getCompaniesList = async () => {
-    //         const {data} = await axios.get('http://localhost:8080/api/company/companiesinfo', {});
-    //         setCompaniesList(data.map((comp: { name: string }) => comp.name))
-    //     }
-    //     getCompaniesList()
-    // }, [company]);
+    useEffect(() => {
+        const getCompaniesList = async () => {
+            const {data} = await axios.get('http://localhost:8080/api/company/companiesinfo', {});
+            setCompaniesList(data.map((comp: { name: string }) => comp.name))
+        }
+        getCompaniesList()
+    }, [company]);
     console.log(companiesList)
 
     const workerSignUpFun = async () => {
