@@ -24,6 +24,7 @@ create table accounts
     password_hash                                 varchar(64)                         not null, -- hash sha256
     confirmed                                     boolean   default false             not null,
     active                                        boolean   default false             not null,
+    dark_mode                                     boolean   default false             not null,
 
     last_incorrect_authentication_date_time       timestamp,
     last_incorrect_authentication_logical_address varchar,

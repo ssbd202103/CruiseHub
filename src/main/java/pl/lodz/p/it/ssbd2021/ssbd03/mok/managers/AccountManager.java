@@ -485,4 +485,10 @@ public class AccountManager implements AccountManagerLocal {
             e.setCreatedBy(creator);
         }
     }
+
+    public void changeMode(String login, boolean newMode) throws BaseAppException {
+        Account account = accountFacade.findByLogin(login);
+
+        account.setDarkMode(newMode);
+    }
 }

@@ -98,8 +98,8 @@ public class AccountMapper {
      * @return Reprezentacja obiektu przesyłowego DTO konta
      */
     public static AccountDto toAccountDto(Account account) {
-        return new AccountDto(account.getLogin(), account.getFirstName(),
-                account.getSecondName(), account.getEmail(), account.getLanguageType().getName(),
+        return new AccountDto(account.getLogin(), account.getFirstName(), account.getSecondName(),
+                account.isDarkMode(), account.getEmail(), account.getLanguageType().getName(),
                 account.getAccessLevels().stream()
                         .map(AccessLevel::getAccessLevelType)
                         .collect(Collectors.toSet()), account.getVersion());

@@ -70,6 +70,11 @@ public class Account extends BaseEntity {
 
     @Getter
     @Setter
+    @Column(name = "dark_mode", nullable = false)
+    private boolean darkMode;
+
+    @Getter
+    @Setter
     @Column(name = "last_incorrect_authentication_date_time")
     private LocalDateTime lastIncorrectAuthenticationDateTime;
 
