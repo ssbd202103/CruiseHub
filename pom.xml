@@ -287,7 +287,8 @@
         <profile>
             <id>prod</id>
             <properties>
-                <app.baseurl>http://studapp.it.p.lodz.pl:8003</app.baseurl>
+<!--                <app.baseurl>http://studapp.it.p.lodz.pl:8003</app.baseurl>-->
+                <app.baseurl>http://172.16.0.82:8003</app.baseurl>
             </properties>
             <activation>
                 <activeByDefault>true</activeByDefault>
