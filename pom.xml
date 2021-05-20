@@ -405,17 +405,10 @@
                         <artifactId>cargo-maven3-plugin</artifactId>
                         <executions>
                             <execution>
-                                <id>undeploy</id>
+                                <id>redeploy</id>
                                 <phase>pre-integration-test</phase>
                                 <goals>
-                                    <goal>undeploy</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>deploy</id>
-                                <phase>pre-integration-test</phase>
-                                <goals>
-                                    <goal>deploy</goal>
+                                    <goal>redeploy</goal>
                                 </goals>
                             </execution>
                         </executions>
