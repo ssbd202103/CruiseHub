@@ -62,6 +62,7 @@ const resources = {
             //workerPanel
             "worker panel": "Panel pracownika",
             //adminPanel
+            "search account": "Wyszukać konto",
             "admin panel": "Panel administracyjny",
             "login": "Login",
             "first name": "Imię",
@@ -179,6 +180,7 @@ const resources = {
             "worker panel": "Worker panel",
             //adminPanel
             "admin panel": "Administrator panel",
+            "search account": "Search account",
             "login": "Login",
             "first name": "First name",
             "last name": "Last name",

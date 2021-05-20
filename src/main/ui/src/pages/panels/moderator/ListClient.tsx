@@ -11,6 +11,7 @@ import {useTranslation} from "react-i18next";
 import {useSelector} from "react-redux";
 import {selectDarkMode} from "../../../redux/slices/userSlice";
 import {getAllAccounts} from "../../../Services/accountsService";
+import DarkedTextField from "../../../components/DarkedTextField";
 
 const useRowStyles = makeStyles({
     root: {
@@ -91,7 +92,12 @@ export default function ModListClient() {
     return (
         <div>
             <div>
-                <input type="text" value={searchInput} onChange={(e) => setSearchInput(e.target.value)} />
+                <DarkedTextField
+                    label={t('search account')}
+                    type="text"
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    style={{marginBottom: '20px'}} />
             </div>
             <TableContainer component={Paper}>
                 <Table aria-label="Clients">

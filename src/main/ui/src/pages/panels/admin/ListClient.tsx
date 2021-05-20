@@ -15,9 +15,8 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import {Button} from "@material-ui/core";
 import {Link} from "react-router-dom";
 import {useTranslation} from "react-i18next";
-import ButtonGroup from '@material-ui/core/ButtonGroup'
+import DarkedTextField from "../../../components/DarkedTextField";
 import axios from "axios";
-import { useLocation } from 'react-router-dom';
 import {useSelector} from "react-redux";
 import {selectDarkMode} from "../../../redux/slices/userSlice";
 import {getAccountDetailsAbout, getAllAccounts} from "../../../Services/accountsService";
@@ -259,7 +258,12 @@ export default function AdminListClient() {
     return (
         <div>
             <div>
-                <input type="text" value={searchInput} onChange={(e) => setSearchInput(e.target.value)} />
+                <DarkedTextField
+                    label={t('search account')}
+                    type="text"
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    style={{marginBottom: '20px'}} />
             </div>
             <TableContainer component={Paper} style={{
                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`
