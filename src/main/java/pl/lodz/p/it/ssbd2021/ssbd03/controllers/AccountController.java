@@ -613,6 +613,7 @@ public class AccountController {
     @PUT
     @Path("/change_mode")
     @Consumes(MediaType.APPLICATION_JSON)
+    @ETagFilterBinding
     public Response changeMode(ChangeModeDto changeModeDto, @HeaderParam("If-Match") String etag) {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, changeModeDto)) {
             return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();

@@ -30,6 +30,8 @@ public class AccountDtoForList implements SignableEntity {
     @Name
     private String secondName;
 
+    private boolean darkMode;
+
     @Email
     private String email;
 

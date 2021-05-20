@@ -588,17 +588,14 @@ class AccountControllerIT {
         ChangeModeDto changeModeDto = new ChangeModeDto(account.getLogin(), account.getVersion(), true);
         String adminToken = this.getAuthToken("rbranson", "abcABC123*");
 
-        Response res = given()
+        given()
+                .contentType(ContentType.JSON)
                 .baseUri(accountBaseUri)
                 .header(new Header("If-Match", etag))
                 .header(new Header("Authorization", "Bearer " + adminToken))
                 .body(changeModeDto)
-                .put("/change_mode");
-
-        res.prettyPrint();
-
-        res.then().statusCode(204);
-
+                .put("/change_mode")
+                .then().statusCode(204);
 
         AccountDto changedAccount = getAccountDto(account.getLogin());
 
