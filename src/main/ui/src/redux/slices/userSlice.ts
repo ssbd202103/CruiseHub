@@ -30,7 +30,7 @@ const userSlice = createSlice({
         firstName: '',
         secondName: '',
         login: '',
-        darkMode: true,
+        darkMode: false,
         email: '',
         languageType: 'PL',
         accessLevels: [],
