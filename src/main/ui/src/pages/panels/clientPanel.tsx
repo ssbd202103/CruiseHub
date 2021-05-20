@@ -25,7 +25,7 @@ import styles from '../../styles/clientPanel.module.css'
 import manageStyles from '../../styles/ManageAccount.module.css'
 import AppColorSetter from "../../components/AppColorSetter";
 import {useSelector} from "react-redux";
-import {selectColor} from "../../redux/slices/colorSlice";
+import {selectDarkMode} from "../../redux/slices/userSlice";
 import ChangeEmail from "../../components/changeData/ChangeEmail";
 import {useState} from "react";
 import ChangeClientData from "../../components/changeData/ChangeClientData";
@@ -36,7 +36,7 @@ import LogOutRoundedButton from "../../components/LogOutRoundedButton";
 export default function ClientPanel() {
     const { t } = useTranslation()
 
-    const color = useSelector(selectColor)
+    const darkMode = useSelector(selectDarkMode)
 
     const [isEmailEdit, setIsEmailEdit] = useState(false)
     const [isDataEdit, setIsDataEdit] = useState(false)
@@ -75,12 +75,12 @@ export default function ClientPanel() {
         <Grid container className={styles.wrapper}>
             <Redirect to="/panels/clientPanel/cruises" />
             <Grid item xs={2} md={3} xl={2}>
-                <PanelMenu color={color ? 'blue' : 'white-dark'}>
-                    <List className={styles.menu + ' ' + styles['menu-' + (color ? 'light' : 'dark')]} component="nav" aria-label="panel menu">
+                <PanelMenu color={!darkMode ? 'blue' : 'white-dark'}>
+                    <List className={styles.menu + ' ' + styles['menu-' + (!darkMode ? 'light' : 'dark')]} component="nav" aria-label="panel menu">
                         <Link to="/panels/clientPanel/cruises">
                             <ListItem button>
                                 <ListItemIcon>
-                                    <CruiseIcon style={{ fill: `var(--${color ? 'white' : 'dark'})` }} />
+                                    <CruiseIcon style={{ fill: `var(--${!darkMode ? 'white' : 'dark'})` }} />
                                 </ListItemIcon>
                                 <ListItemText> {t("cruises")} </ListItemText>
                             </ListItem>
@@ -88,14 +88,14 @@ export default function ClientPanel() {
                         <Link to="/panels/clientPanel/settings">
                             <ListItem button>
                                 <ListItemIcon>
-                                    <SettingsIcon style={{ fill: `var(--${color ? 'white' : 'dark'})` }} />
+                                    <SettingsIcon style={{ fill: `var(--${!darkMode ? 'white' : 'dark'})` }} />
                                 </ListItemIcon>
                                 <ListItemText>{t("settings")}</ListItemText>
                             </ListItem>
                         </Link>
                         <Link to="/">
                             <ListItem button>
-                                <ListItemIcon style={{fill: `var(--${color ? 'white' : 'dark'})` }}>
+                                <ListItemIcon style={{fill: `var(--${!darkMode ? 'white' : 'dark'})` }}>
                                     <GoBackIcon />
                                 </ListItemIcon>
                                 <ListItemText>{t("go back")}</ListItemText>
@@ -108,12 +108,12 @@ export default function ClientPanel() {
                 </PanelMenu>
             </Grid>
 
-            <Grid item className={styles.content + ' ' + styles[`content-${color ? 'light' : 'dark'}`]} xs={10} md={9} xl={10}>
+            <Grid item className={styles.content + ' ' + styles[`content-${!darkMode ? 'light' : 'dark'}`]} xs={10} md={9} xl={10}>
                 <Route exact path="/panels/clientPanel/cruises">
                     <div> {t("my cruises")} </div>
                 </Route>
                 <Route exact path="/panels/clientPanel/settings">
-                    <Grid container className={manageStyles.wrapper + ' ' + manageStyles[`text-${color ? 'white' : 'dark'}`]} >
+                    <Grid container className={manageStyles.wrapper + ' ' + manageStyles[`text-${!darkMode ? 'white' : 'dark'}`]} >
                         <ChangeClientData
                             open={isDataEdit}
                             onOpen={handleIsDataEdit}

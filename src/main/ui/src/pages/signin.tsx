@@ -63,6 +63,7 @@ export default function SignIn() {
                         placeholder="login"
                         value={login}
                         onChange={event => {setLogin(event.target.value)}}
+                        colorIgnored
                     />
 
                     <DarkedTextField 
@@ -76,6 +77,7 @@ export default function SignIn() {
                         placeholder="1234567890"
                         value={password}
                         onChange={event => {setPassword(event.target.value)}}
+                        colorIgnored
                     />
 
                     <Box style={{

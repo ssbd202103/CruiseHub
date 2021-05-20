@@ -25,6 +25,8 @@ public class AccountDetailsViewDto implements SignableEntity {
     @Name
     private String secondName;
 
+    private boolean darkMode;
+
     @Login
     private String login;
 
@@ -47,9 +49,10 @@ public class AccountDetailsViewDto implements SignableEntity {
     @NotEmpty
     private String etag;
 
-    public AccountDetailsViewDto(String firstName, String secondName, String login, String email, boolean confirmed, boolean active, LanguageType languageType, Set<AccessLevelDetailsViewDto> accessLevels, Long version) {
+    public AccountDetailsViewDto(String firstName, String secondName, boolean darkMode, String login, String email, boolean confirmed, boolean active, LanguageType languageType, Set<AccessLevelDetailsViewDto> accessLevels, Long version) {
         this.firstName = firstName;
         this.secondName = secondName;
+        this.darkMode = darkMode;
         this.login = login;
         this.email = email;
         this.confirmed = confirmed;

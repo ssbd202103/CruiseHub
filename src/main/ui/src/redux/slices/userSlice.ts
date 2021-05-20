@@ -6,6 +6,7 @@ export interface IUserSliceState {
     email: string,
     login: string,
     etag: string,
+    darkMode: boolean,
     version: number,
     languageType: string,
     accessLevels: Array<{
@@ -29,6 +30,7 @@ const userSlice = createSlice({
         firstName: '',
         secondName: '',
         login: '',
+        darkMode: true,
         email: '',
         languageType: 'PL',
         accessLevels: [],
@@ -53,6 +55,7 @@ export const selectEmail = createSelector(selectSelf, state => state.user.email)
 export const selectEtag = createSelector(selectSelf, state => state.user.etag)
 export const selectLogin = createSelector(selectSelf, state => state.user.login)
 export const selectVersion = createSelector(selectSelf, state => state.user.version)
+export const selectDarkMode = createSelector(selectSelf, state => state.user.darkMode)
 
 export const selectPhoneNumber = (accessLevelLabel: "CLIENT" | "BUSINESS_WORKER") =>
     createSelector(selectSelf,

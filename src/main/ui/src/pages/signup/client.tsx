@@ -83,6 +83,7 @@ export default function ClientSignUp() {
                     }}
                     value={firstName}
                     onChange={event => {setFirstName(event.target.value)}}
+                    colorIgnored
                 />
 
 
@@ -92,6 +93,7 @@ export default function ClientSignUp() {
                     className={styles.input}
                     value={secondName}
                     onChange={event => {setSecondName(event.target.value)}}
+                    colorIgnored
                 />
             </Box>
 
@@ -103,6 +105,7 @@ export default function ClientSignUp() {
                 icon={(<EmailIcon/>)}
                 value={email}
                 onChange={event => {setEmail(event.target.value)}}
+                colorIgnored
             />
 
             <DarkedTextField
@@ -111,6 +114,7 @@ export default function ClientSignUp() {
                 className={styles.input}
                 value={login}
                 onChange={event => {setLogin(event.target.value)}}
+                colorIgnored
             />
 
 
@@ -120,6 +124,7 @@ export default function ClientSignUp() {
                 className={styles.input}
                 value={languageType}
                 onChange={event => {setLanguageType(event.target.value)}}
+                colorIgnored
             />
 
 
@@ -129,6 +134,7 @@ export default function ClientSignUp() {
                 className={styles.input}
                 value={houseNumber}
                 onChange={event => {setHouseNumber(event.target.value)}}
+                colorIgnored
             />
 
             <DarkedTextField
@@ -137,6 +143,7 @@ export default function ClientSignUp() {
                 className={styles.input}
                 value={street}
                 onChange={event => {setStreet(event.target.value)}}
+                colorIgnored
             />
             <DarkedTextField
                 label={t("postalCode") + ' *'}
@@ -144,6 +151,7 @@ export default function ClientSignUp() {
                 className={styles.input}
                 value={postalCode}
                 onChange={event => {setPostalCode(event.target.value)}}
+                colorIgnored
             />
             <DarkedTextField
                 label={t("city") + ' *'}
@@ -151,6 +159,7 @@ export default function ClientSignUp() {
                 className={styles.input}
                 value={city}
                 onChange={event => {setCity(event.target.value)}}
+                colorIgnored
             />
             <DarkedTextField
                 label={t("country") + ' *'}
@@ -158,6 +167,7 @@ export default function ClientSignUp() {
                 className={styles.input}
                 value={country}
                 onChange={event => {setCountry(event.target.value)}}
+                colorIgnored
             />
 
             <DarkedTextField
@@ -166,6 +176,7 @@ export default function ClientSignUp() {
                 className={styles.input}
                 value={phoneNumber}
                 onChange={event => {setPhoneNumber(event.target.value)}}
+                colorIgnored
             />
 
             <Box
@@ -184,6 +195,7 @@ export default function ClientSignUp() {
                     icon={(<PasswordIcon/>)}
                     value={password}
                     onChange={event => {setPassword(event.target.value)}}
+                    colorIgnored
                 />
 
                 <DarkedTextField
@@ -194,6 +206,7 @@ export default function ClientSignUp() {
                     icon={(<PasswordIcon/>)}
                     value={confirmPassword}
                     onChange={event => {setConfirmPassword(event.target.value)}}
+                    colorIgnored
                 />
             </Box>
 

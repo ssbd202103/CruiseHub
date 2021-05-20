@@ -36,3 +36,7 @@ export interface ModeratorChangeData extends AccountChangeData {
 export interface AdministratorChangeData extends AccountChangeData {
 
 }
+
+export interface ChangeMode extends AbstractAccount {
+    newMode: boolean
+}

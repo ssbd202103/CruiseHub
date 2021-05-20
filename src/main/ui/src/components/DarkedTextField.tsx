@@ -5,7 +5,7 @@ import {
 import { makeStyles } from '@material-ui/styles'
 import * as React from 'react'
 import {useSelector} from "react-redux";
-import {selectColor} from "../redux/slices/colorSlice";
+import {selectDarkMode} from "../redux/slices/userSlice";
 
 const useStyles = makeStyles(theme => ({
     light: {
@@ -71,6 +71,7 @@ export interface DarkedTextFieldProps {
     readonly label?: string,
     readonly style?: React.CSSProperties,
     readonly value?: any,
+    readonly colorIgnored?: boolean,
     onChange?(event: React.ChangeEvent<HTMLInputElement>): void
 }
 
@@ -86,14 +87,15 @@ const DarkedTextField = (props: DarkedTextFieldProps) => {
             label,
             style,
             value,
-            onChange
+            onChange,
+            colorIgnored
         } = props
 
-        const color = useSelector(selectColor)
+        const darkMode = useSelector(selectDarkMode)
 
         return (<TextField
             type={type || "text"}
-            className={classes[color ? 'light' : 'dark'] + ' ' + (styles || "")}
+            className={classes[(colorIgnored && darkMode) ? 'light' : 'dark'] + ' ' + (styles || "")}
             variant="outlined"
             label={label || ""}
             InputProps={{

@@ -9,7 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import {useTranslation} from "react-i18next";
 import {useSelector} from "react-redux";
-import {selectColor} from "../../../redux/slices/colorSlice";
+import {selectDarkMode} from "../../../redux/slices/userSlice";
 import {getAllAccounts} from "../../../Services/accountsService";
 
 const useRowStyles = makeStyles({
@@ -68,7 +68,7 @@ export default function ModListClient() {
     const [users, setUsers] = useState([]);
     const [searchInput, setSearchInput] = useState("");
 
-    const color = useSelector(selectColor)
+    const darkMode = useSelector(selectDarkMode)
 
     useEffect(() => {
         getAllAccounts().then(res => {
@@ -97,17 +97,17 @@ export default function ModListClient() {
                 <Table aria-label="Clients">
                     <TableHead>
                         <TableRow>
-                            <TableCell style={{backgroundColor: `var(--${color ? 'white' : 'dark-light'}`, color: `var(--${color ? 'dark' : 'white-light'}`}}>{t("login")}</TableCell>
-                            <TableCell style={{backgroundColor: `var(--${color ? 'white' : 'dark-light'}`, color: `var(--${color ? 'dark' : 'white-light'}`}}>{t("first name")}</TableCell>
-                            <TableCell style={{backgroundColor: `var(--${color ? 'white' : 'dark-light'}`, color: `var(--${color ? 'dark' : 'white-light'}`}}>{t("last name")}</TableCell>
-                            <TableCell style={{backgroundColor: `var(--${color ? 'white' : 'dark-light'}`, color: `var(--${color ? 'dark' : 'white-light'}`}}>{t("email")}</TableCell>
-                            <TableCell style={{backgroundColor: `var(--${color ? 'white' : 'dark-light'}`, color: `var(--${color ? 'dark' : 'white-light'}`}}>{t("active")}</TableCell>
-                            <TableCell style={{backgroundColor: `var(--${color ? 'white' : 'dark-light'}`, color: `var(--${color ? 'dark' : 'white-light'}`}}>{t("access level")}</TableCell>
+                            <TableCell style={{backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`, color: `var(--${!darkMode ? 'dark' : 'white-light'}`}}>{t("login")}</TableCell>
+                            <TableCell style={{backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`, color: `var(--${!darkMode ? 'dark' : 'white-light'}`}}>{t("first name")}</TableCell>
+                            <TableCell style={{backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`, color: `var(--${!darkMode ? 'dark' : 'white-light'}`}}>{t("last name")}</TableCell>
+                            <TableCell style={{backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`, color: `var(--${!darkMode ? 'dark' : 'white-light'}`}}>{t("email")}</TableCell>
+                            <TableCell style={{backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`, color: `var(--${!darkMode ? 'dark' : 'white-light'}`}}>{t("active")}</TableCell>
+                            <TableCell style={{backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`, color: `var(--${!darkMode ? 'dark' : 'white-light'}`}}>{t("access level")}</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {search(users.map((user, index) => (
-                            <Row key={index} row={user} style={{backgroundColor: `var(--${color ? 'white' : 'dark-light'}`, color: `var(--${color ? 'dark' : 'white-light'}`}} />
+                            <Row key={index} row={user} style={{backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`, color: `var(--${!darkMode ? 'dark' : 'white-light'}`}} />
                         )))}
                     </TableBody>
                 </Table>

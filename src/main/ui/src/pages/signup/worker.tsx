@@ -30,13 +30,13 @@ export default function WorkerSignUp() {
 
     const [companiesList, setCompaniesList] = useState([]);
 
-    useEffect(() => {
-        const getCompaniesList = async () => {
-            const {data} = await axios.get('http://localhost:8080/api/company/companiesinfo', {});
-            setCompaniesList(data.map((comp: { name: string }) => comp.name))
-        }
-        getCompaniesList()
-    }, [company]);
+    // useEffect(() => {
+    //     const getCompaniesList = async () => {
+    //         const {data} = await axios.get('http://localhost:8080/api/company/companiesinfo', {});
+    //         setCompaniesList(data.map((comp: { name: string }) => comp.name))
+    //     }
+    //     getCompaniesList()
+    // }, [company]);
     console.log(companiesList)
 
     const workerSignUpFun = async () => {
@@ -81,6 +81,7 @@ export default function WorkerSignUp() {
                     }}
                     value={firstName}
                     onChange={event => {setFirstName(event.target.value)}}
+                    colorIgnored
                 />
 
 
@@ -90,6 +91,7 @@ export default function WorkerSignUp() {
                     className={styles.input}
                     value={secondName}
                     onChange={event => {setSecondName(event.target.value)}}
+                    colorIgnored
                 />
             </Box>
 
@@ -109,6 +111,7 @@ export default function WorkerSignUp() {
                         marginRight: 20
                     }}
                     onSelectedChange={setCompany}
+                    colorIgnored
                 />
 
                 <DarkedTextField
@@ -119,6 +122,7 @@ export default function WorkerSignUp() {
                     icon={(<EmailIcon/>)}
                     value={email}
                     onChange={event => {setEmail(event.target.value)}}
+                    colorIgnored
                 />
 
 
@@ -142,6 +146,7 @@ export default function WorkerSignUp() {
                     }}
                     value={login}
                     onChange={event => {setLogin(event.target.value)}}
+                    colorIgnored
                 />
 
                 <DarkedTextField
@@ -150,6 +155,7 @@ export default function WorkerSignUp() {
                     className={styles.input}
                     value={phoneNumber}
                     onChange={event => {setPhoneNumber(event.target.value)}}
+                    colorIgnored
                 />
 
             </Box>
@@ -167,6 +173,7 @@ export default function WorkerSignUp() {
                     className={styles.input}
                     value={languageType}
                     onChange={event => {setLanguageType(event.target.value)}}
+                    colorIgnored
                 />
             </Box>
 
@@ -186,6 +193,7 @@ export default function WorkerSignUp() {
                     icon={(<PasswordIcon/>)}
                     value={password}
                     onChange={event => {setPassword(event.target.value)}}
+                    colorIgnored
                 />
 
                 <DarkedTextField
@@ -196,6 +204,7 @@ export default function WorkerSignUp() {
                     icon={(<PasswordIcon/>)}
                     value={confirmPassword}
                     onChange={event => {setConfirmPassword(event.target.value)}}
+                    colorIgnored
                 />
             </Box>
 

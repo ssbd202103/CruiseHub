@@ -2,21 +2,22 @@ import { useTranslation } from "react-i18next";
 import LightThemeIcon from '@material-ui/icons/WbSunnyRounded';
 import DarkThemeIcon from '@material-ui/icons/Brightness3Rounded';
 import {IconButton} from "@material-ui/core";
-import {useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 
-import {selectColor} from '../redux/slices/colorSlice'
-import {change} from '../redux/slices/colorSlice'
+import {selectDarkMode} from '../redux/slices/userSlice'
+import {changeDarkMode} from '../Services/changeDataService'
 
 export default function AppColorSetter() {
     const {t} = useTranslation();
 
-    const color = useSelector(selectColor)
-
-    const dispatch = useDispatch()
+    const darkMode = useSelector(selectDarkMode)
 
     const handleClick = () => {
-        dispatch(change())
+        //TODO
+        changeDarkMode().catch(error => {
+            alert('ERROR. Go to console')
+            console.log(error)
+        })
     }
 
     return (
@@ -33,13 +34,13 @@ export default function AppColorSetter() {
             <p>{t("color")}</p>
             <IconButton>
                 {
-                    color ?
-                        <LightThemeIcon
-                            fontSize="large"
-                            style={{fill: 'var(--white)'}} /> :
+                    darkMode ?
                         <DarkThemeIcon
                             fontSize="large"
-                            style={{fill: 'var(--dark)'}} />
+                            style={{fill: 'var(--dark)'}} /> :
+                        <LightThemeIcon
+                            fontSize="large"
+                            style={{fill: 'var(--white)'}} />
                 }
             </IconButton>
         </div>

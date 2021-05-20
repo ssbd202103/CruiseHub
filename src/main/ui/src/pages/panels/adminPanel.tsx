@@ -32,7 +32,7 @@ import ChangeAccessLevelState from "./admin/ChangeAccessLevelState"
 import styles from '../../styles/moderatorPanel.module.css'
 import AppColorSetter from "../../components/AppColorSetter";
 
-import {selectColor} from "../../redux/slices/colorSlice";
+import {selectDarkMode} from "../../redux/slices/userSlice";
 import {useSelector} from "react-redux";
 import LogOutRoundedButton from "../../components/LogOutRoundedButton";
 import ChangeModeratorData from "../../components/changeData/ChangeModeratorData";
@@ -48,7 +48,7 @@ export default function AdminPanel() {
         setManage(true)
     }
 
-    const color = useSelector(selectColor)
+    const darkMode = useSelector(selectDarkMode)
 
     const [manageAccount, setManage] = useState(true)
     const handleManageAccount = () => {
@@ -82,12 +82,12 @@ export default function AdminPanel() {
         <Grid container className={styles.wrapper}>
             <Redirect to="/panels/adminPanel/accounts" />
             <Grid item xs={2} md={3} xl={2}>
-                <PanelMenu color={color ? 'yellow-dark' : 'white-light'}>
-                    <List className={styles.menu + ' ' + styles['menu-' + (color ? 'light' : 'dark')]} component="nav" aria-label="panel menu">
+                <PanelMenu color={!darkMode ? 'yellow-dark' : 'white-light'}>
+                    <List className={styles.menu + ' ' + styles['menu-' + (!darkMode ? 'light' : 'dark')]} component="nav" aria-label="panel menu">
                         <Link to="/panels/adminPanel/accounts">
                             <ListItem button>
                                 <ListItemIcon>
-                                    <AccountsListIcon style={{ fill: `var(--${color ? 'white' : 'dark'})` }} />
+                                    <AccountsListIcon style={{ fill: `var(--${!darkMode ? 'white' : 'dark'})` }} />
                                 </ListItemIcon>
                                 <ListItemText> {t("list accounts")} </ListItemText>
                             </ListItem>
@@ -95,7 +95,7 @@ export default function AdminPanel() {
                         <Link to="/panels/adminPanel/settings">
                             <ListItem button>
                                 <ListItemIcon>
-                                    <SettingsIcon style={{ fill: `var(--${color ? 'white' : 'dark'})` }} />
+                                    <SettingsIcon style={{ fill: `var(--${!darkMode ? 'white' : 'dark'})` }} />
                                 </ListItemIcon>
                                 <ListItemText>{t("settings")}</ListItemText>
                             </ListItem>
@@ -103,7 +103,7 @@ export default function AdminPanel() {
                         <Link to="/">
                             <ListItem button>
                                 <ListItemIcon>
-                                    <GoBackIcon style={{fill: `var(--${color ? 'white' : 'dark'})` }} />
+                                    <GoBackIcon style={{fill: `var(--${!darkMode ? 'white' : 'dark'})` }} />
                                 </ListItemIcon>
                                 <ListItemText>{t("go back")}</ListItemText>
                             </ListItem>
@@ -115,7 +115,7 @@ export default function AdminPanel() {
                 </PanelMenu>
             </Grid>
 
-            <Grid item className={styles.content + ' ' + styles[`content-${color ? 'light' : 'dark'}`]} xs={10} md={9} xl={10}>
+            <Grid item className={styles.content + ' ' + styles[`content-${!darkMode ? 'light' : 'dark'}`]} xs={10} md={9} xl={10}>
                 <Route exact path="/panels/adminPanel/accounts">
                     <h3> {t("list accounts")} </h3>
                     <ListClient />

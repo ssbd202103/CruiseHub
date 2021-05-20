@@ -8,13 +8,13 @@ import styles from '../styles/Home.module.css'
 
 import { useTranslation } from 'react-i18next'
 import {useSelector} from "react-redux";
-import {selectColor} from "../redux/slices/colorSlice";
+import {selectDarkMode} from "../redux/slices/userSlice";
 
 
 export default function Home() {
     const {t} = useTranslation()
 
-    const color = useSelector(selectColor)
+    const darkMode = useSelector(selectDarkMode)
 
     return (
         <HeaderFooterLayout>
@@ -27,8 +27,8 @@ export default function Home() {
                 <div>{t("ad")}</div>
             </section>
 
-            <section className={styles['top-cruises']} style={{}}>
-                <h2 className={styles.h2} style={{color: `var(--${color ? 'dark' : 'white'}`}}>{t("the best cruises")}</h2>
+            <section className={styles['top-cruises']}>
+                <h2 className={styles.h2} style={{color: `var(--${darkMode ? 'dark' : 'white'}`}}>{t("the best cruises")}</h2>
 
                 <div className={styles['cruises-grid']}>
                     {[0,1,2,3,4,5,6,7,8].map(item => 

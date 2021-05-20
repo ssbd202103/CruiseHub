@@ -128,7 +128,7 @@ public class AccountMapper {
      * @return Reprezentacja konta w postaci obiektu przesyłowego AccountDetailsViewDto
      */
     public static AccountDetailsViewDto toAccountDetailsViewDto(Account account) {
-        return new AccountDetailsViewDto(account.getFirstName(), account.getSecondName(), account.getLogin(),
+        return new AccountDetailsViewDto(account.getFirstName(), account.getSecondName(), account.isDarkMode(), account.getLogin(),
                 account.getEmail(), account.isConfirmed(), account.isActive(), account.getLanguageType().getName(),
                 account.getAccessLevels().stream()
                         .map(AccountMapper::toAccessLevelDetailsViewDto)
