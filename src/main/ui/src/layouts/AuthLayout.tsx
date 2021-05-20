@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid'
 import LayoutProps from './LayoutProps'
 import styles from '../styles/auth.global.module.css'
 
-import { useTranslation } from 'react-i18next'
+import {useTranslation} from 'react-i18next'
 
 export default function AuthLayout({children}: LayoutProps) {
 

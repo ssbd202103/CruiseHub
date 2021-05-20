@@ -1,4 +1,4 @@
-import React, {useEffect, useReducer, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Collapse from '@material-ui/core/Collapse';
@@ -15,9 +15,7 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import {Button} from "@material-ui/core";
 import {Link} from "react-router-dom";
 import {useTranslation} from "react-i18next";
-import ButtonGroup from '@material-ui/core/ButtonGroup'
 import axios from "axios";
-import { useLocation } from 'react-router-dom';
 import {useSelector} from "react-redux";
 import {selectColor} from "../../../redux/slices/colorSlice";
 import {getAccountDetailsAbout, getAllAccounts} from "../../../Services/accountsService";

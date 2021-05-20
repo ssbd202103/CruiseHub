@@ -104,7 +104,7 @@ public interface AccountManagerLocal {
      *
      * @return lista kont
      */
-    List<Account> getAllAccounts();
+    List<Account> getAllAccounts() throws BaseAppException;
 
 
     /**

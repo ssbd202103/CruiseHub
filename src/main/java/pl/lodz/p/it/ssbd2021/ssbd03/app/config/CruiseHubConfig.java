@@ -1,6 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.app.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import org.glassfish.jersey.server.ResourceConfig;
 
@@ -34,6 +35,7 @@ public class CruiseHubConfig extends ResourceConfig {
 
         public AppJsonProvider() {
             super();
+            mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
             setMapper(mapper);
         }
     }

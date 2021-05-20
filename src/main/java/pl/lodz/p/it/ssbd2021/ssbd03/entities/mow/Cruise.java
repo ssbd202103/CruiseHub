@@ -9,6 +9,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
+
 @Entity(name = "cruises")
 public class Cruise extends BaseEntity {
 
@@ -21,19 +23,19 @@ public class Cruise extends BaseEntity {
 
     @Getter
     @Setter
-    @NotNull
+    @NotNull(message = CONSTRAINT_NOT_NULL)
     @Column(name = "start_date")
     private LocalDateTime startDate;
 
     @Getter
     @Setter
-    @NotNull
+    @NotNull(message = CONSTRAINT_NOT_NULL)
     @Column(name = "end_date")
     private LocalDateTime endDate;
 
     @Getter
     @Setter
-    @NotNull
+    @NotNull(message = CONSTRAINT_NOT_NULL)
     @Column(name = "active")
     private boolean active;
 
@@ -45,13 +47,13 @@ public class Cruise extends BaseEntity {
 
     @Getter
     @Setter
-    @NotNull
+    @NotNull(message = CONSTRAINT_NOT_NULL)
     @Column(name = "available")
     private Boolean available;
 
     @Getter
     @Setter
-    @NotNull
+    @NotNull(message = CONSTRAINT_NOT_NULL)
     @OneToOne
     @JoinColumn(name = "cruises_group_id")
     private CruiseGroup cruisesGroup;

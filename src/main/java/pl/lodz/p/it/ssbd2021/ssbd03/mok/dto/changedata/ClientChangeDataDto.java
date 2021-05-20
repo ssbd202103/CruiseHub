@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AddressDto;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.Valid;
 
 @Getter
 @Setter

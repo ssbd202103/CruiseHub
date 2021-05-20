@@ -16,6 +16,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.Set;
 
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
+
 @NoArgsConstructor
 @Getter
 @Setter
@@ -30,21 +32,21 @@ public class AccountDtoForList implements SignableEntity {
     @Name
     private String secondName;
 
-    @Email
+    @Email(message = REGEX_INVALID_EMAIL)
     private String email;
 
     private boolean active;
 
-    @PositiveOrZero
+    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
     private Long version;
 
-    @NotEmpty
+    @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
     private Set<AccessLevelType> accessLevels;
 
-    @NotEmpty
+    @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
     private String etag;
 
-    public AccountDtoForList(@Login String login, @Name String firstName, @Name String secondName, @Email String email, @NotNull boolean active, @PositiveOrZero Long version, @NotNull Set<AccessLevelType> accessLevels, String etag) {
+    public AccountDtoForList(@Login String login, @Name String firstName, @Name String secondName, @Email(message = REGEX_INVALID_EMAIL) String email, @NotNull(message = CONSTRAINT_NOT_NULL) boolean active, @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR) Long version, @NotNull(message = CONSTRAINT_NOT_NULL) Set<AccessLevelType> accessLevels, String etag) {
         this.login = login;
         this.firstName = firstName;
         this.secondName = secondName;
@@ -61,7 +63,7 @@ public class AccountDtoForList implements SignableEntity {
         return login + "." + version;
     }
 
-    public AccountDtoForList(@Login String login, @Name String firstName, @Name String secondName, @Email String email, @NotNull boolean active, @PositiveOrZero Long version, @NotNull Set<AccessLevelType> accessLevels) {
+    public AccountDtoForList(@Login String login, @Name String firstName, @Name String secondName, @Email(message = REGEX_INVALID_EMAIL) String email, @NotNull(message = CONSTRAINT_NOT_NULL) boolean active, @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR) Long version, @NotNull(message = CONSTRAINT_NOT_NULL) Set<AccessLevelType> accessLevels) {
         this.login = login;
         this.firstName = firstName;
         this.secondName = secondName;

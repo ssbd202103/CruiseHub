@@ -1,12 +1,10 @@
-import { useTranslation } from "react-i18next";
+import {useTranslation} from "react-i18next";
 import LightThemeIcon from '@material-ui/icons/WbSunnyRounded';
 import DarkThemeIcon from '@material-ui/icons/Brightness3Rounded';
 import {IconButton} from "@material-ui/core";
-import {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 
-import {selectColor} from '../redux/slices/colorSlice'
-import {change} from '../redux/slices/colorSlice'
+import {change, selectColor} from '../redux/slices/colorSlice'
 
 export default function AppColorSetter() {
     const {t} = useTranslation();

@@ -4,7 +4,6 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AuthUnauthorizedException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.managers.AccountManagerLocal;
 
-import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.inject.Inject;
 import java.time.LocalDateTime;

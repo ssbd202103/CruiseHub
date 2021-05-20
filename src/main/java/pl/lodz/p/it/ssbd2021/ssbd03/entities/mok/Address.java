@@ -11,6 +11,8 @@ import pl.lodz.p.it.ssbd2021.ssbd03.validators.Street;
 import javax.persistence.*;
 import javax.validation.constraints.Positive;
 
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_POSITIVE_ERROR;
+
 @Entity(name = "addresses")
 public class Address extends BaseEntity {
     @Getter
@@ -22,7 +24,7 @@ public class Address extends BaseEntity {
 
     @Getter
     @Setter
-    @Positive
+    @Positive(message = CONSTRAINT_POSITIVE_ERROR)
     @Column(name = "house_number")
     private Long houseNumber;
 

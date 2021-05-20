@@ -1,9 +1,7 @@
-import {Link} from 'react-router-dom'
+import {Link, useHistory} from 'react-router-dom'
 
 import Box from '@material-ui/core/Box'
 import PasswordIcon from '@material-ui/icons/VpnKeyRounded'
-
-import { useHistory } from 'react-router-dom'
 
 import AuthLayout from '../layouts/AuthLayout'
 import DarkedTextField from '../components/DarkedTextField'
@@ -16,8 +14,6 @@ import axios from "axios"
 import React, {useState} from "react"
 
 import {useDispatch} from "react-redux";
-import {update} from '../redux/slices/tokenSlice'
-import {setUser} from '../redux/slices/userSlice'
 import getUser from "../Services/userService";
 
 export default function SignIn() {

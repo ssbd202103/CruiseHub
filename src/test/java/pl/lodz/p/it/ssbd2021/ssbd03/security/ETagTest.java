@@ -9,7 +9,8 @@ import pl.lodz.p.it.ssbd2021.ssbd03.testModel.mok.dto.TestAccountDto;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ETagTest {
 

@@ -1,18 +1,8 @@
 import {useTranslation} from 'react-i18next'
 
-import {
-    Grid,
-    List,
-    ListItem, 
-    ListItemIcon,
-    ListItemText
-} from "@material-ui/core";
+import {Grid, List, ListItem, ListItemIcon, ListItemText} from "@material-ui/core";
 
-import {
-    Route,
-    Link,
-    Redirect
-} from 'react-router-dom'
+import {Link, Redirect, Route} from 'react-router-dom'
 
 import SettingsIcon from '@material-ui/icons/SettingsRounded'
 import CruiseIcon from '@material-ui/icons/CardTravelRounded'

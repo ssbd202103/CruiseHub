@@ -9,6 +9,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_EMPTY;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
+
 @Entity(name = "comments")
 public class Comment extends BaseEntity {
     @Getter
@@ -20,20 +23,20 @@ public class Comment extends BaseEntity {
 
     @Getter
     @Setter
-    @NotNull
+    @NotNull(message = CONSTRAINT_NOT_NULL)
     @OneToOne
     @JoinColumn(name = "account_id")
     private Account account;
 
     @Getter
     @Setter
-    @NotEmpty
+    @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
     @Column(name = "comment")
     private String content;
 
     @Getter
     @Setter
-    @NotNull
+    @NotNull(message = CONSTRAINT_NOT_NULL)
     @OneToOne
     @JoinColumn(name = "cruise_id")
     private Cruise cruise;

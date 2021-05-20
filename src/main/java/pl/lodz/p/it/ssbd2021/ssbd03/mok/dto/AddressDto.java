@@ -10,11 +10,13 @@ import pl.lodz.p.it.ssbd2021.ssbd03.validators.Street;
 
 import javax.validation.constraints.Positive;
 
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_POSITIVE_ERROR;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class AddressDto {
-    @Positive
+    @Positive(message = CONSTRAINT_POSITIVE_ERROR)
     private Long houseNumber;
 
     @Street

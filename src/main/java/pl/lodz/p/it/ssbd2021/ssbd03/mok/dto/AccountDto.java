@@ -17,6 +17,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.Set;
 
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -31,16 +33,16 @@ public class AccountDto implements SignableEntity {
     @Name
     private String secondName;
 
-    @Email
+    @Email(message = REGEX_INVALID_EMAIL)
     private String email;
 
-    @NotNull
+    @NotNull(message = CONSTRAINT_NOT_NULL)
     private LanguageType languageType;
 
-    @NotEmpty
+    @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
     private Set<AccessLevelType> accessLevels;
 
-    @PositiveOrZero
+    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
     private Long version;
 
     @JsonIgnore

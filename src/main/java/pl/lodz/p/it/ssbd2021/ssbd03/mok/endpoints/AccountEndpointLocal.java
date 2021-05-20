@@ -11,9 +11,10 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDt
 import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
 
 import javax.ejb.Local;
-import javax.persistence.OptimisticLockException;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
 
 /**
  * Interfejs który zajmuje się gromadzeniem zmapowanych obiektów klas Dto na obiekty klas modelu związanych z kontami użytkowników i poziomami dostępu, oraz wywołuje metody logiki przekazując zmapowane obiekty.
@@ -71,7 +72,7 @@ public interface AccountEndpointLocal {
      *
      * @return Obiekty kont dto
      */
-    List<AccountDtoForList> getAllAccounts();
+    List<AccountDtoForList> getAllAccounts() throws BaseAppException;
 
 
     /**
@@ -81,7 +82,7 @@ public interface AccountEndpointLocal {
      * @param version wersja konta do weryfikacji
      * @throws BaseAppException Wyjątek aplikacji rzucany w przypadku błędu pobrania danych użytkownika
      */
-    void blockUser(@NotNull String login, @NotNull Long version) throws BaseAppException;
+    void blockUser(@NotNull(message = CONSTRAINT_NOT_NULL) String login, @NotNull(message = CONSTRAINT_NOT_NULL) Long version) throws BaseAppException;
 
 
     /**
@@ -109,7 +110,7 @@ public interface AccountEndpointLocal {
      * @param version            wersja konta do weryfikacji
      * @throws BaseAppException Bazowy wyjątek aplikacji rzucany w przypadku błędu pobrania danych użytkownika
      */
-    void unblockUser(@NotNull String unblockedUserLogin, @NotNull Long version) throws BaseAppException;
+    void unblockUser(@NotNull(message = CONSTRAINT_NOT_NULL) String unblockedUserLogin, @NotNull(message = CONSTRAINT_NOT_NULL) Long version) throws BaseAppException;
 
     /**
      * Metoda odpowiedzialna za wywołanie metody odpowiedzialnej za wysyłania email z linkiem do resetowania hasła dla danego użytkownika, który podał wybrany email

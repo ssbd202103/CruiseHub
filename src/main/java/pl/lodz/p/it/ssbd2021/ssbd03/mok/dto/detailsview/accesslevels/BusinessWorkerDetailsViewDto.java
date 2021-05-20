@@ -8,8 +8,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccessLevelDetailsViewDt
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.CompanyName;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.PhoneNumber;
 
-import javax.validation.constraints.NotEmpty;
-
 @NoArgsConstructor
 @Getter
 @Setter

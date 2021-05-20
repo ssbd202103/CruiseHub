@@ -1,11 +1,13 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.facades;
 
+import org.hibernate.exception.ConstraintViolationException;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.LanguageTypeWrapper;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AccountFacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AuthUnauthorizedException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
@@ -19,6 +21,9 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account.EMAIL_CONSTRAINT;
+import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account.LOGIN_CONSTRAINT;
 
 @Stateless
 @TransactionAttribute(TransactionAttributeType.MANDATORY)
@@ -48,6 +53,10 @@ public class AccountFacade extends AbstractFacade<Account> {
         return tq.getSingleResult();
     }
 
+    @Override
+    public List<Account> findAll() throws FacadeException {
+        return super.findAll();
+    }
 
     public Account findByLogin(String login) throws BaseAppException {
         TypedQuery<Account> tq = em.createNamedQuery("Account.findByLogin", Account.class);
@@ -61,9 +70,28 @@ public class AccountFacade extends AbstractFacade<Account> {
 
 
     public List<Account> getUnconfirmedAccounts() {
-        TypedQuery<Account> tqq = em.createNamedQuery("Account.findUnconfirmedAccount", Account.class);
+        TypedQuery<Account> tqq = em.createNamedQuery("Account.findUnconfirmedAccounts", Account.class);
         return tqq.getResultList();
 
+    }
+
+    @Override
+    public void edit(Account entity) throws FacadeException {
+        try {
+            super.edit(entity);
+        } catch (ConstraintViolationException e) {
+            switch (e.getConstraintName()) {
+                case LOGIN_CONSTRAINT:
+                    throw AccountFacadeException.loginReserved(e);
+                case EMAIL_CONSTRAINT:
+                    throw AccountFacadeException.emailReserved(e);
+            }
+        }
+    }
+
+    @Override
+    public void create(Account entity) throws FacadeException {
+        super.create(entity);
     }
 
     public Account updateAuthenticateInfo(String login, String ipAddr, LocalDateTime time, boolean isAuthValid) throws AuthUnauthorizedException {

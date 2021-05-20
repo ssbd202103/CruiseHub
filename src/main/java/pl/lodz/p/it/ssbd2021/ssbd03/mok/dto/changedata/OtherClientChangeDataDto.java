@@ -8,14 +8,14 @@ import lombok.Setter;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AbstractAccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.PhoneNumber;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.Valid;
 
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class OtherClientChangeDataDto extends AbstractAccountDto {
-    @NotNull
+    @Valid
     private OtherAddressChangeDto newAddress;
     @PhoneNumber
     private String newPhoneNumber;

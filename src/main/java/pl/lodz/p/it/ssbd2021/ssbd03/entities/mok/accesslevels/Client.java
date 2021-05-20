@@ -8,7 +8,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.PhoneNumber;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.validation.Valid;
 
 @Entity(name = "clients")
 @DiscriminatorValue("Client")
@@ -16,7 +16,6 @@ public class Client extends AccessLevel {
 
     @Getter
     @Setter
-    @NotNull
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE,CascadeType.REMOVE})
     @JoinColumn(name = "home_address_id")
     private Address homeAddress;

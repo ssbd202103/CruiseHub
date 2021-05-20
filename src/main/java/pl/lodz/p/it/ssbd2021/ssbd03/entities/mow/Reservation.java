@@ -12,6 +12,9 @@ import javax.validation.constraints.PositiveOrZero;
 import java.util.ArrayList;
 import java.util.List;
 
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_POSITIVE_OR_ZERO_ERROR;
+
 @Entity(name = "reservations")
 public class Reservation extends BaseEntity {
 
@@ -24,18 +27,18 @@ public class Reservation extends BaseEntity {
 
     @Getter
     @Setter
-    @PositiveOrZero
+    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
     @Column(name = "number_of_seats")
     private Long numberOfSeats;
 
     @Getter
-    @NotNull
+    @NotNull(message = CONSTRAINT_NOT_NULL)
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name = "cruise_id")
     private Cruise cruise;
 
     @Getter
-    @NotNull
+    @NotNull(message = CONSTRAINT_NOT_NULL)
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name = "client_id")
     private Client client;

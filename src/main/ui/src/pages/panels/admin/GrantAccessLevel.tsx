@@ -1,10 +1,8 @@
-import {Checkbox, FormControlLabel, FormGroup, Box, RadioGroup, Radio} from "@material-ui/core";
+import {Box, FormControlLabel, FormGroup, Radio, RadioGroup} from "@material-ui/core";
 import {Link} from 'react-router-dom';
-import {useHistory, useLocation} from 'react-router-dom';
 import React from "react";
 import {useTranslation} from 'react-i18next'
 import RoundedButton from '../../../components/RoundedButton'
-import axios from "axios";
 
 
 export default function Checkboxes() {
