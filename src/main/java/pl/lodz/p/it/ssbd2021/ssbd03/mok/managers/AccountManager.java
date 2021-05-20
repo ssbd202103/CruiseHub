@@ -260,7 +260,9 @@ public class AccountManager implements AccountManagerLocal {
         }
 
         account.setConfirmed(true);
-
+        TokenWrapper tokenWrapper = this.tokenWrapperFacade.findByToken(token);
+        tokenWrapper.setUsed(true);
+        this.tokenWrapperFacade.edit(tokenWrapper);
         setUpdatedMetadata(account);
         Locale locale = new Locale(account.getLanguageType().getName().name());
         String body = i18n.getMessage(ACTIVATE_ACCOUNT_BODY, locale);
@@ -276,6 +278,8 @@ public class AccountManager implements AccountManagerLocal {
         String token = JWTHandler.createToken(claims, login);
         String subject = i18n.getMessage(REQUESTED_PASSWORD_RESET_SUBJECT, locale);
         String body = i18n.getMessage(REQUESTED_PASSWORD_RESET_BODY, locale);
+        TokenWrapper tokenWrapper = TokenWrapper.builder().token(token).account(account).used(false).build();
+        this.tokenWrapperFacade.create(tokenWrapper);
         String contentHtml = "<a href=\"" + PropertiesReader.getSecurityProperties().getProperty("app.baseurl") + "/reset/passwordReset/" + token + "\">" + body + "</a>";
         EmailService.sendEmailWithContent(email, subject, contentHtml);
     }

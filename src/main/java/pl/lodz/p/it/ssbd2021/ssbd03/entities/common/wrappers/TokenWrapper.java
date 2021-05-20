@@ -26,6 +26,7 @@ public class TokenWrapper {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USED_TOKENS_SEQ_GEN")
     private Long id;
 
+    @Getter
     @Column(name = "token", updatable = false, nullable = false, unique = true)
     private String token;
 
