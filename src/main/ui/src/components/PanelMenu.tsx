@@ -1,6 +1,4 @@
-import {
-    Box
-} from '@material-ui/core'
+import {Box} from '@material-ui/core'
 
 import styles from '../styles/PanelMenu.module.css'
 import {useSelector} from "react-redux";

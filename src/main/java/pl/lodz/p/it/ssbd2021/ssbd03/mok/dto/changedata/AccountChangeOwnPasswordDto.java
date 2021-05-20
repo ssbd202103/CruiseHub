@@ -1,21 +1,22 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AbstractAccountDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Password;
 
 import javax.validation.constraints.NotNull;
+
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
 
 @Getter
 @Setter
 @NoArgsConstructor
 public class AccountChangeOwnPasswordDto extends AbstractAccountDto {
-    @NotNull
     @Password
     private String oldPassword;
 
-    @NotNull
     @Password
     private String newPassword;
 

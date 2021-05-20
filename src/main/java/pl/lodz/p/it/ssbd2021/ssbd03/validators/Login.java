@@ -13,7 +13,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.REGEX_INVALID_LOGIN;
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
 @Constraint(validatedBy = {})
-@Pattern(regexp = ValidationRegex.LOGIN)
+@Pattern(regexp = ValidationRegex.LOGIN, message = REGEX_INVALID_LOGIN)
 public @interface Login {
     String message() default REGEX_INVALID_LOGIN;
 

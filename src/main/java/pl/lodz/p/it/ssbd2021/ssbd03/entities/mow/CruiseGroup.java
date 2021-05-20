@@ -12,6 +12,8 @@ import javax.validation.constraints.PositiveOrZero;
 import java.util.ArrayList;
 import java.util.List;
 
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
+
 @Entity(name = "cruises_groups")
 public class CruiseGroup extends BaseEntity {
 
@@ -24,7 +26,7 @@ public class CruiseGroup extends BaseEntity {
 
     @Getter
     @Setter
-    @NotNull
+    @NotNull(message = CONSTRAINT_NOT_NULL)
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "company_id")
     private Company company;
@@ -32,26 +34,26 @@ public class CruiseGroup extends BaseEntity {
 
     @Getter
     @Setter
-    @NotNull
+    @NotNull(message = CONSTRAINT_NOT_NULL)
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "start_address_id")
     private CruiseAddress address;
 
     @Getter
     @Setter
-    @NotEmpty
+    @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
     @Column(name = "name")
     private String name;
 
     @Getter
     @Setter
-    @PositiveOrZero
+    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
     @Column(name = "number_of_seats")
     private Long numberOfSeats;
 
     @Getter
     @Setter
-    @Positive
+    @Positive(message = CONSTRAINT_POSITIVE_ERROR)
     @Column(name = "price")
     private Double price;
 
@@ -65,7 +67,7 @@ public class CruiseGroup extends BaseEntity {
 
     @Getter
     @Setter
-    @PositiveOrZero
+    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
     @Column(name = "average_rating")
     private Double averageRating;
 

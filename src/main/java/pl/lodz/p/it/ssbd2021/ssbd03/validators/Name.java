@@ -13,7 +13,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.REGEX_INVALID_NAME;
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
 @Constraint(validatedBy = {})
-@Pattern(regexp = ValidationRegex.NAME)
+@Pattern(regexp = ValidationRegex.NAME, message = REGEX_INVALID_NAME)
 public @interface Name {
     String message() default REGEX_INVALID_NAME;
 

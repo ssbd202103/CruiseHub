@@ -6,7 +6,7 @@ import Grid from "@material-ui/core/Grid";
 import styles from "../../styles/ManageAccount.module.css";
 import RoundedButton from "../RoundedButton";
 import DarkedTextField from "../DarkedTextField";
-import { ChangeDataComponentProps } from '../interfaces'
+import {ChangeDataComponentProps} from '../interfaces'
 import {ConfirmCancelButtonGroup} from "../ConfirmCancelButtonGroup";
 import {changeAdministratorData} from "../../Services/changeDataService";
 

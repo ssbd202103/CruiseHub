@@ -5,11 +5,7 @@ import DarkedTextField from "../DarkedTextField";
 import React, {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {useSelector} from "react-redux";
-import {
-    selectFirstName,
-    selectSecondName,
-    selectPhoneNumber,
-} from '../../redux/slices/userSlice'
+import {selectFirstName, selectPhoneNumber, selectSecondName,} from '../../redux/slices/userSlice'
 import {ChangeDataComponentProps} from "../interfaces";
 import {ConfirmCancelButtonGroup} from "../ConfirmCancelButtonGroup";
 import {changeClientData} from "../../Services/changeDataService";

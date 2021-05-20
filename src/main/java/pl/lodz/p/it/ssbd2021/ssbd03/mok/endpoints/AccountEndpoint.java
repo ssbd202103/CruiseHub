@@ -108,12 +108,12 @@ public class AccountEndpoint implements AccountEndpointLocal {
     }
 
     @Override
-    public List<AccountDtoForList> getAllAccounts() {
+    public List<AccountDtoForList> getAllAccounts() throws BaseAppException {
         return accountManager.getAllAccounts().stream().map(AccountMapper::toAccountListDto).collect(Collectors.toList());
     }
 
     @Override
-    public void blockUser(@NotNull String login, @NotNull Long version) throws BaseAppException {
+    public void blockUser(@NotNull(message = CONSTRAINT_NOT_NULL) String login, @NotNull(message = CONSTRAINT_NOT_NULL) Long version) throws BaseAppException {
         Account account = this.accountManager.blockUser(login, version);
 
         //todo uncomment it when needed
@@ -139,7 +139,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
     }
 
     @Override
-    public void unblockUser(@NotNull String unblockedUserLogin, @NotNull Long version) throws BaseAppException {
+    public void unblockUser(@NotNull(message = CONSTRAINT_NOT_NULL) String unblockedUserLogin, @NotNull(message = CONSTRAINT_NOT_NULL) Long version) throws BaseAppException {
         Account account = this.accountManager.unblockUser(unblockedUserLogin, version);
 
         //todo uncomment it when needed

@@ -1,17 +1,7 @@
-import {
-    Grid,
-    List,
-    ListItem,
-    ListItemIcon,
-    ListItemText
-} from '@material-ui/core'
+import {Grid, List, ListItem, ListItemIcon, ListItemText} from '@material-ui/core'
 
 
-import {
-    Route,
-    Link,
-    Redirect
-} from 'react-router-dom'
+import {Link, Redirect, Route} from 'react-router-dom'
 
 import SettingsIcon from '@material-ui/icons/SettingsRounded'
 import CruiseIcon from '@material-ui/icons/CardTravelRounded'
@@ -19,7 +9,7 @@ import GoBackIcon from '@material-ui/icons/ArrowBackRounded'
 
 import PanelMenu from '../../components/PanelMenu'
 
-import { useTranslation } from 'react-i18next'
+import {useTranslation} from 'react-i18next'
 
 import styles from '../../styles/clientPanel.module.css'
 import manageStyles from '../../styles/ManageAccount.module.css'

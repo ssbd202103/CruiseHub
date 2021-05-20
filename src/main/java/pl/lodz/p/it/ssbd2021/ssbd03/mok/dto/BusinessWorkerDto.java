@@ -15,6 +15,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -29,16 +31,16 @@ public class BusinessWorkerDto implements SignableEntity {
     @Name
     private String secondName;
 
-    @Email
+    @Email(message = REGEX_INVALID_EMAIL)
     private String email;
 
-    @NotNull
+    @NotNull(message = CONSTRAINT_NOT_NULL)
     private LanguageType languageType;
 
     @PhoneNumber
     private String phoneNumber;
 
-    @PositiveOrZero
+    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
     private Long version;
 
     @Override

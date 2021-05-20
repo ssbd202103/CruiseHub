@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
         @NamedQuery(name = "Company.findByName", query = "SELECT company FROM companies company WHERE company.name = :name")
 })
 @Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"nip", "name"})
+        @UniqueConstraint(columnNames = {"nip", "name"}, name = NIP_NAME_CONSTRAINT)
 })
 public class Company extends BaseEntity {
     @Getter
@@ -28,7 +28,7 @@ public class Company extends BaseEntity {
     private Long id;
 
     @Getter
-    @NotNull
+    @NotNull(message = CONSTRAINT_NOT_NULL)
     @OneToOne
     @JoinColumn(name = "address_id")
     private Address address;
@@ -36,7 +36,7 @@ public class Company extends BaseEntity {
 
     @Getter
     @Setter
-    @NotEmpty
+    @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
     @Column(name = "name", unique = true)
     private String name;
 

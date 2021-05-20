@@ -20,7 +20,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AuthUnauthorizedException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacade;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.ClientFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.CompanyFacadeMok;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.TokenWrapperFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.JWTHandler;
@@ -50,9 +49,6 @@ public class AccountManager implements AccountManagerLocal {
 
     @EJB
     private CompanyFacadeMok companyFacadeMok;
-
-    @EJB
-    private ClientFacade clientFacade;
 
     @EJB
     private TokenWrapperFacade tokenWrapperFacade;
@@ -176,7 +172,7 @@ public class AccountManager implements AccountManagerLocal {
     }
 
     @Override
-    public List<Account> getAllAccounts() {
+    public List<Account> getAllAccounts() throws BaseAppException {
         return accountFacade.findAll();
     }
 

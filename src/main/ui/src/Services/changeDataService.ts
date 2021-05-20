@@ -1,11 +1,11 @@
 import store from "../redux/store";
 import axios from './URL'
 import {
+    AdministratorChangeData,
+    BusinessWorkerChangeData,
     ChangeAddress,
     ClientChangeData,
-    BusinessWorkerChangeData,
-    ModeratorChangeData,
-    AdministratorChangeData
+    ModeratorChangeData
 } from "../interfaces/changeInterfaces";
 import getUser from "./userService";
 

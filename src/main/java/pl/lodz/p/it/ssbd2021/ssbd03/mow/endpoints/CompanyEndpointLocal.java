@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CompanyLightDto;
 
 import javax.ejb.Local;
@@ -15,5 +16,5 @@ public interface CompanyEndpointLocal {
      *
      * @return lista obiektów reprezentjace informacje o firmach
      */
-    List<CompanyLightDto> getCompaniesInfo();
+    List<CompanyLightDto> getCompaniesInfo() throws BaseAppException;
 }

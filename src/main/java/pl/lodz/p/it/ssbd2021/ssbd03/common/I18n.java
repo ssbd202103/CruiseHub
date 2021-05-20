@@ -35,6 +35,7 @@ public class I18n {
     public static final String REGEX_INVALID_LOGIN = "error.regex.login";
     public static final String REGEX_INVALID_PASSWORD = "error.regex.password";
     public static final String REGEX_INVALID_NAME = "error.regex.name";
+    public static final String REGEX_INVALID_EMAIL = "error.regex.email";
     public static final String REGEX_INVALID_COMPANY_NAME = "error.regex.companyName";
     public static final String REQUESTED_PASSWORD_RESET_SUBJECT = "account.request.reset.password.subject";
     public static final String REQUESTED_PASSWORD_RESET_BODY = "account.request.reset.password.body";
@@ -51,6 +52,14 @@ public class I18n {
     public static final String INCORRECT_LOGIN = "auth.incorrect.login";
     public static final String INCORRECT_PASSWORD = "auth.incorrect.password";
 	public static final String PASSWORDS_DONT_MATCH_ERROR = "error.password.change.oldPasswordError";
+    public static final String DATABASE_OPERATION_ERROR = "error.database.operation";
+    public static final String LOGIN_RESERVED_ERROR = "error.database.loginReserved";
+    public static final String EMAIL_RESERVED_ERROR = "error.database.emailReserved";
+    public static final String CONSTRAINT_VIOLATION_ERROR = "error.constraintViolation";
+    public static final String CONSTRAINT_POSITIVE_ERROR = "error.constraint.positive";
+    public static final String CONSTRAINT_POSITIVE_OR_ZERO_ERROR = "error.constraint.positiveOrZero";
+    public static final String CONSTRAINT_NOT_EMPTY = "error.constraint.notEmpty";
+    public static final String CONSTRAINT_NOT_NULL = "error.constraint.notNull";
 
     private ResourceBundle bundle;
 

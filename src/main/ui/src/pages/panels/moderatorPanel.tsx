@@ -1,24 +1,14 @@
 import {useTranslation} from 'react-i18next'
-import { useState } from "react";
+import {useState} from "react";
 import ListClient from "./moderator/ListClient";
 
 import SettingsIcon from '@material-ui/icons/SettingsRounded'
 import AccountsListIcon from '@material-ui/icons/PeopleAltRounded'
 import GoBackIcon from '@material-ui/icons/ArrowBackRounded'
 
-import {
-    Grid,
-    List,
-    ListItem, 
-    ListItemIcon,
-    ListItemText
-} from "@material-ui/core";
+import {Grid, List, ListItem, ListItemIcon, ListItemText} from "@material-ui/core";
 
-import {
-    Link,
-    Redirect,
-    Route
-} from 'react-router-dom'
+import {Link, Redirect, Route} from 'react-router-dom'
 
 import PanelMenu from '../../components/PanelMenu'
 import styles from '../../styles/moderatorPanel.module.css'

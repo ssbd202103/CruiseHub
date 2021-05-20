@@ -22,6 +22,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.time.LocalDateTime;
 
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
+
 /**
  * Klasa udostępniająca API do logowania
  */
@@ -48,7 +50,7 @@ public class AuthController {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response auth(@Valid @NotNull AuthenticateDto auth) throws AuthUnauthorizedException {
+    public Response auth(@Valid @NotNull(message = CONSTRAINT_NOT_NULL) AuthenticateDto auth) throws AuthUnauthorizedException {
         Credential credential = auth.toCredential();
         CredentialValidationResult result = identityStoreHandler.validate(credential);
         String token;

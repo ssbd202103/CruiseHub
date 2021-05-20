@@ -2,7 +2,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.security;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class SHA256HashTest {
 

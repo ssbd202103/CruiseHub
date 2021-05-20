@@ -1,7 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.facades;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -27,5 +27,15 @@ public class CompanyFacadeMok extends AbstractFacade<Company> {
         TypedQuery<Company> tq = em.createNamedQuery("Company.findByName", Company.class);
         tq.setParameter("name", companyName);
         return tq.getSingleResult();
+    }
+
+    @Override
+    public void create(Company entity) throws FacadeException {
+        super.create(entity);
+    }
+
+    @Override
+    public void edit(Company entity) throws FacadeException {
+        super.edit(entity);
     }
 }

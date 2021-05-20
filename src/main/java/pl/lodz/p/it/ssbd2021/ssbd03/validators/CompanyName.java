@@ -13,7 +13,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.REGEX_INVALID_COMPANY_NAM
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
 @Constraint(validatedBy = {})
-@Pattern(regexp = ValidationRegex.COMPANY_NAME)
+@Pattern(regexp = ValidationRegex.COMPANY_NAME, message = REGEX_INVALID_COMPANY_NAME)
 public @interface CompanyName {
     String message() default REGEX_INVALID_COMPANY_NAME;
 

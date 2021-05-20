@@ -3,15 +3,16 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.managers;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.TokenWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.EmailServiceException;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.JWTException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.TokenWrapperFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.JWTHandler;
 import pl.lodz.p.it.ssbd2021.ssbd03.services.EmailService;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
 
-import javax.ejb.*;
+import javax.ejb.Schedule;
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
 import javax.inject.Inject;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -43,7 +44,7 @@ public class RemoveUnconfirmedAccountManager {
      * Pobiera i usuwa niezatwierdzone konta, dla których minął 24-godzinny okres potwierdzenia
      */
     @Schedule(persistent = false)
-    private void removeUnconfirmedAccounts() {
+    private void removeUnconfirmedAccounts() throws BaseAppException {
 
         List<Account> unconfirmed = accountFacade.getUnconfirmedAccounts();
         for (Account acc : unconfirmed
@@ -58,7 +59,7 @@ public class RemoveUnconfirmedAccountManager {
     }
 
     @Schedule(hour = "*/12", minute = "*", second = "*", persistent = false)
-    private void removeUsedTokens() {
+    private void removeUsedTokens() throws BaseAppException {
         List<TokenWrapper> tokens = tokenWrapperFacade.getUsedToken();
         for (TokenWrapper tw :
                 tokens) {
@@ -67,18 +68,18 @@ public class RemoveUnconfirmedAccountManager {
     }
 
     @Schedule(hour = "*/12", minute = "*", second = "*", persistent = false)
-    private void removeUnUsedTokens() throws JWTException {
+    private void removeUnUsedTokens() throws BaseAppException {
         List<TokenWrapper> tokens = tokenWrapperFacade.getUnUsedToken();
         for (TokenWrapper tw :
                 tokens) {
-            if(JWTHandler.getExpirationTimeFromToken(tw.getToken()).before(new Date(System.currentTimeMillis()))){
+            if (JWTHandler.getExpirationTimeFromToken(tw.getToken()).before(new Date(System.currentTimeMillis()))) {
                 tokenWrapperFacade.remove(tw);
             }
         }
     }
 
     @Schedule(hour = "*/12", minute = "*", second = "*", persistent = false)
-    private void sendActivationEmailWithToken() throws EmailServiceException { // todo handle this exception
+    private void sendActivationEmailWithToken() throws BaseAppException { // todo handle this exception
         List<Account> unconfirmed = accountFacade.getUnconfirmedAccounts();
         for (Account acc : unconfirmed
         ) {
