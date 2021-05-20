@@ -16,7 +16,6 @@ import axios from "axios";
 import Recaptcha from "react-recaptcha";
 import Popup from "../../PopupRecaptcha";
 import {useSelector} from "react-redux";
-import {selectColor} from "../../redux/slices/colorSlice";
 
 export default function WorkerSignUp() {
     const {t} = useTranslation()
