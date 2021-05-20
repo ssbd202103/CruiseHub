@@ -10,6 +10,8 @@ import {useSelector} from "react-redux";
 import {selectAddress} from "../../redux/slices/userSlice";
 import {ConfirmCancelButtonGroup} from "../ConfirmCancelButtonGroup";
 import {changeClientAddress} from "../../Services/changeDataService";
+import Recaptcha from "react-recaptcha";
+import Popup from "../../PopupRecaptcha";
 
 export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: ChangeDataComponentProps) {
     const {t} = useTranslation()
@@ -22,8 +24,10 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
     const [city, setCity] = useState('')
     const [country, setCountry] = useState('')
 
-    const changeAddress = () => {
-        //TODO
+    const [buttonPopup, setButtonPopup] = useState(false);
+
+    async function verifyCallback() {
+        setButtonPopup(false)
         if (!houseNumber || !street || !postalCode || !city || !country) {
             return alert("Values are missing")
         }
@@ -44,6 +48,13 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
             alert("ERROR: go to console")
             console.log(error)
         })
+
+    }
+
+
+
+    const changeAddress = () => {
+        setButtonPopup(true)
     }
 
     return (
@@ -110,7 +121,15 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
                         value={country}
                         onChange={event => {setCountry(event.target.value)}} />
                 </div>
-
+                <Popup trigger={buttonPopup} setTrigger={setButtonPopup}>
+                    <div>
+                        <Recaptcha
+                            sitekey={process.env.REACT_APP_SECRET_NAME}
+                            size="normal"
+                            verifyCallback={verifyCallback}
+                        />
+                    </div>
+                </Popup>
                 <ConfirmCancelButtonGroup
                     onConfirm={changeAddress}
                     onCancel={onCancel} />

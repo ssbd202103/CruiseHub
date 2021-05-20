@@ -9,6 +9,8 @@ import DarkedTextField from "../DarkedTextField";
 import { ChangeDataComponentProps } from '../interfaces'
 import {ConfirmCancelButtonGroup} from "../ConfirmCancelButtonGroup";
 import {changeModeratorData} from "../../Services/changeDataService";
+import Recaptcha from "react-recaptcha";
+import Popup from "../../PopupRecaptcha";
 
 export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}: ChangeDataComponentProps) {
     const {t} = useTranslation()
@@ -19,13 +21,11 @@ export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}:
     const [firstNameValue, setFirstNameValue] = useState('')
     const [secondNameValue, setSecondNameValue] = useState('')
 
-    useEffect(() => {
-        setFirstNameValue(firstName)
-        setSecondNameValue(secondName)
-    }, [firstName, secondName])
+    const [buttonPopup, setButtonPopup] = useState(false);
 
-    const changeData = () => {
+    function verifyCallback(){
         //TODO
+        setButtonPopup(false)
         if (!firstNameValue || !secondNameValue) {
             return alert("Values are missing")
         }
@@ -36,6 +36,21 @@ export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}:
             alert("ERROR: go to console")
             console.log(error)
         })
+
+    }
+
+
+    useEffect(() => {
+        setFirstNameValue(firstName)
+        setSecondNameValue(secondName)
+    }, [firstName, secondName])
+
+    const changeData = () => {
+
+        setButtonPopup(true)
+
+
+
     }
 
     return (
@@ -75,6 +90,15 @@ export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}:
                         value={secondNameValue}
                         onChange={event => {setSecondNameValue(event.target.value)}} />
                 </div>
+                <Popup trigger={buttonPopup} setTrigger={setButtonPopup}>
+                    <div>
+                        <Recaptcha
+                            sitekey={process.env.REACT_APP_SECRET_NAME}
+                            size="normal"
+                            verifyCallback={verifyCallback}
+                        />
+                    </div>
+                </Popup>
                 <ConfirmCancelButtonGroup
                     onConfirm={changeData}
                     onCancel={onCancel} />

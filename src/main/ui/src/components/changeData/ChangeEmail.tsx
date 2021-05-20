@@ -2,13 +2,15 @@ import Grid from "@material-ui/core/Grid";
 import styles from "../../styles/ManageAccount.module.css";
 import RoundedButton from "../RoundedButton";
 import DarkedTextField from "../DarkedTextField";
-import React, {createRef, useState} from "react";
+import React, {createRef, useReducer, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {changeEmail as changeEmailAction, selectEmail} from "../../redux/slices/userSlice";
 import {changeEmail as changeEmailService} from "../../Services/changeEmailService";
 import {useTranslation} from "react-i18next";
 import {ConfirmCancelButtonGroup} from "../ConfirmCancelButtonGroup";
 import {ChangeDataComponentProps} from '../interfaces'
+import Recaptcha from "react-recaptcha";
+import Popup from "../../PopupRecaptcha";
 
 export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeDataComponentProps) {
     // i18n
@@ -18,12 +20,15 @@ export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeD
     const dispatch = useDispatch()
     const email = useSelector(selectEmail)
 
+
+
     // internal state and behavior
 
-    const [emailValue, setEmailValue] = useState('')
-    const [confirmEmailValue, setConfirmEmailValue] = useState('')
+    const [buttonPopup, setButtonPopup] = useState(false);
 
-    const changeEmail = () => {
+
+    function verifyCallback(){
+        setButtonPopup(false)
         if (!emailValue || !confirmEmailValue) {
             return alert("Fill up required fields")
         }
@@ -36,14 +41,22 @@ export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeD
         changeEmailService(emailValue).then(res => {
             setEmailValue('')
             setConfirmEmailValue('')
+            onConfirm()
         })
             .catch(error => {
-            //TODO
-            alert('ERROR. Go to the console')
-            console.log(error)
-        })
+                //TODO
+                alert('ERROR. Go to the console')
+                console.log(error)
+            })
 
-        onConfirm()
+    }
+
+    const [emailValue, setEmailValue] = useState('')
+    const [confirmEmailValue, setConfirmEmailValue] = useState('')
+
+    const changeEmail = () => {
+        setButtonPopup(true)
+
     }
 
     return (
@@ -74,7 +87,17 @@ export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeD
                         value={confirmEmailValue}
                         onChange={event => {setConfirmEmailValue(event.target.value)}}/>
                 </div>
+                <Popup trigger={buttonPopup} setTrigger={setButtonPopup}>
+                    <div>
+                        <Recaptcha
+                            sitekey={process.env.REACT_APP_SECRET_NAME}
+                            size="normal"
+                            verifyCallback={verifyCallback}
 
+
+                        />
+                    </div>
+                </Popup>
                 <ConfirmCancelButtonGroup
                     onConfirm={changeEmail}
                     onCancel={onCancel} />

@@ -13,6 +13,8 @@ import {
 import {ChangeDataComponentProps} from "../interfaces";
 import {ConfirmCancelButtonGroup} from "../ConfirmCancelButtonGroup";
 import {changeClientData} from "../../Services/changeDataService";
+import Recaptcha from "react-recaptcha";
+import Popup from "../../PopupRecaptcha";
 
 export default function ChangeClientData({open, onOpen, onConfirm, onCancel}: ChangeDataComponentProps) {
     const {t} = useTranslation()
@@ -25,6 +27,24 @@ export default function ChangeClientData({open, onOpen, onConfirm, onCancel}: Ch
     const [secondNameValue, setSecondNameValue] = useState('')
     const [phoneNumberValue, setPhoneNumberValue] = useState('')
 
+    const [buttonPopup, setButtonPopup] = useState(false);
+
+
+    function verifyCallback(){
+        setButtonPopup(false)
+        if (!firstNameValue || !secondNameValue || !phoneNumberValue) {
+            return alert("Values are missing")
+        }
+
+        changeClientData(firstNameValue, secondNameValue, phoneNumberValue).then(res => {
+            onConfirm()
+        }).catch(error => {
+            alert("ERROR: go to console")
+            console.log(error)
+        })
+
+    }
+
     useEffect(() => {
         setFirstNameValue(firstName)
         setSecondNameValue(secondName)
@@ -33,16 +53,7 @@ export default function ChangeClientData({open, onOpen, onConfirm, onCancel}: Ch
 
     const changeData = () => {
         //TODO
-        if (!firstNameValue || !secondNameValue || !phoneNumberValue) {
-            return alert("Values are missing")
-        }
-
-        changeClientData(firstNameValue, secondNameValue, phoneNumberValue).then(res => {
-                onConfirm()
-            }).catch(error => {
-                alert("ERROR: go to console")
-                console.log(error)
-        })
+        setButtonPopup(true)
     }
 
     return (
@@ -91,7 +102,17 @@ export default function ChangeClientData({open, onOpen, onConfirm, onCancel}: Ch
                         placeholder="+48-767-765-456"
                         value={phoneNumberValue}
                         onChange={event => {setPhoneNumberValue(event.target.value)}}/>
+                    <Popup trigger={buttonPopup} setTrigger={setButtonPopup}>
+                        <div>
+                            <Recaptcha
+                                sitekey={process.env.REACT_APP_SECRET_NAME}
+                                size="normal"
+                                verifyCallback={verifyCallback}
+                            />
+                        </div>
+                    </Popup>
                 </div>
+
                 <ConfirmCancelButtonGroup
                     onConfirm={changeData}
                     onCancel={onCancel} />

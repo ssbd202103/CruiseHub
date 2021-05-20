@@ -30,8 +30,7 @@ public class CruisePicture extends BaseEntity {
     @Column(name = "img_name")
     private String imgName;
 
-    public CruisePicture(Long id, @NotNull Byte[] img, @NotNull String imgName) {
-        this.id = id;
+    public CruisePicture(@NotNull Byte[] img, @NotNull String imgName) {
         this.img = img;
         this.imgName = imgName;
     }

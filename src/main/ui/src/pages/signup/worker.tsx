@@ -13,6 +13,10 @@ import styles from '../../styles/auth.global.module.css'
 import {useTranslation} from 'react-i18next'
 import {useEffect, useState} from "react";
 import axios from "axios";
+import Recaptcha from "react-recaptcha";
+import Popup from "../../PopupRecaptcha";
+import {useSelector} from "react-redux";
+import {selectColor} from "../../redux/slices/colorSlice";
 
 export default function WorkerSignUp() {
     const {t} = useTranslation()
@@ -30,17 +34,9 @@ export default function WorkerSignUp() {
 
     const [companiesList, setCompaniesList] = useState([]);
 
-    useEffect(() => {
-        const getCompaniesList = async () => {
-            const {data} = await axios.get('http://localhost:8080/api/company/companiesinfo', {});
-            setCompaniesList(data.map((comp: { name: string }) => comp.name))
-        }
-        getCompaniesList()
-    }, [company]);
-    console.log(companiesList)
+    const [buttonPopup, setButtonPopup] = useState(false);
 
-    const workerSignUpFun = async () => {
-
+    async function verifyCallback() {
         const json = JSON.stringify({
             firstName,
             secondName,
@@ -51,13 +47,26 @@ export default function WorkerSignUp() {
             phoneNumber,
             companyName: company
         });
-
+        setButtonPopup(false)
         await axios.post('http://localhost:8080/api/account/business-worker/registration', json, {
             headers: {
                 'Content-Type': 'application/json'
             }
         });
 
+    }
+
+    useEffect(() => {
+        const getCompaniesList = async () => {
+            const {data} = await axios.get('http://localhost:8080/api/company/companiesinfo', {});
+            setCompaniesList(data.map((comp: { name: string }) => comp.name))
+        }
+        getCompaniesList()
+    }, [company]);
+    console.log(companiesList)
+
+    const workerSignUpFun = async () => {
+        setButtonPopup(true)
     }
 
 
@@ -170,6 +179,7 @@ export default function WorkerSignUp() {
                 />
             </Box>
 
+
             <Box
                 style={{
                     display: "flex",
@@ -214,6 +224,15 @@ export default function WorkerSignUp() {
                     style={{width: '50%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
                     color="pink"
                 >{t("signup")}</RoundedButton>
+                <Popup trigger={buttonPopup} setTrigger={setButtonPopup}>
+                    <div>
+                        <Recaptcha
+                            sitekey={process.env.REACT_APP_SECRET_NAME}
+                            size="normal"
+                            verifyCallback={verifyCallback}
+                        />
+                    </div>
+                </Popup>
                 <Link to="client">
                     <a className={styles.link}>{t("i am a client")}</a>
                 </Link>

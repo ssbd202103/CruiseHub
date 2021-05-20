@@ -8,6 +8,8 @@ import RoundedButton from "../RoundedButton";
 import DarkedTextField from "../DarkedTextField";
 import {ConfirmCancelButtonGroup} from "../ConfirmCancelButtonGroup";
 import {changeBusinessWorkerData} from "../../Services/changeDataService";
+import Recaptcha from "react-recaptcha";
+import Popup from "../../PopupRecaptcha";
 
 export interface ChangeBusinessWorkerProps {
     open: boolean,
@@ -27,14 +29,11 @@ export default function ChangeBusinessWorkerData({open, onOpen, onConfirm, onCan
     const [secondNameValue, setSecondNameValue] = useState('')
     const [phoneNumberValue, setPhoneNumberValue] = useState('')
 
-    useEffect(() => {
-        setFirstNameValue(firstName)
-        setSecondNameValue(secondName)
-        setPhoneNumberValue(phoneNumber)
-    }, [firstName, secondName, phoneNumber])
+    const [buttonPopup, setButtonPopup] = useState(false);
 
-    const changeData = () => {
-        //TODO
+
+    function verifyCallback(){
+        setButtonPopup(false)
         if (!firstNameValue || !secondNameValue || !phoneNumberValue) {
             return alert("Values are missing")
         }
@@ -45,6 +44,18 @@ export default function ChangeBusinessWorkerData({open, onOpen, onConfirm, onCan
             alert("ERROR: go to console")
             console.log(error)
         })
+
+    }
+
+    useEffect(() => {
+        setFirstNameValue(firstName)
+        setSecondNameValue(secondName)
+        setPhoneNumberValue(phoneNumber)
+    }, [firstName, secondName, phoneNumber])
+
+    const changeData = () => {
+        //TODO
+        setButtonPopup(true)
     }
 
     return (
@@ -94,6 +105,15 @@ export default function ChangeBusinessWorkerData({open, onOpen, onConfirm, onCan
                         value={phoneNumberValue}
                         onChange={event => {setPhoneNumberValue(event.target.value)}}/>
                 </div>
+                <Popup trigger={buttonPopup} setTrigger={setButtonPopup}>
+                    <div>
+                        <Recaptcha
+                            sitekey={process.env.REACT_APP_SECRET_NAME}
+                            size="normal"
+                            verifyCallback={verifyCallback}
+                        />
+                    </div>
+                </Popup>
                 <ConfirmCancelButtonGroup
                     onConfirm={changeData}
                     onCancel={onCancel} />

@@ -7,6 +7,8 @@ import React, {createRef, useState} from "react";
 import {changeOwnPassword as changeOwnPasswordService} from "../../Services/changePasswordService";
 import {useTranslation} from "react-i18next";
 import {ConfirmCancelButtonGroup} from "../ConfirmCancelButtonGroup";
+import Recaptcha from "react-recaptcha";
+import Popup from "../../PopupRecaptcha";
 
 export default function ChangePassword({open, onOpen, onConfirm, onCancel}: ChangeDataComponentProps) {
     const {t} = useTranslation()
@@ -15,7 +17,11 @@ export default function ChangePassword({open, onOpen, onConfirm, onCancel}: Chan
     const [newPassword, setNewPassword] = useState('')
     const [confirmNewPassword, setConfirmNewPassword] = useState('')
 
-    const changePassword = async () => {
+    const [buttonPopup, setButtonPopup] = useState(false);
+
+
+    async function verifyCallback() {
+        setButtonPopup(false)
         if (!oldPassword || !newPassword || !confirmNewPassword) {
             //TODO
             return alert("FATAL: fields or values are missing")
@@ -26,9 +32,18 @@ export default function ChangePassword({open, onOpen, onConfirm, onCancel}: Chan
             return alert("FATAL: new passwords are not equal")
         }
 
+
         await changeOwnPasswordService(oldPassword, newPassword)
 
         onConfirm()
+
+    }
+
+
+    const changePassword = async () => {
+        setButtonPopup(true)
+
+
 
     }
 
@@ -64,6 +79,15 @@ export default function ChangePassword({open, onOpen, onConfirm, onCancel}: Chan
                         value={confirmNewPassword}
                         onChange={event => {setConfirmNewPassword(event.target.value)}}/>
                 </div>
+                <Popup trigger={buttonPopup} setTrigger={setButtonPopup}>
+                    <div>
+                        <Recaptcha
+                            sitekey={process.env.REACT_APP_SECRET_NAME}
+                            size="normal"
+                            verifyCallback={verifyCallback}
+                        />
+                    </div>
+                </Popup>
                 <ConfirmCancelButtonGroup
                     onConfirm={changePassword}
                     onCancel={onCancel} />

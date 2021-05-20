@@ -11,12 +11,13 @@ import styles from '../../styles/auth.global.module.css'
 
 import {useTranslation} from 'react-i18next'
 import axios from "axios";
-import {useState} from "react";
+import {createRef, useState} from "react";
+import Recaptcha from 'react-recaptcha'
+import Popup from "../../PopupRecaptcha";
 
 
 export default function ClientSignUp() {
     const {t} = useTranslation()
-
     const [firstName, setFirstName] = useState('')
     const [secondName, setSecondName] = useState('')
     const [login, setLogin] = useState('')
@@ -32,8 +33,9 @@ export default function ClientSignUp() {
     const [country, setCountry] = useState('')
     const [phoneNumber, setPhoneNumber] = useState('')
 
-    const clientSignUpFun = async () => {
+    const [buttonPopup, setButtonPopup] = useState(false);
 
+    async function verifyCallback() {
         const json = JSON.stringify({
                 firstName,
                 secondName,
@@ -51,14 +53,17 @@ export default function ClientSignUp() {
                 phoneNumber
             }
         );
-
+        setButtonPopup(false)
         await axios.post('http://localhost:8080/api/account/client/registration', json, {
             headers: {
                 'Content-Type': 'application/json'
             }
         });
 
+    }
 
+    const clientSignUpFun = async () => {
+        setButtonPopup(true)
     }
 
 
@@ -207,6 +212,16 @@ export default function ClientSignUp() {
                     justifyContent: "space-between"
                 }}
             >
+
+                <Popup trigger={buttonPopup} setTrigger={setButtonPopup}>
+                    <div>
+                        <Recaptcha
+                            sitekey={process.env.REACT_APP_SECRET_NAME}
+                            size="normal"
+                            verifyCallback={verifyCallback}
+                        />
+                    </div>
+                </Popup>
                 <RoundedButton
                     onClick={clientSignUpFun}
                     style={{width: '50%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
