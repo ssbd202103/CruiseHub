@@ -55,6 +55,7 @@ public class Attraction extends BaseEntity {
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @OneToOne
     @JoinColumn(name = "cruise_id")
+    @Valid
     private CruiseGroup cruise;
 
     public Attraction(String name, String description,

@@ -7,10 +7,15 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.PhoneNumber;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_EMPTY;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
+import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company.NIP_NAME_CONSTRAINT;
 
 @Entity(name = "companies")
 @NamedQueries({
@@ -20,6 +25,7 @@ import javax.validation.constraints.NotNull;
         @UniqueConstraint(columnNames = {"nip", "name"}, name = NIP_NAME_CONSTRAINT)
 })
 public class Company extends BaseEntity {
+    public static final String NIP_NAME_CONSTRAINT = "companies_name_unique_constraint";
     @Getter
     @Id
     @SequenceGenerator(name = "COMPANY_SEQ_GEN", sequenceName = "companies_id_seq", allocationSize = 1)
@@ -31,6 +37,7 @@ public class Company extends BaseEntity {
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @OneToOne
     @JoinColumn(name = "address_id")
+    @Valid
     private Address address;
 
 

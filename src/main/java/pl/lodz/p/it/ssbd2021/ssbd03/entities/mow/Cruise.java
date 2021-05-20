@@ -5,6 +5,7 @@ import lombok.Setter;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
@@ -56,6 +57,7 @@ public class Cruise extends BaseEntity {
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @OneToOne
     @JoinColumn(name = "cruises_group_id")
+    @Valid
     private CruiseGroup cruisesGroup;
 
     public Cruise(LocalDateTime startDate, LocalDateTime endDate, boolean active,

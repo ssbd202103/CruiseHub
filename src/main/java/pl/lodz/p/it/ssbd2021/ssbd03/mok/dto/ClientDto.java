@@ -38,6 +38,7 @@ public class ClientDto implements SignableEntity {
     @NotNull(message = CONSTRAINT_NOT_NULL)
     private LanguageType languageType;
 
+    @Valid
     private AddressDto address;
 
     @PhoneNumber

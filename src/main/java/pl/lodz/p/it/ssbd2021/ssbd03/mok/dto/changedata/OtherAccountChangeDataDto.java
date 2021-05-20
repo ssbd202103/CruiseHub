@@ -20,6 +20,7 @@ public class OtherAccountChangeDataDto extends AbstractAccountDto {
     private String newFirstName;
     @Name
     private String newSecondName;
+    @Email(message = REGEX_INVALID_EMAIL)
     private String newEmail;
 
 

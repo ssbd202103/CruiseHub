@@ -7,6 +7,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.ArrayList;
@@ -35,12 +36,14 @@ public class Reservation extends BaseEntity {
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name = "cruise_id")
+    @Valid
     private Cruise cruise;
 
     @Getter
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name = "client_id")
+    @Valid
     private Client client;
 
     @Getter

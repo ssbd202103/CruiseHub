@@ -9,6 +9,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Name;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -39,7 +40,8 @@ public class AccountDetailsViewDto implements SignableEntity {
     @NotNull(message = CONSTRAINT_NOT_NULL)
     private LanguageType languageType;
 
-    @NotEmpty
+    @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
+    @Valid
     private Set<AccessLevelDetailsViewDto> accessLevels;
 
     @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)

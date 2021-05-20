@@ -40,12 +40,14 @@ public abstract class BaseEntity {
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @OneToOne(cascade = CascadeType.PERSIST, optional = false)
     @JoinColumn(name = "altered_by_id")
+    @Valid
     private Account alteredBy;
 
     @Getter
     @Setter
     @JoinColumn(name = "alter_type_id")
     @OneToOne(cascade = {CascadeType.PERSIST})
+    @Valid
     private AlterTypeWrapper alterType;
 
     @Getter

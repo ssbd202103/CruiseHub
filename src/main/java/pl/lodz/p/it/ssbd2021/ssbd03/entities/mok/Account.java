@@ -4,16 +4,16 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.LanguageTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Name;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
-
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.*;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.REGEX_INVALID_EMAIL;
 import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account.EMAIL_CONSTRAINT;
@@ -101,6 +101,7 @@ public class Account extends BaseEntity {
     @Setter
     @JoinColumn(name = "language_type_id")
     @OneToOne(cascade = {CascadeType.PERSIST})
+    @Valid
     private LanguageTypeWrapper languageType;
 
     @Getter
@@ -121,6 +122,7 @@ public class Account extends BaseEntity {
     @Getter
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "account")
     @ToString.Exclude
+    @Valid
     private final Set<AccessLevel> accessLevels = new HashSet<>();
 
     public void setAccessLevel(AccessLevel accessLevel) {

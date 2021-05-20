@@ -5,6 +5,7 @@ import lombok.Setter;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -29,6 +30,7 @@ public class CruiseGroup extends BaseEntity {
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "company_id")
+    @Valid
     private Company company;
 
 
@@ -37,6 +39,7 @@ public class CruiseGroup extends BaseEntity {
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "start_address_id")
+    @Valid
     private CruiseAddress address;
 
     @Getter
@@ -63,6 +66,7 @@ public class CruiseGroup extends BaseEntity {
             joinColumns = @JoinColumn(name = "cruise_picture_id"),
             inverseJoinColumns = @JoinColumn(name = "cruises_group_id")
     )
+    @Valid
     private final List<CruisePicture> cruisePictures = new ArrayList<>();
 
     @Getter

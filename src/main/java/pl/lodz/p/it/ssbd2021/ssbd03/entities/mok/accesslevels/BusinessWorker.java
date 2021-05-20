@@ -8,6 +8,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.PhoneNumber;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 
 @Entity(name = "business_workers")
 @DiscriminatorValue("BusinessWorker")
@@ -28,6 +29,7 @@ public class BusinessWorker extends AccessLevel {
     @Setter
     @OneToOne(cascade = CascadeType.PERSIST, optional = false)
     @JoinColumn(updatable = false, nullable = false, name = "company_id")
+    @Valid
     private Company company;
 
     @Override

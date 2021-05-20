@@ -4,9 +4,10 @@ import lombok.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.xml.registry.infomodel.User;
+import javax.validation.Valid;
 import java.time.LocalDateTime;
+
+import static pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.TokenWrapper.TOKEN_CONSTRAINT;
 
 @Entity(name = "used_tokens")
 @NamedQueries({
@@ -14,12 +15,19 @@ import java.time.LocalDateTime;
         @NamedQuery(name = "TokenWrapper.findUnUsed", query = "SELECT ut FROM used_tokens ut WHERE ut.used=false"),
         @NamedQuery(name = "TokenWrapper.findByToken", query = "SELECT ut FROM used_tokens ut WHERE ut.token=:token"),
 })
+@Table(
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "token", name = TOKEN_CONSTRAINT),
+        }
+)
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class TokenWrapper {
+    public static final String TOKEN_CONSTRAINT = "used_tokens_token_unique_constraint";
+
     @Getter
     @Id
     @SequenceGenerator(name = "USED_TOKENS_SEQ_GEN", sequenceName = "used_tokens_id_seq", allocationSize = 1)
@@ -39,6 +47,7 @@ public class TokenWrapper {
 
     @JoinColumn(name = "account_id", updatable = false, nullable = false)
     @OneToOne(cascade = {CascadeType.PERSIST})
+    @Valid
     private Account account;
 
     @PrePersist

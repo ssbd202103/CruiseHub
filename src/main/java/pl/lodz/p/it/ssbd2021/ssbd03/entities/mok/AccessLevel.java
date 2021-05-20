@@ -5,6 +5,7 @@ import lombok.Setter;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import java.util.Objects;
 
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -26,6 +27,7 @@ public abstract class AccessLevel extends BaseEntity {
     @ManyToOne(optional = false, cascade = CascadeType.PERSIST)
     @Getter
     @Setter
+    @Valid
     private Account account;
 
     public abstract AccessLevelType getAccessLevelType();

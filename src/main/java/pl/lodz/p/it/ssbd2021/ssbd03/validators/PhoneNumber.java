@@ -13,7 +13,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.REGEX_INVALID_PHONE_NUMBE
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
 @Constraint(validatedBy = {})
-@Pattern(regexp = ValidationRegex.PHONE_NUMBER)
+@Pattern(regexp = ValidationRegex.PHONE_NUMBER, message = REGEX_INVALID_PHONE_NUMBER)
 public @interface PhoneNumber {
     String message() default REGEX_INVALID_PHONE_NUMBER;
 

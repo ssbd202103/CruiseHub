@@ -15,6 +15,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_POSITIVE_OR_ZE
 @AllArgsConstructor
 @NoArgsConstructor
 public abstract class AbstractAccountDto implements SignableEntity {
+    @Login
     private String login;
     @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
     private Long version;

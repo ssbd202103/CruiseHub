@@ -11,7 +11,7 @@ import javax.validation.Valid;
 @Setter
 @NoArgsConstructor
 public class ClientChangeDataDto extends ConsumerChangeDataDto {
-    @NotNull
+    @Valid
     private AddressDto newAddress;
 
     public ClientChangeDataDto(String login, Long version, String newFirstName, String newSecondName, String newPhoneNumber, AddressDto newAddress) {

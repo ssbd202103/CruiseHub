@@ -3,7 +3,9 @@ create table language_types
     id   bigint  not null,
     name varchar not null,
 
-    CONSTRAINT language_types_primary_key_constraint PRIMARY KEY (id)
+--     CONSTRAINT language_types_primary_key_constraint PRIMARY KEY (id),
+    CONSTRAINT language_types_name_unique_constraint UNIQUE (name)
+
 );
 
 create table alter_types
@@ -11,7 +13,9 @@ create table alter_types
     id   bigint  not null,
     name varchar not null,
 
-    CONSTRAINT alter_types_primary_key_constraint PRIMARY KEY (id)
+    CONSTRAINT alter_types_primary_key_constraint PRIMARY KEY (id),
+    CONSTRAINT alter_types_name_unique_constraint UNIQUE (name)
+
 );
 
 create table accounts
@@ -65,6 +69,7 @@ create table used_tokens
 
     CONSTRAINT used_tokens_token_unique_constraint UNIQUE (token),
     CONSTRAINT used_tokens_account_id_fk_constraint FOREIGN KEY (account_id) REFERENCES accounts (id)
+
 );
 create sequence used_tokens_id_seq
     START WITH 1

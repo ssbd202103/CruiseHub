@@ -7,6 +7,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 
@@ -27,12 +28,14 @@ public class Rating extends BaseEntity {
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @OneToOne
     @JoinColumn(name = "account_id")
+    @Valid
     private Account account;
 
     @Getter
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @OneToOne
     @JoinColumn(name = "cruise_id")
+    @Valid
     private Cruise cruise;
 
     @Getter

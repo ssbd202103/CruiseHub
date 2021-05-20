@@ -6,6 +6,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -26,6 +27,7 @@ public class Comment extends BaseEntity {
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @OneToOne
     @JoinColumn(name = "account_id")
+    @Valid
     private Account account;
 
     @Getter
@@ -39,6 +41,7 @@ public class Comment extends BaseEntity {
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @OneToOne
     @JoinColumn(name = "cruise_id")
+    @Valid
     private Cruise cruise;
 
     public Comment(Account account, String content, Cruise cruise) {
