@@ -145,6 +145,7 @@
 
 
     <build>
+        <finalName>ssbd03</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -287,7 +288,7 @@
         <profile>
             <id>prod</id>
             <properties>
-<!--                <app.baseurl>http://studapp.it.p.lodz.pl:8003</app.baseurl>-->
+                <!--                <app.baseurl>http://studapp.it.p.lodz.pl:8003</app.baseurl>-->
                 <app.baseurl>http://172.16.0.84:8003</app.baseurl>
             </properties>
             <activation>
