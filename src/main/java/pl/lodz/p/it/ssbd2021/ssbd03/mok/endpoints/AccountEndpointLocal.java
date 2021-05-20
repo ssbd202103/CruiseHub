@@ -1,6 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.ChangeAccessLevelStateDto;
@@ -246,5 +247,13 @@ public interface AccountEndpointLocal {
      * @throws BaseAppException        bazowy wyjątek aplikacji rzucany w przypadku gdy stare hasło podane przez użytkownika nie jest zgodne z tym w bazie danych
      */
     void changeOwnPassword(AccountChangeOwnPasswordDto accountChangeOwnPasswordDto) throws BaseAppException;
+
+    /**
+     * Metoda odpowiedzialna za zmianę jasnego-ciemnego motywu modułu prezentacji
+     *
+     * @param changeModeDto obiekt dto posiadający niezbędne dane do zmienienia motywu
+     */
+
+    void changeMode(ChangeModeDto changeModeDto) throws BaseAppException, FacadeException;
 }
 

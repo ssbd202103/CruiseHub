@@ -4,14 +4,14 @@ import Brand from './Brand'
 
 import styles from '../styles/Footer.module.css'
 import {useSelector} from "react-redux";
-import {selectColor} from "../redux/slices/colorSlice";
+import {selectDarkMode} from "../redux/slices/userSlice";
 
 function Footer() {
 
-    const color = useSelector(selectColor)
+    const darkMode = useSelector(selectDarkMode)
 
     return (
-        <Box component="footer" className={styles.wrapper + ' ' + styles[`wrapper-${color ? 'light' : 'dark'}`]}>
+        <Box component="footer" className={styles.wrapper + ' ' + styles[`wrapper-${!darkMode ? 'light' : 'dark'}`]}>
             <Brand />
             <div style={{
                 fontFamily: '"Montserrat", sans-serrif',

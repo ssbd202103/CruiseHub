@@ -9,15 +9,15 @@ import RoundedButton from './RoundedButton'
 
 import {useTranslation} from 'react-i18next'
 import {useSelector} from "react-redux";
-import {selectColor} from "../redux/slices/colorSlice";
+import {selectDarkMode} from "../redux/slices/userSlice";
 
 function Header() {
     const {t} = useTranslation()
 
-    const color = useSelector(selectColor)
+    const darkMode = useSelector(selectDarkMode)
 
     return (
-        <Box className={styles.wrapper + ' ' + styles[`wrapper-${color ? 'light' : 'dark'}`]}>
+        <Box className={styles.wrapper + ' ' + styles[`wrapper-${!darkMode ? 'light' : 'dark'}`]}>
             <Brand/>
             <Box>
                 <Link to="signin">

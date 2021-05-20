@@ -5,7 +5,8 @@ import {
     ClientChangeData,
     BusinessWorkerChangeData,
     ModeratorChangeData,
-    AdministratorChangeData
+    AdministratorChangeData,
+    ChangeMode
 } from "../interfaces/changeInterfaces";
 import getUser from "./userService";
 
@@ -151,6 +152,36 @@ export function changeAdministratorData(newFirstName: string, newSecondName: str
             "Authorization": `Bearer ${token}`
         }
     }).then(res => {
+        return getUser(token)
+    })
+}
+
+
+export function changeDarkMode() {
+    const {
+        user: {
+            login,
+            darkMode,
+            version,
+            etag
+        },
+        token
+    } = store.getState()
+
+    const changeDto: ChangeMode = {
+        login,
+        version,
+        newMode: !darkMode
+    }
+
+    return axios.put('account/change_mode', changeDto, {
+        headers: {
+            'If-Match': etag,
+            'Authorization': `Bearer ${token}`
+        }
+    })
+        .catch(error => console.log(error))
+        .then(res => {
         return getUser(token)
     })
 }

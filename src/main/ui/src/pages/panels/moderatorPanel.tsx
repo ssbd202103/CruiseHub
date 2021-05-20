@@ -23,7 +23,7 @@ import {
 import PanelMenu from '../../components/PanelMenu'
 import styles from '../../styles/moderatorPanel.module.css'
 import {useSelector} from "react-redux";
-import {selectColor} from "../../redux/slices/colorSlice";
+import {selectDarkMode} from "../../redux/slices/userSlice";
 import AppColorSetter from "../../components/AppColorSetter";
 import LogOutRoundedButton from "../../components/LogOutRoundedButton";
 import ChangeEmail from "../../components/changeData/ChangeEmail";
@@ -39,7 +39,7 @@ export default function ModeratorPanel() {
         setManage(true)
     }
 
-    const color = useSelector(selectColor)
+    const darkModel = useSelector(selectDarkMode)
 
     const [manageAccount, setManage] = useState(true)
     const handleManageAccount = () => {
@@ -73,12 +73,12 @@ export default function ModeratorPanel() {
         <Grid container className={styles.wrapper}>
             <Redirect to="/panels/moderatorPanel/accounts" />
             <Grid item xs={2} md={3} xl={2}>
-                <PanelMenu color={color ? 'pink-dark' : 'white'}>
-                    <List className={styles.menu + ' ' + styles['menu-' + (color ? 'light' : 'dark')]} component="nav" aria-label="panel menu">
+                <PanelMenu color={!darkModel ? 'pink-dark' : 'white'}>
+                    <List className={styles.menu + ' ' + styles['menu-' + (!darkModel ? 'light' : 'dark')]} component="nav" aria-label="panel menu">
                         <Link to="/panels/moderatorPanel/accounts">
                             <ListItem button>
                                 <ListItemIcon>
-                                    <AccountsListIcon style={{ fill: `var(--${color ? 'white' : 'dark'})` }} />
+                                    <AccountsListIcon style={{ fill: `var(--${!darkModel ? 'white' : 'dark'})` }} />
                                 </ListItemIcon>
                                 <ListItemText> {t("list accounts")} </ListItemText>
                             </ListItem>
@@ -86,7 +86,7 @@ export default function ModeratorPanel() {
                         <Link to="/panels/moderatorPanel/settings">
                             <ListItem button>
                                 <ListItemIcon>
-                                    <SettingsIcon style={{ fill: `var(--${color ? 'white' : 'dark'})` }} />
+                                    <SettingsIcon style={{ fill: `var(--${!darkModel ? 'white' : 'dark'})` }} />
                                 </ListItemIcon>
                                 <ListItemText>{t("settings")}</ListItemText>
                             </ListItem>
@@ -94,7 +94,7 @@ export default function ModeratorPanel() {
                         <Link to="/">
                             <ListItem button>
                                 <ListItemIcon>
-                                    <GoBackIcon style={{fill: `var(--${color ? 'white' : 'dark'})` }} />
+                                    <GoBackIcon style={{fill: `var(--${!darkModel ? 'white' : 'dark'})` }} />
                                 </ListItemIcon>
                                 <ListItemText>{t("go back")}</ListItemText>
                             </ListItem>
@@ -106,7 +106,7 @@ export default function ModeratorPanel() {
                 </PanelMenu>
             </Grid>
 
-            <Grid item className={styles.content + ' ' + styles[`content-${color ? 'light' : 'dark'}`]} xs={10} md={9} xl={10}>
+            <Grid item className={styles.content + ' ' + styles[`content-${!darkModel ? 'light' : 'dark'}`]} xs={10} md={9} xl={10}>
                 <Route exact path="/panels/moderatorPanel/accounts">
                     <h3> {t("list accounts")} </h3>
                     <ListClient />

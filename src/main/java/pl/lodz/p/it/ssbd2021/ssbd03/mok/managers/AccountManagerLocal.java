@@ -237,4 +237,12 @@ public interface AccountManagerLocal {
      * @throws BaseAppException Bazowy wyjątek aplikacji rzucany w przypadku gdy stare hasło nie jest zgodne z tym z bazy danych
      */
     void changeOwnPassword(String login, Long version, String oldPassword, String newPassword) throws BaseAppException;
+
+    /**
+     * Metoda odpowiedzialna za zmianę motywu
+     * @param login login użytkownika dla którego należy zmienić motyw
+     * @param newMode flaga nowego motywu
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
+    void changeMode(String login, boolean newMode) throws BaseAppException;
 }

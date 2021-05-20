@@ -24,6 +24,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDt
 import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
 
+import javax.json.Json;
 import javax.ws.rs.core.MediaType;
 import java.util.*;
 
@@ -82,8 +83,6 @@ class AccountControllerIT {
     public void registerBusinessWorkerTest_SUCCESS() {
         BusinessWorkerForRegistrationDto businessWorkerDto = new BusinessWorkerForRegistrationDto("Artur", "Radiuk", randomAlphanumeric(15), randomAlphanumeric(10) + "@gmail.com",
                 "abcABC123*", LanguageType.ENG, "123456789", "FirmaJez");
-        AccountDto accountDto = new AccountDto(businessWorkerDto.getLogin(), businessWorkerDto.getFirstName(), businessWorkerDto.getSecondName(),
-                businessWorkerDto.getEmail(), LanguageType.ENG, Set.of(AccessLevelType.BUSINESS_WORKER), 0L);
         given().baseUri(accountBaseUri).contentType(MediaType.APPLICATION_JSON).body(businessWorkerDto).when().post("/business-worker/registration").then().statusCode(204);
         // todo implement remove method to clean created data
     }
@@ -580,5 +579,26 @@ class AccountControllerIT {
         Response notChangedRes = given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + adminToken)).get("/" + account.getLogin());
         AccountDto notChangedAccount = objectMapper.readValue(notChangedRes.thenReturn().asString(), AccountDto.class);
         Assertions.assertEquals(account.getVersion(), notChangedAccount.getVersion());
+    }
+
+    @Test
+    public void changeModeTest_SUCCESS() throws JsonProcessingException {
+        AccountDto account = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
+        String etag= EntityIdentitySignerVerifier.calculateEntitySignature(account);
+        ChangeModeDto changeModeDto = new ChangeModeDto(account.getLogin(), account.getVersion(), true);
+        String adminToken = this.getAuthToken("rbranson", "abcABC123*");
+
+        given()
+                .contentType(ContentType.JSON)
+                .baseUri(accountBaseUri)
+                .header(new Header("If-Match", etag))
+                .header(new Header("Authorization", "Bearer " + adminToken))
+                .body(changeModeDto)
+                .put("/change_mode")
+                .then().statusCode(204);
+
+        AccountDto changedAccount = getAccountDto(account.getLogin());
+
+        assertTrue(changedAccount.isDarkMode());
     }
 }

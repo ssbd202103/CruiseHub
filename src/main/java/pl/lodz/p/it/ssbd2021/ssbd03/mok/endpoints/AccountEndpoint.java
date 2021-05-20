@@ -287,4 +287,14 @@ public class AccountEndpoint implements AccountEndpointLocal {
         this.accountManager.changeOwnPassword(accountChangeOwnPasswordDto.getLogin(), accountChangeOwnPasswordDto.getVersion(),
                 accountChangeOwnPasswordDto.getOldPassword(), accountChangeOwnPasswordDto.getNewPassword());
     }
+
+    public void changeMode(ChangeModeDto changeModeDto) throws BaseAppException, FacadeException {
+        Long version = getAccountByLogin(changeModeDto.getLogin()).getVersion();
+
+        if (!version.equals(changeModeDto.getVersion())) {
+            throw FacadeException.optimisticLock();
+        }
+
+        this.accountManager.changeMode(changeModeDto.getLogin(), changeModeDto.isNewMode());
+    }
 }

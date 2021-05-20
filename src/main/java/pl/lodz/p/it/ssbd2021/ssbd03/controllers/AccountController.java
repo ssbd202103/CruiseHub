@@ -609,4 +609,24 @@ public class AccountController {
 
         return Response.noContent().build();
     }
+
+    @PUT
+    @Path("/change_mode")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @ETagFilterBinding
+    public Response changeMode(ChangeModeDto changeModeDto, @HeaderParam("If-Match") String etag) {
+        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, changeModeDto)) {
+            return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
+        }
+
+        try {
+            accountEndpoint.changeMode(changeModeDto);
+        } catch (FacadeException e) {
+            return Response.status(NOT_ACCEPTABLE).entity(e.getMessage()).build();
+        } catch (BaseAppException e) {
+            return Response.status(NOT_FOUND).entity(e.getMessage()).build();
+        }
+
+        return Response.noContent().build();
+    }
 }
