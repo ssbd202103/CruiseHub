@@ -79,7 +79,7 @@ export interface DarkedSelectProps {
     readonly  onSelectedChange?: any
 }
 
-export default function DarkedTextField(props: DarkedSelectProps) {
+export default function DarkedSelect(props: DarkedSelectProps) {
 
     const darkMode = useSelector(selectDarkMode)
 
@@ -96,7 +96,7 @@ export default function DarkedTextField(props: DarkedSelectProps) {
 
     return (
         <FormControl
-            className={classes[(colorIgnored && darkMode) ? 'light' : 'dark'] + ' ' + (styles || "")}
+            className={classes[(!colorIgnored && darkMode) ? 'dark' : 'light'] + ' ' + (styles || "")}
             style={style || undefined}
             variant="outlined"
         >

@@ -95,7 +95,7 @@ const DarkedTextField = (props: DarkedTextFieldProps) => {
 
         return (<TextField
             type={type || "text"}
-            className={classes[(colorIgnored && darkMode) ? 'light' : 'dark'] + ' ' + (styles || "")}
+            className={classes[(!colorIgnored && darkMode) ? 'dark' : 'light'] + ' ' + (styles || "")}
             variant="outlined"
             label={label || ""}
             InputProps={{
