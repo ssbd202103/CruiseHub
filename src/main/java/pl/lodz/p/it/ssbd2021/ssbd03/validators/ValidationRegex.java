@@ -10,5 +10,4 @@ public class ValidationRegex {
     public static final String STREET = "^(?:[\\p{L}'.]+[- ]?)+$";
     public static final String POST_CODE = "^[a-zA-Z\\d -]{4,10}$";
     public static final String COMPANY_NAME = "^[\\p{L} \\d]{3,}$";
-    public static final String RATING = "^[2-4]{1}(\\.5)?$|^5$";
 }

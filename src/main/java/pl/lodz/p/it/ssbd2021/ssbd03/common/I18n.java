@@ -51,6 +51,7 @@ public class I18n {
     public static final String INCORRECT_LOGIN = "auth.incorrect.login";
     public static final String INCORRECT_PASSWORD = "auth.incorrect.password";
 	public static final String PASSWORDS_DONT_MATCH_ERROR = "error.password.change.oldPasswordError";
+	public static final String RATING_CONSTRAINT_ERROR = "error.contraint.rating";
 
     private ResourceBundle bundle;
 

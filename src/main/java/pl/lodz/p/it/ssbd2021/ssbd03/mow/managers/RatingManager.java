@@ -5,7 +5,9 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.RatingFacade;
 
 import javax.ejb.EJB;
+import javax.ejb.Stateful;
 
+@Stateful
 public class RatingManager implements RatingManagerLocal {
 
     @EJB
@@ -15,4 +17,6 @@ public class RatingManager implements RatingManagerLocal {
     public void createRating(Rating rating) throws BaseAppException {
 
     }
+
+
 }

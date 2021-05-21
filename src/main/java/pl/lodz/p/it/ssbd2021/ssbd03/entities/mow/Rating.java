@@ -12,8 +12,8 @@ import javax.validation.constraints.PositiveOrZero;
 
 @Entity(name = "ratings")
 @NamedQueries({
-        @NamedQuery(name="Rating.findByCruiseId",
-                query = "SELECT r FROM ratings r WHERE r.cruise =:cruise")
+        @NamedQuery(name="Rating.findByCruiseGroupId",
+                query = "SELECT r FROM ratings r WHERE r.cruiseGroup.name =:name")
 })
 
 public class Rating extends BaseEntity {
@@ -34,8 +34,8 @@ public class Rating extends BaseEntity {
     @Getter
     @NotNull
     @OneToOne
-    @JoinColumn(name = "cruise_id")
-    private Cruise cruise;
+    @JoinColumn(name = "cruise_group_id")
+    private CruiseGroup cruiseGroup;
 
     @Getter
     @Setter
@@ -43,9 +43,9 @@ public class Rating extends BaseEntity {
     @Column(name = "rating")
     private double rating;
 
-    public Rating(@NotNull Account account, @NotNull Cruise cruise, @NotNull double rating) {
+    public Rating(@NotNull Account account, @NotNull CruiseGroup cruiseGroup, @NotNull double rating) {
         this.account = account;
-        this.cruise = cruise;
+        this.cruiseGroup = cruiseGroup;
         this.rating = rating;
     }
 
