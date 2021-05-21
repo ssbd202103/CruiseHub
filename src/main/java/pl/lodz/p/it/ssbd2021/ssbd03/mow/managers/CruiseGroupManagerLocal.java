@@ -53,9 +53,11 @@ public interface CruiseGroupManagerLocal {
 
 
     /**
-     * Pobiera wszystkie obiekty grup wycieczek z bazy
+     * Deaktywuje daną grupę wycieczek
+     * @param name nazwa grupy wycieczek
+     * @param version wersja grupy wycieczek
      *
-     * @return the all companies
+     * @throws BaseAppException Bazowy wyjątek aplikacji
      */
     CruiseGroup deactivateCruiseGroup(String name, Long version) throws BaseAppException;
 }

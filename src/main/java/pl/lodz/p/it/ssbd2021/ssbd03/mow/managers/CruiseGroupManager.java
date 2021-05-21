@@ -56,7 +56,7 @@ public class CruiseGroupManager implements CruiseGroupManagerLocal {
     @Override
     public CruiseGroup deactivateCruiseGroup(String name, Long version) throws BaseAppException {
         CruiseGroup cruiseGroup = this.cruiseGroupFacadeMow.findByName(name);
-        if (!cruiseGroup.getVersion().equals(version)) {
+        if (!(cruiseGroup.getVersion() == version )) {
             throw FacadeException.optimisticLock();
         }
         cruiseGroup.setActive(false);

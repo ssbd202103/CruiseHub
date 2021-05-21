@@ -14,14 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
-@NamedQueries({
-        @NamedQuery(name = "CruiseGroup.findByName", query = "SELECT cruise FROM cruises_groups cruise WHERE cruise.name = :name"),
 
-})
 @Entity(name = "cruises_groups")
 @NamedQueries({
         @NamedQuery(name = "CruiseGroup.findByName", query = "SELECT crg FROM cruises_groups crg WHERE crg.name = :name"),
-
 })
 
 public class CruiseGroup extends BaseEntity {

@@ -14,7 +14,7 @@ import javax.ejb.Stateful;
 import java.util.List;
 
 /**
- * Klasa która zajmuje się gromadzeniem zmapowanych obiektów klas Dto na obiekty klas modelu związanych z firmami oraz wywołuje metody logiki przekazując zmapowane obiekty.
+ * Klasa która zajmuje się gromadzeniem zmapowanych obiektów klas Dto na obiekty klas modelu związanych z grupami wycieczek oraz wywołuje metody logiki przekazując zmapowane obiekty.
  */
 @Stateful
 public class CruiseGroupEndpoint implements CruiseGroupEndpointLocal {
