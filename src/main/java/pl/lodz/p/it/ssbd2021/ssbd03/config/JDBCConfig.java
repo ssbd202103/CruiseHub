@@ -14,7 +14,7 @@ import javax.persistence.PersistenceContext;
     portNumber = 5432,
     databaseName = "ssbd03",
     minPoolSize = 0,
-    maxPoolSize = 5,
+    maxPoolSize = 50,
     maxIdleTime = 10, // Nie potrzebujemy przetrzymywać połączeń tej puli
     isolationLevel = Connection.TRANSACTION_READ_COMMITTED
 )
@@ -29,7 +29,7 @@ import javax.persistence.PersistenceContext;
     databaseName = "ssbd03",
     isolationLevel = Connection.TRANSACTION_READ_COMMITTED,
     minPoolSize = 0,
-    maxPoolSize = 5,
+    maxPoolSize = 50,
     maxIdleTime = 10
 )
 
@@ -43,7 +43,7 @@ import javax.persistence.PersistenceContext;
     databaseName = "ssbd03",
     isolationLevel = Connection.TRANSACTION_READ_COMMITTED,
     minPoolSize = 0,
-    maxPoolSize = 5,
+    maxPoolSize = 50,
     maxIdleTime = 10
 )
 
@@ -57,7 +57,7 @@ import javax.persistence.PersistenceContext;
         databaseName = "ssbd03",
         isolationLevel = Connection.TRANSACTION_READ_COMMITTED,
         minPoolSize = 0,
-        maxPoolSize = 5,
+        maxPoolSize = 50,
         maxIdleTime = 10
 )
 
