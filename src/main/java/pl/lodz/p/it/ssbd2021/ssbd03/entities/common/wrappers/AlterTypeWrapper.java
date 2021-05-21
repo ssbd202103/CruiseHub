@@ -5,6 +5,8 @@ import lombok.Setter;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
 import static pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper.NAME_CONSTRAINT;

@@ -75,12 +75,13 @@ public class Account extends BaseEntity {
     @Setter
     @Column(name = "email", nullable = false, unique = true)
     @Email(message = REGEX_INVALID_EMAIL)
-    @Column(name = "email", nullable = false, unique = true)
+    @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
     private String email;
 
     @Getter
     @Setter
     @Column(name = "password_hash", nullable = false)
+    @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
     private String passwordHash;
 
     @Getter

@@ -30,6 +30,7 @@ public class Client extends AccessLevel {
     @Setter
     @PhoneNumber
     @Column(name = "phone_number", nullable = false)
+    @NotNull(message = CONSTRAINT_NOT_EMPTY)
     private String phoneNumber;
 
     @Override

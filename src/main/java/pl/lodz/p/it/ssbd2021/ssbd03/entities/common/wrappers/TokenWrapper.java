@@ -45,6 +45,7 @@ public class TokenWrapper {
 
     @Getter
     @Column(name = "creation_date_time", updatable = false, nullable = false)
+    @NotNull(message = CONSTRAINT_NOT_NULL)
     private LocalDateTime creationDateTime;
 
     @Column(name = "used", nullable = false)

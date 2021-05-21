@@ -32,16 +32,32 @@ public class CompanyFacadeMok extends AbstractFacade<Company> {
     public Company getCompanyByName(String companyName) throws BaseAppException {
         TypedQuery<Company> tq = em.createNamedQuery("Company.findByName", Company.class);
         tq.setParameter("name", companyName);
-        return tq.getSingleResult();
+        try {
+            return tq.getSingleResult();
+        } catch (NoResultException e) {
+            throw FacadeException.noSuchElement();
+        }
     }
 
     @Override
     public void create(Company entity) throws FacadeException {
-        super.create(entity);
+        try {
+            super.create(entity);
+        } catch (ConstraintViolationException e) {
+            if (e.getConstraintName().equals(NIP_NAME_CONSTRAINT)) {
+                throw CompanyFacadeException.nipNameReserved(e);
+            }
+        }
     }
 
     @Override
     public void edit(Company entity) throws FacadeException {
-        super.edit(entity);
+        try {
+            super.edit(entity);
+        } catch (ConstraintViolationException e) {
+            if (e.getConstraintName().equals(NIP_NAME_CONSTRAINT)) {
+                throw CompanyFacadeException.nipNameReserved(e);
+            }
+        }
     }
 }

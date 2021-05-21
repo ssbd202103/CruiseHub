@@ -5,7 +5,10 @@ import lombok.Setter;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_EMPTY;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
 import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.LanguageTypeWrapper.NAME_CONSTRAINT;
 
 
@@ -29,6 +32,7 @@ public class LanguageTypeWrapper {
     @Column(unique = true)
     @Setter
     @Getter
+    @NotNull(message = CONSTRAINT_NOT_NULL)
     private LanguageType name;
 
     public LanguageTypeWrapper(LanguageType name) {

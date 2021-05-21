@@ -52,7 +52,11 @@ public class AccountFacade extends AbstractFacade<Account> {
     public LanguageTypeWrapper getLanguageTypeWrapperByLanguageType(LanguageType languageType) throws FacadeException {
         TypedQuery<LanguageTypeWrapper> tq = em.createNamedQuery("LanguageTypeWrapper.findByName", LanguageTypeWrapper.class);
         tq.setParameter("name", languageType);
-        return tq.getSingleResult();
+        try {
+            return tq.getSingleResult();
+        } catch (NoResultException e) {
+            throw FacadeException.noSuchElement();
+        }
     }
 
     @Override
@@ -93,7 +97,16 @@ public class AccountFacade extends AbstractFacade<Account> {
 
     @Override
     public void create(Account entity) throws FacadeException {
-        super.create(entity);
+        try {
+            super.create(entity);
+        } catch (ConstraintViolationException e) {
+            switch (e.getConstraintName()) {
+                case LOGIN_CONSTRAINT:
+                    throw AccountFacadeException.loginReserved(e);
+                case EMAIL_CONSTRAINT:
+                    throw AccountFacadeException.emailReserved(e);
+            }
+        }
     }
 
     public Account updateAuthenticateInfo(String login, String ipAddr, LocalDateTime time, boolean isAuthValid) throws FacadeException {
@@ -115,7 +128,6 @@ public class AccountFacade extends AbstractFacade<Account> {
             throw FacadeException.noSuchElement();
 
         }
-
         return account;
     }
 }
