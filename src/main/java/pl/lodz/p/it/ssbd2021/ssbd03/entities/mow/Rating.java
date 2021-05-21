@@ -11,6 +11,11 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 
 @Entity(name = "ratings")
+@NamedQueries({
+        @NamedQuery(name="Rating.findByCruiseId",
+                query = "SELECT r FROM ratings r WHERE r.cruise =:cruise")
+})
+
 public class Rating extends BaseEntity {
 
     @Getter
