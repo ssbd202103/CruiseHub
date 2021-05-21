@@ -6,6 +6,8 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AbstractFacade;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -13,6 +15,7 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Stateless
+@TransactionAttribute(TransactionAttributeType.MANDATORY)
 public class CompanyFacadeMow extends AbstractFacade<Company> {
 
     @PersistenceContext(unitName = "ssbd03mowPU")

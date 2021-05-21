@@ -40,6 +40,8 @@ public class AuthController {
     @Inject
     private AuthenticateEndpointLocal authEndpoint;
 
+    //todo refactor it
+
     /**
      * Metoda służąca do logowania
      *

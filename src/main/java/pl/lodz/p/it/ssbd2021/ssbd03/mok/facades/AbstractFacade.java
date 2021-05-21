@@ -8,7 +8,6 @@ import javax.persistence.PersistenceException;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
-
 public abstract class AbstractFacade<T> {
 
     private final Class<T> entityClass;
