@@ -175,7 +175,7 @@ public class AccountController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public AccountDto grantAccessLevel(GrantAccessLevelDto grantAccessLevel) throws BaseAppException {
-        return accountEndpoint.grantAccessLevel(grantAccessLevel);
+        return tryAndRepeat(() -> accountEndpoint.grantAccessLevel(grantAccessLevel));
     }
 
     /**
@@ -194,7 +194,7 @@ public class AccountController {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, changeAccessLevelStateDto)) {
             return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
         }
-        AccountDto account = accountEndpoint.changeAccessLevelState(changeAccessLevelStateDto);
+        AccountDto account = tryAndRepeat(() -> accountEndpoint.changeAccessLevelState(changeAccessLevelStateDto));
         return Response.ok().entity(account).build();
     }
 
@@ -208,7 +208,7 @@ public class AccountController {
     @PUT
     @Path("/reset-password")
     public void resetPassword(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid PasswordResetDto passwordResetDto) throws BaseAppException {
-        this.accountEndpoint.resetPassword(passwordResetDto);
+        tryAndRepeat(() -> this.accountEndpoint.resetPassword(passwordResetDto));
     }
 
     /**
@@ -220,7 +220,7 @@ public class AccountController {
     @POST
     @Path("/request-password-reset/{login}")
     public void requestPasswordReset(@PathParam("login") @Login String login) throws BaseAppException {
-        this.accountEndpoint.requestPasswordReset(login);
+        tryAndRepeat(() -> this.accountEndpoint.requestPasswordReset(login));
     }
 
     /**
@@ -236,7 +236,7 @@ public class AccountController {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(tagValue, unblockAccountDto)) {
             return Response.status(406).build();
         }
-        accountEndpoint.unblockUser(unblockAccountDto.getLogin(), unblockAccountDto.getVersion());
+        tryAndRepeat(() -> accountEndpoint.unblockUser(unblockAccountDto.getLogin(), unblockAccountDto.getVersion()));
         return Response.status(200).build();
     }
 
@@ -255,7 +255,7 @@ public class AccountController {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, accountChangeOwnPasswordDto)) {
             return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
         }
-        accountEndpoint.changeOwnPassword(accountChangeOwnPasswordDto);
+        tryAndRepeat(() -> accountEndpoint.changeOwnPassword(accountChangeOwnPasswordDto));
         return Response.noContent().build();
     }
 
@@ -270,7 +270,7 @@ public class AccountController {
     @Path("/request-someones-password-reset/{login}/{email}")
     public void requestSomeonesPasswordReset(@PathParam("login") @Login String login, @PathParam("email") @Email(message = REGEX_INVALID_EMAIL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
             String email) throws BaseAppException {
-        this.accountEndpoint.requestSomeonesPasswordReset(login, email);
+        tryAndRepeat(() -> this.accountEndpoint.requestSomeonesPasswordReset(login, email));
     }
 
 
@@ -283,7 +283,7 @@ public class AccountController {
     @PUT
     @Path("/account-verification")
     public void accountVerification(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid AccountVerificationDto accountVerificationDto) throws BaseAppException {
-        this.accountEndpoint.verifyAccount(accountVerificationDto);
+        tryAndRepeat(() -> this.accountEndpoint.verifyAccount(accountVerificationDto));
     }
 
     /**
@@ -302,7 +302,7 @@ public class AccountController {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, otherClientChangeDataDto)) {
             return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
         }
-        OtherClientChangeDataDto account = accountEndpoint.changeOtherClientData(otherClientChangeDataDto);
+        OtherClientChangeDataDto account = tryAndRepeat(() -> accountEndpoint.changeOtherClientData(otherClientChangeDataDto));
         return Response.ok().entity(account).build();
     }
 
@@ -322,7 +322,7 @@ public class AccountController {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, otherBusinessWorkerChangeDataDto)) {
             return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
         }
-        OtherBusinessWorkerChangeDataDto account = accountEndpoint.changeOtherBusinessWorkerData(otherBusinessWorkerChangeDataDto);
+        OtherBusinessWorkerChangeDataDto account = tryAndRepeat(() -> accountEndpoint.changeOtherBusinessWorkerData(otherBusinessWorkerChangeDataDto));
         return Response.ok().entity(account).build();
     }
 
@@ -343,7 +343,7 @@ public class AccountController {
             return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
         }
 
-        AccountDto account = accountEndpoint.changeOtherAccountData(otherAccountChangeDataDto);
+        AccountDto account = tryAndRepeat(() -> accountEndpoint.changeOtherAccountData(otherAccountChangeDataDto));
         return Response.ok().entity(account).build();
     }
 
@@ -360,7 +360,7 @@ public class AccountController {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, accountChangeEmailDto)) {
             return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
         }
-        accountEndpoint.changeEmail(accountChangeEmailDto);
+        tryAndRepeat(() -> accountEndpoint.changeEmail(accountChangeEmailDto));
         return Response.noContent().build();
     }
 
@@ -377,7 +377,7 @@ public class AccountController {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, clientChangeDataDto)) {
             return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
         }
-        accountEndpoint.changeClientData(clientChangeDataDto);
+        tryAndRepeat(() -> accountEndpoint.changeClientData(clientChangeDataDto));
         return Response.noContent().build();
     }
 
@@ -394,7 +394,7 @@ public class AccountController {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, businessWorkerChangeDataDto)) {
             return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
         }
-        accountEndpoint.changeBusinessWorkerData(businessWorkerChangeDataDto);
+        tryAndRepeat(() -> accountEndpoint.changeBusinessWorkerData(businessWorkerChangeDataDto));
         return Response.noContent().build();
     }
 
@@ -411,7 +411,7 @@ public class AccountController {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, moderatorChangeDataDto)) {
             return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
         }
-        accountEndpoint.changeModeratorData(moderatorChangeDataDto);
+        tryAndRepeat(() -> accountEndpoint.changeModeratorData(moderatorChangeDataDto));
         return Response.noContent().build();
     }
 
@@ -428,7 +428,7 @@ public class AccountController {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, administratorChangeDataDto)) {
             return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
         }
-        accountEndpoint.changeAdministratorData(administratorChangeDataDto);
+        tryAndRepeat(() -> accountEndpoint.changeAdministratorData(administratorChangeDataDto));
         return Response.noContent().build();
     }
 
@@ -440,7 +440,7 @@ public class AccountController {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, changeModeDto)) {
             return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
         }
-        accountEndpoint.changeMode(changeModeDto);
+        tryAndRepeat(() -> accountEndpoint.changeMode(changeModeDto));
         return Response.noContent().build();
     }
 }

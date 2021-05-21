@@ -28,13 +28,8 @@ public class AccountSelfController {
     @GET
     @Path("/account-details")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getSelfDetails() {
-        try {
-            String selfLogin = accountEndpoint.getCurrentUserLogin();
-            AccountDetailsViewDto account = accountEndpoint.getAccountDetailsByLogin(selfLogin);
-            return Response.ok().entity(account).build();
-        } catch (BaseAppException e) {
-            return Response.status(NOT_FOUND).entity(e.getMessage()).build();
-        }
+    public AccountDetailsViewDto getSelfDetails() throws BaseAppException {
+        String selfLogin = tryAndRepeat(() -> accountEndpoint.getCurrentUserLogin());
+        return tryAndRepeat(() -> accountEndpoint.getAccountDetailsByLogin(selfLogin));
     }
 }
