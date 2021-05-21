@@ -176,7 +176,7 @@ public class AccountManager implements AccountManagerLocal {
     }
 
     @Override
-    public Account blockUser(String login, Long version, String currentUserLogin) throws BaseAppException {
+    public Account blockUser(String login, long version, String currentUserLogin) throws BaseAppException {
         Account account = this.accountFacade.findByLogin(login);
         if (!(account.getVersion() == version)) {
             throw FacadeException.optimisticLock();
@@ -184,8 +184,7 @@ public class AccountManager implements AccountManagerLocal {
         account.setActive(false);
         setUpdatedMetadata(account);
         Account blockingAccount = this.accountFacade.findByLogin(currentUserLogin);
-        setAlterTypeAndAlterAccount(blockingAccount, accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE),
-            blockingAccount);
+        setUpdatedMetadata(blockingAccount);
         accountFacade.edit(account);
         return account;
     }
@@ -283,7 +282,7 @@ public class AccountManager implements AccountManagerLocal {
     }
 
     @Override
-    public Account unblockUser(String unblockedUserLogin, Long version, String currentUserLogin) throws BaseAppException {
+    public Account unblockUser(String unblockedUserLogin, long version, String currentUserLogin) throws BaseAppException {
         Account account = this.accountFacade.findByLogin(unblockedUserLogin);
         if (!(account.getVersion() == version)) {
             throw FacadeException.optimisticLock();
@@ -291,8 +290,7 @@ public class AccountManager implements AccountManagerLocal {
         account.setActive(true);
         setUpdatedMetadata(account);
         Account blockingAccount = this.accountFacade.findByLogin(currentUserLogin);
-        setAlterTypeAndAlterAccount(blockingAccount, accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE),
-            blockingAccount);
+        setUpdatedMetadata(blockingAccount);
         return account;
     }
 
@@ -466,7 +464,7 @@ public class AccountManager implements AccountManagerLocal {
 
         Map<String, Object> map = Map.of("login", login, "accessLevels", account.getAccessLevels()
                 .stream().map(accessLevel -> accessLevel.getAccessLevelType().name()).collect(Collectors.toList()));
-        return JWTHandler.createToken(map, account.getId().toString());
+        return JWTHandler.createToken(map, String.valueOf(account.getId()));
     }
 
     @Override
