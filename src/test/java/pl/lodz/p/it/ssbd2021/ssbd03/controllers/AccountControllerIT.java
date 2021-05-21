@@ -53,14 +53,14 @@ class AccountControllerIT {
     @Test
     public void requestPasswordReset_SUCCESS() throws JsonProcessingException {
         AccountDto accountDto = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
-        given().baseUri(accountBaseUri).contentType(MediaType.APPLICATION_JSON).post("/request-password-reset/" + accountDto.getLogin()).then().statusCode(200);
+        given().baseUri(accountBaseUri).contentType(MediaType.APPLICATION_JSON).post("/request-password-reset/" + accountDto.getLogin()).then().statusCode(204);
     }
 
     @Test
     public void requestSomeonesPasswordReset_SUCCESS() throws JsonProcessingException {
         String adminToken = this.getAuthToken("rbranson", "abcABC123*");
         AccountDto accountDto = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
-        given().baseUri(accountBaseUri).contentType(MediaType.APPLICATION_JSON).header(new Header("Authorization", "Bearer " + adminToken)).post("/request-someones-password-reset/" + accountDto.getLogin() + "/" + accountDto.getEmail()).then().statusCode(200);
+        given().baseUri(accountBaseUri).contentType(MediaType.APPLICATION_JSON).header(new Header("Authorization", "Bearer " + adminToken)).post("/request-someones-password-reset/" + accountDto.getLogin() + "/" + accountDto.getEmail()).then().statusCode(204);
     }
 
 
@@ -381,7 +381,7 @@ class AccountControllerIT {
                 .when()
                 .put("/change_email");
 
-        assertEquals(403, response.getStatusCode());
+        assertEquals(409, response.getStatusCode());
         assertEquals(OPTIMISTIC_LOCK_EXCEPTION, response.asString());
 
         Response notChangedRes = given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + adminToken)).get("/" + account.getLogin());
@@ -576,7 +576,7 @@ class AccountControllerIT {
                 .contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken))
                 .body(accountChangeOwnPasswordDto)
                 .when()
-                .put("change_own_password").then().statusCode(404);
+                .put("change_own_password").then().statusCode(400);
 
         Response notChangedRes = given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + adminToken)).get("/" + account.getLogin());
         AccountDto notChangedAccount = objectMapper.readValue(notChangedRes.thenReturn().asString(), AccountDto.class);
