@@ -240,6 +240,7 @@ create table cruises_groups
     price                numeric(8, 2) check ((price >= (0)::numeric))                       not null,
     start_address_id     bigint                                                              not null, -- FOREIGN KEY
     average_rating       numeric(2, 1) check ((average_rating >= (0)::numeric) AND (average_rating <= (5)::numeric)),
+    active               boolean   default false             not null,
 
     creation_date_time   timestamp default CURRENT_TIMESTAMP                                 not null,
     last_alter_date_time timestamp                                                           not null,
