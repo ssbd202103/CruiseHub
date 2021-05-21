@@ -2,9 +2,9 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints;
 
 
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AuthUnauthorizedException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.managers.AccountManagerLocal;
 
-import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.inject.Inject;
 import java.time.LocalDateTime;
@@ -19,12 +19,12 @@ public class AuthenticateEndpoint implements AuthenticateEndpointLocal {
     private AccountManagerLocal accountManager;
 
     @Override
-    public void updateIncorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws AuthUnauthorizedException {
+    public void updateIncorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws BaseAppException {
         accountManager.updateIncorrectAuthenticateInfo(login, IpAddr, time);
     }
 
     @Override
-    public String updateCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws AuthUnauthorizedException {
+    public String updateCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws BaseAppException {
         return accountManager.updateCorrectAuthenticateInfo(login, IpAddr, time);
     }
 }

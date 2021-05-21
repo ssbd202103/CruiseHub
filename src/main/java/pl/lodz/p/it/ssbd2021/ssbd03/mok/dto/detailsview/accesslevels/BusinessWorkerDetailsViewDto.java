@@ -8,8 +8,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccessLevelDetailsViewDt
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.CompanyName;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.PhoneNumber;
 
-import javax.validation.constraints.NotEmpty;
-
 @NoArgsConstructor
 @Getter
 @Setter
@@ -24,7 +22,7 @@ public class BusinessWorkerDetailsViewDto extends AccessLevelDetailsViewDto {
     private String companyName;
 
 
-    public BusinessWorkerDetailsViewDto(boolean enabled, String phoneNumber, boolean confirmed, String companyName,Long accLevelVersion) {
+    public BusinessWorkerDetailsViewDto(boolean enabled, String phoneNumber, boolean confirmed, String companyName,long accLevelVersion) {
         super(enabled, AccessLevelType.BUSINESS_WORKER,accLevelVersion);
         this.phoneNumber = phoneNumber;
         this.confirmed = confirmed;

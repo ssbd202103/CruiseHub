@@ -105,7 +105,7 @@ export default function ClientSignUp() {
             <DarkedTextField
                 type="email"
                 label={t("email") + ' *'}
-                placeholder="example@email.com"
+                placeholder="example@Email(message = REGEX_INVALID_EMAIL).com"
                 className={styles.input}
                 icon={(<EmailIcon/>)}
                 value={email}

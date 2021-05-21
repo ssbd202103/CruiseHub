@@ -1,4 +1,3 @@
-
 import {ChangeDataComponentProps} from '../interfaces'
 import Grid from "@material-ui/core/Grid";
 import styles from "../../styles/ManageAccount.module.css";

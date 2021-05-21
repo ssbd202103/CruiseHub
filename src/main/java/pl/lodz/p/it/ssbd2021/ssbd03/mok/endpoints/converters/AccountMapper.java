@@ -8,23 +8,24 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.LanguageTypeWrapper;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AccountManagerException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AddressDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccessLevelDetailsViewDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccountDetailsViewDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.accesslevels.AdministratorDetailsViewDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.accesslevels.BusinessWorkerDetailsViewDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.accesslevels.ClientDetailsViewDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.accesslevels.ModeratorDetailsViewDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-import java.time.LocalDateTime;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ACCESS_LEVEL_DOES_NOT_EXIST_ERROR;
 
 /**
  * Klasa która zajmuje się mapowaniem obiektów klas dto na obiekty klas modelu
@@ -106,7 +107,6 @@ public class AccountMapper {
     }
 
     /**
-     *
      * @param account Konto poddawane konwersji
      * @return Reprezentacja obiektu przesyłowego DTO konta zawierający login, e-mail ,poziomy dostępu oraz informacje
      * czy dane konto jest aktywne
@@ -139,15 +139,15 @@ public class AccountMapper {
         switch (accessLevel.getAccessLevelType()) {
             case CLIENT:
                 Client client = (Client) accessLevel;
-                return new ClientDetailsViewDto(accessLevel.isEnabled(), toAddressDto(client.getHomeAddress()), client.getPhoneNumber(),client.getVersion());
+                return new ClientDetailsViewDto(accessLevel.isEnabled(), toAddressDto(client.getHomeAddress()), client.getPhoneNumber(), client.getVersion());
             case BUSINESS_WORKER:
                 BusinessWorker businessWorker = (BusinessWorker) accessLevel;
                 return new BusinessWorkerDetailsViewDto(businessWorker.isEnabled(), businessWorker.getPhoneNumber(),
-                        businessWorker.getConfirmedByBusinessWorker(), businessWorker.getCompany().getName(),businessWorker.getVersion());
+                        businessWorker.isConfirmedByBusinessWorker(), businessWorker.getCompany().getName(), businessWorker.getVersion());
             case MODERATOR:
-                return new ModeratorDetailsViewDto(accessLevel.isEnabled(),accessLevel.getVersion());
+                return new ModeratorDetailsViewDto(accessLevel.isEnabled(), accessLevel.getVersion());
             case ADMINISTRATOR:
-                return new AdministratorDetailsViewDto(accessLevel.isEnabled(),accessLevel.getVersion());
+                return new AdministratorDetailsViewDto(accessLevel.isEnabled(), accessLevel.getVersion());
             default:
                 return null; // Statement will never execute unless new AccessLevel ENUM is added to the model
         }
@@ -157,8 +157,10 @@ public class AccountMapper {
         return new AddressDto(address.getHouseNumber(), address.getStreet(),
                 address.getPostalCode(), address.getCity(), address.getCountry());
     }
+
     /**
      * Mapuje obiekt klasy account na obiekt DTO
+     *
      * @param account Konto poddawane konwersji
      * @return Reprezentacja obiektu przesyłowego DTO konta zawierający login, wersje, imię, nazwisko, numer telefonu, adres oraz konto modyfikujące
      */
@@ -167,12 +169,13 @@ public class AccountMapper {
         Client fromClient = (Client) account.getAccessLevels().stream().filter(accessLevel -> accessLevel.getAccessLevelType().equals(AccessLevelType.CLIENT)).collect(Collectors.toList()).get(0);
         OtherAddressChangeDto addressChangeDto = new OtherAddressChangeDto(fromClient.getHomeAddress().getHouseNumber(), fromClient.getHomeAddress().getStreet(),
                 fromClient.getHomeAddress().getPostalCode(), fromClient.getHomeAddress().getCity(), fromClient.getHomeAddress().getCountry());
-        return new OtherClientChangeDataDto(account.getLogin(), account.getVersion(), fromClient.getPhoneNumber(), addressChangeDto,fromClient.getVersion());
+        return new OtherClientChangeDataDto(account.getLogin(), account.getVersion(), fromClient.getPhoneNumber(), addressChangeDto, fromClient.getVersion());
 
     }
 
     /**
-     *Mapuje obiekt klasy account na obiekt DTO
+     * Mapuje obiekt klasy account na obiekt DTO
+     *
      * @param account Konto poddawane konwersji
      * @return Reprezentacja obiektu przesyłowego DTO konta zawierający login, wersje, imię, nazwisko, numer telefonu oraz konto modyfikujące
      */
@@ -180,7 +183,7 @@ public class AccountMapper {
 
         BusinessWorker fromBusinessWorker = (BusinessWorker) account.getAccessLevels().stream().filter(accessLevel -> accessLevel.getAccessLevelType().equals(AccessLevelType.BUSINESS_WORKER)).collect(Collectors.toList()).get(0);
         return new OtherBusinessWorkerChangeDataDto(account.getLogin(), account.getVersion(),
-                fromBusinessWorker.getPhoneNumber(),fromBusinessWorker.getVersion()
+                fromBusinessWorker.getPhoneNumber(), fromBusinessWorker.getVersion()
         );
 
     }
@@ -271,12 +274,15 @@ public class AccountMapper {
     }
 
 
-    private static <T> T getAccessLevel(Account from, AccessLevelType target) {
-        return (T) from.getAccessLevels().stream().filter(accessLevel -> accessLevel.getAccessLevelType().equals(target)).collect(Collectors.toList()).get(0);
+    private static AccessLevel getAccessLevel(Account from, AccessLevelType target) throws BaseAppException {
+        Optional<AccessLevel> optionalAccessLevel = from.getAccessLevels().stream()
+                .filter(accessLevel -> accessLevel.getAccessLevelType().equals(target)).findAny();
+
+        return optionalAccessLevel.orElseThrow(() -> new AccountManagerException(ACCESS_LEVEL_DOES_NOT_EXIST_ERROR));
     }
 
-    public static ClientDto toClientDto(Account account) {
-        Client client = getAccessLevel(account, AccessLevelType.CLIENT);
+    public static ClientDto toClientDto(Account account) throws BaseAppException {
+        Client client = (Client) getAccessLevel(account, AccessLevelType.CLIENT);
 
         return new ClientDto(
                 account.getLogin(),
@@ -289,8 +295,8 @@ public class AccountMapper {
                 account.getVersion());
     }
 
-    public static BusinessWorkerDto toBusinessWorkerDto(Account account) {
-        BusinessWorker businessWorker = getAccessLevel(account, AccessLevelType.BUSINESS_WORKER);
+    public static BusinessWorkerDto toBusinessWorkerDto(Account account) throws BaseAppException {
+        BusinessWorker businessWorker = (BusinessWorker) getAccessLevel(account, AccessLevelType.BUSINESS_WORKER);
 
         return new BusinessWorkerDto(
                 account.getLogin(),
@@ -323,5 +329,5 @@ public class AccountMapper {
                 account.getLanguageType().getName(),
                 account.getVersion()
         );
-	}
+    }
 }

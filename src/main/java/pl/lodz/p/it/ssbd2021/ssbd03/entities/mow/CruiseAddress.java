@@ -12,6 +12,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Positive;
 
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_EMPTY;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_POSITIVE_ERROR;
+
 
 @Entity(name = "cruise_addresses")
 public class CruiseAddress extends BaseEntity {
@@ -21,7 +24,7 @@ public class CruiseAddress extends BaseEntity {
     @SequenceGenerator(name = "CRUISE_ADDRESS_SEQ_GEN", sequenceName = "cruise_addresses_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CRUISE_ADDRESS_SEQ_GEN")
     @Column(name = "id")
-    private Integer id;
+    private int id;
 
     @Getter
     @Setter
@@ -31,13 +34,13 @@ public class CruiseAddress extends BaseEntity {
 
     @Getter
     @Setter
-    @Positive
+    @Positive(message = CONSTRAINT_POSITIVE_ERROR)
     @Column(name = "street_number")
-    private Integer streetNumber;
+    private int streetNumber;
 
     @Getter
     @Setter
-    @NotEmpty
+    @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
     @Column(name = "harbor_name")
     private String harborName;
 
@@ -53,7 +56,7 @@ public class CruiseAddress extends BaseEntity {
     @Column(name = "country_name")
     private String countryName;
 
-    public CruiseAddress(String street, Integer streetNumber, String harborName, String cityName, String countryName) {
+    public CruiseAddress(String street, int streetNumber, String harborName, String cityName, String countryName) {
         this.street = street;
         this.streetNumber = streetNumber;
         this.harborName = harborName;

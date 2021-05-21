@@ -6,7 +6,7 @@ import HeaderFooterLayout from '../layouts/HeaderFooterLayout'
 
 import styles from '../styles/Home.module.css'
 
-import { useTranslation } from 'react-i18next'
+import {useTranslation} from 'react-i18next'
 import {useSelector} from "react-redux";
 import {selectDarkMode} from "../redux/slices/userSlice";
 

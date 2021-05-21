@@ -144,7 +144,7 @@ public class AccountController {
     @POST
     @Path("/client/registration")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void createClient(@Valid @NotNull ClientForRegistrationDto clientForRegistrationDto) throws BaseAppException {
+    public void createClient(@Valid @NotNull(message = CONSTRAINT_NOT_NULL) ClientForRegistrationDto clientForRegistrationDto) throws BaseAppException {
         accountEndpoint.createClientAccount(clientForRegistrationDto);
         //todo handle exceptions
     }
@@ -157,7 +157,7 @@ public class AccountController {
     @POST
     @Path("/business-worker/registration")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void createBusinessWorker(@Valid @NotNull BusinessWorkerForRegistrationDto businessWorkerForRegistrationDto) throws BaseAppException {
+    public void createBusinessWorker(@Valid @NotNull(message = CONSTRAINT_NOT_NULL) BusinessWorkerForRegistrationDto businessWorkerForRegistrationDto) throws BaseAppException {
         accountEndpoint.createBusinessWorkerAccount(businessWorkerForRegistrationDto);
         //todo handle exceptions
     }
@@ -170,7 +170,7 @@ public class AccountController {
     @GET
     @Path("/accounts")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<AccountDtoForList> getAllAccounts() {
+    public List<AccountDtoForList> getAllAccounts() throws BaseAppException{
         return accountEndpoint.getAllAccounts();
     }
 
@@ -186,7 +186,7 @@ public class AccountController {
     @PUT
     @Path("/block")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response blockUser(BlockAccountDto blockAccountDto, @HeaderParam("If-Match") @NotNull @NotEmpty String etagValue) {
+    public Response blockUser(BlockAccountDto blockAccountDto, @HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) String etagValue) {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etagValue, blockAccountDto)) {
             return Response.status(406).build();
         }
@@ -256,7 +256,7 @@ public class AccountController {
      */
     @PUT
     @Path("/reset-password")
-    public Response resetPassword(@Valid PasswordResetDto passwordResetDto) {
+    public Response resetPassword(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid PasswordResetDto passwordResetDto) {
         try {
             this.accountEndpoint.resetPassword(passwordResetDto);
         } catch (FacadeException e) {
@@ -293,7 +293,7 @@ public class AccountController {
     @PUT
     @Path("/unblock")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response unblockUser(UnblockAccountDto unblockAccountDto, @HeaderParam("If-Match") @NotNull @NotEmpty String tagValue) {
+    public Response unblockUser(UnblockAccountDto unblockAccountDto, @HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) String tagValue) {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(tagValue, unblockAccountDto)) {
             return Response.status(406).build();
         }
@@ -318,7 +318,7 @@ public class AccountController {
     @PUT
     @Path("/change_own_password")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response changeOwnPassword(@NotNull @Valid AccountChangeOwnPasswordDto accountChangeOwnPasswordDto, @HeaderParam("If-Match") String etag) {
+    public Response changeOwnPassword(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid AccountChangeOwnPasswordDto accountChangeOwnPasswordDto, @HeaderParam("If-Match") String etag) {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, accountChangeOwnPasswordDto)) {
             return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
         }
@@ -348,7 +348,8 @@ public class AccountController {
      */
     @POST
     @Path("/request-someones-password-reset/{login}/{email}")
-    public Response requestSomeonesPasswordReset(@PathParam("login") @Login String login, @PathParam("email") @Email String email) {
+    public Response requestSomeonesPasswordReset(@PathParam("login") @Login String login, @PathParam("email") @Email(message = REGEX_INVALID_EMAIL)     @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
+            String email) {
         try {
             this.accountEndpoint.requestSomeonesPasswordReset(login, email);
         } catch (BaseAppException e) {
@@ -366,7 +367,7 @@ public class AccountController {
      */
     @PUT
     @Path("/account-verification")
-    public Response accountVerification(@Valid AccountVerificationDto accountVerificationDto) {
+    public Response accountVerification(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid AccountVerificationDto accountVerificationDto) {
         try {
             this.accountEndpoint.verifyAccount(accountVerificationDto);
         } catch (FacadeException e) {

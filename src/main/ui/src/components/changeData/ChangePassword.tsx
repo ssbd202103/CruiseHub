@@ -3,7 +3,7 @@ import Grid from "@material-ui/core/Grid";
 import styles from "../../styles/ManageAccount.module.css";
 import RoundedButton from "../RoundedButton";
 import DarkedTextField from "../DarkedTextField";
-import React, {createRef, useState} from "react";
+import React, {useState} from "react";
 import {changeOwnPassword as changeOwnPasswordService} from "../../Services/changePasswordService";
 import {useTranslation} from "react-i18next";
 import {ConfirmCancelButtonGroup} from "../ConfirmCancelButtonGroup";

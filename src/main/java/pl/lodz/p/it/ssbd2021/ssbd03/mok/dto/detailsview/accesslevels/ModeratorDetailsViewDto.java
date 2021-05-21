@@ -6,7 +6,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccessLevelDetailsViewDt
 
 @NoArgsConstructor
 public class ModeratorDetailsViewDto extends AccessLevelDetailsViewDto {
-    public ModeratorDetailsViewDto(boolean enabled,Long accLevelVersion) {
+    public ModeratorDetailsViewDto(boolean enabled,long accLevelVersion) {
         super(enabled, AccessLevelType.MODERATOR,accLevelVersion);
     }
 }

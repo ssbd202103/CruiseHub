@@ -8,6 +8,10 @@ import lombok.Setter;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AbstractAccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.PhoneNumber;
 
+import javax.validation.constraints.PositiveOrZero;
+
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_POSITIVE_OR_ZERO_ERROR;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,11 +19,12 @@ import pl.lodz.p.it.ssbd2021.ssbd03.validators.PhoneNumber;
 public class OtherBusinessWorkerChangeDataDto extends AbstractAccountDto {
     @PhoneNumber
     private String newPhoneNumber;
-    private Long accVersion;
+    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
+    private long accVersion;
 
-    public OtherBusinessWorkerChangeDataDto(String login, Long version, String newPhoneNumber,Long accVersion) {
+    public OtherBusinessWorkerChangeDataDto(String login, long version, String newPhoneNumber, long accVersion) {
         super(login, version);
         this.newPhoneNumber = newPhoneNumber;
-        this.accVersion=accVersion;
+        this.accVersion = accVersion;
     }
 }

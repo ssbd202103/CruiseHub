@@ -1,8 +1,5 @@
-import { 
-    TextField,
-    InputAdornment
-} from '@material-ui/core'
-import { makeStyles } from '@material-ui/styles'
+import {InputAdornment, TextField} from '@material-ui/core'
+import {makeStyles} from '@material-ui/styles'
 import * as React from 'react'
 import {useSelector} from "react-redux";
 import {selectDarkMode} from "../redux/slices/userSlice";

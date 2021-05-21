@@ -1,9 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.facades;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.TokenWrapper;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -33,8 +31,8 @@ public class TokenWrapperFacade extends AbstractFacade<TokenWrapper> {
         return tq.getResultList();
     }
 
-    public List<TokenWrapper> getUnUsedToken() {
-        TypedQuery<TokenWrapper> tq = em.createNamedQuery("TokenWrapper.findUnUsed", TokenWrapper.class);
+    public List<TokenWrapper> getUnusedToken() {
+        TypedQuery<TokenWrapper> tq = em.createNamedQuery("TokenWrapper.findUnused", TokenWrapper.class);
         return tq.getResultList();
     }
 
@@ -44,4 +42,13 @@ public class TokenWrapperFacade extends AbstractFacade<TokenWrapper> {
         return tq.getSingleResult();
     }
 
+    @Override
+    public void create(TokenWrapper entity) throws FacadeException {
+        super.create(entity);
+    }
+
+    @Override
+    public void edit(TokenWrapper entity) throws FacadeException {
+        super.edit(entity);
+    }
 }

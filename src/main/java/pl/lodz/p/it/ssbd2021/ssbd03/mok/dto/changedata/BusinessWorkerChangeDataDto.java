@@ -9,7 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class BusinessWorkerChangeDataDto extends ConsumerChangeDataDto {
 
-    public BusinessWorkerChangeDataDto(String login, Long version, String newFirstName, String newSecondName, String newPhoneNumber) {
+    public BusinessWorkerChangeDataDto(String login, long version, String newFirstName, String newSecondName, String newPhoneNumber) {
         super(login, version, newFirstName, newSecondName, newPhoneNumber);
     }
 }

@@ -9,7 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ModeratorChangeDataDto extends AccountChangeDataDto {
 
-    public ModeratorChangeDataDto(String login, Long version, String newFirstName, String newSecondName) {
+    public ModeratorChangeDataDto(String login, long version, String newFirstName, String newSecondName) {
         super(login, version, newFirstName, newSecondName);
     }
 }
