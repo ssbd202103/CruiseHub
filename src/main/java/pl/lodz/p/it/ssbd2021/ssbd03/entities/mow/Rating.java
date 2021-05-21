@@ -15,6 +15,11 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_POSITIVE_OR_ZERO_ERROR;
 
 @Entity(name = "ratings")
+@NamedQueries({
+        @NamedQuery(name="Rating.findByCruiseGroupId",
+                query = "SELECT r FROM ratings r WHERE r.cruiseGroup.name =:name")
+})
+
 public class Rating extends BaseEntity {
 
     @Getter
@@ -33,10 +38,10 @@ public class Rating extends BaseEntity {
 
     @Getter
     @OneToOne
-    @JoinColumn(name = "cruise_id")
+    @JoinColumn(name = "cruise_group_id")
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid
-    private Cruise cruise;
+    private CruiseGroup cruiseGroup;
 
     @Getter
     @Setter
@@ -44,9 +49,9 @@ public class Rating extends BaseEntity {
     @Column(name = "rating")
     private double rating;
 
-    public Rating(@NotNull(message = CONSTRAINT_NOT_NULL) Account account, @NotNull(message = CONSTRAINT_NOT_NULL) Cruise cruise, @NotNull(message = CONSTRAINT_NOT_NULL) double rating) {
+    public Rating(@NotNull(message = CONSTRAINT_NOT_NULL) Account account, @NotNull(message = CONSTRAINT_NOT_NULL) CruiseGroup cruiseGroup, @NotNull(message = CONSTRAINT_NOT_NULL) double rating) {
         this.account = account;
-        this.cruise = cruise;
+        this.cruiseGroup = cruiseGroup;
         this.rating = rating;
     }
 

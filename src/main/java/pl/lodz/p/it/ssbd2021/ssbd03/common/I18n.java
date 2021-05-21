@@ -65,6 +65,7 @@ public class I18n {
     public static final String CONSTRAINT_NOT_NULL = "error.constraint.notNull";
     public static final String APP_FORBIDDEN = "error.forbidden";
     public static final String APP_INTERNAL_SERVER_ERROR = "error.internal.server";
+    public static final String RATING_CONSTRAINT_ERROR = "error.contraint.rating";
 
     private ResourceBundle bundle;
 
