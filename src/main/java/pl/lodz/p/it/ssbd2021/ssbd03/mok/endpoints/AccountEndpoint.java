@@ -107,8 +107,9 @@ public class AccountEndpoint implements AccountEndpointLocal {
         return accountManager.getAllAccounts().stream().map(AccountMapper::toAccountListDto).collect(Collectors.toList());
     }
 
+    @Override
     public void blockUser(@NotNull(message = CONSTRAINT_NOT_NULL) String login, @NotNull(message = CONSTRAINT_NOT_NULL) long version) throws BaseAppException {
-        Account account = this.accountManager.blockUser(login, version, getCurrentUserLogin());
+        Account account = this.accountManager.blockUser(login, version);
 
         //todo uncomment it when needed
         Locale locale = new Locale(account.getLanguageType().getName().name());
@@ -134,7 +135,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
 
     @Override
     public void unblockUser(@NotNull(message = CONSTRAINT_NOT_NULL) String unblockedUserLogin, @NotNull(message = CONSTRAINT_NOT_NULL) long version) throws BaseAppException {
-        Account account = this.accountManager.unblockUser(unblockedUserLogin, version, getCurrentUserLogin());
+        Account account = this.accountManager.unblockUser(unblockedUserLogin, version);
 
         //todo uncomment it when needed
         Locale locale = new Locale(account.getLanguageType().getName().name());

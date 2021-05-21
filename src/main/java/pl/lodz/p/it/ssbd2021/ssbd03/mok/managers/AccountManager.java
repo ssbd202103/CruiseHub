@@ -133,7 +133,7 @@ public class AccountManager implements AccountManagerLocal {
         }
 
         Optional<AccessLevel> accountAccessLevel = account.getAccessLevels().stream()
-            .filter(accessLevel -> accessLevel.getAccessLevelType() == accessLevelType).findFirst();
+                .filter(accessLevel -> accessLevel.getAccessLevelType() == accessLevelType).findFirst();
 
         if (accountAccessLevel.isEmpty()) {
             throw new AccountManagerException(ACCESS_LEVEL_NOT_ASSIGNED_ERROR);
@@ -176,15 +176,13 @@ public class AccountManager implements AccountManagerLocal {
     }
 
     @Override
-    public Account blockUser(String login, long version, String currentUserLogin) throws BaseAppException {
+    public Account blockUser(String login, long version) throws BaseAppException {
         Account account = this.accountFacade.findByLogin(login);
         if (!(account.getVersion() == version)) {
             throw FacadeException.optimisticLock();
         }
         account.setActive(false);
         setUpdatedMetadata(account);
-        Account blockingAccount = this.accountFacade.findByLogin(currentUserLogin);
-        setUpdatedMetadata(blockingAccount);
         accountFacade.edit(account);
         return account;
     }
@@ -260,7 +258,7 @@ public class AccountManager implements AccountManagerLocal {
         TokenWrapper tokenWrapper = this.tokenWrapperFacade.findByToken(token);
         tokenWrapper.setUsed(true);
         this.tokenWrapperFacade.edit(tokenWrapper);
-        setUpdatedMetadata(account);
+        setUpdatedMetadataWithModifier(account, account);
         Locale locale = new Locale(account.getLanguageType().getName().name());
         String body = i18n.getMessage(ACTIVATE_ACCOUNT_BODY, locale);
         String subject = i18n.getMessage(ACTIVATE_ACCOUNT_SUBJECT, locale);
@@ -282,15 +280,14 @@ public class AccountManager implements AccountManagerLocal {
     }
 
     @Override
-    public Account unblockUser(String unblockedUserLogin, long version, String currentUserLogin) throws BaseAppException {
+    public Account unblockUser(String unblockedUserLogin, long version) throws BaseAppException {
         Account account = this.accountFacade.findByLogin(unblockedUserLogin);
         if (!(account.getVersion() == version)) {
             throw FacadeException.optimisticLock();
         }
         account.setActive(true);
+
         setUpdatedMetadata(account);
-        Account blockingAccount = this.accountFacade.findByLogin(currentUserLogin);
-        setUpdatedMetadata(blockingAccount);
         return account;
     }
 
@@ -367,7 +364,7 @@ public class AccountManager implements AccountManagerLocal {
 
     private AccessLevel getAccessLevel(Account from, AccessLevelType target) throws AccountManagerException {
         Optional<AccessLevel> optionalAccessLevel = from.getAccessLevels().stream()
-            .filter(accessLevel -> accessLevel.getAccessLevelType().equals(target)).findAny();
+                .filter(accessLevel -> accessLevel.getAccessLevelType().equals(target)).findAny();
 
         return optionalAccessLevel.orElseThrow(() -> new AccountManagerException(ACCESS_LEVEL_DOES_NOT_EXIST_ERROR));
     }
@@ -485,6 +482,14 @@ public class AccountManager implements AccountManagerLocal {
 
     public Account getCurrentUser() throws BaseAppException {
         return accountFacade.findByLogin(context.getUserPrincipal().getName());
+    }
+
+    private void setUpdatedMetadataWithModifier(Account modifier, BaseEntity... entities) throws BaseAppException {
+        AlterTypeWrapper update = accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE);
+        for (BaseEntity e : entities) {
+            e.setAlterType(update);
+            e.setAlteredBy(modifier);
+        }
     }
 
     private void setUpdatedMetadata(BaseEntity... entities) throws BaseAppException {

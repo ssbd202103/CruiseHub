@@ -86,21 +86,20 @@ public interface AccountManagerLocal {
      *
      * @param login   Login użytkownika
      * @param version Wersja obiektu do sprawdzenia
-     * @param currentUserLogin Login użytkownika blokującego
      * @throws BaseAppException Wyjątek aplikacji rzucany w przypadku błędu pobrania danych użytkownika
      */
-    Account blockUser(String login, long version, String currentUserLogin) throws BaseAppException;
+    Account blockUser(String login, long version) throws BaseAppException;
 
 
     /**
      * Metoda odpowiedzialna za odblokowanie konta
+     *
      * @param unblockedUserLogin login konta odblokowywanego
-     * @param version wersja obiektu do sprawdzenia
-     * @param currentUserLogin Login blokującego użytkownika
+     * @param version            wersja obiektu do sprawdzenia
      * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku gdy występuje błąd w p
      *                          obraniu danych w fasadzie
      */
-    Account unblockUser(String unblockedUserLogin, long version, String currentUserLogin) throws BaseAppException;
+    Account unblockUser(String unblockedUserLogin, long version) throws BaseAppException;
 
     /**
      * Pobiera liste kont z bazy danych
