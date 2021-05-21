@@ -181,18 +181,18 @@ values (-3, 'PearlHarbort.jpg', null, now(), now(), -2, -1, -1, 0);
 --
 --
 --cruises_groups start
-insert into cruises_groups(id, company_id, name, number_of_seats, price, start_address_id, average_rating,
+insert into cruises_groups(id, company_id, name, number_of_seats, price, start_address_id, average_rating, active,
                            creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id,
                            version)
-values (-1, -1, 'Przygoda', 24, 52, -1, 2.5, now(), now(), -2, -1, -1, 0);
-insert into cruises_groups(id, company_id, name, number_of_seats, price, start_address_id, average_rating,
+values (-1, -1, 'Przygoda', 24, 52, -1, 2.5, true, now(), now(), -2, -1, -1, 0);
+insert into cruises_groups(id, company_id, name, number_of_seats, price, start_address_id, average_rating, active,
                            creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id,
                            version)
-values (-2, -3, 'Santa Maria Beach', 42, 152, -2, 4.5, now(), now(), -2, -1, -1, 0);
-insert into cruises_groups(id, company_id, name, number_of_seats, price, start_address_id, average_rating,
+values (-2, -3, 'Santa Maria Beach', 42, 152, -2, 4.5, true, now(), now(), -2, -1, -1, 0);
+insert into cruises_groups(id, company_id, name, number_of_seats, price, start_address_id, average_rating, active,
                            creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id,
                            version)
-values (-3, -2, 'Beautiful Sandy Shores', 31, 502, -4, 5, now(), now(), -2, -1, -1, 0);
+values (-3, -2, 'Beautiful Sandy Shores', 31, 502, -4, 5, true, now(), now(), -2, -1, -1, 0);
 --cruises_groups end
 --
 --

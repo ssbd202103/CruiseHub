@@ -13,8 +13,12 @@ import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import java.util.List;
 
+/**
+ * Klasa która zajmuje się gromadzeniem zmapowanych obiektów klas Dto na obiekty klas modelu związanych z grupami wycieczek oraz wywołuje metody logiki przekazując zmapowane obiekty.
+ */
 @Stateful
-public class CruiseGroupEndpoint implements CruiseGroupEndpointLocal{
+public class CruiseGroupEndpoint implements CruiseGroupEndpointLocal {
+
     @EJB
     private CruiseGroupManagerLocal cruiseGroupManager;
 
@@ -33,5 +37,16 @@ public class CruiseGroupEndpoint implements CruiseGroupEndpointLocal{
                 changeCruiseGroupDto.getCruiseAddress().getCountryName());
         return CruiseGroupMapper.toChangeCruiseGroupDto(cruiseGroupManager.changeCruiseGroup(changeCruiseGroupDto.getName(), changeCruiseGroupDto.getNumberOfSeats()
         ,changeCruiseGroupDto.getPrice(),start_address,changeCruiseGroupDto.getVersion()));
+    }
+
+    //TODO mozliwe wypisanie wszytchi grup wycieczek.
+/*    @Override
+    public List<> getCruiseGroupsInfo() {
+        return cruiseGroupManager.getAllCruiseGroups(); //.stream().map(CompanyMapper::mapCompanyToCompanyLightDto).collect(Collectors.toList());
+    }*/
+
+    @Override
+    public void deactivateCruiseGroup(String name, Long version) throws BaseAppException {
+       this.cruiseGroupManager.deactivateCruiseGroup(name, version);
     }
 }
