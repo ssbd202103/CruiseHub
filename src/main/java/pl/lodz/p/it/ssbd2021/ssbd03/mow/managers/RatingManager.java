@@ -14,9 +14,12 @@ public class RatingManager implements RatingManagerLocal {
     RatingFacade ratingFacade;
 
     @Override
-    public void createRating(Rating rating) throws BaseAppException {
+    public void createRating(String login, String cruiseName, Integer rating) throws BaseAppException {
 
     }
 
+    @Override
+    public void removeRating(String login, String cruiseName) throws BaseAppException {
 
+    }
 }

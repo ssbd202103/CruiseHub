@@ -10,9 +10,17 @@ public interface RatingManagerLocal {
 
     /**
      * Tworzy ocenę przypisując do niej odpowiednego użytkownika oraz wycieczkę, dla której ta ocena została wystawiona
-     * @param rating obiekt repezentujący ocenę
-     *
-     * @throws BaseAppException bazowy wyjątek aplikacji, zwracany w przypadku nieznalezienia użytkownika lub wycieczki
+     * @param login login użytkownika wystawiający ocenę
+     * @param cruiseName nazwa grupy wycieczek, dla której wystawia się ocena
+     * @throws BaseAppException bazowy wyjątek aplikacji, zwracany w przypadku nieznalezienia użytkownika lub grupy wycieczek
      */
-    void createRating(Rating rating) throws BaseAppException;
+    void createRating(String login, String cruiseName, Integer rating) throws BaseAppException;
+
+    /**
+     * Usuwa ocenę użytkownika o podanym loginie dla grupy wycieczek o podanej nazwie
+     * @param login login użytkownika, którego ocena zostanie usunięta
+     * @param cruiseName nazwa grupy wycieczek, dla której ocena zostanie usunięta
+     * @throws BaseAppException bazowy wyjątek aplikacji, zwracany w przypadku nieznalezienia użytkownika lub grupy wycieczek
+     */
+    void removeRating(String login, String cruiseName) throws BaseAppException;
 }
