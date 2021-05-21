@@ -16,6 +16,7 @@ public class I18n {
     public static final String ACCESS_LEVEL_ALREADY_ENABLED_ERROR = "error.account.accessLevels.alreadyDisabled";
     public static final String ACCESS_LEVEL_ALREADY_DISABLED_ERROR = "error.account.accessLevels.alreadyEnabled";
     public static final String ETAG_EMPTY_ERROR = "error.security.etag.empty";
+    public static final String ETAG_CREATION_ERROR = "error.security.etag.creation";
     public static final String ETAG_INVALID_ERROR = "error.security.etag.invalid";
     public static final String SERIALIZATION_PARSING_ERROR = "error.parsing.serialization";
     public static final String ACCESS_LEVEL_DOES_NOT_EXIST_ERROR = "error.account.accessLevels.doesNotExist";
@@ -27,6 +28,8 @@ public class I18n {
     public static final String ACCOUNT_VERIFICATION_TOKEN_CONTENT_ERROR = "error.account.verification.contentError";
     public static final String ACCOUNT_VERIFICATION_TOKEN_EXPIRED_ERROR = "error.account.verification.expireError";
     public static final String ACCOUNT_VERIFICATION_TOKEN_ALREADY_VERIFIED_ERROR = "error.account.verification.alreadyVerifiedError";
+    public static final String TOKEN_DECODE_ERROR = "error.token.decode";
+    public static final String TOKEN_INVALIDATE_ERROR = "error.token.invalidate";
     public static final String REGEX_INVALID_POST_CODE = "error.regex.postCode";
     public static final String REGEX_INVALID_CITY = "error.regex.city";
     public static final String REGEX_INVALID_COUNTRY = "error.regex.country";
@@ -51,7 +54,7 @@ public class I18n {
     public static final String ACTIVATE_ACCOUNT_BODY = "account.activate.body";
     public static final String INCORRECT_LOGIN = "auth.incorrect.login";
     public static final String INCORRECT_PASSWORD = "auth.incorrect.password";
-	public static final String PASSWORDS_DONT_MATCH_ERROR = "error.password.change.oldPasswordError";
+    public static final String PASSWORDS_DONT_MATCH_ERROR = "error.password.change.oldPasswordError";
     public static final String DATABASE_OPERATION_ERROR = "error.database.operation";
     public static final String LOGIN_RESERVED_ERROR = "error.database.loginReserved";
     public static final String EMAIL_RESERVED_ERROR = "error.database.emailReserved";
@@ -60,6 +63,8 @@ public class I18n {
     public static final String CONSTRAINT_POSITIVE_OR_ZERO_ERROR = "error.constraint.positiveOrZero";
     public static final String CONSTRAINT_NOT_EMPTY = "error.constraint.notEmpty";
     public static final String CONSTRAINT_NOT_NULL = "error.constraint.notNull";
+    public static final String APP_FORBIDDEN = "error.forbidden";
+    public static final String APP_INTERNAL_SERVER_ERROR = "error.internal.server";
 
     private ResourceBundle bundle;
 

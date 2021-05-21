@@ -232,7 +232,7 @@ public interface AccountEndpointLocal {
      * @return etag
      * @see SignableEntity
      */
-    String getETagFromSignableEntity(SignableEntity entity);
+    String getETagFromSignableEntity(SignableEntity entity) throws BaseAppException;
 
     /**
      * Pobiera login obecnego użytkownika
