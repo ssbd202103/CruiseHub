@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
@@ -53,7 +54,7 @@ public class AccountDetailsViewDto implements SignableEntity {
     @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
     private String etag;
 
-    public AccountDetailsViewDto(String firstName, String secondName, boolean darkMode, String login, String email, boolean confirmed, boolean active, LanguageType languageType, Set<AccessLevelDetailsViewDto> accessLevels, long version) {
+    public AccountDetailsViewDto(String firstName, String secondName, boolean darkMode, String login, String email, boolean confirmed, boolean active, LanguageType languageType, Set<AccessLevelDetailsViewDto> accessLevels, long version)  throws BaseAppException {
         this.firstName = firstName;
         this.secondName = secondName;
         this.darkMode = darkMode;

@@ -89,17 +89,12 @@ public class AccountManager implements AccountManagerLocal {
 
     @Override
     public Account grantModeratorAccessLevel(String accountLogin, long accountVersion) throws BaseAppException {
-        Account account;
-        try {
-            account = accountFacade.findByLogin(accountLogin);
-            if (!(account.getVersion() == accountVersion)) {
-                throw FacadeException.optimisticLock();
-            }
-            if (account.getAccessLevels().stream().anyMatch(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.MODERATOR)) {
-                throw new AccountManagerException(ACCESS_LEVEL_ALREADY_ASSIGNED_ERROR);
-            }
-        } catch (FacadeException e) {
-            throw new AccountManagerException(e.getMessage());
+        Account account = accountFacade.findByLogin(accountLogin);
+        if (!(account.getVersion() == accountVersion)) {
+            throw FacadeException.optimisticLock();
+        }
+        if (account.getAccessLevels().stream().anyMatch(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.MODERATOR)) {
+            throw new AccountManagerException(ACCESS_LEVEL_ALREADY_ASSIGNED_ERROR);
         }
 
         Moderator moderator = new Moderator(true);

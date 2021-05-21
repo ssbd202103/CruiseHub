@@ -109,12 +109,10 @@ public class AccountFacade extends AbstractFacade<Account> {
         }
     }
 
-    public Account updateAuthenticateInfo(String login, String ipAddr, LocalDateTime time, boolean isAuthValid) throws FacadeException {
-        TypedQuery<Account> tq = em.createNamedQuery("Account.findByLogin", Account.class);
-        tq.setParameter("login", login);
-        Account account;
+    public Account updateAuthenticateInfo(String login, String ipAddr, LocalDateTime time, boolean isAuthValid) throws BaseAppException {
+
+        Account account = findByLogin(login);
         try {
-            account = tq.getSingleResult();
             if (isAuthValid) {
                 account.setLastCorrectAuthenticationDateTime(time);
                 account.setLastCorrectAuthenticationLogicalAddress(ipAddr);

@@ -4,6 +4,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.security;
 import org.junit.jupiter.api.Test;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.ETagException;
 import pl.lodz.p.it.ssbd2021.ssbd03.testModel.mok.dto.TestAccountDto;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public class ETagTest {
 
 
     @Test
-    void verifyEtag_SUCCESS() {
+    void verifyEtag_SUCCESS() throws ETagException {
         List<TestAccountDto> accounts = getSampleAccounts();
         String etag = EntityIdentitySignerVerifier.calculateEntitySignature(accounts.get(0));
         assertTrue(EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, accounts.get(0)));
@@ -24,7 +25,7 @@ public class ETagTest {
     }
 
     @Test
-    void verifyChangedObjectETag_UNSUCCESS() {
+    void verifyChangedObjectETag_UNSUCCESS() throws ETagException {
         List<TestAccountDto> accounts = getSampleAccounts();
         String etag = EntityIdentitySignerVerifier.calculateEntitySignature(accounts.get(0));
         accounts.get(0).setEmail("andrzej.konieczny@gmail.com");

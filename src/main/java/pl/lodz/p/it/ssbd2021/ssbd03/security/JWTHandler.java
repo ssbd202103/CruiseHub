@@ -19,6 +19,8 @@ import java.util.Properties;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
+
 /**
  * Klasa odpowiedzialna za zarządzanie tokenami JWT.
  */
@@ -68,7 +70,7 @@ public class JWTHandler {
     public static String refreshToken(String token) {
         DecodedJWT decodedToken = JWT.decode(token);
         if (decodedToken.getExpiresAt().before(new Date())) {
-            throw new TokenExpiredException("Cannot refresh expired token");
+            throw new TokenExpiredException(ACCOUNT_VERIFICATION_TOKEN_EXPIRED_ERROR);
         }
 
         //getClaims returns Map<String, Claim> where Claim needs to be converted to Object type,
@@ -90,7 +92,7 @@ public class JWTHandler {
         try {
             return JWT.decode(token).getClaims();
         } catch (JWTDecodeException e) {
-            throw new JWTException("Provided token could not be decoded");
+            throw new JWTException(TOKEN_DECODE_ERROR);
         }
     }
 
@@ -105,7 +107,7 @@ public class JWTHandler {
         try {
             return JWT.decode(token).getIssuer();
         } catch (JWTDecodeException e) {
-            throw new JWTException("Provided token could not be decoded");
+            throw new JWTException(TOKEN_DECODE_ERROR);
         }
     }
 
@@ -120,7 +122,7 @@ public class JWTHandler {
         try {
             return JWT.decode(token).getExpiresAt();
         } catch (JWTDecodeException e) {
-            throw new JWTException("Provided token could not be decoded");
+            throw new JWTException(TOKEN_DECODE_ERROR);
         }
     }
 
@@ -138,8 +140,7 @@ public class JWTHandler {
         try {
             verifier.verify(token);
         } catch (JWTVerificationException exception) {
-//            throw new JWTVerificationException("Token validation failed");
-            throw new JWTException("Provided token invalidate");
+            throw new JWTException(TOKEN_INVALIDATE_ERROR);
         }
     }
 

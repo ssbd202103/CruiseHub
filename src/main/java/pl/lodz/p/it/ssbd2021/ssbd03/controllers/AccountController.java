@@ -59,6 +59,7 @@ public class AccountController {
             AccountDto account = accountEndpoint.getAccountByLogin(login);
             String ETag = accountEndpoint.getETagFromSignableEntity(account);
             return Response.ok().entity(account).header("ETag", ETag).build();
+
         } catch (BaseAppException e) {
             return Response.status(NOT_FOUND).entity(e.getMessage()).build();
         }

@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints;
 
+import com.google.common.collect.Streams;
 import org.apache.commons.codec.digest.DigestUtils;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.TokenWrapper;
@@ -30,6 +31,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -52,7 +54,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
     I18n i18n;
 
     @Override
-    public String getETagFromSignableEntity(SignableEntity entity) {
+    public String getETagFromSignableEntity(SignableEntity entity) throws BaseAppException {
         return EntityIdentitySignerVerifier.calculateEntitySignature(entity);
     }
 
@@ -104,7 +106,11 @@ public class AccountEndpoint implements AccountEndpointLocal {
 
     @Override
     public List<AccountDtoForList> getAllAccounts() throws BaseAppException {
-        return accountManager.getAllAccounts().stream().map(AccountMapper::toAccountListDto).collect(Collectors.toList());
+        List<AccountDtoForList> res = new ArrayList<>();
+        for (Account account : accountManager.getAllAccounts()) {
+            res.add(AccountMapper.toAccountListDto(account));
+        }
+        return res;
     }
 
     @Override
@@ -172,8 +178,6 @@ public class AccountEndpoint implements AccountEndpointLocal {
 
     @Override
     public AccountDto changeOtherAccountData(OtherAccountChangeDataDto otherAccountChangeDataDto) throws BaseAppException {
-        long version = getAccountByLogin(otherAccountChangeDataDto.getLogin()).getVersion();
-
         Account account = AccountMapper.extractAccountFromOtherAccountChangeDataDto(otherAccountChangeDataDto);
         return AccountMapper.toAccountDto(accountManager.updateOtherAccount(account));
     }
