@@ -18,7 +18,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_POSITIVE_ERROR
 @AllArgsConstructor
 public class OtherAddressChangeDto {
     @Positive(message = CONSTRAINT_POSITIVE_ERROR)
-    private Long newHouseNumber;
+    private long newHouseNumber;
     @Street
     private String newStreet;
     @PostCode

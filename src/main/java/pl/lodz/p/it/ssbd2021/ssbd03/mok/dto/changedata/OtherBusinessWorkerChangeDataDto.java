@@ -20,9 +20,9 @@ public class OtherBusinessWorkerChangeDataDto extends AbstractAccountDto {
     @PhoneNumber
     private String newPhoneNumber;
     @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
-    private Long accVersion;
+    private long accVersion;
 
-    public OtherBusinessWorkerChangeDataDto(String login, Long version, String newPhoneNumber, Long accVersion) {
+    public OtherBusinessWorkerChangeDataDto(String login, long version, String newPhoneNumber, long accVersion) {
         super(login, version);
         this.newPhoneNumber = newPhoneNumber;
         this.accVersion = accVersion;

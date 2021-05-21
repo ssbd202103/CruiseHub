@@ -24,7 +24,7 @@ public class CruiseAddress extends BaseEntity {
     @SequenceGenerator(name = "CRUISE_ADDRESS_SEQ_GEN", sequenceName = "cruise_addresses_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CRUISE_ADDRESS_SEQ_GEN")
     @Column(name = "id")
-    private Integer id;
+    private int id;
 
     @Getter
     @Setter
@@ -36,7 +36,7 @@ public class CruiseAddress extends BaseEntity {
     @Setter
     @Positive(message = CONSTRAINT_POSITIVE_ERROR)
     @Column(name = "street_number")
-    private Integer streetNumber;
+    private int streetNumber;
 
     @Getter
     @Setter
@@ -56,7 +56,7 @@ public class CruiseAddress extends BaseEntity {
     @Column(name = "country_name")
     private String countryName;
 
-    public CruiseAddress(String street, Integer streetNumber, String harborName, String cityName, String countryName) {
+    public CruiseAddress(String street, int streetNumber, String harborName, String cityName, String countryName) {
         this.street = street;
         this.streetNumber = streetNumber;
         this.harborName = harborName;

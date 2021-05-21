@@ -25,5 +25,5 @@ public class GrantAccessLevelDto {
     private AccessLevelType accessLevel;
 
     @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
-    private Long accountVersion;
+    private long accountVersion;
 }

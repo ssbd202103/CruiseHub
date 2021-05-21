@@ -31,12 +31,12 @@ public class Company extends BaseEntity {
     @SequenceGenerator(name = "COMPANY_SEQ_GEN", sequenceName = "companies_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "COMPANY_SEQ_GEN")
     @Column(name = "id")
-    private Long id;
+    private long id;
 
     @Getter
-    @NotNull(message = CONSTRAINT_NOT_NULL)
     @OneToOne
     @JoinColumn(name = "address_id")
+    @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid
     private Address address;
 
@@ -58,9 +58,9 @@ public class Company extends BaseEntity {
     @Min(value = 1000000000L)
     @Max(value = 9999999999L)
     @Column(name = "nip")
-    private Long NIP;
+    private long NIP;
 
-    public Company(Address address, String name, String phoneNumber, Long NIP) {
+    public Company(Address address, String name, String phoneNumber, long NIP) {
         this.address = address;
         this.name = name;
         this.phoneNumber = phoneNumber;

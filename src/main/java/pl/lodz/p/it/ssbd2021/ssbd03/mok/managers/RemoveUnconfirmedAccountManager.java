@@ -68,8 +68,8 @@ public class RemoveUnconfirmedAccountManager {
     }
 
     @Schedule(hour = "*/12", minute = "*", second = "*", persistent = false)
-    private void removeUnUsedTokens() throws BaseAppException {
-        List<TokenWrapper> tokens = tokenWrapperFacade.getUnUsedToken();
+    private void removeUnusedTokens() throws BaseAppException {
+        List<TokenWrapper> tokens = tokenWrapperFacade.getUnusedToken();
         for (TokenWrapper tw :
                 tokens) {
             if (JWTHandler.getExpirationTimeFromToken(tw.getToken()).before(new Date(System.currentTimeMillis()))) {

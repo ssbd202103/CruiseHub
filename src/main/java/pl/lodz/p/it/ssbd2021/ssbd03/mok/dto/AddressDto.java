@@ -17,7 +17,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_POSITIVE_ERROR
 @NoArgsConstructor
 public class AddressDto {
     @Positive(message = CONSTRAINT_POSITIVE_ERROR)
-    private Long houseNumber;
+    private long houseNumber;
 
     @Street
     private String street;

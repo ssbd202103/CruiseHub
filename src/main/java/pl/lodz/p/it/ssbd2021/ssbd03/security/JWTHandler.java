@@ -143,19 +143,19 @@ public class JWTHandler {
         }
     }
 
-    private static Long getDefaultValidityInMinutes() {
+    private static long getDefaultValidityInMinutes() {
         try {
             return Long.parseLong(securityProperties.getProperty("jwt.validityInMinutes"));
         } catch (NumberFormatException e) {
-            throw new NumberFormatException("jwt.validityInMinutes value: {" + securityProperties.getProperty("jwt.validityInMinutes") + "} could not be parsed to Long, verify properties data");
+            throw new NumberFormatException("jwt.validityInMinutes value: {" + securityProperties.getProperty("jwt.validityInMinutes") + "} could not be parsed to long, verify properties data");
         }
     }
 
-    private static Long getDefaultValidityInHours() {
+    private static long getDefaultValidityInHours() {
         try {
             return Long.parseLong(securityProperties.getProperty("jwt.validityInHours"));
         } catch (NumberFormatException e) {
-            throw new NumberFormatException("jwt.validityInHours value: {" + securityProperties.getProperty("jwt.validityInHours") + "} could not be parsed to Long, verify properties data");
+            throw new NumberFormatException("jwt.validityInHours value: {" + securityProperties.getProperty("jwt.validityInHours") + "} could not be parsed to long, verify properties data");
         }
     }
 

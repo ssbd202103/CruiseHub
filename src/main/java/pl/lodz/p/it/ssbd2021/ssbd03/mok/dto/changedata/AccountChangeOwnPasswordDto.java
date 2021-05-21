@@ -20,7 +20,7 @@ public class AccountChangeOwnPasswordDto extends AbstractAccountDto {
     @Password
     private String newPassword;
 
-    public AccountChangeOwnPasswordDto(String login, Long version, String oldPassword, String newPassword) {
+    public AccountChangeOwnPasswordDto(String login, long version, String oldPassword, String newPassword) {
         super(login, version);
         this.oldPassword = oldPassword;
         this.newPassword = newPassword;

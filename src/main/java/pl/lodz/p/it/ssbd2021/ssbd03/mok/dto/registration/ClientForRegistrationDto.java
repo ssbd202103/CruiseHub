@@ -12,10 +12,10 @@ import pl.lodz.p.it.ssbd2021.ssbd03.validators.PhoneNumber;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.REGEX_INVALID_EMAIL;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 
 @Data
 @AllArgsConstructor
@@ -32,6 +32,7 @@ public class ClientForRegistrationDto {
     private String login;
 
     @Email(message = REGEX_INVALID_EMAIL)
+    @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
     private String email;
 
     @Password
@@ -40,6 +41,7 @@ public class ClientForRegistrationDto {
     @NotNull(message = CONSTRAINT_NOT_NULL)
     private LanguageType languageType;
 
+    @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid
     private AddressDto addressDto;
 

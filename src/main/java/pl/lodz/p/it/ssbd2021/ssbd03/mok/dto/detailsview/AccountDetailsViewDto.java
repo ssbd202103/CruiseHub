@@ -31,6 +31,7 @@ public class AccountDetailsViewDto implements SignableEntity {
     private String login;
 
     @Email(message = REGEX_INVALID_EMAIL)
+    @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
     private String email;
 
     private boolean confirmed;
@@ -40,17 +41,17 @@ public class AccountDetailsViewDto implements SignableEntity {
     @NotNull(message = CONSTRAINT_NOT_NULL)
     private LanguageType languageType;
 
-    @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
     @Valid
+    @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
     private Set<AccessLevelDetailsViewDto> accessLevels;
 
     @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
-    private Long version;
+    private long version;
 
     @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
     private String etag;
 
-    public AccountDetailsViewDto(String firstName, String secondName, String login, String email, boolean confirmed, boolean active, LanguageType languageType, Set<AccessLevelDetailsViewDto> accessLevels, Long version) {
+    public AccountDetailsViewDto(String firstName, String secondName, String login, String email, boolean confirmed, boolean active, LanguageType languageType, Set<AccessLevelDetailsViewDto> accessLevels, long version) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.login = login;

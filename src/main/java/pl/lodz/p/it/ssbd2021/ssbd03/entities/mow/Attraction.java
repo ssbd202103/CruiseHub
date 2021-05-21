@@ -18,7 +18,7 @@ public class Attraction extends BaseEntity {
     @SequenceGenerator(name = "ATTRACTION_SEQ_GEN", sequenceName = "attractions_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ATTRACTION_SEQ_GEN")
     @Column(name = "id")
-    private Long id;
+    private long id;
 
     @Getter
     @Setter
@@ -28,7 +28,7 @@ public class Attraction extends BaseEntity {
 
     @Getter
     @Setter
-    @Size(min = 20)
+    @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
     @Column(name = "description")
     private String description;
 
@@ -42,24 +42,24 @@ public class Attraction extends BaseEntity {
     @Setter
     @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
     @Column(name = "number_of_seats")
-    private Long numberOfSeats;
+    private long numberOfSeats;
 
     @Getter
     @Setter
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @Column(name = "available")
-    private Boolean available;
+    private boolean available;
 
     @Getter
     @Setter
-    @NotNull(message = CONSTRAINT_NOT_NULL)
     @OneToOne
     @JoinColumn(name = "cruise_id")
+    @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid
     private CruiseGroup cruise;
 
     public Attraction(String name, String description,
-                      double price, Long numberOfSeats, Boolean available, CruiseGroup cruise) {
+                      double price, long numberOfSeats, boolean available, CruiseGroup cruise) {
         this.name = name;
         this.description = description;
         this.price = price;

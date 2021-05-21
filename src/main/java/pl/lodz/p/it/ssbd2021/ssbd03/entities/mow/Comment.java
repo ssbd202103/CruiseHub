@@ -20,13 +20,13 @@ public class Comment extends BaseEntity {
     @SequenceGenerator(name = "COMMENT_SEQ_GEN", sequenceName = "comments_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "COMMENT_SEQ_GEN")
     @Column(name = "id")
-    private Long id;
+    private long id;
 
     @Getter
     @Setter
-    @NotNull(message = CONSTRAINT_NOT_NULL)
     @OneToOne
     @JoinColumn(name = "account_id")
+    @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid
     private Account account;
 
@@ -38,9 +38,9 @@ public class Comment extends BaseEntity {
 
     @Getter
     @Setter
-    @NotNull(message = CONSTRAINT_NOT_NULL)
     @OneToOne
     @JoinColumn(name = "cruise_id")
+    @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid
     private Cruise cruise;
 

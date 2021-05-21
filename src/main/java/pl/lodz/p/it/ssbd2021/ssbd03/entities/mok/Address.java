@@ -20,13 +20,13 @@ public class Address extends BaseEntity {
     @SequenceGenerator(name = "ADDRESS_SEQ_GEN", sequenceName = "address_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ADDRESS_SEQ_GEN")
     @Column(name = "id")
-    private Long id;
+    private long id;
 
     @Getter
     @Setter
     @Positive(message = CONSTRAINT_POSITIVE_ERROR)
     @Column(name = "house_number")
-    private Long houseNumber;
+    private long houseNumber;
 
     @Getter
     @Setter
@@ -52,7 +52,7 @@ public class Address extends BaseEntity {
     public Address() {
     }
 
-    public Address(Long houseNumber, String street, String postalCode, String city, String country) {
+    public Address(long houseNumber, String street, String postalCode, String city, String country) {
         this.houseNumber = houseNumber;
         this.street = street;
         this.postalCode = postalCode;

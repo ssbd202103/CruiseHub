@@ -82,7 +82,7 @@ public interface AccountEndpointLocal {
      * @param version wersja konta do weryfikacji
      * @throws BaseAppException Wyjątek aplikacji rzucany w przypadku błędu pobrania danych użytkownika
      */
-    void blockUser(@NotNull(message = CONSTRAINT_NOT_NULL) String login, @NotNull(message = CONSTRAINT_NOT_NULL) Long version) throws BaseAppException;
+    void blockUser(@NotNull(message = CONSTRAINT_NOT_NULL) String login, @NotNull(message = CONSTRAINT_NOT_NULL) long version) throws BaseAppException;
 
 
     /**
@@ -110,7 +110,7 @@ public interface AccountEndpointLocal {
      * @param version            wersja konta do weryfikacji
      * @throws BaseAppException Bazowy wyjątek aplikacji rzucany w przypadku błędu pobrania danych użytkownika
      */
-    void unblockUser(@NotNull(message = CONSTRAINT_NOT_NULL) String unblockedUserLogin, @NotNull(message = CONSTRAINT_NOT_NULL) Long version) throws BaseAppException;
+    void unblockUser(@NotNull(message = CONSTRAINT_NOT_NULL) String unblockedUserLogin, @NotNull(message = CONSTRAINT_NOT_NULL) long version) throws BaseAppException;
 
     /**
      * Metoda odpowiedzialna za wywołanie metody odpowiedzialnej za wysyłania email z linkiem do resetowania hasła dla danego użytkownika, który podał wybrany email
@@ -238,7 +238,7 @@ public interface AccountEndpointLocal {
      *
      * @return Login użytkownika
      */
-    String getCurrentUserLogin();
+    String getCurrentUserLogin() throws BaseAppException;
 
     /**
      * Metoda odpowiedzialna za wywołanie metody odpowiedzialnej za zmianę hasła akutalnego użytkownika

@@ -34,6 +34,7 @@ public class AccountDto implements SignableEntity {
     private String secondName;
 
     @Email(message = REGEX_INVALID_EMAIL)
+    @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
     private String email;
 
     @NotNull(message = CONSTRAINT_NOT_NULL)
@@ -43,7 +44,7 @@ public class AccountDto implements SignableEntity {
     private Set<AccessLevelType> accessLevels;
 
     @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
-    private Long version;
+    private long version;
 
     @JsonIgnore
     @Override

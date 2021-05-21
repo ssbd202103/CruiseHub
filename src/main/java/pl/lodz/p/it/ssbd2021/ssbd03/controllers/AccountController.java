@@ -256,7 +256,7 @@ public class AccountController {
      */
     @PUT
     @Path("/reset-password")
-    public Response resetPassword(@Valid PasswordResetDto passwordResetDto) {
+    public Response resetPassword(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid PasswordResetDto passwordResetDto) {
         try {
             this.accountEndpoint.resetPassword(passwordResetDto);
         } catch (FacadeException e) {
@@ -348,7 +348,8 @@ public class AccountController {
      */
     @POST
     @Path("/request-someones-password-reset/{login}/{email}")
-    public Response requestSomeonesPasswordReset(@PathParam("login") @Login String login, @PathParam("email") @Email(message = REGEX_INVALID_EMAIL) String email) {
+    public Response requestSomeonesPasswordReset(@PathParam("login") @Login String login, @PathParam("email") @Email(message = REGEX_INVALID_EMAIL)     @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
+            String email) {
         try {
             this.accountEndpoint.requestSomeonesPasswordReset(login, email);
         } catch (BaseAppException e) {
@@ -366,7 +367,7 @@ public class AccountController {
      */
     @PUT
     @Path("/account-verification")
-    public Response accountVerification(@Valid AccountVerificationDto accountVerificationDto) {
+    public Response accountVerification(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid AccountVerificationDto accountVerificationDto) {
         try {
             this.accountEndpoint.verifyAccount(accountVerificationDto);
         } catch (FacadeException e) {

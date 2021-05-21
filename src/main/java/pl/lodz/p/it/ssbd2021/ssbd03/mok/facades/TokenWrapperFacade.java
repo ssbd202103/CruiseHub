@@ -31,8 +31,8 @@ public class TokenWrapperFacade extends AbstractFacade<TokenWrapper> {
         return tq.getResultList();
     }
 
-    public List<TokenWrapper> getUnUsedToken() {
-        TypedQuery<TokenWrapper> tq = em.createNamedQuery("TokenWrapper.findUnUsed", TokenWrapper.class);
+    public List<TokenWrapper> getUnusedToken() {
+        TypedQuery<TokenWrapper> tq = em.createNamedQuery("TokenWrapper.findUnused", TokenWrapper.class);
         return tq.getResultList();
     }
 

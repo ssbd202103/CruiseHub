@@ -12,6 +12,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.validators.Name;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.PhoneNumber;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 
@@ -32,6 +33,7 @@ public class BusinessWorkerDto implements SignableEntity {
     private String secondName;
 
     @Email(message = REGEX_INVALID_EMAIL)
+    @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
     private String email;
 
     @NotNull(message = CONSTRAINT_NOT_NULL)
@@ -41,7 +43,7 @@ public class BusinessWorkerDto implements SignableEntity {
     private String phoneNumber;
 
     @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
-    private Long version;
+    private long version;
 
     @Override
     @JsonIgnore

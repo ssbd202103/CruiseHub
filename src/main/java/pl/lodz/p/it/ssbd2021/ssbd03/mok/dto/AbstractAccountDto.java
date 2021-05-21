@@ -18,7 +18,7 @@ public abstract class AbstractAccountDto implements SignableEntity {
     @Login
     private String login;
     @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
-    private Long version;
+    private long version;
 
     @Override
     @JsonIgnore

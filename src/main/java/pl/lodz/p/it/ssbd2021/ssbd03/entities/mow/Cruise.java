@@ -6,10 +6,12 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
 
 import javax.persistence.*;
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_EMPTY;
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
 
 @Entity(name = "cruises")
@@ -20,7 +22,7 @@ public class Cruise extends BaseEntity {
     @SequenceGenerator(name = "CRUISE_SEQ_GEN", sequenceName = "cruises_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CRUISE_SEQ_GEN")
     @Column(name = "id")
-    private Long id;
+    private long id;
 
     @Getter
     @Setter
@@ -42,7 +44,7 @@ public class Cruise extends BaseEntity {
 
     @Getter
     @Setter
-    @Size(min = 30)
+    @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
     @Column(name = "description")
     private String description;
 
@@ -50,18 +52,18 @@ public class Cruise extends BaseEntity {
     @Setter
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @Column(name = "available")
-    private Boolean available;
+    private boolean available;
 
     @Getter
     @Setter
-    @NotNull(message = CONSTRAINT_NOT_NULL)
     @OneToOne
     @JoinColumn(name = "cruises_group_id")
+    @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid
     private CruiseGroup cruisesGroup;
 
     public Cruise(LocalDateTime startDate, LocalDateTime endDate, boolean active,
-                  String description, Boolean available, CruiseGroup cruisesGroup) {
+                  String description, boolean available, CruiseGroup cruisesGroup) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.active = active;

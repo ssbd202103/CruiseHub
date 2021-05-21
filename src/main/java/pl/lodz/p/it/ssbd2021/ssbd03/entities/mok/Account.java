@@ -11,15 +11,16 @@ import pl.lodz.p.it.ssbd2021.ssbd03.validators.Name;
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.REGEX_INVALID_EMAIL;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account.EMAIL_CONSTRAINT;
 import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account.LOGIN_CONSTRAINT;
 
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.REGEX_INVALID_EMAIL;
 import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account.EMAIL_CONSTRAINT;
 import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account.LOGIN_CONSTRAINT;
 
@@ -50,7 +51,7 @@ public class Account extends BaseEntity {
     @SequenceGenerator(name = "ACCOUNT_SEQ_GEN", sequenceName = "account_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ACCOUNT_SEQ_GEN")
     @Column(name = "id")
-    private Long id;
+    private long id;
 
     @Getter
     @Setter
@@ -72,6 +73,7 @@ public class Account extends BaseEntity {
 
     @Getter
     @Setter
+    @Column(name = "email", nullable = false, unique = true)
     @Email(message = REGEX_INVALID_EMAIL)
     @Column(name = "email", nullable = false, unique = true)
     private String email;
@@ -105,6 +107,7 @@ public class Account extends BaseEntity {
     @Setter
     @JoinColumn(name = "language_type_id")
     @OneToOne(cascade = {CascadeType.PERSIST})
+    @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid
     private LanguageTypeWrapper languageType;
 
@@ -127,6 +130,8 @@ public class Account extends BaseEntity {
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "account")
     @ToString.Exclude
     @Valid
+    @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
+    @NotNull(message = CONSTRAINT_NOT_NULL)
     private final Set<AccessLevel> accessLevels = new HashSet<>();
 
     public void setAccessLevel(AccessLevel accessLevel) {

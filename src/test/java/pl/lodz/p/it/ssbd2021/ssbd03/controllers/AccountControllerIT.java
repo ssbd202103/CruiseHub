@@ -401,7 +401,7 @@ class AccountControllerIT {
         return objectMapper.readValue(responseString, AccountDetailsViewDto.class);
     }
 
-    private void grantAccessLevel(AccountDto account, AccessLevelType accessLevelType, Long accountVersion) {
+    private void grantAccessLevel(AccountDto account, AccessLevelType accessLevelType, long accountVersion) {
         String authToken = this.getAuthToken("rbranson", "abcABC123*");
         if (!account.getAccessLevels().contains(accessLevelType)) {
             GrantAccessLevelDto grantAccessLevel = new GrantAccessLevelDto(account.getLogin(), accessLevelType, accountVersion);
@@ -422,7 +422,7 @@ class AccountControllerIT {
         ClientForRegistrationDto client = getSampleClientForRegistrationDto();
         AccountDto account = registerClientAndGetAccountDto(client);
         AccountDetailsViewDto dto = getAccountDetailsViewDto(account.getLogin());
-        Long version = dto.getAccessLevels().stream()
+        long version = dto.getAccessLevels().stream()
                 .filter(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.CLIENT).findFirst().get().getAccVersion();
 
         String etag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
@@ -451,7 +451,7 @@ class AccountControllerIT {
         BusinessWorkerForRegistrationDto worker = getSampleBusinessWorkerForRegistrationDto();
         AccountDto account = registerBusinessWorkerAndGetAccountDto(worker);
         AccountDetailsViewDto dto = getAccountDetailsViewDto(account.getLogin());
-        Long version = dto.getAccessLevels().stream()
+        long version = dto.getAccessLevels().stream()
                 .filter(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.BUSINESS_WORKER).findFirst().get().getAccVersion();
 
         String etag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
@@ -540,7 +540,7 @@ class AccountControllerIT {
 
         AccountChangeOwnPasswordDto accountChangeOwnPasswordDto = new AccountChangeOwnPasswordDto(
                 account.getLogin(),
-                account.getVersion() - 1,
+                account.getVersion() + 1,
                 "abcABC123*",
                 "ABCabc123*"
         );

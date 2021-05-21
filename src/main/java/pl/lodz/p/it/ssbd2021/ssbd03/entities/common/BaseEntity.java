@@ -29,17 +29,17 @@ public abstract class BaseEntity {
 
     @Getter
     @Setter
-    @NotNull(message = CONSTRAINT_NOT_NULL)
-    @Valid
     @OneToOne(cascade = CascadeType.PERSIST, optional = false)
     @JoinColumn(name = "created_by_id", updatable = false)
+    @NotNull(message = CONSTRAINT_NOT_NULL)
+    @Valid
     private Account createdBy;
 
     @Getter
     @Setter
-    @NotNull(message = CONSTRAINT_NOT_NULL)
     @OneToOne(cascade = CascadeType.PERSIST, optional = false)
     @JoinColumn(name = "altered_by_id")
+    @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid
     private Account alteredBy;
 
@@ -47,6 +47,7 @@ public abstract class BaseEntity {
     @Setter
     @JoinColumn(name = "alter_type_id")
     @OneToOne(cascade = {CascadeType.PERSIST})
+    @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid
     private AlterTypeWrapper alterType;
 
@@ -55,7 +56,7 @@ public abstract class BaseEntity {
     @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
     @Version
     @Column(nullable = false)
-    private Long version;
+    private long version;
 
     @PrePersist
     private void prePersist() {

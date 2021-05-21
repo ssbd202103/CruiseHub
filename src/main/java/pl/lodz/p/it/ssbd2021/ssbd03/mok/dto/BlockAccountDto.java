@@ -19,7 +19,7 @@ public class BlockAccountDto implements SignableEntity {
     private String login;
 
     @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
-    private Long version;
+    private long version;
 
     @JsonIgnore
     @Override

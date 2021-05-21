@@ -23,7 +23,7 @@ public class LanguageTypeWrapper {
     @Getter
     @Id
     @GeneratedValue
-    private Long id;
+    private long id;
 
     @Enumerated(EnumType.STRING)
     @Column(unique = true)

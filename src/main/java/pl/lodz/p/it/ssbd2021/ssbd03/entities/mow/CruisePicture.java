@@ -19,7 +19,7 @@ public class CruisePicture extends BaseEntity {
     @SequenceGenerator(name = "CRUISE_PICTURE_SEQ_GEN", sequenceName = "cruise_pictures_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CRUISE_PICTURE_SEQ_GEN")
     @Column(name = "id")
-    private Long id;
+    private long id;
 
     @Getter
     @Setter
@@ -33,7 +33,7 @@ public class CruisePicture extends BaseEntity {
     @Column(name = "img_name")
     private String imgName;
 
-    public CruisePicture(Long id, @NotNull(message = CONSTRAINT_NOT_NULL) Byte[] img, @NotNull(message = CONSTRAINT_NOT_NULL) String imgName) {
+    public CruisePicture(long id, @NotNull(message = CONSTRAINT_NOT_NULL) Byte[] img, @NotNull(message = CONSTRAINT_NOT_NULL) String imgName) {
         this.id = id;
         this.img = img;
         this.imgName = imgName;

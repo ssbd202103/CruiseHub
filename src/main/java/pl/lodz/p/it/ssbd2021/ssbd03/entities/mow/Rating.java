@@ -22,19 +22,19 @@ public class Rating extends BaseEntity {
     @SequenceGenerator(name = "RATING_SEQ_GEN", sequenceName = "ratings_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RATING_SEQ_GEN")
     @Column(name = "id")
-    private Long id;
+    private long id;
 
     @Getter
-    @NotNull(message = CONSTRAINT_NOT_NULL)
     @OneToOne
     @JoinColumn(name = "account_id")
+    @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid
     private Account account;
 
     @Getter
-    @NotNull(message = CONSTRAINT_NOT_NULL)
     @OneToOne
     @JoinColumn(name = "cruise_id")
+    @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid
     private Cruise cruise;
 
@@ -44,7 +44,7 @@ public class Rating extends BaseEntity {
     @Column(name = "rating")
     private double rating;
 
-    public Rating(Long id, @NotNull(message = CONSTRAINT_NOT_NULL) Account account, @NotNull(message = CONSTRAINT_NOT_NULL) Cruise cruise, @NotNull(message = CONSTRAINT_NOT_NULL) double rating) {
+    public Rating(long id, @NotNull(message = CONSTRAINT_NOT_NULL) Account account, @NotNull(message = CONSTRAINT_NOT_NULL) Cruise cruise, @NotNull(message = CONSTRAINT_NOT_NULL) double rating) {
         this.id = id;
         this.account = account;
         this.cruise = cruise;

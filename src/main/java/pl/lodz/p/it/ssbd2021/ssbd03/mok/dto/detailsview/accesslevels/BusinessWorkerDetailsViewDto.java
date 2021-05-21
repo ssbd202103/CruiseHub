@@ -22,7 +22,7 @@ public class BusinessWorkerDetailsViewDto extends AccessLevelDetailsViewDto {
     private String companyName;
 
 
-    public BusinessWorkerDetailsViewDto(boolean enabled, String phoneNumber, boolean confirmed, String companyName,Long accLevelVersion) {
+    public BusinessWorkerDetailsViewDto(boolean enabled, String phoneNumber, boolean confirmed, String companyName,long accLevelVersion) {
         super(enabled, AccessLevelType.BUSINESS_WORKER,accLevelVersion);
         this.phoneNumber = phoneNumber;
         this.confirmed = confirmed;

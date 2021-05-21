@@ -12,7 +12,6 @@ import javax.security.enterprise.credential.UsernamePasswordCredential;
 @Data
 @NoArgsConstructor
 public class AuthenticateDto {
-    @Login
     private String login;
     private String password;
 

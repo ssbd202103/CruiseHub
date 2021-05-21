@@ -14,7 +14,6 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_EMPTY;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PasswordResetDto {
-
     @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
     private String token;
     @Login

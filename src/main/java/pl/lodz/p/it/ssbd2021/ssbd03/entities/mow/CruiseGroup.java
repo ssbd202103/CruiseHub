@@ -23,22 +23,22 @@ public class CruiseGroup extends BaseEntity {
     @SequenceGenerator(name = "CRUISES_GROUP_SEQ_GEN", sequenceName = "cruises_groups_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CRUISES_GROUP_SEQ_GEN")
     @Column(name = "id")
-    private Long id;
+    private long id;
 
     @Getter
     @Setter
-    @NotNull(message = CONSTRAINT_NOT_NULL)
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "company_id")
+    @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid
     private Company company;
 
 
     @Getter
     @Setter
-    @NotNull(message = CONSTRAINT_NOT_NULL)
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "start_address_id")
+    @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid
     private CruiseAddress address;
 
@@ -52,7 +52,7 @@ public class CruiseGroup extends BaseEntity {
     @Setter
     @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
     @Column(name = "number_of_seats")
-    private Long numberOfSeats;
+    private long numberOfSeats;
 
     @Getter
     @Setter
@@ -67,6 +67,7 @@ public class CruiseGroup extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "cruises_group_id")
     )
     @Valid
+    @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
     private final List<CruisePicture> cruisePictures = new ArrayList<>();
 
     @Getter
@@ -76,7 +77,7 @@ public class CruiseGroup extends BaseEntity {
     private Double averageRating;
 
 
-    public CruiseGroup(Company company, CruiseAddress address, String name, Long numberOfSeats,
+    public CruiseGroup(Company company, CruiseAddress address, String name, long numberOfSeats,
                        Double price, Double averageRating) {
         this.company = company;
         this.address = address;
