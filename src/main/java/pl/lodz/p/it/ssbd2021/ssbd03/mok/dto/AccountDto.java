@@ -33,11 +33,12 @@ public class AccountDto implements SignableEntity {
     @Name
     private String secondName;
 
+    private boolean darkMode;
+
     @Email(message = REGEX_INVALID_EMAIL)
     @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
     private String email;
 
-    private boolean darkMode;
 
     @NotNull(message = CONSTRAINT_NOT_NULL)
     private LanguageType languageType;

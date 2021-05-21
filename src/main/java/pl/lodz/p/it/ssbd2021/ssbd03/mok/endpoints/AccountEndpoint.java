@@ -10,6 +10,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.EndpointException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.JWTException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
@@ -39,7 +40,6 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
  * Klasa która zajmuje się growadzeniem zmapowanych obiektów klas Dto na obiekty klas modelu związanych z kontami użytkowników i poziomami dostępu, oraz wywołuje metody logiki przekazując zmapowane obiekty.
  */
 @Stateful
-//@TransactionAttribute(TransactionAttributeType.NEVER)
 public class AccountEndpoint implements AccountEndpointLocal {
 
     @EJB
@@ -243,7 +243,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
                 accountChangeOwnPasswordDto.getOldPassword(), accountChangeOwnPasswordDto.getNewPassword());
     }
 
-    public void changeMode(ChangeModeDto changeModeDto) throws BaseAppException, FacadeException {
+    public void changeMode(ChangeModeDto changeModeDto) throws BaseAppException {
         Long version = getAccountByLogin(changeModeDto.getLogin()).getVersion();
 
         if (!version.equals(changeModeDto.getVersion())) {
