@@ -10,7 +10,10 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.changeCruiseGroup.changeCruiseGroupD
 import javax.ejb.Local;
 import java.util.List;
 import java.util.Set;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 
+import java.util.List;
 /**
  * Klasa która zarządza logiką biznesową grup wycieczek
  */
@@ -39,4 +42,20 @@ public interface CruiseGroupManagerLocal {
      * @throws BaseAppException Bazowy wyjątek aplikacji
      */
     CruiseGroup changeCruiseGroup(String name, long number_of_seats, Double price, CruiseAddress start_address, long version)throws BaseAppException;
+
+    //TODO mozliwe wypisanie wszytchi grup wycieczek.
+/*    /**
+     * Pobiera wszystkie obiekty grup wycieczek z bazy
+     *
+     * @return the all companies
+     *//*
+    List<CruiseGroup> getAllCruiseGroups();*/
+
+
+    /**
+     * Pobiera wszystkie obiekty grup wycieczek z bazy
+     *
+     * @return the all companies
+     */
+    CruiseGroup deactivateCruiseGroup(String name, Long version) throws BaseAppException;
 }

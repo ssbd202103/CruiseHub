@@ -19,6 +19,11 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 
 })
 @Entity(name = "cruises_groups")
+@NamedQueries({
+        @NamedQuery(name = "CruiseGroup.findByName", query = "SELECT crg FROM cruises_groups crg WHERE crg.name = :name"),
+
+})
+
 public class CruiseGroup extends BaseEntity {
 
     @Getter
@@ -79,6 +84,11 @@ public class CruiseGroup extends BaseEntity {
     @Column(name = "average_rating")
     private Double averageRating;
 
+    @Getter
+    @Setter
+    @NotNull
+    @Column(name = "active")
+    private boolean active;
 
     public CruiseGroup(Company company, CruiseAddress address, String name, long numberOfSeats,
                        Double price, Double averageRating) {
