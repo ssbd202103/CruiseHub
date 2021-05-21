@@ -23,7 +23,7 @@ import java.util.List;
 @TransactionAttribute(TransactionAttributeType.MANDATORY)
 public class AccountFacade extends AbstractFacade<Account> {
 
-    @PersistenceContext(unitName = "ssbd03mokPU")
+    @PersistenceContext(unitName = "ssbd03mowPU")
     private EntityManager em;
 
     public AccountFacade() {
