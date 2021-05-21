@@ -39,7 +39,8 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
  * Klasa która zarządza logiką biznesową kont
  */
 
-@Stateless
+//@Stateless todo check why stateless throws exceptions occasionally
+@Stateful
 @TransactionAttribute(TransactionAttributeType.MANDATORY)
 public class AccountManager implements AccountManagerLocal {
 
