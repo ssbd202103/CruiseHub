@@ -1,6 +1,5 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints;
 
-import com.google.common.collect.Streams;
 import org.apache.commons.codec.digest.DigestUtils;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.TokenWrapper;
@@ -23,18 +22,17 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDt
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters.AccountMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.TokenWrapperFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.managers.AccountManagerLocal;
-import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
-import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.services.EmailService;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 
@@ -42,6 +40,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
  * Klasa która zajmuje się growadzeniem zmapowanych obiektów klas Dto na obiekty klas modelu związanych z kontami użytkowników i poziomami dostępu, oraz wywołuje metody logiki przekazując zmapowane obiekty.
  */
 @Stateful
+@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 public class AccountEndpoint implements AccountEndpointLocal {
 
     @EJB
@@ -52,12 +51,6 @@ public class AccountEndpoint implements AccountEndpointLocal {
 
     @Inject
     I18n i18n;
-
-    @Override
-    public String getETagFromSignableEntity(SignableEntity entity) throws BaseAppException {
-        return EntityIdentitySignerVerifier.calculateEntitySignature(entity);
-    }
-
 
     @Override
     public void createClientAccount(ClientForRegistrationDto clientForRegistrationDto) throws BaseAppException {

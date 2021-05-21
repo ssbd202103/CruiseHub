@@ -9,7 +9,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccountDetailsViewDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
 
 import javax.ejb.Local;
 import javax.validation.constraints.NotNull;
@@ -226,15 +225,6 @@ public interface AccountEndpointLocal {
     AdministratorDto getAdministratorByLogin(String login) throws BaseAppException;
 
     /**
-     * Pobiera etag dla podanej encji
-     *
-     * @param entity encja o interfejsie SignableEntity
-     * @return etag
-     * @see SignableEntity
-     */
-    String getETagFromSignableEntity(SignableEntity entity) throws BaseAppException;
-
-    /**
      * Pobiera login obecnego użytkownika
      *
      * @return Login użytkownika
@@ -245,7 +235,7 @@ public interface AccountEndpointLocal {
      * Metoda odpowiedzialna za wywołanie metody odpowiedzialnej za zmianę hasła akutalnego użytkownika
      *
      * @param accountChangeOwnPasswordDto obiekt dto posiadający niezbedne dane do zmienienia hasła aktualnego użytkownika
-     * @throws BaseAppException        bazowy wyjątek aplikacji rzucany w przypadku gdy stare hasło podane przez użytkownika nie jest zgodne z tym w bazie danych
+     * @throws BaseAppException bazowy wyjątek aplikacji rzucany w przypadku gdy stare hasło podane przez użytkownika nie jest zgodne z tym w bazie danych
      */
     void changeOwnPassword(AccountChangeOwnPasswordDto accountChangeOwnPasswordDto) throws BaseAppException;
 

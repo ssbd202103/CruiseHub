@@ -1,8 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.ChangeAccessLevelStateDto;
@@ -16,7 +14,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 
 import javax.ejb.EJB;
-import javax.ejb.EJBException;
 import javax.enterprise.context.RequestScoped;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
@@ -27,8 +24,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-import static javax.ws.rs.core.Response.Status.*;
+import static javax.ws.rs.core.Response.Status.NOT_ACCEPTABLE;
+import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
+import static pl.lodz.p.it.ssbd2021.ssbd03.controllers.TransactionRepeater.tryAndRepeat;
 
 /**
  * Klasa która udostępnia api RESTowe do wykonania operacji na kontach użytkowników, oraz zajmuje się walidacją danych.
@@ -36,10 +35,6 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 @Path("/account")
 @RequestScoped
 public class AccountController {
-
-    private final ObjectMapper mapper = new ObjectMapper(); //Jackson is set as default serializer,
-    // but Payara likes to ignore it for whatever reason
-
     @EJB
     private AccountEndpointLocal accountEndpoint;
 
@@ -54,8 +49,8 @@ public class AccountController {
     @Path("/{login}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAccountByLogin(@PathParam("login") @Login String login) throws BaseAppException {
-        AccountDto account = accountEndpoint.getAccountByLogin(login);
-        String ETag = accountEndpoint.getETagFromSignableEntity(account);
+        AccountDto account = tryAndRepeat(() -> accountEndpoint.getAccountByLogin(login));
+        String ETag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
         return Response.ok().entity(account).header("ETag", ETag).build();
     }
 
@@ -69,24 +64,24 @@ public class AccountController {
     @Path("/details-view/{login}")
     @Produces(MediaType.APPLICATION_JSON)
     public AccountDetailsViewDto getAccountDetailsByLogin(@PathParam("login") String login) throws BaseAppException {
-        return accountEndpoint.getAccountDetailsByLogin(login);
+        return tryAndRepeat(() -> accountEndpoint.getAccountDetailsByLogin(login));
     }
 
     @GET
     @Path("/client/{login}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getClientByLogin(@PathParam("login") @Login String login) throws BaseAppException {
-        ClientDto client = accountEndpoint.getClientByLogin(login);
-        String Etag = accountEndpoint.getETagFromSignableEntity(client);
-        return Response.ok().entity(client).header("ETag", Etag).build();
+        ClientDto client = tryAndRepeat(() -> accountEndpoint.getClientByLogin(login));
+        String ETag = EntityIdentitySignerVerifier.calculateEntitySignature(client);
+        return Response.ok().entity(client).header("ETag", ETag).build();
     }
 
     @GET
     @Path("/businessworker/{login}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBusinessWorkerByLogin(@PathParam("login") @Login String login) throws BaseAppException {
-        BusinessWorkerDto businessWorker = accountEndpoint.getBusinessWorkerByLogin(login);
-        String ETag = accountEndpoint.getETagFromSignableEntity(businessWorker);
+        BusinessWorkerDto businessWorker = tryAndRepeat(() -> accountEndpoint.getBusinessWorkerByLogin(login));
+        String ETag = EntityIdentitySignerVerifier.calculateEntitySignature(businessWorker);
         return Response.ok().entity(businessWorker).header("ETag", ETag).build();
     }
 
@@ -94,8 +89,8 @@ public class AccountController {
     @Path("/moderator/{login}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getModeratorByLogin(@PathParam("login") @Login String login) throws BaseAppException {
-        ModeratorDto moderator = accountEndpoint.getModeratorByLogin(login);
-        String ETag = accountEndpoint.getETagFromSignableEntity(moderator);
+        ModeratorDto moderator = tryAndRepeat(() -> accountEndpoint.getModeratorByLogin(login));
+        String ETag = EntityIdentitySignerVerifier.calculateEntitySignature(moderator);
         return Response.ok().entity(moderator).header("ETag", ETag).build();
     }
 
@@ -104,8 +99,8 @@ public class AccountController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAdministratorByLogin(@PathParam("login") @Login String login) {
         try {
-            AdministratorDto administrator = accountEndpoint.getAdministratorByLogin(login);
-            String ETag = accountEndpoint.getETagFromSignableEntity(administrator);
+            AdministratorDto administrator = tryAndRepeat(() -> accountEndpoint.getAdministratorByLogin(login));
+            String ETag = EntityIdentitySignerVerifier.calculateEntitySignature(administrator);
             return Response.ok().entity(administrator).header("ETag", ETag).build();
         } catch (BaseAppException e) {
             return Response.status(NOT_FOUND).entity(e.getMessage()).build();
@@ -121,7 +116,7 @@ public class AccountController {
     @Path("/client/registration")
     @Consumes(MediaType.APPLICATION_JSON)
     public void createClient(@Valid @NotNull(message = CONSTRAINT_NOT_NULL) ClientForRegistrationDto clientForRegistrationDto) throws BaseAppException {
-        accountEndpoint.createClientAccount(clientForRegistrationDto);
+        tryAndRepeat(() -> accountEndpoint.createClientAccount(clientForRegistrationDto));
     }
 
     /**
@@ -133,7 +128,7 @@ public class AccountController {
     @Path("/business-worker/registration")
     @Consumes(MediaType.APPLICATION_JSON)
     public void createBusinessWorker(@Valid @NotNull(message = CONSTRAINT_NOT_NULL) BusinessWorkerForRegistrationDto businessWorkerForRegistrationDto) throws BaseAppException {
-        accountEndpoint.createBusinessWorkerAccount(businessWorkerForRegistrationDto);
+        tryAndRepeat(() -> accountEndpoint.createBusinessWorkerAccount(businessWorkerForRegistrationDto));
     }
 
     /**
@@ -145,7 +140,7 @@ public class AccountController {
     @Path("/accounts")
     @Produces(MediaType.APPLICATION_JSON)
     public List<AccountDtoForList> getAllAccounts() throws BaseAppException {
-        return accountEndpoint.getAllAccounts();
+        return tryAndRepeat(() -> accountEndpoint.getAllAccounts());
     }
 
 
@@ -164,7 +159,7 @@ public class AccountController {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etagValue, blockAccountDto)) {
             return Response.status(406).build();
         }
-        accountEndpoint.blockUser(blockAccountDto.getLogin(), blockAccountDto.getVersion());
+        tryAndRepeat(() -> accountEndpoint.blockUser(blockAccountDto.getLogin(), blockAccountDto.getVersion()));
         return Response.ok().build();
     }
 
