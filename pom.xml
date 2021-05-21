@@ -4,7 +4,7 @@
 
     <groupId>pl.lodz.p.it.ssbd2021</groupId>
     <artifactId>ssbd03</artifactId>
-    <version>0.3.8-SNAPSHOT</version>
+    <version>0.4.0-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>ssbd03</name>
 
@@ -139,13 +139,18 @@
             <artifactId>javax.mail</artifactId>
             <version>1.6.2</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>30.1.1-jre</version>
+        </dependency>
 
 
     </dependencies>
 
 
     <build>
+        <finalName>ssbd03</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -175,6 +180,7 @@
                     </statelessTestsetReporter>
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
 
@@ -182,7 +188,7 @@
         <profile>
             <id>dev-without-ui</id>
             <properties>
-
+                <app.baseurl>http://localhost:8080</app.baseurl>
             </properties>
             <activation>
                 <property>
@@ -287,7 +293,8 @@
         <profile>
             <id>prod</id>
             <properties>
-                <app.baseurl>http://studapp.it.p.lodz.pl:8003</app.baseurl>
+                <!--                <app.baseurl>http://studapp.it.p.lodz.pl:8003</app.baseurl>-->
+                <app.baseurl>http://172.16.0.84:8003</app.baseurl>
             </properties>
             <activation>
                 <activeByDefault>true</activeByDefault>
@@ -300,6 +307,89 @@
 
             <build>
                 <plugins>
+                    <!--            to clean build data in ui (react client)    -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-clean-plugin</artifactId>
+                        <version>${maven.clean.plugin}</version>
+                        <configuration>
+                            <filesets>
+                                <fileset>
+                                    <directory>${ui.build.dir}</directory>
+                                    <includes>
+                                        <include>**/*</include>
+                                    </includes>
+                                </fileset>
+                            </filesets>
+                        </configuration>
+                    </plugin>
+
+                    <!--            to copy build data from ui (react client) to the war    -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>${maven.war.plugin}</version>
+                        <configuration>
+                            <webResources>
+                                <resource>
+                                    <directory>${ui.build.dir}</directory>
+                                </resource>
+                            </webResources>
+                        </configuration>
+                    </plugin>
+
+
+                    <plugin>
+                        <groupId>com.github.eirslett</groupId>
+                        <artifactId>frontend-maven-plugin</artifactId>
+                        <!-- NB! Set <version> to the latest released version of frontend-maven-plugin, like in README.md -->
+                        <version>1.11.3</version>
+
+                        <configuration>
+                            <installDirectory>target</installDirectory>
+                        </configuration>
+
+                        <executions>
+
+                            <execution>
+                                <id>install node and npm</id>
+                                <goals>
+                                    <goal>install-node-and-npm</goal>
+                                </goals>
+                                <configuration>
+                                    <!-- See https://nodejs.org/en/download/ for latest node and npm (lts) versions -->
+                                    <nodeVersion>v15.14.0</nodeVersion>
+                                    <npmVersion>7.11.1</npmVersion>
+                                </configuration>
+                            </execution>
+
+                            <execution>
+                                <id>npm install</id>
+                                <goals>
+                                    <goal>npm</goal>
+                                </goals>
+                                <!-- Optional configuration which provides for running any npm command -->
+                                <configuration>
+                                    <arguments>install</arguments>
+                                    <environmentVariables>
+                                        <REACT_APP_ROUTER_BASE>/${project.artifactId}</REACT_APP_ROUTER_BASE>
+                                        <NPM_CONFIG_PREFIX>${project.build.directory}</NPM_CONFIG_PREFIX>
+                                    </environmentVariables>
+                                    <workingDirectory>${ui.dir}</workingDirectory>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>npm run build</id>
+                                <goals>
+                                    <goal>npm</goal>
+                                </goals>
+                                <configuration>
+                                    <arguments>run build</arguments>
+                                    <workingDirectory>${ui.dir}</workingDirectory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
 
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
@@ -318,6 +408,15 @@
                     <plugin>
                         <groupId>org.codehaus.cargo</groupId>
                         <artifactId>cargo-maven3-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>redeploy</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>redeploy</goal>
+                                </goals>
+                            </execution>
+                        </executions>
                         <version>1.9.3</version>
                         <configuration>
                             <container>
@@ -331,7 +430,7 @@
                                     <cargo.remote.username>admin</cargo.remote.username>
                                     <cargo.remote.password>RirjEwWyg7</cargo.remote.password>
                                     <cargo.glassfish.admin.port>4803</cargo.glassfish.admin.port>
-                                    <cargo.hostname>studapp.it.p.lodz.pl</cargo.hostname>
+                                    <cargo.hostname>172.16.0.84</cargo.hostname>
                                 </properties>
                             </configuration>
                         </configuration>

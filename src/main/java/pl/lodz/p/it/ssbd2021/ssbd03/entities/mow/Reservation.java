@@ -7,9 +7,14 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.ArrayList;
 import java.util.List;
+
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_POSITIVE_OR_ZERO_ERROR;
 
 @Entity(name = "reservations")
 public class Reservation extends BaseEntity {
@@ -19,41 +24,40 @@ public class Reservation extends BaseEntity {
     @SequenceGenerator(name = "RESERVATION_SEQ_GEN", sequenceName = "reservations_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RESERVATION_SEQ_GEN")
     @Column(name = "id")
-    private Long id;
+    private long id;
 
     @Getter
     @Setter
-    @NotNull
+    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
     @Column(name = "number_of_seats")
-    private Long numberOfSeats;
+    private long numberOfSeats;
 
     @Getter
-    @NotNull
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name = "cruise_id")
+    @NotNull(message = CONSTRAINT_NOT_NULL)
+    @Valid
     private Cruise cruise;
 
     @Getter
-    @NotNull
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name = "client_id")
+    @NotNull(message = CONSTRAINT_NOT_NULL)
+    @Valid
     private Client client;
 
     @Getter
-    @NotNull
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     @JoinTable(name = "reservation_attractions",
             joinColumns = @JoinColumn(name = "reservation_id"),
             inverseJoinColumns = @JoinColumn(name = "attraction_id")
     )
-    private List<Attraction> attractions = new ArrayList<>();
+    private final List<Attraction> attractions = new ArrayList<>();
 
-    public Reservation(Long id, @NotNull Long numberOfSeats, @NotNull Cruise cruise, @NotNull Client client, @NotNull List<Attraction> attractions) {
-        this.id = id;
+    public Reservation(long numberOfSeats, Cruise cruise, Client client) {
         this.numberOfSeats = numberOfSeats;
         this.cruise = cruise;
         this.client = client;
-        this.attractions = attractions;
     }
 
     public Reservation() {

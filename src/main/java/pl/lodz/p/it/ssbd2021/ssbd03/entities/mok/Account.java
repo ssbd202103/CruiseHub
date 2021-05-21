@@ -4,30 +4,54 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.LanguageTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Name;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.*;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
+import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account.EMAIL_CONSTRAINT;
+import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account.LOGIN_CONSTRAINT;
+
+import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account.EMAIL_CONSTRAINT;
+import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account.LOGIN_CONSTRAINT;
 
 @Entity(name = "accounts")
 @NamedQueries({
         @NamedQuery(name = "Account.findByLogin", query = "SELECT acc FROM accounts acc WHERE acc.login = :login"),
         @NamedQuery(name = "Account.findById", query = "SELECT acc FROM accounts acc WHERE acc.id = :id"),
-        @NamedQuery(name = "Account.findUnconfirmedAccount", query = "SELECT acc FROM accounts acc WHERE acc.confirmed = false")
+        @NamedQuery(name = "Account.findUnconfirmedAccounts", query = "SELECT acc FROM accounts acc WHERE acc.confirmed = false"),
 })
+@Table(
+        indexes = {
+                @Index(name = "accounts_language_type_id_index", columnList = "language_type_id"),
+                @Index(name = "accounts_created_by_id_index", columnList = "created_by_id"),
+                @Index(name = "accounts_altered_by_id_index", columnList = "altered_by_id"),
+                @Index(name = "accounts_alter_type_id_index", columnList = "alter_type_id")
+        },
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "login", name = LOGIN_CONSTRAINT),
+                @UniqueConstraint(columnNames = "email", name = EMAIL_CONSTRAINT)}
+)
+
 public class Account extends BaseEntity {
+    public static final String LOGIN_CONSTRAINT = "accounts_login_unique_constraint";
+    public static final String EMAIL_CONSTRAINT = "accounts_email_unique_constraint";
+
     @Getter
     @Id
     @SequenceGenerator(name = "ACCOUNT_SEQ_GEN", sequenceName = "account_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ACCOUNT_SEQ_GEN")
     @Column(name = "id")
-    private Long id;
+    private long id;
 
     @Getter
     @Setter
@@ -49,13 +73,15 @@ public class Account extends BaseEntity {
 
     @Getter
     @Setter
-    @Email
     @Column(name = "email", nullable = false, unique = true)
+    @Email(message = REGEX_INVALID_EMAIL)
+    @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
     private String email;
 
     @Getter
     @Setter
     @Column(name = "password_hash", nullable = false)
+    @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
     private String passwordHash;
 
     @Getter
@@ -67,6 +93,11 @@ public class Account extends BaseEntity {
     @Setter
     @Column(name = "active", nullable = false)
     private boolean active;
+
+    @Getter
+    @Setter
+    @Column(name = "dark_mode", nullable = false)
+    private boolean darkMode;
 
     @Getter
     @Setter
@@ -82,6 +113,8 @@ public class Account extends BaseEntity {
     @Setter
     @JoinColumn(name = "language_type_id")
     @OneToOne(cascade = {CascadeType.PERSIST})
+    @NotNull(message = CONSTRAINT_NOT_NULL)
+    @Valid
     private LanguageTypeWrapper languageType;
 
     @Getter
@@ -102,6 +135,9 @@ public class Account extends BaseEntity {
     @Getter
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "account")
     @ToString.Exclude
+    @Valid
+    @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
+    @NotNull(message = CONSTRAINT_NOT_NULL)
     private final Set<AccessLevel> accessLevels = new HashSet<>();
 
     public void setAccessLevel(AccessLevel accessLevel) {

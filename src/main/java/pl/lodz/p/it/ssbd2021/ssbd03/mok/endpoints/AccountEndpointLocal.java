@@ -1,6 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.ChangeAccessLevelStateDto;
@@ -11,10 +12,10 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDt
 import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
 
 import javax.ejb.Local;
-import javax.persistence.OptimisticLockException;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
 
 /**
  * Interfejs który zajmuje się gromadzeniem zmapowanych obiektów klas Dto na obiekty klas modelu związanych z kontami użytkowników i poziomami dostępu, oraz wywołuje metody logiki przekazując zmapowane obiekty.
@@ -72,7 +73,7 @@ public interface AccountEndpointLocal {
      *
      * @return Obiekty kont dto
      */
-    List<AccountDtoForList> getAllAccounts();
+    List<AccountDtoForList> getAllAccounts() throws BaseAppException;
 
 
     /**
@@ -82,7 +83,7 @@ public interface AccountEndpointLocal {
      * @param version wersja konta do weryfikacji
      * @throws BaseAppException Wyjątek aplikacji rzucany w przypadku błędu pobrania danych użytkownika
      */
-    void blockUser(@NotNull String login, @NotNull Long version) throws BaseAppException;
+    void blockUser(@NotNull(message = CONSTRAINT_NOT_NULL) String login, @NotNull(message = CONSTRAINT_NOT_NULL) long version) throws BaseAppException;
 
 
     /**
@@ -110,8 +111,7 @@ public interface AccountEndpointLocal {
      * @param version            wersja konta do weryfikacji
      * @throws BaseAppException Bazowy wyjątek aplikacji rzucany w przypadku błędu pobrania danych użytkownika
      */
-    void unblockUser(@NotNull String unblockedUserLogin, @NotNull Long version) throws BaseAppException;
-
+    void unblockUser(@NotNull(message = CONSTRAINT_NOT_NULL) String unblockedUserLogin, @NotNull(message = CONSTRAINT_NOT_NULL) long version) throws BaseAppException;
 
     /**
      * Metoda odpowiedzialna za wywołanie metody odpowiedzialnej za wysyłania email z linkiem do resetowania hasła dla danego użytkownika, który podał wybrany email
@@ -122,6 +122,7 @@ public interface AccountEndpointLocal {
      */
     void requestSomeonesPasswordReset(String login, String email) throws BaseAppException;
 
+    //todo add javadoc
     void verifyAccount(AccountVerificationDto accountVerificationDto) throws BaseAppException;
 
     /**
@@ -129,56 +130,56 @@ public interface AccountEndpointLocal {
      *
      * @param otherClientChangeDataDto dto obiekt przechowujący informację o zmienionych danych
      */
-    OtherClientChangeDataDto changeOtherClientData(OtherClientChangeDataDto otherClientChangeDataDto) throws OptimisticLockException, BaseAppException;
+    OtherClientChangeDataDto changeOtherClientData(OtherClientChangeDataDto otherClientChangeDataDto) throws BaseAppException;
 
     /**
      * Zmienia dane wybranego pracownika
      *
      * @param otherBusinessWorkerChangeDataDto dto obiekt przechowujący informację o  zmienionych danych
      */
-    OtherBusinessWorkerChangeDataDto changeOtherBusinessWorkerData(OtherBusinessWorkerChangeDataDto otherBusinessWorkerChangeDataDto) throws OptimisticLockException, BaseAppException;
+    OtherBusinessWorkerChangeDataDto changeOtherBusinessWorkerData(OtherBusinessWorkerChangeDataDto otherBusinessWorkerChangeDataDto) throws BaseAppException;
 
     /**
      * Zmienia dane wybranego moderatora lub administratora
      *
      * @param otherAccountChangeDataDto dto obiekt przechowujący informację o zmienionych danych
      */
-    AccountDto changeOtherAccountData(OtherAccountChangeDataDto otherAccountChangeDataDto) throws OptimisticLockException, BaseAppException;
+    AccountDto changeOtherAccountData(OtherAccountChangeDataDto otherAccountChangeDataDto) throws BaseAppException;
 
     /**
      * Mapuje obiekt dto z nowym mailem do obiektu modelu oraz zmienia mail
      *
      * @param accountChangeEmailDto dto z nowym mailem
      */
-    void changeEmail(AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException, OptimisticLockException;
+    void changeEmail(AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException;
 
     /**
      * Zmienia dane clienta o podanym loginie
      *
      * @param clientChangeDataDto dto obiekt przechowujący informację o kliencie oraz zmienionych danych
      */
-    void changeClientData(ClientChangeDataDto clientChangeDataDto) throws OptimisticLockException, BaseAppException;
+    void changeClientData(ClientChangeDataDto clientChangeDataDto) throws BaseAppException;
 
     /**
      * Zmienia dane pracownika o podanym loginie
      *
      * @param businessWorkerChangeDataDto dto obiekt przechowujący informację o procowniku oraz zmienionych danych
      */
-    void changeBusinessWorkerData(BusinessWorkerChangeDataDto businessWorkerChangeDataDto) throws OptimisticLockException, BaseAppException;
+    void changeBusinessWorkerData(BusinessWorkerChangeDataDto businessWorkerChangeDataDto) throws BaseAppException;
 
     /**
      * Zmienia dane moderatora o podanym loginie
      *
      * @param moderatorChangeDataDto dto obiekt przechowujący informację o moderatorze oraz zmienionych danych
      */
-    void changeModeratorData(ModeratorChangeDataDto moderatorChangeDataDto) throws OptimisticLockException, BaseAppException;
+    void changeModeratorData(ModeratorChangeDataDto moderatorChangeDataDto) throws BaseAppException;
 
     /**
      * Zmienia dane administratora o podanym loginie
      *
      * @param administratorChangeDataDto dto obiekt przechowujący informację o administratorze oraz zmienionych danych
      */
-    void changeAdministratorData(AdministratorChangeDataDto administratorChangeDataDto) throws OptimisticLockException, BaseAppException;
+    void changeAdministratorData(AdministratorChangeDataDto administratorChangeDataDto) throws BaseAppException;
 
     /**
      * Zwraca konto o podanym loginie
@@ -238,6 +239,22 @@ public interface AccountEndpointLocal {
      *
      * @return Login użytkownika
      */
-    String getCurrentUserLogin();
+    String getCurrentUserLogin() throws BaseAppException;
+
+    /**
+     * Metoda odpowiedzialna za wywołanie metody odpowiedzialnej za zmianę hasła akutalnego użytkownika
+     *
+     * @param accountChangeOwnPasswordDto obiekt dto posiadający niezbedne dane do zmienienia hasła aktualnego użytkownika
+     * @throws BaseAppException        bazowy wyjątek aplikacji rzucany w przypadku gdy stare hasło podane przez użytkownika nie jest zgodne z tym w bazie danych
+     */
+    void changeOwnPassword(AccountChangeOwnPasswordDto accountChangeOwnPasswordDto) throws BaseAppException;
+
+    /**
+     * Metoda odpowiedzialna za zmianę jasnego-ciemnego motywu modułu prezentacji
+     *
+     * @param changeModeDto obiekt dto posiadający niezbędne dane do zmienienia motywu
+     */
+
+    void changeMode(ChangeModeDto changeModeDto) throws BaseAppException, FacadeException;
 }
 

@@ -1,11 +1,8 @@
-import { 
-    TextField,
-    InputAdornment
-} from '@material-ui/core'
-import { makeStyles } from '@material-ui/styles'
+import {InputAdornment, TextField} from '@material-ui/core'
+import {makeStyles} from '@material-ui/styles'
 import * as React from 'react'
 import {useSelector} from "react-redux";
-import {selectColor} from "../redux/slices/colorSlice";
+import {selectDarkMode} from "../redux/slices/userSlice";
 
 const useStyles = makeStyles(theme => ({
     light: {
@@ -69,10 +66,13 @@ export interface DarkedTextFieldProps {
     readonly icon?: JSX.Element,
     readonly placeholder?: string,
     readonly label?: string,
-    readonly style?: React.CSSProperties
+    readonly style?: React.CSSProperties,
+    readonly value?: any,
+    readonly colorIgnored?: boolean,
+    onChange?(event: React.ChangeEvent<HTMLInputElement>): void
 }
 
-const DarkedTextField = React.forwardRef((props: DarkedTextFieldProps, ref) => {
+const DarkedTextField = (props: DarkedTextFieldProps) => {
 
         const classes = useStyles()
 
@@ -83,13 +83,16 @@ const DarkedTextField = React.forwardRef((props: DarkedTextFieldProps, ref) => {
             placeholder,
             label,
             style,
+            value,
+            onChange,
+            colorIgnored
         } = props
 
-        const color = useSelector(selectColor)
+        const darkMode = useSelector(selectDarkMode)
 
         return (<TextField
             type={type || "text"}
-            className={classes[color ? 'light' : 'dark'] + ' ' + (styles || "")}
+            className={classes[(!colorIgnored && darkMode) ? 'dark' : 'light'] + ' ' + (styles || "")}
             variant="outlined"
             label={label || ""}
             InputProps={{
@@ -103,8 +106,9 @@ const DarkedTextField = React.forwardRef((props: DarkedTextFieldProps, ref) => {
             InputLabelProps={labelStyle}
             placeholder={placeholder || ""}
             style={style || undefined}
-            ref={ref as React.RefObject<HTMLDivElement>}
+            value={value}
+            onChange={onChange}
         />)
-    });
+    };
 
 export default DarkedTextField;

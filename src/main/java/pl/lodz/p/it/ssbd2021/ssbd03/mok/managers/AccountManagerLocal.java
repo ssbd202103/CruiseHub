@@ -2,21 +2,14 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.managers;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AuthUnauthorizedException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-
 
 import javax.ejb.Local;
 import java.time.LocalDateTime;
 import java.util.List;
-
-import java.time.LocalDateTime;
 
 /**
  * Klasa która zarządza logiką biznesową kont
@@ -58,7 +51,7 @@ public interface AccountManagerLocal {
      * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku gdy dodanie poziomu jest niemożliwe,
      *                          lub narusza zasady biznesowe aplikacji
      */
-    Account grantModeratorAccessLevel(String accountLogin, Long accountVersion) throws BaseAppException;
+    Account grantModeratorAccessLevel(String accountLogin, long accountVersion) throws BaseAppException;
 
     /**
      * Dodaje poziom dostępu administratora użytkownikowi
@@ -69,32 +62,34 @@ public interface AccountManagerLocal {
      * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku gdy dodanie poziomu jest niemożliwe,
      *                          lub narusza zasady biznesowe aplikacji
      */
-    Account grantAdministratorAccessLevel(String accountLogin, Long accountVersion) throws BaseAppException;
+    Account grantAdministratorAccessLevel(String accountLogin, long accountVersion) throws BaseAppException;
 
 
     /**
      * Zmienia stan poziomu dostępu użytkownika (włącza/wyłącza)
-     * @param accountLogin Login użytkownika
-     * @param accessLevel Poziom dostępu użytkownika
-     * @param enabled Boolean określający oczekiwany stan poziomu dostępu
+     *
+     * @param accountLogin   Login użytkownika
+     * @param accessLevel    Poziom dostępu użytkownika
+     * @param enabled        boolean określający oczekiwany stan poziomu dostępu
      * @param accountVersion Wersja obiektu przed wywołaniem metody
      * @return Obiekt użytkownika po dokonanych zmianach
      * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku gdy zmiana stanu poziomu dostepu jest niemożliwa,
      *                          lub narusza zasady biznesowe aplikacji
      */
     Account changeAccessLevelState(String accountLogin, AccessLevelType accessLevel,
-                                   boolean enabled, Long accountVersion) throws BaseAppException;
+                                   boolean enabled, long accountVersion) throws BaseAppException;
 
     /**
      * Metoda odpowiedzialna za blokowanie konta
-     *
+     * <p>
      * Blokuje użytkownika o zadanym loginie
-     * @param login Login użytkownika
+     *
+     * @param login   Login użytkownika
      * @param version Wersja obiektu do sprawdzenia
      * @param currentUserLogin Login użytkownika blokującego
      * @throws BaseAppException Wyjątek aplikacji rzucany w przypadku błędu pobrania danych użytkownika
      */
-    Account blockUser(String login, Long version, String currentUserLogin) throws BaseAppException;
+    Account blockUser(String login, long version, String currentUserLogin) throws BaseAppException;
 
 
     /**
@@ -105,14 +100,14 @@ public interface AccountManagerLocal {
      * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku gdy występuje błąd w p
      *                          obraniu danych w fasadzie
      */
-    Account unblockUser(String unblockedUserLogin, Long version, String currentUserLogin) throws BaseAppException;
+    Account unblockUser(String unblockedUserLogin, long version, String currentUserLogin) throws BaseAppException;
 
     /**
      * Pobiera liste kont z bazy danych
      *
      * @return lista kont
      */
-    List<Account> getAllAccounts();
+    List<Account> getAllAccounts() throws BaseAppException;
 
 
     /**
@@ -145,55 +140,58 @@ public interface AccountManagerLocal {
     /**
      * Metoda odpowiedzialna za weryfikacje konta użytkonwika.
      *
-     * @param token        jwt token otrzymany przez email
+     * @param token jwt token otrzymany przez email
      * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku gdy token wygasł albo nie przeszedł walidacji oraz gdy brak loginu lub wersji w tokenie oraz w wypadku kiedy konto zostało już wcześniej aktywowane oraz w sytuacj gdy został rzucony wyjątek blokady optymistycznej
      */
     void verifyAccount(String token) throws BaseAppException;
 
 
     /**
-     * Zmień dane wybranego klienta
+     * Zmienia dane wybranego klienta
      *
-     * @param account encja konta zawierająca zmiany
-     * @param alterBy login konta dokonującego zmiany
-     * @return zmienone konto
+     * @param login       login klienta
+     * @param phoneNumber zmieniony numer telefonu
+     * @param addr        zmieniony adres
+     * @param version     wersja
+     * @return zmienione konto
+     * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku gdy token wygasł albo nie przeszedł walidacji oraz gdy brak loginu lub wersji w tokenie oraz w wypadku kiedy konto zostało już wcześniej aktywowane oraz w sytuacj gdy został rzucony wyjątek blokady optymistycznej
      */
-    Account changeOtherClientData(Account account, String alterBy) throws BaseAppException;
+    Account changeOtherClientData(String login, String phoneNumber, Address addr, long version) throws BaseAppException;
 
     /**
-     * Zmień dane wybranego praconiwka firmy
+     * Zmienia dane wybranego pracownika firmy
      *
-     * @param account encja konta zawierająca zmiany
-     * @param alterBy login konta dokonującego zmiany
-     * @return zmienone konto
+     * @param login       login pracownika
+     * @param phoneNumber nowy numer telefonu
+     * @param version     wersja
+     * @return zmienione konto
+     * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku gdy token wygasł albo nie przeszedł walidacji oraz gdy brak loginu lub wersji w tokenie oraz w wypadku kiedy konto zostało już wcześniej aktywowane oraz w sytuacj gdy został rzucony wyjątek blokady optymistycznej
      */
-    Account changeOtherBusinessWorkerData(Account account, String alterBy) throws BaseAppException;
+    Account changeOtherBusinessWorkerData(String login, String phoneNumber, long version) throws BaseAppException;
 
     /**
      * Zmień dane wybranego moderatora lub administratora
      *
      * @param account encja konta zawierająca zmiany
-     * @param alterBy login konta dokonującego zmiany
      * @return zmienone konto
      */
-    Account changeOtherAccountData(Account account, String alterBy) throws BaseAppException;
+    Account updateOtherAccount(Account account) throws BaseAppException;
 
 
     /**
      * Zmienia email konta o podanym loginie
      *
-     * @param login login konta
-     * @param version wersja
+     * @param login    login konta
+     * @param version  wersja
      * @param newEmail nowy email
      */
 
-    void changeEmail(String login, Long version, String newEmail) throws BaseAppException;
+    void changeEmail(String login, long version, String newEmail) throws BaseAppException;
 
     /**
      * Zmień dane klienta
      *
      * @param account encja konta zawierająca zmiany
-     *
      */
     void changeClientData(Account account) throws BaseAppException;
 
@@ -201,7 +199,6 @@ public interface AccountManagerLocal {
      * Zmień dane pracownika firmy
      *
      * @param account encja konta zawierająca zmiany
-     *
      */
     void changeBusinessWorkerData(Account account) throws BaseAppException;
 
@@ -209,7 +206,6 @@ public interface AccountManagerLocal {
      * Zmień dane moderatora
      *
      * @param account encja konta zawierająca zmiany
-     *
      */
     void changeModeratorData(Account account) throws BaseAppException;
 
@@ -217,24 +213,43 @@ public interface AccountManagerLocal {
      * Zmień dane administratora
      *
      * @param account encja konta zawierająca zmiany
-     *
      */
     void changeAdministratorData(Account account) throws BaseAppException;
 
     /**
      * Metoda odpowiedzialna za edycję pól w bazie danych w przypadku niepoprawnego logowania.
-     * @param login Login użytkownika
+     *
+     * @param login  Login użytkownika
      * @param IpAddr Adres IP użytkownika
-     * @param time Czas
+     * @param time   Czas
      */
-    void updateIncorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws AuthUnauthorizedException;
+    void updateIncorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws BaseAppException;
 
     /**
      * Metoda odpowiedzialna za edycję pól w bazie danych w przypadku poprawnego logowania.
-     * @param login Login użytkownika
+     *
+     * @param login  Login użytkownika
      * @param IpAddr Adres IP użytkownika
-     * @param time Czas
+     * @param time   Czas
      * @return Token JWT
      */
-    String updateCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws AuthUnauthorizedException;
+    String updateCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws BaseAppException;
+
+    /**
+     * Metoda odpowiedzialna za zmiane hasła akutalnego użytkownika
+     *
+     * @throws BaseAppException Bazowy wyjątek aplikacji rzucany w przypadku gdy stare hasło nie jest zgodne z tym z bazy danych
+     */
+    void changeOwnPassword(String login, long version, String oldPassword, String newPassword) throws BaseAppException;
+
+    Account getCurrentUser() throws BaseAppException;
+
+    /**
+     * Metoda odpowiedzialna za zmianę motywu
+     * @param login login użytkownika dla którego należy zmienić motyw
+     * @param newMode flaga nowego motywu
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
+    void changeMode(String login, boolean newMode) throws BaseAppException;
+
 }

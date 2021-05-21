@@ -1,6 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AuthUnauthorizedException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 
 import java.time.LocalDateTime;
 
@@ -15,7 +15,7 @@ public interface AuthenticateEndpointLocal {
      * @param IpAddr Adres IP użytkownika
      * @param time Czas
      */
-    void updateIncorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws AuthUnauthorizedException;
+    void updateIncorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws BaseAppException;
 
     /**
      * Metoda odpowiedzialna za edycję pól w bazie danych w przypadku poprawnego logowania.
@@ -24,5 +24,5 @@ public interface AuthenticateEndpointLocal {
      * @param time Czas
      * @return Token JWT
      */
-    String updateCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws AuthUnauthorizedException;
+    String updateCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws BaseAppException;
 }

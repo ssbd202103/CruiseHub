@@ -10,9 +10,8 @@ const tokenSlice = createSlice({
 
 export const {update} = tokenSlice.actions
 
-const selectToken = createSelector(
-    (state: {token: string}) => state,
-    state => state.token
-)
+const selectSelf = (state: {token: string}) => state
+
+export const selectToken = createSelector(selectSelf, state => state.token)
 
 export default tokenSlice.reducer

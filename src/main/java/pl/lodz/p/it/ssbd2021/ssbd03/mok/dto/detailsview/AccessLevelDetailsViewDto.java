@@ -13,6 +13,11 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.accesslevels.BusinessWor
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.accesslevels.ClientDetailsViewDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.accesslevels.ModeratorDetailsViewDto;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -27,8 +32,12 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.accesslevels.ModeratorDe
 public abstract class AccessLevelDetailsViewDto {
     private boolean enabled;
 
+
+    @NotNull(message = CONSTRAINT_NOT_NULL)
+    @Valid
     private AccessLevelType accessLevelType;
 
+    private long accVersion;
     @Override
     public int hashCode() {
         return this.getClass().hashCode();

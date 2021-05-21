@@ -1,6 +1,9 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.ChangeAccessLevelStateDto;
@@ -16,7 +19,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.enterprise.context.RequestScoped;
-import javax.persistence.OptimisticLockException;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -27,7 +29,7 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 
 import static javax.ws.rs.core.Response.Status.*;
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ETAG_IDENTITY_INTEGRITY_ERROR;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 
 /**
  * Klasa która udostępnia api RESTowe do wykonania operacji na kontach użytkowników, oraz zajmuje się walidacją danych.
@@ -35,6 +37,9 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ETAG_IDENTITY_INTEGRITY_E
 @Path("/account")
 @RequestScoped
 public class AccountController {
+
+    private final ObjectMapper mapper = new ObjectMapper(); //Jackson is set as default serializer,
+    // but Payara likes to ignore it for whatever reason
 
     @EJB
     private AccountEndpointLocal accountEndpoint;
@@ -71,15 +76,18 @@ public class AccountController {
     public Response getAccountDetailsByLogin(@PathParam("login") String login) {
         try {
             AccountDetailsViewDto account = accountEndpoint.getAccountDetailsByLogin(login);
-            return Response.ok().entity(account).build();
+            return Response.ok().entity(mapper.writeValueAsString(account)).build();
         } catch (BaseAppException e) {
             return Response.status(NOT_FOUND).entity(e.getMessage()).build();
+        } catch (JsonProcessingException e) {
+            return Response.status(INTERNAL_SERVER_ERROR).entity(SERIALIZATION_PARSING_ERROR).build();
         }
     }
+
     @GET
     @Path("/client/{login}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getClientByLogin(@PathParam("login") @Login String login) throws BaseAppException {
+    public Response getClientByLogin(@PathParam("login") @Login String login) {
         try {
             ClientDto client = accountEndpoint.getClientByLogin(login);
             String Etag = accountEndpoint.getETagFromSignableEntity(client);
@@ -92,7 +100,7 @@ public class AccountController {
     @GET
     @Path("/businessworker/{login}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getBusinessWorkerByLogin(@PathParam("login") @Login String login) throws BaseAppException {
+    public Response getBusinessWorkerByLogin(@PathParam("login") @Login String login) {
         try {
             BusinessWorkerDto businessWorker = accountEndpoint.getBusinessWorkerByLogin(login);
             String ETag = accountEndpoint.getETagFromSignableEntity(businessWorker);
@@ -105,7 +113,7 @@ public class AccountController {
     @GET
     @Path("/moderator/{login}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getModeratorByLogin(@PathParam("login") @Login String login) throws BaseAppException {
+    public Response getModeratorByLogin(@PathParam("login") @Login String login) {
         try {
             ModeratorDto moderator = accountEndpoint.getModeratorByLogin(login);
             String ETag = accountEndpoint.getETagFromSignableEntity(moderator);
@@ -118,7 +126,7 @@ public class AccountController {
     @GET
     @Path("/administrator/{login}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAdministratorByLogin(@PathParam("login") @Login String login) throws BaseAppException {
+    public Response getAdministratorByLogin(@PathParam("login") @Login String login) {
         try {
             AdministratorDto administrator = accountEndpoint.getAdministratorByLogin(login);
             String ETag = accountEndpoint.getETagFromSignableEntity(administrator);
@@ -136,8 +144,9 @@ public class AccountController {
     @POST
     @Path("/client/registration")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void createClient(@Valid @NotNull ClientForRegistrationDto clientForRegistrationDto) throws BaseAppException {
+    public void createClient(@Valid @NotNull(message = CONSTRAINT_NOT_NULL) ClientForRegistrationDto clientForRegistrationDto) throws BaseAppException {
         accountEndpoint.createClientAccount(clientForRegistrationDto);
+        //todo handle exceptions
     }
 
     /**
@@ -148,8 +157,9 @@ public class AccountController {
     @POST
     @Path("/business-worker/registration")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void createBusinessWorker(@Valid @NotNull BusinessWorkerForRegistrationDto businessWorkerForRegistrationDto) throws BaseAppException {
+    public void createBusinessWorker(@Valid @NotNull(message = CONSTRAINT_NOT_NULL) BusinessWorkerForRegistrationDto businessWorkerForRegistrationDto) throws BaseAppException {
         accountEndpoint.createBusinessWorkerAccount(businessWorkerForRegistrationDto);
+        //todo handle exceptions
     }
 
     /**
@@ -160,27 +170,32 @@ public class AccountController {
     @GET
     @Path("/accounts")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<AccountDtoForList> getAllAccounts() {
+    public List<AccountDtoForList> getAllAccounts() throws BaseAppException{
         return accountEndpoint.getAllAccounts();
     }
 
 
     /**
      * Metoda pośrednio odpowiedzialna za blokowanie użytkownika
+     *
      * @param blockAccountDto Obiekt z loginem użytkownika do zablokowania oraz wersją
-     * @param etagValue Wartość etaga
+     * @param etagValue       Wartość etaga
      * @return Respons wraz z kodem
-     * @throws BaseAppException Wyjątek aplikacji rzucany w przypadku błędu pobrania danych użytkownika
      */
     @ETagFilterBinding
     @PUT
     @Path("/block")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response blockUser(BlockAccountDto blockAccountDto, @HeaderParam("If-Match") @NotNull @NotEmpty String etagValue) throws BaseAppException {
+    public Response blockUser(BlockAccountDto blockAccountDto, @HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) String etagValue) {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etagValue, blockAccountDto)) {
             return Response.status(406).build();
         }
-        accountEndpoint.blockUser(blockAccountDto.getLogin(), blockAccountDto.getVersion());
+        try {
+            accountEndpoint.blockUser(blockAccountDto.getLogin(), blockAccountDto.getVersion());
+        } catch (BaseAppException e) {
+            return Response.status(FORBIDDEN).entity(e.getMessage()).build();
+        }
+
         return Response.ok().build();
     }
 
@@ -199,6 +214,8 @@ public class AccountController {
         try {
             AccountDto account = accountEndpoint.grantAccessLevel(grantAccessLevel);
             return Response.ok().entity(account).build();
+        } catch (FacadeException e) {
+            return Response.status(FORBIDDEN).entity(e.getMessage()).build();
         } catch (BaseAppException e) {
             return Response.status(BAD_REQUEST).entity(e.getMessage()).build();
         }
@@ -208,7 +225,7 @@ public class AccountController {
      * Zmień stan danego poziomu dostępu (włącz/wyłącz)
      *
      * @param changeAccessLevelStateDto Obiekt przesyłowy danych potrzebnych do zmiany stanu poziomu dostępu
-     * @param etag Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
+     * @param etag                      Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
      * @return Odpowiedź serwera reprezentująca obiekt AccountDto po zmianach w postaci JSON
      */
     @ETagFilterBinding
@@ -223,6 +240,8 @@ public class AccountController {
         try {
             AccountDto account = accountEndpoint.changeAccessLevelState(changeAccessLevelStateDto);
             return Response.ok().entity(account).build();
+        } catch (FacadeException e) {
+            return Response.status(FORBIDDEN).entity(e.getMessage()).build();
         } catch (BaseAppException e) {
             return Response.status(BAD_REQUEST).entity(e.getMessage()).build();
         }
@@ -237,11 +256,13 @@ public class AccountController {
      */
     @PUT
     @Path("/reset-password")
-    public Response resetPassword(@Valid PasswordResetDto passwordResetDto) {
+    public Response resetPassword(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid PasswordResetDto passwordResetDto) {
         try {
             this.accountEndpoint.resetPassword(passwordResetDto);
+        } catch (FacadeException e) {
+            return Response.status(FORBIDDEN).entity(e.getMessage()).build();
         } catch (BaseAppException e) {
-            Response.status(FORBIDDEN).entity(e.getMessage()).build(); // todo send key
+            return Response.status(BAD_REQUEST).entity(e.getMessage()).build(); // todo send key
         }
         return Response.ok().build(); // todo appropriate condition
     }
@@ -264,23 +285,59 @@ public class AccountController {
     }
 
     /**
-     * @param unblockAccountDto  Obiekt posiadający login użytkownika którego mamy odblokować
-     * @param tagValue Wartość etaga
-     * @return Zwraca kod potwierdzający poprawne bądź niepoprawne wykoannie
-     * @throws BaseAppException Wyjątek rzucany w momencie kiedy nie znajdzie takich użytkowników
+     * @param unblockAccountDto Obiekt posiadający login użytkownika którego mamy odblokować
+     * @param tagValue          Wartość etaga
+     * @return Zwraca kod potwierdzający poprawne bądź niepoprawne wykonanie
      */
     @ETagFilterBinding
     @PUT
     @Path("/unblock")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response unblockUser(UnblockAccountDto unblockAccountDto, @HeaderParam("If-Match") @NotNull @NotEmpty String tagValue) throws BaseAppException {
+    public Response unblockUser(UnblockAccountDto unblockAccountDto, @HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) String tagValue) {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(tagValue, unblockAccountDto)) {
             return Response.status(406).build();
         }
-        accountEndpoint.unblockUser(unblockAccountDto.getLogin(), unblockAccountDto.getVersion());
+        try {
+            accountEndpoint.unblockUser(unblockAccountDto.getLogin(), unblockAccountDto.getVersion());
+        } catch (BaseAppException e) {
+            return Response.status(FORBIDDEN).entity(e.getMessage()).build();
+        }
+
+
         return Response.status(200).build();
     }
 
+    /**
+     * Zmienia hasło aktualnego użytkownika wedle danych podanych w dto, gdy operacja się powiedzie zwraca 204
+     *
+     * @param accountChangeOwnPasswordDto obiekt ktory przechowuje login, wersję, stare oraz nowe hasło podane przez użytkownika
+     * @param etag                        Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
+     * @return Zwraca kod kod potwierdzający poprawne bądź nieporawne wykonanie
+     */
+    @ETagFilterBinding
+    @PUT
+    @Path("/change_own_password")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response changeOwnPassword(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid AccountChangeOwnPasswordDto accountChangeOwnPasswordDto, @HeaderParam("If-Match") String etag) {
+        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, accountChangeOwnPasswordDto)) {
+            return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
+        }
+
+        try {
+            accountEndpoint.changeOwnPassword(accountChangeOwnPasswordDto);
+        } catch (FacadeException e) {
+            return Response.status(FORBIDDEN).entity(e.getMessage()).build();
+        } catch (EJBException e) {
+            return Response.status(NOT_ACCEPTABLE).entity(e.getMessage()).build();
+        } catch (BaseAppException e) {
+            if (e.getMessage().equals(OPTIMISTIC_LOCK_EXCEPTION)) {
+                return Response.status(NOT_ACCEPTABLE).entity(e.getMessage()).build();
+            }
+            return Response.status(NOT_FOUND).entity(e.getMessage()).build();
+        }
+
+        return Response.noContent().build();
+    }
 
     /**
      * Metoda odpowiedzialna za zgłoszenia życzenia resetowania hasła dla danego użytkownika
@@ -291,7 +348,8 @@ public class AccountController {
      */
     @POST
     @Path("/request-someones-password-reset/{login}/{email}")
-    public Response requestSomeonesPasswordReset(@PathParam("login") @Login String login, @PathParam("email") @Email String email) {
+    public Response requestSomeonesPasswordReset(@PathParam("login") @Login String login, @PathParam("email") @Email(message = REGEX_INVALID_EMAIL)     @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
+            String email) {
         try {
             this.accountEndpoint.requestSomeonesPasswordReset(login, email);
         } catch (BaseAppException e) {
@@ -309,19 +367,22 @@ public class AccountController {
      */
     @PUT
     @Path("/account-verification")
-    public Response accountVerification(@Valid AccountVerificationDto accountVerificationDto) {
+    public Response accountVerification(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid AccountVerificationDto accountVerificationDto) {
         try {
             this.accountEndpoint.verifyAccount(accountVerificationDto);
+        } catch (FacadeException e) {
+            return Response.status(FORBIDDEN).entity(e.getMessage()).build();
         } catch (BaseAppException e) {
             Response.status(FORBIDDEN).entity(e.getMessage()).build(); // todo send key
         }
         return Response.ok().build(); // todo appropriate condition
     }
+
     /**
      * Zmień dane wybranego konta o poziomie dostępu klient
      *
      * @param otherClientChangeDataDto obiekt dto z nowymi danymi
-     * @param etag Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
+     * @param etag                     Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
      * @return Odpowiedź serwera w postaci JSON
      */
     @PUT
@@ -337,6 +398,8 @@ public class AccountController {
         try {
             OtherClientChangeDataDto account = accountEndpoint.changeOtherClientData(otherClientChangeDataDto);
             return Response.ok().entity(account).build();
+        } catch (FacadeException e) {
+            return Response.status(FORBIDDEN).entity(e.getMessage()).build();
         } catch (BaseAppException e) {
             return Response.status(BAD_REQUEST).entity(e.getMessage()).build();
         }
@@ -348,7 +411,7 @@ public class AccountController {
      * Zmień dane wybranego konta o poziomie dostępu businnesWorker
      *
      * @param otherBusinessWorkerChangeDataDto obiekt dto z nowymi danymi
-     * @param etag Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
+     * @param etag                             Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
      * @return Odpowiedź serwera w postaci JSON
      */
     @PUT
@@ -364,6 +427,8 @@ public class AccountController {
         try {
             OtherBusinessWorkerChangeDataDto account = accountEndpoint.changeOtherBusinessWorkerData(otherBusinessWorkerChangeDataDto);
             return Response.ok().entity(account).build();
+        } catch (FacadeException e) {
+            return Response.status(FORBIDDEN).entity(e.getMessage()).build();
         } catch (BaseAppException e) {
             return Response.status(BAD_REQUEST).entity(e.getMessage()).build();
         }
@@ -373,7 +438,7 @@ public class AccountController {
      * Zmień dane wybranego konta o poziomie dostępu moderator lub administrator
      *
      * @param otherAccountChangeDataDto obiekt dto z nowymi danymi
-     * @param etag Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
+     * @param etag                      Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
      * @return Odpowiedź serwera w postaci JSON
      */
     @PUT
@@ -389,10 +454,13 @@ public class AccountController {
         try {
             AccountDto account = accountEndpoint.changeOtherAccountData(otherAccountChangeDataDto);
             return Response.ok().entity(account).build();
+        } catch (FacadeException e) {
+            return Response.status(FORBIDDEN).entity(e.getMessage()).build();
         } catch (BaseAppException e) {
             return Response.status(BAD_REQUEST).entity(e.getMessage()).build();
         }
     }
+
     /**
      * Zmień mail według podanych w dto danych
      *
@@ -409,14 +477,20 @@ public class AccountController {
 
         try {
             accountEndpoint.changeEmail(accountChangeEmailDto);
-        } catch (EJBException | OptimisticLockException e) {
+        } catch (FacadeException e) {
+            return Response.status(FORBIDDEN).entity(e.getMessage()).build();
+        } catch (EJBException e) {
             return Response.status(NOT_ACCEPTABLE).entity(e.getMessage()).build();
         } catch (BaseAppException e) {
+            if (e.getMessage().equals(OPTIMISTIC_LOCK_EXCEPTION)) {
+                return Response.status(NOT_ACCEPTABLE).entity(e.getMessage()).build();
+            }
             return Response.status(NOT_FOUND).entity(e.getMessage()).build();
         }
 
         return Response.noContent().build();
     }
+
     /**
      * Zmień dane konta klienta
      *
@@ -433,10 +507,15 @@ public class AccountController {
 
         try {
             accountEndpoint.changeClientData(clientChangeDataDto);
-        } catch (EJBException | OptimisticLockException e) {
+        } catch (FacadeException e) {
+            return Response.status(FORBIDDEN).entity(e.getMessage()).build();
+        } catch (EJBException e) {
             return Response.status(NOT_ACCEPTABLE).entity(e.getMessage()).build();
         } catch (BaseAppException e) {
-            return  Response.status(NOT_FOUND).entity(e.getMessage()).build();
+            if (e.getMessage().equals(OPTIMISTIC_LOCK_EXCEPTION)) {
+                return Response.status(NOT_ACCEPTABLE).entity(e.getMessage()).build();
+            }
+            return Response.status(NOT_FOUND).entity(e.getMessage()).build();
         }
 
         return Response.noContent().build();
@@ -458,10 +537,15 @@ public class AccountController {
 
         try {
             accountEndpoint.changeBusinessWorkerData(businessWorkerChangeDataDto);
-        } catch (EJBException | OptimisticLockException e) {
+        } catch (FacadeException e) {
+            return Response.status(FORBIDDEN).entity(e.getMessage()).build();
+        } catch (EJBException e) {
             return Response.status(NOT_ACCEPTABLE).entity(e.getMessage()).build();
         } catch (BaseAppException e) {
-            return  Response.status(NOT_FOUND).entity(e.getMessage()).build();
+            if (e.getMessage().equals(OPTIMISTIC_LOCK_EXCEPTION)) {
+                return Response.status(NOT_ACCEPTABLE).entity(e.getMessage()).build();
+            }
+            return Response.status(NOT_FOUND).entity(e.getMessage()).build();
         }
 
         return Response.noContent().build();
@@ -476,17 +560,22 @@ public class AccountController {
     @Path("/moderator/changedata")
     @Consumes(MediaType.APPLICATION_JSON)
     @ETagFilterBinding
-    public Response changeModeratorData(ModeratorChangeDataDto moderatorChangeDataDto,  @HeaderParam("If-Match") String etag) {
+    public Response changeModeratorData(ModeratorChangeDataDto moderatorChangeDataDto, @HeaderParam("If-Match") String etag) {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, moderatorChangeDataDto)) {
             return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
         }
 
         try {
             accountEndpoint.changeModeratorData(moderatorChangeDataDto);
-        } catch (EJBException | OptimisticLockException e) {
+        } catch (FacadeException e) {
+            return Response.status(FORBIDDEN).entity(e.getMessage()).build();
+        } catch (EJBException e) {
             return Response.status(NOT_ACCEPTABLE).entity(e.getMessage()).build();
         } catch (BaseAppException e) {
-            return  Response.status(NOT_FOUND).entity(e.getMessage()).build();
+            if (e.getMessage().equals(OPTIMISTIC_LOCK_EXCEPTION)) {
+                return Response.status(NOT_ACCEPTABLE).entity(e.getMessage()).build();
+            }
+            return Response.status(NOT_FOUND).entity(e.getMessage()).build();
         }
 
         return Response.noContent().build();
@@ -508,13 +597,37 @@ public class AccountController {
 
         try {
             accountEndpoint.changeAdministratorData(administratorChangeDataDto);
-        } catch (EJBException | OptimisticLockException e) {
+        } catch (FacadeException e) {
+            return Response.status(FORBIDDEN).entity(e.getMessage()).build();
+        } catch (EJBException e) {
             return Response.status(NOT_ACCEPTABLE).entity(e.getMessage()).build();
         } catch (BaseAppException e) {
-            return  Response.status(NOT_FOUND).entity(e.getMessage()).build();
+            if (e.getMessage().equals(OPTIMISTIC_LOCK_EXCEPTION)) {
+                return Response.status(NOT_ACCEPTABLE).entity(e.getMessage()).build();
+            }
+            return Response.status(NOT_FOUND).entity(e.getMessage()).build();
         }
 
         return Response.noContent().build();
     }
 
+    @PUT
+    @Path("/change_mode")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @ETagFilterBinding
+    public Response changeMode(ChangeModeDto changeModeDto, @HeaderParam("If-Match") String etag) {
+        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, changeModeDto)) {
+            return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
+        }
+
+        try {
+            accountEndpoint.changeMode(changeModeDto);
+        } catch (FacadeException e) {
+            return Response.status(NOT_ACCEPTABLE).entity(e.getMessage()).build();
+        } catch (BaseAppException e) {
+            return Response.status(NOT_FOUND).entity(e.getMessage()).build();
+        }
+
+        return Response.noContent().build();
+    }
 }

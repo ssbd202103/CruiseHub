@@ -8,8 +8,12 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
+
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_POSITIVE_OR_ZERO_ERROR;
 
 @Data
 @AllArgsConstructor
@@ -18,11 +22,12 @@ public class ChangeAccessLevelStateDto implements SignableEntity {
     @Login
     private String accountLogin;
 
-    @NotNull
+    @NotNull(message = CONSTRAINT_NOT_NULL)
+    @Valid
     private AccessLevelType accessLevel;
 
-    @PositiveOrZero
-    private Long accountVersion;
+    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
+    private long accountVersion;
 
     private boolean enabled;
 

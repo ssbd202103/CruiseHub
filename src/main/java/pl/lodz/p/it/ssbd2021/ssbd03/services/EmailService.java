@@ -1,17 +1,19 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.services;
 
-import java.util.*;
-import javax.mail.*;
-import javax.mail.internet.*;
-
-
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.EmailServiceException;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import java.util.Properties;
+
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.EMAIL_SERVICE_INACCESSIBLE;
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.EMAIL_SERVICE_INCORRECT_EMAIL;
-
-import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
 
 /**
  * The type Email service.

@@ -1,10 +1,9 @@
-import {
-    Box
-} from '@material-ui/core'
+import {Box} from '@material-ui/core'
 
 import styles from '../styles/PanelMenu.module.css'
 import {useSelector} from "react-redux";
-import {selectColor} from "../redux/slices/colorSlice";
+import {selectDarkMode} from "../redux/slices/userSlice";
+
 
 export interface PanelMenuProps {
     color: "pink" | "pink-dark" | "pink-light" |
@@ -16,13 +15,14 @@ export interface PanelMenuProps {
     children?: any
 }
 
+
 export default function PanelMenu(props: PanelMenuProps) {
 
-    const color = useSelector(selectColor)
+    const darkMode = useSelector(selectDarkMode)
 
     return (
         <Box className={styles.wrapper} style={{backgroundColor: `var(--${props.color})`}}>
-            <Box className={styles.profile + ' ' + styles[`profile-${color ? 'light' : 'dark'}`]}>
+            <Box className={styles.profile + ' ' + styles[`profile-${!darkMode ? 'light' : 'dark'}`]}>
                 <div className={styles.name}>Jan Kowalski</div>
                 <div className={styles.email}>jan.kowalski@gmail.com</div>
             </Box>

@@ -3,26 +3,19 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.CompanyName;
 
-import java.util.Objects;
+import javax.validation.constraints.Positive;
+
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_POSITIVE_ERROR;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 public class CompanyLightDto {
+    @CompanyName
     private String name;
-    private Long nip;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        CompanyLightDto that = (CompanyLightDto) o;
-        return name.equals(that.name) && nip.equals(that.nip);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, nip);
-    }
+    @Positive(message = CONSTRAINT_POSITIVE_ERROR)
+    private long nip;
 }

@@ -30,8 +30,8 @@ public class AccountSelfController {
     @Path("/account-details")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getSelfDetails() {
-        String selfLogin = accountEndpoint.getCurrentUserLogin();
         try {
+            String selfLogin = accountEndpoint.getCurrentUserLogin();
             AccountDetailsViewDto account = accountEndpoint.getAccountDetailsByLogin(selfLogin);
             return Response.ok().entity(account).build();
         } catch (BaseAppException e) {

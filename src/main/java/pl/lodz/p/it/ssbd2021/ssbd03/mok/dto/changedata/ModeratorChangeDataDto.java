@@ -1,13 +1,15 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class ModeratorChangeDataDto extends AccountChangeDataDto {
 
-    public ModeratorChangeDataDto(String login, Long version, String newFirstName, String newSecondName) {
+    public ModeratorChangeDataDto(String login, long version, String newFirstName, String newSecondName) {
         super(login, version, newFirstName, newSecondName);
     }
 }

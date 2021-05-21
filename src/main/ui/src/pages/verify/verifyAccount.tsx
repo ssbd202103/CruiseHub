@@ -1,11 +1,8 @@
-import {Link, useHistory, useLocation} from 'react-router-dom';
-
+import {useHistory, useLocation} from 'react-router-dom';
 
 import axios from "axios";
 import AuthLayout from "../../layouts/AuthLayout";
-import DarkedTextField from "../../components/DarkedTextField";
 import {useTranslation} from "react-i18next";
-import PasswordIcon from "@material-ui/icons/VpnKeyRounded";
 import styles from '../../styles/auth.global.module.css'
 import RoundedButton from "../../components/RoundedButton";
 
