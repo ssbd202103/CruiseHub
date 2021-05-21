@@ -5,5 +5,12 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.NewCruiseDto;
 
 public interface CruiseEndpointLocal {
-    void addCruise(NewCruiseDto newCruiseDto, Account account) throws BaseAppException;
+
+    /**
+     * Tworzenie nowego rejsu
+     *
+     * @param newCruiseDto Obiekt reprezentujący rejs
+     * @throws BaseAppException wyjątek rzucany w razie nie znalezienia konta osoby tworzącej rejs
+     */
+    void addCruise(NewCruiseDto newCruiseDto) throws BaseAppException;
 }

@@ -11,13 +11,13 @@ import javax.ejb.Stateful;
 
 @Stateful
 public class CruiseEndpoint implements CruiseEndpointLocal {
-//    @EJB
-//    private CruiseManagerLocal cruiseManagerLocal;
+    @EJB
+    private CruiseManagerLocal cruiseManagerLocal;
 
 
     @Override
-    public void addCruise(NewCruiseDto newCruiseDto, Account account) throws BaseAppException {
-       // cruiseManagerLocal.addCruise(CruiseMapper.mapNewCruiseDtoToCruise(newCruiseDto));
+    public void addCruise(NewCruiseDto newCruiseDto) throws BaseAppException {
+        cruiseManagerLocal.addCruise(CruiseMapper.mapNewCruiseDtoToCruise(newCruiseDto));
     }
 
 }

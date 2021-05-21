@@ -14,6 +14,12 @@ import javax.ejb.Local;
 @Local
 public interface CruiseManagerLocal {
 
+    /**
+     * Metoda zajmująca się tworzeniem nowego rejsu
+     *
+     * @param cruise obiekt reprezentujący rejs
+     * @throws BaseAppException Wyjątek rzucany w razie nie znalezienia użytkownika tworzącego rejs
+     */
     void addCruise(Cruise cruise) throws BaseAppException;
 
 }
