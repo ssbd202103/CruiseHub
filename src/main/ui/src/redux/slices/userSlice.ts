@@ -75,12 +75,14 @@ export const isUserEmpty = createSelector(selectSelf, state => {
         secondName,
         login,
         email,
-        accessLevels,
         etag
     } = state.user
 
-    return firstName && secondName && login && email && accessLevels.length && etag
+    return !firstName && !secondName && !login && !email && !etag
 })
+export const getAccessLevelLabels = createSelector(selectSelf, state =>
+    state.user.accessLevels.map((accessLevel: IAccessLevel) => accessLevel.accessLevelType)
+)
 
 export const selectPhoneNumber = (accessLevelLabel: "CLIENT" | "BUSINESS_WORKER") =>
     createSelector(selectSelf,

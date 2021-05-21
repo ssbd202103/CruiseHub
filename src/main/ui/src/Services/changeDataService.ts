@@ -8,7 +8,7 @@ import {
     AdministratorChangeData,
     ChangeMode
 } from "../interfaces/changeInterfaces";
-import getUser from "./userService";
+import {getUser} from "./userService";
 
 export function changeClientData(newFirstName: string, newSecondName: string, newPhoneNumber: string) {
     const {

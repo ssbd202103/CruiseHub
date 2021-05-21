@@ -18,7 +18,7 @@ import React, {useState} from "react"
 import {useDispatch} from "react-redux";
 import {update} from '../redux/slices/tokenSlice'
 import {setUser} from '../redux/slices/userSlice'
-import getUser from "../Services/userService";
+import {getUser} from "../Services/userService";
 
 export default function SignIn() {
     const {t} = useTranslation();

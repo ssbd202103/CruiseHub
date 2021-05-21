@@ -1,6 +1,6 @@
 import store from "../redux/store";
 import axios from './URL'
-import getUser from "./userService";
+import {getUser} from "./userService";
 
 export function changeOwnPassword(oldPassword: string, newPassword: string) {
 

@@ -60,16 +60,16 @@ const resources = {
             "new password": "Wprowadź nowe hasło",
             "new password confirm": "Potwierdź nowe hasło",
             //workerPanel
-            "worker panel": "Panel pracownika",
+            "workerPanel": "Panel pracownika",
             //adminPanel
             "search account": "Wyszukać konto",
-            "admin panel": "Panel administracyjny",
+            "adminPanel": "Panel administracyjny",
             "login": "Login",
             "first name": "Imię",
             "last name": "Nazwisko",
             "active": "Aktywny",
             "access level": "Poziom dostępu",
-            "moderator panel": "Panel moderatora",
+            "moderatorPanel": "Panel moderatora",
             "list accounts": "Lista kont",
             "edit": "Edytuj dane",
             "change password": "Zmień hasło",
@@ -82,7 +82,7 @@ const resources = {
             "grant access level": "Przydziel poziom dostępu",
             "change access level state": "Zmień stan poziomu dostępu",
             //panels.clientPanel
-            "client panel": "Panel klienta",
+            "clientPanel": "Panel klienta",
             //verify
             "verifyAccount": "Zweryfikuj konto",
             //color
@@ -116,7 +116,10 @@ const resources = {
             "error.regex.password": "Niepoprawny format hasła",
             "error.regex.name": "Niepoprawny format imienia",
             "error.regex.companyName": "Niepoprawny format nazwy firmy",
-            "phone change btn": "Zmień numer telefonu"
+            "phone change btn": "Zmień numer telefonu",
+
+            //else
+            'error.emptypanellist': 'Nie masz żadnych paneli do sterowania'
         }
     },
     en: {
@@ -177,9 +180,9 @@ const resources = {
             "new password": "Insert a new password",
             "new password confirm": "Confirm the new password",
             //workerPanel
-            "worker panel": "Worker panel",
+            "workerPanel": "Worker panel",
             //adminPanel
-            "admin panel": "Administrator panel",
+            "adminPanel": "Administrator panel",
             "search account": "Search account",
             "login": "Login",
             "first name": "First name",
@@ -199,7 +202,7 @@ const resources = {
             "unblock": "Unblock account",
             "grand access level": "Grand access level",
             //panels.clientPanel
-            "clientPanelH2": "Client panel",
+            "clientPanel": "Client panel",
             //verify
             "verifyAccount": "Verify account",
             //color
@@ -232,7 +235,9 @@ const resources = {
             "error.regex.password": "Invalid password format",
             "error.regex.name": "Invalid name format",
             "error.regex.companyName": "Invalid company name format",
-            "phone change btn": "Change phone number"
+            "phone change btn": "Change phone number",
+
+            'error.emptypanellist': "You don't have any panel to manage"
         }
     }
 }
