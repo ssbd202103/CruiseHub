@@ -37,7 +37,7 @@ class CompanyControllerIT {
                 new CompanyLightDto("GroveStreetFamilly", 2354685748L),
                 new CompanyLightDto("BeautifulCompany", 9568545875L));
         given().baseUri(baseUri).when().header(new Header("Authorization", "Bearer " + adminToken))
-                .get("company/companiesinfo").then().statusCode(200).and().body(containsString(new Gson().toJson(companies)));
+                .get("company/companies-info").then().statusCode(200).and().body(containsString(new Gson().toJson(companies)));
     }
 
     private String getAuthToken(String login, String password) {

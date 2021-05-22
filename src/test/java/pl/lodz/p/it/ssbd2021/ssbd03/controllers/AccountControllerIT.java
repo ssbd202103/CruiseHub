@@ -26,7 +26,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDt
 import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
 
-import javax.json.Json;
 import javax.ws.rs.core.MediaType;
 import java.util.*;
 
@@ -103,7 +102,7 @@ class AccountControllerIT {
 
         BlockAccountDto blockAccountDto = new BlockAccountDto(accountDetailsViewDto.getLogin(), accountDetailsViewDto.getVersion());
         given().contentType(ContentType.JSON).header("If-Match", accountDetailsViewDto.getEtag()).header(new Header("Authorization", "Bearer " + adminToken))
-                .baseUri(accountBaseUri).body(blockAccountDto).put("/block").then().statusCode(HttpStatus.SC_OK);
+                .baseUri(accountBaseUri).body(blockAccountDto).put("/block").then().statusCode(204);
 
         response = given().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken))
                 .baseUri(accountBaseUri).get("/details/" + account.getLogin());
@@ -197,7 +196,7 @@ class AccountControllerIT {
         Response response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken))
                 .body(changeAccessLevelState).put("/change-access-level-state");
 
-        assertThat(response.getStatusCode()).isEqualTo(406);
+        assertThat(response.getStatusCode()).isEqualTo(400);
         assertThat(response.asString()).isEqualTo(ETAG_IDENTITY_INTEGRITY_ERROR);
 
         // Requesting enabling already enabled account
@@ -254,6 +253,8 @@ class AccountControllerIT {
 
 
         grantAccessLevel.setAccountVersion(grantAccessLevel.getAccountVersion() + 2);
+        etag = EntityIdentitySignerVerifier.calculateEntitySignature(grantAccessLevel);
+
         response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken)).body(grantAccessLevel).put("/grant-access-level");
         assertThat(response.getStatusCode()).isEqualTo(400);
         assertThat(response.asString()).isEqualTo(ACCESS_LEVEL_ALREADY_ASSIGNED_ERROR);
@@ -299,7 +300,7 @@ class AccountControllerIT {
     }
 
     @Test
-    public void unblockUserTest_SUCCESS() throws JsonProcessingException, ETagException { // todo fix this test
+    public void unblockUserTest_SUCCESS() throws JsonProcessingException, ETagException {
         String adminToken = this.getAuthToken("rbranson", "abcABC123*");
 
         AccountDto account = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
@@ -315,7 +316,7 @@ class AccountControllerIT {
 
         UnblockAccountDto unblockAccountDto = new UnblockAccountDto(accountDetailsViewDto.getLogin(), accountDetailsViewDto.getVersion());
         given().contentType(ContentType.JSON).header("If-Match", accountDetailsViewDto.getEtag()).header(new Header("Authorization", "Bearer " + adminToken))
-                .baseUri(accountBaseUri).body(unblockAccountDto).put("/unblock").then().statusCode(HttpStatus.SC_OK);
+                .baseUri(accountBaseUri).body(unblockAccountDto).put("/unblock").then().statusCode(204);
 
         response = given().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken))
                 .baseUri(accountBaseUri).get("/details/" + account.getLogin());
@@ -428,7 +429,6 @@ class AccountControllerIT {
         String etag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
         OtherAddressChangeDto newAddress = new OtherAddressChangeDto(100L, "Aleja Zmieniona", "94-690", "Lodz", "Polska");
         OtherClientChangeDataDto otherClientChangeDataDto = new OtherClientChangeDataDto(account.getLogin(), account.getVersion(),
-
                 "888888888",
                 newAddress,
                 version);
@@ -440,8 +440,6 @@ class AccountControllerIT {
         assertThat(updatedAccount.getNewAddress().getNewCity()).isEqualTo("Lodz");
         assertThat(updatedAccount.getNewAddress().getNewCountry()).isEqualTo("Polska");
         assertThat(updatedAccount.getNewPhoneNumber()).isEqualTo("888888888");
-
-
     }
 
     @Test
@@ -462,7 +460,6 @@ class AccountControllerIT {
         OtherBusinessWorkerChangeDataDto updatedAccount = objectMapper.readValue(response.asString(), OtherBusinessWorkerChangeDataDto.class);
 
         assertThat(updatedAccount.getNewPhoneNumber()).isEqualTo("888888888");
-
     }
 
     @Test
@@ -503,7 +500,6 @@ class AccountControllerIT {
         assertEquals(HttpStatus.SC_OK, response.getStatusCode());
         return response.getBody().asString();
     }
-
 
 
 }

@@ -57,7 +57,7 @@ export default function WorkerSignUp() {
 
     useEffect(() => {
         const getCompaniesList = async () => {
-            const {data} = await axios.get('http://localhost:8080/api/company/companiesinfo', {});
+            const {data} = await axios.get('http://localhost:8080/api/company/companies-info', {});
             setCompaniesList(data.map((comp: { name: string }) => comp.name))
         }
         getCompaniesList()
