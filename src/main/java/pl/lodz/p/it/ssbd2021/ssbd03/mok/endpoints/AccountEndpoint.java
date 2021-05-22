@@ -24,8 +24,10 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.TokenWrapperFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.managers.AccountManagerLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.services.EmailService;
 
+import javax.annotation.Resource;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
+import javax.ejb.EJBContext;
 import javax.ejb.Stateful;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;

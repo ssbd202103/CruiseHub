@@ -24,8 +24,10 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import java.util.List;
 
 import static javax.ws.rs.core.Response.Status.NOT_ACCEPTABLE;
@@ -41,8 +43,6 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.controllers.TransactionRepeater.tryAn
 public class AccountController {
     @Inject
     private AccountEndpointLocal accountEndpoint;
-    @Resource
-    EJBContext ejbContext;
     /**
      * Pobiera użytkownika po loginie oraz tworzy ETaga na jego podstawie
      *

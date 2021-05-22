@@ -10,16 +10,16 @@
     </error-page>
     <!---->
     <security-role>
-        <role-name>ADMINISTRATOR</role-name>
+        <role-name>Administrator</role-name>
     </security-role>
     <security-role>
-        <role-name>MODERATOR</role-name>
+        <role-name>Moderator</role-name>
     </security-role>
     <security-role>
-        <role-name>CLIENT</role-name>
+        <role-name>Client</role-name>
     </security-role>
     <security-role>
-        <role-name>BUSINESS_WORKER</role-name>
+        <role-name>BusinessWorker</role-name>
     </security-role>
     <!---->
 
@@ -99,9 +99,15 @@
         <role-name>changeAdministratorData</role-name>
     </security-role>
 
-    <security-role>
-        <role-name>SYSTEM</role-name>
-    </security-role>
 
+<!--    <security-constraint>-->
+<!--        <web-resource-collection>-->
+<!--            <web-resource-name>api</web-resource-name>-->
+<!--            <url-pattern>/*</url-pattern>-->
+<!--        </web-resource-collection>-->
+<!--        <user-data-constraint>-->
+<!--            <transport-guarantee>CONFIDENTIAL</transport-guarantee>-->
+<!--        </user-data-constraint>-->
+<!--    </security-constraint>-->
 
 </web-app>
