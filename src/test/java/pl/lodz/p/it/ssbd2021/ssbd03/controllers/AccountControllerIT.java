@@ -481,7 +481,21 @@ class AccountControllerIT {
         assertThat(updatedAccount.getFirstName()).isEqualTo("Damian");
         assertThat(updatedAccount.getSecondName()).isEqualTo("Bednarek");
     }
+    @Test
+    public void blockAccountAfterFiveIncorrectLogins_SUCCESS() throws JsonProcessingException, InterruptedException {
+        String adminToken = this.getAuthToken("rbranson", "abcABC123*");
+        ClientForRegistrationDto client = getSampleClientForRegistrationDto();
+        AccountDto account = registerClientAndGetAccountDto(client);
+        AuthenticateDto authInfoFalse = new AuthenticateDto(account.getLogin(), "Incorre2*ctPassword");
+        for(int i=0;i<=5;i++) {
+            Response responseFalse = given().baseUri(authBaseUri).contentType("application/json").body(authInfoFalse).post("/sign-in");
+        }
+        Response response = given().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken))
+                .baseUri(accountBaseUri).get("/details/" + account.getLogin());
 
+       AccountDetailsViewDto accountDetailsViewDto = objectMapper.readValue(response.asString(), AccountDetailsViewDto.class);
+        assertFalse(accountDetailsViewDto.isActive());
+    }
     private BusinessWorkerForRegistrationDto getSampleBusinessWorkerForRegistrationDto() {
         return new BusinessWorkerForRegistrationDto("Artur", "Radiuk", randomAlphanumeric(15), randomAlphanumeric(10) + "@gmail.com",
                 "abcABC123*", LanguageType.PL, "123456789", "FirmaJez");
