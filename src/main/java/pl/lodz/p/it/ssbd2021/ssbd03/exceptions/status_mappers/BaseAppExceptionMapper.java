@@ -3,13 +3,13 @@ package pl.lodz.p.it.ssbd2021.ssbd03.exceptions.status_mappers;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-import javax.ws.rs.core.Response.Status;
-
 import static javax.ws.rs.core.Response.Status.*;
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.NO_SUCH_ELEMENT_ERROR;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.OPTIMISTIC_LOCK_EXCEPTION;
 
 @Provider
 public class BaseAppExceptionMapper implements ExceptionMapper<BaseAppException> {

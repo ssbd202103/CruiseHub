@@ -1,12 +1,12 @@
-package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
+package pl.lodz.p.it.ssbd2021.ssbd03.utils;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 
 public class TransactionRepeater {
-    private static final int repeatCount = 4;
+    private static final int repeatCount = 3;
 
     public static void tryAndRepeat(RepeatVoidInterface repeatInterface) throws BaseAppException {
-        for (int i = 0; i < repeatCount - 1; i++) {
+        for (int i = 0; i < repeatCount; i++) {
             try {
                 repeatInterface.execute();
                 return;
@@ -17,7 +17,7 @@ public class TransactionRepeater {
     }
 
     public static <T> T tryAndRepeat(RepeatResultInterface<T> repeatInterface) throws BaseAppException {
-        for (int i = 0; i < repeatCount - 1; i++) {
+        for (int i = 0; i < repeatCount; i++) {
             try {
                 return repeatInterface.execute();
             } catch (BaseAppException ignored) {

@@ -84,7 +84,7 @@ class AccountSelfControllerIT {
                 .contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken))
                 .body(accountChangeOwnPasswordDto)
                 .when()
-                .put("change-password").then().statusCode(406);
+                .put("change-password").then().statusCode(400);
 
         Response notChangedRes = given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + adminToken)).get("/" + account.getLogin());
         AccountDto notChangedAccount = objectMapper.readValue(notChangedRes.thenReturn().asString(), AccountDto.class);
