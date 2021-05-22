@@ -47,7 +47,7 @@ export default function WorkerSignUp() {
             companyName: company
         });
         setButtonPopup(false)
-        await axios.post('http://localhost:8080/api/accountauth/business-worker/registration', json, {
+        await axios.post('http://localhost:8080/api/auth/business-worker/registration', json, {
             headers: {
                 'Content-Type': 'application/json'
             }
