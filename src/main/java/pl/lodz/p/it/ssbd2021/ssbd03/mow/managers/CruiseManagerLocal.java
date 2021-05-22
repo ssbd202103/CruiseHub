@@ -16,16 +16,17 @@ import java.util.UUID;
 public interface CruiseManagerLocal {
 
     /**
-     * Metoda zajmująca się tworzeniem nowego wycieczki
+     * Zajmuje się tworzeniem nowego wycieczki
      *
      * @param cruise obiekt reprezentujący wycieczke
-     * @throws BaseAppException wyjątek rzucany w razie nie znalezienia użytkownika tworzącego wycieczke
+     * @param cruiseGroupName nazwa grupy wycieczek
+     * @throws BaseAppException wyjątek rzucany w razie nie znalezienia użytkownika tworzącego wycieczke, bądź grupy wycieczek
      */
-    void addCruise(Cruise cruise) throws BaseAppException;
+    void addCruise(Cruise cruise, String cruiseGroupName) throws BaseAppException;
 
 
     /**
-     * Metoda zajmująca się deaktywowaniem istniejącego wycieczke
+     * Zajmuje się deaktywowaniem istniejącego wycieczke
      *
      * @param uuid uuid wycieczki
      * @param version wersja obiektu wycieczki wysyłana do sprawdzenia z wersją znajdującą się w bazie

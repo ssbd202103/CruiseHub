@@ -78,7 +78,6 @@ public class Cruise extends BaseEntity {
     @Setter
     @OneToOne
     @JoinColumn(name = "cruises_group_id")
-    @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid
     private CruiseGroup cruisesGroup;
 

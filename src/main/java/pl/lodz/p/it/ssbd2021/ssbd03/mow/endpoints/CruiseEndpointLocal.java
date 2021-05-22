@@ -19,7 +19,7 @@ public interface CruiseEndpointLocal {
      * Tworzenie nowego rejsu
      *
      * @param newCruiseDto obiekt reprezentujący wycieczki
-     * @throws BaseAppException wyjątek rzucany w razie nie znalezienia konta osoby tworzącej wycieczke
+     * @throws BaseAppException wyjątek rzucany w razie nie znalezienia konta osoby tworzącej wycieczke, bądź grupy wycieczek
      */
     void addCruise(NewCruiseDto newCruiseDto) throws BaseAppException;
 

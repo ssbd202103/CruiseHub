@@ -5,12 +5,14 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.AccountFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.NewCruiseDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CompanyFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseFacade;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseGroupFacadeMow;
 
 import javax.ejb.EJB;
 import javax.inject.Inject;
@@ -34,8 +36,14 @@ public class CruiseManager implements CruiseManagerLocal {
     @Inject
     private AccountFacadeMow accountFacade;
 
+    @Inject
+    private CruiseGroupFacadeMow cruiseGroupFacadeMow;
+
+
     @Override
-    public void addCruise(Cruise cruise) throws BaseAppException {
+    public void addCruise(Cruise cruise, String cruiseGroupName) throws BaseAppException {
+        CruiseGroup cruiseGroup = cruiseGroupFacadeMow.findByName(cruiseGroupName);
+        cruise.setCruisesGroup(cruiseGroup);
         cruiseFacade.create(cruise);
         Account account = accountFacade.findByLogin(securityContext.getUserPrincipal().getName());
         setAlterTypeAndAlterAccount(account, accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE), account);
