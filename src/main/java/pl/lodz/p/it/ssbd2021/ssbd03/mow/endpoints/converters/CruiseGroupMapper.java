@@ -1,14 +1,17 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.converters;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseAddress;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruisePicture;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseAddressDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.addCruiseGroupDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters.AccountMapper;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.changeCruiseGroup.changeCruiseGroupDto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Klasa która zajmuje się mapowaniem obiektów klas dto na obiekty klas modelu
  */
@@ -54,5 +57,25 @@ public class CruiseGroupMapper {
         return new CruiseAddressDto(cruiseAddress.getStreet(),cruiseAddress.getStreetNumber(),cruiseAddress.getHarborName(),
                 cruiseAddress.getCityName(),cruiseAddress.getCountryName(),cruiseAddress.getVersion()
         );
+    }
+    /**
+     * Mapuje obiekt klasy CruisePictures na dto CruisePicturesDto
+     * @param cruisePicture obiekt klasy CruisePictures podawany konwersji
+     * @return obiekt klasy dto
+     */
+    public static CruisePictureDto toCruisePictureDto(CruisePicture cruisePicture){
+        return new CruisePictureDto(cruisePicture.getImgName(),cruisePicture.getImg(),cruisePicture.getVersion());
+    }
+
+    /**
+     * Mapuje obiekt klasy CruiseGroup na dto CruiseGroupDto
+     * @param cruiseGroup grupa wycieczek podawana konwersji
+     * @return obiekt klasy dto
+     */
+    public static CruiseGroupDto toCruiseGroupDto(CruiseGroup cruiseGroup){
+        CompanyLightDto company = CompanyMapper.mapCompanyToCompanyLightDto(cruiseGroup.getCompany());
+        CruiseAddressDto address = CruiseGroupMapper.toCruiseAddressDto(cruiseGroup.getAddress());
+       return new CruiseGroupDto(company,cruiseGroup.getName(),cruiseGroup.getNumberOfSeats(),cruiseGroup.getPrice(),address,
+               cruiseGroup.getCruisePictures().stream().map(CruiseGroupMapper::toCruisePictureDto).collect(Collectors.toList()),cruiseGroup.getVersion());
     }
 }

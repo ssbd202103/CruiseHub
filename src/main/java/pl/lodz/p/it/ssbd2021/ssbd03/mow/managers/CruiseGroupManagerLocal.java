@@ -5,6 +5,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseAddress;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruisePicture;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.changeCruiseGroup.changeCruiseGroupDto;
 
 import javax.ejb.Local;
@@ -43,13 +44,13 @@ public interface CruiseGroupManagerLocal {
      */
     CruiseGroup changeCruiseGroup(String name, long number_of_seats, Double price, CruiseAddress start_address, long version)throws BaseAppException;
 
-    //TODO mozliwe wypisanie wszytchi grup wycieczek.
-/*    /**
+
+    /**
      * Pobiera wszystkie obiekty grup wycieczek z bazy
      *
-     * @return the all companies
-     *//*
-    List<CruiseGroup> getAllCruiseGroups();*/
+     * @return wszystkie grupy wycieczek
+     */
+    List<CruiseGroup> getAllCruiseGroups() throws FacadeException;
 
 
     /**

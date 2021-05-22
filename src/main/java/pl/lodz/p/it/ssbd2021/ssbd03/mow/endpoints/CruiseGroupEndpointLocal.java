@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 
 
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseGroupDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.addCruiseGroupDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.changeCruiseGroup.changeCruiseGroupDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CompanyLightDto;
@@ -31,13 +32,13 @@ public interface CruiseGroupEndpointLocal {
      */
     changeCruiseGroupDto changeCruiseGroup(changeCruiseGroupDto changeCruiseGroup)throws BaseAppException;
 
-    //TODO mozliwe wypisanie wszytchi grup wycieczek.
-/*    /**
+
+    /**
      * Zwraca lista obiektów dto prezentujące informacje o grupach wycieczek
      *
      * @return lista obiektów reprezentjace informacje o grupach wycieczek
-     *//*
-    List<CruiseGroup...DTO> getCruiseGroupsInfo();*/
+     */
+    List<CruiseGroupDto> getCruiseGroupsInfo()throws BaseAppException;
 
 
     /**
