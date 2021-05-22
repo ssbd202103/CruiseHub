@@ -279,6 +279,7 @@ create sequence cruises_groups_id_seq
 create table cruises
 (
     id                   bigint                              not null,
+    uuid                 varchar                             not null,
     start_date           timestamp                           not null,
     end_date             timestamp,
     active               boolean   default false             not null,
@@ -294,6 +295,7 @@ create table cruises
 
     version              bigint check (version >= 0)         not null,
 
+    CONSTRAINT cruises_uuid_unique_constraint UNIQUE(uuid),
     CONSTRAINT cruises_id_pk_constraint PRIMARY KEY (id),
     CONSTRAINT cruises_cruises_group_id_fk FOREIGN KEY (cruises_group_id) REFERENCES cruises_groups (id),
     CONSTRAINT cruises_alter_type_id_fk_constraint FOREIGN KEY (alter_type_id) REFERENCES alter_types (id),

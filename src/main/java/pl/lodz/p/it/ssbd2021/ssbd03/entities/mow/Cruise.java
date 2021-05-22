@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.entities.mow;
 import lombok.Getter;
 import lombok.Setter;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -10,12 +11,26 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_EMPTY;
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
+import static pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper.NAME_CONSTRAINT;
+import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise.UUID_CONSTRAINT;
 
 @Entity(name = "cruises")
+@NamedQueries({
+        @NamedQuery(name = "Cruise.findByUUID", query = "SELECT c FROM cruises c WHERE c.uuid = :uuid")
+})
+@Table(
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "uuid", name = UUID_CONSTRAINT),
+
+        }
+)
 public class Cruise extends BaseEntity {
+
+    public static final String UUID_CONSTRAINT = "cruises_uuid_unique_constraint";
 
     @Getter
     @Id
@@ -23,6 +38,12 @@ public class Cruise extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CRUISE_SEQ_GEN")
     @Column(name = "id")
     private long id;
+
+
+    @Getter
+    @NotNull(message = CONSTRAINT_NOT_NULL)
+    @Column(name = "uuid", nullable = false, unique = true, updatable = false)
+    private UUID uuid;
 
     @Getter
     @Setter
@@ -70,6 +91,7 @@ public class Cruise extends BaseEntity {
         this.description = description;
         this.available = available;
         this.cruisesGroup = cruisesGroup;
+        this.uuid = UUID.randomUUID();
     }
 
     public Cruise() {
