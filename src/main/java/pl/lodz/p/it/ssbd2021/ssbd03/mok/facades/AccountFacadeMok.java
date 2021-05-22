@@ -25,12 +25,12 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account.LOGIN_CONSTRAINT
 
 @Stateless
 @TransactionAttribute(TransactionAttributeType.MANDATORY)
-public class AccountFacade extends AbstractFacade<Account> {
+public class AccountFacadeMok extends AbstractFacade<Account> {
 
     @PersistenceContext(unitName = "ssbd03mokPU")
     private EntityManager em;
 
-    public AccountFacade() {
+    public AccountFacadeMok() {
         super(Account.class);
     }
 

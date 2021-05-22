@@ -4,7 +4,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Rating;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.AccountFacade;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.AccountFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseGroupFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.RatingFacade;
 
@@ -23,7 +23,7 @@ public class RatingManager implements RatingManagerLocal {
     RatingFacade ratingFacade;
 
     @EJB
-    AccountFacade accountFacade;
+    AccountFacadeMow accountFacade;
 
     @EJB
     CruiseGroupFacadeMow cruiseGroupFacadeMow;

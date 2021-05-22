@@ -4,7 +4,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.TokenWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacade;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacadeMok;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.TokenWrapperFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.JWTHandler;
 import pl.lodz.p.it.ssbd2021.ssbd03.services.EmailService;
@@ -34,7 +34,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.VERIFICATION_EMAIL_SUBJEC
 public class RemoveUnconfirmedAccountManager {
 
     @Inject
-    private AccountFacade accountFacade;
+    private AccountFacadeMok accountFacade;
     @Inject
     private TokenWrapperFacade tokenWrapperFacade;
     @Inject

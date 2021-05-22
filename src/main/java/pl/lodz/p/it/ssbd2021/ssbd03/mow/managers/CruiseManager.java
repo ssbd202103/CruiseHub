@@ -6,13 +6,10 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.NewCruiseDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.AccountFacade;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CompanyFacadeMow;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.AccountFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseFacade;
 
 import javax.ejb.EJB;
-import javax.inject.Inject;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
 import java.time.LocalDateTime;
@@ -30,7 +27,7 @@ public class CruiseManager implements CruiseManagerLocal {
     private CruiseFacade cruiseFacade;
 
     @EJB
-    private AccountFacade accountFacade;
+    private AccountFacadeMow accountFacade;
 
     @Override
     public void addCruise(Cruise cruise) throws BaseAppException {

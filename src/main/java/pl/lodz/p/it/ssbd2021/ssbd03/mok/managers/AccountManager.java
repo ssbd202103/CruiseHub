@@ -18,7 +18,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AccountManagerException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacade;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacadeMok;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.CompanyFacadeMok;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.TokenWrapperFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.JWTHandler;
@@ -45,7 +45,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 public class AccountManager implements AccountManagerLocal {
 
     @EJB
-    private AccountFacade accountFacade;
+    private AccountFacadeMok accountFacade;
 
     @EJB
     private CompanyFacadeMok companyFacadeMok;

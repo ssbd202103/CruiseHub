@@ -21,12 +21,12 @@ import java.util.List;
 
 @Stateless
 @TransactionAttribute(TransactionAttributeType.MANDATORY)
-public class AccountFacade extends AbstractFacade<Account> {
+public class AccountFacadeMow extends AbstractFacade<Account> {
 
     @PersistenceContext(unitName = "ssbd03mowPU")
     private EntityManager em;
 
-    public AccountFacade() {
+    public AccountFacadeMow() {
         super(Account.class);
     }
 
