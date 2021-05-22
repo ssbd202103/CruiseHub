@@ -59,6 +59,8 @@ public class AccountManager implements AccountManagerLocal {
     @Inject
     I18n i18n;
 
+    private static final Properties securityProperties = PropertiesReader.getSecurityProperties();
+
     @Override
     public void createClientAccount(Account account, Client client) throws BaseAppException {
         account.setLanguageType(accountFacade.getLanguageTypeWrapperByLanguageType(account.getLanguageType().getName()));
@@ -413,7 +415,13 @@ public class AccountManager implements AccountManagerLocal {
 
     @Override
     public void updateIncorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws BaseAppException {
+
         this.accountFacade.updateAuthenticateInfo(login, IpAddr, time, false);
+        Account account= accountFacade.findByLogin(login);
+        if(account.getNumberOfAuthenticationFailures()>=Long.parseLong(securityProperties.getProperty("max.incorrect.logins"))){
+            account.setActive(false);
+            accountFacade.edit(account);
+        }
     }
 
 
