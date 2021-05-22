@@ -1,8 +1,11 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.facades;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Attraction;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
+//TODO poprawić na import z mow po poprawieniu ABstractFacade dla mow
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AbstractFacade;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -26,17 +29,17 @@ public class AttractionFacadeMow extends AbstractFacade<Attraction> {
     }
 
     @Override
-    public List<Attraction> findAll() { //TODO throws FacadeException {
+    public List<Attraction> findAll() throws FacadeException {
         return super.findAll();
     }
 
     @Override
-    public void edit(Attraction entity) { //TODo throws FacadeException {
+    public void edit(Attraction entity) throws FacadeException {
         super.edit(entity);
     }
 
     @Override
-    public void create(Attraction entity) { //TODO throws FacadeException {
+    public void create(Attraction entity) throws FacadeException {
         super.create(entity);
     }
 
@@ -51,7 +54,8 @@ public class AttractionFacadeMow extends AbstractFacade<Attraction> {
     }
 
     public Attraction deleteAttraction(String name) throws BaseAppException {
-        TypedQuery<Attraction> tq = em.createNamedQuery("Attraction.deleteByName", Attraction.class);
+        //TODO change query
+        TypedQuery<Attraction> tq = em.createNamedQuery("Attraction.findByIdIfReserved", Attraction.class);
         tq.setParameter("name", name);
         try {
             return tq.getSingleResult();
