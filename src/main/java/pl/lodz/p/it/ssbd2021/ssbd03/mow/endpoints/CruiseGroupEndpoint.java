@@ -2,8 +2,11 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
 
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseAddress;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruisePicture;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseGroupDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.addCruiseGroupDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.changeCruiseGroup.changeCruiseGroupDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.converters.CruiseGroupMapper;
@@ -11,6 +14,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.managers.CruiseGroupManagerLocal;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,11 +43,15 @@ public class CruiseGroupEndpoint implements CruiseGroupEndpointLocal {
         ,changeCruiseGroupDto.getPrice(),start_address,changeCruiseGroupDto.getVersion()));
     }
 
-    //TODO mozliwe wypisanie wszytchi grup wycieczek.
-/*    @Override
-    public List<> getCruiseGroupsInfo() {
-        return cruiseGroupManager.getAllCruiseGroups(); //.stream().map(CompanyMapper::mapCompanyToCompanyLightDto).collect(Collectors.toList());
-    }*/
+
+    @Override
+    public List<CruiseGroupDto> getCruiseGroupsInfo() throws FacadeException {
+       List<CruiseGroupDto> res = new ArrayList<>();
+       for (CruiseGroup cruiseGroup: cruiseGroupManager.getAllCruiseGroups()){
+           res.add(CruiseGroupMapper.toCruiseGroupDto(cruiseGroup));
+       }
+       return res;
+    }
 
     @Override
     public void deactivateCruiseGroup(String name, Long version) throws BaseAppException {

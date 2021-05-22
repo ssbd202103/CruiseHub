@@ -47,11 +47,11 @@ public class CruiseGroupManager implements CruiseGroupManagerLocal {
         return null; //todo
     }
 
-    //TODO mozliwe wypisanie wszytchi grup wycieczek.
-/*    @Override
-    public List<CruiseGroup> getAllCruiseGroups() {
-        return cruiseGroupFacadeMow.findAll().stream().map(o -> (CruiseGroup) o).collect(Collectors.toList());
-    }*/
+
+    @Override
+    public List<CruiseGroup> getAllCruiseGroups() throws FacadeException {
+        return cruiseGroupFacadeMow.findAll();
+    }
 
     @Override
     public CruiseGroup deactivateCruiseGroup(String name, Long version) throws BaseAppException {
