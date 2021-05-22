@@ -64,10 +64,10 @@ public class ReservationFacadeMow extends AbstractFacade<Reservation> {
     }
 
     public List<Reservation> findWorkerCruiseReservations(long id) throws BaseAppException {
-        //TODO Metoda znajdujaca id uzytkownika który jest aktualnie uzytkujacy jako bisnez worker
+        //TODO Metoda znajdujaca id uzytkownika który jest aktualnie uzytkujacy jako bisnez worker / zmienić query
         //
         //
-        TypedQuery<Reservation> tq = em.createNamedQuery("Reservation.findWorkerCruiseReservations", Reservation.class);
+        TypedQuery<Reservation> tq = em.createNamedQuery("Reservation.findCruiseReservations", Reservation.class);
         tq.setParameter("id", id);
         try {
             return tq.getResultList();
