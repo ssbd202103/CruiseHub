@@ -17,7 +17,7 @@ function VerifyAccount(props: any) {
             "token": location.pathname.toString().substring('/verify/accountVerification/'.length)
         }
 
-        await axios.put('http://localhost:8080/api/account/account-verification', json, {
+        await axios.put('http://localhost:8080/api/account/verify', json, {
             headers: {
                 'Content-Type': 'application/json'
             }

@@ -9,6 +9,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.managers.CruiseGroupManagerLocal;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
+import javax.inject.Inject;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 @Stateful
 public class AttractionEndpoint implements AttractionEndpointLocal{
 
-    @EJB
+    @Inject
     private AttractionManagerLocal attractionManager;
 
 //TODO baza pod wypisanie atrakcji

@@ -47,7 +47,7 @@ class AccountControllerIT {
     AccountControllerIT() {
         Properties securityProperties = PropertiesReader.getSecurityProperties();
         accountBaseUri = securityProperties.getProperty("app.baseurl") + "/api/account";
-        authBaseUri = securityProperties.getProperty("app.baseurl") + "/api/signin";
+        authBaseUri = securityProperties.getProperty("app.baseurl") + "/api/auth";
     }
 
     @Test
@@ -85,8 +85,7 @@ class AccountControllerIT {
     public void registerBusinessWorkerTest_SUCCESS() {
         BusinessWorkerForRegistrationDto businessWorkerDto = new BusinessWorkerForRegistrationDto("Artur", "Radiuk", randomAlphanumeric(15), randomAlphanumeric(10) + "@gmail.com",
                 "abcABC123*", LanguageType.ENG, "123456789", "FirmaJez");
-        given().baseUri(accountBaseUri).contentType(MediaType.APPLICATION_JSON).body(businessWorkerDto).when().post("/business-worker/registration").then().statusCode(204);
-        // todo implement remove method to clean created data
+        given().baseUri(authBaseUri).contentType(MediaType.APPLICATION_JSON).body(businessWorkerDto).when().post("/business-worker/registration").then().statusCode(204);
     }
 
     @Test
@@ -97,7 +96,7 @@ class AccountControllerIT {
         AccountDto account = registerClientAndGetAccountDto(client);
 
         Response response = given().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken))
-                .baseUri(accountBaseUri).get("/details-view/" + account.getLogin());
+                .baseUri(accountBaseUri).get("/details/" + account.getLogin());
 
         AccountDetailsViewDto accountDetailsViewDto = objectMapper.readValue(response.asString(), AccountDetailsViewDto.class);
         assertTrue(accountDetailsViewDto.isActive());
@@ -107,7 +106,7 @@ class AccountControllerIT {
                 .baseUri(accountBaseUri).body(blockAccountDto).put("/block").then().statusCode(HttpStatus.SC_OK);
 
         response = given().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken))
-                .baseUri(accountBaseUri).get("/details-view/" + account.getLogin());
+                .baseUri(accountBaseUri).get("/details/" + account.getLogin());
 
         accountDetailsViewDto = objectMapper.readValue(response.asString(), AccountDetailsViewDto.class);
         assertFalse(accountDetailsViewDto.isActive());
@@ -310,7 +309,7 @@ class AccountControllerIT {
                 .baseUri(accountBaseUri).body(blockAccountDto).put("/block");
 
         Response response = given().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken))
-                .baseUri(accountBaseUri).get("/details-view/" + account.getLogin());
+                .baseUri(accountBaseUri).get("/details/" + account.getLogin());
         AccountDetailsViewDto accountDetailsViewDto = objectMapper.readValue(response.asString(), AccountDetailsViewDto.class);
         assertFalse(accountDetailsViewDto.isActive());
 
@@ -319,7 +318,7 @@ class AccountControllerIT {
                 .baseUri(accountBaseUri).body(unblockAccountDto).put("/unblock").then().statusCode(HttpStatus.SC_OK);
 
         response = given().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken))
-                .baseUri(accountBaseUri).get("/details-view/" + account.getLogin());
+                .baseUri(accountBaseUri).get("/details/" + account.getLogin());
 
         accountDetailsViewDto = objectMapper.readValue(response.asString(), AccountDetailsViewDto.class);
         assertTrue(accountDetailsViewDto.isActive());
@@ -353,7 +352,7 @@ class AccountControllerIT {
                 .contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken))
                 .body(accountChangeEmailDto)
                 .when()
-                .put("/change_email").then().statusCode(204);
+                .put("/change-email").then().statusCode(204);
 
 
         Response changedRes = given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + adminToken)).get("/" + account.getLogin());
@@ -379,7 +378,7 @@ class AccountControllerIT {
                 .contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken))
                 .body(accountChangeEmailDto)
                 .when()
-                .put("/change_email");
+                .put("/change-email");
 
         assertEquals(409, response.getStatusCode());
         assertEquals(OPTIMISTIC_LOCK_EXCEPTION, response.asString());
@@ -397,7 +396,7 @@ class AccountControllerIT {
 
     private AccountDetailsViewDto getAccountDetailsViewDto(String login) throws JsonProcessingException {
         String authToken = this.getAuthToken("rbranson", "abcABC123*");
-        String responseString = given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + authToken)).get("/details-view/" + login)
+        String responseString = given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + authToken)).get("/details/" + login)
                 .thenReturn().asString();
         return objectMapper.readValue(responseString, AccountDetailsViewDto.class);
     }
@@ -433,7 +432,7 @@ class AccountControllerIT {
                 "888888888",
                 newAddress,
                 version);
-        Response response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken)).body(otherClientChangeDataDto).put("/changeOtherData/client");
+        Response response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken)).body(otherClientChangeDataDto).put("/change-client-data");
         assertThat(response.getStatusCode()).isEqualTo(200);
         OtherClientChangeDataDto updatedAccount = objectMapper.readValue(response.asString(), OtherClientChangeDataDto.class);
         assertThat(updatedAccount.getNewAddress().getNewStreet()).isEqualTo("Aleja Zmieniona");
@@ -458,7 +457,7 @@ class AccountControllerIT {
         String etag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
         OtherBusinessWorkerChangeDataDto otherBusinessWorkerChangeDataDto = new OtherBusinessWorkerChangeDataDto(account.getLogin(), account.getVersion(),
                 "888888888", version);
-        Response response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken)).body(otherBusinessWorkerChangeDataDto).put("/changeOtherData/businessworker");
+        Response response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken)).body(otherBusinessWorkerChangeDataDto).put("/change-business-worker-data");
         assertThat(response.getStatusCode()).isEqualTo(200);
         OtherBusinessWorkerChangeDataDto updatedAccount = objectMapper.readValue(response.asString(), OtherBusinessWorkerChangeDataDto.class);
 
@@ -476,7 +475,7 @@ class AccountControllerIT {
                 "Damian",
                 "Bednarek",
                 randomAlphanumeric(10) + "@gmail.com");
-        Response response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken)).body(otherAccountChangeDataDto).put("/changeOtherData");
+        Response response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken)).body(otherAccountChangeDataDto).put("/change-account-data");
         assertThat(response.getStatusCode()).isEqualTo(200);
         AccountDto updatedAccount = objectMapper.readValue(response.asString(), AccountDto.class);
         assertThat(updatedAccount.getFirstName()).isEqualTo("Damian");
@@ -489,7 +488,7 @@ class AccountControllerIT {
     }
 
     private AccountDto registerBusinessWorkerAndGetAccountDto(BusinessWorkerForRegistrationDto worker) throws JsonProcessingException {
-        given().baseUri(accountBaseUri).contentType("application/json").body(worker).post("/business-worker/registration").then().statusCode(204);
+        given().baseUri(authBaseUri).contentType("application/json").body(worker).post("/business-worker/registration").then().statusCode(204);
         return getAccountDto(worker.getLogin());
     }
 
@@ -500,107 +499,11 @@ class AccountControllerIT {
                 .contentType(ContentType.JSON)
                 .body(authenticateDto)
                 .when()
-                .post("/auth");
+                .post("/sign-in");
         assertEquals(HttpStatus.SC_OK, response.getStatusCode());
         return response.getBody().asString();
     }
 
-    @Test
-    public void changePasswordTest_SUCCESS() throws JsonProcessingException {
-        String adminToken = this.getAuthToken("rbranson", "abcABC123*");
-        AccountDto account = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
-        Response res = given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + adminToken)).get("/" + account.getLogin());
-        String etag = res.getHeader("Etag");
 
-        AccountChangeOwnPasswordDto accountChangeOwnPasswordDto = new AccountChangeOwnPasswordDto(
-                account.getLogin(),
-                account.getVersion(),
-                "abcABC123*",
-                "ABCabc123*"
-        );
 
-        given().baseUri(accountBaseUri).header("If-Match", etag)
-                .contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken))
-                .body(accountChangeOwnPasswordDto)
-                .when()
-                .put("change_own_password").then().statusCode(204);
-
-        Response changedRes = given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + adminToken)).get("/" + account.getLogin());
-        AccountDto changedAccount = objectMapper.readValue(changedRes.thenReturn().asString(), AccountDto.class);
-        assertTrue(changedAccount.getVersion() > account.getVersion());
-        // potrzebna jest metoda do logowania, by sprawdzic zmienianie hasla
-    }
-
-    @Test
-    public void changePasswordVersionTest_FAIL() throws JsonProcessingException {
-        // fail optimistic check (version)
-        String adminToken = this.getAuthToken("rbranson", "abcABC123*");
-        AccountDto account = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
-        Response res = given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + adminToken)).get("/" + account.getLogin());
-        String etag = res.getHeader("Etag");
-
-        AccountChangeOwnPasswordDto accountChangeOwnPasswordDto = new AccountChangeOwnPasswordDto(
-                account.getLogin(),
-                account.getVersion() + 1,
-                "abcABC123*",
-                "ABCabc123*"
-        );
-
-        given().baseUri(accountBaseUri).header("If-Match", etag)
-                .contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken))
-                .body(accountChangeOwnPasswordDto)
-                .when()
-                .put("change_own_password").then().statusCode(406);
-
-        Response notChangedRes = given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + adminToken)).get("/" + account.getLogin());
-        AccountDto notChangedAccount = objectMapper.readValue(notChangedRes.thenReturn().asString(), AccountDto.class);
-        Assertions.assertEquals(account.getVersion(), notChangedAccount.getVersion());
-    }
-
-    @Test
-    public void changePasswordMatchTest_FAIL() throws JsonProcessingException {
-        // fail old password check
-        String adminToken = this.getAuthToken("rbranson", "abcABC123*");
-        AccountDto account = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
-        Response res = given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + adminToken)).get("/" + account.getLogin());
-        String etag = res.getHeader("Etag");
-
-        AccountChangeOwnPasswordDto accountChangeOwnPasswordDto = new AccountChangeOwnPasswordDto(
-                account.getLogin(),
-                account.getVersion(),
-                "CBAcba123*",
-                "ABCabc123*"
-        );
-
-        given().baseUri(accountBaseUri).header("If-Match", etag)
-                .contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken))
-                .body(accountChangeOwnPasswordDto)
-                .when()
-                .put("change_own_password").then().statusCode(400);
-
-        Response notChangedRes = given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + adminToken)).get("/" + account.getLogin());
-        AccountDto notChangedAccount = objectMapper.readValue(notChangedRes.thenReturn().asString(), AccountDto.class);
-        Assertions.assertEquals(account.getVersion(), notChangedAccount.getVersion());
-    }
-
-    @Test
-    public void changeModeTest_SUCCESS() throws JsonProcessingException, ETagException {
-        AccountDto account = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
-        String etag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
-        ChangeModeDto changeModeDto = new ChangeModeDto(account.getLogin(), account.getVersion(), true);
-        String adminToken = this.getAuthToken("rbranson", "abcABC123*");
-
-        given()
-                .contentType(ContentType.JSON)
-                .baseUri(accountBaseUri)
-                .header(new Header("If-Match", etag))
-                .header(new Header("Authorization", "Bearer " + adminToken))
-                .body(changeModeDto)
-                .put("/change_mode")
-                .then().statusCode(204);
-
-        AccountDto changedAccount = getAccountDto(account.getLogin());
-
-        assertTrue(changedAccount.isDarkMode());
-    }
 }

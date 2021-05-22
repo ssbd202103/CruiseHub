@@ -8,13 +8,14 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.managers.CruiseManagerLocal;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
+import javax.inject.Inject;
 
 /**
  * Klasa który zajmuje się obsługą obiektów dto z zakresu wycieczek (rejsów)
  */
 @Stateful
 public class CruiseEndpoint implements CruiseEndpointLocal {
-    @EJB
+    @Inject
     private CruiseManagerLocal cruiseManagerLocal;
 
 

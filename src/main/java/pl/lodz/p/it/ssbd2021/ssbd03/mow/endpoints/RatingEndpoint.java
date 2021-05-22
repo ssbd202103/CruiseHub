@@ -6,10 +6,11 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.RemoveRankingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.managers.RatingManagerLocal;
 
 import javax.ejb.EJB;
+import javax.inject.Inject;
 
 public class RatingEndpoint implements RatingEndpointLocal {
 
-    @EJB
+    @Inject
     RatingManagerLocal ratingManager;
 
     @Override

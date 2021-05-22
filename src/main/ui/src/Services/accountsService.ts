@@ -14,7 +14,7 @@ export function getAllAccounts() {
 export function getAccountDetailsAbout(login: string) {
     const {token} = store.getState()
 
-    return axios.get(`account/details-view/${login}`, {
+    return axios.get(`account/details/${login}`, {
         headers: {
             'Authorization': `Bearer ${token}`
         }

@@ -31,7 +31,7 @@ export default function ChangeAccessLevelState() {
             }
         })
 
-        const result = await axios.get(`http://localhost:8080/api/account/details-view/${currentAccount.login}`);
+        const result = await axios.get(`http://localhost:8080/api/account/details/${currentAccount.login}`);
         sessionStorage.setItem("changeAccessLevelStateAccount", JSON.stringify(result.data));
         forceUpdate()
     }

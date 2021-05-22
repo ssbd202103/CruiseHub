@@ -43,10 +43,10 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 public class AccountEndpoint implements AccountEndpointLocal {
 
-    @EJB
+    @Inject
     private AccountManagerLocal accountManager;
 
-    @EJB
+    @Inject
     private TokenWrapperFacade tokenWrapperFacade;
 
     @Inject

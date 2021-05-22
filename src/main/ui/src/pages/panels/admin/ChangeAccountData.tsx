@@ -59,7 +59,7 @@ export default function ChangeAccountData() {
             version: currentAccount.version
 
         })
-        await fetch("http://localhost:8080/api/account/changeOtherData", {
+        await fetch("http://localhost:8080/api/account/change-account-data", {
             method: "PUT",
             mode: "same-origin",
             body: json,
@@ -69,7 +69,7 @@ export default function ChangeAccountData() {
                 "If-Match": currentAccount.etag
             }
         })
-        const result = await axios.get(`http://localhost:8080/api/account/details-view/${currentAccount.login}`);
+        const result = await axios.get(`http://localhost:8080/api/account/details/${currentAccount.login}`);
         sessionStorage.setItem("changeAccountData", JSON.stringify(result.data));
         forceUpdate()
         handleChangePerData()
@@ -91,7 +91,7 @@ export default function ChangeAccountData() {
             },
             accVersion: clientAddr.accVersion
         })
-        await fetch("http://localhost:8080/api/account/changeOtherData/client", {
+        await fetch("http://localhost:8080/api/account/change-client-data", {
             method: "PUT",
             mode: "same-origin",
             body: json,
@@ -101,7 +101,7 @@ export default function ChangeAccountData() {
                 "If-Match": currentAccount.etag
             }
         })
-        const result = await axios.get(`http://localhost:8080/api/account/details-view/${currentAccount.login}`);
+        const result = await axios.get(`http://localhost:8080/api/account/details/${currentAccount.login}`);
         sessionStorage.setItem("changeAccountData", JSON.stringify(result.data));
         forceUpdate()
         handleChangAddress()
@@ -114,7 +114,7 @@ export default function ChangeAccountData() {
             accVersion: businnesPhone.accVersion
 
         })
-        await fetch("http://localhost:8080/api/account/changeOtherData/businessworker", {
+        await fetch("http://localhost:8080/api/account/change-business-worker-data", {
             method: "PUT",
             mode: "same-origin",
             body: json,
@@ -124,7 +124,7 @@ export default function ChangeAccountData() {
                 "If-Match": currentAccount.etag
             }
         })
-        const result = await axios.get(`http://localhost:8080/api/account/details-view/${currentAccount.login}`);
+        const result = await axios.get(`http://localhost:8080/api/account/details/${currentAccount.login}`);
         sessionStorage.setItem("changeAccountData", JSON.stringify(result.data));
         forceUpdate()
         handleChangePhone()

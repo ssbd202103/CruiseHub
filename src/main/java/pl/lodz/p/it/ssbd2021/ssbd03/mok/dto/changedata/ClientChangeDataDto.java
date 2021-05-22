@@ -18,7 +18,8 @@ public class ClientChangeDataDto extends ConsumerChangeDataDto {
     @Valid
     private AddressDto newAddress;
 
-    public ClientChangeDataDto(String login, long version, String newFirstName, String newSecondName, String newPhoneNumber, AddressDto newAddress) {
+    public ClientChangeDataDto(String login, long version, String newFirstName,
+                               String newSecondName, String newPhoneNumber, AddressDto newAddress) {
         super(login, version, newFirstName, newSecondName, newPhoneNumber);
 
         this.newAddress = newAddress;

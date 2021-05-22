@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 @Stateful
 public class CruiseGroupManager implements CruiseGroupManagerLocal {
 
-    @EJB
+    @Inject
     private CruiseGroupFacadeMow cruiseGroupFacadeMow;
 
     @Context
