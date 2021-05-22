@@ -198,18 +198,18 @@ values (-3, -2, 'Beautiful Sandy Shores', 31, 502, -4, 5, true, now(), now(), -2
 --
 --
 --cruises start
-insert into cruises(id, start_date, end_date, active, description, cruises_group_id, available, creation_date_time,
+insert into cruises(id, uuid,start_date, end_date, active, description, cruises_group_id, available, creation_date_time,
                     last_alter_date_time, alter_type_id, created_by_id,
                     altered_by_id, version)
-values (-1, now(), now(), true, 'Beautiful tour', -1, true, now(), now(), -2, -1, -1, 0);
-insert into cruises(id, start_date, end_date, active, description, cruises_group_id, available, creation_date_time,
+values (-1, '581d626f-d421-47dd-89ef-b41bc30aa36c',now(), now(), true, 'Beautiful tour', -1, true, now(), now(), -2, -1, -1, 0);
+insert into cruises(id, uuid, start_date, end_date, active, description, cruises_group_id, available, creation_date_time,
                     last_alter_date_time, alter_type_id, created_by_id,
                     altered_by_id, version)
-values (-2, now(), now(), false, 'Beautiful Beautiful tour', -2, true, now(), now(), -2, -1, -1, 0);
-insert into cruises(id, start_date, end_date, active, description, cruises_group_id, available, creation_date_time,
+values (-2, '181d626f-d421-47dd-89ef-b41bc30aa36c', now(), now(), false, 'Beautiful Beautiful tour', -2, true, now(), now(), -2, -1, -1, 0);
+insert into cruises(id, uuid, start_date, end_date, active, description, cruises_group_id, available, creation_date_time,
                     last_alter_date_time, alter_type_id, created_by_id,
                     altered_by_id, version)
-values (-3, now(), now(), true, 'The most Beautiful tour', -3, false, now(), now(), -2, -1, -1, 0);
+values (-3, '481d626f-d421-47dd-89ef-b41bc30aa36c', now(), now(), true, 'The most Beautiful tour', -3, false, now(), now(), -2, -1, -1, 0);
 --cruises end
 --
 --
