@@ -7,7 +7,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruisePicture;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseGroupDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.addCruiseGroupDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.AddCruiseGroupDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.changeCruiseGroup.changeCruiseGroupDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.converters.CruiseGroupMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.managers.CruiseGroupManagerLocal;
@@ -27,7 +27,7 @@ public class CruiseGroupEndpoint implements CruiseGroupEndpointLocal {
     private CruiseGroupManagerLocal cruiseGroupManager;
 
     @Override
-    public void addCruiseGroup(addCruiseGroupDto addCruiseGroupDto) throws BaseAppException{
+    public void addCruiseGroup(AddCruiseGroupDto addCruiseGroupDto) throws BaseAppException{
         CruiseAddress cruiseAddress = CruiseGroupMapper.extractAddressForAddingCruiseGroup(addCruiseGroupDto);
         List<CruisePicture> cruisePicture = CruiseGroupMapper.extractCruiseGroupPicturesFromAddingCruiseGroup(addCruiseGroupDto);
         this.cruiseGroupManager.addCruiseGroup(addCruiseGroupDto.getCompanyName(), addCruiseGroupDto.getName(), addCruiseGroupDto.getNumberOfSeats(),

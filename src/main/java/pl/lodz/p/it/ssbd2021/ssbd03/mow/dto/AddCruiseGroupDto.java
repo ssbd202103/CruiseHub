@@ -11,7 +11,7 @@ import java.util.Set;
 @Data
 @Getter
 @Setter
-public class addCruiseGroupDto {
+public class AddCruiseGroupDto {
     @CompanyName
     private String companyName;
 

@@ -4,14 +4,12 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 
 
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseGroupDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.addCruiseGroupDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.AddCruiseGroupDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.changeCruiseGroup.changeCruiseGroupDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CompanyLightDto;
 
 import javax.ejb.Local;
-import javax.validation.constraints.NotNull;
 import java.util.List;
-import javax.ejb.Local;
+
 /**
  * Interfejs który zajmuje się gromadzeniem zmapowanych obiektów klas Dto na obiekty klas modelu związanych z grupami wycieczek oraz wywołuje metody logiki przekazując zmapowane obiekty.
  */
@@ -22,7 +20,7 @@ public interface CruiseGroupEndpointLocal {
      * @param addCruiseGroupDto obiekt dto zawierający dane potrzene do utworzenia grupy wycieczek
      * @throws BaseAppException Bazowy wyjątek aplikacji
      */
-    void addCruiseGroup(addCruiseGroupDto addCruiseGroupDto) throws BaseAppException;
+    void addCruiseGroup(AddCruiseGroupDto addCruiseGroupDto) throws BaseAppException;
 
     /**
      * Umożliwia edycję grupy wycieczek

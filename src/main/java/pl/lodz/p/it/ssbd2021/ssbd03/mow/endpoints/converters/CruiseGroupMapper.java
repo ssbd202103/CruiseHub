@@ -1,10 +1,8 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.converters;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseAddress;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruisePicture;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters.AccountMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.changeCruiseGroup.changeCruiseGroupDto;
 
@@ -23,7 +21,7 @@ public class CruiseGroupMapper {
      * @param addCruiseGroup obiekt klasy dto
      * @return obiekt klasy modelu który prezentuje adres wycieczki
      */
-    public static CruiseAddress extractAddressForAddingCruiseGroup(addCruiseGroupDto addCruiseGroup){
+    public static CruiseAddress extractAddressForAddingCruiseGroup(AddCruiseGroupDto addCruiseGroup){
         return new CruiseAddress(addCruiseGroup.getCruiseAddress().getStreet(),addCruiseGroup.getCruiseAddress().getStreetNumber(),
                 addCruiseGroup.getCruiseAddress().getHarborName(),addCruiseGroup.getCruiseAddress().getCityName(),
                 addCruiseGroup.getCruiseAddress().getCountryName());
@@ -34,7 +32,7 @@ public class CruiseGroupMapper {
      * @param addCruiseGroup obiekt klasy dto
      * @return lista obiektów klasy CruisePicture
      */
-    public static List<CruisePicture> extractCruiseGroupPicturesFromAddingCruiseGroup(addCruiseGroupDto addCruiseGroup){
+    public static List<CruisePicture> extractCruiseGroupPicturesFromAddingCruiseGroup(AddCruiseGroupDto addCruiseGroup){
         List<CruisePicture> pictures= new ArrayList<>();//todo implement this
         return pictures;
     }
