@@ -29,4 +29,15 @@ public class ReservationEndpoint implements ReservationEndpointLocal{
         }
         return res;
     }
+
+    //TODO how to get current user ?
+    @Override
+    public List<CruiseReservationDto> viewWorkerCruiseReservations(long cruise_id) throws BaseAppException {
+        List<CruiseReservationDto> res = new ArrayList<>();
+        for (Reservation reservation: reservationManager.getCruiseReservations(cruise_id)){
+            res.add(ReservationMapper.toReservationDto(reservation));
+        }
+        return res;
+    }
+
 }

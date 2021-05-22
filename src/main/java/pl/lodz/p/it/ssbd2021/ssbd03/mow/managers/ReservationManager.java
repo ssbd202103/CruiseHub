@@ -26,4 +26,10 @@ public class ReservationManager implements ReservationManagerLocal{
         return res;
 
     }
+    @Override
+    public List<Reservation> getWorkerCruiseReservations(long cruise_id) throws BaseAppException {
+        List<Reservation> res = reservationFacadeMow.findWorkerCruiseReservations(cruise_id);
+        return res;
+
+    }
 }
