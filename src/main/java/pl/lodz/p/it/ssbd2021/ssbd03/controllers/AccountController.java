@@ -14,7 +14,9 @@ import pl.lodz.p.it.ssbd2021.ssbd03.security.ETagFilterBinding;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 
+import javax.annotation.Resource;
 import javax.ejb.EJB;
+import javax.ejb.EJBContext;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.validation.Valid;
@@ -39,7 +41,8 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.controllers.TransactionRepeater.tryAn
 public class AccountController {
     @Inject
     private AccountEndpointLocal accountEndpoint;
-
+    @Resource
+    EJBContext ejbContext;
     /**
      * Pobiera użytkownika po loginie oraz tworzy ETaga na jego podstawie
      *

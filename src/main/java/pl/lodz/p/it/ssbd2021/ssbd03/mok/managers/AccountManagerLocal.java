@@ -7,6 +7,9 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 
+import javax.annotation.security.DeclareRoles;
+import javax.annotation.security.RolesAllowed;
+import javax.annotation.security.RunAs;
 import javax.ejb.Local;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -174,7 +177,7 @@ public interface AccountManagerLocal {
      * @param account encja konta zawierająca zmiany
      * @return zmienone konto
      */
-    Account updateOtherAccount(Account account) throws BaseAppException;
+    Account changeOtherAccountData(Account account) throws BaseAppException;
 
 
     /**
@@ -222,6 +225,7 @@ public interface AccountManagerLocal {
      * @param IpAddr Adres IP użytkownika
      * @param time   Czas
      */
+    @RolesAllowed("SYSTEM")
     void updateIncorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws BaseAppException;
 
     /**
@@ -232,6 +236,7 @@ public interface AccountManagerLocal {
      * @param time   Czas
      * @return Token JWT
      */
+    @RolesAllowed("SYSTEM")
     String updateCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws BaseAppException;
 
     /**

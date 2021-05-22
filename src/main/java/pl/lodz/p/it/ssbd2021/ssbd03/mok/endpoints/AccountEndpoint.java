@@ -24,7 +24,8 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.TokenWrapperFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.managers.AccountManagerLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.services.EmailService;
 
-import javax.ejb.EJB;
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -52,6 +53,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
     @Inject
     I18n i18n;
 
+    @PermitAll
     @Override
     public void createClientAccount(ClientForRegistrationDto clientForRegistrationDto) throws BaseAppException {
         Client client = AccountMapper.extractClientFromClientForRegistrationDto(clientForRegistrationDto);
@@ -59,6 +61,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
         this.accountManager.createClientAccount(account, client);
     }
 
+    @PermitAll
     @Override
     public void createBusinessWorkerAccount(BusinessWorkerForRegistrationDto businessWorkerForRegistrationDto) throws BaseAppException {
         BusinessWorker businessWorker = AccountMapper.extractBusinessWorkerFromBusinessWorkerForRegistrationDto(businessWorkerForRegistrationDto);
@@ -66,6 +69,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
         this.accountManager.createBusinessWorkerAccount(account, businessWorker, businessWorkerForRegistrationDto.getCompanyName());
     }
 
+    @RolesAllowed("grantAccessLevel")
     @Override
     public AccountDto grantAccessLevel(GrantAccessLevelDto grantAccessLevelDto) throws BaseAppException {
         if (grantAccessLevelDto.getAccessLevel().equals(AccessLevelType.MODERATOR)) {
@@ -82,6 +86,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
         throw new EndpointException(ACCESS_LEVEL_NOT_ASSIGNABLE_ERROR);
     }
 
+    @RolesAllowed("changeAccessLevelState")
     @Override
     public AccountDto changeAccessLevelState(ChangeAccessLevelStateDto changeAccessLevelStateDto) throws BaseAppException {
         return AccountMapper.toAccountDto(
@@ -91,12 +96,13 @@ public class AccountEndpoint implements AccountEndpointLocal {
         );
     }
 
-
+    @RolesAllowed({"getAccountDetailsByLogin", "selfGetAccountDetails"})
     @Override
     public AccountDetailsViewDto getAccountDetailsByLogin(String login) throws BaseAppException {
         return AccountMapper.toAccountDetailsViewDto(accountManager.getAccountByLogin(login));
     }
 
+    @RolesAllowed("getAllAccounts")
     @Override
     public List<AccountDtoForList> getAllAccounts() throws BaseAppException {
         List<AccountDtoForList> res = new ArrayList<>();
@@ -106,6 +112,7 @@ public class AccountEndpoint implements AccountEndpointLocal {
         return res;
     }
 
+    @RolesAllowed("blockUser")
     @Override
     public void blockUser(@NotNull(message = CONSTRAINT_NOT_NULL) String login, @NotNull(message = CONSTRAINT_NOT_NULL) long version) throws BaseAppException {
         Account account = this.accountManager.blockUser(login, version);
@@ -117,21 +124,23 @@ public class AccountEndpoint implements AccountEndpointLocal {
         EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
     }
 
+    @PermitAll
     @Override
     public void requestPasswordReset(String login) throws BaseAppException {
         this.accountManager.requestPasswordReset(login);
     }
 
+    @PermitAll
     @Override
     public void resetPassword(PasswordResetDto passwordResetDto) throws BaseAppException {
         TokenWrapper tokenWrapper = this.tokenWrapperFacade.findByToken(passwordResetDto.getToken());
         if (tokenWrapper.isUsed()) {
             throw new JWTException(PASSWORD_RESET_USED_TOKEN_ERROR);
         }
-
         this.accountManager.resetPassword(passwordResetDto.getLogin(), DigestUtils.sha256Hex(passwordResetDto.getPassword()), passwordResetDto.getToken());
     }
 
+    @RolesAllowed("unblockUser")
     @Override
     public void unblockUser(@NotNull(message = CONSTRAINT_NOT_NULL) String unblockedUserLogin, @NotNull(message = CONSTRAINT_NOT_NULL) long version) throws BaseAppException {
         Account account = this.accountManager.unblockUser(unblockedUserLogin, version);
@@ -143,18 +152,19 @@ public class AccountEndpoint implements AccountEndpointLocal {
         EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
     }
 
-
+    @RolesAllowed("requestSomeonesPasswordReset")
     @Override
     public void requestSomeonesPasswordReset(String login, String email) throws BaseAppException {
         this.accountManager.requestSomeonesPasswordReset(login, email);
     }
 
+    @PermitAll
     @Override
     public void verifyAccount(AccountVerificationDto accountVerificationDto) throws BaseAppException {
         this.accountManager.verifyAccount(accountVerificationDto.getToken());
     }
 
-
+    @RolesAllowed("changeOtherClientData")
     @Override
     public OtherClientChangeDataDto changeOtherClientData(OtherClientChangeDataDto otherClientChangeDataDto) throws BaseAppException {
 
@@ -164,82 +174,96 @@ public class AccountEndpoint implements AccountEndpointLocal {
         return AccountMapper.accountDtoForClientDataChange(accountManager.changeOtherClientData(otherClientChangeDataDto.getLogin(), otherClientChangeDataDto.getNewPhoneNumber(), addr, otherClientChangeDataDto.getAccVersion()));
     }
 
+    @RolesAllowed("changeOtherBusinessWorkerData")
     @Override
     public OtherBusinessWorkerChangeDataDto changeOtherBusinessWorkerData(OtherBusinessWorkerChangeDataDto otherBusinessWorkerChangeDataDto) throws BaseAppException {
         return AccountMapper.accountDtoForBusinnesWorkerDataChange(accountManager.changeOtherBusinessWorkerData(otherBusinessWorkerChangeDataDto.getLogin(), otherBusinessWorkerChangeDataDto.getNewPhoneNumber(), otherBusinessWorkerChangeDataDto.getAccVersion()));
     }
 
+    @RolesAllowed("changeOtherAccountData")
     @Override
     public AccountDto changeOtherAccountData(OtherAccountChangeDataDto otherAccountChangeDataDto) throws BaseAppException {
         Account account = AccountMapper.extractAccountFromOtherAccountChangeDataDto(otherAccountChangeDataDto);
-        return AccountMapper.toAccountDto(accountManager.updateOtherAccount(account));
+        return AccountMapper.toAccountDto(accountManager.changeOtherAccountData(account));
     }
 
-
+    @RolesAllowed("changeEmail")
     @Override
     public void changeEmail(AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException {
         accountManager.changeEmail(accountChangeEmailDto.getLogin(), accountChangeEmailDto.getVersion(), accountChangeEmailDto.getNewEmail());
     }
 
+    @RolesAllowed("changeClientData")
     @Override
     public void changeClientData(ClientChangeDataDto clientChangeDataDto) throws BaseAppException {
         Account account = AccountMapper.extractAccountFromClientChangeDataDto(clientChangeDataDto);
         accountManager.changeClientData(account);
     }
 
+    @RolesAllowed("changeBusinessWorkerData")
     @Override
     public void changeBusinessWorkerData(BusinessWorkerChangeDataDto businessWorkerChangeDataDto) throws BaseAppException {
         Account account = AccountMapper.extractAccountFromBusinessWorkerChangeDataDto(businessWorkerChangeDataDto);
         accountManager.changeBusinessWorkerData(account);
     }
 
+    @RolesAllowed("changeModeratorData")
     @Override
     public void changeModeratorData(ModeratorChangeDataDto moderatorChangeDataDto) throws BaseAppException {
         Account account = AccountMapper.extractAccountFromModeratorChangeDataDto(moderatorChangeDataDto);
         accountManager.changeModeratorData(account);
     }
 
+    @RolesAllowed("changeAdministratorData")
     @Override
     public void changeAdministratorData(AdministratorChangeDataDto administratorChangeDataDto) throws BaseAppException {
         Account account = AccountMapper.extractAccountFromAdministratorChangeDataDto(administratorChangeDataDto);
         accountManager.changeAdministratorData(account);
     }
 
+    @RolesAllowed("getAccountByLogin")
     @Override
     public AccountDto getAccountByLogin(String login) throws BaseAppException {
         return AccountMapper.toAccountDto(accountManager.getAccountByLogin(login));
     }
 
+    @RolesAllowed("getAccessLevelByLogin")
     @Override
     public ClientDto getClientByLogin(String login) throws BaseAppException {
         return AccountMapper.toClientDto(accountManager.getAccountByLogin(login));
     }
 
+    @RolesAllowed("getAccessLevelByLogin")
     @Override
     public BusinessWorkerDto getBusinessWorkerByLogin(String login) throws BaseAppException {
         return AccountMapper.toBusinessWorkerDto(accountManager.getAccountByLogin(login));
     }
 
+    @RolesAllowed("getAccessLevelByLogin")
     @Override
     public ModeratorDto getModeratorByLogin(String login) throws BaseAppException {
         return AccountMapper.toModeratorDto(accountManager.getAccountByLogin(login));
     }
 
+    @RolesAllowed("getAccessLevelByLogin")
     @Override
     public AdministratorDto getAdministratorByLogin(String login) throws BaseAppException {
         return AccountMapper.toAdministratorDto(accountManager.getAccountByLogin(login));
     }
 
+    @RolesAllowed("authenticatedUser")
     @Override
     public String getCurrentUserLogin() throws BaseAppException {
         return accountManager.getCurrentUser().getLogin();
     }
 
+    @RolesAllowed("authenticatedUser")
     public void changeOwnPassword(AccountChangeOwnPasswordDto accountChangeOwnPasswordDto) throws BaseAppException {
         this.accountManager.changeOwnPassword(accountChangeOwnPasswordDto.getLogin(), accountChangeOwnPasswordDto.getVersion(),
                 accountChangeOwnPasswordDto.getOldPassword(), accountChangeOwnPasswordDto.getNewPassword());
     }
 
+    @RolesAllowed("authenticatedUser")
     public void changeMode(ChangeModeDto changeModeDto) throws BaseAppException {
         Long version = getAccountByLogin(changeModeDto.getLogin()).getVersion();
 

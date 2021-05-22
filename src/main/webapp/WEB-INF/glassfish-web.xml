@@ -1,23 +1,142 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE glassfish-web-app PUBLIC "-//GlassFish.org//DTD GlassFish Application Server 3.1 Servlet 3.0//EN" "http://glassfish.org/dtds/glassfish-web-app_3_0-1.dtd">
+<!DOCTYPE glassfish-web-app PUBLIC "-//GlassFish.org//DTD GlassFish Application Server 3.1 Servlet 3.0//EN"
+        "http://glassfish.org/dtds/glassfish-web-app_3_0-1.dtd">
 <glassfish-web-app error-url="">
+
     <security-role-mapping>
         <role-name>ADMINISTRATOR</role-name>
         <group-name>administrators</group-name>
     </security-role-mapping>
+
     <security-role-mapping>
         <role-name>MODERATOR</role-name>
         <group-name>moderators</group-name>
     </security-role-mapping>
+
     <security-role-mapping>
         <role-name>BUSINESS_WORKER</role-name>
         <group-name>business_workers</group-name>
     </security-role-mapping>
+
     <security-role-mapping>
         <role-name>CLIENT</role-name>
         <group-name>clients</group-name>
     </security-role-mapping>
 
-    <class-loader delegate="true"/>
+    <security-role-mapping>
+        <role-name>SYSTEM</role-name>
+        <group-name>system</group-name>
+    </security-role-mapping>
+
+
+    <!--    -->
+    <security-role-mapping>
+        <role-name>getAccountByLogin</role-name>
+        <group-name>moderators</group-name>
+        <group-name>administrators</group-name>
+    </security-role-mapping>
+
+    <security-role-mapping>
+        <role-name>getAccountDetailsByLogin</role-name>
+        <group-name>moderators</group-name>
+        <group-name>administrators</group-name>
+    </security-role-mapping>
+
+    <security-role-mapping>
+        <role-name>selfGetAccountDetails</role-name>
+        <group-name>clients</group-name>
+        <group-name>business_workers</group-name>
+        <group-name>moderators</group-name>
+        <group-name>administrators</group-name>
+    </security-role-mapping>
+
+    <security-role-mapping>
+        <role-name>getAccessLevelByLogin</role-name>
+        <group-name>moderators</group-name>
+        <group-name>administrators</group-name>
+    </security-role-mapping>
+
+    <security-role-mapping>
+        <role-name>getAllAccounts</role-name>
+        <group-name>moderators</group-name>
+        <group-name>administrators</group-name>
+    </security-role-mapping>
+
+    <security-role-mapping>
+        <role-name>blockUser</role-name>
+        <group-name>moderators</group-name>
+        <group-name>administrators</group-name>
+    </security-role-mapping>
+
+    <security-role-mapping>
+        <role-name>unblockUser</role-name>
+        <group-name>administrators</group-name>
+    </security-role-mapping>
+
+    <security-role-mapping>
+        <role-name>grantAccessLevel</role-name>
+        <group-name>administrators</group-name>
+    </security-role-mapping>
+
+    <security-role-mapping>
+        <role-name>changeAccessLevelState</role-name>
+        <group-name>administrators</group-name>
+    </security-role-mapping>
+
+    <security-role-mapping>
+        <role-name>requestSomeonesPasswordReset</role-name>
+        <group-name>administrators</group-name>
+    </security-role-mapping>
+
+    <security-role-mapping>
+        <role-name>changeOtherBusinessWorkerData</role-name>
+        <group-name>administrators</group-name>
+    </security-role-mapping>
+
+    <security-role-mapping>
+        <role-name>changeOtherAccountData</role-name>
+        <group-name>administrators</group-name>
+    </security-role-mapping>
+
+    <security-role-mapping>
+        <role-name>changeOtherAccountData</role-name>
+        <group-name>administrators</group-name>
+    </security-role-mapping>
+
+    <security-role-mapping>
+        <role-name>authenticatedUser</role-name>
+        <group-name>clients</group-name>
+        <group-name>business_workers</group-name>
+        <group-name>moderators</group-name>
+        <group-name>administrators</group-name>
+    </security-role-mapping>
+
+    <security-role-mapping>
+        <role-name>changeEmail</role-name>
+        <group-name>clients</group-name>
+        <group-name>business_workers</group-name>
+        <group-name>moderators</group-name>
+        <group-name>administrators</group-name>
+    </security-role-mapping>
+
+    <security-role-mapping>
+        <role-name>changeClientData</role-name>
+        <group-name>clients</group-name>
+    </security-role-mapping>
+
+    <security-role-mapping>
+        <role-name>changeBusinessWorkerData</role-name>
+        <group-name>business_workers</group-name>
+    </security-role-mapping>
+
+    <security-role-mapping>
+        <role-name>changeModeratorData</role-name>
+        <group-name>moderators</group-name>
+    </security-role-mapping>
+
+    <security-role-mapping>
+        <role-name>changeAdministratorData</role-name>
+        <group-name>administrators</group-name>
+    </security-role-mapping>
 
 </glassfish-web-app>
