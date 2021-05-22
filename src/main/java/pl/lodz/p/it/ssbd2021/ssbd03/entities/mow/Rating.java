@@ -16,7 +16,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_POSITIVE_OR_ZE
 
 @Entity(name = "ratings")
 @NamedQueries({
-        @NamedQuery(name="Rating.findByCruiseGroupId", query = "SELECT r FROM ratings r WHERE r.cruise.cruisesGroup.name =:name")
+        @NamedQuery(name= "Rating.findByCruiseGroupName", query = "SELECT r FROM ratings r WHERE r.cruise.cruisesGroup.name =:name")
 })
 
 public class Rating extends BaseEntity {

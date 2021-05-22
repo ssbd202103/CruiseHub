@@ -20,8 +20,8 @@ public class RatingFacade extends AbstractFacade<Rating> {
         super(Rating.class);
     }
 
-    public List findByCruiseName(String name) throws BaseAppException {
-        TypedQuery<Rating> tq = em.createNamedQuery("Rating.findByCruiseGroupId", Rating.class);
+    public List<Rating> findByCruiseGroupName(String name) throws BaseAppException {
+        TypedQuery<Rating> tq = em.createNamedQuery("Rating.findByCruiseGroupName", Rating.class);
         tq.setParameter("name", name);
 
         try {
