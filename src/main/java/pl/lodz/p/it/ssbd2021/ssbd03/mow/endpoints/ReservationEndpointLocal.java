@@ -18,4 +18,13 @@ public interface ReservationEndpointLocal {
      * @throws BaseAppException Bazowy wyjątek aplikacji
      */
     List<CruiseReservationDto> viewCruiseReservations(long cruise_id) throws BaseAppException;
-}
+
+    /**
+     *  Pobiera wszytskie rezerwacje dla danej wycieczki która nalezy do biznes_worker'a
+     * @param cruise_id
+     * @return
+     * @throws BaseAppException
+     */
+    List<CruiseReservationDto> viewWorkerCruiseReservations(long cruise_id) throws BaseAppException;
+
+    }

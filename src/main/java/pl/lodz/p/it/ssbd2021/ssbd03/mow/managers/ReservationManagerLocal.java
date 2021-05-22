@@ -18,4 +18,13 @@ public interface ReservationManagerLocal {
      * @throws BaseAppException Bazowy wyjątek aplikacji
      */
     List<Reservation> getCruiseReservations(long cruise_id) throws BaseAppException;
+
+    /**
+     * Zwraca liste rezerwacji dla danej wycieczki zalogowanego buisnse-workera
+     *
+     * @param cruise_id
+     * @return
+     * @throws BaseAppException
+     */
+    List<Reservation> getWorkerCruiseReservations(long cruise_id) throws BaseAppException;
 }

@@ -16,10 +16,11 @@ import java.util.List;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 
+    //TODO sprawdzenie i powprawnienie Reservation.findWorkerCruiseReservations query
 @NamedQueries({
         @NamedQuery(name = "Reservation.findByID", query = "SELECT reservation FROM reservations reservation WHERE reservation.id = :id"),
-        @NamedQuery(name = "Reservation.findCruiseReservations", query = "SELECT reservation FROM reservations reservation WHERE reservation.cruise = :id")
-
+        @NamedQuery(name = "Reservation.findCruiseReservations", query = "SELECT reservation FROM reservations reservation WHERE reservation.cruise = :id"),
+        @NamedQuery(name = "Reservation.findWorkerCruiseReservations", query = "SELECT reservation FROM reservations reservation WHERE reservation.cruise = :id and reservation.cruise IN (SELECT id FROM cruises WHERE cruises_groups.id IN (SELECT id FROM cruises_groups WHERE company.id IN (SELECT id FROM companies WHERE companies.id IN (select company_id FROM business_workers WHERE id = :id))) ) ")
 })
 @Entity(name = "reservations")
 public class Reservation extends BaseEntity {
