@@ -14,11 +14,11 @@ public class RatingEndpoint implements RatingEndpointLocal {
 
     @Override
     public void createRating(RatingDto ratingDto) throws BaseAppException {
-        //TODO
+        ratingManager.createRating(ratingDto.getLogin(), ratingDto.getCruiseGroupName(), ratingDto.getRating());
     }
 
     @Override
     public void removeRating(RemoveRankingDto removeRankingDto) throws BaseAppException {
-        //TODO
+        ratingManager.removeRating(removeRankingDto.getLogin(), removeRankingDto.getCruiseGroupName());
     }
 }

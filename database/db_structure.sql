@@ -366,7 +366,7 @@ create table ratings
 (
     id                   bigint                                                                      not null,
     account_id           bigint                                                                      not null, -- FOREIGN KEY
-    cruise_id            bigint                                                                      not null, -- FOREIGN KEY
+    cruise_group_id      bigint                                                                      not null, -- FOREIGN KEY
     rating               numeric(2, 1) check ((rating >= (0)::numeric) AND (rating <= (5)::numeric)) not null,
 
     creation_date_time   timestamp default CURRENT_TIMESTAMP                                         not null,
@@ -378,7 +378,7 @@ create table ratings
 
     CONSTRAINT ratings_primary_key_constraint PRIMARY KEY (id),
     CONSTRAINT ratings_account_id_fk_constraint FOREIGN KEY (account_id) REFERENCES accounts (id),
-    CONSTRAINT ratings_cruise_id_fk_constraint FOREIGN KEY (cruise_id) REFERENCES cruises (id),
+    CONSTRAINT ratings_cruise_group_id_fk_constraint FOREIGN KEY (cruise_group_id) REFERENCES cruises_groups (id),
     CONSTRAINT ratings_alter_type_id_fk_constraint FOREIGN KEY (alter_type_id) REFERENCES alter_types (id),
     CONSTRAINT ratings_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
     CONSTRAINT ratings_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id)
@@ -849,9 +849,9 @@ CREATE INDEX reservations_alter_type_id_index
 CREATE INDEX ratings_account_id_index
     ON ratings USING btree
         (account_id ASC NULLS LAST);
-CREATE INDEX ratings_cruise_id_index
+CREATE INDEX ratings_cruise_group_id_index
     ON ratings USING btree
-        (cruise_id ASC NULLS LAST);
+        (cruise_group_id ASC NULLS LAST);
 CREATE INDEX ratings_created_by_id_index
     ON ratings USING btree
         (created_by_id ASC NULLS LAST);

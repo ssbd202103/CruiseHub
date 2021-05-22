@@ -31,6 +31,18 @@ public class RatingFacade extends AbstractFacade<Rating> {
         }
     }
 
+    public Rating findByCruiseNameAndAccountLogin(String name, String login) throws BaseAppException {
+        TypedQuery<Rating> tq = em.createNamedQuery("Rating.findByCruiseGroupNameAndAccountLogin", Rating.class);
+        tq.setParameter("name", name);
+        tq.setParameter("login", login);
+
+        try {
+            return tq.getSingleResult();
+        } catch (NoResultException e) {
+            throw FacadeException.noSuchElement();
+        }
+    }
+
     @Override
     protected EntityManager getEntityManager() {
         return em;

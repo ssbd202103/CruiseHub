@@ -250,15 +250,15 @@ values (-3, -2, 1, -3,30, now(), now(), -2, -1, -1, 0);
 --
 --
 --ratings start
-insert into ratings(id, account_id, cruise_id, rating, creation_date_time, last_alter_date_time, alter_type_id,
+insert into ratings(id, account_id, cruise_group_id, rating, creation_date_time, last_alter_date_time, alter_type_id,
                     created_by_id,
                     altered_by_id, version)
 values (-1, -2, -1, 3, now(), now(), -2, -1, -1, 0);
-insert into ratings(id, account_id, cruise_id, rating, creation_date_time, last_alter_date_time, alter_type_id,
+insert into ratings(id, account_id, cruise_group_id, rating, creation_date_time, last_alter_date_time, alter_type_id,
                     created_by_id,
                     altered_by_id, version)
 values (-2, -1, -2, 4.5, now(), now(), -2, -1, -1, 0);
-insert into ratings(id, account_id, cruise_id, rating, creation_date_time, last_alter_date_time, alter_type_id,
+insert into ratings(id, account_id, cruise_group_id, rating, creation_date_time, last_alter_date_time, alter_type_id,
                     created_by_id,
                     altered_by_id, version)
 values (-3, -3, -3, 5, now(), now(), -2, -1, -1, 0);
