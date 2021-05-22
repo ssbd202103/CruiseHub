@@ -11,6 +11,7 @@ import javax.ejb.Stateful;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Klasa która zajmuje się growadzeniem zmapowanych obiektów klas Dto na obiekty klas modelu związanych z rezerwacją wycieczek, oraz wywołuje metody logiki przekazując zmapowane obiekty.
@@ -23,9 +24,9 @@ public class ReservationEndpoint implements ReservationEndpointLocal{
 
 
     @Override
-    public List<CruiseReservationDto> viewCruiseReservations(long cruise_id) throws BaseAppException {
+    public List<CruiseReservationDto> viewCruiseReservations(UUID cruise_uuid) throws BaseAppException {
         List<CruiseReservationDto> res = new ArrayList<>();
-        for (Reservation reservation: reservationManager.getCruiseReservations(cruise_id)){
+        for (Reservation reservation: reservationManager.getCruiseReservations(cruise_uuid)){
             res.add(ReservationMapper.toReservationDto(reservation));
         }
         return res;
@@ -33,9 +34,9 @@ public class ReservationEndpoint implements ReservationEndpointLocal{
 
     //TODO how to get current user ?
     @Override
-    public List<CruiseReservationDto> viewWorkerCruiseReservations(long cruise_id) throws BaseAppException {
+    public List<CruiseReservationDto> viewWorkerCruiseReservations(UUID cruise_uuid) throws BaseAppException {
         List<CruiseReservationDto> res = new ArrayList<>();
-        for (Reservation reservation: reservationManager.getCruiseReservations(cruise_id)){
+        for (Reservation reservation: reservationManager.getCruiseReservations(cruise_uuid)){
             res.add(ReservationMapper.toReservationDto(reservation));
         }
         return res;

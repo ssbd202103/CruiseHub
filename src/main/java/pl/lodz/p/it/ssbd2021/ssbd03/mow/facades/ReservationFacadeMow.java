@@ -13,6 +13,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.sql.ResultSet;
 import java.util.List;
+import java.util.UUID;
 
 @Stateless
 public class ReservationFacadeMow extends AbstractFacade<Reservation> {
@@ -44,9 +45,9 @@ public class ReservationFacadeMow extends AbstractFacade<Reservation> {
         super.create(entity);
     }
 
-    public Reservation findByID(long id) throws BaseAppException {
-        TypedQuery<Reservation> tq = em.createNamedQuery("Reservation.findByID", Reservation.class);
-        tq.setParameter("id", id);
+    public Reservation findByUUID(UUID uuid) throws BaseAppException {
+        TypedQuery<Reservation> tq = em.createNamedQuery("Reservation.findByUUID", Reservation.class);
+        tq.setParameter("uuid", uuid);
         try {
             return tq.getSingleResult();
         } catch (NoResultException e) {

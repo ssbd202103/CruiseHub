@@ -28,4 +28,6 @@ public class CruiseGroupDto {
     private List<CruisePictureDto> cruisePictures;
     @Positive
     private long version;
+
+    private boolean active;
 }
