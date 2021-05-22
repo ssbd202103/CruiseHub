@@ -17,7 +17,8 @@ import javax.inject.Inject;
  */
 @Stateful
 public class CruiseEndpoint implements CruiseEndpointLocal {
-    @EJB
+
+    @Inject
     private CruiseManagerLocal cruiseManagerLocal;
 
 
