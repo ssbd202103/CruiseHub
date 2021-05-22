@@ -16,6 +16,9 @@
         <role-name>MODERATOR</role-name>
     </security-role>
     <security-role>
+        <role-name>CLIENT</role-name>
+    </security-role>
+    <security-role>
         <role-name>BUSINESS_WORKER</role-name>
     </security-role>
     <!---->
