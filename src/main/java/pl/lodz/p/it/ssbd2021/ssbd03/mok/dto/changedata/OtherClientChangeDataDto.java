@@ -28,7 +28,8 @@ public class OtherClientChangeDataDto extends AbstractAccountDto {
     @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
     private long accVersion;
 
-    public OtherClientChangeDataDto(String login, long version, String newPhoneNumber, OtherAddressChangeDto newAddress,long accVersion) {
+    public OtherClientChangeDataDto(String login, long version, String newPhoneNumber,
+                                    OtherAddressChangeDto newAddress,long accVersion) {
         super(login, version);
         this.newPhoneNumber = newPhoneNumber;
         this.newAddress = newAddress;

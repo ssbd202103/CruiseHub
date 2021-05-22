@@ -44,13 +44,13 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 @TransactionAttribute(TransactionAttributeType.MANDATORY)
 public class AccountManager implements AccountManagerLocal {
 
-    @EJB
+    @Inject
     private AccountFacadeMok accountFacade;
 
-    @EJB
+    @Inject
     private CompanyFacadeMok companyFacadeMok;
 
-    @EJB
+    @Inject
     private TokenWrapperFacade tokenWrapperFacade;
 
     @Context

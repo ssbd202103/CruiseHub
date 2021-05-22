@@ -16,7 +16,7 @@ class AuthControllerIT {
 
     AuthControllerIT() {
         Properties securityProperties = PropertiesReader.getSecurityProperties();
-        authBaseUri = securityProperties.getProperty("app.baseurl") + "/api/signin";
+        authBaseUri = securityProperties.getProperty("app.baseurl") + "/api/auth";
     }
 
     @Test
@@ -26,13 +26,13 @@ class AuthControllerIT {
 
         // correct test
         AuthenticateDto authInfo = new AuthenticateDto(correctLogin, correctPassword);
-        Response response = given().baseUri(authBaseUri).contentType("application/json").body(authInfo).post("/auth");
+        Response response = given().baseUri(authBaseUri).contentType("application/json").body(authInfo).post("/sign-in");
         assertFalse(response.getBody().asPrettyString().isEmpty());
         assertEquals(200, response.getStatusCode());
 
         // a test with an incorrect password
         AuthenticateDto authInfoFalse = new AuthenticateDto(correctLogin, "Incorre2*ctPassword");
-        Response responseFalse = given().baseUri(authBaseUri).contentType("application/json").body(authInfoFalse).post("/auth");
+        Response responseFalse = given().baseUri(authBaseUri).contentType("application/json").body(authInfoFalse).post("/sign-in");
         assertEquals(401, responseFalse.getStatusCode());
     }
 }

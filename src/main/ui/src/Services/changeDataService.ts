@@ -31,7 +31,7 @@ export function changeClientData(newFirstName: string, newSecondName: string, ne
         version
     }
 
-    return axios.put('account/client/changedata', changeAccountDataDto, {
+    return axios.put('self/change-client-data', changeAccountDataDto, {
         headers: {
             "If-Match": etag,
             "Authorization": `Bearer ${token}`
@@ -64,7 +64,7 @@ export function changeClientAddress(newAddress: ChangeAddress) {
         version
     }
 
-    return axios.put('account/client/changedata', changeAccountDataDto, {
+    return axios.put('self/change-client-data', changeAccountDataDto, {
         headers: {
             "If-Match": etag,
             "Authorization": `Bearer ${token}`
@@ -92,7 +92,7 @@ export function changeBusinessWorkerData(newFirstName: string, newSecondName: st
         version
     }
 
-    return axios.put('account//businessworker/changedata', changeAccountDataDto, {
+    return axios.put('self/change-business-worker-data', changeAccountDataDto, {
         headers: {
             "If-Match": etag,
             "Authorization": `Bearer ${token}`
@@ -119,7 +119,7 @@ export function changeModeratorData(newFirstName: string, newSecondName: string)
         version
     }
 
-    return axios.put('account/moderator/changedata', changeAccountDataDto, {
+    return axios.put('self/change-moderator-data', changeAccountDataDto, {
         headers: {
             "If-Match": etag,
             "Authorization": `Bearer ${token}`
@@ -146,7 +146,7 @@ export function changeAdministratorData(newFirstName: string, newSecondName: str
         version
     }
 
-    return axios.put('account/administrator/changedata', changeAccountDataDto, {
+    return axios.put('self/change-administrator-data', changeAccountDataDto, {
         headers: {
             "If-Match": etag,
             "Authorization": `Bearer ${token}`
@@ -174,7 +174,7 @@ export function changeDarkMode() {
         newMode: !darkMode
     }
 
-    return axios.put('account/change_mode', changeDto, {
+    return axios.put('self/change-theme-mode', changeDto, {
         headers: {
             'If-Match': etag,
             'Authorization': `Bearer ${token}`

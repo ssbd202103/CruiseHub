@@ -6,6 +6,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.ReservationFacadeMow;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import java.util.List;
 @Stateful
 public class ReservationManager implements ReservationManagerLocal{
 
-    @EJB
+    @Inject
     private ReservationFacadeMow reservationFacadeMow;
 
 

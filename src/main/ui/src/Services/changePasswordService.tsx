@@ -15,7 +15,7 @@ export function changeOwnPassword(oldPassword: string, newPassword: string) {
 
     console.log(oldPassword, newPassword)
 
-    return axios.put('account/change_own_password', {
+    return axios.put('self/change-password', {
         login: login,
         version: version,
         oldPassword: oldPassword,

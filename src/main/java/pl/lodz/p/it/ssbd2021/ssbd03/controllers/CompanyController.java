@@ -6,6 +6,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.CompanyEndpointLocal;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -17,7 +18,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.controllers.TransactionRepeater.tryAn
 @Path("/company")
 @RequestScoped
 public class CompanyController {
-    @EJB
+    @Inject
     private CompanyEndpointLocal companyEndpoint;
 
     @GET

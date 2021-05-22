@@ -7,6 +7,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.managers.CompanyManagerLocal;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
+import javax.inject.Inject;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
  */
 @Stateful
 public class CompanyEndpoint implements CompanyEndpointLocal {
-    @EJB
+    @Inject
     private CompanyManagerLocal companyManager;
 
     @Override

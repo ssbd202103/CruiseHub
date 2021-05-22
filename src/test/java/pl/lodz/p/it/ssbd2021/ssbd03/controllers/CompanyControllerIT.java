@@ -25,7 +25,7 @@ class CompanyControllerIT {
     public CompanyControllerIT() {
         Properties securityProperties = PropertiesReader.getSecurityProperties();
         baseUri = securityProperties.getProperty("app.baseurl") + "/api";
-        authBaseUri = securityProperties.getProperty("app.baseurl") + "/api/signin";
+        authBaseUri = securityProperties.getProperty("app.baseurl") + "/api/auth";
 
     }
 
@@ -47,7 +47,7 @@ class CompanyControllerIT {
                 .contentType(ContentType.JSON)
                 .body(authenticateDto)
                 .when()
-                .post("/auth");
+                .post("/sign-in");
         assertEquals(HttpStatus.SC_OK, response.getStatusCode());
         return response.getBody().asString();
     }

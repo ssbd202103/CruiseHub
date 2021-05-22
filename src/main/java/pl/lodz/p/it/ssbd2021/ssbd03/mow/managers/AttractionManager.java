@@ -6,6 +6,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.AttractionFacadeMow;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
+import javax.inject.Inject;
 import java.util.List;
 
 /**
@@ -14,7 +15,7 @@ import java.util.List;
 @Stateful
 public class AttractionManager implements AttractionManagerLocal{
 
-    @EJB
+    @Inject
     private AttractionFacadeMow attractionFacadeMow;
 
     @Override

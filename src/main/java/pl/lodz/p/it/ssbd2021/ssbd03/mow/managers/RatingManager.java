@@ -10,6 +10,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.RatingFacade;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
+import javax.inject.Inject;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
 
@@ -19,13 +20,13 @@ public class RatingManager implements RatingManagerLocal {
     @Context
     SecurityContext securityContext;
 
-    @EJB
+    @Inject
     RatingFacade ratingFacade;
 
-    @EJB
+    @Inject
     AccountFacadeMow accountFacade;
 
-    @EJB
+    @Inject
     CruiseGroupFacadeMow cruiseGroupFacadeMow;
 
     @Override

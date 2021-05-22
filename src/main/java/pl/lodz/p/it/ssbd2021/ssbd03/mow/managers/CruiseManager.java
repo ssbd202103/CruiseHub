@@ -10,6 +10,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.AccountFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseFacade;
 
 import javax.ejb.EJB;
+import javax.inject.Inject;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
 import java.time.LocalDateTime;
@@ -23,10 +24,10 @@ public class CruiseManager implements CruiseManagerLocal {
     @Context
     private SecurityContext securityContext;
 
-    @EJB
+    @Inject
     private CruiseFacade cruiseFacade;
 
-    @EJB
+    @Inject
     private AccountFacadeMow accountFacade;
 
     @Override

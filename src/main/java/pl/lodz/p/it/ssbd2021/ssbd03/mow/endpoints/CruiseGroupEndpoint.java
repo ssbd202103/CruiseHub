@@ -14,6 +14,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.managers.CruiseGroupManagerLocal;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,7 @@ import java.util.List;
 @Stateful
 public class CruiseGroupEndpoint implements CruiseGroupEndpointLocal {
 
-    @EJB
+    @Inject
     private CruiseGroupManagerLocal cruiseGroupManager;
 
     @Override
