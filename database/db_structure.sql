@@ -340,7 +340,6 @@ create sequence attractions_id_seq
 create table reservations
 (
     id                   bigint                              not null,
-    uuid                 varchar                             not null,
     client_id            bigint                              not null, --FOREIGN KEY
     number_of_seats      bigint check (number_of_seats >= 0) not null,
     cruise_id            bigint                              not null, --FOREIGN KEY
@@ -354,7 +353,6 @@ create table reservations
     version              bigint check (version >= 0)         not null,
 
     CONSTRAINT reservations_id_pk_constraint PRIMARY KEY (id),
-    CONSTRAINT reservations_uuid_unique_constraint UNIQUE(uuid),
     CONSTRAINT reservations_client_id_fk_constraint FOREIGN KEY (client_id) REFERENCES clients (id),
     CONSTRAINT reservations_cruise_id_fk_constraint FOREIGN KEY (cruise_id) REFERENCES cruises (id),
     CONSTRAINT reservations_alter_type_id_fk_constraint FOREIGN KEY (alter_type_id) REFERENCES alter_types (id),
