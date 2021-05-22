@@ -77,7 +77,7 @@ class AccountControllerIT {
     @Test
     public void registerClientTest_SUCCESS() {
         ClientForRegistrationDto client = getSampleClientForRegistrationDto();
-        given().baseUri(accountBaseUri).contentType(MediaType.APPLICATION_JSON).body(client).when().post("/client/registration").then().statusCode(204);
+        given().baseUri(authBaseUri).contentType(MediaType.APPLICATION_JSON).body(client).when().post("/client/registration").then().statusCode(204);
         // todo implement remove method to clean created data
     }
 
@@ -332,7 +332,7 @@ class AccountControllerIT {
     }
 
     private AccountDto registerClientAndGetAccountDto(ClientForRegistrationDto client) throws JsonProcessingException {
-        given().baseUri(accountBaseUri).contentType("application/json").body(client).post("/client/registration");
+        given().baseUri(authBaseUri).contentType("application/json").body(client).post("/client/registration");
         return getAccountDto(client.getLogin());
     }
 

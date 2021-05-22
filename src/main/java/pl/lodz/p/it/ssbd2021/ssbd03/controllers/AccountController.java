@@ -16,6 +16,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -36,7 +37,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.controllers.TransactionRepeater.tryAn
 @Path("/account")
 @RequestScoped
 public class AccountController {
-    @EJB
+    @Inject
     private AccountEndpointLocal accountEndpoint;
 
     /**
