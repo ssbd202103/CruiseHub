@@ -1,53 +1,82 @@
 import * as React from 'react'
-import {
-    FormControl,
-    InputLabel,
-    Select,
-    MenuItem
-} from '@material-ui/core'
+import {FormControl, InputLabel, MenuItem, Select} from '@material-ui/core'
 import {makeStyles} from '@material-ui/styles'
+import {selectDarkMode} from '../redux/slices/userSlice'
+import {useSelector} from "react-redux";
 
 
 const useStyles = makeStyles(theme => ({
-    root: {
-        '& .MuiSelect-root': {
-            fontFamily: "'Montserrat Alternates', sans-serif",
-            fontSize: '1.2rem'
+    light: {
+        borderColor: 'var(--dark)',
+        '& .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'var(--dark)'
         },
-        '& .MuiInputBase-root': {
-            borderColor: 'var(--dark)',
-            '&.Mui-focused.Mui-focused fieldset': {
-                borderColor: 'var(--dark)'
-            }
+        color: 'var(--dark)',
+        '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'var(--dark)'
         },
-        '& .MuiInputLabel-root': {
-            fontFamily: "'Montserrat', sans-serif",
-            fontSize: '1.1rem',
+        '& input': {
             color: 'var(--dark)'
         },
-        '& .MuiInputLabel-root.Mui-focused': {
-            color: 'var(--dark) !important'
+        '& input + fieldset': {
+            borderColor: 'var(--dark)'
         },
-
+        '&:hover input + fieldset': {
+            borderColor: 'var(--dark)'
+        },
+        '& .MuiInputLabel-root': {
+            color: 'var(--dark-light)'
+        }
+    },
+    dark: {
+        borderColor: 'var(--white)',
+        '& .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'var(--white)'
+        },
+        color: 'var(--white)',
+        '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'var(--white)'
+        },
+        '& input + fieldset': {
+            borderColor: 'var(--white)'
+        },
+        '& input': {
+            color: 'var(--white)'
+        },
+        '& input::placeholder': {
+            color: 'var(--white)'
+        },
+        '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'var(--white)'
+        },
+        '& .MuiInputLabel-root': {
+            color: 'var(--white-dark)'
+        }
     }
 }))
 
-const inputStyle = {}
-
-const labelStyle = {
-    style: {}
+const inputStyle = {
+    fontFamily: "'Montserrat Alternates', sans-serif",
+    fontSize: '1.2rem',
 }
 
-export interface DarkedTextFieldProps {
+const labelStyle = {
+    fontFamily: "'Montserrat', sans-serif",
+    fontSize: '1.1rem',
+}
+
+export interface DarkedSelectProps {
     readonly className?: string,
     readonly label?: string,
     readonly style?: React.CSSProperties,
     readonly options: Array<string | number>,
-
+    readonly colorIgnored?: boolean
     readonly  onSelectedChange?: any
 }
 
-export default function DarkedTextField(props: any) {
+export default function DarkedSelect(props: DarkedSelectProps) {
+
+    const darkMode = useSelector(selectDarkMode)
 
     const classes = useStyles()
 
@@ -56,18 +85,22 @@ export default function DarkedTextField(props: any) {
         label,
         style,
         options,
+        colorIgnored,
         onSelectedChange
     } = props
 
     return (
         <FormControl
-            className={classes.root + ' ' + (styles || "")}
-            style={style || null}
+            className={classes[(!colorIgnored && darkMode) ? 'dark' : 'light'] + ' ' + (styles || "")}
+            style={style || undefined}
             variant="outlined"
         >
-            <InputLabel>{label}</InputLabel>
+            <InputLabel
+                style={labelStyle}
+            >{label}</InputLabel>
             <Select
-                label={label + 'a'}
+                inputProps={{style: inputStyle}}
+                label={label + ' '}
             >
                 {options.map((item: string | number, index: number) => <MenuItem
                     key={item} value={item}

@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useReducer, useState} from 'react'
 
 import Grid from '@material-ui/core/Grid'
 
@@ -9,194 +9,320 @@ import {useTranslation} from 'react-i18next';
 import styles from '../../../styles/ManageAccount.module.css'
 import RoundedButton from '../../../components/RoundedButton';
 import DarkedTextField from '../../../components/DarkedTextField';
+import axios from "axios";
 
 export default function ChangeAccountData() {
     const {t} = useTranslation()
-
+    const [, forceUpdate] = useReducer(x => x + 1, 0); // used to force component refresh on forceUpdate call
     const [ChangePerData, setPerData] = useState(false)
     const [ChangAddress, setChangChangAddress] = useState(false)
-    const [ChangEmail, setChangEmail] = useState(false)
+    const [ChangePhone, setChangePhone] = useState(false)
+
+    const [firstName, setFirstName] = useState('')
+    const [secondName, setSecondName] = useState('')
+    const [email, setEmail] = useState('')
+
+    const [houseNumber, setHouseNumber] = useState('')
+    const [street, setStreet] = useState('')
+    const [postalCode, setPostalCode] = useState('')
+    const [city, setCity] = useState('')
+    const [country, setCountry] = useState('')
+    const [phoneNumber, setPhoneNumber] = useState('')
+
+    const [businessPhoneNumber, setBusinessPhoneNumber] = useState('')
 
     //Functions for personal data change
     const handleChangePerData = () => {
         setPerData(state => !state)
-        setChangChangAddress( false)
-        setChangEmail( false)
+        setChangChangAddress(false)
+        setChangePhone(false)
     }
-    const changePersonalData = () => {
-        //Place for transfer function (change personal data in database)
-        handleChangePerData()
-    }
-
     //Functions for address data change
     const handleChangAddress = () => {
         setChangChangAddress(state => !state)
         setPerData(false)
-        setChangEmail(false)
+        setChangePhone(false)
     }
-    const changeAddress = () => {
-        //Place for transfer function (change address in database)
-        handleChangAddress()
+    const handleChangePhone = () => {
+        setChangChangAddress(false)
+        setPerData(false)
+        setChangePhone(state => !state)
     }
 
-    //Functions for email data change
-    const handleChangEmail = () => {
-        setChangEmail(state => !state)
-        setPerData( false)
-        setChangChangAddress( false)
+
+    const changePersonalData = async () => {
+        const json = JSON.stringify({
+            login: currentAccount.login,
+            newFirstName: firstName,
+            newSecondName: secondName,
+            newEmail: email,
+            version: currentAccount.version
+
+        })
+        await fetch("http://localhost:8080/api/account/change-account-data", {
+            method: "PUT",
+            mode: "same-origin",
+            body: json,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "If-Match": currentAccount.etag
+            }
+        })
+        const result = await axios.get(`http://localhost:8080/api/account/details/${currentAccount.login}`);
+        sessionStorage.setItem("changeAccountData", JSON.stringify(result.data));
+        forceUpdate()
+        handleChangePerData()
     }
-    const changeEmail = () => {
-        //Place for transfer function (change email in database)
-        handleChangEmail()
+
+
+    const changeAddress = async () => {
+        const json = JSON.stringify({
+            login: currentAccount.login,
+            version: currentAccount.version,
+
+            newPhoneNumber: phoneNumber,
+            newAddress: {
+                newHouseNumber: houseNumber,
+                newStreet: street,
+                newPostalCode: postalCode,
+                newCity: city,
+                newCountry: country,
+            },
+            accVersion: clientAddr.accVersion
+        })
+        await fetch("http://localhost:8080/api/account/change-client-data", {
+            method: "PUT",
+            mode: "same-origin",
+            body: json,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "If-Match": currentAccount.etag
+            }
+        })
+        const result = await axios.get(`http://localhost:8080/api/account/details/${currentAccount.login}`);
+        sessionStorage.setItem("changeAccountData", JSON.stringify(result.data));
+        forceUpdate()
+        handleChangAddress()
     }
+    const changeBusinessPhone = async () => {
+        const json = JSON.stringify({
+            login: currentAccount.login,
+            version: currentAccount.version,
+            newPhoneNumber: businessPhoneNumber,
+            accVersion: businnesPhone.accVersion
+
+        })
+        await fetch("http://localhost:8080/api/account/change-business-worker-data", {
+            method: "PUT",
+            mode: "same-origin",
+            body: json,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "If-Match": currentAccount.etag
+            }
+        })
+        const result = await axios.get(`http://localhost:8080/api/account/details/${currentAccount.login}`);
+        sessionStorage.setItem("changeAccountData", JSON.stringify(result.data));
+        forceUpdate()
+        handleChangePhone()
+    }
+    const currentAccount = JSON.parse(sessionStorage.getItem("changeAccountData") as string)
+    const clientAccount = JSON.parse(sessionStorage.getItem("changeAccountData") as string)
+    const businessAccount = JSON.parse(sessionStorage.getItem("changeAccountData") as string)
+    const acLevel = currentAccount.accessLevels.map((accessLevel: any) => accessLevel.accessLevelType)
+    const clientAddr = clientAccount.accessLevels.find((data: any) => (data.accessLevelType.includes("CLIENT")))
+    const businnesPhone = businessAccount.accessLevels.find((data: any) => (data.accessLevelType.includes("BUSINESS_WORKER")))
 
     return (
         <Grid container className={styles.wrapper}>
-                <Grid item style={{display: ChangePerData ? "none" : "block"}} className={styles.item}>
-                    <h3>{t("personal data")}</h3>
+            <Grid item style={{display: ChangePerData ? "none" : "block"}} className={styles.item}>
+                <h3>{t("personal data")}</h3>
+                <div>
                     <div>
-                        <div>
-                            <h4>{t("name")}</h4>
-                            <p>Michał</p>
-                        </div>
-                        <div>                        
-                            <h4>{t("surname")}</h4>
-                            <p>Blazymur</p>
-                        </div>
-                        <div>                        
-                            <h4>{t("Login")}</h4>
-                            <p>BigMike</p>
-                        </div>
-                        <div>                                            
-                            <h4>{t("phone number")}</h4>
-                            <p>+48-767-765-456</p>
-                        </div>
-
-                        <RoundedButton 
-                            color="blue"
-                            onClick={handleChangePerData}
-                        >{t("personal data change btn")}</RoundedButton>
+                        <h4>{t("name")}</h4>
+                        <p>{currentAccount.firstName}</p>
                     </div>
-                </Grid>
-
-                <Grid item style={{display: ChangePerData ? "block" : "none"}} className={styles['change-item']}>
-                    <h3>{t("personal data change")}</h3>
                     <div>
-                        <DarkedTextField 
-                            type="text" 
-                            label={t("name")}
-                            placeholder="Michał" />
-                        <DarkedTextField 
-                            type="text" 
-                            label={t("surname")}
-                            placeholder="Blazymur"/>
-                        <DarkedTextField 
-                            type="text" 
-                            label="Login"
-                            placeholder="BigMike"/>
-                        <DarkedTextField 
-                            type="text" 
-                            label={t("phone")}
-                            placeholder="+48-767-765-456"/>
+                        <h4>{t("surname")}</h4>
+                        <p>{currentAccount.secondName}</p>
                     </div>
-                    <RoundedButton color="blue"
-                                onClick={changePersonalData}
-                        >{t("confirm")}</RoundedButton>
-                </Grid>
+                    <div>
+                        <h4>{t("Login")}</h4>
+                        <p>{currentAccount.login}</p>
+                    </div>
+                    <div>
+                        <h4>{t("email")}</h4>
+                        <p>{currentAccount.email}</p>
 
-                <Grid item  style={{display: ChangAddress ? "none" : "block"}} className={styles.item}>
+                    </div>
+                    <RoundedButton
+                        color="blue"
+                        onClick={handleChangePerData}
+                    >{t("personal data change btn")}</RoundedButton>
+                </div>
+            </Grid>
+
+            <Grid item style={{display: ChangePerData ? "block" : "none"}} className={styles['change-item']}>
+                <h3>{t("personal data change")}</h3>
+                <div>
+                    <DarkedTextField
+                        type="text"
+                        label={t("name")}
+                        placeholder={currentAccount.firstName}
+                        value={firstName}
+                        onChange={event => {setFirstName(event.target.value)}}/>
+                    <DarkedTextField
+                        type="text"
+                        label={t("surname")}
+                        placeholder={currentAccount.secondName}
+                        value={secondName}
+                        onChange={event => {setSecondName(event.target.value)}}/>
+
+                    <DarkedTextField
+                        type="text"
+                        label={t("new email")}
+                        placeholder={t(currentAccount.email)}
+                        value={email}
+                        onChange={event => {setEmail(event.target.value)}}/>
+
+                </div>
+                <RoundedButton color="blue"
+                               onClick={changePersonalData}
+                >{t("confirm")}</RoundedButton>
+                <RoundedButton color="pink"
+                               onClick={handleChangePerData}
+                >{t("cancel")}</RoundedButton>
+            </Grid>
+            <Grid item style={{display: acLevel.includes('CLIENT') ? "block" : "none"}} className={styles.item}>
+                <Grid item style={{display: ChangAddress ? "none" : "block"}} className={styles.item}>
                     <h3>{t("address")}</h3>
+
                     <div>
                         <div>
                             <h4>{t("street")}</h4>
-                            <p>11-Listopada 28</p>
+                            <p>{clientAddr ? clientAddr.address.street : ""}</p>
                         </div>
                         <div>
                             <h4>{t("house number")}</h4>
-                            <p>23</p>
+                            <p>{clientAddr ? clientAddr.address.houseNumber : ""}</p>
                         </div>
                         <div>
                             <h4>{t("postal code")}</h4>
-                            <p>91-345</p>
+                            <p>{clientAddr ? clientAddr.address.postalCode : ""}</p>
                         </div>
                         <div>
                             <h4>{t("city")}</h4>
-                            <p>Zakopianka</p>
+                            <p>{clientAddr ? clientAddr.address.city : ""}</p>
                         </div>
                         <div>
                             <h4>{t("country")}</h4>
-                            <p>Zanzibar</p>
+                            <p>{clientAddr ? clientAddr.address.country : ""}</p>
                         </div>
-                    <RoundedButton color="blue"
-                            onClick={handleChangAddress}
-                    >{t("address change btn")}</RoundedButton>
+                        <div>
+                            <h4>{t("phone number")}</h4>
+                            <p>{clientAddr ? clientAddr.phoneNumber : ""}</p>
+                        </div>
+                        <RoundedButton color="blue"
+                                       onClick={handleChangAddress}
+                        >{t("address change btn")}</RoundedButton>
                     </div>
+
                 </Grid>
-                <Grid item  style={{display:ChangAddress  ? "block" : "none"}} className={styles['change-item']}>
+                <Grid item style={{display: ChangAddress ? "block" : "none"}} className={styles['change-item']}>
                     <h3>{t("address change")}</h3>
                     <div>
-                    <DarkedTextField 
-                        type="text" 
-                        label={t("street")}
-                        placeholder="11-Listopada 28" />
-                    <DarkedTextField 
-                        type="text" 
-                        label={t("house number")}
-                        placeholder="23" />
-                    <DarkedTextField 
-                        type="text" 
-                        label={t("postal code")}
-                        placeholder="91-345" />
-                    <DarkedTextField 
-                        type="text" 
-                        label={t("city")}
-                        placeholder="Zakopianka" />
-                    <DarkedTextField 
-                        type="text"
-                        label={t("country")} 
-                        placeholder="Zanzibar" />
+                        <DarkedTextField
+                            type="text"
+                            label={t("street")}
+                            placeholder={clientAddr ? clientAddr.address.street : ""}
+                            value={street}
+                            onChange={event => {setStreet(event.target.value)}}/>
+                        <DarkedTextField
+                            type="text"
+                            label={t("house number")}
+                            placeholder={clientAddr ? clientAddr.address.houseNumber : ""}
+                            value={houseNumber}
+                            onChange={event => {setHouseNumber(event.target.value)}}/>
+                        <DarkedTextField
+                            type="text"
+                            label={t("postal code")}
+                            placeholder={clientAddr ? clientAddr.address.postalCode : ""}
+                            value={postalCode}
+                            onChange={event => {setPostalCode(event.target.value)}}/>
+                        <DarkedTextField
+                            type="text"
+                            label={t("city")}
+                            placeholder={clientAddr ? clientAddr.address.city : ""}
+                            value={city}
+                            onChange={event => {setCity(event.target.value)}}/>
+                        <DarkedTextField
+                            type="text"
+                            label={t("country")}
+                            placeholder={clientAddr ? clientAddr.address.country : ""}
+                            value={country}
+                            onChange={event => {setCountry(event.target.value)}}/>
+                        <DarkedTextField
+                            type="text"
+                            label={t("phone number")}
+                            placeholder={clientAddr ? clientAddr.phoneNumber : ""}
+                            value={phoneNumber}
+                            onChange={event => {setPhoneNumber(event.target.value)}}/>
                     </div>
-
-                    <RoundedButton 
+                    <RoundedButton
                         color="blue"
                         onClick={changeAddress}
+                    >{t("confirm")}</RoundedButton><RoundedButton
+                    color="pink"
+                    onClick={handleChangAddress}
+                >{t("cancel")}</RoundedButton>
+
+                </Grid>
+            </Grid>
+            <Grid item style={{display: acLevel.includes('BUSINESS_WORKER') ? "block" : "none"}}
+                  className={styles.item}>
+                <Grid item style={{display: ChangePhone ? "none" : "block"}} className={styles.item}>
+                    <div>
+                        <div>
+                            <h4>{t("phone number")}</h4>
+                            <p>{businnesPhone ? businnesPhone.phoneNumber : ""}</p>
+                        </div>
+                        <RoundedButton color="blue"
+                                       onClick={handleChangePhone}
+                        >{t("phone change btn")}</RoundedButton>
+                    </div>
+
+                </Grid>
+                <Grid item style={{display: ChangePhone ? "block" : "none"}} className={styles['change-item']}>
+                    <h4>{t("phone number")}</h4>
+                    <div>
+                        <DarkedTextField
+                            type="text"
+                            label={t("phone number")}
+                            placeholder={businnesPhone ? businnesPhone.phoneNumber : ""}
+                            value={businessPhoneNumber}
+                            onChange={event => {setBusinessPhoneNumber(event.target.value)}}/>
+                    </div>
+                    <RoundedButton
+                        color="blue"
+                        onClick={changeBusinessPhone}
                     >{t("confirm")}</RoundedButton>
+                    <RoundedButton
+                        color="pink"
+                        onClick={handleChangePhone}
+                    >{t("cancel")}</RoundedButton>
                 </Grid>
 
-                <Grid item  style={{display: ChangEmail ? "none" : "block"}} className={styles.item}>
-                    <h3>{t("email")}</h3>
-                    <div>
-                        <p>BigMIke@gmail.com</p>
-                        <RoundedButton 
-                            color="blue"
-                            onClick={handleChangEmail}
-                        >{t("email change btn")}</RoundedButton>
-                    </div>
-                </Grid>
-                <Grid item  style={{display: ChangEmail ? "block" : "none"}} className={styles['change-item']}>
-                    <h3>{t("email change")}</h3>
-                    <div>
-                        <DarkedTextField 
-                            type="text"
-                            label={t("new email")} 
-                            placeholder={t("new email")} />
-                        <DarkedTextField 
-                            type="text" 
-                            label={t("new email confirm")}
-                            placeholder={t("new email confirm")} />
-                    </div>
-                    <RoundedButton 
-                        color="blue"
-                        onClick={changeEmail}
-                    >{t("confirm")}</RoundedButton>
-                </Grid>
-                <Grid item>
-                    <Link to="/panels/adminPanel/accounts">
-                        <RoundedButton color="pink">
-                            {t("go back")}
-                        </RoundedButton>
-                    </Link>
-                </Grid>
+            </Grid>
+            <Grid item>
+                <Link to="/panels/adminPanel/accounts">
+                    <RoundedButton color="pink">
+                        {t("go back")}
+                    </RoundedButton>
+                </Link>
+            </Grid>
         </Grid>
     )
 }

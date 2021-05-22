@@ -7,9 +7,20 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
+
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 
 @Entity(name = "ratings")
+@NamedQueries({
+        @NamedQuery(name= "Rating.findByCruiseGroupName", query = "SELECT r FROM ratings r WHERE r.cruiseGroup.name =:name"),
+        @NamedQuery(name= "Rating.findByCruiseGroupNameAndAccountLogin", query = "SELECT r FROM ratings r WHERE r.cruiseGroup.name=:name AND r.account.login=:login")
+})
+
 public class Rating extends BaseEntity {
 
     @Getter
@@ -17,29 +28,34 @@ public class Rating extends BaseEntity {
     @SequenceGenerator(name = "RATING_SEQ_GEN", sequenceName = "ratings_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RATING_SEQ_GEN")
     @Column(name = "id")
-    private Long id;
+    private long id;
 
     @Getter
-    @NotNull
     @OneToOne
     @JoinColumn(name = "account_id")
+    @NotNull(message = CONSTRAINT_NOT_NULL)
+    @Valid
     private Account account;
 
     @Getter
-    @NotNull
     @OneToOne
-    @JoinColumn(name = "cruise_id")
-    private Cruise cruise;
+    @JoinColumn(name = "cruise_group_id")
+    @NotNull(message = CONSTRAINT_NOT_NULL)
+    @Valid
+    private CruiseGroup cruiseGroup;
 
     @Getter
     @Setter
-    @NotNull
+    @Min(value = 1, message = RATING_CONSTRAINT_ERROR)
+    @Max(value = 5, message = RATING_CONSTRAINT_ERROR)
     @Column(name = "rating")
-    private double rating;
+    private Integer rating;
 
-    public Rating(@NotNull Account account, @NotNull Cruise cruise, @NotNull double rating) {
+    public Rating(@NotNull(message = CONSTRAINT_NOT_NULL) Account account,
+                  @NotNull(message = CONSTRAINT_NOT_NULL) CruiseGroup cruiseGroup, @
+                          NotNull(message = CONSTRAINT_NOT_NULL) Integer rating) {
         this.account = account;
-        this.cruise = cruise;
+        this.cruiseGroup = cruiseGroup;
         this.rating = rating;
     }
 

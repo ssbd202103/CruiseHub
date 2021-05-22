@@ -3,6 +3,8 @@ import {Link} from 'react-router-dom'
 import Box from '@material-ui/core/Box'
 import PasswordIcon from '@material-ui/icons/VpnKeyRounded'
 
+import { useHistory } from 'react-router-dom'
+
 import AuthLayout from '../layouts/AuthLayout'
 import DarkedTextField from '../components/DarkedTextField'
 import RoundedButton from '../components/RoundedButton'
@@ -11,27 +13,38 @@ import {useTranslation} from 'react-i18next'
 
 import styles from '../styles/auth.global.module.css'
 import axios from "axios"
-import React, {createRef} from "react"
+import React, {useState} from "react"
+
+import {useDispatch} from "react-redux";
+import {update} from '../redux/slices/tokenSlice'
+import {setUser} from '../redux/slices/userSlice'
+import {getUser} from "../Services/userService";
 
 export default function SignIn() {
     const {t} = useTranslation();
 
-    const loginRef = createRef() as React.RefObject<HTMLDivElement>
-    const passwordRef = createRef() as React.RefObject<HTMLDivElement>
+    const history = useHistory();
+
+    const dispatch = useDispatch();
+
+    const [login, setLogin] = useState('')
+    const [password, setPassword] = useState('')
 
     const auth = async () => {
         const json = JSON.stringify({
-            login: loginRef?.current?.querySelector('input')?.value,
-            password: passwordRef?.current?.querySelector('input')?.value
+            login: login,
+            password: password
         })
 
-        let response = await axios.post('http://localhost:8080/cruisehub/api/signin', json, {
+        let response = await axios.post('http://localhost:8080/api/auth/sign-in', json, {
             headers: {
                 'Content-Type': 'application/json'
             }
         })
 
-        window.localStorage.setItem('token', response.data)
+        await getUser(response.data)
+
+        history.push('/')
     }
 
 
@@ -48,7 +61,9 @@ export default function SignIn() {
                             margin: '20px 0'
                         }}
                         placeholder="login"
-                        ref={loginRef}
+                        value={login}
+                        onChange={event => {setLogin(event.target.value)}}
+                        colorIgnored
                     />
 
                     <DarkedTextField 
@@ -60,7 +75,9 @@ export default function SignIn() {
                         }} 
                         icon={(<PasswordIcon />)}
                         placeholder="1234567890"
-                        ref={passwordRef}
+                        value={password}
+                        onChange={event => {setPassword(event.target.value)}}
+                        colorIgnored
                     />
 
                     <Box style={{

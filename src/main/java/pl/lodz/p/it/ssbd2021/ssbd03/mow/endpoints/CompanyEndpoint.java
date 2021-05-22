@@ -1,12 +1,13 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CompanyLightDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.converters.CompanyMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.managers.CompanyManagerLocal;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
-import javax.ejb.Stateless;
+import javax.inject.Inject;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,11 +16,11 @@ import java.util.stream.Collectors;
  */
 @Stateful
 public class CompanyEndpoint implements CompanyEndpointLocal {
-    @EJB
+    @Inject
     private CompanyManagerLocal companyManager;
 
     @Override
-    public List<CompanyLightDto> getCompaniesInfo() {
+    public List<CompanyLightDto> getCompaniesInfo() throws BaseAppException {
         return companyManager.getAllCompanies().stream().map(CompanyMapper::mapCompanyToCompanyLightDto).collect(Collectors.toList());
     }
 }

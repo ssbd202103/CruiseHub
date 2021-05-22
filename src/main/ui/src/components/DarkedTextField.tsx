@@ -1,15 +1,49 @@
-import { 
-    TextField,
-    InputAdornment
-} from '@material-ui/core'
-import { makeStyles } from '@material-ui/styles'
+import {InputAdornment, TextField} from '@material-ui/core'
+import {makeStyles} from '@material-ui/styles'
 import * as React from 'react'
+import {useSelector} from "react-redux";
+import {selectDarkMode} from "../redux/slices/userSlice";
 
 const useStyles = makeStyles(theme => ({
-    root: {
+    light: {
         borderColor: 'var(--dark)',
+        color: 'var(--dark)',
         '& input:focus:focus + fieldset': {
             borderColor: 'var(--dark)'
+        },
+        '& input': {
+            color: 'var(--dark)'
+        },
+        '& input + fieldset': {
+            borderColor: 'var(--dark)'
+        },
+        '&:hover input + fieldset': {
+            borderColor: 'var(--dark)'
+        },
+        '& .MuiInputLabel-root': {
+            color: 'var(--dark-light)'
+        }
+    },
+    dark: {
+        borderColor: 'var(--white)',
+        color: 'var(--white)',
+        '& input:focus:focus + fieldset': {
+            borderColor: 'var(--white)'
+        },
+        '& input + fieldset': {
+            borderColor: 'var(--white)'
+        },
+        '& input': {
+            color: 'var(--white)'
+        },
+        '& input::placeholder': {
+            color: 'var(--white)'
+        },
+        '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
+            borderColor: 'var(--white)'
+        },
+        '& .MuiInputLabel-root': {
+            color: 'var(--white-dark)'
         }
     }
 }))
@@ -23,7 +57,6 @@ const labelStyle = {
     style: {
         fontFamily: "'Montserrat', sans-serif",
         fontSize: '1.1rem',
-        color: 'var(--dark)'
     }
 }
 
@@ -33,10 +66,13 @@ export interface DarkedTextFieldProps {
     readonly icon?: JSX.Element,
     readonly placeholder?: string,
     readonly label?: string,
-    readonly style?: React.CSSProperties
+    readonly style?: React.CSSProperties,
+    readonly value?: any,
+    readonly colorIgnored?: boolean,
+    onChange?(event: React.ChangeEvent<HTMLInputElement>): void
 }
 
-const DarkedTextField = React.forwardRef((props: DarkedTextFieldProps, ref) => {
+const DarkedTextField = (props: DarkedTextFieldProps) => {
 
         const classes = useStyles()
 
@@ -47,11 +83,16 @@ const DarkedTextField = React.forwardRef((props: DarkedTextFieldProps, ref) => {
             placeholder,
             label,
             style,
+            value,
+            onChange,
+            colorIgnored
         } = props
+
+        const darkMode = useSelector(selectDarkMode)
 
         return (<TextField
             type={type || "text"}
-            className={classes.root + ' ' + (styles || "")}
+            className={classes[(!colorIgnored && darkMode) ? 'dark' : 'light'] + ' ' + (styles || "")}
             variant="outlined"
             label={label || ""}
             InputProps={{
@@ -65,8 +106,9 @@ const DarkedTextField = React.forwardRef((props: DarkedTextFieldProps, ref) => {
             InputLabelProps={labelStyle}
             placeholder={placeholder || ""}
             style={style || undefined}
-            ref={ref as React.RefObject<HTMLDivElement>}
+            value={value}
+            onChange={onChange}
         />)
-    });
+    };
 
 export default DarkedTextField;

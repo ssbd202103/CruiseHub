@@ -5,9 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccessLevelDetailsViewDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.CompanyName;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.PhoneNumber;
-
-import javax.validation.constraints.NotEmpty;
 
 @NoArgsConstructor
 @Getter
@@ -19,11 +18,12 @@ public class BusinessWorkerDetailsViewDto extends AccessLevelDetailsViewDto {
 
     private boolean confirmed;
 
-    @NotEmpty
+    @CompanyName
     private String companyName;
 
-    public BusinessWorkerDetailsViewDto(boolean enabled, String phoneNumber, boolean confirmed, String companyName) {
-        super(enabled, AccessLevelType.BUSINESS_WORKER);
+
+    public BusinessWorkerDetailsViewDto(boolean enabled, String phoneNumber, boolean confirmed, String companyName,long accLevelVersion) {
+        super(enabled, AccessLevelType.BUSINESS_WORKER,accLevelVersion);
         this.phoneNumber = phoneNumber;
         this.confirmed = confirmed;
         this.companyName = companyName;

@@ -3,66 +3,94 @@ package pl.lodz.p.it.ssbd2021.ssbd03.entities.mow;
 import lombok.Getter;
 import lombok.Setter;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
-
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.UUID;
+
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_EMPTY;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
+import static pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper.NAME_CONSTRAINT;
+import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise.UUID_CONSTRAINT;
 
 @Entity(name = "cruises")
+@NamedQueries({
+        @NamedQuery(name = "Cruise.findByUUID", query = "SELECT c FROM cruises c WHERE c.uuid = :uuid")
+})
+@Table(
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "uuid", name = UUID_CONSTRAINT),
+
+        }
+)
 public class Cruise extends BaseEntity {
+
+    public static final String UUID_CONSTRAINT = "cruises_uuid_unique_constraint";
 
     @Getter
     @Id
     @SequenceGenerator(name = "CRUISE_SEQ_GEN", sequenceName = "cruises_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CRUISE_SEQ_GEN")
     @Column(name = "id")
-    private Long id;
+    private long id;
+
+
+    @Getter
+    @NotNull(message = CONSTRAINT_NOT_NULL)
+    @Column(name = "uuid", nullable = false, unique = true, updatable = false)
+    private UUID uuid;
 
     @Getter
     @Setter
-    @NotNull
+    @NotNull(message = CONSTRAINT_NOT_NULL)
     @Column(name = "start_date")
     private LocalDateTime startDate;
 
     @Getter
     @Setter
-    @NotNull
+    @NotNull(message = CONSTRAINT_NOT_NULL)
     @Column(name = "end_date")
     private LocalDateTime endDate;
 
     @Getter
     @Setter
-    @NotNull
     @Column(name = "active")
     private boolean active;
 
     @Getter
     @Setter
-    @NotNull
+    @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
     @Column(name = "description")
     private String description;
 
     @Getter
     @Setter
-    @NotNull
+    @NotNull(message = CONSTRAINT_NOT_NULL)
     @Column(name = "available")
-    private Boolean available;
+    private boolean available;
 
     @Getter
     @Setter
-    @NotNull
     @OneToOne
     @JoinColumn(name = "cruises_group_id")
+    @NotNull(message = CONSTRAINT_NOT_NULL)
+    @Valid
     private CruiseGroup cruisesGroup;
 
-    public Cruise(@NotNull LocalDateTime startDate, @NotNull LocalDateTime endDate, @NotNull boolean active, @NotNull String description, @NotNull Boolean available, @NotNull CruiseGroup cruisesGroup) {
+    public Cruise(LocalDateTime startDate, LocalDateTime endDate, boolean active,
+                  String description, boolean available, CruiseGroup cruisesGroup) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.active = active;
         this.description = description;
         this.available = available;
         this.cruisesGroup = cruisesGroup;
+        this.uuid = UUID.randomUUID();
     }
 
     public Cruise() {

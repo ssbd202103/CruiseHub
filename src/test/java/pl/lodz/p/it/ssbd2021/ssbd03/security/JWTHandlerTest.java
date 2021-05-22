@@ -1,7 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.security;
 
 import com.auth0.jwt.JWT;
-import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -54,7 +53,7 @@ class JWTHandlerTest {
             assertDoesNotThrow(() -> JWTHandler.validateToken(token));
 
             String editedToken = token.replaceAll(".{3}(?=$)", "zzz"); //changing last 3 signs of token's signature
-            assertThrows(JWTVerificationException.class, () -> JWTHandler.validateToken(editedToken));
+            assertThrows(JWTException.class, () -> JWTHandler.validateToken(editedToken));
         }
     }
 

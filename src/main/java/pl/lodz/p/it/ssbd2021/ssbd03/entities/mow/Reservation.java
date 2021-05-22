@@ -7,10 +7,22 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.ArrayList;
 import java.util.List;
 
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
+
+    //TODO sprawdzenie i powprawnienie Reservation.findWorkerCruiseReservations query
+@NamedQueries({
+        @NamedQuery(name = "Reservation.findByID", query = "SELECT reservation FROM reservations reservation WHERE reservation.id = :id"),
+        @NamedQuery(name = "Reservation.findCruiseReservations", query = "SELECT reservation FROM reservations reservation WHERE reservation.cruise = :id"),
+       //todo change query so you can get reserwation that is in the criuse that is in the cruise group that i sowned by company that the Buissner worker is working for
+        // @NamedQuery(name = "Reservation.findWorkerCruiseReservations", query = "SELECT reservation FROM reservations reservation WHERE reservation.cruise = :id and reservation.cruise IN (SELECT id FROM cruises WHERE cruises_groups.id IN (SELECT id FROM cruises_groups WHERE company.id IN (SELECT id FROM companies WHERE companies.id IN (select business_workers.company FROM business_workers WHERE id = :id))) ) ")
+})
 @Entity(name = "reservations")
 public class Reservation extends BaseEntity {
 
@@ -19,40 +31,46 @@ public class Reservation extends BaseEntity {
     @SequenceGenerator(name = "RESERVATION_SEQ_GEN", sequenceName = "reservations_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RESERVATION_SEQ_GEN")
     @Column(name = "id")
-    private Long id;
+    private long id;
 
     @Getter
     @Setter
-    @NotNull
+    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
     @Column(name = "number_of_seats")
-    private Long numberOfSeats;
+    private long numberOfSeats;
 
     @Getter
-    @NotNull
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name = "cruise_id")
+    @NotNull(message = CONSTRAINT_NOT_NULL)
+    @Valid
     private Cruise cruise;
 
     @Getter
-    @NotNull
+    @Setter
+    @Positive(message = CONSTRAINT_POSITIVE_ERROR)
+    @Column(name = "price")
+    private Double price;
+
+    @Getter
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name = "client_id")
+    @NotNull(message = CONSTRAINT_NOT_NULL)
+    @Valid
     private Client client;
 
     @Getter
-    @NotNull
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     @JoinTable(name = "reservation_attractions",
             joinColumns = @JoinColumn(name = "reservation_id"),
             inverseJoinColumns = @JoinColumn(name = "attraction_id")
     )
-    private List<Attraction> attractions = new ArrayList<>();
+    private final List<Attraction> attractions = new ArrayList<>();
 
-    public Reservation(@NotNull Long numberOfSeats, @NotNull Cruise cruise, @NotNull Client client, @NotNull List<Attraction> attractions) {
+    public Reservation(long numberOfSeats, Cruise cruise, Client client) {
         this.numberOfSeats = numberOfSeats;
         this.cruise = cruise;
         this.client = client;
-        this.attractions = attractions;
     }
 
     public Reservation() {

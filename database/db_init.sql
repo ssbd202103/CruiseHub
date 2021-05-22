@@ -19,42 +19,42 @@ insert into alter_types(id, name)
 values (-3, 'DELETE');
 --alter_types end
 
--- accounts start ||| password is 12345678
-insert into accounts(id, first_name, second_name, login, email, password_hash, confirmed, active,
+-- accounts start ||| password is abcABC123*
+insert into accounts(id, first_name, second_name, login, email, password_hash, confirmed, active, dark_mode,
                      last_incorrect_authentication_date_time, last_incorrect_authentication_logical_address,
                      last_correct_authentication_date_time, last_correct_authentication_logical_address,
                      language_type_id,
                      creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id, version)
 values (-1, 'Richard', 'Branson', 'rbranson', 'rbranson@gmail.com',
-        'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f',
-        true, true, null, null, null, null, -1, now(), now(), -2, -1, -1, 0);
+        '70417c6b38327eddd1f5ee5633d8b90ab06398ebb4461c8ebcdc5b22bf7a6578',
+        true, true, false, null, null, null, null, -1, now(), now(), -2, -1, -1, 0);
 
-insert into accounts(id, first_name, second_name, login, email, password_hash, confirmed, active,
+insert into accounts(id, first_name, second_name, login, email, password_hash, confirmed, active, dark_mode,
                      last_incorrect_authentication_date_time, last_incorrect_authentication_logical_address,
                      last_correct_authentication_date_time, last_correct_authentication_logical_address,
                      language_type_id,
                      creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id, version)
 values (-2, 'Elon', 'Musk', 'emusk', 'emusk@gmail.com',
-        'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f',
-        true, true, null, null, null, null, -1, now(), now(), -2, -2, -2, 0);
+        '70417c6b38327eddd1f5ee5633d8b90ab06398ebb4461c8ebcdc5b22bf7a6578',
+        true, true, false, null, null, null, null, -1, now(), now(), -2, -2, -2, 0);
 
-insert into accounts(id, first_name, second_name, login, email, password_hash, confirmed, active,
+insert into accounts(id, first_name, second_name, login, email, password_hash, confirmed, active, dark_mode,
                      last_incorrect_authentication_date_time, last_incorrect_authentication_logical_address,
                      last_correct_authentication_date_time, last_correct_authentication_logical_address,
                      language_type_id,
                      creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id, version)
 values (-3, 'Jeff', 'Bezos', 'jbezos', 'jbezos@gmail.com',
-        'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f',
-        true, true, null, null, null, null, -1, now(), now(), -2, -3, -3, 0);
+        '70417c6b38327eddd1f5ee5633d8b90ab06398ebb4461c8ebcdc5b22bf7a6578',
+        true, true, false, null, null, null, null, -1, now(), now(), -2, -3, -3, 0);
 
-insert into accounts(id, first_name, second_name, login, email, password_hash, confirmed, active,
+insert into accounts(id, first_name, second_name, login, email, password_hash, confirmed, active, dark_mode,
                      last_incorrect_authentication_date_time, last_incorrect_authentication_logical_address,
                      last_correct_authentication_date_time, last_correct_authentication_logical_address,
                      language_type_id,
                      creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id, version)
 values (-4, 'Mark', 'Zuckerberg', 'mzuckerberg', 'mzuckerberg@gmail.com',
-        'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f',
-        true, true, null, null, null, null, -1, now(), now(), -2, -4, -4, 0);
+        '70417c6b38327eddd1f5ee5633d8b90ab06398ebb4461c8ebcdc5b22bf7a6578',
+        true, true, false, null, null, null, null, -1, now(), now(), -2, -4, -4, 0);
 -- accounts end
 --
 --
@@ -180,50 +180,36 @@ values (-3, 'PearlHarbort.jpg', null, now(), now(), -2, -1, -1, 0);
 --
 --
 --
---commercial_types start
---commercial_types 1
-insert into commercial_types(id, name)
-values (-1, 'None');
---commercial_types 2
-insert into commercial_types(id, name)
-values (-2, 'Normal');
---commercial_types 3
-insert into commercial_types(id, name)
-values (-3, 'Premium');
---commercial_types end
---
---
---
 --cruises_groups start
-insert into cruises_groups(id, company_id, name, number_of_seats, price, start_address_id, average_rating,
+insert into cruises_groups(id, company_id, name, number_of_seats, price, start_address_id, average_rating, active,
                            creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id,
                            version)
-values (-1, -1, 'Przygoda', 24, 52, -1, 2.5, now(), now(), -2, -1, -1, 0);
-insert into cruises_groups(id, company_id, name, number_of_seats, price, start_address_id, average_rating,
+values (-1, -1, 'Przygoda', 24, 52, -1, 2.5, true, now(), now(), -2, -1, -1, 0);
+insert into cruises_groups(id, company_id, name, number_of_seats, price, start_address_id, average_rating, active,
                            creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id,
                            version)
-values (-2, -3, 'Santa Maria Beach', 42, 152, -2, 4.5, now(), now(), -2, -1, -1, 0);
-insert into cruises_groups(id, company_id, name, number_of_seats, price, start_address_id, average_rating,
+values (-2, -3, 'Santa Maria Beach', 42, 152, -2, 4.5, true, now(), now(), -2, -1, -1, 0);
+insert into cruises_groups(id, company_id, name, number_of_seats, price, start_address_id, average_rating, active,
                            creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id,
                            version)
-values (-3, -2, 'Beautiful Sandy Shores', 31, 502, -4, 5, now(), now(), -2, -1, -1, 0);
+values (-3, -2, 'Beautiful Sandy Shores', 31, 502, -4, 5, true, now(), now(), -2, -1, -1, 0);
 --cruises_groups end
 --
 --
 --
 --cruises start
-insert into cruises(id, start_date, end_date, active, description, cruises_group_id, available, creation_date_time,
+insert into cruises(id, uuid,start_date, end_date, active, description, cruises_group_id, available, creation_date_time,
                     last_alter_date_time, alter_type_id, created_by_id,
                     altered_by_id, version)
-values (-1, now(), now(), true, 'Beautiful tour', -1, true, now(), now(), -2, -1, -1, 0);
-insert into cruises(id, start_date, end_date, active, description, cruises_group_id, available, creation_date_time,
+values (-1, '581d626f-d421-47dd-89ef-b41bc30aa36c',now(), now(), true, 'Beautiful tour', -1, true, now(), now(), -2, -1, -1, 0);
+insert into cruises(id, uuid, start_date, end_date, active, description, cruises_group_id, available, creation_date_time,
                     last_alter_date_time, alter_type_id, created_by_id,
                     altered_by_id, version)
-values (-2, now(), now(), false, 'Beautiful Beautiful tour', -2, true, now(), now(), -2, -1, -1, 0);
-insert into cruises(id, start_date, end_date, active, description, cruises_group_id, available, creation_date_time,
+values (-2, '181d626f-d421-47dd-89ef-b41bc30aa36c', now(), now(), false, 'Beautiful Beautiful tour', -2, true, now(), now(), -2, -1, -1, 0);
+insert into cruises(id, uuid, start_date, end_date, active, description, cruises_group_id, available, creation_date_time,
                     last_alter_date_time, alter_type_id, created_by_id,
                     altered_by_id, version)
-values (-3, now(), now(), true, 'The most Beautiful tour', -3, false, now(), now(), -2, -1, -1, 0);
+values (-3, '481d626f-d421-47dd-89ef-b41bc30aa36c', now(), now(), true, 'The most Beautiful tour', -3, false, now(), now(), -2, -1, -1, 0);
 --cruises end
 --
 --
@@ -247,32 +233,32 @@ values (-3, 'Romantic dinner', 'Romantic dinner on the most beautiful Sandy Shor
 --
 --
 --reservation start
-insert into reservations(id, client_id, number_of_seats, cruise_id, creation_date_time, last_alter_date_time,
+insert into reservations(id, client_id, number_of_seats, cruise_id,price, creation_date_time, last_alter_date_time,
                          alter_type_id, created_by_id,
                          altered_by_id, version)
-values (-1, -2, 2, -1, now(), now(), -2, -1, -1, 0);
-insert into reservations(id, client_id, number_of_seats, cruise_id, creation_date_time, last_alter_date_time,
+values (-1, -2, 2, -1,50, now(), now(), -2, -1, -1, 0);
+insert into reservations(id, client_id, number_of_seats, cruise_id,price, creation_date_time, last_alter_date_time,
                          alter_type_id, created_by_id,
                          altered_by_id, version)
-values (-2, -2, 5, -2, now(), now(), -2, -1, -1, 0);
-insert into reservations(id, client_id, number_of_seats, cruise_id, creation_date_time, last_alter_date_time,
+values (-2, -2, 5, -2,20, now(), now(), -2, -1, -1, 0);
+insert into reservations(id, client_id, number_of_seats, cruise_id,price, creation_date_time, last_alter_date_time,
                          alter_type_id, created_by_id,
                          altered_by_id, version)
-values (-3, -2, 1, -3, now(), now(), -2, -1, -1, 0);
+values (-3, -2, 1, -3,30, now(), now(), -2, -1, -1, 0);
 --reservation end
 --
 --
 --
 --ratings start
-insert into ratings(id, account_id, cruise_id, rating, creation_date_time, last_alter_date_time, alter_type_id,
+insert into ratings(id, account_id, cruise_group_id, rating, creation_date_time, last_alter_date_time, alter_type_id,
                     created_by_id,
                     altered_by_id, version)
 values (-1, -2, -1, 3, now(), now(), -2, -1, -1, 0);
-insert into ratings(id, account_id, cruise_id, rating, creation_date_time, last_alter_date_time, alter_type_id,
+insert into ratings(id, account_id, cruise_group_id, rating, creation_date_time, last_alter_date_time, alter_type_id,
                     created_by_id,
                     altered_by_id, version)
 values (-2, -1, -2, 4.5, now(), now(), -2, -1, -1, 0);
-insert into ratings(id, account_id, cruise_id, rating, creation_date_time, last_alter_date_time, alter_type_id,
+insert into ratings(id, account_id, cruise_group_id, rating, creation_date_time, last_alter_date_time, alter_type_id,
                     created_by_id,
                     altered_by_id, version)
 values (-3, -3, -3, 5, now(), now(), -2, -1, -1, 0);
@@ -294,23 +280,6 @@ insert into comments (id, account_id, cruise_id, comment, creation_date_time, la
                       altered_by_id, version)
 values (-3, -3, -3, 'It is the most beatufiul travel in the the Wolrd', now(), now(), -2, -1, -1, 0);
 --comments end
---
---
---
---commercials start
-insert into commercials (id, commercial_type_id, cruises_group_id, start_date, end_date, creation_date_time,
-                         last_alter_date_time, alter_type_id, created_by_id,
-                         altered_by_id, version)
-values (-1, -1, -1, now(), now(), now(), now(), -2, -1, -1, 0);
-insert into commercials (id, commercial_type_id, cruises_group_id, start_date, end_date, creation_date_time,
-                         last_alter_date_time, alter_type_id, created_by_id,
-                         altered_by_id, version)
-values (-2, -2, -2, now(), now(), now(), now(), -2, -1, -1, 0);
-insert into commercials (id, commercial_type_id, cruises_group_id, start_date, end_date, creation_date_time,
-                         last_alter_date_time, alter_type_id, created_by_id,
-                         altered_by_id, version)
-values (-3, -3, -3, now(), now(), now(), now(), -2, -1, -1, 0);
---commercials end
 --
 --
 --

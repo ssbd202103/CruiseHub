@@ -19,6 +19,7 @@ const resources = {
             "cruises": "Wycieczki",
             "my cruises": "Moje wycieczki",
             "phone": "Telefon",
+            "cancel": "Anuluj",
             //signin
             "signin": "Zaloguj się",
             "signin.welcome": "Witamy ponownie",
@@ -41,7 +42,7 @@ const resources = {
             "phone number": "Numer telefonu",
             "personal data change btn": "Edytuj dane personalne",
             "personal data change": "Edycja danych personalnych",
-            "address": "Adres",
+            "address": "Dane adresowe",
             "street": "Ulica",
             "house number": "Numer domu",
             "postal code": "Kod pocztowy",
@@ -59,13 +60,16 @@ const resources = {
             "new password": "Wprowadź nowe hasło",
             "new password confirm": "Potwierdź nowe hasło",
             //workerPanel
-            "worker panel": "Panel pracownika",
+            "workerPanel": "Panel pracownika",
             //adminPanel
-            "admin panel": "Panel administracyjny",
+            "search account": "Wyszukać konto",
+            "adminPanel": "Panel administracyjny",
             "login": "Login",
+            "first name": "Imię",
+            "last name": "Nazwisko",
             "active": "Aktywny",
             "access level": "Poziom dostępu",
-            "moderator panel": "Panel moderatora",
+            "moderatorPanel": "Panel moderatora",
             "list accounts": "Lista kont",
             "edit": "Edytuj dane",
             "change password": "Zmień hasło",
@@ -78,9 +82,13 @@ const resources = {
             "grant access level": "Przydziel poziom dostępu",
             "change access level state": "Zmień stan poziomu dostępu",
             //panels.clientPanel
-            "client panel": "Panel klienta",
+            "clientPanel": "Panel klienta",
             //verify
             "verifyAccount": "Zweryfikuj konto",
+            //color
+            "color": "Kolor",
+            "color.light": "Jasny",
+            "color.dark": "Ciemny",
             //errors
             "error.facade.noSuchElement": "Nie znaleziono elementu w bazie danych",
             "error.account.accessLevels.alreadyAssigned": "Poziom dostępu jest już przydzielony do konta",
@@ -95,8 +103,23 @@ const resources = {
             "error.password.reset.wrongIdentity": "Żądanie zawiera złą tożsamość",
             "error.email.incorrect": "Address email jest niepoprawny",
             "error.emailService.inaccessible": "Serwis pocztowy jest niedostępny",
-            "error.password.reset.contentError": "Błędna zawartość tokenu do resetowania hasła"
+            "error.password.reset.contentError": "Błędna zawartość tokenu do resetowania hasła",
+			"error.password.change.oldPasswordError": "Podane stare hasło jest niepoprawne",
 
+            ////regex errors
+            "error.regex.postCode": "Niepoprawny format kodu pocztowego",
+            "error.regex.city": "Niepoprawny format miasta",
+            "error.regex.country": "Niepoprawny format państwa",
+            "error.regex.street": "Niepoprawny format ulicy",
+            "error.regex.phoneNumber": "Niepoprawny format numeru telefonu",
+            "error.regex.login": "Niepoprawny format loginu",
+            "error.regex.password": "Niepoprawny format hasła",
+            "error.regex.name": "Niepoprawny format imienia",
+            "error.regex.companyName": "Niepoprawny format nazwy firmy",
+            "phone change btn": "Zmień numer telefonu",
+
+            //else
+            'error.emptypanellist': 'Nie masz żadnych paneli do sterowania'
         }
     },
     en: {
@@ -116,6 +139,7 @@ const resources = {
             "cruises": "Cruises",
             "my cruises": "My cruises",
             "phone": "Phone",
+            "cancel": "Cancel",
             //signin
             "signin": "Sign in",
             "signin.welcome": "Welcome back",
@@ -138,14 +162,14 @@ const resources = {
             "phone number": "Phone Number",
             "personal data change btn": "Edit personal data",
             "personal data change": "Editing personal data",
-            "address": "Address",
+            "address": "Address data",
             "street": "Street",
             "house number": "House number",
             "postal code": "Postal code",
             "city": "City",
             "country": "Country",
             "address change btn": "Edit address",
-            "address change": "Editing address",
+            "address change": "Editing address data",
             "email change btn": "Change e-mail",
             "email change": "Editing e-mail",
             "new email": "Insert a new e-mail",
@@ -156,10 +180,13 @@ const resources = {
             "new password": "Insert a new password",
             "new password confirm": "Confirm the new password",
             //workerPanel
-            "worker panel": "Worker panel",
+            "workerPanel": "Worker panel",
             //adminPanel
-            "admin panel": "Administrator panel",
+            "adminPanel": "Administrator panel",
+            "search account": "Search account",
             "login": "Login",
+            "first name": "First name",
+            "last name": "Last name",
             "active": "Active",
             "access level": "Access level",
             "list accounts": "Accounts list",
@@ -175,9 +202,13 @@ const resources = {
             "unblock": "Unblock account",
             "grand access level": "Grand access level",
             //panels.clientPanel
-            "clientPanelH2": "Client panel",
+            "clientPanel": "Client panel",
             //verify
             "verifyAccount": "Verify account",
+            //color
+            "color": "Color",
+            "color.light": "Light",
+            "color.dark": "Dark",
             //errors
             "error.facade.noSuchElement": "No such element found in the database",
             "error.account.accessLevels.alreadyAssigned": "Access level already assigned to the account",
@@ -191,8 +222,22 @@ const resources = {
             "error.parsing.serialization": "Received data could not be serialized properly",
             "error.password.reset.wrongIdentity": "Request contains wrong identity",
             "error.email.incorrect": "Email address is incorrect",
-            "error.password.reset.contentError": "Błędna zawartość tokenu do resetowania hasła"
+            "error.password.reset.contentError": "Invalid password reset token content",
+            "error.password.change.oldPasswordError": "Inserted old password is invalid",
 
+            ////regex errors
+            "error.regex.postCode": "Invalid post code format",
+            "error.regex.city": "Invalid city format",
+            "error.regex.country": "Invalid country format",
+            "error.regex.street": "Invalid street format",
+            "error.regex.phoneNumber": "Invalid phone number format",
+            "error.regex.login": "Invalid login format",
+            "error.regex.password": "Invalid password format",
+            "error.regex.name": "Invalid name format",
+            "error.regex.companyName": "Invalid company name format",
+            "phone change btn": "Change phone number",
+
+            'error.emptypanellist': "You don't have any panel to manage"
         }
     }
 }

@@ -1,31 +1,12 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AccountChangeEmailDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AdministratorChangeDataDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.BusinessWorkerChangeDataDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.ClientChangeDataDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.ModeratorChangeDataDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.UnblockAccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.ChangeAccessLevelStateDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.BlockAccountDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherAccountChangeDataDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherBusinessWorkerChangeDataDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.OtherClientChangeDataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.GrantAccessLevelDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccountDetailsViewDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AccountChangeEmailDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.AccountEndpointLocal;
@@ -34,40 +15,21 @@ import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 
 import javax.ejb.EJB;
-import javax.ejb.EJBException;
 import javax.enterprise.context.RequestScoped;
-import javax.print.attribute.standard.Media;
-import javax.persistence.OptimisticLockException;
-import javax.persistence.OptimisticLockException;
+import javax.inject.Inject;
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import static javax.ws.rs.core.Response.Status.*;
-import static javax.ws.rs.core.Response.Status.*;
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ETAG_IDENTITY_INTEGRITY_ERROR;
-
-import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
-import static javax.ws.rs.core.Response.Status.NOT_FOUND;
-
-import static javax.ws.rs.core.Response.Status.*;
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ETAG_IDENTITY_INTEGRITY_ERROR;
-
 import java.util.List;
 
-import static javax.ws.rs.core.Response.Status.*;
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ETAG_IDENTITY_INTEGRITY_ERROR;
-
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.security.ETagFilterBinding;
-import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
-import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
-
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ETAG_IDENTITY_INTEGRITY_ERROR;
+import static javax.ws.rs.core.Response.Status.NOT_ACCEPTABLE;
+import static javax.ws.rs.core.Response.Status.NOT_FOUND;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
+import static pl.lodz.p.it.ssbd2021.ssbd03.controllers.TransactionRepeater.tryAndRepeat;
 
 /**
  * Klasa która udostępnia api RESTowe do wykonania operacji na kontach użytkowników, oraz zajmuje się walidacją danych.
@@ -75,8 +37,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ETAG_IDENTITY_INTEGRITY_E
 @Path("/account")
 @RequestScoped
 public class AccountController {
-
-    @EJB
+    @Inject
     private AccountEndpointLocal accountEndpoint;
 
     /**
@@ -89,14 +50,10 @@ public class AccountController {
     @GET
     @Path("/{login}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAccountByLogin(@PathParam("login") @Login String login) {
-        try {
-            AccountDto account = accountEndpoint.getAccountByLogin(login);
-            String ETag = accountEndpoint.getETagFromSignableEntity(account);
-            return Response.ok().entity(account).header("ETag", ETag).build();
-        } catch (BaseAppException e) {
-            return Response.status(NOT_FOUND).entity(e.getMessage()).build();
-        }
+    public Response getAccountByLogin(@PathParam("login") @Login String login) throws BaseAppException {
+        AccountDto account = tryAndRepeat(() -> accountEndpoint.getAccountByLogin(login));
+        String ETag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
+        return Response.ok().entity(account).header("ETag", ETag).build();
     }
 
     /**
@@ -106,90 +63,50 @@ public class AccountController {
      * @return Odpowiedź serwera z reprezentacją JSON obiektu użytkownika
      */
     @GET
-    @Path("/details-view/{login}")
+    @Path("/details/{login}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAccountDetailsByLogin(@PathParam("login") String login) {
-        try {
-            AccountDetailsViewDto account = accountEndpoint.getAccountDetailsByLogin(login);
-            return Response.ok().entity(account).build();
-        } catch (BaseAppException e) {
-            return Response.status(NOT_FOUND).entity(e.getMessage()).build();
-        }
+    public AccountDetailsViewDto getAccountDetailsByLogin(@PathParam("login") String login) throws BaseAppException {
+        return tryAndRepeat(() -> accountEndpoint.getAccountDetailsByLogin(login));
     }
+
     @GET
     @Path("/client/{login}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getClientByLogin(@PathParam("login") @Login String login) throws BaseAppException {
-        try {
-            ClientDto client = accountEndpoint.getClientByLogin(login);
-            String Etag = accountEndpoint.getETagFromSignableEntity(client);
-            return Response.ok().entity(client).header("ETag", Etag).build();
-        } catch (BaseAppException e) {
-            return Response.status(NOT_FOUND).entity(e.getMessage()).build();
-        }
+        ClientDto client = tryAndRepeat(() -> accountEndpoint.getClientByLogin(login));
+        String ETag = EntityIdentitySignerVerifier.calculateEntitySignature(client);
+        return Response.ok().entity(client).header("ETag", ETag).build();
     }
 
     @GET
-    @Path("/businessworker/{login}")
+    @Path("/business-worker/{login}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBusinessWorkerByLogin(@PathParam("login") @Login String login) throws BaseAppException {
-        try {
-            BusinessWorkerDto businessWorker = accountEndpoint.getBusinessWorkerByLogin(login);
-            String ETag = accountEndpoint.getETagFromSignableEntity(businessWorker);
-            return Response.ok().entity(businessWorker).header("ETag", ETag).build();
-        } catch (BaseAppException e) {
-            return Response.status(NOT_FOUND).entity(e.getMessage()).build();
-        }
+        BusinessWorkerDto businessWorker = tryAndRepeat(() -> accountEndpoint.getBusinessWorkerByLogin(login));
+        String ETag = EntityIdentitySignerVerifier.calculateEntitySignature(businessWorker);
+        return Response.ok().entity(businessWorker).header("ETag", ETag).build();
     }
 
     @GET
     @Path("/moderator/{login}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getModeratorByLogin(@PathParam("login") @Login String login) throws BaseAppException {
-        try {
-            ModeratorDto moderator = accountEndpoint.getModeratorByLogin(login);
-            String ETag = accountEndpoint.getETagFromSignableEntity(moderator);
-            return Response.ok().entity(moderator).header("ETag", ETag).build();
-        } catch (BaseAppException e) {
-            return Response.status(NOT_FOUND).entity(e.getMessage()).build();
-        }
+        ModeratorDto moderator = tryAndRepeat(() -> accountEndpoint.getModeratorByLogin(login));
+        String ETag = EntityIdentitySignerVerifier.calculateEntitySignature(moderator);
+        return Response.ok().entity(moderator).header("ETag", ETag).build();
     }
 
     @GET
     @Path("/administrator/{login}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAdministratorByLogin(@PathParam("login") @Login String login) throws BaseAppException {
+    public Response getAdministratorByLogin(@PathParam("login") @Login String login) {
         try {
-            AdministratorDto administrator = accountEndpoint.getAdministratorByLogin(login);
-            String ETag = accountEndpoint.getETagFromSignableEntity(administrator);
+            AdministratorDto administrator = tryAndRepeat(() -> accountEndpoint.getAdministratorByLogin(login));
+            String ETag = EntityIdentitySignerVerifier.calculateEntitySignature(administrator);
             return Response.ok().entity(administrator).header("ETag", ETag).build();
         } catch (BaseAppException e) {
             return Response.status(NOT_FOUND).entity(e.getMessage()).build();
         }
-    }
-
-    /**
-     * Stwórz nowe konto z poziomem dostępu Klient
-     *
-     * @param clientForRegistrationDto Zbiór danych niezbędnych dla stworzenia konta z poziomem dostępu Klient
-     */
-    @POST
-    @Path("/client/registration")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void createClient(@Valid @NotNull ClientForRegistrationDto clientForRegistrationDto) throws BaseAppException {
-        accountEndpoint.createClientAccount(clientForRegistrationDto);
-    }
-
-    /**
-     * Stwórz nowe konto z poziomem dostępu Pracownik firmy
-     *
-     * @param businessWorkerForRegistrationDto Zbiór danych niezbędnych dla stworzenia konta z poziomem dostępu Pracownik firmy
-     */
-    @POST
-    @Path("/business-worker/registration")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void createBusinessWorker(@Valid @NotNull BusinessWorkerForRegistrationDto businessWorkerForRegistrationDto) throws BaseAppException {
-        accountEndpoint.createBusinessWorkerAccount(businessWorkerForRegistrationDto);
     }
 
     /**
@@ -200,27 +117,44 @@ public class AccountController {
     @GET
     @Path("/accounts")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<AccountDtoForList> getAllAccounts() {
-        return accountEndpoint.getAllAccounts();
+    public List<AccountDtoForList> getAllAccounts() throws BaseAppException {
+        return tryAndRepeat(() -> accountEndpoint.getAllAccounts());
     }
 
 
     /**
      * Metoda pośrednio odpowiedzialna za blokowanie użytkownika
+     *
      * @param blockAccountDto Obiekt z loginem użytkownika do zablokowania oraz wersją
-     * @param etagValue Wartość etaga
+     * @param etagValue       Wartość etaga
      * @return Respons wraz z kodem
-     * @throws BaseAppException Wyjątek aplikacji rzucany w przypadku błędu pobrania danych użytkownika
      */
     @ETagFilterBinding
     @PUT
     @Path("/block")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response blockUser(BlockAccountDto blockAccountDto, @HeaderParam("If-Match") @NotNull @NotEmpty String etagValue) throws BaseAppException {
+    public Response blockUser(BlockAccountDto blockAccountDto, @HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) String etagValue) throws BaseAppException {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etagValue, blockAccountDto)) {
             return Response.status(406).build();
         }
-        accountEndpoint.blockUser(blockAccountDto.getLogin(), blockAccountDto.getVersion());
+        tryAndRepeat(() -> accountEndpoint.blockUser(blockAccountDto.getLogin(), blockAccountDto.getVersion()));
+        return Response.ok().build();
+    }
+
+    /**
+     * @param unblockAccountDto Obiekt posiadający login użytkownika którego mamy odblokować
+     * @param tagValue          Wartość etaga
+     * @return Zwraca kod potwierdzający poprawne bądź niepoprawne wykonanie
+     */
+    @ETagFilterBinding
+    @PUT
+    @Path("/unblock")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response unblockUser(UnblockAccountDto unblockAccountDto, @HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) String tagValue) throws BaseAppException {
+        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(tagValue, unblockAccountDto)) {
+            return Response.status(406).build();
+        }
+        tryAndRepeat(() -> accountEndpoint.unblockUser(unblockAccountDto.getLogin(), unblockAccountDto.getVersion()));
         return Response.status(200).build();
     }
 
@@ -235,20 +169,15 @@ public class AccountController {
     @Path("/grant-access-level")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response grantAccessLevel(GrantAccessLevelDto grantAccessLevel) {
-        try {
-            AccountDto account = accountEndpoint.grantAccessLevel(grantAccessLevel);
-            return Response.ok().entity(account).build();
-        } catch (BaseAppException e) {
-            return Response.status(BAD_REQUEST).entity(e.getMessage()).build();
-        }
+    public AccountDto grantAccessLevel(GrantAccessLevelDto grantAccessLevel) throws BaseAppException {
+        return tryAndRepeat(() -> accountEndpoint.grantAccessLevel(grantAccessLevel));
     }
 
     /**
      * Zmień stan danego poziomu dostępu (włącz/wyłącz)
      *
      * @param changeAccessLevelStateDto Obiekt przesyłowy danych potrzebnych do zmiany stanu poziomu dostępu
-     * @param etag Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
+     * @param etag                      Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
      * @return Odpowiedź serwera reprezentująca obiekt AccountDto po zmianach w postaci JSON
      */
     @ETagFilterBinding
@@ -256,16 +185,12 @@ public class AccountController {
     @Path("/change-access-level-state")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response changeAccessLevelState(ChangeAccessLevelStateDto changeAccessLevelStateDto, @HeaderParam("If-Match") String etag) {
+    public Response changeAccessLevelState(ChangeAccessLevelStateDto changeAccessLevelStateDto, @HeaderParam("If-Match") String etag) throws BaseAppException {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, changeAccessLevelStateDto)) {
             return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
         }
-        try {
-            AccountDto account = accountEndpoint.changeAccessLevelState(changeAccessLevelStateDto);
-            return Response.ok().entity(account).build();
-        } catch (BaseAppException e) {
-            return Response.status(BAD_REQUEST).entity(e.getMessage()).build();
-        }
+        AccountDto account = tryAndRepeat(() -> accountEndpoint.changeAccessLevelState(changeAccessLevelStateDto));
+        return Response.ok().entity(account).build();
     }
 
 
@@ -277,13 +202,8 @@ public class AccountController {
      */
     @PUT
     @Path("/reset-password")
-    public Response resetPassword(@Valid PasswordResetDto passwordResetDto) {
-        try {
-            this.accountEndpoint.resetPassword(passwordResetDto);
-        } catch (BaseAppException e) {
-            Response.status(FORBIDDEN).entity(e.getMessage()).build(); // todo send key
-        }
-        return Response.ok().build(); // todo appropriate condition
+    public void resetPassword(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid PasswordResetDto passwordResetDto) throws BaseAppException {
+        tryAndRepeat(() -> this.accountEndpoint.resetPassword(passwordResetDto));
     }
 
     /**
@@ -294,33 +214,9 @@ public class AccountController {
      */
     @POST
     @Path("/request-password-reset/{login}")
-    public Response requestPasswordReset(@PathParam("login") @Login String login) {
-        try {
-            this.accountEndpoint.requestPasswordReset(login);
-        } catch (BaseAppException e) {
-            Response.status(NOT_FOUND).entity(e.getMessage()).build();
-        }
-        return Response.ok().build();
+    public void requestPasswordReset(@PathParam("login") @Login String login) throws BaseAppException {
+        tryAndRepeat(() -> this.accountEndpoint.requestPasswordReset(login));
     }
-
-    /**
-     * @param unblockAccountDto  Obiekt posiadający login użytkownika którego mamy odblokować
-     * @param tagValue Wartość etaga
-     * @return Zwraca kod potwierdzający poprawne bądź niepoprawne wykoannie
-     * @throws BaseAppException Wyjątek rzucany w momencie kiedy nie znajdzie takich użytkowników
-     */
-    @ETagFilterBinding
-    @PUT
-    @Path("/unblock")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response unblockUser(UnblockAccountDto unblockAccountDto, @HeaderParam("If-Match") @NotNull @NotEmpty String tagValue) throws BaseAppException {
-        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(tagValue, unblockAccountDto)) {
-            return Response.status(406).build();
-        }
-        accountEndpoint.unblockUser(unblockAccountDto.getLogin(), unblockAccountDto.getVersion());
-        return Response.status(200).build();
-    }
-
 
     /**
      * Metoda odpowiedzialna za zgłoszenia życzenia resetowania hasła dla danego użytkownika
@@ -331,13 +227,9 @@ public class AccountController {
      */
     @POST
     @Path("/request-someones-password-reset/{login}/{email}")
-    public Response requestSomeonesPasswordReset(@PathParam("login") @Login String login, @PathParam("email") @Email String email) {
-        try {
-            this.accountEndpoint.requestSomeonesPasswordReset(login, email);
-        } catch (BaseAppException e) {
-            Response.status(NOT_FOUND).entity(e.getMessage()).build();
-        }
-        return Response.ok().build();
+    public void requestSomeonesPasswordReset(@PathParam("login") @Login String login, @PathParam("email") @Email(message = REGEX_INVALID_EMAIL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
+            String email) throws BaseAppException {
+        tryAndRepeat(() -> this.accountEndpoint.requestSomeonesPasswordReset(login, email));
     }
 
 
@@ -348,213 +240,86 @@ public class AccountController {
      * @return Odpowiedź serwera w postaci JSON
      */
     @PUT
-    @Path("/account-verification")
-    public Response accountVerification(@Valid AccountVerificationDto accountVerificationDto) {
-        try {
-            this.accountEndpoint.verifyAccount(accountVerificationDto);
-        } catch (BaseAppException e) {
-            Response.status(FORBIDDEN).entity(e.getMessage()).build(); // todo send key
-        }
-        return Response.ok().build(); // todo appropriate condition
+    @Path("/verify")
+    public void verifyAccount(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid AccountVerificationDto accountVerificationDto) throws BaseAppException {
+        tryAndRepeat(() -> this.accountEndpoint.verifyAccount(accountVerificationDto));
     }
+
     /**
      * Zmień dane wybranego konta o poziomie dostępu klient
      *
      * @param otherClientChangeDataDto obiekt dto z nowymi danymi
-     * @param etag Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
+     * @param etag                     Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
      * @return Odpowiedź serwera w postaci JSON
      */
     @PUT
-    @Path("/changeOtherData/client")
+    @Path("/change-client-data")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @ETagFilterBinding
-    public Response changeOtherClientData(OtherClientChangeDataDto otherClientChangeDataDto, @HeaderParam("If-Match") String etag) {
+    public Response changeOtherClientData(OtherClientChangeDataDto otherClientChangeDataDto, @HeaderParam("If-Match") String etag) throws BaseAppException {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, otherClientChangeDataDto)) {
             return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
         }
-
-        try {
-            OtherClientChangeDataDto account = accountEndpoint.changeOtherClientData(otherClientChangeDataDto);
-            return Response.ok().entity(account).build();
-        } catch (BaseAppException e) {
-            return Response.status(BAD_REQUEST).entity(e.getMessage()).build();
-        }
-
-
+        OtherClientChangeDataDto account = tryAndRepeat(() -> accountEndpoint.changeOtherClientData(otherClientChangeDataDto));
+        return Response.ok().entity(account).build();
     }
 
     /**
      * Zmień dane wybranego konta o poziomie dostępu businnesWorker
      *
      * @param otherBusinessWorkerChangeDataDto obiekt dto z nowymi danymi
-     * @param etag Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
+     * @param etag                             Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
      * @return Odpowiedź serwera w postaci JSON
      */
     @PUT
-    @Path("/changeOtherData/businessworker")
+    @Path("/change-business-worker-data")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @ETagFilterBinding
-    public Response changeOtherBusinessWorkerData(OtherBusinessWorkerChangeDataDto otherBusinessWorkerChangeDataDto, @HeaderParam("If-Match") String etag) {
+    public Response changeOtherBusinessWorkerData(OtherBusinessWorkerChangeDataDto otherBusinessWorkerChangeDataDto, @HeaderParam("If-Match") String etag) throws BaseAppException {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, otherBusinessWorkerChangeDataDto)) {
             return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
         }
-
-        try {
-            OtherBusinessWorkerChangeDataDto account = accountEndpoint.changeOtherBusinessWorkerData(otherBusinessWorkerChangeDataDto);
-            return Response.ok().entity(account).build();
-        } catch (BaseAppException e) {
-            return Response.status(BAD_REQUEST).entity(e.getMessage()).build();
-        }
+        OtherBusinessWorkerChangeDataDto account = tryAndRepeat(() -> accountEndpoint.changeOtherBusinessWorkerData(otherBusinessWorkerChangeDataDto));
+        return Response.ok().entity(account).build();
     }
 
     /**
      * Zmień dane wybranego konta o poziomie dostępu moderator lub administrator
      *
      * @param otherAccountChangeDataDto obiekt dto z nowymi danymi
-     * @param etag Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
+     * @param etag                      Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
      * @return Odpowiedź serwera w postaci JSON
      */
     @PUT
-    @Path("/changeOtherData")
+    @Path("/change-account-data")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @ETagFilterBinding
-    public Response changeOtherAccountData(OtherAccountChangeDataDto otherAccountChangeDataDto, @HeaderParam("If-Match") String etag) {
+    public Response changeOtherAccountData(OtherAccountChangeDataDto otherAccountChangeDataDto, @HeaderParam("If-Match") String etag) throws BaseAppException {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, otherAccountChangeDataDto)) {
             return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
         }
 
-        try {
-            AccountDto account = accountEndpoint.changeOtherAccountData(otherAccountChangeDataDto);
-            return Response.ok().entity(account).build();
-        } catch (BaseAppException e) {
-            return Response.status(BAD_REQUEST).entity(e.getMessage()).build();
-        }
+        AccountDto account = tryAndRepeat(() -> accountEndpoint.changeOtherAccountData(otherAccountChangeDataDto));
+        return Response.ok().entity(account).build();
     }
+
     /**
      * Zmień mail według podanych w dto danych
      *
      * @param accountChangeEmailDto obiekt dto z loginem, nowym mailem oraz wersją
      */
     @PUT
-    @Path("/change_email")
+    @Path("/change-email")
     @ETagFilterBinding
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response changeEmail(AccountChangeEmailDto accountChangeEmailDto, @HeaderParam("If-Match") String etag) {
+    public Response changeEmail(AccountChangeEmailDto accountChangeEmailDto, @HeaderParam("If-Match") String etag) throws BaseAppException {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, accountChangeEmailDto)) {
             return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
         }
-
-        try {
-            accountEndpoint.changeEmail(accountChangeEmailDto);
-        } catch (EJBException | OptimisticLockException e) {
-            return Response.status(NOT_ACCEPTABLE).entity(e.getMessage()).build();
-        } catch (BaseAppException e) {
-            return Response.status(NOT_FOUND).entity(e.getMessage()).build();
-        }
-
+        tryAndRepeat(() -> accountEndpoint.changeEmail(accountChangeEmailDto));
         return Response.noContent().build();
     }
-    /**
-     * Zmień dane konta klienta
-     *
-     * @param clientChangeDataDto obiekt dto z nowymi danymi
-     */
-    @PUT
-    @Path("/client/changedata")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @ETagFilterBinding
-    public Response changeClientData(ClientChangeDataDto clientChangeDataDto, @HeaderParam("If-Match") String etag) {
-        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, clientChangeDataDto)) {
-            return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
-        }
-
-        try {
-            accountEndpoint.changeClientData(clientChangeDataDto);
-        } catch (EJBException | OptimisticLockException e) {
-            return Response.status(NOT_ACCEPTABLE).entity(e.getMessage()).build();
-        } catch (BaseAppException e) {
-            return  Response.status(NOT_FOUND).entity(e.getMessage()).build();
-        }
-
-        return Response.noContent().build();
-    }
-
-    /**
-     * Zmień dane konta pracownika firmy
-     *
-     * @param businessWorkerChangeDataDto obiekt dto z nowymi danymi
-     */
-    @PUT
-    @Path("/businessworker/changedata")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @ETagFilterBinding
-    public Response changeBusinessWorkerData(BusinessWorkerChangeDataDto businessWorkerChangeDataDto, @HeaderParam("If-Match") String etag) {
-        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, businessWorkerChangeDataDto)) {
-            return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
-        }
-
-        try {
-            accountEndpoint.changeBusinessWorkerData(businessWorkerChangeDataDto);
-        } catch (EJBException | OptimisticLockException e) {
-            return Response.status(NOT_ACCEPTABLE).entity(e.getMessage()).build();
-        } catch (BaseAppException e) {
-            return  Response.status(NOT_FOUND).entity(e.getMessage()).build();
-        }
-
-        return Response.noContent().build();
-    }
-
-    /**
-     * Zmień dane konta moderatora
-     *
-     * @param moderatorChangeDataDto obiekt dto z nowymi danymi
-     */
-    @PUT
-    @Path("/moderator/changedata")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @ETagFilterBinding
-    public Response changeModeratorData(ModeratorChangeDataDto moderatorChangeDataDto,  @HeaderParam("If-Match") String etag) {
-        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, moderatorChangeDataDto)) {
-            return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
-        }
-
-        try {
-            accountEndpoint.changeModeratorData(moderatorChangeDataDto);
-        } catch (EJBException | OptimisticLockException e) {
-            return Response.status(NOT_ACCEPTABLE).entity(e.getMessage()).build();
-        } catch (BaseAppException e) {
-            return  Response.status(NOT_FOUND).entity(e.getMessage()).build();
-        }
-
-        return Response.noContent().build();
-    }
-
-    /**
-     * Zmień dane konta administratora
-     *
-     * @param administratorChangeDataDto obiekt dto z nowymi danymi
-     */
-    @PUT
-    @Path("/administrator/changedata")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @ETagFilterBinding
-    public Response changeAdministratorData(AdministratorChangeDataDto administratorChangeDataDto, @HeaderParam("If-Match") String etag) {
-        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, administratorChangeDataDto)) {
-            return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
-        }
-
-        try {
-            accountEndpoint.changeAdministratorData(administratorChangeDataDto);
-        } catch (EJBException | OptimisticLockException e) {
-            return Response.status(NOT_ACCEPTABLE).entity(e.getMessage()).build();
-        } catch (BaseAppException e) {
-            return  Response.status(NOT_FOUND).entity(e.getMessage()).build();
-        }
-
-        return Response.noContent().build();
-    }
-
 }

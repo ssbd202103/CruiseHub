@@ -19,6 +19,8 @@ import java.util.Properties;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
+
 /**
  * Klasa odpowiedzialna za zarządzanie tokenami JWT.
  */
@@ -68,7 +70,7 @@ public class JWTHandler {
     public static String refreshToken(String token) {
         DecodedJWT decodedToken = JWT.decode(token);
         if (decodedToken.getExpiresAt().before(new Date())) {
-            throw new TokenExpiredException("Cannot refresh expired token");
+            throw new TokenExpiredException(ACCOUNT_VERIFICATION_TOKEN_EXPIRED_ERROR);
         }
 
         //getClaims returns Map<String, Claim> where Claim needs to be converted to Object type,
@@ -90,9 +92,10 @@ public class JWTHandler {
         try {
             return JWT.decode(token).getClaims();
         } catch (JWTDecodeException e) {
-            throw new JWTException("Provided token could not be decoded");
+            throw new JWTException(TOKEN_DECODE_ERROR);
         }
     }
+
     /**
      * Metoda zwrająca issuera;
      *
@@ -104,9 +107,10 @@ public class JWTHandler {
         try {
             return JWT.decode(token).getIssuer();
         } catch (JWTDecodeException e) {
-            throw new JWTException("Provided token could not be decoded");
+            throw new JWTException(TOKEN_DECODE_ERROR);
         }
     }
+
     /**
      * Metoda zwrająca issuera;
      *
@@ -114,11 +118,11 @@ public class JWTHandler {
      * @return issuer;
      * @throws JWTDecodeException Wyjątek błędu dekodowania
      */
-    public static Date getExpiersTimeFromToken(String token) throws JWTException {
+    public static Date getExpirationTimeFromToken(String token) throws JWTException {
         try {
             return JWT.decode(token).getExpiresAt();
         } catch (JWTDecodeException e) {
-            throw new JWTException("Provided token could not be decoded");
+            throw new JWTException(TOKEN_DECODE_ERROR);
         }
     }
 
@@ -129,32 +133,33 @@ public class JWTHandler {
      * @param token Przekazany token
      * @throws JWTVerificationException Wyjątek błędu walidacji
      */
-    public static void validateToken(String token) {
+    public static void validateToken(String token) throws JWTException {
         Algorithm algorithm = Algorithm.HMAC256(getJWTSecret());
         JWTVerifier verifier = JWT.require(algorithm).build();
 
         try {
             verifier.verify(token);
         } catch (JWTVerificationException exception) {
-            throw new JWTVerificationException("Token validation failed");
+            throw new JWTException(TOKEN_INVALIDATE_ERROR);
         }
     }
 
-    private static Long getDefaultValidityInMinutes() {
+    private static long getDefaultValidityInMinutes() {
         try {
             return Long.parseLong(securityProperties.getProperty("jwt.validityInMinutes"));
         } catch (NumberFormatException e) {
-            throw new NumberFormatException("jwt.validityInMinutes value: {" + securityProperties.getProperty("jwt.validityInMinutes") + "} could not be parsed to Long, verify properties data");
+            throw new NumberFormatException("jwt.validityInMinutes value: {" + securityProperties.getProperty("jwt.validityInMinutes") + "} could not be parsed to long, verify properties data");
         }
     }
 
-    private static Long getDefaultValidityInHours() {
+    private static long getDefaultValidityInHours() {
         try {
             return Long.parseLong(securityProperties.getProperty("jwt.validityInHours"));
         } catch (NumberFormatException e) {
-            throw new NumberFormatException("jwt.validityInHours value: {" + securityProperties.getProperty("jwt.validityInHours") + "} could not be parsed to Long, verify properties data");
+            throw new NumberFormatException("jwt.validityInHours value: {" + securityProperties.getProperty("jwt.validityInHours") + "} could not be parsed to long, verify properties data");
         }
     }
+
     private static String getJWTSecret() {
         return securityProperties.getProperty("jwt.secret");
     }

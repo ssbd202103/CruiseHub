@@ -20,6 +20,7 @@ public class AccountMapper {
                 account.getLogin(),
                 account.getFirstName(),
                 account.getSecondName(),
+                account.isDarkMode(),
                 account.getEmail(),
                 account.getLanguageType().getName(),
                 account.getAccessLevels().stream()

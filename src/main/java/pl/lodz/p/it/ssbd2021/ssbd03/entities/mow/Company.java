@@ -4,52 +4,63 @@ import lombok.Getter;
 import lombok.Setter;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address;
-
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.PhoneNumber;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_EMPTY;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
+import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company.NIP_NAME_CONSTRAINT;
 
 @Entity(name = "companies")
 @NamedQueries({
         @NamedQuery(name = "Company.findByName", query = "SELECT company FROM companies company WHERE company.name = :name")
 })
 @Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"nip", "name"})
+        @UniqueConstraint(columnNames = {"nip", "name"}, name = NIP_NAME_CONSTRAINT)
 })
 public class Company extends BaseEntity {
+    public static final String NIP_NAME_CONSTRAINT = "companies_name_unique_constraint";
     @Getter
     @Id
     @SequenceGenerator(name = "COMPANY_SEQ_GEN", sequenceName = "companies_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "COMPANY_SEQ_GEN")
     @Column(name = "id")
-    private Long id;
+    private long id;
 
     @Getter
-    @NotNull
     @OneToOne
     @JoinColumn(name = "address_id")
+    @NotNull(message = CONSTRAINT_NOT_NULL)
+    @Valid
     private Address address;
 
 
     @Getter
     @Setter
-    @NotNull
+    @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
     @Column(name = "name", unique = true)
     private String name;
 
     @Getter
     @Setter
-    @NotNull
+    @PhoneNumber
     @Column(name = "phone_number")
     private String phoneNumber;
 
     @Getter
     @Setter
-    @NotNull
+    @Min(value = 1000000000L)
+    @Max(value = 9999999999L)
     @Column(name = "nip")
-    private Long NIP;
+    private long NIP;
 
-    public Company(@NotNull Address address, @NotNull String name, @NotNull String phoneNumber, @NotNull Long NIP) {
+    public Company(Address address, String name, String phoneNumber, long NIP) {
         this.address = address;
         this.name = name;
         this.phoneNumber = phoneNumber;

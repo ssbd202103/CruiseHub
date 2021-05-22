@@ -1,4 +1,4 @@
-import React, {createRef, useState} from 'react';
+import React, {useState} from 'react';
 import axios from "axios";
 import AuthLayout from "../../layouts/AuthLayout";
 import DarkedTextField from "../../components/DarkedTextField";
@@ -10,12 +10,12 @@ const RequestPasswordReset = () => {
     const {t} = useTranslation()
 
 
-    const loginRef = createRef() as React.RefObject<HTMLDivElement>
+    const [login, setLogin] = useState('')
 
     const onFormSubmit = () => {
         // event.preventDefault()
         // console.log("hello world")
-        axios.post(`http://localhost:8080/api/account/request-password-reset/${loginRef?.current?.querySelector('input')?.value}`, {});
+        axios.post(`http://localhost:8080/api/account/request-password-reset/${login}`, {});
     }
 
     return (
@@ -24,7 +24,8 @@ const RequestPasswordReset = () => {
                 label={t("login") + ' *'}
                 placeholder="login"
                 className={styles.input}
-                ref={loginRef}
+                value={login}
+                onChange={event => {setLogin(event.target.value)}}
             />
             <RoundedButton
                 onClick={onFormSubmit}
