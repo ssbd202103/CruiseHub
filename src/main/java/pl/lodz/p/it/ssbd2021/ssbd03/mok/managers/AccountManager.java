@@ -421,6 +421,10 @@ public class AccountManager implements AccountManagerLocal {
         if(account.getNumberOfAuthenticationFailures()>=Long.parseLong(securityProperties.getProperty("max.incorrect.logins"))){
             account.setActive(false);
             accountFacade.edit(account);
+            Locale locale = new Locale(account.getLanguageType().getName().name());
+            String body = i18n.getMessage(BLOCKED_ACCOUNT_BODY, locale);
+            String subject = i18n.getMessage(BLOCKED_ACCOUNT_SUBJECT, locale);
+            EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
         }
     }
 
