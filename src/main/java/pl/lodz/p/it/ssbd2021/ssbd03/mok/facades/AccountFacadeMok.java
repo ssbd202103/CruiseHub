@@ -10,6 +10,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AccountFacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 
+import javax.annotation.security.PermitAll;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -64,6 +65,7 @@ public class AccountFacadeMok extends AbstractFacade<Account> {
         return super.findAll();
     }
 
+    @PermitAll
     public Account findByLogin(String login) throws BaseAppException {
         TypedQuery<Account> tq = em.createNamedQuery("Account.findByLogin", Account.class);
         tq.setParameter("login", login);

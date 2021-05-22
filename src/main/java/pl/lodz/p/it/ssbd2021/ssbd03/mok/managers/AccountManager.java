@@ -25,6 +25,11 @@ import pl.lodz.p.it.ssbd2021.ssbd03.security.JWTHandler;
 import pl.lodz.p.it.ssbd2021.ssbd03.services.EmailService;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
 
+import javax.annotation.Resource;
+import javax.annotation.security.DeclareRoles;
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
+import javax.annotation.security.RunAs;
 import javax.ejb.*;
 import javax.inject.Inject;
 import javax.ws.rs.core.Context;
@@ -42,6 +47,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 //@Stateless todo check why stateless throws exceptions occasionally
 @Stateful
 @TransactionAttribute(TransactionAttributeType.MANDATORY)
+@RunAs("SYSTEM")
 public class AccountManager implements AccountManagerLocal {
 
     @Inject
@@ -59,8 +65,10 @@ public class AccountManager implements AccountManagerLocal {
     @Inject
     I18n i18n;
 
+
     private static final Properties securityProperties = PropertiesReader.getSecurityProperties();
 
+    @PermitAll
     @Override
     public void createClientAccount(Account account, Client client) throws BaseAppException {
         account.setLanguageType(accountFacade.getLanguageTypeWrapperByLanguageType(account.getLanguageType().getName()));
@@ -76,6 +84,7 @@ public class AccountManager implements AccountManagerLocal {
         }
     }
 
+    @PermitAll
     @Override
     public void createBusinessWorkerAccount(Account account, BusinessWorker businessWorker, String companyName) throws BaseAppException {
         account.setLanguageType(accountFacade.getLanguageTypeWrapperByLanguageType(account.getLanguageType().getName()));
@@ -90,6 +99,7 @@ public class AccountManager implements AccountManagerLocal {
         }
     }
 
+    @RolesAllowed("grantAccessLevel")
     @Override
     public Account grantModeratorAccessLevel(String accountLogin, long accountVersion) throws BaseAppException {
         Account account = accountFacade.findByLogin(accountLogin);
@@ -106,6 +116,7 @@ public class AccountManager implements AccountManagerLocal {
         return account;
     }
 
+    @RolesAllowed("grantAccessLevel")
     @Override
     public Account grantAdministratorAccessLevel(String accountLogin, long accountVersion) throws BaseAppException {
         Account account = accountFacade.findByLogin(accountLogin);
@@ -122,6 +133,7 @@ public class AccountManager implements AccountManagerLocal {
         return account;
     }
 
+    @RolesAllowed("changeAccessLevelState")
     @Override
     public Account changeAccessLevelState(String accountLogin, AccessLevelType accessLevelType,
                                           boolean enabled, long accountVersion) throws BaseAppException {
@@ -168,11 +180,13 @@ public class AccountManager implements AccountManagerLocal {
         EmailService.sendEmailWithContent(account.getEmail().trim(), subject, contentHtml);
     }
 
+    @RolesAllowed("getAllAccounts")
     @Override
     public List<Account> getAllAccounts() throws BaseAppException {
         return accountFacade.findAll();
     }
 
+    @RolesAllowed("blockUser")
     @Override
     public Account blockUser(String login, long version) throws BaseAppException {
         Account account = this.accountFacade.findByLogin(login);
@@ -186,6 +200,7 @@ public class AccountManager implements AccountManagerLocal {
     }
 
 
+    @PermitAll
     @Override
     public void requestPasswordReset(String login) throws BaseAppException {
         Account account = this.accountFacade.findByLogin(login);
@@ -197,6 +212,7 @@ public class AccountManager implements AccountManagerLocal {
         EmailService.sendEmailWithContent(account.getEmail().trim(), "hello", contentHtml);
     }
 
+    @PermitAll
     @Override
     public void resetPassword(String login, String passwordHash, String token) throws BaseAppException {
         JWTHandler.validateToken(token);
@@ -227,6 +243,7 @@ public class AccountManager implements AccountManagerLocal {
 
     }
 
+    @PermitAll
     @Override
     public void verifyAccount(String token) throws BaseAppException {
         JWTHandler.validateToken(token);
@@ -263,6 +280,7 @@ public class AccountManager implements AccountManagerLocal {
         EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
     }
 
+    @RolesAllowed("requestSomeonesPasswordReset")
     @Override
     public void requestSomeonesPasswordReset(String login, String email) throws BaseAppException {
         Account account = this.accountFacade.findByLogin(login);
@@ -277,6 +295,7 @@ public class AccountManager implements AccountManagerLocal {
         EmailService.sendEmailWithContent(email, subject, contentHtml);
     }
 
+    @RolesAllowed("unblockUser")
     @Override
     public Account unblockUser(String unblockedUserLogin, long version) throws BaseAppException {
         Account account = this.accountFacade.findByLogin(unblockedUserLogin);
@@ -289,6 +308,7 @@ public class AccountManager implements AccountManagerLocal {
         return account;
     }
 
+    @RolesAllowed("changeOtherClientData")
     @Override
     public Account changeOtherClientData(String login, String phoneNumber, Address addr, long version) throws BaseAppException {
         Account targetAccount = accountFacade.findByLogin(login);
@@ -322,7 +342,8 @@ public class AccountManager implements AccountManagerLocal {
         targetAddress.setCountry(fromAddress.getCountry());
     }
 
-    public Account updateOtherAccount(Account updatedAccount) throws BaseAppException {
+    @RolesAllowed("changeOtherAccountData")
+    public Account changeOtherAccountData(Account updatedAccount) throws BaseAppException {
         Account targetAccount = accountFacade.findByLogin(updatedAccount.getLogin());
 
         if (!(targetAccount.getVersion() == (updatedAccount.getVersion()))) {
@@ -336,6 +357,7 @@ public class AccountManager implements AccountManagerLocal {
         return targetAccount;
     }
 
+    @RolesAllowed("changeOtherBusinessWorkerData")
     @Override
     public Account changeOtherBusinessWorkerData(String login, String phoneNumber, long version) throws BaseAppException {
         Account targetAccount = accountFacade.findByLogin(login);
@@ -349,6 +371,7 @@ public class AccountManager implements AccountManagerLocal {
     }
 
 
+    @RolesAllowed("changeEmail")
     @Override
     public void changeEmail(String login, long version, String newEmail) throws BaseAppException {
         Account account = accountFacade.findByLogin(login);
@@ -376,6 +399,7 @@ public class AccountManager implements AccountManagerLocal {
     }
 
 
+    @RolesAllowed("changeClientData")
     @Override
     public void changeClientData(Account fromAccount) throws BaseAppException {
         Account targetAccount = accountFacade.findByLogin(fromAccount.getLogin());
@@ -396,6 +420,7 @@ public class AccountManager implements AccountManagerLocal {
         setUpdatedMetadata(targetClient, targetAddress, targetAccount);
     }
 
+    @RolesAllowed("changeBusinessWorkerData")
     @Override
     public void changeBusinessWorkerData(Account fromAccount) throws BaseAppException {
         Account targetAccount = accountFacade.findByLogin(fromAccount.getLogin());
@@ -413,12 +438,13 @@ public class AccountManager implements AccountManagerLocal {
         setUpdatedMetadata(targetBusinessWorker, targetAccount);
     }
 
+    @PermitAll
     @Override
     public void updateIncorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws BaseAppException {
 
         this.accountFacade.updateAuthenticateInfo(login, IpAddr, time, false);
-        Account account= accountFacade.findByLogin(login);
-        if(account.getNumberOfAuthenticationFailures()>=Long.parseLong(securityProperties.getProperty("max.incorrect.logins"))){
+        Account account = accountFacade.findByLogin(login);
+        if (account.getNumberOfAuthenticationFailures() >= Long.parseLong(securityProperties.getProperty("max.incorrect.logins"))) {
             account.setActive(false);
             accountFacade.edit(account);
             Locale locale = new Locale(account.getLanguageType().getName().name());
@@ -428,7 +454,7 @@ public class AccountManager implements AccountManagerLocal {
         }
     }
 
-
+    @RolesAllowed("changeModeratorData")
     @Override
     public void changeModeratorData(Account fromAccount) throws BaseAppException {
         Account targetAccount = accountFacade.findByLogin(fromAccount.getLogin());
@@ -443,6 +469,7 @@ public class AccountManager implements AccountManagerLocal {
         setUpdatedMetadata(targetModerator, targetAccount);
     }
 
+    @RolesAllowed("changeAdministratorData")
     @Override
     public void changeAdministratorData(Account fromAccount) throws BaseAppException {
         Account targetAccount = accountFacade.findByLogin(fromAccount.getLogin());
@@ -458,11 +485,14 @@ public class AccountManager implements AccountManagerLocal {
         setUpdatedMetadata(targetAdministrator, targetAccount);
     }
 
+
+    @RolesAllowed({"getAccountByLogin", "getAccountDetailsByLogin", "selfGetAccountDetails", "getAccessLevelByLogin"})
     @Override
     public Account getAccountByLogin(String login) throws BaseAppException {
         return accountFacade.findByLogin(login);
     }
 
+    @PermitAll
     @Override
     public String updateCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws BaseAppException {
         Account account = this.accountFacade.updateAuthenticateInfo(login, IpAddr, time, true);
@@ -472,6 +502,8 @@ public class AccountManager implements AccountManagerLocal {
         return JWTHandler.createToken(map, String.valueOf(account.getId()));
     }
 
+
+    @RolesAllowed("authenticatedUser")
     @Override
     public void changeOwnPassword(String login, long version, String oldPassword, String newPassword) throws BaseAppException {
         Account account = accountFacade.findByLogin(login);
@@ -488,6 +520,7 @@ public class AccountManager implements AccountManagerLocal {
         setUpdatedMetadata(account);
     }
 
+    @RolesAllowed("authenticatedUser")
     public Account getCurrentUser() throws BaseAppException {
         return accountFacade.findByLogin(context.getUserPrincipal().getName());
     }
@@ -517,6 +550,7 @@ public class AccountManager implements AccountManagerLocal {
         }
     }
 
+    @RolesAllowed("authenticatedUser")
     public void changeMode(String login, boolean newMode) throws BaseAppException {
         Account account = accountFacade.findByLogin(login);
 

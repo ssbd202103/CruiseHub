@@ -93,11 +93,11 @@ values (-1);
 -- addresses start
 insert into addresses(id, house_number, street, postal_code, city, country,
                       creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id, version)
-values (-1, 1, 'street 1', '123', 'London', 'United Kingdom', now(), now(), -2, -2, -2, 0);
+values (-1, 1, 'street', '30-300', 'London', 'United Kingdom', now(), now(), -2, -2, -2, 0);
 
 insert into addresses(id, house_number, street, postal_code, city, country,
                       creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id, version)
-values (-2, 1, 'street 2', '321', 'Manchester', 'United Kingdom', now(), now(), -2, -3, -3, 0);
+values (-2, 1, 'street', '30-300', 'Manchester', 'United Kingdom', now(), now(), -2, -3, -3, 0);
 -- addresses end
 --
 --

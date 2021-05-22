@@ -2,6 +2,8 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 
+import javax.annotation.security.DeclareRoles;
+import javax.annotation.security.RunAs;
 import java.time.LocalDateTime;
 
 /**

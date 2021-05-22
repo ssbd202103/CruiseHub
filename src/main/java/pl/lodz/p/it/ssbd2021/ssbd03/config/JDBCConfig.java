@@ -5,54 +5,54 @@ import javax.annotation.sql.DataSourceDefinition;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-@DataSourceDefinition( // Ta pula połączeń jest na potrzeby tworzenia struktur przy wdrażaniu aplikacji
-    name = "java:app/jdbc/ssbd03adminDS",
-    className = "org.postgresql.ds.PGSimpleDataSource",
-    user = "ssbd03admin",
-    password = "adminpasswd",
-    serverName = "studdev.it.p.lodz.pl",
-    portNumber = 5432,
-    databaseName = "ssbd03",
-    minPoolSize = 0,
-    maxPoolSize = 50,
-    maxIdleTime = 10, // Nie potrzebujemy przetrzymywać połączeń tej puli
-    isolationLevel = Connection.TRANSACTION_READ_COMMITTED
+@DataSourceDefinition(
+        name = "java:app/jdbc/ssbd03adminDS",
+        className = "org.postgresql.ds.PGSimpleDataSource",
+        user = "ssbd03admin",
+        password = "adminpasswd",
+//        serverName = "studdev.it.p.lodz.pl",
+        portNumber = 5432,
+        databaseName = "ssbd03",
+        minPoolSize = 0,
+        maxPoolSize = 50,
+        maxIdleTime = 10,
+        isolationLevel = Connection.TRANSACTION_READ_COMMITTED
 )
 
-@DataSourceDefinition( // Ta pula połączeń jest na potrzeby implementacji uwierzytelnienia w aplikacji
-    name = "java:app/jdbc/ssbd03glassfishDS",
-    className = "org.postgresql.ds.PGSimpleDataSource",
-    user = "ssbd03glassfish",
-    password = "glassfishpasswd",
-    serverName = "studdev.it.p.lodz.pl",
-    portNumber = 5432,
-    databaseName = "ssbd03",
-    isolationLevel = Connection.TRANSACTION_READ_COMMITTED,
-    minPoolSize = 0,
-    maxPoolSize = 50,
-    maxIdleTime = 10
+@DataSourceDefinition(
+        name = "java:app/jdbc/ssbd03glassfishDS",
+        className = "org.postgresql.ds.PGSimpleDataSource",
+        user = "ssbd03glassfish",
+        password = "glassfishpasswd",
+//        serverName = "studdev.it.p.lodz.pl",
+        portNumber = 5432,
+        databaseName = "ssbd03",
+        isolationLevel = Connection.TRANSACTION_READ_COMMITTED,
+        minPoolSize = 0,
+        maxPoolSize = 50,
+        maxIdleTime = 10
 )
 
-@DataSourceDefinition( // Ta pula połączeń jest na potrzeby operacji realizowanych przez moduł aplikacji
-    name = "java:app/jdbc/ssbd03mokDS",
-    className = "org.postgresql.ds.PGSimpleDataSource",
-    user = "ssbd03mok",
-    password = "mokpasswd",
-    serverName = "studdev.it.p.lodz.pl",
-    portNumber = 5432,
-    databaseName = "ssbd03",
-    isolationLevel = Connection.TRANSACTION_READ_COMMITTED,
-    minPoolSize = 0,
-    maxPoolSize = 50,
-    maxIdleTime = 10
+@DataSourceDefinition(
+        name = "java:app/jdbc/ssbd03mokDS",
+        className = "org.postgresql.ds.PGSimpleDataSource",
+        user = "ssbd03mok",
+        password = "mokpasswd",
+//        serverName = "studdev.it.p.lodz.pl",
+        portNumber = 5432,
+        databaseName = "ssbd03",
+        isolationLevel = Connection.TRANSACTION_READ_COMMITTED,
+        minPoolSize = 0,
+        maxPoolSize = 50,
+        maxIdleTime = 10
 )
 
-@DataSourceDefinition( // Ta pula połączeń jest na potrzeby operacji realizowanych przez moduł aplikacji
+@DataSourceDefinition(
         name = "java:app/jdbc/ssbd03mowDS",
         className = "org.postgresql.ds.PGSimpleDataSource",
         user = "ssbd03mow",
         password = "mowpasswd",
-        serverName = "studdev.it.p.lodz.pl",
+//        serverName = "studdev.it.p.lodz.pl",
         portNumber = 5432,
         databaseName = "ssbd03",
         isolationLevel = Connection.TRANSACTION_READ_COMMITTED,

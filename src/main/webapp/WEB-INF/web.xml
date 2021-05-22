@@ -8,20 +8,110 @@
         <error-code>404</error-code>
         <location>/index.html</location>
     </error-page>
+    <!---->
+    <security-role>
+        <role-name>Administrator</role-name>
+    </security-role>
+    <security-role>
+        <role-name>Moderator</role-name>
+    </security-role>
+    <security-role>
+        <role-name>Client</role-name>
+    </security-role>
+    <security-role>
+        <role-name>BusinessWorker</role-name>
+    </security-role>
+    <!---->
 
-    <!-- Roles -->
     <security-role>
-        <role-name>ADMINISTRATOR</role-name>
-    </security-role>
-    <security-role>
-        <role-name>MODERATOR</role-name>
-    </security-role>
-    <security-role>
-        <role-name>BUSINESS_WORKER</role-name>
-    </security-role>
-    <security-role>
-        <role-name>CLIENT</role-name>
+        <role-name>getAccountByLogin</role-name>
     </security-role>
 
+    <security-role>
+        <role-name>getAccountDetailsByLogin</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>selfGetAccountDetails</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>getAccessLevelByLogin</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>getAllAccounts</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>blockUser</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>unblockUser</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>grantAccessLevel</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>changeAccessLevelState</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>requestSomeonesPasswordReset</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>changeOtherClientData</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>changeOtherBusinessWorkerData</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>changeOtherAccountData</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>changeEmail</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>authenticatedUser</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>changeClientData</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>changeBusinessWorkerData</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>changeModeratorData</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>changeAdministratorData</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>SYSTEM</role-name>
+    </security-role>
+
+
+<!--    <security-constraint> todo-->
+<!--        <web-resource-collection>-->
+<!--            <web-resource-name>api</web-resource-name>-->
+<!--            <url-pattern>/*</url-pattern>-->
+<!--        </web-resource-collection>-->
+<!--        <user-data-constraint>-->
+<!--            <transport-guarantee>CONFIDENTIAL</transport-guarantee>-->
+<!--        </user-data-constraint>-->
+<!--    </security-constraint>-->
 
 </web-app>

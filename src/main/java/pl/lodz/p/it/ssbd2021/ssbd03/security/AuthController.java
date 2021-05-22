@@ -8,6 +8,9 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDt
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.AccountEndpointLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.AuthenticateEndpointLocal;
 
+import javax.annotation.security.DeclareRoles;
+import javax.annotation.security.RunAs;
+import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.security.enterprise.credential.Credential;
