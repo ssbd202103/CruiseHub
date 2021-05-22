@@ -2,13 +2,11 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.managers;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Reservation;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseFacade;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.ReservationFacadeMow;
 
-import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,18 +21,18 @@ public class ReservationManager implements ReservationManagerLocal{
     private ReservationFacadeMow reservationFacadeMow;
 
     @Inject
-    private CruiseFacade cruiseFacade;
+    private CruiseFacadeMow cruiseFacadeMow;
 
     @Override
     public List<Reservation> getCruiseReservations(UUID cruise_uuid) throws BaseAppException {
-        long id= cruiseFacade.findByUUID(cruise_uuid).getId();
+        long id= cruiseFacadeMow.findByUUID(cruise_uuid).getId();
         List<Reservation> res = reservationFacadeMow.findCruiseReservations(id);
         return res;
 
     }
     @Override
     public List<Reservation> getWorkerCruiseReservations(UUID cruise_uuid) throws BaseAppException {
-        long id= cruiseFacade.findByUUID(cruise_uuid).getId();
+        long id= cruiseFacadeMow.findByUUID(cruise_uuid).getId();
         List<Reservation> res = reservationFacadeMow.findWorkerCruiseReservations(id);
         return res;
 

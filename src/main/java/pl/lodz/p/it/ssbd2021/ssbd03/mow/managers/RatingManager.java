@@ -6,9 +6,8 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Rating;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.AccountFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseGroupFacadeMow;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.RatingFacade;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.RatingFacadeMow;
 
-import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.inject.Inject;
 import javax.ws.rs.core.Context;
@@ -21,17 +20,17 @@ public class RatingManager implements RatingManagerLocal {
     SecurityContext securityContext;
 
     @Inject
-    RatingFacade ratingFacade;
+    RatingFacadeMow ratingFacade;
 
     @Inject
-    AccountFacadeMow accountFacade;
+    AccountFacadeMow accountFacadeMow;
 
     @Inject
     CruiseGroupFacadeMow cruiseGroupFacadeMow;
 
     @Override
     public void createRating(String login, String cruiseName, Integer rating) throws BaseAppException {
-        Account account = accountFacade.findByLogin(login);
+        Account account = accountFacadeMow.findByLogin(login);
         CruiseGroup cruiseGroup = cruiseGroupFacadeMow.findByName(cruiseName);
         Rating r = new Rating(account, cruiseGroup, rating);
 

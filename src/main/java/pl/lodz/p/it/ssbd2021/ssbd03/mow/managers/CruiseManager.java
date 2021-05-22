@@ -9,12 +9,9 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.AccountFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.NewCruiseDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CompanyFacadeMow;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseFacade;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseGroupFacadeMow;
 
-import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
@@ -31,7 +28,7 @@ public class CruiseManager implements CruiseManagerLocal {
     private SecurityContext securityContext;
 
     @Inject
-    private CruiseFacade cruiseFacade;
+    private CruiseFacadeMow cruiseFacadeMow;
 
     @Inject
     private AccountFacadeMow accountFacade;
@@ -44,7 +41,7 @@ public class CruiseManager implements CruiseManagerLocal {
     public void addCruise(Cruise cruise, String cruiseGroupName) throws BaseAppException {
         CruiseGroup cruiseGroup = cruiseGroupFacadeMow.findByName(cruiseGroupName);
         cruise.setCruisesGroup(cruiseGroup);
-        cruiseFacade.create(cruise);
+        cruiseFacadeMow.create(cruise);
         Account account = accountFacade.findByLogin(securityContext.getUserPrincipal().getName());
         setAlterTypeAndAlterAccount(account, accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE), account);
 
@@ -56,7 +53,7 @@ public class CruiseManager implements CruiseManagerLocal {
         if (!(account.getVersion() == version)) {
             throw FacadeException.optimisticLock();
         }
-        Cruise cruise = cruiseFacade.findByUUID(uuid);
+        Cruise cruise = cruiseFacadeMow.findByUUID(uuid);
         cruise.setActive(false);
         setAlterTypeAndAlterCruise(cruise , accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE),account);
     }

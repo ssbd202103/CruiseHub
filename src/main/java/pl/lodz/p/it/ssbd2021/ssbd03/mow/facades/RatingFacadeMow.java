@@ -11,12 +11,12 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
-public class RatingFacade extends AbstractFacade<Rating> {
+public class RatingFacadeMow extends AbstractFacade<Rating> {
 
     @PersistenceContext(unitName = "ssbd03mowPU")
     private EntityManager em;
 
-    public RatingFacade() {
+    public RatingFacadeMow() {
         super(Rating.class);
     }
 

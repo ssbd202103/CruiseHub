@@ -17,12 +17,12 @@ import java.util.UUID;
 
 @Stateless
 @TransactionAttribute(TransactionAttributeType.MANDATORY)
-public class CruiseFacade extends AbstractFacade<Cruise> {
+public class CruiseFacadeMow extends AbstractFacade<Cruise> {
 
     @PersistenceContext(unitName = "ssbd03mowPU")
     private EntityManager em;
 
-    public CruiseFacade() {
+    public CruiseFacadeMow() {
         super(Cruise.class);
     }
 
