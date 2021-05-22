@@ -225,7 +225,7 @@ public interface AccountManagerLocal {
      * @param IpAddr Adres IP użytkownika
      * @param time   Czas
      */
-    @RolesAllowed("SYSTEM")
+
     void updateIncorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws BaseAppException;
 
     /**
@@ -236,7 +236,7 @@ public interface AccountManagerLocal {
      * @param time   Czas
      * @return Token JWT
      */
-    @RolesAllowed("SYSTEM")
+
     String updateCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws BaseAppException;
 
     /**

@@ -29,6 +29,7 @@ import javax.annotation.Resource;
 import javax.annotation.security.DeclareRoles;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
+import javax.annotation.security.RunAs;
 import javax.ejb.*;
 import javax.inject.Inject;
 import javax.ws.rs.core.Context;
@@ -46,6 +47,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 //@Stateless todo check why stateless throws exceptions occasionally
 @Stateful
 @TransactionAttribute(TransactionAttributeType.MANDATORY)
+@RunAs("SYSTEM")
 public class AccountManager implements AccountManagerLocal {
 
     @Inject
@@ -62,7 +64,6 @@ public class AccountManager implements AccountManagerLocal {
 
     @Inject
     I18n i18n;
-
 
 
     @PermitAll

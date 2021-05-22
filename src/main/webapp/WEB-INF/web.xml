@@ -99,8 +99,12 @@
         <role-name>changeAdministratorData</role-name>
     </security-role>
 
+    <security-role>
+        <role-name>SYSTEM</role-name>
+    </security-role>
 
-<!--    <security-constraint>-->
+
+<!--    <security-constraint> todo-->
 <!--        <web-resource-collection>-->
 <!--            <web-resource-name>api</web-resource-name>-->
 <!--            <url-pattern>/*</url-pattern>-->
