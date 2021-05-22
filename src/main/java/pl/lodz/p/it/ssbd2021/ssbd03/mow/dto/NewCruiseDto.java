@@ -16,5 +16,5 @@ public class NewCruiseDto {
     private boolean active;
     private String description;
     private Boolean available;
-    private CruiseGroup cruisesGroup;
+    private CruiseGroupDto cruiseGroupDto;
 }
