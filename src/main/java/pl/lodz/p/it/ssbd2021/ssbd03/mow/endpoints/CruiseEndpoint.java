@@ -24,7 +24,7 @@ public class CruiseEndpoint implements CruiseEndpointLocal {
 
     @Override
     public void addCruise(NewCruiseDto newCruiseDto) throws BaseAppException {
-        cruiseManagerLocal.addCruise(CruiseMapper.mapNewCruiseDtoToCruise(newCruiseDto));
+        cruiseManagerLocal.addCruise(CruiseMapper.mapNewCruiseDtoToCruise(newCruiseDto), newCruiseDto.getCruiseName());
     }
 
     @Override
