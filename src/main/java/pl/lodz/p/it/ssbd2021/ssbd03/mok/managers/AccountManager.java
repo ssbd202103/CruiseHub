@@ -25,8 +25,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.security.JWTHandler;
 import pl.lodz.p.it.ssbd2021.ssbd03.services.EmailService;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateful;
+import javax.ejb.*;
 import javax.inject.Inject;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
@@ -40,7 +39,9 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
  * Klasa która zarządza logiką biznesową kont
  */
 
+//@Stateless todo check why stateless throws exceptions occasionally
 @Stateful
+@TransactionAttribute(TransactionAttributeType.MANDATORY)
 public class AccountManager implements AccountManagerLocal {
 
     @EJB

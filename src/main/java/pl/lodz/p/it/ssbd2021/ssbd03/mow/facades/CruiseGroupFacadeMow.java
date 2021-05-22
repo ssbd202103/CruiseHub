@@ -1,13 +1,12 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.facades;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company;
+
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AbstractFacade;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.AbstractFacade;
 
 import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -15,15 +14,12 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Stateless
-@TransactionAttribute(TransactionAttributeType.MANDATORY)
-public class CompanyFacadeMow extends AbstractFacade<Company> {
+public class CruiseGroupFacadeMow extends AbstractFacade<CruiseGroup> {
 
     @PersistenceContext(unitName = "ssbd03mowPU")
     private EntityManager em;
 
-    public CompanyFacadeMow() {
-        super(Company.class);
-    }
+    public CruiseGroupFacadeMow() { super(CruiseGroup.class); }
 
     @Override
     protected EntityManager getEntityManager() {
@@ -31,22 +27,23 @@ public class CompanyFacadeMow extends AbstractFacade<Company> {
     }
 
     @Override
-    public List<Company> findAll() throws FacadeException {
+    public List<CruiseGroup> findAll() { //TODO throws FacadeException {
         return super.findAll();
     }
 
     @Override
-    public void edit(Company entity) throws FacadeException {
+    public void edit(CruiseGroup entity) { //TODo throws FacadeException {
         super.edit(entity);
     }
 
     @Override
-    public void create(Company entity) throws FacadeException {
+    public void create(CruiseGroup entity) { //TODO throws FacadeException {
         super.create(entity);
     }
-    public Company getCompanyByName(String companyName) throws BaseAppException {
-        TypedQuery<Company> tq = em.createNamedQuery("Company.findByName", Company.class);
-        tq.setParameter("name", companyName);
+
+    public CruiseGroup findByName(String name) throws BaseAppException {
+        TypedQuery<CruiseGroup> tq = em.createNamedQuery("CruiseGroup.findByName", CruiseGroup.class);
+        tq.setParameter("name", name);
         try {
             return tq.getSingleResult();
         } catch (NoResultException e) {

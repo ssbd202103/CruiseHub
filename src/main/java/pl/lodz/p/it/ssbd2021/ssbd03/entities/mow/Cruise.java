@@ -38,7 +38,6 @@ public class Cruise extends BaseEntity {
 
     @Getter
     @Setter
-    @NotNull(message = CONSTRAINT_NOT_NULL)
     @Column(name = "active")
     private boolean active;
 
