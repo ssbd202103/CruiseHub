@@ -189,7 +189,7 @@ create table business_workers
     id                           bigint      not null, -- FOREIGN KEY
     phone_number                 varchar(12) not null,
     company_id                   bigint      not null,
-    confirmed_by_business_worker bool        not null,
+    confirmed bool        not null,
 
     CONSTRAINT business_workers_id_pk_constraint PRIMARY KEY (id),
     CONSTRAINT business_workers_id_fk_constraint FOREIGN KEY (id) REFERENCES access_levels (id),

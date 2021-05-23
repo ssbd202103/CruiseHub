@@ -120,7 +120,7 @@ values (-3, 'BeautifulCompany', -2, '756458542', 9568545875, now(), now(), -2, -
 --
 --
 -- business_workers start
-insert into business_workers (id, phone_number, company_id, confirmed_by_business_worker)
+insert into business_workers (id, phone_number, company_id, confirmed)
 values (-4, '0987654321', -2, true);
 -- business_workers end
 --
