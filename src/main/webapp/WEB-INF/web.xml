@@ -111,6 +111,10 @@
         <role-name>publishCruise</role-name>
     </security-role>
 
+    <security-role>
+        <role-name>ownFindRating</role-name>
+    </security-role>
+
 
 <!--    <security-constraint> todo-->
 <!--        <web-resource-collection>-->
