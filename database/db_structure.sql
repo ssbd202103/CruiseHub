@@ -446,9 +446,11 @@ CREATE VIEW glassfish_auth_view AS
 SELECT accounts.login, accounts.password_hash, access_levels.access_level
 FROM accounts
          JOIN access_levels ON accounts.id = access_levels.account_id
+         LEFT JOIN business_workers bw on access_levels.id = bw.id
 WHERE accounts.confirmed
   AND accounts.active
-  AND access_levels.enabled;
+  AND access_levels.enabled
+  AND (bw.confirmed OR bw.confirmed IS NULL);
 
 -- Table owner --
 ALTER TABLE used_tokens
