@@ -118,6 +118,12 @@ public class AccountController {
         return tryAndRepeat(() -> accountEndpoint.getAllAccounts());
     }
 
+    @GET
+    @Path("unconfirmed-business-workers")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<BusinessWorkerDto> getAllUnconfirmedBusinessWorkers() throws BaseAppException{
+        return tryAndRepeat(() -> accountEndpoint.getAllUnconfirmedBusinessWorkers());
+    }
 
     /**
      * Metoda pośrednio odpowiedzialna za blokowanie użytkownika
@@ -318,4 +324,6 @@ public class AccountController {
 
         tryAndRepeat(() -> accountEndpoint.changeEmail(accountChangeEmailDto));
     }
+
+
 }

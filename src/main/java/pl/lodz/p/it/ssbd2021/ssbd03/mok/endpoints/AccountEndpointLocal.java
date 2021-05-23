@@ -246,5 +246,7 @@ public interface AccountEndpointLocal {
      */
 
     void changeMode(ChangeModeDto changeModeDto) throws BaseAppException, FacadeException;
+
+    List<BusinessWorkerDto> getAllUnconfirmedBusinessWorkers() throws BaseAppException;
 }
 

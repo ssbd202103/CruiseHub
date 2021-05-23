@@ -186,6 +186,12 @@ public class AccountManager implements AccountManagerLocal {
         return accountFacade.findAll();
     }
 
+    //todo Roles Allowed
+    @Override
+    public List<Account> getAllUnconfirmedBusinessWorkers(){
+        accountFacade.getUnconfirmedBusinessWorkers();
+        return accountFacade.getUnconfirmedBusinessWorkers();
+    }
     @RolesAllowed("blockUser")
     @Override
     public Account blockUser(String login, long version) throws BaseAppException {

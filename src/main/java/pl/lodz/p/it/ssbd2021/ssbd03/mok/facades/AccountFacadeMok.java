@@ -82,6 +82,11 @@ public class AccountFacadeMok extends AbstractFacade<Account> {
         return tqq.getResultList();
 
     }
+    public List<Account> getUnconfirmedBusinessWorkers() {
+        TypedQuery<Account> tqq = em.createNamedQuery("Account.findUnconfirmedBusinessWorkers", Account.class);
+        return tqq.getResultList();
+
+    }
 
     @Override
     public void edit(Account entity) throws FacadeException {

@@ -114,6 +114,15 @@ public class AccountEndpoint implements AccountEndpointLocal {
         return res;
     }
 
+    //tod Roles Allowed
+    @Override
+    public List<BusinessWorkerDto> getAllUnconfirmedBusinessWorkers() throws BaseAppException {
+        List<BusinessWorkerDto> res = new ArrayList<>();
+        for(Account account: accountManager.getAllUnconfirmedBusinessWorkers()){
+            res.add(AccountMapper.toBusinessWorkerDto(account));
+        }
+        return res;
+    }
     @RolesAllowed("blockUser")
     @Override
     public void blockUser(@NotNull(message = CONSTRAINT_NOT_NULL) String login, @NotNull(message = CONSTRAINT_NOT_NULL) long version) throws BaseAppException {
