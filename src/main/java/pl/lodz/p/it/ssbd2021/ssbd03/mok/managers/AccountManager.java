@@ -188,9 +188,15 @@ public class AccountManager implements AccountManagerLocal {
 
     //todo Roles Allowed
     @Override
-    public List<Account> getAllUnconfirmedBusinessWorkers(){
-        accountFacade.getUnconfirmedBusinessWorkers();
-        return accountFacade.getUnconfirmedBusinessWorkers();
+    public List<Account> getAllUnconfirmedBusinessWorkers() throws BaseAppException {
+        List<Account> accounts = new ArrayList<>();
+       for(Account account : accountFacade.findAll()) {
+           BusinessWorker worker = (BusinessWorker) getAccessLevel(account,AccessLevelType.BUSINESS_WORKER);
+           if(!worker.isConfirmedByBusinessWorker()){
+               accounts.add(account);
+           }
+       }
+       return accounts;
     }
     @RolesAllowed("blockUser")
     @Override

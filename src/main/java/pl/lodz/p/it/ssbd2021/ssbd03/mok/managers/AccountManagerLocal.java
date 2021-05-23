@@ -256,5 +256,5 @@ public interface AccountManagerLocal {
      */
     void changeMode(String login, boolean newMode) throws BaseAppException;
 
-    List<Account> getAllUnconfirmedBusinessWorkers();
+    List<Account> getAllUnconfirmedBusinessWorkers() throws BaseAppException;
 }
