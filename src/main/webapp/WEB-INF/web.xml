@@ -111,6 +111,14 @@
         <role-name>publishCruise</role-name>
     </security-role>
 
+    <security-role>
+        <role-name>addAttraction</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>editAttraction</role-name>
+    </security-role>
+
 
 <!--    <security-constraint> todo-->
 <!--        <web-resource-collection>-->

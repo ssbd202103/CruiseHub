@@ -1,4 +1,4 @@
-package pl.lodz.p.it.ssbd2021.ssbd03.mow;
+package pl.lodz.p.it.ssbd2021.ssbd03.mow.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

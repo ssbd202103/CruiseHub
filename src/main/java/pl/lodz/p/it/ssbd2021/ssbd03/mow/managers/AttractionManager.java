@@ -1,11 +1,10 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.managers;
 
-import org.hibernate.cfg.NotYetImplementedException;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Attraction;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.AttractionFacadeMow;
 
-import javax.ejb.EJB;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
 import javax.inject.Inject;
 import java.util.List;
@@ -14,7 +13,7 @@ import java.util.List;
  * Klasa która zarządza logiką biznesową atrakcji
  */
 @Stateful
-public class AttractionManager implements AttractionManagerLocal{
+public class AttractionManager implements AttractionManagerLocal {
 
     @Inject
     private AttractionFacadeMow attractionFacadeMow;
@@ -28,15 +27,15 @@ public class AttractionManager implements AttractionManagerLocal{
     public void deleteAttraction(String name) throws BaseAppException {
         Attraction attraction = this.attractionFacadeMow.findByName(name);
         //TODO sprawdzenie czy atrakcja nie jest zarezerwowana
-        if(attraction != null){   //if na te chwile do zmiany
+        if (attraction != null) {   //if na te chwile do zmiany
 
-        }
-        else {
+        } else {
             this.attractionFacadeMow.deleteAttraction(name);
         }
     }
 
 
+    @RolesAllowed("addAttraction")
     @Override
     public void addAttraction(Attraction attraction) throws BaseAppException {
         throw new UnsupportedOperationException();
