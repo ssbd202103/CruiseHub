@@ -17,7 +17,7 @@ public interface AttractionManagerLocal {
      *
      * @return the all companies
      */
-    List<Attraction> getAllAttraction() throws BaseAppException;
+    List<Attraction> getAllAttractions() throws BaseAppException;
 
     /**
      * Metoda odpowiedzialna za usuwanie atrkacji
@@ -27,4 +27,11 @@ public interface AttractionManagerLocal {
      */
     void deleteAttraction(String name) throws BaseAppException;
 
+
+    /**
+     * Metoda odpowiedzialna za stworzenie atrakcji i dodanie jej do grupy wycieczek.
+     * @param attraction Obiekt reprezentujący atrakcję
+     * @throws BaseAppException Wyjątek występujący w przypadku naruszenia zasad biznesowych.
+     */
+    void addAttraction(Attraction attraction) throws BaseAppException;
     }

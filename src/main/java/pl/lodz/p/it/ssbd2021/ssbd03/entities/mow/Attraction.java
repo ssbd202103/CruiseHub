@@ -57,8 +57,8 @@ public class Attraction extends BaseEntity {
     @Getter
     @Setter
     @NotNull(message = CONSTRAINT_NOT_NULL)
-    @Column(name = "available")
-    private boolean available;
+    @Column(name = "has_free_spots")
+    private boolean hasFreeSpots;
 
     @Getter
     @Setter
@@ -69,13 +69,22 @@ public class Attraction extends BaseEntity {
     private CruiseGroup cruise;
 
     public Attraction(String name, String description,
-                      double price, long numberOfSeats, boolean available, CruiseGroup cruise) {
+                      double price, long numberOfSeats, boolean hasFreeSpots, CruiseGroup cruise) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.numberOfSeats = numberOfSeats;
-        this.available = available;
+        this.hasFreeSpots = hasFreeSpots;
         this.cruise = cruise;
+    }
+
+    public Attraction(String name, String description, double price, long numberOfSeats, CruiseGroup cruise) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.numberOfSeats = numberOfSeats;
+        this.cruise = cruise;
+        this.hasFreeSpots = true;
     }
 
     public Attraction() {

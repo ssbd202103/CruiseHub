@@ -317,7 +317,7 @@ create table attractions
     description          varchar                             not null,
     price                numeric(8, 2)                       not null,
     number_of_seats      bigint check (number_of_seats >= 0) not null,
-    available            boolean   default false             not null,
+    has_free_spots       boolean   default true              not null,
     cruise_id            bigint,                                       -- FOREIGN KEY
 
     creation_date_time   timestamp default CURRENT_TIMESTAMP not null,

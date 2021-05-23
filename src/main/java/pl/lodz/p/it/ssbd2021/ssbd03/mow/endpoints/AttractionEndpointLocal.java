@@ -1,6 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.AddAttractionDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CompanyLightDto;
 
 import javax.ejb.Local;
@@ -27,4 +28,11 @@ public interface AttractionEndpointLocal {
      * @throws BaseAppException
      */
     void deleteAttraction(String name) throws BaseAppException;
+
+    /**
+     * Metoda odpowiedzialna za stworzenie atrakcji i dodanie jej do grupy wycieczek.
+     * @param addAttractionDto Obiekt przesyłowy DTO reprezentujący atrakcję
+     * @throws BaseAppException Wyjątek występujący w przypadku naruszenia zasad biznesowych.
+     */
+    void addAttraction(AddAttractionDto addAttractionDto) throws BaseAppException;
     }
