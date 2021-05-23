@@ -1,9 +1,11 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.AddAttractionDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.AddAttractionDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.EditAttractionDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.managers.AttractionManagerLocal;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
 import javax.inject.Inject;
 
@@ -29,8 +31,15 @@ public class AttractionEndpoint implements AttractionEndpointLocal {
     }
 
 
+    @RolesAllowed("addAttraction")
     @Override
     public void addAttraction(AddAttractionDto addAttractionDto) throws BaseAppException {
+        throw new UnsupportedOperationException();
+    }
+
+    @RolesAllowed("editAttraction")
+    @Override
+    public void editAttraction(EditAttractionDto editAttractionDto) throws BaseAppException {
         throw new UnsupportedOperationException();
     }
 }

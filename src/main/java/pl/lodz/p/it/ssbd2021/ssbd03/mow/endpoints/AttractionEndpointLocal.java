@@ -1,11 +1,11 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Attraction;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.AddAttractionDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CompanyLightDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.AddAttractionDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.EditAttractionDto;
 
 import javax.ejb.Local;
-import java.util.List;
 
 /**
  * Interfejs który zajmuje się gromadzeniem zmapowanych obiektów klas Dto na obiekty klas modelu związanych z firmami oraz wywołuje metody logiki przekazując zmapowane obiekty.
@@ -35,4 +35,11 @@ public interface AttractionEndpointLocal {
      * @throws BaseAppException Wyjątek występujący w przypadku naruszenia zasad biznesowych.
      */
     void addAttraction(AddAttractionDto addAttractionDto) throws BaseAppException;
+
+    /**
+     * Metoda odpowiedzialna za edycję istniejącej atrakcji
+     * @param editAttractionDto Obiekt przesyłowy DTO reprezentujący atrakcję po zmianach
+     * @throws BaseAppException Wyjątek występujący w przypadku nieznalezienia atrakcji lub naruszenia zasad biznesowych.
+     */
+    void editAttraction(EditAttractionDto editAttractionDto) throws BaseAppException;
     }

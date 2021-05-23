@@ -34,4 +34,11 @@ public interface AttractionManagerLocal {
      * @throws BaseAppException Wyjątek występujący w przypadku naruszenia zasad biznesowych.
      */
     void addAttraction(Attraction attraction) throws BaseAppException;
+
+    /**
+     * Metoda odpowiedzialna za edycję istniejącej atrakcji.
+     * @param attraction Obiekt reprezentujący atrakcję po dokonanych zmianach.
+     * @throws BaseAppException Wyjątek występujący w przypadku nieznalezienia atrakcji lub naruszenia zasad biznesowych.
+     */
+    void editAttraction(Attraction attraction) throws BaseAppException;
     }

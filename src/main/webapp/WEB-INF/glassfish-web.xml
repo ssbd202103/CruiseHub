@@ -155,6 +155,17 @@
     </security-role-mapping>
 
     <security-role-mapping>
+        <role-name>addAttraction</role-name>
+        <group-name>BUSINESS_WORKER</group-name>
+    </security-role-mapping>
+
+    <security-role-mapping>
+        <role-name>editAttraction</role-name>
+        <group-name>BUSINESS_WORKER</group-name>
+        <group-name>ADMINISTRATOR</group-name>
+    </security-role-mapping>
+
+    <security-role-mapping>
         <role-name>ownFindRating</role-name>
         <group-name>CLIENT</group-name>
     </security-role-mapping>
