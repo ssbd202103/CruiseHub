@@ -112,6 +112,10 @@
     </security-role>
 
     <security-role>
+        <role-name>ownFindRating</role-name>
+    </security-role>
+
+    <security-role>
         <role-name>addAttraction</role-name>
     </security-role>
 
