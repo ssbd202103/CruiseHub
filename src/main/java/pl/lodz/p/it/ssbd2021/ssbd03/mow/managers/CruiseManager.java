@@ -12,6 +12,10 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseGroupFacadeMow;
 
+import javax.annotation.security.RolesAllowed;
+import javax.ejb.Stateful;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
@@ -21,6 +25,8 @@ import java.util.UUID;
 /**
  * Klasa która zarządza logiką biznesową wycieczek (rejsów)
  */
+@Stateful
+@TransactionAttribute(TransactionAttributeType.MANDATORY)
 public class CruiseManager implements CruiseManagerLocal {
 
 
@@ -55,7 +61,7 @@ public class CruiseManager implements CruiseManagerLocal {
         }
         Cruise cruise = cruiseFacadeMow.findByUUID(uuid);
         cruise.setActive(false);
-        setAlterTypeAndAlterCruise(cruise , accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE),account);
+        setAlterTypeAndAlterCruise(cruise, accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE), account);
     }
 
     private void setAlterTypeAndAlterAccount(Account account, AlterTypeWrapper alterTypeWrapper, Account alteredBy) {
@@ -63,6 +69,7 @@ public class CruiseManager implements CruiseManagerLocal {
         account.setAlterType(alterTypeWrapper);
         account.setLastAlterDateTime(LocalDateTime.now());
     }
+
     private void setAlterTypeAndAlterCruise(Cruise cruise, AlterTypeWrapper alterTypeWrapper, Account alteredBy) {
         cruise.setAlteredBy(alteredBy);
         cruise.setAlterType(alterTypeWrapper);
@@ -72,5 +79,11 @@ public class CruiseManager implements CruiseManagerLocal {
     @Override
     public Cruise getCruise(UUID uuid) throws BaseAppException {
         return cruiseFacadeMow.findByUUID(uuid);
+    }
+
+    @RolesAllowed("publishCruise")
+    @Override
+    public void publishCruise(long cruiseVersion, UUID cruiseUuid) throws BaseAppException {
+        // todo finish implementation
     }
 }

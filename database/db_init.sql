@@ -198,18 +198,24 @@ values (-3, -2, 'Beautiful Sandy Shores', 31, 502, -4, 5, true, now(), now(), -2
 --
 --
 --cruises start
-insert into cruises(id, uuid,start_date, end_date, active, description, cruises_group_id, available, creation_date_time,
+insert into cruises(id, uuid, start_date, end_date, active, description, cruises_group_id, available,
+                    creation_date_time,
                     last_alter_date_time, alter_type_id, created_by_id,
-                    altered_by_id, version)
-values (-1, '581d626f-d421-47dd-89ef-b41bc30aa36c',now(), now(), true, 'Beautiful tour', -1, true, now(), now(), -2, -1, -1, 0);
-insert into cruises(id, uuid, start_date, end_date, active, description, cruises_group_id, available, creation_date_time,
+                    altered_by_id, version, published)
+values (-1, '581d626f-d421-47dd-89ef-b41bc30aa36c', now(), now(), true, 'Beautiful tour', -1, true, now(), now(), -2,
+        -1, -1, 0, true);
+insert into cruises(id, uuid, start_date, end_date, active, description, cruises_group_id, available,
+                    creation_date_time,
                     last_alter_date_time, alter_type_id, created_by_id,
-                    altered_by_id, version)
-values (-2, '181d626f-d421-47dd-89ef-b41bc30aa36c', now(), now(), false, 'Beautiful Beautiful tour', -2, true, now(), now(), -2, -1, -1, 0);
-insert into cruises(id, uuid, start_date, end_date, active, description, cruises_group_id, available, creation_date_time,
+                    altered_by_id, version, published)
+values (-2, '181d626f-d421-47dd-89ef-b41bc30aa36c', now(), now(), false, 'Beautiful Beautiful tour', -2, true, now(),
+        now(), -2, -1, -1, 0, true);
+insert into cruises(id, uuid, start_date, end_date, active, description, cruises_group_id, available,
+                    creation_date_time,
                     last_alter_date_time, alter_type_id, created_by_id,
-                    altered_by_id, version)
-values (-3, '481d626f-d421-47dd-89ef-b41bc30aa36c', now(), now(), true, 'The most Beautiful tour', -3, false, now(), now(), -2, -1, -1, 0);
+                    altered_by_id, version, published)
+values (-3, '481d626f-d421-47dd-89ef-b41bc30aa36c', now(), now(), true, 'The most Beautiful tour', -3, false, now(),
+        now(), -2, -1, -1, 0, true);
 --cruises end
 --
 --
@@ -233,18 +239,21 @@ values (-3, 'Romantic dinner', 'Romantic dinner on the most beautiful Sandy Shor
 --
 --
 --reservation start
-insert into reservations(id, uuid,client_id, number_of_seats, cruise_id,price, creation_date_time, last_alter_date_time,
+insert into reservations(id, uuid, client_id, number_of_seats, cruise_id, price, creation_date_time,
+                         last_alter_date_time,
                          alter_type_id, created_by_id,
                          altered_by_id, version)
-values (-1,'ab3e9d82-bbac-11eb-8529-0242ac130003', -2, 2, -1,50, now(), now(), -2, -1, -1, 0);
-insert into reservations(id, uuid,client_id, number_of_seats, cruise_id,price, creation_date_time, last_alter_date_time,
+values (-1, 'ab3e9d82-bbac-11eb-8529-0242ac130003', -2, 2, -1, 50, now(), now(), -2, -1, -1, 0);
+insert into reservations(id, uuid, client_id, number_of_seats, cruise_id, price, creation_date_time,
+                         last_alter_date_time,
                          alter_type_id, created_by_id,
                          altered_by_id, version)
-values (-2,'ab3e9fd0-bbac-11eb-8529-0242ac130003', -2, 5, -2,20, now(), now(), -2, -1, -1, 0);
-insert into reservations(id, uuid,client_id, number_of_seats, cruise_id,price, creation_date_time, last_alter_date_time,
+values (-2, 'ab3e9fd0-bbac-11eb-8529-0242ac130003', -2, 5, -2, 20, now(), now(), -2, -1, -1, 0);
+insert into reservations(id, uuid, client_id, number_of_seats, cruise_id, price, creation_date_time,
+                         last_alter_date_time,
                          alter_type_id, created_by_id,
                          altered_by_id, version)
-values (-3,'ab3ea0ca-bbac-11eb-8529-0242ac130003', -2, 1, -3,30, now(), now(), -2, -1, -1, 0);
+values (-3, 'ab3ea0ca-bbac-11eb-8529-0242ac130003', -2, 1, -3, 30, now(), now(), -2, -1, -1, 0);
 --reservation end
 --
 --

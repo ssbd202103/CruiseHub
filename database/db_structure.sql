@@ -256,7 +256,7 @@ create table cruises_groups
     price                numeric(8, 2) check ((price >= (0)::numeric))                       not null,
     start_address_id     bigint                                                              not null, -- FOREIGN KEY
     average_rating       numeric(2, 1) check ((average_rating >= (0)::numeric) AND (average_rating <= (5)::numeric)),
-    active               boolean   default false             not null,
+    active               boolean   default false                                             not null,
 
     creation_date_time   timestamp default CURRENT_TIMESTAMP                                 not null,
     last_alter_date_time timestamp                                                           not null,
@@ -296,8 +296,9 @@ create table cruises
     alter_type_id        bigint                              not null, -- FOREIGN KEY
 
     version              bigint check (version >= 0)         not null,
+    published            boolean                             not null,
 
-    CONSTRAINT cruises_uuid_unique_constraint UNIQUE(uuid),
+    CONSTRAINT cruises_uuid_unique_constraint UNIQUE (uuid),
     CONSTRAINT cruises_id_pk_constraint PRIMARY KEY (id),
     CONSTRAINT cruises_cruises_group_id_fk FOREIGN KEY (cruises_group_id) REFERENCES cruises_groups (id),
     CONSTRAINT cruises_alter_type_id_fk_constraint FOREIGN KEY (alter_type_id) REFERENCES alter_types (id),
@@ -344,7 +345,7 @@ create table reservations
     client_id            bigint                              not null, --FOREIGN KEY
     number_of_seats      bigint check (number_of_seats >= 0) not null,
     cruise_id            bigint                              not null, --FOREIGN KEY
-    price                numeric(8, 2) ,
+    price                numeric(8, 2),
 
     creation_date_time   timestamp default CURRENT_TIMESTAMP not null,
     last_alter_date_time timestamp                           not null,
@@ -354,7 +355,7 @@ create table reservations
     version              bigint check (version >= 0)         not null,
 
     CONSTRAINT reservations_id_pk_constraint PRIMARY KEY (id),
-    CONSTRAINT reservations_uuid_unique_constraint UNIQUE(uuid),
+    CONSTRAINT reservations_uuid_unique_constraint UNIQUE (uuid),
     CONSTRAINT reservations_client_id_fk_constraint FOREIGN KEY (client_id) REFERENCES clients (id),
     CONSTRAINT reservations_cruise_id_fk_constraint FOREIGN KEY (cruise_id) REFERENCES cruises (id),
     CONSTRAINT reservations_alter_type_id_fk_constraint FOREIGN KEY (alter_type_id) REFERENCES alter_types (id),

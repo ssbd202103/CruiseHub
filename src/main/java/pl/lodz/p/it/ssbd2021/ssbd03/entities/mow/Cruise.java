@@ -81,6 +81,11 @@ public class Cruise extends BaseEntity {
     @Valid
     private CruiseGroup cruisesGroup;
 
+    @Getter
+    @Setter
+    @Column(name = "published")
+    private boolean published;
+
     public Cruise(LocalDateTime startDate, LocalDateTime endDate, boolean active,
                   String description, boolean available, CruiseGroup cruisesGroup) {
         this.startDate = startDate;

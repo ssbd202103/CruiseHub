@@ -4,6 +4,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.DeactivateCruiseDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.NewCruiseDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.PublishCruiseDto;
 
 import javax.ejb.Local;
 import java.util.UUID;
@@ -26,6 +27,7 @@ public interface CruiseEndpointLocal {
 
     /**
      * Deaktywowanie wycieczki
+     *
      * @param deactivateCruiseDto obiekt dto posiadający uuid oraz wersję wycieczki
      * @throws BaseAppException wyjątek rzucany w razie nie znalezienia wycieczki bądź konta deaktywującego
      */
@@ -33,9 +35,19 @@ public interface CruiseEndpointLocal {
 
     /**
      * Otrzymanie informacji o wycieczce o podanym uuid
+     *
      * @param uuid uuid wycieczki
      * @return obiekt dto przechowujący informację o wycieczce
      * @throws BaseAppException wyjątek rzucany w razie nie znalezienia wycieczki bądź konta deaktywującego
      */
     CruiseDto getCruise(UUID uuid) throws BaseAppException;
+
+    /**
+     * Publikuje wycieczke
+     *
+     * @param publishCruiseDto dto niezbędne do publikacji wycieczki
+     * @return
+     * @throws BaseAppException wyjątek rzucany w razie nie znalezienia wycieczki bądź konta publikującego
+     */
+    void publishCruise(PublishCruiseDto publishCruiseDto) throws BaseAppException;
 }

@@ -107,6 +107,10 @@
         <role-name>removeClientReservation</role-name>
     </security-role>
 
+    <security-role>
+        <role-name>publishCruise</role-name>
+    </security-role>
+
 
 <!--    <security-constraint> todo-->
 <!--        <web-resource-collection>-->
