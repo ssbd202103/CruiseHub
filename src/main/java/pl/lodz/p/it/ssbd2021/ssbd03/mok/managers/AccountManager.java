@@ -193,8 +193,11 @@ public class AccountManager implements AccountManagerLocal {
         String token = JWTHandler.createToken(claims, login);
         TokenWrapper tokenWrapper = TokenWrapper.builder().token(token).account(account).used(false).build();
         this.tokenWrapperFacade.create(tokenWrapper);
-        String contentHtml = "<a href=\"" + PropertiesReader.getSecurityProperties().getProperty("app.baseurl") + "/reset/passwordReset/" + token + "\">Reset password</a>";
-        EmailService.sendEmailWithContent(account.getEmail().trim(), "hello", contentHtml);
+        Locale locale = new Locale(account.getLanguageType().getName().name());
+        String subject = i18n.getMessage(REQUESTED_PASSWORD_RESET_SUBJECT, locale);
+        String body = i18n.getMessage(REQUESTED_PASSWORD_RESET_BODY, locale);
+        String contentHtml = "<a href=\"" + PropertiesReader.getSecurityProperties().getProperty("app.baseurl") + "/reset/passwordReset/" + token + "\">"+body+"</a>";
+        EmailService.sendEmailWithContent(account.getEmail().trim(), subject, contentHtml);
     }
 
     @Override
@@ -293,7 +296,7 @@ public class AccountManager implements AccountManagerLocal {
     public Account changeOtherClientData(String login, String phoneNumber, Address addr, long version) throws BaseAppException {
         Account targetAccount = accountFacade.findByLogin(login);
         Client targetClient = (Client) getAccessLevel(targetAccount, AccessLevelType.CLIENT);
-        if (!(targetClient.getVersion() == version)) { //this need to check if client version has changed, not account version
+        if (!(targetClient.getVersion() == version)) {
             throw FacadeException.optimisticLock();
         }
 
@@ -340,7 +343,7 @@ public class AccountManager implements AccountManagerLocal {
     public Account changeOtherBusinessWorkerData(String login, String phoneNumber, long version) throws BaseAppException {
         Account targetAccount = accountFacade.findByLogin(login);
         BusinessWorker targetBusinessWorker = (BusinessWorker) getAccessLevel(targetAccount, AccessLevelType.BUSINESS_WORKER);
-        if (!(targetBusinessWorker.getVersion() == version)) {//this need to check if businessWorker version has changed, not account version
+        if (!(targetBusinessWorker.getVersion() == version)) {
             throw FacadeException.optimisticLock();
         }
         targetBusinessWorker.setPhoneNumber(phoneNumber);

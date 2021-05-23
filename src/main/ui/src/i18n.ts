@@ -105,6 +105,27 @@ const resources = {
             "error.emailService.inaccessible": "Serwis pocztowy jest niedostępny",
             "error.password.reset.contentError": "Błędna zawartość tokenu do resetowania hasła",
 			"error.password.change.oldPasswordError": "Podane stare hasło jest niepoprawne",
+            "error.security.etag.creation": "Błąd podczas tworzenia nagłówka ETag",
+            "error.account.accessLevels.doesNotExist": "Dany poziom dostępu nie istnieje!",
+            "error.password.reset.tokenUsed": "Podany link aktywacyjny został już wykorzystany!",
+            "error.account.verification.contentError":"Błędna zawartość tokenu do zatwierdzenia konta",
+            "error.account.verification.expireError": "Token wygasł",
+            "error.account.verification.alreadyVerifiedError": "Dane konto zostało już zatwierdzone",
+            "error.token.decode": "Błąd podczas odczyty tokenu",
+            "error.token.invalidate": "Niepoprawny token",
+            "error.database.loginReserved": "Podany login jest juz użyty",
+            "error.database.emailReserved": "Podany email jest już użyty",
+            "error.constraintViolation": "Podane dane są niepoprawne",
+            "error.constraint.positive": "Podana liczba musi być dodatnia",
+            "error.constraint.positiveOrZero":"Podana wartość musi być więszka lub równa 0",
+            "error.constraint.notEmpty":"Podane pole nie może być puste",
+            "error.constraint.notNull":"Podana wartość nie może być zerem",
+            "error.forbidden":"Operacja zabroniona",
+            "error.internal.server": "Błąd wewnętrzny serwera",
+
+            //auth errors
+            "auth.incorrect.login":"Podany login jest niepoprawny",
+            "auth.incorrect.password": "Podane hasło jest niepoprawne",
 
             ////regex errors
             "error.regex.postCode": "Niepoprawny format kodu pocztowego",
@@ -117,6 +138,7 @@ const resources = {
             "error.regex.name": "Niepoprawny format imienia",
             "error.regex.companyName": "Niepoprawny format nazwy firmy",
             "phone change btn": "Zmień numer telefonu",
+            "error.regex.email": "Niepoprawny adres email",
 
             //else
             'error.emptypanellist': 'Nie masz żadnych paneli do sterowania'
@@ -224,6 +246,27 @@ const resources = {
             "error.email.incorrect": "Email address is incorrect",
             "error.password.reset.contentError": "Invalid password reset token content",
             "error.password.change.oldPasswordError": "Inserted old password is invalid",
+            "error.security.etag.creation": "Error during creating ETag",
+            "error.account.accessLevels.doesNotExist": "Given access level does not exists",
+            "error.password.reset.tokenUsed": "Given activation link has already been used",
+            "error.account.verification.contentError":"Invalid token to confirm account",
+            "error.account.verification.expireError": "Token has expired",
+            "error.account.verification.alreadyVerifiedError": "Given account has already been confirmed",
+            "error.token.decode": "Error during decoding token",
+            "error.token.invalidate": "Invalid token",
+            "error.database.loginReserved": "Given login is already in use",
+            "error.database.emailReserved": "Given email is already in use",
+            "error.constraintViolation": "Incorrect data",
+            "error.constraint.positive": "Given number must be positive",
+            "error.constraint.positiveOrZero":"Given value must be greater or equal to zero",
+            "error.constraint.notEmpty":"Given field can not be empty",
+            "error.constraint.notNull":"Given value can not be null",
+            "error.forbidden":"Operation forbidden",
+            "error.internal.server": "Internal server error",
+
+            //auth errors
+            "auth.incorrect.login":"Given login is incorrect",
+            "auth.incorrect.password": "Given password is incorrect",
 
             ////regex errors
             "error.regex.postCode": "Invalid post code format",
@@ -236,6 +279,7 @@ const resources = {
             "error.regex.name": "Invalid name format",
             "error.regex.companyName": "Invalid company name format",
             "phone change btn": "Change phone number",
+            "error.regex.email": "Invalid email address",
 
             'error.emptypanellist': "You don't have any panel to manage"
         }
