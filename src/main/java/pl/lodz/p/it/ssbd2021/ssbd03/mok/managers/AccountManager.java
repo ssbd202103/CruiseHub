@@ -47,7 +47,6 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 //@Stateless todo check why stateless throws exceptions occasionally
 @Stateful
 @TransactionAttribute(TransactionAttributeType.MANDATORY)
-@RunAs("SYSTEM")
 public class AccountManager implements AccountManagerLocal {
 
     @Inject

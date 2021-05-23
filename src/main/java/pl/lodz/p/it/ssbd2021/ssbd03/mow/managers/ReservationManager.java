@@ -5,7 +5,10 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.ReservationFacadeMow;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import java.util.List;
 import java.util.UUID;
@@ -15,7 +18,8 @@ import java.util.UUID;
  */
 
 @Stateful
-public class ReservationManager implements ReservationManagerLocal{
+@TransactionAttribute(TransactionAttributeType.MANDATORY)
+public class ReservationManager implements ReservationManagerLocal {
 
     @Inject
     private ReservationFacadeMow reservationFacadeMow;
@@ -36,5 +40,12 @@ public class ReservationManager implements ReservationManagerLocal{
         List<Reservation> res = reservationFacadeMow.findWorkerCruiseReservations(id);
         return res;
 
+    }
+
+    @RolesAllowed("removeClientReservation")
+    @Override
+    public void removeClientReservation(long reservationVersion, UUID reservationUuid, String clientLogin) throws BaseAppException {
+        // todo finish implementation
+        Reservation reservation = reservationFacadeMow.findReservationByUuidAndLogin(UUID.randomUUID(), clientLogin);
     }
 }

@@ -143,4 +143,11 @@
         <role-name>SYSTEM</role-name>
         <group-name>SYSTEM</group-name>
     </security-role-mapping>
+
+    <security-role-mapping>
+        <role-name>removeClientReservation</role-name>
+        <group-name>ADMINISTRATOR</group-name>
+    </security-role-mapping>
+
+
 </glassfish-web-app>

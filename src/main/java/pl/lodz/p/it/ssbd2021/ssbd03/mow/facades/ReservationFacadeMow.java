@@ -1,21 +1,23 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.facades;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Reservation;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AbstractFacade;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import java.sql.ResultSet;
 import java.util.List;
 import java.util.UUID;
 
 @Stateless
+@TransactionAttribute(TransactionAttributeType.MANDATORY)
 public class ReservationFacadeMow extends AbstractFacade<Reservation> {
 
     @PersistenceContext(unitName = "ssbd03mowPU")
@@ -72,6 +74,18 @@ public class ReservationFacadeMow extends AbstractFacade<Reservation> {
         tq.setParameter("id", id);
         try {
             return tq.getResultList();
+        } catch (NoResultException e) {
+            throw FacadeException.noSuchElement();
+        }
+    }
+
+    @RolesAllowed("removeClientReservation")
+    public Reservation findReservationByUuidAndLogin(UUID uuid, String login) throws BaseAppException {
+        TypedQuery<Reservation> tq = em.createNamedQuery("Reservation.findByUUIDAndLogin", Reservation.class);
+        tq.setParameter("uuid", uuid.toString());
+        tq.setParameter("login", login);
+        try {
+            return tq.getSingleResult();
         } catch (NoResultException e) {
             throw FacadeException.noSuchElement();
         }

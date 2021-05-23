@@ -28,4 +28,14 @@ public interface ReservationManagerLocal {
      * @throws BaseAppException
      */
     List<Reservation> getWorkerCruiseReservations(UUID cruise_uuid) throws BaseAppException;
+
+    /**
+     * Usuwa wycieczke klienta podanego w obiekci dto
+     *
+     * @param reservationVersion
+     * @param reservationUuid
+     * @param clientLogin
+     * @throws BaseAppException
+     */
+    void removeClientReservation(long reservationVersion, UUID reservationUuid, String clientLogin) throws BaseAppException;
 }
