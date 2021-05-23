@@ -6,8 +6,10 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 //TODO poprawić na import z mow po poprawieniu ABstractFacade dla mow
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AbstractFacade;
+import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
 import javax.ejb.Stateless;
+import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -15,6 +17,7 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Stateless
+@Interceptors(TrackingInterceptor.class)
 public class AttractionFacadeMow extends AbstractFacade<Attraction> {
 
     @PersistenceContext(unitName = "ssbd03mowPU")

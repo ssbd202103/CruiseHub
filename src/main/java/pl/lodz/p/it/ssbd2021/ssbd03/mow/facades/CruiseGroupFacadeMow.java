@@ -5,8 +5,10 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.AbstractFacade;
+import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
 import javax.ejb.Stateless;
+import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -14,6 +16,7 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Stateless
+@Interceptors(TrackingInterceptor.class)
 public class CruiseGroupFacadeMow extends AbstractFacade<CruiseGroup> {
 
     @PersistenceContext(unitName = "ssbd03mowPU")

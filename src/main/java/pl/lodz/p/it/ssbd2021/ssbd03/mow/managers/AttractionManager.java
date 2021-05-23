@@ -3,16 +3,19 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.managers;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Attraction;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.AttractionFacadeMow;
+import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.inject.Inject;
+import javax.interceptor.Interceptors;
 import java.util.List;
 
 /**
  * Klasa która zarządza logiką biznesową atrakcji
  */
 @Stateful
+@Interceptors(TrackingInterceptor.class)
 public class AttractionManager implements AttractionManagerLocal{
 
     @Inject

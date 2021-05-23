@@ -6,10 +6,12 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.converters.CompanyMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.managers.AttractionManagerLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.managers.CompanyManagerLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.managers.CruiseGroupManagerLocal;
+import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.inject.Inject;
+import javax.interceptor.Interceptors;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,6 +20,7 @@ import java.util.stream.Collectors;
  */
 
 @Stateful
+@Interceptors(TrackingInterceptor.class)
 public class AttractionEndpoint implements AttractionEndpointLocal{
 
     @Inject

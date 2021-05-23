@@ -4,10 +4,13 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.RatingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.RemoveRankingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.managers.RatingManagerLocal;
+import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
 import javax.ejb.EJB;
 import javax.inject.Inject;
+import javax.interceptor.Interceptors;
 
+@Interceptors(TrackingInterceptor.class)
 public class RatingEndpoint implements RatingEndpointLocal {
 
     @Inject

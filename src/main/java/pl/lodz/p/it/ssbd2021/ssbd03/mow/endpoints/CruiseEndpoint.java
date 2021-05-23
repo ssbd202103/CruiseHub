@@ -6,16 +6,19 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.DeactivateCruiseDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.NewCruiseDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.converters.CruiseMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.managers.CruiseManagerLocal;
+import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import java.util.UUID;
 import javax.inject.Inject;
+import javax.interceptor.Interceptors;
 
 /**
  * Klasa który zajmuje się obsługą obiektów dto z zakresu wycieczek (rejsów)
  */
 @Stateful
+@Interceptors(TrackingInterceptor.class)
 public class CruiseEndpoint implements CruiseEndpointLocal {
 
     @Inject

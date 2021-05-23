@@ -2,8 +2,10 @@ package pl.lodz.p.it.ssbd2021.ssbd03.security;
 
 import com.auth0.jwt.interfaces.Claim;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.JWTException;
+import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
 import javax.enterprise.context.RequestScoped;
+import javax.interceptor.Interceptors;
 import javax.security.enterprise.AuthenticationStatus;
 import javax.security.enterprise.authentication.mechanism.http.HttpAuthenticationMechanism;
 import javax.security.enterprise.authentication.mechanism.http.HttpMessageContext;

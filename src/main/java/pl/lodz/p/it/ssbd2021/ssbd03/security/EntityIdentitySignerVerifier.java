@@ -5,7 +5,9 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.ETagException;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
+import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
+import javax.interceptor.Interceptors;
 import java.text.ParseException;
 import java.util.Properties;
 
@@ -14,6 +16,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ETAG_CREATION_ERROR;
 /**
  * Klasa udostępniająca statyczne metody obsługujące ETag
  */
+@Interceptors(TrackingInterceptor.class)
 public class EntityIdentitySignerVerifier {
     private static final Properties securityProperties = PropertiesReader.getSecurityProperties();
 

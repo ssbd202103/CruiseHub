@@ -10,7 +10,9 @@ import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.JWTException;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
+import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
+import javax.interceptor.Interceptors;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
@@ -24,10 +26,8 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 /**
  * Klasa odpowiedzialna za zarządzanie tokenami JWT.
  */
+@Interceptors(TrackingInterceptor.class)
 public class JWTHandler {
-    private JWTHandler() {
-    }
-
     private static final Properties securityProperties = PropertiesReader.getSecurityProperties();
 
     /**

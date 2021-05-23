@@ -1,21 +1,22 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.facades;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Reservation;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AbstractFacade;
+import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
 import javax.ejb.Stateless;
+import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import java.sql.ResultSet;
 import java.util.List;
 import java.util.UUID;
 
 @Stateless
+@Interceptors(TrackingInterceptor.class)
 public class ReservationFacadeMow extends AbstractFacade<Reservation> {
 
     @PersistenceContext(unitName = "ssbd03mowPU")

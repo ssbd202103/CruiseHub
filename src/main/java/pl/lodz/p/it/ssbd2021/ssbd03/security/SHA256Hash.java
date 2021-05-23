@@ -9,7 +9,6 @@ public class SHA256Hash implements PasswordHash {
 
     @Override
     public void initialize(Map<String, String> parameters) {
-
     }
 
     @Override

@@ -1,7 +1,11 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.utils;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
+import javax.interceptor.Interceptors;
+
+@Interceptors(TrackingInterceptor.class)
 public class TransactionRepeater {
     private static final int repeatCount = 3;
 
