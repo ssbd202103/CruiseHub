@@ -27,12 +27,13 @@ public class AuthenticateEndpoint implements AuthenticateEndpointLocal {
     @Inject
     private AccountManagerLocal accountManager;
 
-
+    @PermitAll
     @Override
     public void updateIncorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws BaseAppException {
         accountManager.updateIncorrectAuthenticateInfo(login, IpAddr, time);
     }
 
+    @PermitAll
     @Override
     public String updateCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws BaseAppException {
         return accountManager.updateCorrectAuthenticateInfo(login, IpAddr, time);

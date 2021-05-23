@@ -59,7 +59,6 @@
 
     <security-role-mapping>
         <role-name>blockUser</role-name>
-        <group-name>MODERATOR</group-name>
         <group-name>ADMINISTRATOR</group-name>
     </security-role-mapping>
 

@@ -97,6 +97,7 @@ public class AccountFacadeMok extends AbstractFacade<Account> {
         }
     }
 
+    @PermitAll
     @Override
     public void create(Account entity) throws FacadeException {
         try {
@@ -111,6 +112,7 @@ public class AccountFacadeMok extends AbstractFacade<Account> {
         }
     }
 
+    @PermitAll
     public Account updateAuthenticateInfo(String login, String ipAddr, LocalDateTime time, boolean isAuthValid) throws BaseAppException {
 
         Account account = findByLogin(login);
@@ -130,5 +132,25 @@ public class AccountFacadeMok extends AbstractFacade<Account> {
 
         }
         return account;
+    }
+
+    @Override
+    public void remove(Account entity) throws FacadeException {
+        super.remove(entity);
+    }
+
+    @Override
+    public Account find(Object id) throws FacadeException {
+        return super.find(id);
+    }
+
+    @Override
+    public List findRange(int[] range) throws FacadeException {
+        return super.findRange(range);
+    }
+
+    @Override
+    public long count() throws FacadeException {
+        return super.count();
     }
 }
