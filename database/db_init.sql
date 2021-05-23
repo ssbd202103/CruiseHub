@@ -215,15 +215,15 @@ values (-3, '481d626f-d421-47dd-89ef-b41bc30aa36c', now(), now(), true, 'The mos
 --
 --
 --attractions start
-insert into attractions(id, name, description, price, number_of_seats, available, cruise_id, creation_date_time,
+insert into attractions(id, name, description, price, number_of_seats, has_free_spots, cruise_id, creation_date_time,
                         last_alter_date_time, alter_type_id, created_by_id,
                         altered_by_id, version)
 values (-1, 'Bungee', 'Bungee jump', 23, 20, true, -1, now(), now(), -2, -1, -1, 0);
-insert into attractions(id, name, description, price, number_of_seats, available, cruise_id, creation_date_time,
+insert into attractions(id, name, description, price, number_of_seats, has_free_spots, cruise_id, creation_date_time,
                         last_alter_date_time, alter_type_id, created_by_id,
                         altered_by_id, version)
 values (-2, 'Scuba Diving', 'Scuba diving in the sea', 223, 20, true, -2, now(), now(), -2, -1, -1, 0);
-insert into attractions(id, name, description, price, number_of_seats, available, cruise_id, creation_date_time,
+insert into attractions(id, name, description, price, number_of_seats, has_free_spots, cruise_id, creation_date_time,
                         last_alter_date_time, alter_type_id, created_by_id,
                         altered_by_id, version)
 values (-3, 'Romantic dinner', 'Romantic dinner on the most beautiful Sandy Shores', 1203, 20, true, -3, now(), now(),

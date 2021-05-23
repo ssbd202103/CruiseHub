@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.managers;
 
+import org.hibernate.cfg.NotYetImplementedException;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Attraction;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.AttractionFacadeMow;
@@ -19,7 +20,7 @@ public class AttractionManager implements AttractionManagerLocal{
     private AttractionFacadeMow attractionFacadeMow;
 
     @Override
-    public List<Attraction> getAllAttraction() throws BaseAppException {
+    public List<Attraction> getAllAttractions() throws BaseAppException {
         return attractionFacadeMow.findAll();
     }
 
@@ -33,6 +34,12 @@ public class AttractionManager implements AttractionManagerLocal{
         else {
             this.attractionFacadeMow.deleteAttraction(name);
         }
+    }
+
+
+    @Override
+    public void addAttraction(Attraction attraction) throws BaseAppException {
+        throw new UnsupportedOperationException();
     }
 
 
