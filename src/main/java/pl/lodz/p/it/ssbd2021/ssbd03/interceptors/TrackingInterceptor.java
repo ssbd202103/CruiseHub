@@ -29,16 +29,19 @@ public class TrackingInterceptor {
         try {
             Object result = context.proceed();
             resultString = result == null ? "without return value" : "with returned value" + result;
-            logger.info(getLogString(context.getMethod().toString(), paramList, resultString));
+            logger.info(getLogString(context.getMethod().getName(), paramList, resultString));
             return result;
         } catch (Exception e) {
-            resultString = String.format("with exception thrown: \"%s\", cause: \"%s\", message: \"%s\"", e, e.getCause(), e.getMessage());
+            resultString = String.format("with exception thrown: \"%s\", \ncause: \"%s\", \nmessage: \"%s\"", e, e.getCause(), e.getMessage());
             logger.severe(getLogString(context.getMethod().toString(), paramList, resultString));
             throw e;
         }
     }
 
     private String getLogString(String methodName, Iterable<Object> parameters, String resultString) {
-        return String.format("Method \"%s\" called by user \"%s\" with arguments \"%s\", \"%s\"", methodName, context.getCallerPrincipal().getName(), parameters, resultString);
+        return String.format("Method \"%s\" " +
+                "\ncalled by user \"%s\" " +
+                "\nwith arguments \"%s\", " +
+                "\n\"%s\"", methodName, context.getCallerPrincipal().getName(), parameters, resultString);
     }
 }
