@@ -34,4 +34,11 @@ public interface CruiseManagerLocal {
      */
     void deactivateCruise(UUID uuid, Long version) throws BaseAppException;
 
+    /**
+     * Zwraca wycieczkę o podanym uuid
+     * @param uuid uuid wycieczki
+     * @return obiekt encji reprezentujący wycieczkę
+     * @throws BaseAppException wyjątek rzucany w raze nie znalezienia wycieczki
+     */
+    Cruise getCruise(UUID uuid) throws BaseAppException;
 }
