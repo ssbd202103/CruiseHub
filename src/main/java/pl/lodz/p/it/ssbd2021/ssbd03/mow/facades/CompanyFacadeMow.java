@@ -5,6 +5,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AbstractFacade;
 
+import javax.annotation.security.PermitAll;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -14,8 +15,10 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
+import static javax.ejb.TransactionAttributeType.MANDATORY;
+
 @Stateless
-@TransactionAttribute(TransactionAttributeType.MANDATORY)
+@TransactionAttribute(MANDATORY)
 public class CompanyFacadeMow extends AbstractFacade<Company> {
 
     @PersistenceContext(unitName = "ssbd03mowPU")
@@ -30,6 +33,7 @@ public class CompanyFacadeMow extends AbstractFacade<Company> {
         return em;
     }
 
+    @PermitAll
     @Override
     public List<Company> findAll() throws FacadeException {
         return super.findAll();

@@ -154,10 +154,15 @@
         <group-name>BUSINESS_WORKER</group-name>
     </security-role-mapping>
 
-
     <security-role-mapping>
         <role-name>ownFindRating</role-name>
         <group-name>CLIENT</group-name>
+    </security-role-mapping>
+
+    <security-role-mapping>
+        <role-name>getAllCompanies</role-name>
+        <group-name>BUSINESS_WORKER</group-name>
+        <group-name>MODERATOR</group-name>
     </security-role-mapping>
 
 
