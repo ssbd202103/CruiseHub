@@ -1,8 +1,9 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.dto;
 
 
-import lombok.*;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 

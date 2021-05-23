@@ -1,9 +1,9 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.DeactivateCruiseDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.NewCruiseDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.PublishCruiseDto;
 
 import javax.ejb.Local;

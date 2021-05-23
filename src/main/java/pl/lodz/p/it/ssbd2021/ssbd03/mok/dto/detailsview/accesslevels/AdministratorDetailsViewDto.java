@@ -5,7 +5,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccessLevelDetailsViewDt
 
 
 public class AdministratorDetailsViewDto extends AccessLevelDetailsViewDto {
-    public AdministratorDetailsViewDto(boolean enabled,long accLevelVersion) {
+    public AdministratorDetailsViewDto(boolean enabled, long accLevelVersion) {
         super(enabled, AccessLevelType.ADMINISTRATOR, accLevelVersion);
     }
 

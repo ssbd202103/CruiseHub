@@ -111,7 +111,7 @@ public class AccountMapper {
      * @return Reprezentacja obiektu przesyłowego DTO konta zawierający login, e-mail ,poziomy dostępu oraz informacje
      * czy dane konto jest aktywne
      */
-    public static AccountDtoForList toAccountListDto(Account account)throws BaseAppException {
+    public static AccountDtoForList toAccountListDto(Account account) throws BaseAppException {
         return new AccountDtoForList(account.getLogin(),
                 account.getFirstName(), account.getSecondName(),
                 account.getEmail(), account.isActive(),
@@ -127,7 +127,7 @@ public class AccountMapper {
      * @param account Konto poddawane konwersji
      * @return Reprezentacja konta w postaci obiektu przesyłowego AccountDetailsViewDto
      */
-    public static AccountDetailsViewDto toAccountDetailsViewDto(Account account) throws BaseAppException  {
+    public static AccountDetailsViewDto toAccountDetailsViewDto(Account account) throws BaseAppException {
         return new AccountDetailsViewDto(account.getFirstName(), account.getSecondName(), account.isDarkMode(), account.getLogin(),
                 account.getEmail(), account.isConfirmed(), account.isActive(), account.getLanguageType().getName(),
                 account.getAccessLevels().stream()

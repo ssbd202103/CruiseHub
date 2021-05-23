@@ -14,6 +14,7 @@ import java.util.UUID;
 public interface ReservationManagerLocal {
     /**
      * zwaraca listę rezerwacji dla podanej wycieczki
+     *
      * @param cruise_uuid uuid wycieczki dla której chcemy znaleść rezerwacje
      * @return Lista rezerwacji dla podanej wycieczki
      * @throws BaseAppException Bazowy wyjątek aplikacji

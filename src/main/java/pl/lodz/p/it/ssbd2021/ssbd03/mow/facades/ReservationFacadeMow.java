@@ -59,6 +59,7 @@ public class ReservationFacadeMow extends AbstractFacade<Reservation> {
             throw FacadeException.noSuchElement();
         }
     }
+
     public List<Reservation> findCruiseReservations(long id) throws BaseAppException {
         TypedQuery<Reservation> tq = em.createNamedQuery("Reservation.findCruiseReservations", Reservation.class);
         tq.setParameter("id", id);

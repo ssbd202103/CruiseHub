@@ -20,7 +20,7 @@ public class Client extends AccessLevel {
 
     @Getter
     @Setter
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE,CascadeType.REMOVE})
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.REMOVE})
     @JoinColumn(name = "home_address_id")
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid

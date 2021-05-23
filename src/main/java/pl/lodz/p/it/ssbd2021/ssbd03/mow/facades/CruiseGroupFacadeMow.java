@@ -4,7 +4,6 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.facades;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.AbstractFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
 import javax.ejb.Stateless;
@@ -22,7 +21,9 @@ public class CruiseGroupFacadeMow extends AbstractFacade<CruiseGroup> {
     @PersistenceContext(unitName = "ssbd03mowPU")
     private EntityManager em;
 
-    public CruiseGroupFacadeMow() { super(CruiseGroup.class); }
+    public CruiseGroupFacadeMow() {
+        super(CruiseGroup.class);
+    }
 
     @Override
     protected EntityManager getEntityManager() {

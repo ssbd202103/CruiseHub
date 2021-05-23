@@ -3,7 +3,6 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 
 import javax.security.enterprise.credential.Credential;
 import javax.security.enterprise.credential.UsernamePasswordCredential;

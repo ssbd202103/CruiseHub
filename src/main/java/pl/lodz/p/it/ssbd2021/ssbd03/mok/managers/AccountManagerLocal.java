@@ -7,9 +7,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 
-import javax.annotation.security.DeclareRoles;
-import javax.annotation.security.RolesAllowed;
-import javax.annotation.security.RunAs;
 import javax.ejb.Local;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -250,7 +247,8 @@ public interface AccountManagerLocal {
 
     /**
      * Metoda odpowiedzialna za zmianę motywu
-     * @param login login użytkownika dla którego należy zmienić motyw
+     *
+     * @param login   login użytkownika dla którego należy zmienić motyw
      * @param newMode flaga nowego motywu
      * @throws BaseAppException Bazowy wyjątek aplikacji
      */

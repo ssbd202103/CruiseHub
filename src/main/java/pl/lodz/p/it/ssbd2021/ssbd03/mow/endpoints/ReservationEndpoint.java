@@ -9,7 +9,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.managers.ReservationManagerLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
 import javax.annotation.security.RolesAllowed;
-import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -34,7 +33,7 @@ public class ReservationEndpoint implements ReservationEndpointLocal {
     @Override
     public List<CruiseReservationDto> viewCruiseReservations(UUID cruise_uuid) throws BaseAppException {
         List<CruiseReservationDto> res = new ArrayList<>();
-        for (Reservation reservation: reservationManager.getCruiseReservations(cruise_uuid)){
+        for (Reservation reservation : reservationManager.getCruiseReservations(cruise_uuid)) {
             res.add(ReservationMapper.toReservationDto(reservation));
         }
         return res;
@@ -44,7 +43,7 @@ public class ReservationEndpoint implements ReservationEndpointLocal {
     @Override
     public List<CruiseReservationDto> viewWorkerCruiseReservations(UUID cruise_uuid) throws BaseAppException {
         List<CruiseReservationDto> res = new ArrayList<>();
-        for (Reservation reservation: reservationManager.getCruiseReservations(cruise_uuid)){
+        for (Reservation reservation : reservationManager.getCruiseReservations(cruise_uuid)) {
             res.add(ReservationMapper.toReservationDto(reservation));
         }
         return res;

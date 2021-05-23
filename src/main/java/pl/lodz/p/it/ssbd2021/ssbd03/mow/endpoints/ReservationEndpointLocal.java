@@ -15,14 +15,16 @@ import java.util.UUID;
 public interface ReservationEndpointLocal {
     /**
      * Pobiera wszystkie rezerwacje dla danej wycieczki
+     *
      * @param cruise_uuid identyfikator wycieczki
-     * @return  lista rezerwacji
+     * @return lista rezerwacji
      * @throws BaseAppException Bazowy wyjątek aplikacji
      */
     List<CruiseReservationDto> viewCruiseReservations(UUID cruise_uuid) throws BaseAppException;
 
     /**
-     *  Pobiera wszytskie rezerwacje dla danej wycieczki która nalezy do biznes_worker'a
+     * Pobiera wszytskie rezerwacje dla danej wycieczki która nalezy do biznes_worker'a
+     *
      * @param cruise_uuid
      * @return
      * @throws BaseAppException

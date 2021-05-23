@@ -54,7 +54,7 @@ public class AccountDetailsViewDto implements SignableEntity {
     @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
     private String etag;
 
-    public AccountDetailsViewDto(String firstName, String secondName, boolean darkMode, String login, String email, boolean confirmed, boolean active, LanguageType languageType, Set<AccessLevelDetailsViewDto> accessLevels, long version)  throws BaseAppException {
+    public AccountDetailsViewDto(String firstName, String secondName, boolean darkMode, String login, String email, boolean confirmed, boolean active, LanguageType languageType, Set<AccessLevelDetailsViewDto> accessLevels, long version) throws BaseAppException {
         this.firstName = firstName;
         this.secondName = secondName;
         this.darkMode = darkMode;

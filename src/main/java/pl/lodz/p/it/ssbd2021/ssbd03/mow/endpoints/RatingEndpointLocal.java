@@ -8,8 +8,8 @@ public interface RatingEndpointLocal {
 
     /**
      * Dodaje ocenę użytkownika o podanym loginie dla wycieczki o podanym id
-     * @param ratingDto obiekt dto przechowujący informację do stworzenia oceny
      *
+     * @param ratingDto obiekt dto przechowujący informację do stworzenia oceny
      * @throws BaseAppException bazowy wyjątek aplikacji, zwracany w przypadku nieznależenia użytkownika lub grupy wycieczek
      */
     void createRating(RatingDto ratingDto) throws BaseAppException;

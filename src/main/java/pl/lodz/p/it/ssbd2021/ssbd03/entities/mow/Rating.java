@@ -11,14 +11,14 @@ import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
 
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.RATING_CONSTRAINT_ERROR;
 
 @Entity(name = "ratings")
 @NamedQueries({
-        @NamedQuery(name= "Rating.findByCruiseGroupName", query = "SELECT r FROM ratings r WHERE r.cruiseGroup.name =:name"),
-        @NamedQuery(name= "Rating.findByCruiseGroupNameAndAccountLogin", query = "SELECT r FROM ratings r WHERE r.cruiseGroup.name=:name AND r.account.login=:login")
+        @NamedQuery(name = "Rating.findByCruiseGroupName", query = "SELECT r FROM ratings r WHERE r.cruiseGroup.name =:name"),
+        @NamedQuery(name = "Rating.findByCruiseGroupNameAndAccountLogin", query = "SELECT r FROM ratings r WHERE r.cruiseGroup.name=:name AND r.account.login=:login")
 })
 
 public class Rating extends BaseEntity {

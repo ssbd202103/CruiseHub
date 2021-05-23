@@ -30,6 +30,7 @@ public interface AttractionManagerLocal {
 
     /**
      * Metoda odpowiedzialna za stworzenie atrakcji i dodanie jej do grupy wycieczek.
+     *
      * @param attraction Obiekt reprezentujący atrakcję
      * @throws BaseAppException Wyjątek występujący w przypadku naruszenia zasad biznesowych.
      */
@@ -37,8 +38,9 @@ public interface AttractionManagerLocal {
 
     /**
      * Metoda odpowiedzialna za edycję istniejącej atrakcji.
+     *
      * @param attraction Obiekt reprezentujący atrakcję po dokonanych zmianach.
      * @throws BaseAppException Wyjątek występujący w przypadku nieznalezienia atrakcji lub naruszenia zasad biznesowych.
      */
     void editAttraction(Attraction attraction) throws BaseAppException;
-    }
+}

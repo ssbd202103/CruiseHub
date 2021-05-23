@@ -1,7 +1,5 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.facades;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;

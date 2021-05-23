@@ -32,14 +32,15 @@ public class ReservationManager implements ReservationManagerLocal {
 
     @Override
     public List<Reservation> getCruiseReservations(UUID cruise_uuid) throws BaseAppException {
-        long id= cruiseFacadeMow.findByUUID(cruise_uuid).getId();
+        long id = cruiseFacadeMow.findByUUID(cruise_uuid).getId();
         List<Reservation> res = reservationFacadeMow.findCruiseReservations(id);
         return res;
 
     }
+
     @Override
     public List<Reservation> getWorkerCruiseReservations(UUID cruise_uuid) throws BaseAppException {
-        long id= cruiseFacadeMow.findByUUID(cruise_uuid).getId();
+        long id = cruiseFacadeMow.findByUUID(cruise_uuid).getId();
         List<Reservation> res = reservationFacadeMow.findWorkerCruiseReservations(id);
         return res;
 

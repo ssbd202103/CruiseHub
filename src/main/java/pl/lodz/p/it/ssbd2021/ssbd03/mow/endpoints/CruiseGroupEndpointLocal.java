@@ -1,10 +1,8 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-
-
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseGroupDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.AddCruiseGroupDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseGroupDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.changeCruiseGroup.changeCruiseGroupDto;
 
 import javax.ejb.Local;
@@ -17,6 +15,7 @@ import java.util.List;
 public interface CruiseGroupEndpointLocal {
     /**
      * Tworzy nową grupę wycieczek  na podstawie dostarczonego dto
+     *
      * @param addCruiseGroupDto obiekt dto zawierający dane potrzene do utworzenia grupy wycieczek
      * @throws BaseAppException Bazowy wyjątek aplikacji
      */
@@ -24,11 +23,12 @@ public interface CruiseGroupEndpointLocal {
 
     /**
      * Umożliwia edycję grupy wycieczek
+     *
      * @param changeCruiseGroup obiekt dto zawierający dane potrzene do edycji grupy wycieczek
      * @return zmieniona grupa wycieczek
      * @throws BaseAppException Bazowy wyjątek aplikacji
      */
-    changeCruiseGroupDto changeCruiseGroup(changeCruiseGroupDto changeCruiseGroup)throws BaseAppException;
+    changeCruiseGroupDto changeCruiseGroup(changeCruiseGroupDto changeCruiseGroup) throws BaseAppException;
 
 
     /**
@@ -36,13 +36,13 @@ public interface CruiseGroupEndpointLocal {
      *
      * @return lista obiektów reprezentjace informacje o grupach wycieczek
      */
-    List<CruiseGroupDto> getCruiseGroupsInfo()throws BaseAppException;
+    List<CruiseGroupDto> getCruiseGroupsInfo() throws BaseAppException;
 
 
     /**
      * Metoda odpowiedzialna za wywołanie metody odpowiedzialnej za deaktywacje grupy wycieczek
      *
-     * @param name   nazwa dezaktywowanej grupy wycieczek
+     * @param name    nazwa dezaktywowanej grupy wycieczek
      * @param version wersja grupy wycieczek do weryfikacji
      * @throws BaseAppException Wyjątek aplikacji rzucany w przypadku błędu pobrania danych grupy wycieczek
      */

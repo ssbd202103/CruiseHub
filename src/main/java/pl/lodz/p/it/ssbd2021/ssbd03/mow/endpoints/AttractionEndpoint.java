@@ -1,6 +1,8 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.AddAttractionDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.EditAttractionDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.managers.AttractionManagerLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 

@@ -6,10 +6,6 @@ import lombok.Setter;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AbstractAccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Password;
 
-import javax.validation.constraints.NotNull;
-
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
-
 @Getter
 @Setter
 @NoArgsConstructor

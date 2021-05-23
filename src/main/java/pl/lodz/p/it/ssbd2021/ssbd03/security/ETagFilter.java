@@ -1,8 +1,5 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.security;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
-
-import javax.interceptor.Interceptors;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.Response;

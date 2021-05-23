@@ -25,8 +25,8 @@ public class ClientDetailsViewDto extends AccessLevelDetailsViewDto {
     private String phoneNumber;
 
 
-    public ClientDetailsViewDto(boolean enabled,AddressDto address, String phoneNumber,long accLevelVersion) {
-        super(enabled, AccessLevelType.CLIENT,accLevelVersion);
+    public ClientDetailsViewDto(boolean enabled, AddressDto address, String phoneNumber, long accLevelVersion) {
+        super(enabled, AccessLevelType.CLIENT, accLevelVersion);
         this.address = address;
         this.phoneNumber = phoneNumber;
 

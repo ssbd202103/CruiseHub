@@ -1,6 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.exceptions;
 
-public class ETagException extends BaseAppException{
+public class ETagException extends BaseAppException {
     public ETagException(String message, Throwable cause) {
         super(message, cause);
     }

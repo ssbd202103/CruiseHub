@@ -1,10 +1,8 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.facades;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Attraction;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
-//TODO poprawić na import z mow po poprawieniu ABstractFacade dla mow
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AbstractFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
@@ -23,7 +21,9 @@ public class AttractionFacadeMow extends AbstractFacade<Attraction> {
     @PersistenceContext(unitName = "ssbd03mowPU")
     private EntityManager em;
 
-    public AttractionFacadeMow() { super(Attraction.class); }
+    public AttractionFacadeMow() {
+        super(Attraction.class);
+    }
 
 
     @Override
@@ -62,7 +62,7 @@ public class AttractionFacadeMow extends AbstractFacade<Attraction> {
         tq.setParameter("name", name);
         try {
             return tq.getSingleResult();
-        }catch (NoResultException e){
+        } catch (NoResultException e) {
             throw FacadeException.noSuchElement();
         }
     }

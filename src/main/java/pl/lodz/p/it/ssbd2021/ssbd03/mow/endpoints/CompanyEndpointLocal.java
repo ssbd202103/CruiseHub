@@ -22,10 +22,11 @@ public interface CompanyEndpointLocal {
 
     /**
      * Zwraca listę pracowników firmy
+     *
      * @param companyName Nazwa firmy
      * @return Reprezentacja Dto pracownika firmy
      * @throws BaseAppException bazowy wyjątek aplikacji, zwracany w przypadku nieznalezienia firmy
-     * lub naruszenia zasad biznesowych
+     *                          lub naruszenia zasad biznesowych
      */
     List<BusinessWorkerDto> getBusinessWorkersForCompany(String companyName) throws BaseAppException;
 

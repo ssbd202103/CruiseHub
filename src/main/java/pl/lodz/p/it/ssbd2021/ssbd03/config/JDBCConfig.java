@@ -1,9 +1,9 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.config;
 
-import java.sql.Connection;
 import javax.annotation.sql.DataSourceDefinition;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.sql.Connection;
 
 @DataSourceDefinition(
         name = "java:app/jdbc/ssbd03adminDS",

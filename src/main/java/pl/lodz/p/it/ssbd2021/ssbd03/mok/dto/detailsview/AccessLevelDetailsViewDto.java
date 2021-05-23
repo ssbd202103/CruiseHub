@@ -38,6 +38,7 @@ public abstract class AccessLevelDetailsViewDto {
     private AccessLevelType accessLevelType;
 
     private long accVersion;
+
     @Override
     public int hashCode() {
         return this.getClass().hashCode();

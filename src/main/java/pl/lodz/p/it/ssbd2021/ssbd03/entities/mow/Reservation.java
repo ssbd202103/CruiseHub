@@ -17,7 +17,7 @@ import java.util.UUID;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 
-    //TODO sprawdzenie i powprawnienie Reservation.findWorkerCruiseReservations query
+//TODO sprawdzenie i powprawnienie Reservation.findWorkerCruiseReservations query
 @NamedQueries({
         @NamedQuery(name = "Reservation.findByUUID", query = "SELECT reservation FROM reservations reservation WHERE reservation.uuid = :uuid"),
         @NamedQuery(name = "Reservation.findCruiseReservations", query = "SELECT reservation FROM reservations reservation WHERE reservation.cruise = :id"),

@@ -18,8 +18,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Stateless
 @TransactionAttribute(TransactionAttributeType.MANDATORY)
@@ -60,8 +58,6 @@ public class AccountFacadeMow extends AbstractFacade<Account> {
             throw FacadeException.noSuchElement();
         }
     }
-
-
 
 
 }

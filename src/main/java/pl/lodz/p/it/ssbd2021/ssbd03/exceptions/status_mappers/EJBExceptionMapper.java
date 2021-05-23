@@ -15,7 +15,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.APP_INTERNAL_SERVER_ERROR
 public class EJBExceptionMapper implements ExceptionMapper<EJBException> {
     @Override
     public Response toResponse(EJBException exception) {
-        if(exception.getCausedByException() instanceof AccessLocalException){
+        if (exception.getCausedByException() instanceof AccessLocalException) {
             return Response.status(FORBIDDEN).entity(APP_FORBIDDEN).build();
         }
         return Response.status(INTERNAL_SERVER_ERROR).entity(APP_INTERNAL_SERVER_ERROR).build();

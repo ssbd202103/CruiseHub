@@ -5,7 +5,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.validators.CompanyName;
 
 import javax.validation.constraints.Positive;
 import java.util.List;
-import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
