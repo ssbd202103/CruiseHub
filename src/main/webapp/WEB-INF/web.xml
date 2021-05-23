@@ -103,6 +103,10 @@
         <role-name>SYSTEM</role-name>
     </security-role>
 
+    <security-role>
+        <role-name>removeClientReservation</role-name>
+    </security-role>
+
 
 <!--    <security-constraint> todo-->
 <!--        <web-resource-collection>-->

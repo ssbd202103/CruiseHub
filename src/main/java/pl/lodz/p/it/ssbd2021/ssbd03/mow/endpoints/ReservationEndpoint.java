@@ -3,11 +3,15 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Reservation;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseReservationDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.RemoveClientReservationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.converters.ReservationMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.managers.ReservationManagerLocal;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +21,8 @@ import java.util.UUID;
  * Klasa która zajmuje się growadzeniem zmapowanych obiektów klas Dto na obiekty klas modelu związanych z rezerwacją wycieczek, oraz wywołuje metody logiki przekazując zmapowane obiekty.
  */
 @Stateful
-public class ReservationEndpoint implements ReservationEndpointLocal{
+@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+public class ReservationEndpoint implements ReservationEndpointLocal {
 
     @Inject
     private ReservationManagerLocal reservationManager;
@@ -42,4 +47,10 @@ public class ReservationEndpoint implements ReservationEndpointLocal{
         return res;
     }
 
+    @RolesAllowed("removeClientReservation")
+    @Override
+    public void removeClientReservation(RemoveClientReservationDto removeClientReservationDto) throws BaseAppException {
+        this.reservationManager.removeClientReservation(removeClientReservationDto.getReservationVersion(), removeClientReservationDto.getReservationUuid(), removeClientReservationDto.getClientLogin());
+        // todo implement
+    }
 }

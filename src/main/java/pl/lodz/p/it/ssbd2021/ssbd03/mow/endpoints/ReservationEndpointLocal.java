@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseReservationDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.RemoveClientReservationDto;
 
 import javax.ejb.Local;
 import java.util.List;
@@ -28,4 +29,15 @@ public interface ReservationEndpointLocal {
      */
     List<CruiseReservationDto> viewWorkerCruiseReservations(UUID cruise_uuid) throws BaseAppException;
 
-    }
+    /**
+     * Usuwa wycieczke klienta podanego w obiekci dto
+     *
+     * @param removeClientReservationDto
+     * @return
+     * @throws BaseAppException
+     */
+    void removeClientReservation(RemoveClientReservationDto removeClientReservationDto) throws BaseAppException;
+
+
+}
+
