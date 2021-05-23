@@ -56,7 +56,6 @@ public class Attraction extends BaseEntity {
 
     @Getter
     @Setter
-    @NotNull(message = CONSTRAINT_NOT_NULL)
     @Column(name = "has_free_spots")
     private boolean hasFreeSpots;
 

@@ -41,5 +41,11 @@ public class AttractionManager implements AttractionManagerLocal {
         throw new UnsupportedOperationException();
     }
 
+    @RolesAllowed("editAttraction")
+    @Override
+    public void editAttraction(Attraction attraction) throws BaseAppException {
+        throw new UnsupportedOperationException();
+    }
+
 
 }
