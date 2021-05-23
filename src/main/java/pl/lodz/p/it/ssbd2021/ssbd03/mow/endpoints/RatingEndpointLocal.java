@@ -21,4 +21,14 @@ public interface RatingEndpointLocal {
      * @throws BaseAppException bazowy wyjątek aplikacji, zwracany w przypadku nieznależenia użytkownika lub grupy wycieczek
      */
     void removeRating(RemoveRankingDto removeRankingDto) throws BaseAppException;
+
+    /**
+     * Pobiera ocene klienta dla podanej wycieczki
+     *
+     * @param login           login klienta
+     * @param cruiseGroupName login
+     * @throws BaseAppException bazowy wyjątek aplikacji, zwracany w przypadku nieznależenia oceny
+     */
+    RatingDto getRating(String login, String cruiseGroupName) throws BaseAppException;
+
 }

@@ -4,16 +4,22 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Rating;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.RatingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.AccountFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseGroupFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.RatingFacadeMow;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
+import javax.ejb.TransactionAttribute;
 import javax.inject.Inject;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
 
+import static javax.ejb.TransactionAttributeType.MANDATORY;
+
 @Stateful
+@TransactionAttribute(MANDATORY)
 public class RatingManager implements RatingManagerLocal {
 
     @Context
@@ -42,5 +48,11 @@ public class RatingManager implements RatingManagerLocal {
         Rating r = ratingFacade.findByCruiseNameAndAccountLogin(cruiseName, login);
 
         ratingFacade.remove(r);
+    }
+
+    @RolesAllowed("ownFindRating")
+    @Override
+    public Rating getRating(String login, String cruiseGroupName) throws BaseAppException {
+        return null; // todo finish implementation
     }
 }
