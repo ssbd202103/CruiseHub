@@ -1,11 +1,13 @@
-import React from 'react';
+import React, {ComponentType, createRef} from 'react';
+import Button from "@material-ui/core/Button";
+import Slide from "@material-ui/core/Slide"
 
 import 'normalize.css'
 import './styles/globals.css';
 
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
 
-import {I18nextProvider} from 'react-i18next';
+import {I18nextProvider, useTranslation} from 'react-i18next';
 import i18n from './i18n'
 
 import Home from './pages/home'
@@ -14,75 +16,100 @@ import SignUpClient from './pages/signup/client'
 import SignUpWorker from './pages/signup/worker'
 import AdminPanel from './pages/panels/adminPanel'
 import ModeratorPanel from "./pages/panels/moderatorPanel";
-
-
 import ClientPanel from './pages/panels/clientPanel'
 import WorkerPanel from './pages/panels/workerPanel'
 import PasswordReset from "./pages/reset/passwordReset";
 import RequestPasswordReset from './pages/reset/requestPasswordReset';
 import RequestSomeonePasswordReset from './pages/reset/requestSomeonesPasswordReset';
-
 import VerifyAccount from './pages/verify/verifyAccount';
 
+import {SnackbarKey, SnackbarProvider} from 'notistack';
+import {TransitionProps} from "@material-ui/core/transitions";
+
+
 function App() {
+    const {t} = useTranslation()
+
+    const notistackRef = createRef<SnackbarProvider>()
+
+    const handleDismiss = (key: SnackbarKey) => () => {
+        notistackRef.current?.closeSnackbar(key)
+    }
+
     return (
         <I18nextProvider i18n={i18n}>
+            <SnackbarProvider
+                ref={notistackRef}
 
-            <Router basename={process.env.REACT_APP_ROUTER_BASE || ''}>
-                <Switch>
-                    <Route exact path="/">
-                        <Home/>
-                    </Route>
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left'
+                }}
 
-                    <Route path="/signin">
-                        <Signin/>
-                    </Route>
+                action={key => (
+                    <Button onClick={handleDismiss(key)} style={{color: 'white'}}>
+                        {t('dismiss')}
+                    </Button>
+                )}
 
-                    <Route path="/signup/client">
-                        <SignUpClient/>
-                    </Route>
+                TransitionComponent={Slide as ComponentType<TransitionProps>}
+            >
+                <Router basename={process.env.REACT_APP_ROUTER_BASE || ''}>
+                    <Switch>
+                        <Route exact path="/">
+                            <Home/>
+                        </Route>
 
-                    <Route path="/signup/worker">
-                        <SignUpWorker/>
-                    </Route>
+                        <Route path="/signin">
+                            <Signin/>
+                        </Route>
 
-                    <Route path="/panels/workerPanel">
-                        <WorkerPanel/>
-                    </Route>
+                        <Route path="/signup/client">
+                            <SignUpClient/>
+                        </Route>
 
-                    <Route path="/panels/clientPanel">
-                        <ClientPanel/>
-                    </Route>
+                        <Route path="/signup/worker">
+                            <SignUpWorker/>
+                        </Route>
 
-                    <Route path="/panels/adminPanel">
-                        <AdminPanel/>
-                    </Route>
+                        <Route path="/panels/workerPanel">
+                            <WorkerPanel/>
+                        </Route>
 
-                    <Route path="/panels/moderatorPanel">
-                        <ModeratorPanel/>
-                    </Route>
+                        <Route path="/panels/clientPanel">
+                            <ClientPanel/>
+                        </Route>
 
-                    <Route path="/reset/passwordReset/*">
-                        <PasswordReset/>
-                    </Route>
+                        <Route path="/panels/adminPanel">
+                            <AdminPanel/>
+                        </Route>
 
-                    <Route path="/reset/requestPassword">
-                        <RequestPasswordReset/>
-                    </Route>
+                        <Route path="/panels/moderatorPanel">
+                            <ModeratorPanel/>
+                        </Route>
 
-                    <Route path="/reset/resetSomebodyPassword">
-                        <RequestSomeonePasswordReset/>
-                    </Route>
-                   <Route path="/verify/accountVerification/*">
-                        <VerifyAccount/>
-                    </Route>
+                        <Route path="/reset/passwordReset/*">
+                            <PasswordReset/>
+                        </Route>
 
-                    <Route path="*">
-                        <div>404 not found</div>
-                    </Route>
+                        <Route path="/reset/requestPassword">
+                            <RequestPasswordReset/>
+                        </Route>
 
-                </Switch>
-            </Router>
+                        <Route path="/reset/resetSomebodyPassword">
+                            <RequestSomeonePasswordReset/>
+                        </Route>
+                        <Route path="/verify/accountVerification/*">
+                            <VerifyAccount/>
+                        </Route>
+
+                        <Route path="*">
+                            <div>404 not found</div>
+                        </Route>
+
+                    </Switch>
+                </Router>
+            </SnackbarProvider>
         </I18nextProvider>
     );
 }

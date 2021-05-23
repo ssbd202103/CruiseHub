@@ -4,6 +4,7 @@ import {initReactI18next} from 'react-i18next'
 const resources = {
     pl: {
         translation: {
+            "dismiss": "Odrzuć",
             "go back": "Wróć",
             "email": "E-mail",
             "password": "Hasło",
@@ -104,7 +105,7 @@ const resources = {
             "error.email.incorrect": "Address email jest niepoprawny",
             "error.emailService.inaccessible": "Serwis pocztowy jest niedostępny",
             "error.password.reset.contentError": "Błędna zawartość tokenu do resetowania hasła",
-			"error.password.change.oldPasswordError": "Podane stare hasło jest niepoprawne",
+            "error.password.change.oldPasswordError": "Podane stare hasło jest niepoprawne",
             "error.security.etag.creation": "Błąd podczas tworzenia nagłówka ETag",
             "error.account.accessLevels.doesNotExist": "Dany poziom dostępu nie istnieje!",
             "error.password.reset.tokenUsed": "Podany link aktywacyjny został już wykorzystany!",
@@ -146,6 +147,7 @@ const resources = {
     },
     en: {
         translation: {
+            "dismiss": "Dismiss",
             "go back": "Go back",
             "email": "E-mail",
             "password": "Password",
