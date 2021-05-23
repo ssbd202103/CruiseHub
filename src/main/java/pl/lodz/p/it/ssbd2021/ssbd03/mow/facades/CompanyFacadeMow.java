@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.facades;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
@@ -44,11 +45,23 @@ public class CompanyFacadeMow extends AbstractFacade<Company> {
     public void create(Company entity) throws FacadeException {
         super.create(entity);
     }
+
     public Company getCompanyByName(String companyName) throws BaseAppException {
         TypedQuery<Company> tq = em.createNamedQuery("Company.findByName", Company.class);
         tq.setParameter("name", companyName);
         try {
             return tq.getSingleResult();
+        } catch (NoResultException e) {
+            throw FacadeException.noSuchElement();
+        }
+    }
+
+
+    public List<BusinessWorker> getBusinessWorkersByCompanyName(String companyName) throws BaseAppException {
+        TypedQuery<BusinessWorker> tq = em.createNamedQuery("Company.findBusinessWorkersByCompanyName", BusinessWorker.class);
+        tq.setParameter("companyName", companyName);
+        try {
+            return tq.getResultList();
         } catch (NoResultException e) {
             throw FacadeException.noSuchElement();
         }
