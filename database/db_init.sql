@@ -233,18 +233,18 @@ values (-3, 'Romantic dinner', 'Romantic dinner on the most beautiful Sandy Shor
 --
 --
 --reservation start
-insert into reservations(id, client_id, number_of_seats, cruise_id,price, creation_date_time, last_alter_date_time,
+insert into reservations(id, uuid,client_id, number_of_seats, cruise_id,price, creation_date_time, last_alter_date_time,
                          alter_type_id, created_by_id,
                          altered_by_id, version)
-values (-1, -2, 2, -1,50, now(), now(), -2, -1, -1, 0);
-insert into reservations(id, client_id, number_of_seats, cruise_id,price, creation_date_time, last_alter_date_time,
+values (-1,'ab3e9d82-bbac-11eb-8529-0242ac130003', -2, 2, -1,50, now(), now(), -2, -1, -1, 0);
+insert into reservations(id, uuid,client_id, number_of_seats, cruise_id,price, creation_date_time, last_alter_date_time,
                          alter_type_id, created_by_id,
                          altered_by_id, version)
-values (-2, -2, 5, -2,20, now(), now(), -2, -1, -1, 0);
-insert into reservations(id, client_id, number_of_seats, cruise_id,price, creation_date_time, last_alter_date_time,
+values (-2,'ab3e9fd0-bbac-11eb-8529-0242ac130003', -2, 5, -2,20, now(), now(), -2, -1, -1, 0);
+insert into reservations(id, uuid,client_id, number_of_seats, cruise_id,price, creation_date_time, last_alter_date_time,
                          alter_type_id, created_by_id,
                          altered_by_id, version)
-values (-3, -2, 1, -3,30, now(), now(), -2, -1, -1, 0);
+values (-3,'ab3ea0ca-bbac-11eb-8529-0242ac130003', -2, 1, -3,30, now(), now(), -2, -1, -1, 0);
 --reservation end
 --
 --
