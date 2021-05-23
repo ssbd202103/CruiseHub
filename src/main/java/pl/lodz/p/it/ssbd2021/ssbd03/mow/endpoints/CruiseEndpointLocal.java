@@ -1,9 +1,9 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.DeactivateCruiseDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.NewCruiseDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseDto;
 
 import javax.ejb.Local;
 import java.util.UUID;
@@ -31,4 +31,11 @@ public interface CruiseEndpointLocal {
      */
     void deactivateCruise(DeactivateCruiseDto deactivateCruiseDto) throws BaseAppException;
 
+    /**
+     * Otrzymanie informacji o wycieczce o podanym uuid
+     * @param uuid uuid wycieczki
+     * @return obiekt dto przechowujący informację o wycieczce
+     * @throws BaseAppException wyjątek rzucany w razie nie znalezienia wycieczki bądź konta deaktywującego
+     */
+    CruiseDto getCruise(UUID uuid) throws BaseAppException;
 }

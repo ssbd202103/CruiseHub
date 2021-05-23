@@ -1,7 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.converters;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.NewCruiseDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.*;
 
 
 /**
@@ -21,5 +21,14 @@ public class CruiseMapper {
     public static Cruise mapNewCruiseDtoToCruise(NewCruiseDto newCruiseDto) {
         return new Cruise(newCruiseDto.getStartDate(), newCruiseDto.getEndDate(), newCruiseDto.isActive(), newCruiseDto.getDescription(),
                 newCruiseDto.getAvailable(), null);
+    }
+
+    public static CruiseDto mapCruiseToCruiseDto(Cruise cruise) {
+
+        CruiseGroupDto cruiseGroupDto = CruiseGroupMapper.toCruiseGroupDto(cruise.getCruisesGroup());
+
+        return new CruiseDto(cruise.getUuid(), cruise.getVersion(),
+                cruise.getStartDate(), cruise.getEndDate(),
+                cruise.isActive(), cruise.getDescription(), cruise.isAvailable(), cruiseGroupDto);
     }
 }

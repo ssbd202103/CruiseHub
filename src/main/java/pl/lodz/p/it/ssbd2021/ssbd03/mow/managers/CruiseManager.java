@@ -69,6 +69,8 @@ public class CruiseManager implements CruiseManagerLocal {
         cruise.setLastAlterDateTime(LocalDateTime.now());
     }
 
-
-
+    @Override
+    public Cruise getCruise(UUID uuid) throws BaseAppException {
+        return cruiseFacadeMow.findByUUID(uuid);
+    }
 }
