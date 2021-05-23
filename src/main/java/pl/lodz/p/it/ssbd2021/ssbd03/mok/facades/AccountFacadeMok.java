@@ -118,7 +118,7 @@ public class AccountFacadeMok extends AbstractFacade<Account> {
             if (isAuthValid) {
                 account.setLastCorrectAuthenticationDateTime(time);
                 account.setLastCorrectAuthenticationLogicalAddress(ipAddr);
-
+                account.setNumberOfAuthenticationFailures(0);
             } else {
                 account.setLastIncorrectAuthenticationDateTime(time);
                 account.setLastIncorrectAuthenticationLogicalAddress(ipAddr);
