@@ -18,6 +18,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AccountManagerException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
+import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacadeMok;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.CompanyFacadeMok;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.TokenWrapperFacade;
@@ -25,13 +26,14 @@ import pl.lodz.p.it.ssbd2021.ssbd03.security.JWTHandler;
 import pl.lodz.p.it.ssbd2021.ssbd03.services.EmailService;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
 
-import javax.annotation.Resource;
-import javax.annotation.security.DeclareRoles;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.annotation.security.RunAs;
-import javax.ejb.*;
+import javax.ejb.Stateful;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
+import javax.interceptor.Interceptors;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
 import java.time.LocalDateTime;
@@ -47,6 +49,8 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 //@Stateless todo check why stateless throws exceptions occasionally
 @Stateful
 @TransactionAttribute(TransactionAttributeType.MANDATORY)
+@RunAs("SYSTEM")
+@Interceptors(TrackingInterceptor.class)
 public class AccountManager implements AccountManagerLocal {
 
     @Inject
@@ -498,6 +502,7 @@ public class AccountManager implements AccountManagerLocal {
     @Override
     public String updateCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws BaseAppException {
         Account account = this.accountFacade.updateAuthenticateInfo(login, IpAddr, time, true);
+        account.setNumberOfAuthenticationFailures(0);
 
         Map<String, Object> map = Map.of("login", login, "accessLevels", account.getAccessLevels()
                 .stream().map(accessLevel -> accessLevel.getAccessLevelType().name()).collect(Collectors.toList()));

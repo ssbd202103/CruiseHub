@@ -32,7 +32,7 @@ public class BusinessWorker extends AccessLevel {
     @Getter
     @Setter
     @Column(name = "confirmed", nullable = false)
-    private boolean confirmedByBusinessWorker;
+    private boolean confirmed;
 
     @Getter
     @Setter
@@ -53,6 +53,6 @@ public class BusinessWorker extends AccessLevel {
     public BusinessWorker(String phoneNumber, boolean enabled) {
         this.phoneNumber = phoneNumber;
         this.enabled = enabled;
-        this.confirmedByBusinessWorker = false;
+        this.confirmed = false;
     }
 }

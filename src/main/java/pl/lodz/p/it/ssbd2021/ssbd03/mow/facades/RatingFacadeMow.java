@@ -4,10 +4,12 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Rating;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AbstractFacade;
+import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -18,6 +20,7 @@ import static javax.ejb.TransactionAttributeType.MANDATORY;
 
 @TransactionAttribute(MANDATORY)
 @Stateless
+@Interceptors(TrackingInterceptor.class)
 public class RatingFacadeMow extends AbstractFacade<Rating> {
 
     @PersistenceContext(unitName = "ssbd03mowPU")

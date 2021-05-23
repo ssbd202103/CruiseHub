@@ -6,12 +6,14 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CompanyLightDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.changeCruiseGroup.CompanyDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.converters.CompanyMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.managers.CompanyManagerLocal;
+import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
 import javax.ejb.TransactionAttribute;
 import javax.inject.Inject;
+import javax.interceptor.Interceptors;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +24,7 @@ import static javax.ejb.TransactionAttributeType.REQUIRES_NEW;
  */
 @Stateful
 @TransactionAttribute(REQUIRES_NEW)
+@Interceptors(TrackingInterceptor.class)
 public class CompanyEndpoint implements CompanyEndpointLocal {
     @Inject
     private CompanyManagerLocal companyManager;

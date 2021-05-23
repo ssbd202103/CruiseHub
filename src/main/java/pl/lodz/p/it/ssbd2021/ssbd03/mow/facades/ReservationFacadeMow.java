@@ -4,11 +4,13 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Reservation;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AbstractFacade;
+import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -18,6 +20,7 @@ import java.util.UUID;
 
 @Stateless
 @TransactionAttribute(TransactionAttributeType.MANDATORY)
+@Interceptors(TrackingInterceptor.class)
 public class ReservationFacadeMow extends AbstractFacade<Reservation> {
 
     @PersistenceContext(unitName = "ssbd03mowPU")

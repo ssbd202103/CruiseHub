@@ -5,11 +5,13 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AbstractFacade;
+import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
 import javax.annotation.security.PermitAll;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -20,6 +22,7 @@ import static javax.ejb.TransactionAttributeType.MANDATORY;
 
 @Stateless
 @TransactionAttribute(MANDATORY)
+@Interceptors(TrackingInterceptor.class)
 public class CompanyFacadeMow extends AbstractFacade<Company> {
 
     @PersistenceContext(unitName = "ssbd03mowPU")

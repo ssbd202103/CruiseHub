@@ -9,12 +9,14 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.TokenWrapperFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.JWTHandler;
 import pl.lodz.p.it.ssbd2021.ssbd03.services.EmailService;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
+import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
 import javax.annotation.security.RunAs;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
+import javax.interceptor.Interceptors;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
@@ -33,6 +35,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.VERIFICATION_EMAIL_SUBJEC
 @Singleton
 @Startup
 @RunAs("SYSTEM")
+@Interceptors(TrackingInterceptor.class)
 public class SystemScheduler {
 
     @Inject

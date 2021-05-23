@@ -8,6 +8,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.NewCruiseDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.PublishCruiseDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.converters.CruiseMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.managers.CruiseManagerLocal;
+import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
@@ -15,12 +16,14 @@ import java.util.UUID;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
+import javax.interceptor.Interceptors;
 
 /**
  * Klasa który zajmuje się obsługą obiektów dto z zakresu wycieczek (rejsów)
  */
 @Stateful
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+@Interceptors(TrackingInterceptor.class)
 public class CruiseEndpoint implements CruiseEndpointLocal {
 
     @Inject

@@ -4,12 +4,14 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CompanyFacadeMow;
+import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
 import javax.ejb.TransactionAttribute;
 import javax.inject.Inject;
+import javax.interceptor.Interceptors;
 import java.util.List;
 
 import static javax.ejb.TransactionAttributeType.MANDATORY;
@@ -19,6 +21,7 @@ import static javax.ejb.TransactionAttributeType.MANDATORY;
  */
 @Stateful
 @TransactionAttribute(MANDATORY)
+@Interceptors(TrackingInterceptor.class)
 public class CompanyManager implements CompanyManagerLocal {
     @Inject
     private CompanyFacadeMow companyFacadeMow;

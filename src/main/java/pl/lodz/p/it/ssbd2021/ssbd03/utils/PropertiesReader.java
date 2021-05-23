@@ -1,10 +1,14 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.utils;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
+
+import javax.interceptor.Interceptors;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+@Interceptors(TrackingInterceptor.class)
 public class PropertiesReader {
 
     private static final String SECURITY_PROPERTIES_FILE = "security/security.properties";

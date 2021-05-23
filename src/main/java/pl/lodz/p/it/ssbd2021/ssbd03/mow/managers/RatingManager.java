@@ -8,11 +8,13 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.RatingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.AccountFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseGroupFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.RatingFacadeMow;
+import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
 import javax.ejb.TransactionAttribute;
 import javax.inject.Inject;
+import javax.interceptor.Interceptors;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
 
@@ -20,6 +22,7 @@ import static javax.ejb.TransactionAttributeType.MANDATORY;
 
 @Stateful
 @TransactionAttribute(MANDATORY)
+@Interceptors(TrackingInterceptor.class)
 public class RatingManager implements RatingManagerLocal {
 
     @Context
