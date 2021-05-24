@@ -118,6 +118,17 @@ public class AccountController {
         return tryAndRepeat(() -> accountEndpoint.getAllAccounts());
     }
 
+    /**
+     * Pobiera listę wszystkich niezatwierdzonych pracowników firm
+     * @return lista dto z pracownikami firm
+     * @throws BaseAppException bazowy wyjątek aplikacji
+     */
+    @GET
+    @Path("/unconfirmed-business-workers")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<BusinessWorkerWithCompanyDto> getAllUnconfirmedBusinessWorkers() throws BaseAppException{
+        return tryAndRepeat(() -> accountEndpoint.getAllUnconfirmedBusinessWorkers());
+    }
 
     /**
      * Metoda pośrednio odpowiedzialna za blokowanie użytkownika
@@ -318,4 +329,6 @@ public class AccountController {
 
         tryAndRepeat(() -> accountEndpoint.changeEmail(accountChangeEmailDto));
     }
+
+
 }

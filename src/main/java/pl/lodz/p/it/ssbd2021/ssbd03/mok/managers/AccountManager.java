@@ -189,6 +189,15 @@ public class AccountManager implements AccountManagerLocal {
         return accountFacade.findAll();
     }
 
+    @RolesAllowed("getAllUnconfirmedBusinessWorkers")
+    @Override
+    public List<Account> getAllUnconfirmedBusinessWorkers() throws BaseAppException {
+        List<Account> res = new ArrayList<>();
+       for(AccessLevel account : accountFacade.getUnconfirmedBusinessWorkers()) {
+               res.add(account.getAccount());
+       }
+       return res;
+    }
     @RolesAllowed("blockUser")
     @Override
     public Account blockUser(String login, long version) throws BaseAppException {

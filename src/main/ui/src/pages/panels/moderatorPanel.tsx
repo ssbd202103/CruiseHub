@@ -1,5 +1,5 @@
 import {useTranslation} from 'react-i18next'
-import {useState} from "react";
+import React, {useState} from "react";
 import ListClient from "./moderator/ListClient";
 
 import SettingsIcon from '@material-ui/icons/SettingsRounded'
@@ -19,6 +19,8 @@ import LogOutRoundedButton from "../../components/LogOutRoundedButton";
 import ChangeEmail from "../../components/changeData/ChangeEmail";
 import ChangePassword from "../../components/changeData/ChangePassword";
 import ChangeModeratorData from "../../components/changeData/ChangeModeratorData";
+import ManageCompanies from "./moderator/ManageCompanies";
+import ChangeAccountData from "./admin/ChangeAccountData";
 
 
 export default function ModeratorPanel() {
@@ -73,6 +75,14 @@ export default function ModeratorPanel() {
                                 <ListItemText> {t("list accounts")} </ListItemText>
                             </ListItem>
                         </Link>
+                        <Link to="/panels/moderatorPanel/manageCompanies">
+                            <ListItem button>
+                                <ListItemIcon>
+                                    <AccountsListIcon style={{ fill: `var(--${!darkModel ? 'white' : 'dark'})` }} />
+                                </ListItemIcon>
+                                <ListItemText> {t("Manage business workers")} </ListItemText>
+                            </ListItem>
+                        </Link>
                         <Link to="/panels/moderatorPanel/settings">
                             <ListItem button>
                                 <ListItemIcon>
@@ -118,6 +128,9 @@ export default function ModeratorPanel() {
                         onConfirm={() => {setIsPasswordEdit(false)}}
                         onCancel={() => {setIsPasswordEdit(false)}} />
                     <LogOutRoundedButton />
+                </Route>
+                <Route exact path="/panels/moderatorPanel/ManageCompanies">
+                    <ManageCompanies/>
                 </Route>
             </Grid>
         </Grid>

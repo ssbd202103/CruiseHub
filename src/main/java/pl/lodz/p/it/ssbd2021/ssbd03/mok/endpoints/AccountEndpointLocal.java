@@ -246,5 +246,12 @@ public interface AccountEndpointLocal {
      */
 
     void changeMode(ChangeModeDto changeModeDto) throws BaseAppException, FacadeException;
+
+    /**
+     * Metoda opdowiedzialna za pobranie wszystkich niezatwierdzonych pracowników firm
+     * @return lista obiektow dto BusinessWorkerWithCompanyDto
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
+    List<BusinessWorkerWithCompanyDto> getAllUnconfirmedBusinessWorkers() throws BaseAppException;
 }
 
