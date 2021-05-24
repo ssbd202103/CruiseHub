@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Reservation;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CreateReservationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseReservationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.RemoveClientReservationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.converters.ReservationMapper;
@@ -55,4 +56,11 @@ public class ReservationEndpoint implements ReservationEndpointLocal {
         this.reservationManager.removeClientReservation(removeClientReservationDto.getReservationVersion(), removeClientReservationDto.getReservationUuid(), removeClientReservationDto.getClientLogin());
         // todo implement
     }
+
+    @RolesAllowed("createReservation")
+    @Override
+    public void createReservation(CreateReservationDto crDto) throws BaseAppException {
+        this.reservationManager.createReservation(crDto.getReservationVersion(), crDto.getCruiseUuid(), crDto.getNumberOfSeats(), crDto.getClientLogin());
+    }
+
 }
