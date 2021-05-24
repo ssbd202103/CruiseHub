@@ -2,6 +2,8 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Reservation;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CancelReservationDTO;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CreateReservationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseReservationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.RemoveClientReservationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.converters.ReservationMapper;
@@ -54,5 +56,17 @@ public class ReservationEndpoint implements ReservationEndpointLocal {
     public void removeClientReservation(RemoveClientReservationDto removeClientReservationDto) throws BaseAppException {
         this.reservationManager.removeClientReservation(removeClientReservationDto.getReservationVersion(), removeClientReservationDto.getReservationUuid(), removeClientReservationDto.getClientLogin());
         // todo implement
+    }
+
+    @RolesAllowed("createReservation")
+    @Override
+    public void createReservation(CreateReservationDto crDto) throws BaseAppException {
+        this.reservationManager.createReservation(crDto.getCruiseVersion(), crDto.getCruiseUuid(), crDto.getNumberOfSeats(), crDto.getClientLogin());
+    }
+
+    @RolesAllowed("cancelReservation")
+    @Override
+    public void cancelReservation(CancelReservationDTO crDto) throws BaseAppException {
+        this.reservationManager.cancelReservation(crDto.getReservationVersion(), crDto.getCruiseUuid(), crDto.getClientLogin());
     }
 }

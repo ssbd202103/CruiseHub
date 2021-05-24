@@ -254,4 +254,28 @@ public interface AccountManagerLocal {
      */
     void changeMode(String login, boolean newMode) throws BaseAppException;
 
+    /**
+     * Metoda odpowiedzialna za odświeżanie tokenu JWT
+     * @param token Aktualny token JWT
+     * @return token Odnowiony token JWT
+     * @throws BaseAppException Bazowy wyjątek aplikacyjny, rzucany w przypadku gdy przekazany token nie jest ważny,
+     * lub jego podmiot nie jest upoważniony do ponownego uwierzytelnienia
+     */
+    String refreshJWTToken(String token) throws BaseAppException;
+
+    /**
+     * Metoda opdowiedzialna za pobranie wszystkich niezatwierdzonych pracowników firm
+     * @return lista obiektow account
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
+    List<Account> getAllUnconfirmedBusinessWorkers() throws BaseAppException;
+
+    /**
+     * Metoda odpowiedzialna za potwierdzenie pracownika firmy
+     * @param login login pracownika firmy
+     * @param version wersja na potrzeby blokady optymistycznej
+     * @throws BaseAppException bazowy wyjątek aplikacji
+     */
+    void confirmBusinessWorker(String login, long version) throws BaseAppException;
+
 }

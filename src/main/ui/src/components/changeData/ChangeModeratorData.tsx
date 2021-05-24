@@ -11,9 +11,12 @@ import {ConfirmCancelButtonGroup} from "../ConfirmCancelButtonGroup";
 import {changeModeratorData} from "../../Services/changeDataService";
 import Recaptcha from "react-recaptcha";
 import Popup from "../../PopupRecaptcha";
+import {useSnackbarQueue} from "../../pages/snackbar";
 
 export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}: ChangeDataComponentProps) {
     const {t} = useTranslation()
+
+    const showError = useSnackbarQueue('error')
 
     const firstName = useSelector(selectFirstName)
     const secondName = useSelector(selectSecondName)
@@ -23,19 +26,27 @@ export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}:
 
     const [buttonPopup, setButtonPopup] = useState(false);
 
+    const handleCancel = () => {
+        setFirstNameValue('')
+        setSecondNameValue('')
+        onCancel()
+    }
+
     function verifyCallback(){
-        //TODO
         setButtonPopup(false)
         if (!firstNameValue || !secondNameValue) {
-            return alert("Values are missing")
+            showError(t('error.fields'))
+            return;
         }
 
         changeModeratorData(firstNameValue, secondNameValue).then(res => {
+            setFirstNameValue('')
+            setSecondNameValue('')
             onConfirm()
         }).catch(error => {
-            alert("ERROR: go to console")
-            console.log(error)
-        })
+            const message = error.response.data
+            showError(t(message))
+        });
 
     }
 
@@ -101,7 +112,7 @@ export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}:
                 </Popup>
                 <ConfirmCancelButtonGroup
                     onConfirm={changeData}
-                    onCancel={onCancel} />
+                    onCancel={handleCancel} />
             </Grid>
         </>
 )

@@ -21,7 +21,10 @@
     <persistence-unit name="ssbd03glassfishPU" transaction-type="JTA">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <jta-data-source>java:app/jdbc/ssbd03glassfishDS</jta-data-source>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.TokenWrapper</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client</class>
@@ -36,6 +39,7 @@
             <property name="hibernate.transaction.jta.platform"
                       value="org.hibernate.service.jta.platform.internal.SunOneJtaPlatform"/>
             <property name="hibernate.canonicalmodel.prefix" value="glassfish"/>
+            <property name="hibernate.show_sql" value="true"/>
         </properties>
     </persistence-unit>
     <!-- Application PUs -->

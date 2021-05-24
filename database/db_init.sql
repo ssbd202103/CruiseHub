@@ -4,7 +4,7 @@ insert into language_types(id, name)
 values (-1, 'PL');
 --language_types 2
 insert into language_types(id, name)
-values (-2, 'ENG');
+values (-2, 'EN');
 --language_types end
 
 --alter_types start
@@ -78,7 +78,7 @@ values (-4, 'BusinessWorker', -3, true, now(), now(), -3, -3, -2, 0);
 
 insert into access_levels (id, access_level, account_id, enabled, creation_date_time, last_alter_date_time,
                            created_by_id, altered_by_id, alter_type_id, version)
-values (-5, 'Moderator', -4, false, now(), now(), -4, -4, -2, 0);
+values (-5, 'Moderator', -4, true, now(), now(), -4, -4, -2, 0);
 -- access_levels end
 --
 --

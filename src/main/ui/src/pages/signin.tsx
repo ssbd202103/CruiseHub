@@ -3,58 +3,49 @@ import {Link} from 'react-router-dom'
 import Box from '@material-ui/core/Box'
 import PasswordIcon from '@material-ui/icons/VpnKeyRounded'
 
-import {useHistory} from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 
 import AuthLayout from '../layouts/AuthLayout'
 import DarkedTextField from '../components/DarkedTextField'
 import RoundedButton from '../components/RoundedButton'
 
 import {useTranslation} from 'react-i18next'
-import {COUNTRY_REGEX, LOGIN_REGEX, PASSWORD_REGEX} from '../regexConstants'
 
 import styles from '../styles/auth.global.module.css'
 import axios from "axios"
-import React, {useEffect, useState} from "react"
+import React, {useState} from "react"
+
 import {getUser} from "../Services/userService";
+
+import {useSnackbarQueue} from "./snackbar";
 
 export default function SignIn() {
     const {t} = useTranslation();
 
-    const history = useHistory();
+    const showError = useSnackbarQueue('error')
 
-    // const dispatch = useDispatch();
+    const history = useHistory();
 
     const [login, setLogin] = useState('')
     const [password, setPassword] = useState('')
 
-    const [loginRegexError, setLoginRegexError] = useState(false)
-    const [passwordRegexError, setPasswordRegexError] = useState(false)
-
-
     const auth = async () => {
+        const json = JSON.stringify({
+            login: login,
+            password: password
+        })
 
-        if (LOGIN_REGEX.test(login) && PASSWORD_REGEX.test(password)) {
-            const json = JSON.stringify({
-                login: login,
-                password: password
-            })
-
-            let response = await axios.post('http://localhost:8080/api/auth/sign-in', json, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-
-            await getUser(response.data)
-
+        axios.post('http://localhost:8080/api/auth/sign-in', json, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(res => {
+            getUser(res.data)
             history.push('/')
-
-
-            console.log("done")// todo show done message
-        } else {
-            console.log("error")// todo show error message
-        }
-
+        }).catch(error => {
+            const message = error.response.data
+            showError(t(message))
+        })
     }
 
 
@@ -72,14 +63,8 @@ export default function SignIn() {
                 }}
                 placeholder="login"
                 value={login}
-                onChange={event => {
-                    setLogin(event.target.value)
-                    setLoginRegexError(!LOGIN_REGEX.test(event.target.value))
-                }}
+                onChange={event => {setLogin(event.target.value)}}
                 colorIgnored
-                regexErrorText={t("bad_login")}
-                regexError={loginRegexError}
-
             />
 
             <DarkedTextField
@@ -89,16 +74,11 @@ export default function SignIn() {
                     width: '70%',
                     margin: '20px 0'
                 }}
-                icon={(<PasswordIcon/>)}
+                icon={(<PasswordIcon />)}
                 placeholder="1234567890"
                 value={password}
+                onChange={event => {setPassword(event.target.value)}}
                 colorIgnored
-                onChange={event => {
-                    setPassword(event.target.value)
-                    setPasswordRegexError(!PASSWORD_REGEX.test(event.target.value))
-                }}
-                regexError={passwordRegexError}
-                regexErrorText={t("bad_password")}
             />
 
             <Box style={{

@@ -189,6 +189,15 @@ public class AccountManager implements AccountManagerLocal {
         return accountFacade.findAll();
     }
 
+    @RolesAllowed("getAllUnconfirmedBusinessWorkers")
+    @Override
+    public List<Account> getAllUnconfirmedBusinessWorkers() throws BaseAppException {
+        List<Account> res = new ArrayList<>();
+       for(AccessLevel account : accountFacade.getUnconfirmedBusinessWorkers()) {
+               res.add(account.getAccount());
+       }
+       return res;
+    }
     @RolesAllowed("blockUser")
     @Override
     public Account blockUser(String login, long version) throws BaseAppException {
@@ -263,7 +272,7 @@ public class AccountManager implements AccountManagerLocal {
 
         String login = claims.get("sub").asString();
         if (expire.before(new Date())) {
-            throw new AccountManagerException(ACCOUNT_VERIFICATION_TOKEN_EXPIRED_ERROR);
+            throw new AccountManagerException(TOKEN_EXPIRED_ERROR);
         }
 
         Account account = this.accountFacade.findByLogin(login);
@@ -504,9 +513,9 @@ public class AccountManager implements AccountManagerLocal {
         Account account = this.accountFacade.updateAuthenticateInfo(login, IpAddr, time, true);
         account.setNumberOfAuthenticationFailures(0);
 
-        Map<String, Object> map = Map.of("login", login, "accessLevels", account.getAccessLevels()
+        Map<String, Object> map = Map.of("accessLevels", account.getAccessLevels()
                 .stream().map(accessLevel -> accessLevel.getAccessLevelType().name()).collect(Collectors.toList()));
-        return JWTHandler.createToken(map, String.valueOf(account.getId()));
+        return JWTHandler.createToken(map, account.getLogin());
     }
 
 
@@ -562,5 +571,52 @@ public class AccountManager implements AccountManagerLocal {
         Account account = accountFacade.findByLogin(login);
 
         account.setDarkMode(newMode);
+        setUpdatedMetadata(account);
+    }
+
+    @RolesAllowed("authenticatedUser")
+    public String refreshJWTToken(String token) throws BaseAppException {
+        Map<String, Claim> claims = JWTHandler.getClaimsFromToken(token);
+
+        try {
+            String login = claims.get("sub").asString();
+            Set<String> accessLevelsFromToken = new HashSet<>(claims.get("accessLevels").asList(String.class));
+            Account account = accountFacade.findByLogin(login);
+            if (!canUserRefreshToken(account, accessLevelsFromToken)) {
+                throw new AccountManagerException(TOKEN_REFRESH_ERROR);
+            }
+            return JWTHandler.refreshToken(token);
+        } catch (NullPointerException e) {
+            throw new AccountManagerException(TOKEN_REFRESH_ERROR);
+        }
+    }
+
+    private boolean canUserRefreshToken(Account account, Set<String> tokenAccessLevels) {
+
+        Set<String> accountValidAccessLevels = account.getAccessLevels().stream()
+                .filter(accessLevel -> {
+                            if (accessLevel instanceof BusinessWorker) {
+                                BusinessWorker bw = (BusinessWorker) accessLevel;
+                                return bw.isEnabled() && bw.isConfirmed();
+                            }
+                            return accessLevel.isEnabled();
+                        }
+                )
+                .map(a -> a.getAccessLevelType().name()).collect(Collectors.toSet());
+
+        boolean accessLevelsValid = tokenAccessLevels.equals(accountValidAccessLevels) && !tokenAccessLevels.isEmpty();
+
+        return account.isActive() && account.isConfirmed() && accessLevelsValid;
+    }
+    @RolesAllowed("ConfirmBusinessWorker")
+    @Override
+    public void confirmBusinessWorker(String login, long version) throws BaseAppException {
+        Account account = accountFacade.findByLogin(login);
+        BusinessWorker worker= (BusinessWorker) getAccessLevel(account,AccessLevelType.BUSINESS_WORKER);
+        if (!(worker.getVersion() == version)) {
+            throw FacadeException.optimisticLock();
+        }
+        worker.setConfirmed(true);
+        setUpdatedMetadata(worker);
     }
 }

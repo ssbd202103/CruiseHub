@@ -6,6 +6,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 
 import javax.ejb.Local;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -64,5 +65,12 @@ public interface CruiseManagerLocal {
      * @throws BaseAppException wyjątek rzucany w razie nie znalezienia wycieczki, bądź złej wersji
      */
     void editCruise(String description, LocalDateTime startDate, LocalDateTime endDate, UUID uuid, Long version) throws BaseAppException;
+
+    /**
+     * Zwraca wszystkie opublikowane wycieczki
+     * @return Lista wycieczek
+     * @throws BaseAppException Bazowy wyjatek aplikacji
+     */
+    List<Cruise> getPublishedCruises() throws BaseAppException;
 
 }

@@ -1,4 +1,5 @@
 import {createSelector, createSlice, PayloadAction} from '@reduxjs/toolkit'
+import i18n from "i18next";
 
 export interface IUserSliceState {
     firstName: string,
@@ -34,7 +35,7 @@ const userSlice = createSlice({
         login: '',
         darkMode: false,
         email: '',
-        languageType: 'PL',
+        languageType: window.navigator.languages[1].toUpperCase() === "EN" ? "EN" : "PL",
         accessLevels: [] as Array<IAccessLevel>,
         etag: '',
         version: 0
@@ -44,17 +45,22 @@ const userSlice = createSlice({
         changeEmail: (state: IUserSliceState, {payload}: PayloadAction<string>) => {
             state.email = payload
         },
-        emptyUser: (state: IUserSliceState) => ({
-            firstName: '',
-            secondName: '',
-            login: '',
-            darkMode: false,
-            email: '',
-            languageType: 'PL',
-            accessLevels: [] as Array<IAccessLevel>,
-            etag: '',
-            version: 0
-        })
+        emptyUser: (state: IUserSliceState) => {
+            const languageType = window.navigator.languages[1]
+                .toUpperCase() === "PL" ? "PL" : "EN"
+            i18n.changeLanguage(languageType)
+            return {
+                firstName: '',
+                secondName: '',
+                login: '',
+                darkMode: false,
+                email: '',
+                languageType,
+                accessLevels: [] as Array<IAccessLevel>,
+                etag: '',
+                version: 0
+            }
+        }
     }
 })
 
@@ -86,7 +92,7 @@ export const getAccessLevelLabels = createSelector(selectSelf, state =>
 
 export const selectPhoneNumber = (accessLevelLabel: "CLIENT" | "BUSINESS_WORKER") =>
     createSelector(selectSelf,
-            state => state.user.accessLevels.find(accessLevel => accessLevel.accessLevelType === accessLevelLabel)?.phoneNumber || "-1")
+        state => state.user.accessLevels.find(accessLevel => accessLevel.accessLevelType === accessLevelLabel)?.phoneNumber || "-1")
 
 export const selectAddress =
     createSelector(selectSelf,

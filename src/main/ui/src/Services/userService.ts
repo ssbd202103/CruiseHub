@@ -3,15 +3,15 @@ import axios from "axios";
 import {update} from "../redux/slices/tokenSlice";
 import {setUser, emptyUser} from "../redux/slices/userSlice";
 
-export async function getUser(token: string) {
-    const accountDetails = await axios.get('http://localhost:8080/api/self/account-details', {
+export function getUser(token: string) {
+    return axios.get('http://localhost:8080/api/self/account-details', {
         headers: {
             'Authorization': `Bearer ${token}`
         }
+    }).then(res => {
+        store.dispatch(update(token))
+        store.dispatch(setUser(res.data))
     })
-
-    store.dispatch(update(token))
-    store.dispatch(setUser(accountDetails.data))
 }
 
 export function logOut() {

@@ -4,10 +4,11 @@ import {initReactI18next} from 'react-i18next'
 const resources = {
     pl: {
         translation: {
+            "invalid.form": "Niepoprawnie wypełniony formularz",
+            "dismiss": "Odrzuć",
             "go back": "Wróć",
             "email": "E-mail",
             "password": "Hasło",
-            "bad_password": "Zle Hasło",
             "confirm password": "Potwierdź hasło",
             "name": "Imię",
             "surname": "Nazwisko",
@@ -66,7 +67,6 @@ const resources = {
             "search account": "Wyszukać konto",
             "adminPanel": "Panel administracyjny",
             "login": "Login",
-            "bad_login": "Zły Login",
             "first name": "Imię",
             "last name": "Nazwisko",
             "active": "Aktywny",
@@ -85,6 +85,11 @@ const resources = {
             "change access level state": "Zmień stan poziomu dostępu",
             //panels.clientPanel
             "clientPanel": "Panel klienta",
+            //panels.ModeratorPanel
+            "search business workers": "Szukaj niezatwierdzonych pracowników",
+            "company name": "Nazwa firmy",
+            "company phone number": " Numer telefonu firmy",
+            "Manage business workers": "Zarządzaj pracownikami frim",
             //verify
             "verifyAccount": "Zweryfikuj konto",
             //color
@@ -143,11 +148,18 @@ const resources = {
             "error.regex.email": "Niepoprawny adres email",
 
             //else
-            'error.emptypanellist': 'Nie masz żadnych paneli do sterowania'
+            'error.emptypanellist': 'Nie masz żadnych paneli do sterowania',
+
+            'error.fields': 'Zostały wprowadzone niepoprawne dane',
+            'passwords are not equal': 'Hasła nie są identyczne',
+            'emails are not equal': 'Emaile nie są identyczne',
+            'error.houseNumber.NaN': 'Podany numer domu nie jest liczbą'
         }
     },
     en: {
         translation: {
+            "invalid.form": "Invalid form",
+            "dismiss": "Dismiss",
             "go back": "Go back",
             "email": "E-mail",
             "password": "Password",
@@ -229,6 +241,11 @@ const resources = {
             "grand access level": "Grand access level",
             //panels.clientPanel
             "clientPanel": "Client panel",
+            //panels.ModeratorPanel
+            "search business workers": "Search business workers",
+            "company name": "Company name",
+            "company phone number": "Company phone number",
+            "Manage business workers": "Manage business workers",
             //verify
             "verifyAccount": "Verify account",
             //color
@@ -285,7 +302,12 @@ const resources = {
             "phone change btn": "Change phone number",
             "error.regex.email": "Invalid email address",
 
-            'error.emptypanellist': "You don't have any panel to manage"
+            'error.emptypanellist': "You don't have any panel to manage",
+
+            'error.fields': 'Given invalid data',
+            'passwords are not equal': 'Passwords are not equal',
+            'emails are not equal': "Emails are not equal",
+            'error.houseNumber.NaN': 'Given house number is not a number'
         }
     }
 }

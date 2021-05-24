@@ -5,7 +5,6 @@
          version="4.0">
     <default-context-path>/</default-context-path>
     <error-page>
-        <error-code>404</error-code>
         <location>/index.html</location>
     </error-page>
     <!---->
@@ -100,11 +99,26 @@
     </security-role>
 
     <security-role>
+        <role-name>getAllUnconfirmedBusinessWorkers</role-name>
+    </security-role>
+    <security-role>
+        <role-name>ConfirmBusinessWorker</role-name>
+    </security-role>
+
+    <security-role>
         <role-name>SYSTEM</role-name>
     </security-role>
 
     <security-role>
         <role-name>removeClientReservation</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>createReservation</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>cancelReservation</role-name>
     </security-role>
 
     <security-role>

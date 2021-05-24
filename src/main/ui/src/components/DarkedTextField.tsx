@@ -58,8 +58,7 @@ export interface DarkedTextFieldProps {
     readonly style?: React.CSSProperties,
     readonly value?: any,
     readonly colorIgnored?: boolean,
-    readonly regexError?: boolean,
-    readonly regexErrorText?: string
+    readonly regexError?: boolean
 
     onChange?(event: React.ChangeEvent<HTMLInputElement>): void
 }
@@ -93,8 +92,7 @@ const DarkedTextField = (props: DarkedTextFieldProps) => {
             value,
             onChange,
             colorIgnored,
-            regexError,
-            regexErrorText
+            regexError
         } = props
 
         const darkMode = useSelector(selectDarkMode)
@@ -123,7 +121,6 @@ const DarkedTextField = (props: DarkedTextFieldProps) => {
                     value={value}
                     onChange={onChange}
                 />
-                {regexError ? <p style={regexErrorTextStyle}>{regexErrorText}</p> : ''}
             </>
 
         )

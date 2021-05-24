@@ -83,7 +83,7 @@ class AccountControllerIT {
     @Test
     public void registerBusinessWorkerTest_SUCCESS() {
         BusinessWorkerForRegistrationDto businessWorkerDto = new BusinessWorkerForRegistrationDto("Artur", "Radiuk", randomAlphanumeric(15), randomAlphanumeric(10) + "@gmail.com",
-                "abcABC123*", LanguageType.ENG, "123456789", "FirmaJez");
+                "abcABC123*", LanguageType.EN, "123456789", "FirmaJez");
         given().baseUri(authBaseUri).contentType(MediaType.APPLICATION_JSON).body(businessWorkerDto).when().post("/business-worker/registration").then().statusCode(204);
     }
 
@@ -190,20 +190,11 @@ class AccountControllerIT {
         ChangeAccessLevelStateDto changeAccessLevelState = new ChangeAccessLevelStateDto(account.getLogin(),
                 moderator.get().getAccessLevelType(), account.getVersion(), true);
 
-        String etag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
-        changeAccessLevelState.setAccountVersion(account.getVersion() - 1);
-
-        Response response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken))
-                .body(changeAccessLevelState).put("/change-access-level-state");
-
-        assertThat(response.getStatusCode()).isEqualTo(400);
-        assertThat(response.asString()).isEqualTo(ETAG_IDENTITY_INTEGRITY_ERROR);
-
         // Requesting enabling already enabled account
         changeAccessLevelState.setAccountVersion(account.getVersion() + 2);
-        etag = EntityIdentitySignerVerifier.calculateEntitySignature(changeAccessLevelState);
+        String etag = EntityIdentitySignerVerifier.calculateEntitySignature(changeAccessLevelState);
 
-        response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken))
+        Response response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken))
                 .body(changeAccessLevelState).put("/change-access-level-state");
 
         assertThat(response.getStatusCode()).isEqualTo(400);
@@ -298,6 +289,31 @@ class AccountControllerIT {
         assertTrue(accountDtoList.stream().anyMatch(newAccount -> newAccount.getLogin().equals(account.getLogin())));
 
     }
+    @Test
+    public void getAllUnconfirmedBusinessWorkers_SUCESS() throws JsonProcessingException {
+        String adminToken = this.getAuthToken("mzuckerberg", "abcABC123*");
+
+        Response response = RestAssured.given().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken)).baseUri(accountBaseUri).get("/unconfirmed-business-workers");
+        String accountString = response.getBody().asString();
+        List<BusinessWorkerWithCompanyDto> workerks = Arrays.asList(objectMapper.readValue(accountString, BusinessWorkerWithCompanyDto[].class));
+        assertTrue(workerks.size()>0);
+
+    }
+    @Test
+    public void ConfirmBusinessWorker() throws JsonProcessingException {
+        String adminToken = this.getAuthToken("mzuckerberg", "abcABC123*");
+
+        Response response = RestAssured.given().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken)).baseUri(accountBaseUri).get("/unconfirmed-business-workers");
+        String accountString = response.getBody().asString();
+        List<BusinessWorkerWithCompanyDto> workerks = Arrays.asList(objectMapper.readValue(accountString, BusinessWorkerWithCompanyDto[].class));
+       BusinessWorkerWithCompanyDto worker= workerks.get(0);
+        given().baseUri(accountBaseUri).header("If-Match", worker.getEtag())
+                .contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken))
+                .body(worker)
+                .when()
+                .put("/confirm-business-worker").then().statusCode(204);
+
+    }
 
     @Test
     public void unblockUserTest_SUCCESS() throws JsonProcessingException, ETagException {
@@ -371,7 +387,7 @@ class AccountControllerIT {
 
         AccountChangeEmailDto accountChangeEmailDto = new AccountChangeEmailDto(
                 account.getLogin(),
-                account.getVersion() - 1,
+                account.getVersion() + 2,
                 randomAlphanumeric(10) + "@gmail.com");
         String etag = EntityIdentitySignerVerifier.calculateEntitySignature(accountChangeEmailDto);
 

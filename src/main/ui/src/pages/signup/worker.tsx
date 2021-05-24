@@ -16,9 +16,23 @@ import axios from "axios";
 import Recaptcha from "react-recaptcha";
 import Popup from "../../PopupRecaptcha";
 import {useSelector} from "react-redux";
+import {
+    CITY_REGEX, COUNTRY_REGEX,
+    EMAIL_REGEX,
+    LOGIN_REGEX,
+    NAME_REGEX,
+    NUM_REGEX,
+    PASSWORD_REGEX,
+    PHONE_NUMBER_REGEX, POST_CODE_REGEX, STREET_REGEX
+} from "../../regexConstants";
+import {useSnackbarQueue} from "../snackbar";
+import i18n from "i18next";
+
 
 export default function WorkerSignUp() {
     const {t} = useTranslation()
+    const showError = useSnackbarQueue('error')
+    const showSuccess = useSnackbarQueue('success')
 
     const [firstName, setFirstName] = useState('')
     const [secondName, setSecondName] = useState('')
@@ -35,6 +49,13 @@ export default function WorkerSignUp() {
 
     const [buttonPopup, setButtonPopup] = useState(false);
 
+    const [loginRegexError, setLoginRegexError] = useState(false)
+    const [passwordRegexError, setPasswordRegexError] = useState(false)
+    const [firstNameRegexError, setFirstNameRegexError] = useState(false)
+    const [secondNameRegexError, setSecondNameRegexError] = useState(false)
+    const [emailRegexError, setEmailRegexError] = useState(false)
+    const [phoneNumberRegexError, setPhoneNumberRegexError] = useState(false)
+
     async function verifyCallback() {
         const json = JSON.stringify({
             firstName,
@@ -42,15 +63,18 @@ export default function WorkerSignUp() {
             login,
             email,
             password,
-            languageType,
+            languageType: i18n.language,
             phoneNumber,
             companyName: company
         });
         setButtonPopup(false)
-        await axios.post('http://localhost:8080/api/auth/business-worker/registration', json, {
+        axios.post('http://localhost:8080/api/auth/business-worker/registration', json, {
             headers: {
                 'Content-Type': 'application/json'
             }
+        }).catch(error => {
+            const message = error.response.data
+            showError(t(message))
         });
 
     }
@@ -60,12 +84,30 @@ export default function WorkerSignUp() {
             const {data} = await axios.get('http://localhost:8080/api/company/companies-info', {});
             setCompaniesList(data.map((comp: { name: string }) => comp.name))
         }
-        getCompaniesList()
+        // getCompaniesList()
     }, [company]);
     console.log(companiesList)
 
+
     const workerSignUpFun = async () => {
-        setButtonPopup(true)
+        setLoginRegexError(!LOGIN_REGEX.test(login))
+        setPasswordRegexError(!PASSWORD_REGEX.test(password))
+        setFirstNameRegexError(!NAME_REGEX.test(firstName))
+        setSecondNameRegexError(!NAME_REGEX.test(secondName))
+        setEmailRegexError(!EMAIL_REGEX.test(email))
+
+        setPhoneNumberRegexError(!PHONE_NUMBER_REGEX.test(phoneNumber))
+
+        if (!LOGIN_REGEX.test(login) || !PASSWORD_REGEX.test(password) || !NAME_REGEX.test(firstName) ||
+            !NAME_REGEX.test(secondName) || !EMAIL_REGEX.test(email) || !PHONE_NUMBER_REGEX.test(phoneNumber)) {
+
+            showError(t("invalid.form"))
+
+        } else {
+            setButtonPopup(true)
+            showSuccess("DONE")
+        }
+
     }
 
 
@@ -88,8 +130,12 @@ export default function WorkerSignUp() {
                         marginRight: 20
                     }}
                     value={firstName}
-                    onChange={event => {setFirstName(event.target.value)}}
+                    onChange={event => {
+                        setFirstName(event.target.value)
+                        setFirstNameRegexError(!NAME_REGEX.test(event.target.value))
+                    }}
                     colorIgnored
+                    regexError={firstNameRegexError}
                 />
 
 
@@ -98,8 +144,12 @@ export default function WorkerSignUp() {
                     placeholder="Doe"
                     className={styles.input}
                     value={secondName}
-                    onChange={event => {setSecondName(event.target.value)}}
+                    onChange={event => {
+                        setSecondName(event.target.value)
+                        setSecondNameRegexError(!NAME_REGEX.test(event.target.value))
+                    }}
                     colorIgnored
+                    regexError={secondNameRegexError}
                 />
             </Box>
 
@@ -129,8 +179,12 @@ export default function WorkerSignUp() {
                     className={styles.input}
                     icon={(<EmailIcon/>)}
                     value={email}
-                    onChange={event => {setEmail(event.target.value)}}
+                    onChange={event => {
+                        setEmail(event.target.value)
+                        setEmailRegexError(!EMAIL_REGEX.test(event.target.value))
+                    }}
                     colorIgnored
+                    regexError={emailRegexError}
                 />
 
 
@@ -153,8 +207,12 @@ export default function WorkerSignUp() {
                         marginRight: 20
                     }}
                     value={login}
-                    onChange={event => {setLogin(event.target.value)}}
+                    onChange={event => {
+                        setLogin(event.target.value)
+                        setLoginRegexError(!LOGIN_REGEX.test(event.target.value))
+                    }}
                     colorIgnored
+                    regexError={loginRegexError}
                 />
 
                 <DarkedTextField
@@ -162,8 +220,12 @@ export default function WorkerSignUp() {
                     placeholder="examplenumber"
                     className={styles.input}
                     value={phoneNumber}
-                    onChange={event => {setPhoneNumber(event.target.value)}}
+                    onChange={event => {
+                        setPhoneNumber(event.target.value)
+                        setPhoneNumberRegexError(!PHONE_NUMBER_REGEX.test(event.target.value))
+                    }}
                     colorIgnored
+                    regexError={phoneNumberRegexError}
                 />
 
             </Box>
@@ -175,16 +237,7 @@ export default function WorkerSignUp() {
                     padding: 0
                 }}
             >
-                <DarkedTextField
-                    label={t("languageType") + ' *'}
-                    placeholder="language type"
-                    className={styles.input}
-                    value={languageType}
-                    onChange={event => {setLanguageType(event.target.value)}}
-                    colorIgnored
-                />
             </Box>
-
 
             <Box
                 style={{
@@ -201,8 +254,17 @@ export default function WorkerSignUp() {
                     style={{marginRight: 20}}
                     icon={(<PasswordIcon/>)}
                     value={password}
-                    onChange={event => {setPassword(event.target.value)}}
+                    onChange={event => {
+                        setPassword(event.target.value)
+                        setPasswordRegexError(!PASSWORD_REGEX.test(event.target.value))
+                        if (event.target.value != confirmPassword || !PASSWORD_REGEX.test(event.target.value)) {
+                            setPasswordRegexError(true)
+                        } else {
+                            setPasswordRegexError(false)
+                        }
+                    }}
                     colorIgnored
+                    regexError={passwordRegexError}
                 />
 
                 <DarkedTextField
@@ -212,8 +274,19 @@ export default function WorkerSignUp() {
                     className={styles.input}
                     icon={(<PasswordIcon/>)}
                     value={confirmPassword}
-                    onChange={event => {setConfirmPassword(event.target.value)}}
+                    onChange={event => {
+                        setConfirmPassword(event.target.value)
+
+                        setPasswordRegexError(!PASSWORD_REGEX.test(event.target.value))
+                        if (password != event.target.value || !PASSWORD_REGEX.test(event.target.value)) {
+                            setPasswordRegexError(true)
+                        } else {
+                            setPasswordRegexError(false)
+                        }
+                    }}
                     colorIgnored
+                    regexError={passwordRegexError}
+
                 />
             </Box>
 

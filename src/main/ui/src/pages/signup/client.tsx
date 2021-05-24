@@ -24,10 +24,15 @@ import {
     POST_CODE_REGEX,
     STREET_REGEX
 } from "../../regexConstants";
+import {useSnackbarQueue} from "../snackbar";
+import i18n from "i18next";
 
 
 export default function ClientSignUp() {
     const {t} = useTranslation()
+    const showError = useSnackbarQueue('error')
+    const showSuccess = useSnackbarQueue('success')
+
     const [firstName, setFirstName] = useState('')
     const [secondName, setSecondName] = useState('')
     const [login, setLogin] = useState('')
@@ -57,6 +62,7 @@ export default function ClientSignUp() {
     const [phoneNumberRegexError, setPhoneNumberRegexError] = useState(false)
     const [houseNumberRegexError, setHouseNumberRegexError] = useState(false)
 
+
     async function verifyCallback() {
         const json = JSON.stringify({
                 firstName,
@@ -64,7 +70,7 @@ export default function ClientSignUp() {
                 login,
                 email,
                 password,
-                languageType,
+                languageType: i18n.language,
                 addressDto: {
                     houseNumber,
                     street,
@@ -76,10 +82,13 @@ export default function ClientSignUp() {
             }
         );
         setButtonPopup(false)
-        await axios.post('http://localhost:8080/api/auth/client/registration', json, {
+        axios.post('http://localhost:8080/api/auth/client/registration', json, {
             headers: {
                 'Content-Type': 'application/json'
             }
+        }).catch(error => {
+            const message = error.response.data
+            showError(t(message))
         });
     }
 
@@ -101,13 +110,10 @@ export default function ClientSignUp() {
             !NAME_REGEX.test(secondName) || !EMAIL_REGEX.test(email) || !NUM_REGEX.test(houseNumber) ||
             !STREET_REGEX.test(street) || !POST_CODE_REGEX.test(postalCode) || !CITY_REGEX.test(city) ||
             !COUNTRY_REGEX.test(country) || !PHONE_NUMBER_REGEX.test(phoneNumber)) {
-
-            console.log("error") // todo show done message'
-
+            showError(t("invalid.form"))
         } else {
             setButtonPopup(true)
-
-            console.log("done") // todo show done message
+            showSuccess("DONE")
         }
     }
 
@@ -182,19 +188,6 @@ export default function ClientSignUp() {
                 colorIgnored
                 regexError={loginRegexError}
             />
-
-
-            <DarkedTextField // todo remove
-                label={t("languageType") + ' *'}
-                placeholder="language type"
-                className={styles.input}
-                value={languageType}
-                onChange={event => {
-                    setLanguageType(event.target.value)
-                }}
-                colorIgnored
-            />
-
 
             <DarkedTextField
                 label={t("houseNumber") + ' *'}

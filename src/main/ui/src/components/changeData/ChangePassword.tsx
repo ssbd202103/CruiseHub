@@ -9,9 +9,12 @@ import {useTranslation} from "react-i18next";
 import {ConfirmCancelButtonGroup} from "../ConfirmCancelButtonGroup";
 import Recaptcha from "react-recaptcha";
 import Popup from "../../PopupRecaptcha";
+import {useSnackbarQueue} from "../../pages/snackbar";
 
 export default function ChangePassword({open, onOpen, onConfirm, onCancel}: ChangeDataComponentProps) {
     const {t} = useTranslation()
+
+    const showError = useSnackbarQueue('error')
 
     const [oldPassword, setOldPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
@@ -19,32 +22,40 @@ export default function ChangePassword({open, onOpen, onConfirm, onCancel}: Chan
 
     const [buttonPopup, setButtonPopup] = useState(false);
 
+    const handleCancel = () => {
+        setOldPassword('')
+        setNewPassword('')
+        setConfirmNewPassword('')
+        onCancel()
+    }
 
     async function verifyCallback() {
         setButtonPopup(false)
         if (!oldPassword || !newPassword || !confirmNewPassword) {
-            //TODO
-            return alert("FATAL: fields or values are missing")
+            showError(t('error.fields'))
+            return;
         }
 
         if (newPassword != confirmNewPassword) {
-            //TODO
-            return alert("FATAL: new passwords are not equal")
+            showError(t('passwords are not equal'));
+            return;
         }
 
 
-        await changeOwnPasswordService(oldPassword, newPassword)
-
-        onConfirm()
-
+        changeOwnPasswordService(oldPassword, newPassword).then(res => {
+            setOldPassword('')
+            setNewPassword('')
+            setConfirmNewPassword('')
+            onConfirm()
+        }).catch(error => {
+            const message = error.response.data
+            showError(t(message))
+        });
     }
 
 
     const changePassword = async () => {
         setButtonPopup(true)
-
-
-
     }
 
     return (
@@ -90,7 +101,7 @@ export default function ChangePassword({open, onOpen, onConfirm, onCancel}: Chan
                 </Popup>
                 <ConfirmCancelButtonGroup
                     onConfirm={changePassword}
-                    onCancel={onCancel} />
+                    onCancel={handleCancel} />
             </Grid>
         </>
     )

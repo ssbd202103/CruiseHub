@@ -17,6 +17,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -57,5 +58,10 @@ public class CruiseEndpoint implements CruiseEndpointLocal {
     public void editCruise(EditCruiseDto editCruiseDto) throws BaseAppException {
         cruiseManagerLocal.editCruise(editCruiseDto.getDescription(), editCruiseDto.getStartDate(), editCruiseDto.getEndDate(),
                 editCruiseDto.getUuid(), editCruiseDto.getVersion());
+    }
+
+    @Override
+    public List<Cruise> getPublishedCruises() throws BaseAppException {
+        return cruiseManagerLocal.getPublishedCruises();
     }
 }

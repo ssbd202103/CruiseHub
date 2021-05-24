@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useReducer, useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -12,7 +12,10 @@ import {useSelector} from "react-redux";
 import {selectDarkMode} from "../../../redux/slices/userSlice";
 import {getAllAccounts} from "../../../Services/accountsService";
 import DarkedTextField from "../../../components/DarkedTextField";
-import {useSnackbarQueue} from "../../snackbar";
+import store from "../../../redux/store";
+import axios from "../../../Services/URL";
+import { Button } from '@material-ui/core';
+import RoundedButton from "../../../components/RoundedButton";
 
 const useRowStyles = makeStyles({
     root: {
@@ -27,16 +30,21 @@ function createData(
     firstName: string,
     secondName: string,
     email: string,
-    active: boolean,
-    accessLevels: string[],
+    phoneNumber: string,
+    companyName: string,
+    companyPhoneNumber: string,
+    version: string
 ) {
     return {
         login: login,
         firstName: firstName,
         secondName: secondName,
         email: email,
-        active: active,
-        accessLevels: accessLevels,
+        phoneNumber: phoneNumber,
+        companyName: companyName,
+        companyPhoneNumber:  companyPhoneNumber,
+        version: version
+
     };
 }
 
@@ -46,6 +54,7 @@ export interface RowProps {
 }
 
 function Row(props: RowProps) {
+    const {t} = useTranslation()
     const { row } = props;
     const { style } = props;
     const classes = useRowStyles();
@@ -53,34 +62,60 @@ function Row(props: RowProps) {
     return (
         <TableRow className={classes.root}>
             <TableCell component="th" scope="row" style={style}>
-            {row.login}
+                {row.login}
             </TableCell>
             <TableCell style={style}>{row.firstName}</TableCell>
             <TableCell style={style}>{row.secondName}</TableCell>
             <TableCell style={style}>{row.email}</TableCell>
-            <TableCell style={style}>{row.active.toString()}</TableCell>
-            <TableCell style={style}>{row.accessLevels.toString()}</TableCell>
+            <TableCell style={style}>{row.phoneNumber}</TableCell>
+            <TableCell style={style}>{row.companyName}</TableCell>
+            <TableCell style={style}>{row.companyPhoneNumber}</TableCell>
+            <TableCell style={style}><Button onClick={() =>
+                confirmWorker({row})
+
+            }>{t("confirm")}</Button></TableCell>
         </TableRow>
     );
 }
 
+function getWorkers(){
+    const {token} = store.getState()
 
+    return axios.get('account/unconfirmed-business-workers', {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+}
+function confirmWorker(props: any) {
+    const {token} = store.getState()
+    const { row } = props;
+    const json = JSON.stringify({
+        login: row.login,
+        version: row.version
+    })
+    return axios.put('account/confirm-business-worker', json, {
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "If-Match": row.etag,
+            "Authorization": `Bearer ${token}`,
+
+        }
+    })
+}
 
 export default function ModListClient() {
+    const [, forceUpdate] = useReducer(x => x + 1, 0);
     const [users, setUsers] = useState([]);
     const [searchInput, setSearchInput] = useState("");
-
-    const showError = useSnackbarQueue('error')
 
     const darkMode = useSelector(selectDarkMode)
 
     useEffect(() => {
-        getAllAccounts().then(res => {
+        getWorkers().then(res => {
             setUsers(res.data)
-        }).catch(error => {
-            const message = error.response.data
-            showError(t(message))
-        });
+        })
     },[]);
 
     function search(rows: any[]) {
@@ -99,22 +134,24 @@ export default function ModListClient() {
         <div>
             <div>
                 <DarkedTextField
-                    label={t('search account')}
+                    label={t('search business workers')}
                     type="text"
                     value={searchInput}
                     onChange={(e) => setSearchInput(e.target.value)}
                     style={{marginBottom: '20px'}} />
             </div>
             <TableContainer component={Paper}>
-                <Table aria-label="Clients">
+                <Table aria-label="Business Workers">
                     <TableHead>
                         <TableRow>
                             <TableCell style={{backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`, color: `var(--${!darkMode ? 'dark' : 'white-light'}`}}>{t("login")}</TableCell>
                             <TableCell style={{backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`, color: `var(--${!darkMode ? 'dark' : 'white-light'}`}}>{t("first name")}</TableCell>
                             <TableCell style={{backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`, color: `var(--${!darkMode ? 'dark' : 'white-light'}`}}>{t("last name")}</TableCell>
                             <TableCell style={{backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`, color: `var(--${!darkMode ? 'dark' : 'white-light'}`}}>{t("email")}</TableCell>
-                            <TableCell style={{backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`, color: `var(--${!darkMode ? 'dark' : 'white-light'}`}}>{t("active")}</TableCell>
-                            <TableCell style={{backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`, color: `var(--${!darkMode ? 'dark' : 'white-light'}`}}>{t("access level")}</TableCell>
+                            <TableCell style={{backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`, color: `var(--${!darkMode ? 'dark' : 'white-light'}`}}>{t("phone number")}</TableCell>
+                            <TableCell style={{backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`, color: `var(--${!darkMode ? 'dark' : 'white-light'}`}}>{t("company name")}</TableCell>
+                            <TableCell style={{backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`, color: `var(--${!darkMode ? 'dark' : 'white-light'}`}}>{t("company phone number")}</TableCell>
+                            <TableCell style={{backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`, color: `var(--${!darkMode ? 'dark' : 'white-light'}`}}>{t("confirm")}</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>

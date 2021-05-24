@@ -10,9 +10,12 @@ import styles from '../../../styles/ManageAccount.module.css'
 import RoundedButton from '../../../components/RoundedButton';
 import DarkedTextField from '../../../components/DarkedTextField';
 import axios from "axios";
+import {useSnackbarQueue} from "../../snackbar";
 
 export default function ChangeAccountData() {
     const {t} = useTranslation()
+    const showError = useSnackbarQueue('error')
+
     const [, forceUpdate] = useReducer(x => x + 1, 0); // used to force component refresh on forceUpdate call
     const [ChangePerData, setPerData] = useState(false)
     const [ChangAddress, setChangChangAddress] = useState(false)
@@ -59,7 +62,7 @@ export default function ChangeAccountData() {
             version: currentAccount.version
 
         })
-        await fetch("http://localhost:8080/api/account/change-account-data", {
+        fetch("http://localhost:8080/api/account/change-account-data", {
             method: "PUT",
             mode: "same-origin",
             body: json,
@@ -68,7 +71,10 @@ export default function ChangeAccountData() {
                 "Accept": "application/json",
                 "If-Match": currentAccount.etag
             }
-        })
+        }).catch(error => {
+            const message = error.response.data
+            showError(t(message))
+        });
         const result = await axios.get(`http://localhost:8080/api/account/details/${currentAccount.login}`);
         sessionStorage.setItem("changeAccountData", JSON.stringify(result.data));
         forceUpdate()
@@ -91,7 +97,8 @@ export default function ChangeAccountData() {
             },
             accVersion: clientAddr.accVersion
         })
-        await fetch("http://localhost:8080/api/account/change-client-data", {
+
+        fetch("http://localhost:8080/api/account/change-client-data", {
             method: "PUT",
             mode: "same-origin",
             body: json,
@@ -100,11 +107,19 @@ export default function ChangeAccountData() {
                 "Accept": "application/json",
                 "If-Match": currentAccount.etag
             }
-        })
-        const result = await axios.get(`http://localhost:8080/api/account/details/${currentAccount.login}`);
-        sessionStorage.setItem("changeAccountData", JSON.stringify(result.data));
-        forceUpdate()
-        handleChangAddress()
+        }).catch(error => {
+            const message = error.response.data
+            showError(t(message))
+        });
+
+        const result = axios.get(`http://localhost:8080/api/account/details/${currentAccount.login}`).then(res => {
+            sessionStorage.setItem("changeAccountData", JSON.stringify(res.data));
+            forceUpdate()
+            handleChangAddress()
+        }).catch(error => {
+            const message = error.response.data
+            showError(t(message))
+        });
     }
     const changeBusinessPhone = async () => {
         const json = JSON.stringify({
@@ -114,7 +129,7 @@ export default function ChangeAccountData() {
             accVersion: businnesPhone.accVersion
 
         })
-        await fetch("http://localhost:8080/api/account/change-business-worker-data", {
+        fetch("http://localhost:8080/api/account/change-business-worker-data", {
             method: "PUT",
             mode: "same-origin",
             body: json,
@@ -123,11 +138,20 @@ export default function ChangeAccountData() {
                 "Accept": "application/json",
                 "If-Match": currentAccount.etag
             }
-        })
-        const result = await axios.get(`http://localhost:8080/api/account/details/${currentAccount.login}`);
-        sessionStorage.setItem("changeAccountData", JSON.stringify(result.data));
-        forceUpdate()
-        handleChangePhone()
+        }).catch(error => {
+            const message = error.response.data
+            showError(t(message))
+        });
+
+        axios.get(`http://localhost:8080/api/account/details/${currentAccount.login}`).then(res => {
+            sessionStorage.setItem("changeAccountData", JSON.stringify(res.data));
+            forceUpdate()
+            handleChangePhone()
+        }).catch(error => {
+            const message = error.response.data
+            showError(t(message))
+        });
+
     }
     const currentAccount = JSON.parse(sessionStorage.getItem("changeAccountData") as string)
     const clientAccount = JSON.parse(sessionStorage.getItem("changeAccountData") as string)

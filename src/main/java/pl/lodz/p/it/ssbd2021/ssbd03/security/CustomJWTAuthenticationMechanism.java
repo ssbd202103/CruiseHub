@@ -39,7 +39,7 @@ public class CustomJWTAuthenticationMechanism implements HttpAuthenticationMecha
         try {
             JWTHandler.validateToken(jwtSerializedToken);
             Map<String, Claim> claims = JWTHandler.getClaimsFromToken(jwtSerializedToken);
-            String login = claims.get("login").asString();
+            String login = claims.get("sub").asString();
             List<String> groups = claims.get("accessLevels").asList(String.class);
             Date expirationTime = claims.get("exp").asDate();
             boolean tokenExpired = new Date().after(expirationTime);

@@ -3,14 +3,15 @@ import {Link} from 'react-router-dom';
 import React from "react";
 import {useTranslation} from 'react-i18next'
 import RoundedButton from '../../../components/RoundedButton'
+import {useSnackbarQueue} from "../../snackbar";
 
 
 export default function Checkboxes() {
     const {t} = useTranslation()
+    const showError = useSnackbarQueue('error')
     const [selectedAccessLevel, setSelectedAccessLevel] = React.useState("");
 
     const currentAccount = JSON.parse(sessionStorage.getItem("grantAccessLevelAccount") as string)
-
 
     const handleConfirm = async () => {
         if (!["Moderator", "Administrator"].includes(selectedAccessLevel)) return;
@@ -34,7 +35,7 @@ export default function Checkboxes() {
         /// above axios code results in java backend not seeing headers, most likely CORS issue,
         //  no-cors mode does not resolve it for axios, it works with fetch though
 
-        await fetch("http://localhost:8080/api/account/grant-access-level", {
+        fetch("http://localhost:8080/api/account/grant-access-level", {
             method: "PUT",
             mode: "same-origin",
             body: JSON.stringify(json),
@@ -43,7 +44,10 @@ export default function Checkboxes() {
                 "Accept": "application/json",
                 "If-Match": currentAccount.etag
             }
-        })
+        }).catch(error => {
+            const message = error.response.data
+            showError(t(message))
+        });
     }
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedAccessLevel(event.target.value)
