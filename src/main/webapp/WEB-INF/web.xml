@@ -102,6 +102,9 @@
     <security-role>
         <role-name>getAllUnconfirmedBusinessWorkers</role-name>
     </security-role>
+    <security-role>
+        <role-name>ConfirmBusinessWorker</role-name>
+    </security-role>
 
     <security-role>
         <role-name>SYSTEM</role-name>

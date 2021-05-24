@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useReducer, useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -15,6 +15,7 @@ import DarkedTextField from "../../../components/DarkedTextField";
 import store from "../../../redux/store";
 import axios from "../../../Services/URL";
 import { Button } from '@material-ui/core';
+import RoundedButton from "../../../components/RoundedButton";
 
 const useRowStyles = makeStyles({
     root: {
@@ -69,7 +70,10 @@ function Row(props: RowProps) {
             <TableCell style={style}>{row.phoneNumber}</TableCell>
             <TableCell style={style}>{row.companyName}</TableCell>
             <TableCell style={style}>{row.companyPhoneNumber}</TableCell>
-            <TableCell style={style}><Button onClick={() => confirmWorker({row.login},{row.version})}>{t("confirm")}</Button></TableCell>
+            <TableCell style={style}><Button onClick={() =>
+                confirmWorker({row})
+
+            }>{t("confirm")}</Button></TableCell>
         </TableRow>
     );
 }
@@ -83,22 +87,26 @@ function getWorkers(){
         }
     })
 }
-function confirmWorker(rowlogin: any, rowversion: any) {
+function confirmWorker(props: any) {
     const {token} = store.getState()
-    console.log(row)
+    const { row } = props;
     const json = JSON.stringify({
         login: row.login,
         version: row.version
     })
-    return axios.put('account/change-client-data', json, {
+    return axios.put('account/confirm-business-worker', json, {
         headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
             "If-Match": row.etag,
-            "Authorization": `Bearer ${token}`
+            "Authorization": `Bearer ${token}`,
+
         }
     })
 }
 
 export default function ModListClient() {
+    const [, forceUpdate] = useReducer(x => x + 1, 0);
     const [users, setUsers] = useState([]);
     const [searchInput, setSearchInput] = useState("");
 

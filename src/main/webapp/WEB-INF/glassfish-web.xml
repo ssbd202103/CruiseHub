@@ -60,6 +60,10 @@
         <role-name>getAllUnconfirmedBusinessWorkers</role-name>
         <group-name>MODERATOR</group-name>
     </security-role-mapping>
+    <security-role-mapping>
+        <role-name>ConfirmBusinessWorker</role-name>
+        <group-name>MODERATOR</group-name>
+    </security-role-mapping>
 
     <security-role-mapping>
         <role-name>blockUser</role-name>
