@@ -143,7 +143,7 @@ public class AccountMapper {
             case BUSINESS_WORKER:
                 BusinessWorker businessWorker = (BusinessWorker) accessLevel;
                 return new BusinessWorkerDetailsViewDto(businessWorker.isEnabled(), businessWorker.getPhoneNumber(),
-                        businessWorker.isConfirmedByBusinessWorker(), businessWorker.getCompany().getName(), businessWorker.getVersion());
+                        businessWorker.isConfirmed(), businessWorker.getCompany().getName(), businessWorker.getVersion());
             case MODERATOR:
                 return new ModeratorDetailsViewDto(accessLevel.isEnabled(), accessLevel.getVersion());
             case ADMINISTRATOR:
