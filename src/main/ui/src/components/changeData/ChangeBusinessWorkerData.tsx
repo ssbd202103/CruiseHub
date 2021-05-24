@@ -10,6 +10,7 @@ import {ConfirmCancelButtonGroup} from "../ConfirmCancelButtonGroup";
 import {changeBusinessWorkerData} from "../../Services/changeDataService";
 import Recaptcha from "react-recaptcha";
 import Popup from "../../PopupRecaptcha";
+import {useSnackbarQueue} from "../../pages/snackbar";
 
 export interface ChangeBusinessWorkerProps {
     open: boolean,
@@ -21,6 +22,8 @@ export interface ChangeBusinessWorkerProps {
 export default function ChangeBusinessWorkerData({open, onOpen, onConfirm, onCancel}: ChangeBusinessWorkerProps) {
     const {t} = useTranslation()
 
+    const showError = useSnackbarQueue('error')
+
     const firstName = useSelector(selectFirstName)
     const secondName = useSelector(selectSecondName)
     const phoneNumber = useSelector(selectPhoneNumber("CLIENT"))
@@ -31,19 +34,29 @@ export default function ChangeBusinessWorkerData({open, onOpen, onConfirm, onCan
 
     const [buttonPopup, setButtonPopup] = useState(false);
 
+    const handleCancel = () => {
+        setFirstNameValue('')
+        setSecondNameValue('')
+        setPhoneNumberValue('')
+        onCancel()
+    }
 
     function verifyCallback(){
         setButtonPopup(false)
         if (!firstNameValue || !secondNameValue || !phoneNumberValue) {
-            return alert("Values are missing")
+            showError(t('error.fields'))
+            return
         }
 
         changeBusinessWorkerData(firstNameValue, secondNameValue, phoneNumberValue).then(res => {
+            setFirstNameValue('')
+            setSecondNameValue('')
+            setPhoneNumberValue('')
             onConfirm()
         }).catch(error => {
-            alert("ERROR: go to console")
-            console.log(error)
-        })
+            const message = error.response.data
+            showError(t(message))
+        });
 
     }
 
@@ -116,7 +129,7 @@ export default function ChangeBusinessWorkerData({open, onOpen, onConfirm, onCan
                 </Popup>
                 <ConfirmCancelButtonGroup
                     onConfirm={changeData}
-                    onCancel={onCancel} />
+                    onCancel={handleCancel} />
             </Grid>
         </>
     )

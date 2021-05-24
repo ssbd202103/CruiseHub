@@ -15,10 +15,12 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import Recaptcha from "react-recaptcha";
 import Popup from "../../PopupRecaptcha";
-import {useSelector} from "react-redux";
+import {useSnackbarQueue} from "../snackbar";
+
 
 export default function WorkerSignUp() {
     const {t} = useTranslation()
+    const showError = useSnackbarQueue('error')
 
     const [firstName, setFirstName] = useState('')
     const [secondName, setSecondName] = useState('')
@@ -47,10 +49,13 @@ export default function WorkerSignUp() {
             companyName: company
         });
         setButtonPopup(false)
-        await axios.post('http://localhost:8080/api/auth/business-worker/registration', json, {
+        axios.post('http://localhost:8080/api/auth/business-worker/registration', json, {
             headers: {
                 'Content-Type': 'application/json'
             }
+        }).catch(error => {
+            const message = error.response.data
+            showError(t(message))
         });
 
     }

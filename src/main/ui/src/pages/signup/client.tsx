@@ -14,10 +14,13 @@ import axios from "axios";
 import {createRef, useState} from "react";
 import Recaptcha from 'react-recaptcha'
 import Popup from "../../PopupRecaptcha";
+import {useSnackbarQueue} from "../snackbar";
 
 
 export default function ClientSignUp() {
     const {t} = useTranslation()
+    const showError = useSnackbarQueue('error')
+
     const [firstName, setFirstName] = useState('')
     const [secondName, setSecondName] = useState('')
     const [login, setLogin] = useState('')
@@ -54,10 +57,13 @@ export default function ClientSignUp() {
             }
         );
         setButtonPopup(false)
-        await axios.post('http://localhost:8080/api/auth/client/registration', json, {
+        axios.post('http://localhost:8080/api/auth/client/registration', json, {
             headers: {
                 'Content-Type': 'application/json'
             }
+        }).catch(error => {
+            const message = error.response.data
+            showError(t(message))
         });
 
     }
