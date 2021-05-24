@@ -1,6 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.utils.TransactionRepeater;
 
 import java.time.LocalDateTime;
 
@@ -27,4 +28,13 @@ public interface AuthenticateEndpointLocal {
      * @return Token JWT
      */
     String updateCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws BaseAppException;
+
+    /**
+     * Metoda odpowiedzialna za odświeżanie tokenu JWT
+     * @param token Aktualny token JWT
+     * @return token Odnowiony token JWT
+     * @throws BaseAppException Bazowy wyjątek aplikacyjny, rzucany w przypadku gdy przekazany token nie jest ważny,
+     * lub jego podmiot nie jest upoważniony do ponownego uwierzytelnienia
+     */
+    String refreshToken(String token) throws BaseAppException;
 }

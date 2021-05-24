@@ -8,6 +8,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.JWTException;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
@@ -21,7 +22,8 @@ import java.util.Properties;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.TOKEN_DECODE_ERROR;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.TOKEN_INVALIDATE_ERROR;
 
 /**
  * Klasa odpowiedzialna za zarządzanie tokenami JWT.
@@ -67,10 +69,10 @@ public class JWTHandler {
      * @return Nowy token JWT z zachowaniem oryginalnego payloadu
      * @throws TokenExpiredException Wyjątek wygaśniętego tokenu
      */
-    public static String refreshToken(String token) {
+    public static String refreshToken(String token) throws BaseAppException {
         DecodedJWT decodedToken = JWT.decode(token);
         if (decodedToken.getExpiresAt().before(new Date())) {
-            throw new TokenExpiredException(ACCOUNT_VERIFICATION_TOKEN_EXPIRED_ERROR);
+            throw JWTException.tokenExpired();
         }
 
         //getClaims returns Map<String, Claim> where Claim needs to be converted to Object type,
@@ -86,7 +88,7 @@ public class JWTHandler {
      *
      * @param token Token poddawany dekodowaniu
      * @return Mapa stwierdzeń &lt;String, Claim&gt;
-     * @throws JWTDecodeException Wyjątek błędu dekodowania
+     * @throws JWTException Wyjątek błędu dekodowania
      */
     public static Map<String, Claim> getClaimsFromToken(String token) throws JWTException {
         try {

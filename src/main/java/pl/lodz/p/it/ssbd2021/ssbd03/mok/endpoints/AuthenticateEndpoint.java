@@ -6,6 +6,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.managers.AccountManagerLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
 import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -35,5 +36,11 @@ public class AuthenticateEndpoint implements AuthenticateEndpointLocal {
     @Override
     public String updateCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws BaseAppException {
         return accountManager.updateCorrectAuthenticateInfo(login, IpAddr, time);
+    }
+
+    @RolesAllowed("authenticatedUser")
+    @Override
+    public String refreshToken(String token) throws BaseAppException {
+        return accountManager.refreshJWTToken(token);
     }
 }
