@@ -17,6 +17,7 @@ import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.ejb.Local;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
 import javax.ws.rs.core.Context;
@@ -65,6 +66,19 @@ public class CruiseManager implements CruiseManagerLocal {
         Cruise cruise = cruiseFacadeMow.findByUUID(uuid);
         cruise.setActive(false);
         setAlterTypeAndAlterCruise(cruise, accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE), account);
+    }
+
+    @Override
+    public void editCruise(String description, LocalDateTime startDate, LocalDateTime endDate, UUID uuid, Long version) throws BaseAppException {
+        Cruise cruiseToEdit = cruiseFacadeMow.findByUUID(uuid);
+        if(!(version == cruiseToEdit.getVersion())) {
+            throw FacadeException.optimisticLock();
+        }
+        cruiseToEdit.setDescription(description);
+        cruiseToEdit.setEndDate(endDate);
+        cruiseToEdit.setStartDate(startDate);
+        setAlterTypeAndAlterCruise(cruiseToEdit, accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE),
+                accountFacade.findByLogin(securityContext.getUserPrincipal().getName()));
     }
 
     private void setAlterTypeAndAlterAccount(Account account, AlterTypeWrapper alterTypeWrapper, Account alteredBy) {

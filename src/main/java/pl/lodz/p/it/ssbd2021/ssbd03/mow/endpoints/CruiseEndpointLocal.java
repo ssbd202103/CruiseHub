@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.DeactivateCruiseDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.EditCruiseDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.NewCruiseDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.PublishCruiseDto;
 
@@ -29,7 +30,7 @@ public interface CruiseEndpointLocal {
      * Deaktywowanie wycieczki
      *
      * @param deactivateCruiseDto obiekt dto posiadający uuid oraz wersję wycieczki
-     * @throws BaseAppException wyjątek rzucany w razie nie znalezienia wycieczki bądź konta deaktywującego
+     * @throws BaseAppException wyjątek rzucany w razie nie znalezienia wycieczki bądź konta deaktywującego, bądź złej wersji
      */
     void deactivateCruise(DeactivateCruiseDto deactivateCruiseDto) throws BaseAppException;
 
@@ -50,4 +51,11 @@ public interface CruiseEndpointLocal {
      * @throws BaseAppException wyjątek rzucany w razie nie znalezienia wycieczki bądź konta publikującego
      */
     void publishCruise(PublishCruiseDto publishCruiseDto) throws BaseAppException;
+
+    /**
+     * Edycja wycieczki
+     *
+     * @param editCruiseDto obiekt dto posiadający zmiany w wycieczce, versje oraz UUID
+     */
+    void editCruise(EditCruiseDto editCruiseDto) throws BaseAppException;
 }

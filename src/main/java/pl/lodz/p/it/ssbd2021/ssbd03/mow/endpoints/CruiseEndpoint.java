@@ -4,6 +4,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.DeactivateCruiseDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.EditCruiseDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.NewCruiseDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.PublishCruiseDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.converters.CruiseMapper;
@@ -51,5 +52,10 @@ public class CruiseEndpoint implements CruiseEndpointLocal {
     @Override
     public void publishCruise(PublishCruiseDto publishCruiseDto) throws BaseAppException {
         // todo finish implementation
+    }
+    @Override
+    public void editCruise(EditCruiseDto editCruiseDto) throws BaseAppException {
+        cruiseManagerLocal.editCruise(editCruiseDto.getDescription(), editCruiseDto.getStartDate(), editCruiseDto.getEndDate(),
+                editCruiseDto.getUuid(), editCruiseDto.getVersion());
     }
 }
