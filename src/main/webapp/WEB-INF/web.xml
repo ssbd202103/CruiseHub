@@ -116,6 +116,10 @@
     </security-role>
 
     <security-role>
+        <role-name>cancelReservation</role-name>
+    </security-role>
+
+    <security-role>
         <role-name>publishCruise</role-name>
     </security-role>
 
