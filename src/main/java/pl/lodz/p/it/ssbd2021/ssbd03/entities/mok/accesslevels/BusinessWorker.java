@@ -15,10 +15,10 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_EMPTY;
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
 
 @Entity(name = "business_workers")
-@NamedQueries(
+@NamedQueries({
         @NamedQuery(name = "Company.findBusinessWorkersByCompanyName", query = "SELECT bw FROM business_workers bw where bw.company.name = :companyName"),
-        @NamedQuery(name = "BusinessWorker.findALlUnconfirmed", query = "SELECT acc FROM business_workers acc WHERE acc.confirmedByBusinessWorker = false ")
-)
+        @NamedQuery(name = "BusinessWorker.findALlUnconfirmed", query = "SELECT acc FROM business_workers acc WHERE acc.confirmed = false ")
+})
 
 @DiscriminatorValue("BusinessWorker")
 public class BusinessWorker extends AccessLevel {
