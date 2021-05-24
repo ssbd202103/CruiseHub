@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.ETagException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
@@ -306,6 +307,21 @@ class AccountControllerIT {
         String accountString = response.getBody().asString();
         List<BusinessWorkerWithCompanyDto> workerks = Arrays.asList(objectMapper.readValue(accountString, BusinessWorkerWithCompanyDto[].class));
         assertTrue(workerks.size()>0);
+
+    }
+    @Test
+    public void ConfirmBusinessWorker() throws JsonProcessingException {
+        String adminToken = this.getAuthToken("mzuckerberg", "abcABC123*");
+
+        Response response = RestAssured.given().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken)).baseUri(accountBaseUri).get("/unconfirmed-business-workers");
+        String accountString = response.getBody().asString();
+        List<BusinessWorkerWithCompanyDto> workerks = Arrays.asList(objectMapper.readValue(accountString, BusinessWorkerWithCompanyDto[].class));
+       BusinessWorkerWithCompanyDto worker= workerks.get(0);
+        given().baseUri(accountBaseUri).header("If-Match", worker.getEtag())
+                .contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken))
+                .body(worker)
+                .when()
+                .put("/confirm-business-worker").then().statusCode(204);
 
     }
 
