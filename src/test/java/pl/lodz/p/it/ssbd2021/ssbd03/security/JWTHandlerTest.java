@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.JWTException;
 import pl.lodz.p.it.ssbd2021.ssbd03.testModel.mok.dto.TestAccountDto;
 
@@ -58,7 +59,7 @@ class JWTHandlerTest {
     }
 
     @Test
-    public void refreshTokenTest() throws InterruptedException {
+    public void refreshTokenTest() throws InterruptedException, BaseAppException {
         TestAccountDto account = getSampleAccounts().get(0);
         Map<String, Object> claims = mapper.convertValue(account, Map.class);
         String subject = "184";

@@ -190,20 +190,11 @@ class AccountControllerIT {
         ChangeAccessLevelStateDto changeAccessLevelState = new ChangeAccessLevelStateDto(account.getLogin(),
                 moderator.get().getAccessLevelType(), account.getVersion(), true);
 
-        String etag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
-        changeAccessLevelState.setAccountVersion(account.getVersion() - 1);
-
-        Response response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken))
-                .body(changeAccessLevelState).put("/change-access-level-state");
-
-        assertThat(response.getStatusCode()).isEqualTo(400);
-        assertThat(response.asString()).isEqualTo(ETAG_IDENTITY_INTEGRITY_ERROR);
-
         // Requesting enabling already enabled account
         changeAccessLevelState.setAccountVersion(account.getVersion() + 2);
-        etag = EntityIdentitySignerVerifier.calculateEntitySignature(changeAccessLevelState);
+        String etag = EntityIdentitySignerVerifier.calculateEntitySignature(changeAccessLevelState);
 
-        response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken))
+        Response response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken))
                 .body(changeAccessLevelState).put("/change-access-level-state");
 
         assertThat(response.getStatusCode()).isEqualTo(400);
@@ -371,7 +362,7 @@ class AccountControllerIT {
 
         AccountChangeEmailDto accountChangeEmailDto = new AccountChangeEmailDto(
                 account.getLogin(),
-                account.getVersion() - 1,
+                account.getVersion() + 2,
                 randomAlphanumeric(10) + "@gmail.com");
         String etag = EntityIdentitySignerVerifier.calculateEntitySignature(accountChangeEmailDto);
 

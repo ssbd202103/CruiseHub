@@ -36,4 +36,9 @@ public class AuthenticateEndpoint implements AuthenticateEndpointLocal {
     public String updateCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws BaseAppException {
         return accountManager.updateCorrectAuthenticateInfo(login, IpAddr, time);
     }
+
+    @Override
+    public String refreshToken(String token) throws BaseAppException {
+        return accountManager.refreshJWTToken(token);
+    }
 }
