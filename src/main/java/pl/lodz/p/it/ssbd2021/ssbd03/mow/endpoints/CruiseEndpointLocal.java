@@ -27,8 +27,9 @@ public interface CruiseEndpointLocal {
     /**
      * Deaktywowanie wycieczki
      * @param deactivateCruiseDto obiekt dto posiadający uuid oraz wersję wycieczki
-     * @throws BaseAppException wyjątek rzucany w razie nie znalezienia wycieczki bądź konta deaktywującego
+     * @throws BaseAppException wyjątek rzucany w razie nie znalezienia wycieczki bądź konta deaktywującego, bądź złej wersji
      */
     void deactivateCruise(DeactivateCruiseDto deactivateCruiseDto) throws BaseAppException;
+
 
 }

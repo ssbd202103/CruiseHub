@@ -30,8 +30,17 @@ public interface CruiseManagerLocal {
      *
      * @param uuid uuid wycieczki
      * @param version wersja obiektu wycieczki wysyłana do sprawdzenia z wersją znajdującą się w bazie
-     * @throws BaseAppException wyjątek rzucany w razie nie znalezienia wycieczki bądź konta deaktywującego
+     * @throws BaseAppException wyjątek rzucany w razie nie znalezienia wycieczki bądź konta deaktywującego, bądź złej wersji
      */
     void deactivateCruise(UUID uuid, Long version) throws BaseAppException;
+
+
+    /**
+     * Zajmuje się edycją wycieczki
+     *
+     * @param cruise obiekt reprezentujący wycieczkę z wprowadzonymi zmianamii
+     * @throws BaseAppException wyjątek rzucany w razie nie znalezienia wycieczki, bądź złej wersji
+     */
+    void editCruise(Cruise cruise) throws BaseAppException;
 
 }

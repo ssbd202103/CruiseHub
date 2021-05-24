@@ -58,6 +58,17 @@ public class CruiseManager implements CruiseManagerLocal {
         setAlterTypeAndAlterCruise(cruise , accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE),account);
     }
 
+    @Override
+    public void editCruise(Cruise cruise) throws BaseAppException {
+        Cruise cruiseToEdit = cruiseFacadeMow.findByUUID(cruise.getUuid());
+        if(!(cruise.getVersion() == cruiseToEdit.getVersion())) {
+            throw FacadeException.optimisticLock();
+        }
+        cruiseToEdit.setDescription(cruise.getDescription());
+        setAlterTypeAndAlterCruise(cruiseToEdit, accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE),
+                accountFacade.findByLogin(securityContext.getUserPrincipal().getName()));
+    }
+
     private void setAlterTypeAndAlterAccount(Account account, AlterTypeWrapper alterTypeWrapper, Account alteredBy) {
         account.setAlteredBy(alteredBy);
         account.setAlterType(alterTypeWrapper);
