@@ -562,9 +562,10 @@ public class AccountManager implements AccountManagerLocal {
         Account account = accountFacade.findByLogin(login);
 
         account.setDarkMode(newMode);
+        setUpdatedMetadata(account);
     }
 
-    @PermitAll
+    @RolesAllowed("authenticatedUser")
     public String refreshJWTToken(String token) throws BaseAppException {
         Map<String, Claim> claims = JWTHandler.getClaimsFromToken(token);
 
