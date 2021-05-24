@@ -23,6 +23,7 @@ import javax.interceptor.Interceptors;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -103,4 +104,11 @@ public class CruiseManager implements CruiseManagerLocal {
     public void publishCruise(long cruiseVersion, UUID cruiseUuid) throws BaseAppException {
         // todo finish implementation
     }
+
+    @Override
+    public List<Cruise> getPublishedCruises() {
+        // TODO
+        return null;
+    }
+
 }
