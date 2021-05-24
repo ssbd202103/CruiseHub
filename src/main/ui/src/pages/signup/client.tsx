@@ -14,12 +14,12 @@ import axios from "axios";
 import {createRef, useState} from "react";
 import Recaptcha from 'react-recaptcha'
 import Popup from "../../PopupRecaptcha";
-import {useErrorSnackbar} from "../snackbar";
+import {useSnackbarQueue} from "../snackbar";
 
 
 export default function ClientSignUp() {
     const {t} = useTranslation()
-    const showError = useErrorSnackbar()
+    const showError = useSnackbarQueue('error')
 
     const [firstName, setFirstName] = useState('')
     const [secondName, setSecondName] = useState('')

@@ -10,7 +10,7 @@ import {ConfirmCancelButtonGroup} from "../ConfirmCancelButtonGroup";
 import {changeBusinessWorkerData} from "../../Services/changeDataService";
 import Recaptcha from "react-recaptcha";
 import Popup from "../../PopupRecaptcha";
-import {useErrorSnackbar} from "../../pages/snackbar";
+import {useSnackbarQueue} from "../../pages/snackbar";
 
 export interface ChangeBusinessWorkerProps {
     open: boolean,
@@ -22,7 +22,7 @@ export interface ChangeBusinessWorkerProps {
 export default function ChangeBusinessWorkerData({open, onOpen, onConfirm, onCancel}: ChangeBusinessWorkerProps) {
     const {t} = useTranslation()
 
-    const showError = useErrorSnackbar()
+    const showError = useSnackbarQueue('error')
 
     const firstName = useSelector(selectFirstName)
     const secondName = useSelector(selectSecondName)

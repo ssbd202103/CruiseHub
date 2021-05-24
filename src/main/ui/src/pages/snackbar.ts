@@ -3,12 +3,12 @@ import Slide from "@material-ui/core/Slide";
 import {ComponentType} from "react";
 import {TransitionProps} from "@material-ui/core/transitions";
 
-export function useErrorSnackbar() {
+export function useSnackbarQueue(variant: 'error' | 'success') {
     const {enqueueSnackbar} = useSnackbar();
 
     return (message: string) => {
         enqueueSnackbar(message, {
-            variant: 'error',
+            variant,
             anchorOrigin: {
                 vertical: 'bottom',
                 horizontal: 'left',

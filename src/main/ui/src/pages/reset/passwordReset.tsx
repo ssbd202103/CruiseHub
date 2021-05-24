@@ -8,13 +8,13 @@ import {useTranslation} from "react-i18next";
 import PasswordIcon from "@material-ui/icons/VpnKeyRounded";
 import styles from '../../styles/auth.global.module.css'
 import RoundedButton from "../../components/RoundedButton";
-import {useErrorSnackbar} from "../snackbar";
+import {useSnackbarQueue} from "../snackbar";
 
 
 function PasswordReset(props: any) {
     const location = useLocation();
     const {t} = useTranslation()
-    const showError = useErrorSnackbar()
+    const showError = useSnackbarQueue('error')
 
     const [login, setLogin] = useState('')
     const [password, setPassword] = useState('')

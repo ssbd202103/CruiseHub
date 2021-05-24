@@ -5,11 +5,11 @@ import DarkedTextField from "../../components/DarkedTextField";
 import styles from "../../styles/auth.global.module.css";
 import {useTranslation} from "react-i18next";
 import RoundedButton from "../../components/RoundedButton";
-import {useErrorSnackbar} from "../snackbar";
+import {useSnackbarQueue} from "../snackbar";
 
 const RequestPasswordReset = () => {
     const {t} = useTranslation()
-    const showError = useErrorSnackbar()
+    const showError = useSnackbarQueue('error')
 
     const [login, setLogin] = useState('')
 

@@ -11,12 +11,12 @@ import {ConfirmCancelButtonGroup} from "../ConfirmCancelButtonGroup";
 import {ChangeDataComponentProps} from '../interfaces'
 import Recaptcha from "react-recaptcha";
 import Popup from "../../PopupRecaptcha";
-import {useErrorSnackbar} from "../../pages/snackbar";
+import {useSnackbarQueue} from "../../pages/snackbar";
 
 export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeDataComponentProps) {
     // i18n
     const {t} = useTranslation()
-    const showError = useErrorSnackbar()
+    const showError = useSnackbarQueue('error')
 
     // redux
     const dispatch = useDispatch()

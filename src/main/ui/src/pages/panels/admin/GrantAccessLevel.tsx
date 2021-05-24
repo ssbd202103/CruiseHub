@@ -3,12 +3,12 @@ import {Link} from 'react-router-dom';
 import React from "react";
 import {useTranslation} from 'react-i18next'
 import RoundedButton from '../../../components/RoundedButton'
-import {useErrorSnackbar} from "../../snackbar";
+import {useSnackbarQueue} from "../../snackbar";
 
 
 export default function Checkboxes() {
     const {t} = useTranslation()
-    const showError = useErrorSnackbar()
+    const showError = useSnackbarQueue('error')
     const [selectedAccessLevel, setSelectedAccessLevel] = React.useState("");
 
     const currentAccount = JSON.parse(sessionStorage.getItem("grantAccessLevelAccount") as string)

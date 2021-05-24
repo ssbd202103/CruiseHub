@@ -4,14 +4,14 @@ import RoundedButton from '../../../components/RoundedButton'
 import axios from "axios";
 import styles from '../../../styles/ManageAccount.module.css'
 import Grid from "@material-ui/core/Grid";
-import {useErrorSnackbar} from "../../snackbar";
+import {useSnackbarQueue} from "../../snackbar";
 
 
 export default function ChangeAccessLevelState() {
     const [, forceUpdate] = useReducer(x => x + 1, 0); // used to force component refresh on forceUpdate call
     const {t} = useTranslation()
 
-    const showError = useErrorSnackbar()
+    const showError = useSnackbarQueue('error')
 
     const currentAccount = JSON.parse(sessionStorage.getItem("changeAccessLevelStateAccount") as string)
 

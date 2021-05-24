@@ -21,7 +21,7 @@ import {useSelector} from "react-redux";
 import {selectDarkMode} from "../../../redux/slices/userSlice";
 import {getAccountDetailsAbout, getAllAccounts} from "../../../Services/accountsService";
 import {selectToken} from "../../../redux/slices/tokenSlice";
-import {useErrorSnackbar} from "../../snackbar";
+import {useSnackbarQueue} from "../../snackbar";
 
 interface UnblockAccountParams {
     login: string;
@@ -128,7 +128,7 @@ function Row(props: RowProps) {
     const [buttonText, setButtonText] = useState("true");
     const token = useSelector(selectToken)
 
-    const showError = useErrorSnackbar()
+    const showError = useSnackbarQueue('error')
 
     const classes = useRowStyles();
     const buttonClass = useButtonStyles();
@@ -252,7 +252,7 @@ export default function AdminListClient() {
     const [users, setUsers] = useState([]);
     const [searchInput, setSearchInput] = useState("");
 
-    const showError = useErrorSnackbar()
+    const showError = useSnackbarQueue('error')
 
     const darkMode = useSelector(selectDarkMode)
 

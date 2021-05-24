@@ -11,12 +11,12 @@ import {ConfirmCancelButtonGroup} from "../ConfirmCancelButtonGroup";
 import {changeClientAddress} from "../../Services/changeDataService";
 import Recaptcha from "react-recaptcha";
 import Popup from "../../PopupRecaptcha";
-import {useErrorSnackbar} from "../../pages/snackbar";
+import {useSnackbarQueue} from "../../pages/snackbar";
 
 export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: ChangeDataComponentProps) {
     const {t} = useTranslation()
 
-    const showError = useErrorSnackbar()
+    const showError = useSnackbarQueue('error')
 
     const address = useSelector(selectAddress)
 

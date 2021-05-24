@@ -5,12 +5,12 @@ import AuthLayout from "../../layouts/AuthLayout";
 import {useTranslation} from "react-i18next";
 import styles from '../../styles/auth.global.module.css'
 import RoundedButton from "../../components/RoundedButton";
-import {useErrorSnackbar} from "../snackbar";
+import {useSnackbarQueue} from "../snackbar";
 
 function VerifyAccount(props: any) {
     const location = useLocation();
     const {t} = useTranslation()
-    const showError = useErrorSnackbar()
+    const showError = useSnackbarQueue('error')
     const history = useHistory()
     const submitAccountVerification = async (event: any) => {
         event.preventDefault()

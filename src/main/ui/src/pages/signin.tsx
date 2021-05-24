@@ -17,12 +17,12 @@ import React, {useState} from "react"
 
 import {getUser} from "../Services/userService";
 
-import {useErrorSnackbar} from "./snackbar";
+import {useSnackbarQueue} from "./snackbar";
 
 export default function SignIn() {
     const {t} = useTranslation();
 
-    const showError = useErrorSnackbar()
+    const showError = useSnackbarQueue('error')
 
     const history = useHistory();
 

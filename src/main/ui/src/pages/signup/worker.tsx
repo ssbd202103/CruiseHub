@@ -15,12 +15,12 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import Recaptcha from "react-recaptcha";
 import Popup from "../../PopupRecaptcha";
-import {useErrorSnackbar} from "../snackbar";
+import {useSnackbarQueue} from "../snackbar";
 
 
 export default function WorkerSignUp() {
     const {t} = useTranslation()
-    const showError = useErrorSnackbar()
+    const showError = useSnackbarQueue('error')
 
     const [firstName, setFirstName] = useState('')
     const [secondName, setSecondName] = useState('')

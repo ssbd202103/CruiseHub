@@ -10,11 +10,11 @@ import styles from '../../../styles/ManageAccount.module.css'
 import RoundedButton from '../../../components/RoundedButton';
 import DarkedTextField from '../../../components/DarkedTextField';
 import axios from "axios";
-import {useErrorSnackbar} from "../../snackbar";
+import {useSnackbarQueue} from "../../snackbar";
 
 export default function ChangeAccountData() {
     const {t} = useTranslation()
-    const showError = useErrorSnackbar()
+    const showError = useSnackbarQueue('error')
 
     const [, forceUpdate] = useReducer(x => x + 1, 0); // used to force component refresh on forceUpdate call
     const [ChangePerData, setPerData] = useState(false)
