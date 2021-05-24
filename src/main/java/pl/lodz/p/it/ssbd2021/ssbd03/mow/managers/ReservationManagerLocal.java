@@ -49,4 +49,13 @@ public interface ReservationManagerLocal {
      * @throws BaseAppException Bazowy wyjatek aplikacji
      */
     void createReservation(long version, UUID cruiseUUID, long numberOfSeats, String login) throws BaseAppException;
+
+    /**
+     * Anuluje wycieczke uzytkownika
+     * @param reservationVersion Wersja rezerwacji
+     * @param cruiseUUID UUID wycieczki
+     * @param login Login uzytkownika
+     * @throws BaseAppException Bazowy wyjatek aplikacji
+     */
+    void cancelReservation(long reservationVersion, UUID cruiseUUID, String login) throws BaseAppException;
 }

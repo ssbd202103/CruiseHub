@@ -9,9 +9,8 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateReservationDto {
-    private long cruiseVersion;
+public class CancelReservationDTO {
+    private long reservationVersion;
     private UUID cruiseUuid;
-    private long numberOfSeats;
     private String clientLogin;
 }

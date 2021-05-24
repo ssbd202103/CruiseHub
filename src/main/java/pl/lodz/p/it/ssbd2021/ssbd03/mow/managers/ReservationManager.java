@@ -74,6 +74,13 @@ public class ReservationManager implements ReservationManagerLocal {
 //        reservationFacadeMow.create(reservation);
     }
 
+    @RolesAllowed("cancelReservation")
+    @Override
+    public void cancelReservation(long reservationVersion, UUID cruiseUUID, String login) throws BaseAppException {
+        Cruise cruise = cruiseFacadeMow.findByUUID(cruiseUUID);
+        // TODO implement
+    }
+
     private long getAvailableSeats(UUID cruiseUUID) throws BaseAppException {
         List<Reservation> reservations = getCruiseReservations(cruiseUUID);
         long takenSeats = 0L;
