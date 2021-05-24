@@ -108,6 +108,10 @@
     </security-role>
 
     <security-role>
+        <role-name>createReservation</role-name>
+    </security-role>
+
+    <security-role>
         <role-name>publishCruise</role-name>
     </security-role>
 

@@ -1,6 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CreateReservationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseReservationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.RemoveClientReservationDto;
 
@@ -40,6 +41,12 @@ public interface ReservationEndpointLocal {
      */
     void removeClientReservation(RemoveClientReservationDto removeClientReservationDto) throws BaseAppException;
 
+    /**
+     * Rezerwuje wycieczke dla podanego klienta
+     * @param createReservationDto Informacja o kliencie oraz wycieczne
+     * @throws BaseAppException Bazowy wyjatek aplikacji
+     */
+    void createReservation(CreateReservationDto createReservationDto) throws BaseAppException;
 
 }
 

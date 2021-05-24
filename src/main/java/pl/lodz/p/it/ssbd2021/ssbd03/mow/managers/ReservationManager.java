@@ -1,7 +1,11 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.managers;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Reservation;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.AccountFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.ReservationFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
@@ -28,6 +32,9 @@ public class ReservationManager implements ReservationManagerLocal {
     private ReservationFacadeMow reservationFacadeMow;
 
     @Inject
+    private AccountFacadeMow accountFacadeMow;
+
+    @Inject
     private CruiseFacadeMow cruiseFacadeMow;
 
     @Override
@@ -52,4 +59,30 @@ public class ReservationManager implements ReservationManagerLocal {
         // todo finish implementation
         Reservation reservation = reservationFacadeMow.findReservationByUuidAndLogin(UUID.randomUUID(), clientLogin);
     }
+
+    @RolesAllowed("createReservation")
+    @Override
+    public void createReservation(long version, UUID cruiseUUID, long numberOfSeats, String login) throws BaseAppException {
+        Cruise cruise = cruiseFacadeMow.findByUUID(cruiseUUID);
+        Account acc = accountFacadeMow.findByLogin(login);
+        if (numberOfSeats > getAvailableSeats(cruiseUUID)) {
+            // todo throw an exception
+        }
+//        Reservation reservation = new Reservation(numberOfSeats, cruise, acc);
+//        reservation.setPrice(cruise.getCruisesGroup().getPrice() * numberOfSeats);
+
+//        reservationFacadeMow.create(reservation);
+    }
+
+    private long getAvailableSeats(UUID cruiseUUID) throws BaseAppException {
+        List<Reservation> reservations = getCruiseReservations(cruiseUUID);
+        long takenSeats = 0L;
+        for (Reservation res : reservations) {
+            takenSeats += res.getNumberOfSeats();
+        }
+        long allSeats = cruiseFacadeMow.findByUUID(cruiseUUID).getCruisesGroup().getNumberOfSeats();
+
+        return allSeats - takenSeats;
+    }
+
 }
