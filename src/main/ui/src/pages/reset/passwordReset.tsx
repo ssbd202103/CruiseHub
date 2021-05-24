@@ -8,11 +8,13 @@ import {useTranslation} from "react-i18next";
 import PasswordIcon from "@material-ui/icons/VpnKeyRounded";
 import styles from '../../styles/auth.global.module.css'
 import RoundedButton from "../../components/RoundedButton";
+import {useSnackbarQueue} from "../snackbar";
 
 
 function PasswordReset(props: any) {
     const location = useLocation();
     const {t} = useTranslation()
+    const showError = useSnackbarQueue('error')
 
     const [login, setLogin] = useState('')
     const [password, setPassword] = useState('')
@@ -28,10 +30,13 @@ function PasswordReset(props: any) {
             password
         }
 
-        await axios.put('http://localhost:8080/api/account/reset-password', json, {
+        axios.put('http://localhost:8080/api/account/reset-password', json, {
             headers: {
                 'Content-Type': 'application/json'
             }
+        }).catch(error => {
+            const message = error.response.data
+            showError(t(message))
         });
     }
 

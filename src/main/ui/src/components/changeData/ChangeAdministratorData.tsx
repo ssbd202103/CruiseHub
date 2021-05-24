@@ -11,9 +11,12 @@ import {ConfirmCancelButtonGroup} from "../ConfirmCancelButtonGroup";
 import {changeAdministratorData} from "../../Services/changeDataService";
 import Recaptcha from "react-recaptcha";
 import Popup from "../../PopupRecaptcha";
+import {useSnackbarQueue} from "../../pages/snackbar";
 
 export default function ChangeAdministratorData({open, onOpen, onConfirm, onCancel}: ChangeDataComponentProps) {
     const {t} = useTranslation()
+
+    const showError = useSnackbarQueue('error')
 
     const firstName = useSelector(selectFirstName)
     const secondName = useSelector(selectSecondName)
@@ -23,18 +26,27 @@ export default function ChangeAdministratorData({open, onOpen, onConfirm, onCanc
     const [firstNameValue, setFirstNameValue] = useState('')
     const [secondNameValue, setSecondNameValue] = useState('')
 
+    const handleCancel = () => {
+        setFirstNameValue('')
+        setSecondNameValue('')
+        onCancel()
+    }
+
     async function verifyCallback() {
         setButtonPopup(false)
         if (!firstNameValue || !secondNameValue) {
-            return alert("Values are missing")
+            showError(t('error.fields'))
+            return
         }
 
         changeAdministratorData(firstNameValue, secondNameValue).then(res => {
+            setFirstNameValue('')
+            setSecondNameValue('')
             onConfirm()
         }).catch(error => {
-            alert("ERROR: go to console")
-            console.log(error)
-        })
+            const message = error.response.data
+            showError(t(message))
+        });
 
     }
 
@@ -96,7 +108,7 @@ export default function ChangeAdministratorData({open, onOpen, onConfirm, onCanc
                 </Popup>
                 <ConfirmCancelButtonGroup
                     onConfirm={changeData}
-                    onCancel={onCancel} />
+                    onCancel={handleCancel} />
             </Grid>
         </>
     )

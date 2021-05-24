@@ -5,17 +5,22 @@ import DarkedTextField from "../../components/DarkedTextField";
 import styles from "../../styles/auth.global.module.css";
 import {useTranslation} from "react-i18next";
 import RoundedButton from "../../components/RoundedButton";
+import {useSnackbarQueue} from "../snackbar";
 
 const RequestPasswordReset = () => {
     const {t} = useTranslation()
-
+    const showError = useSnackbarQueue('error')
 
     const [login, setLogin] = useState('')
 
     const onFormSubmit = () => {
         // event.preventDefault()
         // console.log("hello world")
-        axios.post(`http://localhost:8080/api/account/request-password-reset/${login}`, {});
+        axios.post(`http://localhost:8080/api/account/request-password-reset/${login}`, {})
+            .catch(error => {
+                const message = error.response.data
+                showError(t(message))
+            });
     }
 
     return (
