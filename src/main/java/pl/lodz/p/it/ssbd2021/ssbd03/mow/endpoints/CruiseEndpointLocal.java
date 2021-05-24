@@ -56,6 +56,7 @@ public interface CruiseEndpointLocal {
      * Edycja wycieczki
      *
      * @param editCruiseDto obiekt dto posiadający zmiany w wycieczce, versje oraz UUID
+     * @throws BaseAppException wyjątek rzucany w razie nie znalezienia wycieczki bądź konta deaktywującego, bądź złej wersji
      */
     void editCruise(EditCruiseDto editCruiseDto) throws BaseAppException;
 }
