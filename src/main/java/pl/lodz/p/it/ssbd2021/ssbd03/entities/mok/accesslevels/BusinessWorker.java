@@ -15,6 +15,10 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_EMPTY;
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
 
 @Entity(name = "business_workers")
+@NamedQueries({
+        @NamedQuery(name = "BusinessWorker.findALlUnconfirmed", query = "SELECT acc FROM business_workers acc WHERE acc.confirmedByBusinessWorker = false "),
+
+})
 @DiscriminatorValue("BusinessWorker")
 public class BusinessWorker extends AccessLevel {
 

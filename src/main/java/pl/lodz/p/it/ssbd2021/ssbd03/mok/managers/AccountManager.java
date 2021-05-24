@@ -186,17 +186,14 @@ public class AccountManager implements AccountManagerLocal {
         return accountFacade.findAll();
     }
 
-    //todo Roles Allowed
+    @RolesAllowed("getAllUnconfirmedBusinessWorkers")
     @Override
     public List<Account> getAllUnconfirmedBusinessWorkers() throws BaseAppException {
-        List<Account> accounts = new ArrayList<>();
-       for(Account account : accountFacade.findAll()) {
-           BusinessWorker worker = (BusinessWorker) getAccessLevel(account,AccessLevelType.BUSINESS_WORKER);
-           if(!worker.isConfirmedByBusinessWorker()){
-               accounts.add(account);
-           }
+        List<Account> res = new ArrayList<>();
+       for(AccessLevel account : accountFacade.getUnconfirmedBusinessWorkers()) {
+               res.add(account.getAccount());
        }
-       return accounts;
+       return res;
     }
     @RolesAllowed("blockUser")
     @Override

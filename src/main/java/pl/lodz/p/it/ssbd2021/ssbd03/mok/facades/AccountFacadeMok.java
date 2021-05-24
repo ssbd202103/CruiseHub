@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.facades;
 import org.hibernate.exception.ConstraintViolationException;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.LanguageTypeWrapper;
@@ -82,11 +83,11 @@ public class AccountFacadeMok extends AbstractFacade<Account> {
         return tqq.getResultList();
 
     }
-/*    public List<Account> getUnconfirmedBusinessWorkers() {
-        TypedQuery<Account> tqq = em.createNamedQuery("Account.findUnconfirmedBusinessWorkers", Account.class);
+    public List<AccessLevel> getUnconfirmedBusinessWorkers() {
+        TypedQuery<AccessLevel> tqq = em.createNamedQuery("BusinessWorker.findALlUnconfirmed", AccessLevel.class);
         return tqq.getResultList();
 
-    }*/
+    }
 
     @Override
     public void edit(Account entity) throws FacadeException {

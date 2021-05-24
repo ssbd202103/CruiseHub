@@ -118,10 +118,15 @@ public class AccountController {
         return tryAndRepeat(() -> accountEndpoint.getAllAccounts());
     }
 
+    /**
+     * Pobiera listę wszystkich niezatwierdzonych pracowników firm
+     * @return lista dto z pracownikami firm
+     * @throws BaseAppException bazowy wyjątek aplikacji
+     */
     @GET
-    @Path("unconfirmed-business-workers")
+    @Path("/unconfirmed-business-workers")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<BusinessWorkerDto> getAllUnconfirmedBusinessWorkers() throws BaseAppException{
+    public List<BusinessWorkerWithCompanyDto> getAllUnconfirmedBusinessWorkers() throws BaseAppException{
         return tryAndRepeat(() -> accountEndpoint.getAllUnconfirmedBusinessWorkers());
     }
 

@@ -83,6 +83,11 @@ const resources = {
             "change access level state": "Zmień stan poziomu dostępu",
             //panels.clientPanel
             "clientPanel": "Panel klienta",
+            //panels.ModeratorPanel
+            "search business workers": "Szukaj niezatwierdzonych pracowników",
+            "company name": "Nazwa firmy",
+            "company phone number":" Numer telefonu firmy",
+            "Manage business workers":"Zarządzaj pracownikami frim",
             //verify
             "verifyAccount": "Zweryfikuj konto",
             //color
@@ -225,6 +230,11 @@ const resources = {
             "grand access level": "Grand access level",
             //panels.clientPanel
             "clientPanel": "Client panel",
+            //panels.ModeratorPanel
+            "search business workers": "Search business workers",
+            "company name": "Company name",
+            "company phone number":"Company phone number",
+            "Manage business workers":"Manage business workers",
             //verify
             "verifyAccount": "Verify account",
             //color

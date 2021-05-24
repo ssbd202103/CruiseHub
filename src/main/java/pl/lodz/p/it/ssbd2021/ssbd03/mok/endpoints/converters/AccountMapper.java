@@ -297,7 +297,6 @@ public class AccountMapper {
 
     public static BusinessWorkerDto toBusinessWorkerDto(Account account) throws BaseAppException {
         BusinessWorker businessWorker = (BusinessWorker) getAccessLevel(account, AccessLevelType.BUSINESS_WORKER);
-
         return new BusinessWorkerDto(
                 account.getLogin(),
                 account.getFirstName(),
@@ -306,6 +305,27 @@ public class AccountMapper {
                 account.getLanguageType().getName(),
                 businessWorker.getPhoneNumber(),
                 account.getVersion()
+        );
+    }
+
+    /**
+     * Mapuje oiekt klasy account na obiekt dto BusinessWorkerWithCompanyDto
+     * @param account konto użytkownika podawane konwersji
+     * @return obiekt dto BusinessWorkerWithCompanyDto
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
+    public static BusinessWorkerWithCompanyDto toBusinessWorkerWithCompanyDto(Account account) throws BaseAppException {
+        BusinessWorker businessWorker = (BusinessWorker) getAccessLevel(account, AccessLevelType.BUSINESS_WORKER);
+        return new BusinessWorkerWithCompanyDto(
+                account.getLogin(),
+                account.getFirstName(),
+                account.getSecondName(),
+                account.getEmail(),
+                account.getLanguageType().getName(),
+                businessWorker.getPhoneNumber(),
+                account.getVersion(),
+                businessWorker.getCompany().getName(),
+                businessWorker.getCompany().getPhoneNumber()
         );
     }
 

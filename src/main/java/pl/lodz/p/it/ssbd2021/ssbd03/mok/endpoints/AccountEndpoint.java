@@ -114,12 +114,13 @@ public class AccountEndpoint implements AccountEndpointLocal {
         return res;
     }
 
-    //tod Roles Allowed
+    @RolesAllowed("getAllUnconfirmedBusinessWorkers")
     @Override
-    public List<BusinessWorkerDto> getAllUnconfirmedBusinessWorkers() throws BaseAppException {
-        List<BusinessWorkerDto> res = new ArrayList<>();
-        for(Account account: accountManager.getAllUnconfirmedBusinessWorkers()){
-            res.add(AccountMapper.toBusinessWorkerDto(account));
+    public List<BusinessWorkerWithCompanyDto> getAllUnconfirmedBusinessWorkers() throws BaseAppException {
+        List<BusinessWorkerWithCompanyDto> res = new ArrayList<>();
+        List<Account> accounts = accountManager.getAllUnconfirmedBusinessWorkers();
+        for(Account account: accounts){
+            res.add(AccountMapper.toBusinessWorkerWithCompanyDto(account));
         }
         return res;
     }

@@ -256,5 +256,10 @@ public interface AccountManagerLocal {
      */
     void changeMode(String login, boolean newMode) throws BaseAppException;
 
+    /**
+     * Metoda opdowiedzialna za pobranie wszystkich niezatwierdzonych pracowników firm
+     * @return lista obiektow account
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
     List<Account> getAllUnconfirmedBusinessWorkers() throws BaseAppException;
 }
