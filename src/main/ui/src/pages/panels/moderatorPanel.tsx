@@ -19,7 +19,7 @@ import LogOutRoundedButton from "../../components/LogOutRoundedButton";
 import ChangeEmail from "../../components/changeData/ChangeEmail";
 import ChangePassword from "../../components/changeData/ChangePassword";
 import ChangeModeratorData from "../../components/changeData/ChangeModeratorData";
-import ManageCompanies from "./moderator/ManageCompanies";
+import ManageWorkers from "./moderator/ManageBusinessWorkers";
 import ChangeAccountData from "./admin/ChangeAccountData";
 
 
@@ -75,7 +75,7 @@ export default function ModeratorPanel() {
                                 <ListItemText> {t("list accounts")} </ListItemText>
                             </ListItem>
                         </Link>
-                        <Link to="/panels/moderatorPanel/manageCompanies">
+                        <Link to="/panels/moderatorPanel/ManageWorkers">
                             <ListItem button>
                                 <ListItemIcon>
                                     <AccountsListIcon style={{ fill: `var(--${!darkModel ? 'white' : 'dark'})` }} />
@@ -129,8 +129,8 @@ export default function ModeratorPanel() {
                         onCancel={() => {setIsPasswordEdit(false)}} />
                     <LogOutRoundedButton />
                 </Route>
-                <Route exact path="/panels/moderatorPanel/ManageCompanies">
-                    <ManageCompanies/>
+                <Route exact path="/panels/moderatorPanel/ManageWorkers">
+                    <ManageWorkers/>
                 </Route>
             </Grid>
         </Grid>

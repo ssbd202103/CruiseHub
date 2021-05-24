@@ -330,5 +330,20 @@ public class AccountController {
         tryAndRepeat(() -> accountEndpoint.changeEmail(accountChangeEmailDto));
     }
 
-
+    /**
+     * Potwierdz danego pracownika firmy
+     * @param blockAccountDto dto zawierające wersje oraz login danego pracownika
+     * @param etag Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
+     * @throws BaseAppException bazowy wyjątek apklikacji
+     */
+    @PUT
+    @Path("/confirm-business-worker")
+    @ETagFilterBinding
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void confirmBusinessWorker(BlockAccountDto blockAccountDto,@HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) String etag) throws BaseAppException {
+        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, blockAccountDto)) {
+            throw ControllerException.etagIdentityIntegrity();
+        }
+        tryAndRepeat(() -> accountEndpoint.confirmBusinessWorker(blockAccountDto));
+    }
 }

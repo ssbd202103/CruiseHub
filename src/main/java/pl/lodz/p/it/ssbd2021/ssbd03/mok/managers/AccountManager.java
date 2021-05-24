@@ -572,4 +572,15 @@ public class AccountManager implements AccountManagerLocal {
 
         account.setDarkMode(newMode);
     }
+    @RolesAllowed("ConfirmBusinessWorker")
+    @Override
+    public void confirmBusinessWorker(String login, long version) throws BaseAppException {
+        Account account = accountFacade.findByLogin(login);
+        BusinessWorker worker= (BusinessWorker) getAccessLevel(account,AccessLevelType.BUSINESS_WORKER);
+        if (!(worker.getVersion() == version)) {
+            throw FacadeException.optimisticLock();
+        }
+        worker.setConfirmed(true);
+        setUpdatedMetadata(worker);
+    }
 }

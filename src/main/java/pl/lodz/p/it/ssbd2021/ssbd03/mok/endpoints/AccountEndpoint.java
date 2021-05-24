@@ -286,4 +286,10 @@ public class AccountEndpoint implements AccountEndpointLocal {
 
         this.accountManager.changeMode(changeModeDto.getLogin(), changeModeDto.isNewMode());
     }
+    @RolesAllowed("ConfirmBusinessWorker")
+    @Override
+    public void confirmBusinessWorker( BlockAccountDto blockAccountDto) throws BaseAppException {
+
+        this.accountManager.confirmBusinessWorker(blockAccountDto.getLogin(), blockAccountDto.getVersion());
+    }
 }

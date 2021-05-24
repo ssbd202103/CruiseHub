@@ -253,5 +253,12 @@ public interface AccountEndpointLocal {
      * @throws BaseAppException Bazowy wyjątek aplikacji
      */
     List<BusinessWorkerWithCompanyDto> getAllUnconfirmedBusinessWorkers() throws BaseAppException;
+
+    /**
+     * Metoda odpowiedzialna za potwierdzenie pracownika firmy
+     * @param blockAccountDto obiekt dto posiadjący login oraz wersje pracownika firmy
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
+    void confirmBusinessWorker( BlockAccountDto blockAccountDto) throws BaseAppException;
 }
 

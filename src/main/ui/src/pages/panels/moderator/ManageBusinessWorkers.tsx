@@ -31,7 +31,8 @@ function createData(
     email: string,
     phoneNumber: string,
     companyName: string,
-    companyPhoneNumber: string
+    companyPhoneNumber: string,
+    version: string
 ) {
     return {
         login: login,
@@ -40,7 +41,8 @@ function createData(
         email: email,
         phoneNumber: phoneNumber,
         companyName: companyName,
-        companyPhoneNumber:  companyPhoneNumber
+        companyPhoneNumber:  companyPhoneNumber,
+        version: version
 
     };
 }
@@ -67,7 +69,7 @@ function Row(props: RowProps) {
             <TableCell style={style}>{row.phoneNumber}</TableCell>
             <TableCell style={style}>{row.companyName}</TableCell>
             <TableCell style={style}>{row.companyPhoneNumber}</TableCell>
-            <TableCell style={style}><Button>{t("confirm")}</Button></TableCell>
+            <TableCell style={style}><Button onClick={() => confirmWorker({row.login},{row.version})}>{t("confirm")}</Button></TableCell>
         </TableRow>
     );
 }
@@ -78,6 +80,20 @@ function getWorkers(){
     return axios.get('account/unconfirmed-business-workers', {
         headers: {
             'Authorization': `Bearer ${token}`
+        }
+    })
+}
+function confirmWorker(rowlogin: any, rowversion: any) {
+    const {token} = store.getState()
+    console.log(row)
+    const json = JSON.stringify({
+        login: row.login,
+        version: row.version
+    })
+    return axios.put('account/change-client-data', json, {
+        headers: {
+            "If-Match": row.etag,
+            "Authorization": `Bearer ${token}`
         }
     })
 }

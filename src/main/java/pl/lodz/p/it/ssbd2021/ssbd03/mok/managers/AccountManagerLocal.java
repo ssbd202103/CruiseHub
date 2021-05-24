@@ -260,4 +260,13 @@ public interface AccountManagerLocal {
      * @throws BaseAppException Bazowy wyjątek aplikacji
      */
     List<Account> getAllUnconfirmedBusinessWorkers() throws BaseAppException;
+
+    /**
+     * Metoda odpowiedzialna za potwierdzenie pracownika firmy
+     * @param login login pracownika firmy
+     * @param version wersja na potrzeby blokady optymistycznej
+     * @throws BaseAppException bazowy wyjątek aplikacji
+     */
+    void confirmBusinessWorker(String login, long version) throws BaseAppException;
+
 }
