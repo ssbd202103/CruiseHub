@@ -300,11 +300,12 @@ class AccountControllerIT {
     }
     @Test
     public void getAllUnconfirmedBusinessWorkers_SUCESS() throws JsonProcessingException {
-        String adminToken = this.getAuthToken("rbranson", "abcABC123*");
+        String adminToken = this.getAuthToken("mzuckerberg", "abcABC123*");
 
         Response response = RestAssured.given().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken)).baseUri(accountBaseUri).get("/unconfirmed-business-workers");
         String accountString = response.getBody().asString();
-        List<AccountDtoForList> accountDtoList = Arrays.asList(objectMapper.readValue(accountString, AccountDtoForList[].class));
+        List<BusinessWorkerWithCompanyDto> workerks = Arrays.asList(objectMapper.readValue(accountString, BusinessWorkerWithCompanyDto[].class));
+        assertTrue(workerks.size()>0);
 
     }
 
