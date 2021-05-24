@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.DeactivateCruiseDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.EditCruiseDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.NewCruiseDto;
 
 import javax.ejb.Local;
@@ -32,4 +33,10 @@ public interface CruiseEndpointLocal {
     void deactivateCruise(DeactivateCruiseDto deactivateCruiseDto) throws BaseAppException;
 
 
+    /**
+     * Edycja wycieczki
+     *
+     * @param editCruiseDto obiekt dto posiadający zmiany w wycieczce, versje oraz UUID
+     */
+    void editCruise(EditCruiseDto editCruiseDto) throws BaseAppException;
 }

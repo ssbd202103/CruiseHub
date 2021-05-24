@@ -7,6 +7,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.NewCruiseDto;
 
 import javax.ejb.Local;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
@@ -38,9 +39,13 @@ public interface CruiseManagerLocal {
     /**
      * Zajmuje się edycją wycieczki
      *
-     * @param cruise obiekt reprezentujący wycieczkę z wprowadzonymi zmianamii
+     * @param description opis wycieczki do zmiany
+     * @param startDate data rozpoczęcia wycieczki do zmiany
+     * @param endDate data zakończenia wycieczki do zmiany
+     * @param uuid uuid wycieczki
+     * @param version wersja obiektu wycieczki
      * @throws BaseAppException wyjątek rzucany w razie nie znalezienia wycieczki, bądź złej wersji
      */
-    void editCruise(Cruise cruise) throws BaseAppException;
+    void editCruise(String description, LocalDateTime startDate, LocalDateTime endDate, UUID uuid, Long version) throws BaseAppException;
 
 }

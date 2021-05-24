@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.DeactivateCruiseDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.EditCruiseDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.NewCruiseDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.converters.CruiseMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.managers.CruiseManagerLocal;
@@ -33,6 +34,11 @@ public class CruiseEndpoint implements CruiseEndpointLocal {
 
     }
 
+    @Override
+    public void editCruise(EditCruiseDto editCruiseDto) throws BaseAppException {
+        cruiseManagerLocal.editCruise(editCruiseDto.getDescription(), editCruiseDto.getStartDate(), editCruiseDto.getEndDate(),
+                editCruiseDto.getUuid(), editCruiseDto.getVersion());
+    }
 
 
 }

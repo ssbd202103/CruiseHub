@@ -12,6 +12,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseGroupFacadeMow;
 
+import javax.ejb.Local;
 import javax.inject.Inject;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
@@ -59,12 +60,14 @@ public class CruiseManager implements CruiseManagerLocal {
     }
 
     @Override
-    public void editCruise(Cruise cruise) throws BaseAppException {
-        Cruise cruiseToEdit = cruiseFacadeMow.findByUUID(cruise.getUuid());
-        if(!(cruise.getVersion() == cruiseToEdit.getVersion())) {
+    public void editCruise(String description, LocalDateTime startDate, LocalDateTime endDate, UUID uuid, Long version) throws BaseAppException {
+        Cruise cruiseToEdit = cruiseFacadeMow.findByUUID(uuid);
+        if(!(version == cruiseToEdit.getVersion())) {
             throw FacadeException.optimisticLock();
         }
-        cruiseToEdit.setDescription(cruise.getDescription());
+        cruiseToEdit.setDescription(description);
+        cruiseToEdit.setEndDate(endDate);
+        cruiseToEdit.setStartDate(startDate);
         setAlterTypeAndAlterCruise(cruiseToEdit, accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE),
                 accountFacade.findByLogin(securityContext.getUserPrincipal().getName()));
     }
