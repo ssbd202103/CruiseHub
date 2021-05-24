@@ -11,9 +11,12 @@ import {ConfirmCancelButtonGroup} from "../ConfirmCancelButtonGroup";
 import {changeClientData} from "../../Services/changeDataService";
 import Recaptcha from "react-recaptcha";
 import Popup from "../../PopupRecaptcha";
+import {useErrorSnackbar} from "../../pages/snackbar";
 
 export default function ChangeClientData({open, onOpen, onConfirm, onCancel}: ChangeDataComponentProps) {
     const {t} = useTranslation()
+
+    const showError = useErrorSnackbar()
 
     const firstName = useSelector(selectFirstName)
     const secondName = useSelector(selectSecondName)
@@ -25,19 +28,29 @@ export default function ChangeClientData({open, onOpen, onConfirm, onCancel}: Ch
 
     const [buttonPopup, setButtonPopup] = useState(false);
 
+    const handleCancel = () => {
+        setFirstNameValue('')
+        setSecondNameValue('')
+        setPhoneNumberValue('')
+        onCancel()
+    }
 
     function verifyCallback(){
         setButtonPopup(false)
         if (!firstNameValue || !secondNameValue || !phoneNumberValue) {
-            return alert("Values are missing")
+            showError(t('error.fields'))
+            return;
         }
 
         changeClientData(firstNameValue, secondNameValue, phoneNumberValue).then(res => {
+            setFirstNameValue('')
+            setSecondNameValue('')
+            setPhoneNumberValue('')
             onConfirm()
         }).catch(error => {
-            alert("ERROR: go to console")
-            console.log(error)
-        })
+            const message = error.response.data
+            showError(t(message))
+        });
 
     }
 
@@ -111,7 +124,7 @@ export default function ChangeClientData({open, onOpen, onConfirm, onCancel}: Ch
 
                 <ConfirmCancelButtonGroup
                     onConfirm={changeData}
-                    onCancel={onCancel} />
+                    onCancel={handleCancel} />
             </Grid>
         </>
     )

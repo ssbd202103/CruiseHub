@@ -4,11 +4,14 @@ import RoundedButton from '../../../components/RoundedButton'
 import axios from "axios";
 import styles from '../../../styles/ManageAccount.module.css'
 import Grid from "@material-ui/core/Grid";
+import {useErrorSnackbar} from "../../snackbar";
 
 
 export default function ChangeAccessLevelState() {
     const [, forceUpdate] = useReducer(x => x + 1, 0); // used to force component refresh on forceUpdate call
     const {t} = useTranslation()
+
+    const showError = useErrorSnackbar()
 
     const currentAccount = JSON.parse(sessionStorage.getItem("changeAccessLevelStateAccount") as string)
 
@@ -20,7 +23,7 @@ export default function ChangeAccessLevelState() {
             enabled: enabled
         }
 
-        await fetch("http://localhost:8080/api/account/change-access-level-state", {
+        fetch("http://localhost:8080/api/account/change-access-level-state", {
             method: "PUT",
             mode: "same-origin",
             body: JSON.stringify(json),
@@ -29,11 +32,19 @@ export default function ChangeAccessLevelState() {
                 "Accept": "application/json",
                 "If-Match": currentAccount.etag
             }
-        })
+        }).catch(error => {
+            const message = error.response.data
+            showError(t(message))
+        });
 
-        const result = await axios.get(`http://localhost:8080/api/account/details/${currentAccount.login}`);
-        sessionStorage.setItem("changeAccessLevelStateAccount", JSON.stringify(result.data));
-        forceUpdate()
+        axios.get(`http://localhost:8080/api/account/details/${currentAccount.login}`).then(res => {
+            sessionStorage.setItem("changeAccessLevelStateAccount", JSON.stringify(res.data));
+            forceUpdate()
+        }).catch(error => {
+            const message = error.response.data
+            showError(t(message))
+        });
+
     }
 
     return (

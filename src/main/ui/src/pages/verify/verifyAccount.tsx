@@ -5,10 +5,12 @@ import AuthLayout from "../../layouts/AuthLayout";
 import {useTranslation} from "react-i18next";
 import styles from '../../styles/auth.global.module.css'
 import RoundedButton from "../../components/RoundedButton";
+import {useErrorSnackbar} from "../snackbar";
 
 function VerifyAccount(props: any) {
     const location = useLocation();
     const {t} = useTranslation()
+    const showError = useErrorSnackbar()
     const history = useHistory()
     const submitAccountVerification = async (event: any) => {
         event.preventDefault()
@@ -21,7 +23,11 @@ function VerifyAccount(props: any) {
             headers: {
                 'Content-Type': 'application/json'
             }
-        }).then(res =>{history.push("/signin")});
+        }).then(res =>{history.push("/signin")})
+            .catch(error => {
+                const message = error.response.data
+                showError(t(message))
+            });
     }
 
 

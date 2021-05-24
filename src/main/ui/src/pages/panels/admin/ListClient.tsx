@@ -21,6 +21,7 @@ import {useSelector} from "react-redux";
 import {selectDarkMode} from "../../../redux/slices/userSlice";
 import {getAccountDetailsAbout, getAllAccounts} from "../../../Services/accountsService";
 import {selectToken} from "../../../redux/slices/tokenSlice";
+import {useErrorSnackbar} from "../../snackbar";
 
 interface UnblockAccountParams {
     login: string;
@@ -30,13 +31,13 @@ interface UnblockAccountParams {
 }
 
 
-const unblockAccount = async ({login, etag, version, token}: UnblockAccountParams) => {
+const unblockAccount = ({login, etag, version, token}: UnblockAccountParams) => {
     const json = JSON.stringify({
             login: login,
             version: version,
         }
     );
-    await axios.put('http://localhost:8080/api/account/unblock', json, {
+    return axios.put('http://localhost:8080/api/account/unblock', json, {
         headers:{
             'Content-Type': 'application/json',
             'If-Match': etag,
@@ -45,20 +46,19 @@ const unblockAccount = async ({login, etag, version, token}: UnblockAccountParam
 
     }).then(response => {
         return response.status == 200;
-    });
-
+    })
 };
 function refresh() {
     window.location.reload();
 }
 
-const blockAccount = async ({login, etag, version, token}: UnblockAccountParams) => {
+const blockAccount = ({login, etag, version, token}: UnblockAccountParams) => {
     const json = JSON.stringify({
             login: login,
             version: version,
         }
     );
-    await axios.put('http://localhost:8080/api/account/block', json, {
+    return axios.put('http://localhost:8080/api/account/block', json, {
         headers:{
             'Content-Type': 'application/json',
             'If-Match': etag,
@@ -68,7 +68,6 @@ const blockAccount = async ({login, etag, version, token}: UnblockAccountParams)
     }).then(response => {
         return response.status == 200;
     });
-
 };
 
 const useRowStyles = makeStyles({
@@ -129,13 +128,20 @@ function Row(props: RowProps) {
     const [buttonText, setButtonText] = useState("true");
     const token = useSelector(selectToken)
 
+    const showError = useErrorSnackbar()
+
     const classes = useRowStyles();
     const buttonClass = useButtonStyles();
 
     const handleSetOpen = async () => {
-        const result = await getAccountDetailsAbout(row.login);
-        sessionStorage.setItem("changeAccountData", JSON.stringify(result.data));
-        setOpen(state => !state);
+        getAccountDetailsAbout(row.login).then(res => {
+            sessionStorage.setItem("changeAccountData", JSON.stringify(res.data));
+            setOpen(state => !state);
+        }).catch(error => {
+            const message = error.response.data
+            showError(t(message))
+        });
+
     }
 
     const setCurrentGrantAccessLevelAccount = () => {
@@ -148,8 +154,12 @@ function Row(props: RowProps) {
     }
 
     const setCurrentChangeAccessLevelStateAccount = async () => {
-        const result = await getAccountDetailsAbout(row.login);
-        sessionStorage.setItem("changeAccessLevelStateAccount", JSON.stringify(result.data));
+        getAccountDetailsAbout(row.login).then(res => {
+            sessionStorage.setItem("changeAccessLevelStateAccount", JSON.stringify(res.data));
+        }).catch(error => {
+            const message = error.response.data
+            showError(t(message))
+        });
     }
 
     return (
@@ -196,16 +206,23 @@ function Row(props: RowProps) {
 
                                             <Button className={buttonClass.root} onClick={() => {
                                                 if(row.active) {
-                                                    if (blockAccount({etag: row.etag,
-                                                        login: row.login, version: row.version, token: token})) {
-                                                       refresh()
-                                                    }
-                                                } else {
-                                                    if (unblockAccount({etag: row.etag,
-                                                        login: row.login, version: row.version, token: token})) {
+                                                    blockAccount({etag: row.etag,
+                                                        login: row.login, version: row.version, token: token}).then(res => {
                                                         refresh()
+                                                    }).catch(error => {
+                                                            const message = error.response.data
+                                                            showError(t(message))
+                                                        });
+                                                } else {
+                                                    unblockAccount({etag: row.etag,
+                                                        login: row.login, version: row.version, token: token})
+                                                        .then(res => {
+                                                            refresh()
+                                                        }).catch(error => {
+                                                        const message = error.response.data
+                                                        showError(t(message))
+                                                    });
 
-                                                    }
                                                 }
                                             }}>{row.active ? t("block") : t("unblock")}</Button>
 
@@ -235,11 +252,16 @@ export default function AdminListClient() {
     const [users, setUsers] = useState([]);
     const [searchInput, setSearchInput] = useState("");
 
+    const showError = useErrorSnackbar()
+
     const darkMode = useSelector(selectDarkMode)
 
     useEffect(() => {
         getAllAccounts().then(res => {
             setUsers(res.data)
+        }).catch(error => {
+            const message = error.response.data
+            showError(t(message))
         })
     },[]);
 

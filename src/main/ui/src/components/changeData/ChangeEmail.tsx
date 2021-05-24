@@ -11,16 +11,25 @@ import {ConfirmCancelButtonGroup} from "../ConfirmCancelButtonGroup";
 import {ChangeDataComponentProps} from '../interfaces'
 import Recaptcha from "react-recaptcha";
 import Popup from "../../PopupRecaptcha";
+import {useErrorSnackbar} from "../../pages/snackbar";
 
 export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeDataComponentProps) {
     // i18n
     const {t} = useTranslation()
+    const showError = useErrorSnackbar()
 
     // redux
     const dispatch = useDispatch()
     const email = useSelector(selectEmail)
 
+    const [emailValue, setEmailValue] = useState('')
+    const [confirmEmailValue, setConfirmEmailValue] = useState('')
 
+    const handleCancel = () => {
+        setEmailValue('')
+        setConfirmEmailValue('')
+        onCancel()
+    }
 
     // internal state and behavior
 
@@ -30,29 +39,27 @@ export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeD
     function verifyCallback(){
         setButtonPopup(false)
         if (!emailValue || !confirmEmailValue) {
-            return alert("Fill up required fields")
+            showError(t('error.fields'))
+            return;
         }
 
         if (emailValue !== confirmEmailValue) {
-            //TODO
-            return alert("FATAL: emails are not equal")
+            showError(t('emails are not equal'))
+            return;
         }
 
         changeEmailService(emailValue).then(res => {
             setEmailValue('')
             setConfirmEmailValue('')
             onConfirm()
-        })
-            .catch(error => {
-                //TODO
-                alert('ERROR. Go to the console')
-                console.log(error)
-            })
+        }).catch(error => {
+            const message = error.response.data
+            showError(t(message))
+        });
 
     }
 
-    const [emailValue, setEmailValue] = useState('')
-    const [confirmEmailValue, setConfirmEmailValue] = useState('')
+
 
     const changeEmail = () => {
         setButtonPopup(true)
@@ -100,7 +107,7 @@ export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeD
                 </Popup>
                 <ConfirmCancelButtonGroup
                     onConfirm={changeEmail}
-                    onCancel={onCancel} />
+                    onCancel={handleCancel} />
             </Grid>
         </>
     )

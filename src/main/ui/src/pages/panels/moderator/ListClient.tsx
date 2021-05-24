@@ -12,6 +12,7 @@ import {useSelector} from "react-redux";
 import {selectDarkMode} from "../../../redux/slices/userSlice";
 import {getAllAccounts} from "../../../Services/accountsService";
 import DarkedTextField from "../../../components/DarkedTextField";
+import {useErrorSnackbar} from "../../snackbar";
 
 const useRowStyles = makeStyles({
     root: {
@@ -69,12 +70,17 @@ export default function ModListClient() {
     const [users, setUsers] = useState([]);
     const [searchInput, setSearchInput] = useState("");
 
+    const showError = useErrorSnackbar()
+
     const darkMode = useSelector(selectDarkMode)
 
     useEffect(() => {
         getAllAccounts().then(res => {
             setUsers(res.data)
-        })
+        }).catch(error => {
+            const message = error.response.data
+            showError(t(message))
+        });
     },[]);
 
     function search(rows: any[]) {

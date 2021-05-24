@@ -6,18 +6,21 @@ import {useSelector} from "react-redux";
 
 import {selectDarkMode} from '../redux/slices/userSlice'
 import {changeDarkMode} from '../Services/changeDataService'
+import {useErrorSnackbar} from "../pages/snackbar";
 
 export default function AppColorSetter() {
     const {t} = useTranslation();
+
+    const showError = useErrorSnackbar()
 
     const darkMode = useSelector(selectDarkMode)
 
     const handleClick = () => {
         //TODO
         changeDarkMode().catch(error => {
-            alert('ERROR. Go to console')
-            console.log(error)
-        })
+            const message = error.response.data
+            showError(t(message))
+        });
     }
 
     return (

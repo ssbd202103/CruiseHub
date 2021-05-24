@@ -142,7 +142,12 @@ const resources = {
             "error.regex.email": "Niepoprawny adres email",
 
             //else
-            'error.emptypanellist': 'Nie masz żadnych paneli do sterowania'
+            'error.emptypanellist': 'Nie masz żadnych paneli do sterowania',
+
+            'error.fields': 'Zostały wprowadzone niepoprawne dane',
+            'passwords are not equal': 'Hasła nie są identyczne',
+            'emails are not equal': 'Emaile nie są identyczne',
+            'error.houseNumber.NaN': 'Podany numer domu nie jest liczbą'
         }
     },
     en: {
@@ -283,7 +288,12 @@ const resources = {
             "phone change btn": "Change phone number",
             "error.regex.email": "Invalid email address",
 
-            'error.emptypanellist': "You don't have any panel to manage"
+            'error.emptypanellist': "You don't have any panel to manage",
+
+            'error.fields': 'Given invalid data',
+            'passwords are not equal': 'Passwords are not equal',
+            'emails are not equal': "Emails are not equal",
+            'error.houseNumber.NaN': 'Given house number is not a number'
         }
     }
 }

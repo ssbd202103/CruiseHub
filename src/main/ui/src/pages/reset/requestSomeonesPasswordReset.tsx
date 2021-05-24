@@ -6,9 +6,11 @@ import styles from "../../styles/auth.global.module.css";
 import {useTranslation} from "react-i18next";
 import RoundedButton from "../../components/RoundedButton";
 import {Link} from "react-router-dom";
+import {useErrorSnackbar} from "../snackbar";
 
 const RequestSomeonePasswordReset = () => {
     const {t} = useTranslation()
+    const showError = useErrorSnackbar()
 
     const currentAccount = JSON.parse(sessionStorage.getItem("resetPasswordAccount") as string)
 
@@ -16,7 +18,11 @@ const RequestSomeonePasswordReset = () => {
 
     let login = currentAccount.login;
     const onFormSubmit = () => {
-        axios.post(`http://localhost:8080/api/account/request-someones-password-reset/${login}/${email}/`, {});
+        axios.post(`http://localhost:8080/api/account/request-someones-password-reset/${login}/${email}/`, {})
+            .catch(error => {
+                const message = error.response.data
+                showError(t(message))
+            });
     }
     return (
         <AuthLayout>

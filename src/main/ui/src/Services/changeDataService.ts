@@ -179,9 +179,7 @@ export function changeDarkMode() {
             'If-Match': etag,
             'Authorization': `Bearer ${token}`
         }
-    })
-        .catch(error => console.log(error))
-        .then(res => {
+    }).then(res => {
         return getUser(token)
     })
 }

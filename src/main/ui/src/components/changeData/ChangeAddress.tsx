@@ -11,9 +11,12 @@ import {ConfirmCancelButtonGroup} from "../ConfirmCancelButtonGroup";
 import {changeClientAddress} from "../../Services/changeDataService";
 import Recaptcha from "react-recaptcha";
 import Popup from "../../PopupRecaptcha";
+import {useErrorSnackbar} from "../../pages/snackbar";
 
 export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: ChangeDataComponentProps) {
     const {t} = useTranslation()
+
+    const showError = useErrorSnackbar()
 
     const address = useSelector(selectAddress)
 
@@ -25,14 +28,25 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
 
     const [buttonPopup, setButtonPopup] = useState(false);
 
+    const handleCancel = () => {
+        setHouseNumber('')
+        setStreet('')
+        setPostalCode('')
+        setCity('')
+        setCountry('')
+        onCancel()
+    }
+
     async function verifyCallback() {
         setButtonPopup(false)
         if (!houseNumber || !street || !postalCode || !city || !country) {
-            return alert("Values are missing")
+            showError(t('error.fields'))
+            return
         }
 
         if (isNaN(Number(houseNumber))) {
-            return alert('house number must be number')
+            showError(t('error.houseNumber.NaN'))
+            return
         }
 
         changeClientAddress({
@@ -42,11 +56,16 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
             city,
             country
         }).then(res => {
+            setHouseNumber('')
+            setStreet('')
+            setPostalCode('')
+            setCity('')
+            setCountry('')
             onConfirm()
         }).catch(error => {
-            alert("ERROR: go to console")
-            console.log(error)
-        })
+            const message = error.response.data
+            showError(t(message))
+        });
 
     }
 
@@ -131,7 +150,7 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
                 </Popup>
                 <ConfirmCancelButtonGroup
                     onConfirm={changeAddress}
-                    onCancel={onCancel} />
+                    onCancel={handleCancel} />
             </Grid>
         </>
     )
