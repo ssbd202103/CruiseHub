@@ -91,6 +91,7 @@ public class AuthController {
 
     @POST
     @Path("/refresh-token/")
+    @Produces(MediaType.TEXT_PLAIN)
     public String refreshJWTToken(@HeaderParam("Authorization") String tokenString) throws BaseAppException {
         if(!tokenString.contains("Bearer ")) {
             throw new ControllerException("Invalid authorization header");
