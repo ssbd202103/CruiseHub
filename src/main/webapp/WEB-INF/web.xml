@@ -145,6 +145,9 @@
         <role-name>getBusinessWorkersForCompany</role-name>
     </security-role>
 
+    <security-role>
+        <role-name>removeClientRating</role-name>
+    </security-role>
 
 
     <!--    <security-constraint> todo-->

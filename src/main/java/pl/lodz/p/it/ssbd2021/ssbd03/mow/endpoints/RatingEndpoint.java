@@ -1,8 +1,11 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Rating;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.RatingDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.RemoveClientRatingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.RemoveRankingDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.converters.RatingMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.managers.RatingManagerLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
@@ -34,5 +37,11 @@ public class RatingEndpoint implements RatingEndpointLocal {
     @Override
     public RatingDto getRating(String login, String cruiseGroupName) throws BaseAppException {
         return null; // todo finish implementation
+    }
+
+    @RolesAllowed("removeClientRating")
+    @Override
+    public void removeClientRating(RemoveClientRatingDto removeClientRatingDto) throws BaseAppException {
+        // todo finish implementation
     }
 }
