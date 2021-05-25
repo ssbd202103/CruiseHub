@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {ChangeEvent, useEffect, useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Collapse from '@material-ui/core/Collapse';
@@ -12,7 +12,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-import {Button} from "@material-ui/core";
+import {Button, TextField} from "@material-ui/core";
 import {Link} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import DarkedTextField from "../../../components/DarkedTextField";
@@ -22,6 +22,9 @@ import {selectDarkMode} from "../../../redux/slices/userSlice";
 import {getAccountDetailsAbout, getAllAccounts} from "../../../Services/accountsService";
 import {selectToken} from "../../../redux/slices/tokenSlice";
 import {useSnackbarQueue} from "../../snackbar";
+import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
+
+
 
 interface UnblockAccountParams {
     login: string;
@@ -267,25 +270,38 @@ export default function AdminListClient() {
 
     function search(rows: any[]) {
         if (Array.isArray(rows) && rows.length) {
-            return rows.filter(
-                row => row.props.row.firstName.toLowerCase().indexOf(searchInput.toLowerCase()) > -1 ||
-                       row.props.row.secondName.toLowerCase().indexOf(searchInput.toLowerCase()) > -1
+            const filteredAccount = rows.filter(
+                row => row.props.row.firstName.concat(" ", row.props.row.secondName).toLowerCase().
+                    indexOf(searchInput.toLowerCase())> -1
             );
+
+            filteredAccount.forEach(account => (accounts.includes(account.props.row.firstName + " " + account.props.row.secondName) ?
+                "" : accounts.push(account.props.row.firstName + " " + account.props.row.secondName)));
+            return filteredAccount
         } else {
             return rows;
         }
     }
 
     const {t} = useTranslation()
+
+    const accounts: String[] = [];
+
+
     return (
         <div>
             <div>
-                <DarkedTextField
-                    label={t('search account')}
-                    type="text"
-                    value={searchInput}
-                    onChange={(e) => setSearchInput(e.target.value)}
-                    style={{marginBottom: '20px'}} />
+                <Autocomplete
+                    options={accounts}
+                    inputValue={searchInput}
+                    style={{ width: 300 }}
+                    noOptionsText={t('no options')}
+                    onChange={(event, value) => {setSearchInput(value as string ?? '')}}
+                    renderInput={(params) => (
+                        <TextField {...params} label={t('search account')}  variant="outlined" onChange={(e) => setSearchInput(e.target.value)}/>
+                    )}
+                />
+
             </div>
             <TableContainer component={Paper} style={{
                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`

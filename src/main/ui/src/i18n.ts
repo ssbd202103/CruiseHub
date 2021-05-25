@@ -153,7 +153,8 @@ const resources = {
             'error.fields': 'Zostały wprowadzone niepoprawne dane',
             'passwords are not equal': 'Hasła nie są identyczne',
             'emails are not equal': 'Emaile nie są identyczne',
-            'error.houseNumber.NaN': 'Podany numer domu nie jest liczbą'
+            'error.houseNumber.NaN': 'Podany numer domu nie jest liczbą',
+            'no options': 'Brak opcji'
         }
     },
     en: {
@@ -307,7 +308,8 @@ const resources = {
             'error.fields': 'Given invalid data',
             'passwords are not equal': 'Passwords are not equal',
             'emails are not equal': "Emails are not equal",
-            'error.houseNumber.NaN': 'Given house number is not a number'
+            'error.houseNumber.NaN': 'Given house number is not a number',
+            'no options': 'No options'
         }
     }
 }
