@@ -7,6 +7,8 @@ import {useTranslation} from "react-i18next";
 import RoundedButton from "../../components/RoundedButton";
 import {Link} from "react-router-dom";
 import {useSnackbarQueue} from "../snackbar";
+import store from "../../redux/store";
+import {getUser} from "../../Services/userService";
 
 const RequestSomeonePasswordReset = () => {
     const {t} = useTranslation()
@@ -15,10 +17,14 @@ const RequestSomeonePasswordReset = () => {
     const currentAccount = JSON.parse(sessionStorage.getItem("resetPasswordAccount") as string)
 
     const [email, setEmail] = useState('')
-
+    const {token} = store.getState()
     let login = currentAccount.login;
     const onFormSubmit = () => {
-        axios.post(`/api/account/request-someones-password-reset/${login}/${email}/`, {})
+        axios.post(`/api/account/request-someones-password-reset/${login}/${email}/`, null, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
             .catch(error => {
                 const message = error.response.data
                 showError(t(message))
