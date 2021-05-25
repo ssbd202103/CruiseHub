@@ -22,7 +22,7 @@ export default function Checkboxes() {
             accountVersion: currentAccount.version
         }
 
-        // await axios.put("http://localhost:8080/api/account/grant-access-level", {
+        // await axios.put("/api/account/grant-access-level", {
         //     json,
         //     mode: 'no-cors',
         //     headers: {
@@ -35,7 +35,7 @@ export default function Checkboxes() {
         /// above axios code results in java backend not seeing headers, most likely CORS issue,
         //  no-cors mode does not resolve it for axios, it works with fetch though
 
-        fetch("http://localhost:8080/api/account/grant-access-level", {
+        fetch("/api/account/grant-access-level", {
             method: "PUT",
             mode: "same-origin",
             body: JSON.stringify(json),

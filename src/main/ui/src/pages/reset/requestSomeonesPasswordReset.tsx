@@ -18,7 +18,7 @@ const RequestSomeonePasswordReset = () => {
 
     let login = currentAccount.login;
     const onFormSubmit = () => {
-        axios.post(`http://localhost:8080/api/account/request-someones-password-reset/${login}/${email}/`, {})
+        axios.post(`/api/account/request-someones-password-reset/${login}/${email}/`, {})
             .catch(error => {
                 const message = error.response.data
                 showError(t(message))
