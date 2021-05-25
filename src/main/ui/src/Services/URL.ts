@@ -1,5 +1,6 @@
 import axios from "axios";
 
 export default axios.create({
-    baseURL: "http://localhost:8080/api/"
+  //  baseURL: "http://studapp.it.p.lodz.pl:8003/api/"
+    baseURL: "https://localhost:8181/api/"
 });

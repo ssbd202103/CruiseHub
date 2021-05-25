@@ -5,7 +5,6 @@
          version="4.0">
     <default-context-path>/</default-context-path>
     <error-page>
-        <error-code>404</error-code>
         <location>/index.html</location>
     </error-page>
     <!---->
@@ -102,6 +101,9 @@
     <security-role>
         <role-name>getAllUnconfirmedBusinessWorkers</role-name>
     </security-role>
+    <security-role>
+        <role-name>ConfirmBusinessWorker</role-name>
+    </security-role>
 
     <security-role>
         <role-name>SYSTEM</role-name>
@@ -144,15 +146,14 @@
     </security-role>
 
 
-
-    <!--    <security-constraint> todo-->
-<!--        <web-resource-collection>-->
-<!--            <web-resource-name>api</web-resource-name>-->
-<!--            <url-pattern>/*</url-pattern>-->
-<!--        </web-resource-collection>-->
-<!--        <user-data-constraint>-->
-<!--            <transport-guarantee>CONFIDENTIAL</transport-guarantee>-->
-<!--        </user-data-constraint>-->
-<!--    </security-constraint>-->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>api</web-resource-name>
+            <url-pattern>/*</url-pattern>
+        </web-resource-collection>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
 
 </web-app>

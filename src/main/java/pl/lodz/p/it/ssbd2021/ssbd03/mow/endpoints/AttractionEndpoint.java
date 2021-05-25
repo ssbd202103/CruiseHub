@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.endpoints.BaseEndpoint;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.AddAttractionDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.EditAttractionDto;
@@ -17,7 +18,7 @@ import javax.interceptor.Interceptors;
 
 @Stateful
 @Interceptors(TrackingInterceptor.class)
-public class AttractionEndpoint implements AttractionEndpointLocal {
+public class AttractionEndpoint extends BaseEndpoint implements AttractionEndpointLocal {
 
     @Inject
     private AttractionManagerLocal attractionManager;

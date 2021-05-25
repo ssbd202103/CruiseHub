@@ -11,15 +11,27 @@ import styles from '../../styles/auth.global.module.css'
 
 import {useTranslation} from 'react-i18next'
 import axios from "axios";
-import {createRef, useState} from "react";
+import {createRef, useEffect, useState} from "react";
 import Recaptcha from 'react-recaptcha'
 import Popup from "../../PopupRecaptcha";
+import {
+    CITY_REGEX, COUNTRY_REGEX,
+    EMAIL_REGEX,
+    LOGIN_REGEX,
+    NAME_REGEX,
+    NUM_REGEX,
+    PASSWORD_REGEX, PHONE_NUMBER_REGEX,
+    POST_CODE_REGEX,
+    STREET_REGEX
+} from "../../regexConstants";
 import {useSnackbarQueue} from "../snackbar";
+import i18n from "i18next";
 
 
 export default function ClientSignUp() {
     const {t} = useTranslation()
     const showError = useSnackbarQueue('error')
+    const showSuccess = useSnackbarQueue('success')
 
     const [firstName, setFirstName] = useState('')
     const [secondName, setSecondName] = useState('')
@@ -38,6 +50,19 @@ export default function ClientSignUp() {
 
     const [buttonPopup, setButtonPopup] = useState(false);
 
+    const [loginRegexError, setLoginRegexError] = useState(false)
+    const [passwordRegexError, setPasswordRegexError] = useState(false)
+    const [firstNameRegexError, setFirstNameRegexError] = useState(false)
+    const [secondNameRegexError, setSecondNameRegexError] = useState(false)
+    const [emailRegexError, setEmailRegexError] = useState(false)
+    const [streetRegexError, setStreetRegexError] = useState(false)
+    const [postalCodeRegexError, setPostalCodeRegexError] = useState(false)
+    const [cityRegexError, setCityRegexError] = useState(false)
+    const [countryRegexError, setCountryRegexError] = useState(false)
+    const [phoneNumberRegexError, setPhoneNumberRegexError] = useState(false)
+    const [houseNumberRegexError, setHouseNumberRegexError] = useState(false)
+
+
     async function verifyCallback() {
         const json = JSON.stringify({
                 firstName,
@@ -45,7 +70,7 @@ export default function ClientSignUp() {
                 login,
                 email,
                 password,
-                languageType,
+                languageType: i18n.language,
                 addressDto: {
                     houseNumber,
                     street,
@@ -57,7 +82,7 @@ export default function ClientSignUp() {
             }
         );
         setButtonPopup(false)
-        axios.post('http://localhost:8080/api/auth/client/registration', json, {
+        axios.post('/api/auth/client/registration', json, {
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -65,11 +90,31 @@ export default function ClientSignUp() {
             const message = error.response.data
             showError(t(message))
         });
-
     }
 
+
     const clientSignUpFun = async () => {
-        setButtonPopup(true)
+        setLoginRegexError(!LOGIN_REGEX.test(login))
+        setPasswordRegexError(!PASSWORD_REGEX.test(password))
+        setFirstNameRegexError(!NAME_REGEX.test(firstName))
+        setSecondNameRegexError(!NAME_REGEX.test(secondName))
+        setEmailRegexError(!EMAIL_REGEX.test(email))
+        setHouseNumberRegexError(!NUM_REGEX.test(houseNumber))
+        setStreetRegexError(!STREET_REGEX.test(street))
+        setPostalCodeRegexError(!POST_CODE_REGEX.test(postalCode))
+        setCityRegexError(!CITY_REGEX.test(city))
+        setCountryRegexError(!COUNTRY_REGEX.test(country))
+        setPhoneNumberRegexError(!PHONE_NUMBER_REGEX.test(phoneNumber))
+
+        if (!LOGIN_REGEX.test(login) || !PASSWORD_REGEX.test(password) || !NAME_REGEX.test(firstName) ||
+            !NAME_REGEX.test(secondName) || !EMAIL_REGEX.test(email) || !NUM_REGEX.test(houseNumber) ||
+            !STREET_REGEX.test(street) || !POST_CODE_REGEX.test(postalCode) || !CITY_REGEX.test(city) ||
+            !COUNTRY_REGEX.test(country) || !PHONE_NUMBER_REGEX.test(phoneNumber)) {
+            showError(t("invalid.form"))
+        } else {
+            setButtonPopup(true)
+            showSuccess("DONE")
+        }
     }
 
 
@@ -93,7 +138,11 @@ export default function ClientSignUp() {
                         marginRight: 20
                     }}
                     value={firstName}
-                    onChange={event => {setFirstName(event.target.value)}}
+                    onChange={event => {
+                        setFirstName(event.target.value)
+                        setFirstNameRegexError(!NAME_REGEX.test(event.target.value))
+                    }}
+                    regexError={firstNameRegexError}
                     colorIgnored
                 />
 
@@ -103,20 +152,28 @@ export default function ClientSignUp() {
                     placeholder="Doe"
                     className={styles.input}
                     value={secondName}
-                    onChange={event => {setSecondName(event.target.value)}}
+                    onChange={event => {
+                        setSecondName(event.target.value)
+                        setSecondNameRegexError(!NAME_REGEX.test(event.target.value))
+                    }}
                     colorIgnored
+                    regexError={secondNameRegexError}
                 />
             </Box>
 
             <DarkedTextField
                 type="email"
                 label={t("email") + ' *'}
-                placeholder="example@Email(message = REGEX_INVALID_EMAIL).com"
+                placeholder="example@Email.com"
                 className={styles.input}
                 icon={(<EmailIcon/>)}
                 value={email}
-                onChange={event => {setEmail(event.target.value)}}
+                onChange={event => {
+                    setEmail(event.target.value)
+                    setEmailRegexError(!EMAIL_REGEX.test(event.target.value))
+                }}
                 colorIgnored
+                regexError={emailRegexError}
             />
 
             <DarkedTextField
@@ -124,28 +181,25 @@ export default function ClientSignUp() {
                 placeholder="examplelogin"
                 className={styles.input}
                 value={login}
-                onChange={event => {setLogin(event.target.value)}}
+                onChange={event => {
+                    setLogin(event.target.value)
+                    setLoginRegexError(!LOGIN_REGEX.test(event.target.value))
+                }}
                 colorIgnored
+                regexError={loginRegexError}
             />
-
-
-            <DarkedTextField
-                label={t("languageType") + ' *'}
-                placeholder="language type"
-                className={styles.input}
-                value={languageType}
-                onChange={event => {setLanguageType(event.target.value)}}
-                colorIgnored
-            />
-
 
             <DarkedTextField
                 label={t("houseNumber") + ' *'}
                 placeholder="house number"
                 className={styles.input}
                 value={houseNumber}
-                onChange={event => {setHouseNumber(event.target.value)}}
+                onChange={event => {
+                    setHouseNumber(event.target.value)
+                    setHouseNumberRegexError(!NUM_REGEX.test(event.target.value))
+                }}
                 colorIgnored
+                regexError={houseNumberRegexError}
             />
 
             <DarkedTextField
@@ -153,32 +207,48 @@ export default function ClientSignUp() {
                 placeholder="street"
                 className={styles.input}
                 value={street}
-                onChange={event => {setStreet(event.target.value)}}
+                onChange={event => {
+                    setStreet(event.target.value)
+                    setStreetRegexError(!STREET_REGEX.test(event.target.value))
+                }}
                 colorIgnored
+                regexError={streetRegexError}
             />
             <DarkedTextField
                 label={t("postalCode") + ' *'}
                 placeholder="postal code"
                 className={styles.input}
                 value={postalCode}
-                onChange={event => {setPostalCode(event.target.value)}}
+                onChange={event => {
+                    setPostalCode(event.target.value)
+                    setPostalCodeRegexError(!POST_CODE_REGEX.test(event.target.value))
+                }}
                 colorIgnored
+                regexError={postalCodeRegexError}
             />
             <DarkedTextField
                 label={t("city") + ' *'}
                 placeholder="city"
                 className={styles.input}
                 value={city}
-                onChange={event => {setCity(event.target.value)}}
+                onChange={event => {
+                    setCity(event.target.value)
+                    setCityRegexError(!CITY_REGEX.test(event.target.value))
+                }}
                 colorIgnored
+                regexError={cityRegexError}
             />
             <DarkedTextField
                 label={t("country") + ' *'}
                 placeholder="country"
                 className={styles.input}
                 value={country}
-                onChange={event => {setCountry(event.target.value)}}
+                onChange={event => {
+                    setCountry(event.target.value)
+                    setCountryRegexError(!COUNTRY_REGEX.test(event.target.value))
+                }}
                 colorIgnored
+                regexError={countryRegexError}
             />
 
             <DarkedTextField
@@ -186,8 +256,12 @@ export default function ClientSignUp() {
                 placeholder="phone number"
                 className={styles.input}
                 value={phoneNumber}
-                onChange={event => {setPhoneNumber(event.target.value)}}
+                onChange={event => {
+                    setPhoneNumber(event.target.value)
+                    setPhoneNumberRegexError(!PHONE_NUMBER_REGEX.test(event.target.value))
+                }}
                 colorIgnored
+                regexError={phoneNumberRegexError}
             />
 
             <Box
@@ -205,8 +279,17 @@ export default function ClientSignUp() {
                     style={{marginRight: 20}}
                     icon={(<PasswordIcon/>)}
                     value={password}
-                    onChange={event => {setPassword(event.target.value)}}
+                    onChange={event => {
+                        setPassword(event.target.value)
+                        setPasswordRegexError(!PASSWORD_REGEX.test(event.target.value))
+                        if (event.target.value != confirmPassword || !PASSWORD_REGEX.test(event.target.value)) {
+                            setPasswordRegexError(true)
+                        } else {
+                            setPasswordRegexError(false)
+                        }
+                    }}
                     colorIgnored
+                    regexError={passwordRegexError}
                 />
 
                 <DarkedTextField
@@ -216,8 +299,17 @@ export default function ClientSignUp() {
                     className={styles.input}
                     icon={(<PasswordIcon/>)}
                     value={confirmPassword}
-                    onChange={event => {setConfirmPassword(event.target.value)}}
+                    onChange={event => {
+                        setConfirmPassword(event.target.value)
+                        setPasswordRegexError(!PASSWORD_REGEX.test(event.target.value))
+                        if (password != event.target.value || !PASSWORD_REGEX.test(event.target.value)) {
+                            setPasswordRegexError(true)
+                        } else {
+                            setPasswordRegexError(false)
+                        }
+                    }}
                     colorIgnored
+                    regexError={passwordRegexError}
                 />
             </Box>
 

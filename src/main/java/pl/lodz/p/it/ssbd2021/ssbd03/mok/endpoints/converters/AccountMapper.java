@@ -323,7 +323,7 @@ public class AccountMapper {
                 account.getEmail(),
                 account.getLanguageType().getName(),
                 businessWorker.getPhoneNumber(),
-                account.getVersion(),
+                businessWorker.getVersion(),
                 businessWorker.getCompany().getName(),
                 businessWorker.getCompany().getPhoneNumber()
         );

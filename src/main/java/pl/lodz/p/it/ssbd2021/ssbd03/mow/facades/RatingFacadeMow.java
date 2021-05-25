@@ -53,6 +53,16 @@ public class RatingFacadeMow extends AbstractFacade<Rating> {
     }
 
     @Override
+    public void remove(Rating entity) throws FacadeException {
+        super.remove(entity);
+    }
+
+    @Override
+    public void create(Rating entity) throws FacadeException {
+        super.create(entity);
+    }
+
+    @Override
     protected EntityManager getEntityManager() {
         return em;
     }

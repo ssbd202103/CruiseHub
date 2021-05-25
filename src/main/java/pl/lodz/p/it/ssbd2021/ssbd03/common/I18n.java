@@ -25,8 +25,10 @@ public class I18n {
     public static final String EMAIL_SERVICE_INACCESSIBLE = "error.emailService.inaccessible";
     public static final String PASSWORD_RESET_TOKEN_CONTENT_ERROR = "error.password.reset.contentError";
     public static final String PASSWORD_RESET_USED_TOKEN_ERROR = "error.password.reset.tokenUsed";
+    public static final String PASSWORD_RESET_ACCOUNT_NOT_VERIFIED_ERROR = "error.password.reset.account.notVerifiedError";
     public static final String ACCOUNT_VERIFICATION_TOKEN_CONTENT_ERROR = "error.account.verification.contentError";
-    public static final String ACCOUNT_VERIFICATION_TOKEN_EXPIRED_ERROR = "error.account.verification.expireError";
+    public static final String TOKEN_EXPIRED_ERROR = "error.token.expired";
+    public static final String TOKEN_REFRESH_ERROR = "error.token.refresh";
     public static final String ACCOUNT_VERIFICATION_TOKEN_ALREADY_VERIFIED_ERROR = "error.account.verification.alreadyVerifiedError";
     public static final String TOKEN_DECODE_ERROR = "error.token.decode";
     public static final String TOKEN_INVALIDATE_ERROR = "error.token.invalidate";

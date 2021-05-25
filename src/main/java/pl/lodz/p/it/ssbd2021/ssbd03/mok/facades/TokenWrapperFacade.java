@@ -54,4 +54,9 @@ public class TokenWrapperFacade extends AbstractFacade<TokenWrapper> {
     public void edit(TokenWrapper entity) throws FacadeException {
         super.edit(entity);
     }
+
+    @Override
+    public void remove(TokenWrapper entity) throws FacadeException {
+        super.remove(entity);
+    }
 }

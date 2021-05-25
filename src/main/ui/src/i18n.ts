@@ -4,6 +4,7 @@ import {initReactI18next} from 'react-i18next'
 const resources = {
     pl: {
         translation: {
+            "invalid.form": "Niepoprawnie wypełniony formularz",
             "dismiss": "Odrzuć",
             "go back": "Wróć",
             "email": "E-mail",
@@ -87,8 +88,8 @@ const resources = {
             //panels.ModeratorPanel
             "search business workers": "Szukaj niezatwierdzonych pracowników",
             "company name": "Nazwa firmy",
-            "company phone number":" Numer telefonu firmy",
-            "Manage business workers":"Zarządzaj pracownikami frim",
+            "company phone number": " Numer telefonu firmy",
+            "Manage business workers": "Zarządzaj pracownikami frim",
             //verify
             "verifyAccount": "Zweryfikuj konto",
             //color
@@ -114,7 +115,7 @@ const resources = {
             "error.security.etag.creation": "Błąd podczas tworzenia nagłówka ETag",
             "error.account.accessLevels.doesNotExist": "Dany poziom dostępu nie istnieje!",
             "error.password.reset.tokenUsed": "Podany link aktywacyjny został już wykorzystany!",
-            "error.account.verification.contentError":"Błędna zawartość tokenu do zatwierdzenia konta",
+            "error.account.verification.contentError": "Błędna zawartość tokenu do zatwierdzenia konta",
             "error.account.verification.expireError": "Token wygasł",
             "error.account.verification.alreadyVerifiedError": "Dane konto zostało już zatwierdzone",
             "error.token.decode": "Błąd podczas odczyty tokenu",
@@ -123,14 +124,14 @@ const resources = {
             "error.database.emailReserved": "Podany email jest już użyty",
             "error.constraintViolation": "Podane dane są niepoprawne",
             "error.constraint.positive": "Podana liczba musi być dodatnia",
-            "error.constraint.positiveOrZero":"Podana wartość musi być więszka lub równa 0",
-            "error.constraint.notEmpty":"Podane pole nie może być puste",
-            "error.constraint.notNull":"Podana wartość nie może być zerem",
-            "error.forbidden":"Operacja zabroniona",
+            "error.constraint.positiveOrZero": "Podana wartość musi być więszka lub równa 0",
+            "error.constraint.notEmpty": "Podane pole nie może być puste",
+            "error.constraint.notNull": "Podana wartość nie może być zerem",
+            "error.forbidden": "Operacja zabroniona",
             "error.internal.server": "Błąd wewnętrzny serwera",
 
             //auth errors
-            "auth.incorrect.login":"Podany login jest niepoprawny",
+            "auth.incorrect.login": "Podany login jest niepoprawny",
             "auth.incorrect.password": "Podane hasło jest niepoprawne",
 
             ////regex errors
@@ -157,10 +158,12 @@ const resources = {
     },
     en: {
         translation: {
+            "invalid.form": "Invalid form",
             "dismiss": "Dismiss",
             "go back": "Go back",
             "email": "E-mail",
             "password": "Password",
+            "bad_password": "Bad Password",
             "confirm password": "Confirm password",
             "name": "Name",
             "surname": "Surname",
@@ -219,6 +222,7 @@ const resources = {
             "adminPanel": "Administrator panel",
             "search account": "Search account",
             "login": "Login",
+            "bad_login": "Bad Login",
             "first name": "First name",
             "last name": "Last name",
             "active": "Active",
@@ -240,8 +244,8 @@ const resources = {
             //panels.ModeratorPanel
             "search business workers": "Search business workers",
             "company name": "Company name",
-            "company phone number":"Company phone number",
-            "Manage business workers":"Manage business workers",
+            "company phone number": "Company phone number",
+            "Manage business workers": "Manage business workers",
             //verify
             "verifyAccount": "Verify account",
             //color
@@ -266,7 +270,7 @@ const resources = {
             "error.security.etag.creation": "Error during creating ETag",
             "error.account.accessLevels.doesNotExist": "Given access level does not exists",
             "error.password.reset.tokenUsed": "Given activation link has already been used",
-            "error.account.verification.contentError":"Invalid token to confirm account",
+            "error.account.verification.contentError": "Invalid token to confirm account",
             "error.account.verification.expireError": "Token has expired",
             "error.account.verification.alreadyVerifiedError": "Given account has already been confirmed",
             "error.token.decode": "Error during decoding token",
@@ -275,14 +279,14 @@ const resources = {
             "error.database.emailReserved": "Given email is already in use",
             "error.constraintViolation": "Incorrect data",
             "error.constraint.positive": "Given number must be positive",
-            "error.constraint.positiveOrZero":"Given value must be greater or equal to zero",
-            "error.constraint.notEmpty":"Given field can not be empty",
-            "error.constraint.notNull":"Given value can not be null",
-            "error.forbidden":"Operation forbidden",
+            "error.constraint.positiveOrZero": "Given value must be greater or equal to zero",
+            "error.constraint.notEmpty": "Given field can not be empty",
+            "error.constraint.notNull": "Given value can not be null",
+            "error.forbidden": "Operation forbidden",
             "error.internal.server": "Internal server error",
 
             //auth errors
-            "auth.incorrect.login":"Given login is incorrect",
+            "auth.incorrect.login": "Given login is incorrect",
             "auth.incorrect.password": "Given password is incorrect",
 
             ////regex errors

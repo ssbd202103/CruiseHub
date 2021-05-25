@@ -62,7 +62,7 @@ export default function ChangeAccountData() {
             version: currentAccount.version
 
         })
-        fetch("http://localhost:8080/api/account/change-account-data", {
+        fetch("/api/account/change-account-data", {
             method: "PUT",
             mode: "same-origin",
             body: json,
@@ -75,7 +75,7 @@ export default function ChangeAccountData() {
             const message = error.response.data
             showError(t(message))
         });
-        const result = await axios.get(`http://localhost:8080/api/account/details/${currentAccount.login}`);
+        const result = await axios.get(`/api/account/details/${currentAccount.login}`);
         sessionStorage.setItem("changeAccountData", JSON.stringify(result.data));
         forceUpdate()
         handleChangePerData()
@@ -98,7 +98,7 @@ export default function ChangeAccountData() {
             accVersion: clientAddr.accVersion
         })
 
-        fetch("http://localhost:8080/api/account/change-client-data", {
+        fetch("/api/account/change-client-data", {
             method: "PUT",
             mode: "same-origin",
             body: json,
@@ -112,7 +112,7 @@ export default function ChangeAccountData() {
             showError(t(message))
         });
 
-        const result = axios.get(`http://localhost:8080/api/account/details/${currentAccount.login}`).then(res => {
+        const result = axios.get(`/api/account/details/${currentAccount.login}`).then(res => {
             sessionStorage.setItem("changeAccountData", JSON.stringify(res.data));
             forceUpdate()
             handleChangAddress()
@@ -129,7 +129,7 @@ export default function ChangeAccountData() {
             accVersion: businnesPhone.accVersion
 
         })
-        fetch("http://localhost:8080/api/account/change-business-worker-data", {
+        fetch("/api/account/change-business-worker-data", {
             method: "PUT",
             mode: "same-origin",
             body: json,
@@ -143,7 +143,7 @@ export default function ChangeAccountData() {
             showError(t(message))
         });
 
-        axios.get(`http://localhost:8080/api/account/details/${currentAccount.login}`).then(res => {
+        axios.get(`/api/account/details/${currentAccount.login}`).then(res => {
             sessionStorage.setItem("changeAccountData", JSON.stringify(res.data));
             forceUpdate()
             handleChangePhone()

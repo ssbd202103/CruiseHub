@@ -1,4 +1,4 @@
-import {InputAdornment, TextField} from '@material-ui/core'
+import {Box, InputAdornment, TextField} from '@material-ui/core'
 import {makeStyles} from '@material-ui/styles'
 import * as React from 'react'
 import {useSelector} from "react-redux";
@@ -48,17 +48,6 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const inputStyle = {
-    fontFamily: "'Montserrat Alternates', sans-serif",
-    fontSize: '1.2rem',
-}
-
-const labelStyle = {
-    style: {
-        fontFamily: "'Montserrat', sans-serif",
-        fontSize: '1.1rem',
-    }
-}
 
 export interface DarkedTextFieldProps {
     readonly type?: "text" | "email" | "password",
@@ -69,11 +58,28 @@ export interface DarkedTextFieldProps {
     readonly style?: React.CSSProperties,
     readonly value?: any,
     readonly colorIgnored?: boolean,
+    readonly regexError?: boolean
+
     onChange?(event: React.ChangeEvent<HTMLInputElement>): void
 }
 
 const DarkedTextField = (props: DarkedTextFieldProps) => {
+        const inputStyle = {
+            fontFamily: "'Montserrat Alternates', sans-serif",
+            fontSize: '1.2rem',
+            color: ''
+        }
 
+        const labelStyle = {
+            style: {
+                fontFamily: "'Montserrat', sans-serif",
+                fontSize: '1.1rem',
+                color: ''
+            }
+        }
+        const regexErrorTextStyle = {
+            color: 'red'
+        }
         const classes = useStyles()
 
         const {
@@ -85,30 +91,40 @@ const DarkedTextField = (props: DarkedTextFieldProps) => {
             style,
             value,
             onChange,
-            colorIgnored
+            colorIgnored,
+            regexError
         } = props
 
         const darkMode = useSelector(selectDarkMode)
+        inputStyle.color = regexError ? 'red' : ''
+        labelStyle.style.color = regexError ? 'red' : ''
 
-        return (<TextField
-            type={type || "text"}
-            className={classes[(!colorIgnored && darkMode) ? 'dark' : 'light'] + ' ' + (styles || "")}
-            variant="outlined"
-            label={label || ""}
-            InputProps={{
-                startAdornment: (
-                    <InputAdornment position="start">
-                        {icon || ""}
-                    </InputAdornment>
-                ),
-                style: inputStyle,
-            }}
-            InputLabelProps={labelStyle}
-            placeholder={placeholder || ""}
-            style={style || undefined}
-            value={value}
-            onChange={onChange}
-        />)
-    };
+        return (
+            <>
+                <TextField
+                    type={type || "text"}
+                    className={classes[(!colorIgnored && darkMode) ? 'dark' : 'light'] + ' ' + (styles || "")}
+                    variant="outlined"
+                    label={label || ""}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                {icon || ""}
+                            </InputAdornment>
+                        ),
+                        style: inputStyle,
+                        error: regexError
+                    }}
+                    InputLabelProps={labelStyle}
+                    placeholder={placeholder || ""}
+                    style={style || undefined}
+                    value={value}
+                    onChange={onChange}
+                />
+            </>
+
+        )
+    }
+;
 
 export default DarkedTextField;

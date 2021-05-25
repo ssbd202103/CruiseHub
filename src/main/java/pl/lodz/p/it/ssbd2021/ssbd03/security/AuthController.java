@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.security;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.ControllerException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AuthenticateDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
@@ -16,10 +17,7 @@ import javax.security.enterprise.identitystore.IdentityStoreHandler;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -89,6 +87,17 @@ public class AuthController {
                 .header("Access-Control-Allow-Credentials", "true")
                 .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
                 .build();
+    }
+
+    @POST
+    @Path("/refresh-token/")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String refreshJWTToken(@HeaderParam("Authorization") String tokenString) throws BaseAppException {
+        if(!tokenString.contains("Bearer ")) {
+            throw new ControllerException("Invalid authorization header");
+        }
+        String token = tokenString.substring("Bearer ".length());
+        return tryAndRepeat(() -> authEndpoint.refreshToken(token));
     }
 
 

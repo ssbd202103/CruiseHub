@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.endpoints.BaseEndpoint;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseDto;
@@ -17,6 +18,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -25,7 +27,7 @@ import java.util.UUID;
 @Stateful
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 @Interceptors(TrackingInterceptor.class)
-public class CruiseEndpoint implements CruiseEndpointLocal {
+public class CruiseEndpoint extends BaseEndpoint implements CruiseEndpointLocal {
 
     @Inject
     private CruiseManagerLocal cruiseManagerLocal;
@@ -57,5 +59,10 @@ public class CruiseEndpoint implements CruiseEndpointLocal {
     public void editCruise(EditCruiseDto editCruiseDto) throws BaseAppException {
         cruiseManagerLocal.editCruise(editCruiseDto.getDescription(), editCruiseDto.getStartDate(), editCruiseDto.getEndDate(),
                 editCruiseDto.getUuid(), editCruiseDto.getVersion());
+    }
+
+    @Override
+    public List<Cruise> getPublishedCruises() throws BaseAppException {
+        return cruiseManagerLocal.getPublishedCruises();
     }
 }

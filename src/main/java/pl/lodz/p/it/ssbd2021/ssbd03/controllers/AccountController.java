@@ -51,7 +51,7 @@ public class AccountController {
     @GET
     @Path("/{login}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAccountByLogin(@PathParam("login") @Login String login) throws BaseAppException {
+    public Response getAccountByLogin(@PathParam("login") @Login @Valid String login) throws BaseAppException {
         AccountDto account = tryAndRepeat(() -> accountEndpoint.getAccountByLogin(login));
         String ETag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
         return Response.ok().entity(account).header("ETag", ETag).build();
@@ -66,14 +66,14 @@ public class AccountController {
     @GET
     @Path("/details/{login}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getAccountDetailsByLogin(@PathParam("login") String login) throws BaseAppException, JsonProcessingException {
+    public String getAccountDetailsByLogin(@PathParam("login") @Valid @Login String login) throws BaseAppException, JsonProcessingException {
         return mapper.writeValueAsString(tryAndRepeat(() -> accountEndpoint.getAccountDetailsByLogin(login)));
     }
 
     @GET
     @Path("/client/{login}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getClientByLogin(@PathParam("login") @Login String login) throws BaseAppException {
+    public Response getClientByLogin(@PathParam("login") @Valid @Login String login) throws BaseAppException {
         ClientDto client = tryAndRepeat(() -> accountEndpoint.getClientByLogin(login));
         String ETag = EntityIdentitySignerVerifier.calculateEntitySignature(client);
         return Response.ok().entity(client).header("ETag", ETag).build();
@@ -82,7 +82,7 @@ public class AccountController {
     @GET
     @Path("/business-worker/{login}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getBusinessWorkerByLogin(@PathParam("login") @Login String login) throws BaseAppException {
+    public Response getBusinessWorkerByLogin(@PathParam("login") @Valid @Login String login) throws BaseAppException {
         BusinessWorkerDto businessWorker = tryAndRepeat(() -> accountEndpoint.getBusinessWorkerByLogin(login));
         String ETag = EntityIdentitySignerVerifier.calculateEntitySignature(businessWorker);
         return Response.ok().entity(businessWorker).header("ETag", ETag).build();
@@ -91,7 +91,7 @@ public class AccountController {
     @GET
     @Path("/moderator/{login}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getModeratorByLogin(@PathParam("login") @Login String login) throws BaseAppException {
+    public Response getModeratorByLogin(@PathParam("login") @Valid @Login String login) throws BaseAppException {
         ModeratorDto moderator = tryAndRepeat(() -> accountEndpoint.getModeratorByLogin(login));
         String ETag = EntityIdentitySignerVerifier.calculateEntitySignature(moderator);
         return Response.ok().entity(moderator).header("ETag", ETag).build();
@@ -100,7 +100,7 @@ public class AccountController {
     @GET
     @Path("/administrator/{login}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAdministratorByLogin(@PathParam("login") @Login String login) throws BaseAppException {
+    public Response getAdministratorByLogin(@PathParam("login") @Valid @Login String login) throws BaseAppException {
         AdministratorDto administrator = tryAndRepeat(() -> accountEndpoint.getAdministratorByLogin(login));
         String ETag = EntityIdentitySignerVerifier.calculateEntitySignature(administrator);
         return Response.ok().entity(administrator).header("ETag", ETag).build();
@@ -141,7 +141,7 @@ public class AccountController {
     @PUT
     @Path("/block")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void blockUser(BlockAccountDto blockAccountDto, @HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) String etag) throws BaseAppException {
+    public void blockUser(@Valid BlockAccountDto blockAccountDto, @HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) @Valid String etag) throws BaseAppException {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, blockAccountDto)) {
             throw ControllerException.etagIdentityIntegrity();
         }
@@ -157,7 +157,7 @@ public class AccountController {
     @PUT
     @Path("/unblock")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void unblockUser(UnblockAccountDto unblockAccountDto, @HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) String etag) throws BaseAppException {
+    public void unblockUser(@Valid UnblockAccountDto unblockAccountDto, @HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) String etag) throws BaseAppException {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, unblockAccountDto)) {
             throw ControllerException.etagIdentityIntegrity();
         }
@@ -175,7 +175,7 @@ public class AccountController {
     @Path("/grant-access-level")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public AccountDto grantAccessLevel(GrantAccessLevelDto grantAccessLevel, @HeaderParam("If-Match") String etag) throws BaseAppException {
+    public AccountDto grantAccessLevel(@Valid GrantAccessLevelDto grantAccessLevel, @HeaderParam("If-Match") String etag) throws BaseAppException {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, grantAccessLevel)) {
             throw ControllerException.etagIdentityIntegrity();
         }
@@ -194,7 +194,7 @@ public class AccountController {
     @Path("/change-access-level-state")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public AccountDto changeAccessLevelState(ChangeAccessLevelStateDto changeAccessLevelStateDto, @HeaderParam("If-Match") String etag) throws BaseAppException {
+    public AccountDto changeAccessLevelState(@Valid ChangeAccessLevelStateDto changeAccessLevelStateDto, @HeaderParam("If-Match") String etag) throws BaseAppException {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, changeAccessLevelStateDto)) {
             throw ControllerException.etagIdentityIntegrity();
         }
@@ -222,7 +222,7 @@ public class AccountController {
      */
     @POST
     @Path("/request-password-reset/{login}")
-    public void requestPasswordReset(@PathParam("login") @Login String login) throws BaseAppException {
+    public void requestPasswordReset(@PathParam("login") @Valid @Login String login) throws BaseAppException {
         tryAndRepeat(() -> this.accountEndpoint.requestPasswordReset(login));
     }
 
@@ -235,8 +235,8 @@ public class AccountController {
      */
     @POST
     @Path("/request-someones-password-reset/{login}/{email}")
-    public void requestSomeonesPasswordReset(@PathParam("login") @Login String login, @PathParam("email") @Email(message = REGEX_INVALID_EMAIL)
-    @NotEmpty(message = CONSTRAINT_NOT_EMPTY) String email) throws BaseAppException {
+    public void requestSomeonesPasswordReset(@PathParam("login") @Valid @Login String login, @PathParam("email")
+    @Valid @Email(message = REGEX_INVALID_EMAIL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) String email) throws BaseAppException {
         tryAndRepeat(() -> this.accountEndpoint.requestSomeonesPasswordReset(login, email));
     }
 
@@ -265,7 +265,8 @@ public class AccountController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @ETagFilterBinding
-    public OtherClientChangeDataDto changeOtherClientData(OtherClientChangeDataDto otherClientChangeDataDto, @HeaderParam("If-Match") String etag) throws BaseAppException {
+    public OtherClientChangeDataDto changeOtherClientData(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid OtherClientChangeDataDto otherClientChangeDataDto,
+                                                          @HeaderParam("If-Match") String etag) throws BaseAppException {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, otherClientChangeDataDto)) {
             throw ControllerException.etagIdentityIntegrity();
         }
@@ -285,7 +286,8 @@ public class AccountController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @ETagFilterBinding
-    public OtherBusinessWorkerChangeDataDto changeOtherBusinessWorkerData(OtherBusinessWorkerChangeDataDto otherBusinessWorkerChangeDataDto, @HeaderParam("If-Match") String etag) throws BaseAppException {
+    public OtherBusinessWorkerChangeDataDto changeOtherBusinessWorkerData(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid OtherBusinessWorkerChangeDataDto otherBusinessWorkerChangeDataDto,
+                                                                          @HeaderParam("If-Match") String etag) throws BaseAppException {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, otherBusinessWorkerChangeDataDto)) {
             throw ControllerException.etagIdentityIntegrity();
         }
@@ -305,7 +307,8 @@ public class AccountController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @ETagFilterBinding
-    public AccountDto changeOtherAccountData(OtherAccountChangeDataDto otherAccountChangeDataDto, @HeaderParam("If-Match") String etag) throws BaseAppException {
+    public AccountDto changeOtherAccountData(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid OtherAccountChangeDataDto otherAccountChangeDataDto,
+                                             @HeaderParam("If-Match") String etag) throws BaseAppException {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, otherAccountChangeDataDto)) {
             throw ControllerException.etagIdentityIntegrity();
         }
@@ -322,7 +325,8 @@ public class AccountController {
     @Path("/change-email")
     @ETagFilterBinding
     @Consumes(MediaType.APPLICATION_JSON)
-    public void changeEmail(AccountChangeEmailDto accountChangeEmailDto, @HeaderParam("If-Match") String etag) throws BaseAppException {
+    public void changeEmail(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid AccountChangeEmailDto accountChangeEmailDto,
+                            @HeaderParam("If-Match") String etag) throws BaseAppException {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, accountChangeEmailDto)) {
             throw ControllerException.etagIdentityIntegrity();
         }
@@ -330,5 +334,20 @@ public class AccountController {
         tryAndRepeat(() -> accountEndpoint.changeEmail(accountChangeEmailDto));
     }
 
-
+    /**
+     * Potwierdz danego pracownika firmy
+     * @param blockAccountDto dto zawierające wersje oraz login danego pracownika
+     * @param etag Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
+     * @throws BaseAppException bazowy wyjątek apklikacji
+     */
+    @PUT
+    @Path("/confirm-business-worker")
+    @ETagFilterBinding
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void confirmBusinessWorker(BlockAccountDto blockAccountDto,@HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) String etag) throws BaseAppException {
+        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, blockAccountDto)) {
+            throw ControllerException.etagIdentityIntegrity();
+        }
+        tryAndRepeat(() -> accountEndpoint.confirmBusinessWorker(blockAccountDto));
+    }
 }

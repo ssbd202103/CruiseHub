@@ -50,7 +50,7 @@ class AccountMapperTest {
 
         Account account3 = new Account("John", "Wayne", "batman001", "john.wayne@waynecorp.com",
                 "1532e76dbe9d43d0dea98c331ca5ae8a65c5e8e8b99d3e2a42ae989356f6242a", true, true,
-                new LanguageTypeWrapper(LanguageType.ENG));
+                new LanguageTypeWrapper(LanguageType.EN));
         account3.setAccessLevel(new Administrator(true));
         account3.setAccessLevel(new Client(new Address(174L, "Wallstreet", "123-1382", "New York", "USA"), "473-173-183", true));
 
