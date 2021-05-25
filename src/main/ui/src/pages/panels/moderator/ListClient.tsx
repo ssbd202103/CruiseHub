@@ -13,6 +13,8 @@ import {selectDarkMode} from "../../../redux/slices/userSlice";
 import {getAllAccounts} from "../../../Services/accountsService";
 import DarkedTextField from "../../../components/DarkedTextField";
 import {useSnackbarQueue} from "../../snackbar";
+import {TextField} from "@material-ui/core";
+import Autocomplete from "@material-ui/lab/Autocomplete";
 
 const useRowStyles = makeStyles({
     root: {
@@ -85,26 +87,34 @@ export default function ModListClient() {
 
     function search(rows: any[]) {
         if (Array.isArray(rows) && rows.length) {
-            return rows.filter(
-                row => row.props.row.firstName.toLowerCase().indexOf(searchInput.toLowerCase()) > -1 ||
-                    row.props.row.secondName.toLowerCase().indexOf(searchInput.toLowerCase()) > -1
+            const filteredAccount = rows.filter(
+                row => row.props.row.firstName.concat(" ", row.props.row.secondName).toLowerCase().
+                indexOf(searchInput.toLowerCase())> -1
             );
+
+            filteredAccount.forEach(account => (accounts.includes(account.props.row.firstName + " " + account.props.row.secondName) ?
+                "" : accounts.push(account.props.row.firstName + " " + account.props.row.secondName)));
+            return filteredAccount
         } else {
             return rows;
         }
     }
 
     const {t} = useTranslation()
+
+    const accounts: String[] = [];
     return (
         <div>
-            <div>
-                <DarkedTextField
-                    label={t('search account')}
-                    type="text"
-                    value={searchInput}
-                    onChange={(e) => setSearchInput(e.target.value)}
-                    style={{marginBottom: '20px'}} />
-            </div>
+            <Autocomplete
+                options={accounts}
+                inputValue={searchInput}
+                style={{ width: 300 }}
+                noOptionsText={t('no options')}
+                onChange={(event, value) => {setSearchInput(value as string ?? '')}}
+                renderInput={(params) => (
+                    <TextField {...params} label={t('search account')}  variant="outlined" onChange={(e) => setSearchInput(e.target.value)}/>
+                )}
+            />
             <TableContainer component={Paper}>
                 <Table aria-label="Clients">
                     <TableHead>
