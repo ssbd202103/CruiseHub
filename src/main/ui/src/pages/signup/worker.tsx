@@ -84,7 +84,7 @@ export default function WorkerSignUp() {
             const {data} = await axios.get('/api/company/companies-info', {});
             setCompaniesList(data.map((comp: { name: string }) => comp.name))
         }
-        // getCompaniesList()
+        getCompaniesList()
     }, [company]);
     console.log(companiesList)
 
