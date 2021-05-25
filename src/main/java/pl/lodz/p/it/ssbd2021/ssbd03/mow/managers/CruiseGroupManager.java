@@ -9,6 +9,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseGroupFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
@@ -33,17 +34,18 @@ public class CruiseGroupManager implements CruiseGroupManagerLocal {
     @Inject
     I18n i18n;
 
+    @RolesAllowed("addCruiseGroup")
     @Override
     public void addCruiseGroup(String companyName, String name, long number_of_seats, Double price, CruiseAddress start_address, List<CruisePicture> pictures) {
         //todo
     }
-
+    @RolesAllowed("changeCruiseGroup")
     @Override
     public CruiseGroup changeCruiseGroup(String name, long number_of_seats, Double price, CruiseAddress start_address, long version) {
         return null; //todo
     }
 
-
+    @RolesAllowed("getAllCruiseGroups")
     @Override
     public List<CruiseGroup> getAllCruiseGroups() throws FacadeException {
         return cruiseGroupFacadeMow.findAll();

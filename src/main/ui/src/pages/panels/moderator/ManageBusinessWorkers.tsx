@@ -80,7 +80,6 @@ function Row(props: RowProps) {
 
 function getWorkers(){
     const {token} = store.getState()
-
     return axios.get('account/unconfirmed-business-workers', {
         headers: {
             'Authorization': `Bearer ${token}`
@@ -109,7 +108,6 @@ export default function ModListClient() {
     const [, forceUpdate] = useReducer(x => x + 1, 0);
     const [users, setUsers] = useState([]);
     const [searchInput, setSearchInput] = useState("");
-
     const darkMode = useSelector(selectDarkMode)
 
     useEffect(() => {
@@ -127,6 +125,14 @@ export default function ModListClient() {
         } else {
             return rows;
         }
+    }
+    const handleChange = () =>{
+        forceUpdate()
+
+            getWorkers().then(res => {
+                setUsers(res.data)
+            })
+
     }
 
     const {t} = useTranslation()
@@ -161,6 +167,7 @@ export default function ModListClient() {
                     </TableBody>
                 </Table>
             </TableContainer>
+            <RoundedButton color={"blue"} onClick={handleChange}>{t("Refresh")}</RoundedButton>
         </div>
     );
 }

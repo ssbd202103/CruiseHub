@@ -38,6 +38,7 @@ public class ReservationManager implements ReservationManagerLocal {
     private CruiseFacadeMow cruiseFacadeMow;
 
     @Override
+    @RolesAllowed("viewCruiseReservations")
     public List<Reservation> getCruiseReservations(UUID cruise_uuid) throws BaseAppException {
         long id = cruiseFacadeMow.findByUUID(cruise_uuid).getId();
         List<Reservation> res = reservationFacadeMow.findCruiseReservations(id);

@@ -14,6 +14,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.converters.CruiseGroupMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.managers.CruiseGroupManagerLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
@@ -31,6 +32,7 @@ public class CruiseGroupEndpoint extends BaseEndpoint implements CruiseGroupEndp
     private CruiseGroupManagerLocal cruiseGroupManager;
 
     @Override
+    @RolesAllowed("addCruiseGroup")
     public void addCruiseGroup(AddCruiseGroupDto addCruiseGroupDto) throws BaseAppException {
         CruiseAddress cruiseAddress = CruiseGroupMapper.extractAddressForAddingCruiseGroup(addCruiseGroupDto);
         List<CruisePicture> cruisePicture = CruiseGroupMapper.extractCruiseGroupPicturesFromAddingCruiseGroup(addCruiseGroupDto);
@@ -39,6 +41,7 @@ public class CruiseGroupEndpoint extends BaseEndpoint implements CruiseGroupEndp
     }
 
     @Override
+    @RolesAllowed("changeCruiseGroup")
     public changeCruiseGroupDto changeCruiseGroup(changeCruiseGroupDto changeCruiseGroupDto) throws BaseAppException {
         CruiseAddress start_address = new CruiseAddress(changeCruiseGroupDto.getCruiseAddress().getStreet(), changeCruiseGroupDto.getCruiseAddress().getStreetNumber(),
                 changeCruiseGroupDto.getCruiseAddress().getHarborName(), changeCruiseGroupDto.getCruiseAddress().getCityName(),
@@ -49,6 +52,7 @@ public class CruiseGroupEndpoint extends BaseEndpoint implements CruiseGroupEndp
 
 
     @Override
+    @RolesAllowed("getAllCruiseGroups")
     public List<CruiseGroupDto> getCruiseGroupsInfo() throws FacadeException {
         List<CruiseGroupDto> res = new ArrayList<>();
         for (CruiseGroup cruiseGroup : cruiseGroupManager.getAllCruiseGroups()) {

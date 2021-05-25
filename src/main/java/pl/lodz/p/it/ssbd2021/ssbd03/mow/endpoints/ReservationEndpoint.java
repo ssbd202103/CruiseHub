@@ -34,6 +34,7 @@ public class ReservationEndpoint extends BaseEndpoint implements ReservationEndp
 
 
     @Override
+    @RolesAllowed("viewCruiseReservations")
     public List<CruiseReservationDto> viewCruiseReservations(UUID cruise_uuid) throws BaseAppException {
         List<CruiseReservationDto> res = new ArrayList<>();
         for (Reservation reservation : reservationManager.getCruiseReservations(cruise_uuid)) {
