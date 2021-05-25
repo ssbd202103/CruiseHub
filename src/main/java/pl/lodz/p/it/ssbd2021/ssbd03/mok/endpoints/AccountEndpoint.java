@@ -1,7 +1,9 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints;
 
+import lombok.extern.java.Log;
 import org.apache.commons.codec.digest.DigestUtils;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.endpoints.BaseEndpoint;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.TokenWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
@@ -45,7 +47,8 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 @Stateful
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 @Interceptors(TrackingInterceptor.class)
-public class AccountEndpoint implements AccountEndpointLocal {
+@Log
+public class AccountEndpoint extends BaseEndpoint implements AccountEndpointLocal {
 
     @Inject
     private AccountManagerLocal accountManager;
@@ -99,10 +102,16 @@ public class AccountEndpoint implements AccountEndpointLocal {
         );
     }
 
-    @RolesAllowed({"getAccountDetailsByLogin", "selfGetAccountDetails"})
+    @RolesAllowed("getAccountDetailsByLogin")
     @Override
     public AccountDetailsViewDto getAccountDetailsByLogin(String login) throws BaseAppException {
         return AccountMapper.toAccountDetailsViewDto(accountManager.getAccountByLogin(login));
+    }
+
+    @RolesAllowed("selfGetAccountDetails")
+    @Override
+    public AccountDetailsViewDto getSelfDetails() throws BaseAppException {
+        return AccountMapper.toAccountDetailsViewDto(accountManager.getCurrentUser());
     }
 
     @RolesAllowed("getAllAccounts")
@@ -120,11 +129,12 @@ public class AccountEndpoint implements AccountEndpointLocal {
     public List<BusinessWorkerWithCompanyDto> getAllUnconfirmedBusinessWorkers() throws BaseAppException {
         List<BusinessWorkerWithCompanyDto> res = new ArrayList<>();
         List<Account> accounts = accountManager.getAllUnconfirmedBusinessWorkers();
-        for(Account account: accounts){
+        for (Account account : accounts) {
             res.add(AccountMapper.toBusinessWorkerWithCompanyDto(account));
         }
         return res;
     }
+
     @RolesAllowed("blockUser")
     @Override
     public void blockUser(@NotNull(message = CONSTRAINT_NOT_NULL) String login, @NotNull(message = CONSTRAINT_NOT_NULL) long version) throws BaseAppException {
@@ -265,12 +275,6 @@ public class AccountEndpoint implements AccountEndpointLocal {
     }
 
     @RolesAllowed("authenticatedUser")
-    @Override
-    public String getCurrentUserLogin() throws BaseAppException {
-        return accountManager.getCurrentUser().getLogin();
-    }
-
-    @RolesAllowed("authenticatedUser")
     public void changeOwnPassword(AccountChangeOwnPasswordDto accountChangeOwnPasswordDto) throws BaseAppException {
         this.accountManager.changeOwnPassword(accountChangeOwnPasswordDto.getLogin(), accountChangeOwnPasswordDto.getVersion(),
                 accountChangeOwnPasswordDto.getOldPassword(), accountChangeOwnPasswordDto.getNewPassword());
@@ -286,9 +290,10 @@ public class AccountEndpoint implements AccountEndpointLocal {
 
         this.accountManager.changeMode(changeModeDto.getLogin(), changeModeDto.isNewMode());
     }
+
     @RolesAllowed("ConfirmBusinessWorker")
     @Override
-    public void confirmBusinessWorker( BlockAccountDto blockAccountDto) throws BaseAppException {
+    public void confirmBusinessWorker(BlockAccountDto blockAccountDto) throws BaseAppException {
 
         this.accountManager.confirmBusinessWorker(blockAccountDto.getLogin(), blockAccountDto.getVersion());
     }

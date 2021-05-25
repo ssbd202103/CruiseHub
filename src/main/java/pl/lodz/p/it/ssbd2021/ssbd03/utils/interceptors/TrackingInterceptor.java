@@ -23,7 +23,7 @@ public class TrackingInterceptor {
         try {
             Object result = context.proceed();
             resultString = result == null ? "without return value" : "with returned value \"" + result + "\"";
-            log.info(getLogString(context.getMethod().getName(), paramList, resultString));
+            log.info(getLogString(context.getMethod().toString(), paramList, resultString));
             return result;
         } catch (Exception e) {
             resultString = String.format("with exception thrown: \"%s\", \ncause: \"%s\", \nmessage: \"%s\"", e, e.getCause(), e.getMessage());

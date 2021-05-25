@@ -1,6 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
 
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.endpoints.BaseEndpoint;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseAddress;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruisePicture;
@@ -24,7 +25,7 @@ import java.util.List;
  */
 @Stateful
 @Interceptors(TrackingInterceptor.class)
-public class CruiseGroupEndpoint implements CruiseGroupEndpointLocal {
+public class CruiseGroupEndpoint extends BaseEndpoint implements CruiseGroupEndpointLocal {
 
     @Inject
     private CruiseGroupManagerLocal cruiseGroupManager;
