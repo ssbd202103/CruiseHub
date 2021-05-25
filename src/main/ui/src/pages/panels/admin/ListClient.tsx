@@ -37,7 +37,7 @@ const unblockAccount = ({login, etag, version, token}: UnblockAccountParams) => 
             version: version,
         }
     );
-    return axios.put('http://localhost:8080/api/account/unblock', json, {
+    return axios.put('/api/account/unblock', json, {
         headers:{
             'Content-Type': 'application/json',
             'If-Match': etag,
@@ -58,7 +58,7 @@ const blockAccount = ({login, etag, version, token}: UnblockAccountParams) => {
             version: version,
         }
     );
-    return axios.put('http://localhost:8080/api/account/block', json, {
+    return axios.put('/api/account/block', json, {
         headers:{
             'Content-Type': 'application/json',
             'If-Match': etag,

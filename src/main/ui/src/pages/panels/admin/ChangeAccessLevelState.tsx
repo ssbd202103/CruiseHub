@@ -23,7 +23,7 @@ export default function ChangeAccessLevelState() {
             enabled: enabled
         }
 
-        fetch("http://localhost:8080/api/account/change-access-level-state", {
+        fetch("/api/account/change-access-level-state", {
             method: "PUT",
             mode: "same-origin",
             body: JSON.stringify(json),
@@ -37,7 +37,7 @@ export default function ChangeAccessLevelState() {
             showError(t(message))
         });
 
-        axios.get(`http://localhost:8080/api/account/details/${currentAccount.login}`).then(res => {
+        axios.get(`/api/account/details/${currentAccount.login}`).then(res => {
             sessionStorage.setItem("changeAccessLevelStateAccount", JSON.stringify(res.data));
             forceUpdate()
         }).catch(error => {

@@ -82,7 +82,7 @@ export default function ClientSignUp() {
             }
         );
         setButtonPopup(false)
-        axios.post('http://localhost:8080/api/auth/client/registration', json, {
+        axios.post('/api/auth/client/registration', json, {
             headers: {
                 'Content-Type': 'application/json'
             }
