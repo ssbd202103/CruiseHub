@@ -26,13 +26,13 @@ class AuthControllerIT {
 
         // correct test
         AuthenticateDto authInfo = new AuthenticateDto(correctLogin, correctPassword);
-        Response response = given().baseUri(authBaseUri).contentType("application/json").body(authInfo).post("/sign-in");
+        Response response = given().relaxedHTTPSValidation().baseUri(authBaseUri).contentType("application/json").body(authInfo).post("/sign-in");
         assertFalse(response.getBody().asPrettyString().isEmpty());
         assertEquals(200, response.getStatusCode());
 
         // a test with an incorrect password
         AuthenticateDto authInfoFalse = new AuthenticateDto(correctLogin, "Incorre2*ctPassword");
-        Response responseFalse = given().baseUri(authBaseUri).contentType("application/json").body(authInfoFalse).post("/sign-in");
+        Response responseFalse = given().relaxedHTTPSValidation().baseUri(authBaseUri).contentType("application/json").body(authInfoFalse).post("/sign-in");
         assertEquals(401, responseFalse.getStatusCode());
     }
 }
