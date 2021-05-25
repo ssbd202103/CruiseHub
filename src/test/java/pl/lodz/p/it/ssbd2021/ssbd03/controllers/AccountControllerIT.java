@@ -52,14 +52,14 @@ class AccountControllerIT {
     @Test
     public void requestPasswordReset_SUCCESS() throws JsonProcessingException {
         AccountDto accountDto = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
-        given().baseUri(accountBaseUri).contentType(MediaType.APPLICATION_JSON).post("/request-password-reset/" + accountDto.getLogin()).then().statusCode(204);
+        given().relaxedHTTPSValidation().baseUri(accountBaseUri).contentType(MediaType.APPLICATION_JSON).post("/request-password-reset/" + accountDto.getLogin()).then().statusCode(204);
     }
 
     @Test
     public void requestSomeonesPasswordReset_SUCCESS() throws JsonProcessingException {
         String adminToken = this.getAuthToken("rbranson", "abcABC123*");
         AccountDto accountDto = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
-        given().baseUri(accountBaseUri).contentType(MediaType.APPLICATION_JSON).header(new Header("Authorization", "Bearer " + adminToken)).post("/request-someones-password-reset/" + accountDto.getLogin() + "/" + accountDto.getEmail()).then().statusCode(204);
+        given().relaxedHTTPSValidation().baseUri(accountBaseUri).contentType(MediaType.APPLICATION_JSON).header(new Header("Authorization", "Bearer " + adminToken)).post("/request-someones-password-reset/" + accountDto.getLogin() + "/" + accountDto.getEmail()).then().statusCode(204);
     }
 
 
@@ -70,13 +70,13 @@ class AccountControllerIT {
         PasswordResetDto passwordResetDto = new PasswordResetDto(
                 "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhcmFkaXVrIiwiaXNzIjoiY3J1aXNlaHViIiwiZXhwIjoxNjE5ODU4NDA3LCJ2ZXJzaW9uIjo1LCJpYXQiOjE2MTk4NTcyMDcsImp0aSI6Ijk0M2EyMzM1LTFlZTctNGE4ZS1iNmFhLWU3Y2FiM2I3OWNmYSJ9.wI1xu7qZDCVrV-HYGCxgqbn9HVIr8mFW0JC0g_qZn3A",
                 "aradiuk", "password");
-        given().baseUri(accountBaseUri).contentType(MediaType.APPLICATION_JSON).body(passwordResetDto).post("/reset-password").then().statusCode(200);
+        given().relaxedHTTPSValidation().baseUri(accountBaseUri).contentType(MediaType.APPLICATION_JSON).body(passwordResetDto).post("/reset-password").then().statusCode(200);
     }
 
     @Test
     public void registerClientTest_SUCCESS() {
         ClientForRegistrationDto client = getSampleClientForRegistrationDto();
-        given().baseUri(authBaseUri).contentType(MediaType.APPLICATION_JSON).body(client).when().post("/client/registration").then().statusCode(204);
+        given().relaxedHTTPSValidation().baseUri(authBaseUri).contentType(MediaType.APPLICATION_JSON).body(client).when().post("/client/registration").then().statusCode(204);
         // todo implement remove method to clean created data
     }
 
@@ -84,7 +84,7 @@ class AccountControllerIT {
     public void registerBusinessWorkerTest_SUCCESS() {
         BusinessWorkerForRegistrationDto businessWorkerDto = new BusinessWorkerForRegistrationDto("Artur", "Radiuk", randomAlphanumeric(15), randomAlphanumeric(10) + "@gmail.com",
                 "abcABC123*", LanguageType.EN, "123456789", "FirmaJez");
-        given().baseUri(authBaseUri).contentType(MediaType.APPLICATION_JSON).body(businessWorkerDto).when().post("/business-worker/registration").then().statusCode(204);
+        given().relaxedHTTPSValidation().baseUri(authBaseUri).contentType(MediaType.APPLICATION_JSON).body(businessWorkerDto).when().post("/business-worker/registration").then().statusCode(204);
     }
 
     @Test
@@ -94,17 +94,17 @@ class AccountControllerIT {
         ClientForRegistrationDto client = getSampleClientForRegistrationDto();
         AccountDto account = registerClientAndGetAccountDto(client);
 
-        Response response = given().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken))
+        Response response = given().relaxedHTTPSValidation().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken))
                 .baseUri(accountBaseUri).get("/details/" + account.getLogin());
 
         AccountDetailsViewDto accountDetailsViewDto = objectMapper.readValue(response.asString(), AccountDetailsViewDto.class);
         assertTrue(accountDetailsViewDto.isActive());
 
         BlockAccountDto blockAccountDto = new BlockAccountDto(accountDetailsViewDto.getLogin(), accountDetailsViewDto.getVersion());
-        given().contentType(ContentType.JSON).header("If-Match", accountDetailsViewDto.getEtag()).header(new Header("Authorization", "Bearer " + adminToken))
+        given().relaxedHTTPSValidation().contentType(ContentType.JSON).header("If-Match", accountDetailsViewDto.getEtag()).header(new Header("Authorization", "Bearer " + adminToken))
                 .baseUri(accountBaseUri).body(blockAccountDto).put("/block").then().statusCode(204);
 
-        response = given().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken))
+        response = given().relaxedHTTPSValidation().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken))
                 .baseUri(accountBaseUri).get("/details/" + account.getLogin());
 
         accountDetailsViewDto = objectMapper.readValue(response.asString(), AccountDetailsViewDto.class);
@@ -234,7 +234,7 @@ class AccountControllerIT {
         String etag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
 
         // requesting granting accessLevel with no ETAG
-        Response response = given().baseUri(accountBaseUri).contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken)).body(grantAccessLevel).put("/grant-access-level");
+        Response response = given().relaxedHTTPSValidation().baseUri(accountBaseUri).contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken)).body(grantAccessLevel).put("/grant-access-level");
         assertThat(response.getStatusCode()).isEqualTo(400);
         assertThat(response.asString()).isEqualTo(ETAG_EMPTY_ERROR);
 
@@ -265,7 +265,7 @@ class AccountControllerIT {
     public void getAllAccountsTest_SUCCESS() throws JsonProcessingException {
         String adminToken = this.getAuthToken("rbranson", "abcABC123*");
 
-        Response response = RestAssured.given().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken)).baseUri(accountBaseUri).get("/accounts");
+        Response response = RestAssured.given().relaxedHTTPSValidation().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken)).baseUri(accountBaseUri).get("/accounts");
         String accountString = response.getBody().asString();
         List<AccountDtoForList> accountDtoList = Arrays.asList(objectMapper.readValue(accountString, AccountDtoForList[].class));
 
@@ -276,7 +276,7 @@ class AccountControllerIT {
 
         AccountDto account = registerClientAndGetAccountDto(client);
 
-        response = RestAssured.given().contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken)).baseUri(accountBaseUri).get("/accounts");
+        response = RestAssured.given().relaxedHTTPSValidation().contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken)).baseUri(accountBaseUri).get("/accounts");
 
         accountString = response.getBody().asString();
         accountDtoList = Arrays.asList(objectMapper.readValue(accountString, AccountDtoForList[].class));
@@ -293,7 +293,7 @@ class AccountControllerIT {
     public void getAllUnconfirmedBusinessWorkers_SUCESS() throws JsonProcessingException {
         String adminToken = this.getAuthToken("mzuckerberg", "abcABC123*");
 
-        Response response = RestAssured.given().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken)).baseUri(accountBaseUri).get("/unconfirmed-business-workers");
+        Response response = RestAssured.given().relaxedHTTPSValidation().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken)).baseUri(accountBaseUri).get("/unconfirmed-business-workers");
         String accountString = response.getBody().asString();
         List<BusinessWorkerWithCompanyDto> workerks = Arrays.asList(objectMapper.readValue(accountString, BusinessWorkerWithCompanyDto[].class));
         assertTrue(workerks.size()>0);
@@ -303,11 +303,11 @@ class AccountControllerIT {
     public void ConfirmBusinessWorker() throws JsonProcessingException {
         String adminToken = this.getAuthToken("mzuckerberg", "abcABC123*");
 
-        Response response = RestAssured.given().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken)).baseUri(accountBaseUri).get("/unconfirmed-business-workers");
+        Response response = RestAssured.given().relaxedHTTPSValidation().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken)).baseUri(accountBaseUri).get("/unconfirmed-business-workers");
         String accountString = response.getBody().asString();
         List<BusinessWorkerWithCompanyDto> workerks = Arrays.asList(objectMapper.readValue(accountString, BusinessWorkerWithCompanyDto[].class));
        BusinessWorkerWithCompanyDto worker= workerks.get(0);
-        given().baseUri(accountBaseUri).header("If-Match", worker.getEtag())
+        given().relaxedHTTPSValidation().baseUri(accountBaseUri).header("If-Match", worker.getEtag())
                 .contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken))
                 .body(worker)
                 .when()
@@ -322,19 +322,19 @@ class AccountControllerIT {
         AccountDto account = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
         BlockAccountDto blockAccountDto = new BlockAccountDto(account.getLogin(), account.getVersion());
         String etag = EntityIdentitySignerVerifier.calculateEntitySignature(blockAccountDto);
-        given().contentType(ContentType.JSON).header("If-Match", etag).header(new Header("Authorization", "Bearer " + adminToken))
+        given().relaxedHTTPSValidation().contentType(ContentType.JSON).header("If-Match", etag).header(new Header("Authorization", "Bearer " + adminToken))
                 .baseUri(accountBaseUri).body(blockAccountDto).put("/block");
 
-        Response response = given().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken))
+        Response response = given().relaxedHTTPSValidation().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken))
                 .baseUri(accountBaseUri).get("/details/" + account.getLogin());
         AccountDetailsViewDto accountDetailsViewDto = objectMapper.readValue(response.asString(), AccountDetailsViewDto.class);
         assertFalse(accountDetailsViewDto.isActive());
 
         UnblockAccountDto unblockAccountDto = new UnblockAccountDto(accountDetailsViewDto.getLogin(), accountDetailsViewDto.getVersion());
-        given().contentType(ContentType.JSON).header("If-Match", accountDetailsViewDto.getEtag()).header(new Header("Authorization", "Bearer " + adminToken))
+        given().relaxedHTTPSValidation().contentType(ContentType.JSON).header("If-Match", accountDetailsViewDto.getEtag()).header(new Header("Authorization", "Bearer " + adminToken))
                 .baseUri(accountBaseUri).body(unblockAccountDto).put("/unblock").then().statusCode(204);
 
-        response = given().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken))
+        response = given().relaxedHTTPSValidation().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken))
                 .baseUri(accountBaseUri).get("/details/" + account.getLogin());
 
         accountDetailsViewDto = objectMapper.readValue(response.asString(), AccountDetailsViewDto.class);
@@ -349,7 +349,7 @@ class AccountControllerIT {
     }
 
     private AccountDto registerClientAndGetAccountDto(ClientForRegistrationDto client) throws JsonProcessingException {
-        given().baseUri(authBaseUri).contentType("application/json").body(client).post("/client/registration");
+        given().relaxedHTTPSValidation().baseUri(authBaseUri).contentType("application/json").body(client).post("/client/registration");
         return getAccountDto(client.getLogin());
     }
 
@@ -357,7 +357,7 @@ class AccountControllerIT {
     public void changeEmailTest_SUCCESS() throws JsonProcessingException {
         String adminToken = this.getAuthToken("rbranson", "abcABC123*");
         AccountDto account = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
-        Response res = given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + adminToken)).get("/" + account.getLogin());
+        Response res = given().relaxedHTTPSValidation().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + adminToken)).get("/" + account.getLogin());
         String etag = res.getHeader("Etag");
 
         AccountChangeEmailDto accountChangeEmailDto = new AccountChangeEmailDto(
@@ -365,14 +365,14 @@ class AccountControllerIT {
                 account.getVersion(),
                 randomAlphanumeric(10) + "@gmail.com");
 
-        given().baseUri(accountBaseUri).header("If-Match", etag)
+        given().relaxedHTTPSValidation().baseUri(accountBaseUri).header("If-Match", etag)
                 .contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken))
                 .body(accountChangeEmailDto)
                 .when()
                 .put("/change-email").then().statusCode(204);
 
 
-        Response changedRes = given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + adminToken)).get("/" + account.getLogin());
+        Response changedRes = given().relaxedHTTPSValidation().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + adminToken)).get("/" + account.getLogin());
         AccountDto changedAccount = objectMapper.readValue(changedRes.thenReturn().asString(), AccountDto.class);
 
         Assertions.assertEquals(accountChangeEmailDto.getNewEmail(), changedAccount.getEmail());
@@ -383,7 +383,7 @@ class AccountControllerIT {
         String adminToken = this.getAuthToken("rbranson", "abcABC123*");
 
         AccountDto account = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
-        Response res = given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + adminToken)).get("/" + account.getLogin());
+        Response res = given().relaxedHTTPSValidation().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + adminToken)).get("/" + account.getLogin());
 
         AccountChangeEmailDto accountChangeEmailDto = new AccountChangeEmailDto(
                 account.getLogin(),
@@ -391,7 +391,7 @@ class AccountControllerIT {
                 randomAlphanumeric(10) + "@gmail.com");
         String etag = EntityIdentitySignerVerifier.calculateEntitySignature(accountChangeEmailDto);
 
-        Response response = given().baseUri(accountBaseUri).header("If-Match", etag)
+        Response response = given().relaxedHTTPSValidation().baseUri(accountBaseUri).header("If-Match", etag)
                 .contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken))
                 .body(accountChangeEmailDto)
                 .when()
@@ -400,20 +400,20 @@ class AccountControllerIT {
         assertEquals(409, response.getStatusCode());
         assertEquals(OPTIMISTIC_LOCK_EXCEPTION, response.asString());
 
-        Response notChangedRes = given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + adminToken)).get("/" + account.getLogin());
+        Response notChangedRes = given().relaxedHTTPSValidation().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + adminToken)).get("/" + account.getLogin());
         AccountDto notChangedAccount = objectMapper.readValue(notChangedRes.thenReturn().asString(), AccountDto.class);
         Assertions.assertEquals(account.getEmail(), notChangedAccount.getEmail());
     }
 
     private AccountDto getAccountDto(String login) throws JsonProcessingException {
         String authToken = this.getAuthToken("rbranson", "abcABC123*");
-        return objectMapper.readValue(given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + authToken)).get("/" + login).thenReturn().asString(), AccountDto.class);
+        return objectMapper.readValue(given().relaxedHTTPSValidation().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + authToken)).get("/" + login).thenReturn().asString(), AccountDto.class);
     }
 
 
     private AccountDetailsViewDto getAccountDetailsViewDto(String login) throws JsonProcessingException {
         String authToken = this.getAuthToken("rbranson", "abcABC123*");
-        String responseString = given().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + authToken)).get("/details/" + login)
+        String responseString = given().relaxedHTTPSValidation().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + authToken)).get("/details/" + login)
                 .thenReturn().asString();
         return objectMapper.readValue(responseString, AccountDetailsViewDto.class);
     }
@@ -429,7 +429,7 @@ class AccountControllerIT {
     }
 
     private RequestSpecification getBaseUriETagRequest(String etag) {
-        return given().baseUri(accountBaseUri).header("If-Match", etag);
+        return given().relaxedHTTPSValidation().baseUri(accountBaseUri).header("If-Match", etag);
     }
 
     @Test
@@ -501,9 +501,9 @@ class AccountControllerIT {
         AccountDto account = registerClientAndGetAccountDto(client);
         AuthenticateDto authInfoFalse = new AuthenticateDto(account.getLogin(), "Incorre2*ctPassword");
         for(int i=0;i<=5;i++) {
-            Response responseFalse = given().baseUri(authBaseUri).contentType("application/json").body(authInfoFalse).post("/sign-in");
+            Response responseFalse = given().relaxedHTTPSValidation().baseUri(authBaseUri).contentType("application/json").body(authInfoFalse).post("/sign-in");
         }
-        Response response = given().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken))
+        Response response = given().relaxedHTTPSValidation().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken))
                 .baseUri(accountBaseUri).get("/details/" + account.getLogin());
 
        AccountDetailsViewDto accountDetailsViewDto = objectMapper.readValue(response.asString(), AccountDetailsViewDto.class);
@@ -515,14 +515,14 @@ class AccountControllerIT {
     }
 
     private AccountDto registerBusinessWorkerAndGetAccountDto(BusinessWorkerForRegistrationDto worker) throws JsonProcessingException {
-        given().baseUri(authBaseUri).contentType("application/json").body(worker).post("/business-worker/registration").then().statusCode(204);
+        given().relaxedHTTPSValidation().baseUri(authBaseUri).contentType("application/json").body(worker).post("/business-worker/registration").then().statusCode(204);
         return getAccountDto(worker.getLogin());
     }
 
     private String getAuthToken(String login, String password) {
         AuthenticateDto authenticateDto = new AuthenticateDto(login, password);
 
-        Response response = given().baseUri(authBaseUri)
+        Response response = given().relaxedHTTPSValidation().baseUri(authBaseUri)
                 .contentType(ContentType.JSON)
                 .body(authenticateDto)
                 .when()

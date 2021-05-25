@@ -36,14 +36,14 @@ class CompanyControllerIT {
         List<CompanyLightDto> companies = Arrays.asList(new CompanyLightDto("FirmaJez", 1265485965L),
                 new CompanyLightDto("GroveStreetFamilly", 2354685748L),
                 new CompanyLightDto("BeautifulCompany", 9568545875L));
-        given().baseUri(baseUri).when().header(new Header("Authorization", "Bearer " + adminToken))
+        given().relaxedHTTPSValidation().baseUri(baseUri).when().header(new Header("Authorization", "Bearer " + adminToken))
                 .get("company/companies-info").then().statusCode(200).and().body(containsString(new Gson().toJson(companies)));
     }
 
     private String getAuthToken(String login, String password) {
         AuthenticateDto authenticateDto = new AuthenticateDto(login, password);
 
-        Response response = given().baseUri(authBaseUri)
+        Response response = given().relaxedHTTPSValidation().baseUri(authBaseUri)
                 .contentType(ContentType.JSON)
                 .body(authenticateDto)
                 .when()
