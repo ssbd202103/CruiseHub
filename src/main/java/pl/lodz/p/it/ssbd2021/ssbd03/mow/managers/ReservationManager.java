@@ -16,6 +16,8 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.SecurityContext;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,6 +39,9 @@ public class ReservationManager implements ReservationManagerLocal {
     @Inject
     private CruiseFacadeMow cruiseFacadeMow;
 
+    @Context
+    private SecurityContext context;
+
     @Override
     public List<Reservation> getCruiseReservations(UUID cruise_uuid) throws BaseAppException {
         long id = cruiseFacadeMow.findByUUID(cruise_uuid).getId();
@@ -50,7 +55,6 @@ public class ReservationManager implements ReservationManagerLocal {
         long id = cruiseFacadeMow.findByUUID(cruise_uuid).getId();
         List<Reservation> res = reservationFacadeMow.findWorkerCruiseReservations(id);
         return res;
-
     }
 
     @RolesAllowed("removeClientReservation")
@@ -92,4 +96,15 @@ public class ReservationManager implements ReservationManagerLocal {
         return allSeats - takenSeats;
     }
 
+    @RolesAllowed("viewSelfReservations")
+    @Override
+    public List<Reservation> getClientReservations() throws BaseAppException {
+        Account account = getCurrentUser();
+        return reservationFacadeMow.findReservationByLogin(account.getLogin());
+    }
+
+    @RolesAllowed("authenticatedUser")
+    public Account getCurrentUser() throws BaseAppException {
+        return accountFacadeMow.findByLogin(context.getUserPrincipal().getName());
+    }
 }

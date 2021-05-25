@@ -69,4 +69,12 @@ public class ReservationEndpoint implements ReservationEndpointLocal {
     public void cancelReservation(CancelReservationDTO crDto) throws BaseAppException {
         this.reservationManager.cancelReservation(crDto.getReservationVersion(), crDto.getCruiseUuid(), crDto.getClientLogin());
     }
+
+    @RolesAllowed("viewSelfReservations")
+    @Override
+    public List<CruiseReservationDto> viewSelfCruiseReservations() throws BaseAppException {
+        List<CruiseReservationDto> res = new ArrayList<>();
+        // todo finish implementation
+        return res;
+    }
 }
