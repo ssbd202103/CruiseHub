@@ -216,6 +216,9 @@ public class AccountManager implements AccountManagerLocal {
     @Override
     public void requestPasswordReset(String login) throws BaseAppException {
         Account account = this.accountFacade.findByLogin(login);
+        if (!account.isConfirmed()) {
+            throw new AccountManagerException(PASSWORD_RESET_ACCOUNT_NOT_VERIFIED_ERROR);
+        }
         Map<String, Object> claims = Map.of("version", account.getVersion());
         String token = JWTHandler.createToken(claims, login);
         TokenWrapper tokenWrapper = TokenWrapper.builder().token(token).account(account).used(false).build();
@@ -239,10 +242,13 @@ public class AccountManager implements AccountManagerLocal {
         }
         if (!claims.get("sub").asString().equals(login)) {
             throw new AccountManagerException(PASSWORD_RESET_IDENTITY_ERROR);
-
         }
 
         Account account = this.accountFacade.findByLogin(login);
+        if (!account.isConfirmed()) {
+            throw new AccountManagerException(PASSWORD_RESET_ACCOUNT_NOT_VERIFIED_ERROR);
+        }
+
         if (!(account.getVersion() == claims.get("version").asLong())) {
             throw FacadeException.optimisticLock();
         }
@@ -299,6 +305,9 @@ public class AccountManager implements AccountManagerLocal {
     @Override
     public void requestSomeonesPasswordReset(String login, String email) throws BaseAppException {
         Account account = this.accountFacade.findByLogin(login);
+        if (!account.isConfirmed()) {
+            throw new AccountManagerException(PASSWORD_RESET_ACCOUNT_NOT_VERIFIED_ERROR);
+        }
         Map<String, Object> claims = Map.of("version", account.getVersion());
         Locale locale = new Locale(account.getLanguageType().getName().name());
         String token = JWTHandler.createToken(claims, login);
