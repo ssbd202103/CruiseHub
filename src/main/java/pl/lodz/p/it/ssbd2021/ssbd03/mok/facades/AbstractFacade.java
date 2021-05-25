@@ -5,7 +5,9 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 public abstract class AbstractFacade<T> {
@@ -18,7 +20,7 @@ public abstract class AbstractFacade<T> {
 
     protected abstract EntityManager getEntityManager();
 
-    public void create(T entity) throws FacadeException {
+    protected void create(T entity) throws FacadeException {
         try {
             getEntityManager().persist(entity);
             getEntityManager().flush();
@@ -31,7 +33,7 @@ public abstract class AbstractFacade<T> {
     }
 
 
-    public void edit(T entity) throws FacadeException {
+    protected void edit(T entity) throws FacadeException {
         try {
             getEntityManager().merge(entity);
             getEntityManager().flush();
@@ -43,15 +45,17 @@ public abstract class AbstractFacade<T> {
         }
     }
 
-    public void remove(T entity) throws FacadeException {
+    protected void remove(T entity) throws FacadeException {
         try {
             getEntityManager().remove(getEntityManager().merge(entity));
         } catch (PersistenceException exp) {
             throw FacadeException.databaseOperation();
+        } catch (IllegalArgumentException exp) {
+            throw FacadeException.noSuchElement();
         }
     }
 
-    public T find(Object id) throws FacadeException {
+    protected T find(Object id) throws FacadeException {
         try {
             return getEntityManager().find(entityClass, id);
         } catch (PersistenceException exp) {
@@ -59,7 +63,7 @@ public abstract class AbstractFacade<T> {
         }
     }
 
-    public List findAll() throws FacadeException {
+    protected List findAll() throws FacadeException {
         try {
             CriteriaQuery<Object> cq = getEntityManager().getCriteriaBuilder().createQuery();
             cq.select(cq.from(entityClass));
@@ -69,11 +73,11 @@ public abstract class AbstractFacade<T> {
         }
     }
 
-    public List findRange(int[] range) throws FacadeException {
+    protected List findRange(int[] range) throws FacadeException {
         try {
             CriteriaQuery<Object> cq = getEntityManager().getCriteriaBuilder().createQuery();
             cq.select(cq.from(entityClass));
-            javax.persistence.Query q = getEntityManager().createQuery(cq);
+            Query q = getEntityManager().createQuery(cq);
             q.setMaxResults(range[1] - range[0] + 1);
             q.setFirstResult(range[0]);
             return q.getResultList();
@@ -82,12 +86,12 @@ public abstract class AbstractFacade<T> {
         }
     }
 
-    public long count() throws FacadeException {
+    protected long count() throws FacadeException {
         try {
             CriteriaQuery<Object> cq = getEntityManager().getCriteriaBuilder().createQuery();
-            javax.persistence.criteria.Root<T> rt = cq.from(entityClass);
+            Root<T> rt = cq.from(entityClass);
             cq.select(getEntityManager().getCriteriaBuilder().count(rt));
-            javax.persistence.Query q = getEntityManager().createQuery(cq);
+            Query q = getEntityManager().createQuery(cq);
             return ((long) q.getSingleResult());
         } catch (PersistenceException exp) {
             throw FacadeException.databaseOperation();
