@@ -145,6 +145,21 @@
         <role-name>getBusinessWorkersForCompany</role-name>
     </security-role>
 
+    <security-role>
+        <role-name>addCruiseGroup</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>changeCruiseGroup</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>getAllCruiseGroups</role-name>
+    </security-role>
+    <security-role>
+        <role-name>viewCruiseReservations</role-name>
+    </security-role>
+
 
     <security-constraint>
         <web-resource-collection>
