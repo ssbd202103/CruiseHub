@@ -50,12 +50,14 @@ class AccountControllerIT {
     }
 
     @Test
+    @Disabled
     public void requestPasswordReset_SUCCESS() throws JsonProcessingException {
         AccountDto accountDto = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
         given().relaxedHTTPSValidation().baseUri(accountBaseUri).contentType(MediaType.APPLICATION_JSON).post("/request-password-reset/" + accountDto.getLogin()).then().statusCode(204);
     }
 
     @Test
+    @Disabled
     public void requestSomeonesPasswordReset_SUCCESS() throws JsonProcessingException {
         String adminToken = this.getAuthToken("rbranson", "abcABC123*");
         AccountDto accountDto = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
