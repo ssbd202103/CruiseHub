@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.facades;
 
+import lombok.extern.java.Log;
 import org.hibernate.exception.ConstraintViolationException;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
@@ -30,6 +31,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account.LOGIN_CONSTRAINT
 @Stateless
 @TransactionAttribute(TransactionAttributeType.MANDATORY)
 @Interceptors(TrackingInterceptor.class)
+@Log
 public class AccountFacadeMok extends AbstractFacade<Account> {
 
     @PersistenceContext(unitName = "ssbd03mokPU")
@@ -86,6 +88,7 @@ public class AccountFacadeMok extends AbstractFacade<Account> {
         return tqq.getResultList();
 
     }
+
     public List<AccessLevel> getUnconfirmedBusinessWorkers() {
         TypedQuery<AccessLevel> tqq = em.createNamedQuery("BusinessWorker.findALlUnconfirmed", AccessLevel.class);
         return tqq.getResultList();
@@ -125,17 +128,31 @@ public class AccountFacadeMok extends AbstractFacade<Account> {
     public Account updateAuthenticateInfo(String login, String ipAddr, LocalDateTime time, boolean isAuthValid) throws BaseAppException {
 
         Account account = findByLogin(login);
+        String loggedString;
         try {
             if (isAuthValid) {
+                //todo check if user is admin and send email with authentication time and logical address if so
                 account.setLastCorrectAuthenticationDateTime(time);
                 account.setLastCorrectAuthenticationLogicalAddress(ipAddr);
                 account.setNumberOfAuthenticationFailures(0);
+
+                loggedString = String.format("Correct authentication for user %s" +
+                                "\nAuthentication time: %s" +
+                                "\nOrigin logical address: %s",
+                        login, time, ipAddr);
+                log.info(loggedString);
             } else {
                 account.setLastIncorrectAuthenticationDateTime(time);
                 account.setLastIncorrectAuthenticationLogicalAddress(ipAddr);
                 account.setNumberOfAuthenticationFailures(account.getNumberOfAuthenticationFailures() + 1);
-            }
 
+                loggedString = String.format("Authentication failure for user %s" +
+                                "\nAuthentication time: %s" +
+                                "\nOrigin logical address: %s" +
+                                "\nNumber of consecutive authentication failures: %d",
+                        login, time, ipAddr, account.getNumberOfAuthenticationFailures());
+                log.warning(loggedString);
+            }
         } catch (NoResultException e) {
             throw FacadeException.noSuchElement();
 

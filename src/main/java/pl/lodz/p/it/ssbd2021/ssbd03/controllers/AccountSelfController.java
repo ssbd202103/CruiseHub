@@ -40,8 +40,7 @@ public class AccountSelfController {
     @Path("/account-details")
     @Produces(MediaType.APPLICATION_JSON)
     public String getSelfDetails() throws BaseAppException, JsonProcessingException {
-        String selfLogin = tryAndRepeat(() -> accountEndpoint.getCurrentUserLogin());
-        return mapper.writeValueAsString(tryAndRepeat(() -> accountEndpoint.getAccountDetailsByLogin(selfLogin)));
+        return mapper.writeValueAsString(tryAndRepeat(() -> accountEndpoint.getSelfDetails()));
     }
 
     /**
@@ -49,7 +48,6 @@ public class AccountSelfController {
      *
      * @param accountChangeOwnPasswordDto obiekt ktory przechowuje login, wersję, stare oraz nowe hasło podane przez użytkownika
      * @param etag                        Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
-     * @return Zwraca kod kod potwierdzający poprawne bądź nieporawne wykonanie
      */
     @ETagFilterBinding
     @PUT

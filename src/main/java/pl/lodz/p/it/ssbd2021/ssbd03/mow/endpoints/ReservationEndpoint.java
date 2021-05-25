@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.endpoints.BaseEndpoint;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Reservation;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CancelReservationDTO;
@@ -26,7 +27,7 @@ import java.util.UUID;
 @Stateful
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 @Interceptors(TrackingInterceptor.class)
-public class ReservationEndpoint implements ReservationEndpointLocal {
+public class ReservationEndpoint extends BaseEndpoint implements ReservationEndpointLocal {
 
     @Inject
     private ReservationManagerLocal reservationManager;

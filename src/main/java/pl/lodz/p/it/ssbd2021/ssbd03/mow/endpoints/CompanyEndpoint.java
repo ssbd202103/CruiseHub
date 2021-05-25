@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.endpoints.BaseEndpoint;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.BusinessWorkerDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CompanyLightDto;
@@ -25,7 +26,7 @@ import static javax.ejb.TransactionAttributeType.REQUIRES_NEW;
 @Stateful
 @TransactionAttribute(REQUIRES_NEW)
 @Interceptors(TrackingInterceptor.class)
-public class CompanyEndpoint implements CompanyEndpointLocal {
+public class CompanyEndpoint extends BaseEndpoint implements CompanyEndpointLocal {
     @Inject
     private CompanyManagerLocal companyManager;
 

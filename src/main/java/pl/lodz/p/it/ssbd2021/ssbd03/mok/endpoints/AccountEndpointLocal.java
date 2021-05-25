@@ -41,10 +41,19 @@ public interface AccountEndpointLocal {
      * Pobiera obiekt AccountDetailsViewDto szukanego użytkownika
      *
      * @param login Login użytkownika
-     * @return Reprezentacja użytkownika po dokonanych zmianach w postaci AccountDetailsViewDto
+     * @return Reprezentacja użytkownika w postaci AccountDetailsViewDto
      * @throws BaseAppException Bazowy wyjątek aplikacji, zwracany w przypadku nieznalezienia użytkownika.
      */
     AccountDetailsViewDto getAccountDetailsByLogin(String login) throws BaseAppException;
+
+    /**
+     * Pobiera obiekt AccountDetailsViewDto obecnego użytkownika
+     *
+     * @return Reprezentacja użytkownika w postaci AccountDetailsViewDto
+     * @throws BaseAppException Bazowy wyjątek aplikacji zwracany w przypadku nieznalezienia
+     *                          konta odpowiadającego obecnemu użytkownikowi
+     */
+    AccountDetailsViewDto getSelfDetails() throws BaseAppException;
 
     /**
      * Dodaje poziom dostępu do użytkownika
@@ -225,13 +234,6 @@ public interface AccountEndpointLocal {
     AdministratorDto getAdministratorByLogin(String login) throws BaseAppException;
 
     /**
-     * Pobiera login obecnego użytkownika
-     *
-     * @return Login użytkownika
-     */
-    String getCurrentUserLogin() throws BaseAppException;
-
-    /**
      * Metoda odpowiedzialna za wywołanie metody odpowiedzialnej za zmianę hasła akutalnego użytkownika
      *
      * @param accountChangeOwnPasswordDto obiekt dto posiadający niezbedne dane do zmienienia hasła aktualnego użytkownika
@@ -249,6 +251,7 @@ public interface AccountEndpointLocal {
 
     /**
      * Metoda opdowiedzialna za pobranie wszystkich niezatwierdzonych pracowników firm
+     *
      * @return lista obiektow dto BusinessWorkerWithCompanyDto
      * @throws BaseAppException Bazowy wyjątek aplikacji
      */
@@ -256,9 +259,10 @@ public interface AccountEndpointLocal {
 
     /**
      * Metoda odpowiedzialna za potwierdzenie pracownika firmy
+     *
      * @param blockAccountDto obiekt dto posiadjący login oraz wersje pracownika firmy
      * @throws BaseAppException Bazowy wyjątek aplikacji
      */
-    void confirmBusinessWorker( BlockAccountDto blockAccountDto) throws BaseAppException;
+    void confirmBusinessWorker(BlockAccountDto blockAccountDto) throws BaseAppException;
 }
 
