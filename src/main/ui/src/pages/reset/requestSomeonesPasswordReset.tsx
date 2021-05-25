@@ -8,7 +8,7 @@ import RoundedButton from "../../components/RoundedButton";
 import {Link} from "react-router-dom";
 import {useSnackbarQueue} from "../snackbar";
 import store from "../../redux/store";
-import {getUser} from "../../Services/userService";
+import {getUser, updateToken} from "../../Services/userService";
 
 const RequestSomeonePasswordReset = () => {
     const {t} = useTranslation()
@@ -19,16 +19,17 @@ const RequestSomeonePasswordReset = () => {
     const [email, setEmail] = useState('')
     const {token} = store.getState()
     let login = currentAccount.login;
+
     const onFormSubmit = () => {
         axios.post(`/api/account/request-someones-password-reset/${login}/${email}/`, null, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
-        })
-            .catch(error => {
-                const message = error.response.data
-                showError(t(message))
-            });
+        }).catch(error => {
+            const message = error.response.data
+            showError(t(message))
+        });
+        updateToken()
     }
     return (
         <AuthLayout>
@@ -38,14 +39,16 @@ const RequestSomeonePasswordReset = () => {
                 placeholder="email"
                 className={styles.input}
                 value={email}
-                onChange={event => {setEmail(event.target.value)}}
+                onChange={event => {
+                    setEmail(event.target.value)
+                }}
             />
             <Link to="/panels/adminPanel/accounts">
-            <RoundedButton
-                onClick={onFormSubmit}
-                style={{width: '100%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
-                color="pink"
-            >Send email </RoundedButton>
+                <RoundedButton
+                    onClick={onFormSubmit}
+                    style={{width: '100%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
+                    color="pink"
+                >Send email </RoundedButton>
             </Link>
         </AuthLayout>
 

@@ -16,6 +16,7 @@ import store from "../../../redux/store";
 import axios from "../../../Services/URL";
 import { Button } from '@material-ui/core';
 import RoundedButton from "../../../components/RoundedButton";
+import {updateToken} from "../../../Services/userService";
 
 const useRowStyles = makeStyles({
     root: {
@@ -85,6 +86,7 @@ function getWorkers(){
             'Authorization': `Bearer ${token}`
         }
     })
+    updateToken()
 }
 function confirmWorker(props: any) {
     const {token} = store.getState()
@@ -102,6 +104,7 @@ function confirmWorker(props: any) {
 
         }
     })
+    updateToken()
 }
 
 export default function ModListClient() {

@@ -4,6 +4,7 @@ import React from "react";
 import {useTranslation} from 'react-i18next'
 import RoundedButton from '../../../components/RoundedButton'
 import {useSnackbarQueue} from "../../snackbar";
+import {updateToken} from "../../../Services/userService";
 
 
 export default function Checkboxes() {
@@ -48,6 +49,7 @@ export default function Checkboxes() {
             const message = error.response.data
             showError(t(message))
         });
+        updateToken()
     }
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedAccessLevel(event.target.value)

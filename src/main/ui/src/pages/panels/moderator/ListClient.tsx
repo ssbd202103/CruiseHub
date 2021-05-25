@@ -13,6 +13,7 @@ import {selectDarkMode} from "../../../redux/slices/userSlice";
 import {getAllAccounts} from "../../../Services/accountsService";
 import DarkedTextField from "../../../components/DarkedTextField";
 import {useSnackbarQueue} from "../../snackbar";
+import {updateToken} from "../../../Services/userService";
 
 const useRowStyles = makeStyles({
     root: {
@@ -81,6 +82,7 @@ export default function ModListClient() {
             const message = error.response.data
             showError(t(message))
         });
+        updateToken()
     },[]);
 
     function search(rows: any[]) {

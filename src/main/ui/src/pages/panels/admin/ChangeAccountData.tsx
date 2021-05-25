@@ -11,6 +11,7 @@ import RoundedButton from '../../../components/RoundedButton';
 import DarkedTextField from '../../../components/DarkedTextField';
 import axios from "axios";
 import {useSnackbarQueue} from "../../snackbar";
+import {updateToken} from "../../../Services/userService";
 
 export default function ChangeAccountData() {
     const {t} = useTranslation()
@@ -79,6 +80,7 @@ export default function ChangeAccountData() {
         sessionStorage.setItem("changeAccountData", JSON.stringify(result.data));
         forceUpdate()
         handleChangePerData()
+        updateToken()
     }
 
 

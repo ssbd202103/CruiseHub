@@ -5,6 +5,7 @@ import axios from "axios";
 import styles from '../../../styles/ManageAccount.module.css'
 import Grid from "@material-ui/core/Grid";
 import {useSnackbarQueue} from "../../snackbar";
+import {updateToken} from "../../../Services/userService";
 
 
 export default function ChangeAccessLevelState() {
@@ -44,6 +45,8 @@ export default function ChangeAccessLevelState() {
             const message = error.response.data
             showError(t(message))
         });
+
+        updateToken()
 
     }
 

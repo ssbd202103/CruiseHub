@@ -22,6 +22,7 @@ import {selectDarkMode} from "../../../redux/slices/userSlice";
 import {getAccountDetailsAbout, getAllAccounts} from "../../../Services/accountsService";
 import {selectToken} from "../../../redux/slices/tokenSlice";
 import {useSnackbarQueue} from "../../snackbar";
+import {updateToken} from "../../../Services/userService";
 
 interface UnblockAccountParams {
     login: string;
@@ -66,6 +67,7 @@ const blockAccount = ({login, etag, version, token}: UnblockAccountParams) => {
         }
 
     }).then(response => {
+        updateToken()
         return response.status == 200;
     });
 };
