@@ -4,10 +4,12 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
 import javax.interceptor.Interceptors;
+import java.util.Properties;
 
 @Interceptors(TrackingInterceptor.class)
 public class TransactionRepeater {
-    private static final int repeatCount = 3;
+    private static final Properties securityProperties = PropertiesReader.getSecurityProperties();
+    private static final int repeatCount = Integer.parseInt(securityProperties.getProperty("transaction.repeat.count"));
 
     public static void tryAndRepeat(RepeatVoidInterface repeatInterface) throws BaseAppException {
         for (int i = 0; i < repeatCount; i++) {
