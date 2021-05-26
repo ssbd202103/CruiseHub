@@ -518,12 +518,20 @@ public class AccountManager implements AccountManagerLocal {
 
     @PermitAll
     @Override
-    public String updateCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws BaseAppException {
-        Account account = this.accountFacade.updateAuthenticateInfo(login, IpAddr, time, true);
+    public String updateCorrectAuthenticateInfo(String login, String ipAddr, LocalDateTime time) throws BaseAppException {
+        Account account = this.accountFacade.updateAuthenticateInfo(login, ipAddr, time, true);
         account.setNumberOfAuthenticationFailures(0);
 
         Map<String, Object> map = Map.of("accessLevels", account.getAccessLevels()
                 .stream().map(accessLevel -> accessLevel.getAccessLevelType().name()).collect(Collectors.toList()));
+
+        if(account.getAccessLevels().stream().anyMatch(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.ADMINISTRATOR)) {
+            Locale locale = new Locale(account.getLanguageType().getName().name());
+            String body = i18n.getMessage(LOG_IN_BODY, locale);
+            body = String.format("%s %s",body,ipAddr);
+            String subject = i18n.getMessage(LOG_IN_SUBJECT, locale);
+            EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
+        }
         return JWTHandler.createToken(map, account.getLogin());
     }
 

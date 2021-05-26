@@ -76,6 +76,9 @@ public class I18n {
     public static final String APP_INTERNAL_SERVER_ERROR = "error.internal.server";
     public static final String RATING_CONSTRAINT_ERROR = "error.constraint.rating";
 
+    public static final String LOG_IN_SUBJECT = "log.in.subject";
+    public static final String LOG_IN_BODY = "log.in.body";
+
     private ResourceBundle bundle;
 
     public String getMessage(String message, Locale locale) {
