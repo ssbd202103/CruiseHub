@@ -114,7 +114,6 @@ export default function ClientSignUp() {
             showError(t("invalid.form"))
         } else {
             setButtonPopup(true)
-            showSuccess("DONE")
         }
     }
 
