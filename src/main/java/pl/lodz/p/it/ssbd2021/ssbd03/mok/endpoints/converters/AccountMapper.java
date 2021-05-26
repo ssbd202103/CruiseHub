@@ -200,7 +200,6 @@ public class AccountMapper {
         account.setVersion(otherAccountChangeDataDto.getVersion());
         account.setFirstName(otherAccountChangeDataDto.getNewFirstName());
         account.setSecondName(otherAccountChangeDataDto.getNewSecondName());
-        account.setEmail(otherAccountChangeDataDto.getNewEmail());
         return account;
     }
 

@@ -319,19 +319,13 @@ public class AccountController {
     /**
      * Zmień mail według podanych w dto danych
      *
-     * @param accountChangeEmailDto obiekt dto z loginem, nowym mailem oraz wersją
+     * @param accountVerificationDto obiekt dto z tokenem
      */
     @PUT
     @Path("/change-email")
-    @ETagFilterBinding
     @Consumes(MediaType.APPLICATION_JSON)
-    public void changeEmail(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid AccountChangeEmailDto accountChangeEmailDto,
-                            @HeaderParam("If-Match") String etag) throws BaseAppException {
-        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, accountChangeEmailDto)) {
-            throw ControllerException.etagIdentityIntegrity();
-        }
-
-        tryAndRepeat(() -> accountEndpoint.changeEmail(accountChangeEmailDto));
+    public void changeEmail(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid AccountVerificationDto accountVerificationDto) throws BaseAppException {
+        tryAndRepeat(() -> this.accountEndpoint.changeEmail(accountVerificationDto));
     }
 
     /**
@@ -349,5 +343,28 @@ public class AccountController {
             throw ControllerException.etagIdentityIntegrity();
         }
         tryAndRepeat(() -> accountEndpoint.confirmBusinessWorker(blockAccountDto));
+    }
+
+    @POST
+    @Path("/request-email-change")
+    public void requestEmailChange(AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException {
+        tryAndRepeat(() -> this.accountEndpoint.requestEmailChange(accountChangeEmailDto));
+    }
+    @POST
+    @Path("/request-other-email-change")
+    public void requestOtherEmailChange(AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException {
+        tryAndRepeat(() -> this.accountEndpoint.requestOtherEmailChange(accountChangeEmailDto));
+    }
+
+    /**
+     * Zmień mail według podanych w dto danych
+     *
+     * @param accountVerificationDto obiekt dto z tokenem
+     */
+    @PUT
+    @Path("/change-other-email")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void changeOtherEmail(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid AccountVerificationDto accountVerificationDto) throws BaseAppException {
+        tryAndRepeat(() -> this.accountEndpoint.changeOtherEmail(accountVerificationDto));
     }
 }

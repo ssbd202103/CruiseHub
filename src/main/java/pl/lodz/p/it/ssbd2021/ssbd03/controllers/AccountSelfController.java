@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.ControllerException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountVerificationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.AccountEndpointLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.ETagFilterBinding;
@@ -129,17 +130,13 @@ public class AccountSelfController {
     /**
      * Zmień mail według podanych w dto danych
      *
-     * @param accountChangeEmailDto obiekt dto z loginem, nowym mailem oraz wersją
+     * @param accountVerificationDto obiekt dto z tokenem
      */
-    @PUT // todo read login from security context
+    @PUT
     @Path("/change-email")
-    @ETagFilterBinding
     @Consumes(MediaType.APPLICATION_JSON)
-    public void changeEmail(AccountChangeEmailDto accountChangeEmailDto, @HeaderParam("If-Match") String etag) throws BaseAppException {
-        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, accountChangeEmailDto)) {
-            throw ControllerException.etagIdentityIntegrity();
-        }
-        tryAndRepeat(() -> accountEndpoint.changeEmail(accountChangeEmailDto));
+    public void changeEmail(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid AccountVerificationDto accountVerificationDto) throws BaseAppException {
+        tryAndRepeat(() -> this.accountEndpoint.changeEmail(accountVerificationDto));
     }
 
     @PUT

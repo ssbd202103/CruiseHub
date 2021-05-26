@@ -212,8 +212,14 @@ public class AccountEndpoint extends BaseEndpoint implements AccountEndpointLoca
 
     @RolesAllowed("changeEmail")
     @Override
-    public void changeEmail(AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException {
-        accountManager.changeEmail(accountChangeEmailDto.getLogin(), accountChangeEmailDto.getVersion(), accountChangeEmailDto.getNewEmail());
+    public void changeEmail(AccountVerificationDto accountVerificationDto) throws BaseAppException {
+        accountManager.changeEmail(accountVerificationDto.getToken());
+    }
+
+    @RolesAllowed("changeOtherEmail")
+    @Override
+    public void changeOtherEmail(AccountVerificationDto accountVerificationDto) throws BaseAppException {
+        accountManager.changeOtherEmail(accountVerificationDto.getToken());
     }
 
     @RolesAllowed("changeClientData")
@@ -296,5 +302,16 @@ public class AccountEndpoint extends BaseEndpoint implements AccountEndpointLoca
     public void confirmBusinessWorker(BlockAccountDto blockAccountDto) throws BaseAppException {
 
         this.accountManager.confirmBusinessWorker(blockAccountDto.getLogin(), blockAccountDto.getVersion());
+    }
+
+    @RolesAllowed("changeEmail")
+    @Override
+    public void requestEmailChange(AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException {
+        accountManager.requestEmailChange(accountChangeEmailDto.getLogin(), accountChangeEmailDto.getNewEmail());
+    }
+    @RolesAllowed("changeOtherEmail")
+    @Override
+    public void requestOtherEmailChange(AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException {
+        accountManager.requestOtherEmailChange(accountChangeEmailDto.getLogin(), accountChangeEmailDto.getNewEmail());
     }
 }

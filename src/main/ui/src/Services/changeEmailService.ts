@@ -17,8 +17,7 @@ export function changeEmail(newEmail: string) {
         token
     } = store.getState()
 
-
-    return axios.put('account/change-email', {
+    return axios.post('account/request-email-change', {
             newEmail,
             login,
             version

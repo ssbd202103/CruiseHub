@@ -157,9 +157,9 @@ public interface AccountEndpointLocal {
     /**
      * Mapuje obiekt dto z nowym mailem do obiektu modelu oraz zmienia mail
      *
-     * @param accountChangeEmailDto dto z nowym mailem
+     * @param accountVerificationDto dto z tokenem
      */
-    void changeEmail(AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException;
+    void changeEmail(AccountVerificationDto accountVerificationDto) throws BaseAppException;
 
     /**
      * Zmienia dane clienta o podanym loginie
@@ -264,5 +264,26 @@ public interface AccountEndpointLocal {
      * @throws BaseAppException Bazowy wyjątek aplikacji
      */
     void confirmBusinessWorker(BlockAccountDto blockAccountDto) throws BaseAppException;
+
+    /**
+     * Metoda opdowiedzialna za zmiane maila
+     * @param accountChangeEmailDto obiekt dto posiadający login oraz nowy adres email
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
+    void requestEmailChange(AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException;
+
+    /**
+     * Metoda opdowiedzialna za wysłanie linku aktywacyjnego
+     * @param accountChangeEmailDto obiekt dto posiadający login oraz nowy adres email
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
+    void requestOtherEmailChange(AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException;
+
+    /**
+     * Metoda opdowiedzialna za zmiane maila przez Administratora
+     *
+     * @param accountVerificationDto dto z tokenem
+     */
+    void changeOtherEmail(AccountVerificationDto accountVerificationDto) throws BaseAppException;
 }
 

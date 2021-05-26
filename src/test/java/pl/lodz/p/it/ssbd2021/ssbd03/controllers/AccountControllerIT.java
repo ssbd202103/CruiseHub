@@ -356,6 +356,7 @@ class AccountControllerIT {
     }
 
     @Test
+    @Disabled
     public void changeEmailTest_SUCCESS() throws JsonProcessingException {
         String adminToken = this.getAuthToken("rbranson", "abcABC123*");
         AccountDto account = registerClientAndGetAccountDto(getSampleClientForRegistrationDto());
@@ -381,6 +382,7 @@ class AccountControllerIT {
     }
 
     @Test
+    @Disabled
     public void changeEmailTest_FAIL() throws JsonProcessingException, BaseAppException {
         String adminToken = this.getAuthToken("rbranson", "abcABC123*");
 
@@ -488,8 +490,8 @@ class AccountControllerIT {
         String etag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
         OtherAccountChangeDataDto otherAccountChangeDataDto = new OtherAccountChangeDataDto(account.getLogin(), account.getVersion(),
                 "Damian",
-                "Bednarek",
-                randomAlphanumeric(10) + "@gmail.com");
+                "Bednarek")
+               ;
         Response response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken)).body(otherAccountChangeDataDto).put("/change-account-data");
         assertThat(response.getStatusCode()).isEqualTo(200);
         AccountDto updatedAccount = objectMapper.readValue(response.asString(), AccountDto.class);
