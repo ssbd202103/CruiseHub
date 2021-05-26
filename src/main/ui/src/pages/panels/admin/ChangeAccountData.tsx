@@ -108,7 +108,8 @@ export default function ChangeAccountData() {
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json",
-                "If-Match": currentAccount.etag
+                "If-Match": currentAccount.etag,
+                "Authorization": `Bearer ${token}`
             }
         }).catch(error => {
             const message = error.response.data
@@ -139,7 +140,8 @@ export default function ChangeAccountData() {
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json",
-                "If-Match": currentAccount.etag
+                "If-Match": currentAccount.etag,
+                "Authorization": `Bearer ${token}`
             }
         }).catch(error => {
             const message = error.response.data

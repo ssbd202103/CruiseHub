@@ -166,7 +166,11 @@ const resources = {
             "error.size.city": "Miasto powinno mieć maksymalnie 64 znaków",
             "error.size.street": "Ulica powinna mieć maksymalnie 64 znaki",
             "error.size.companyName": "Nazwa firmy powinna mieć maksymalnie 64 znaki",
-            "error.size.postCode": "Kod pocztowy powinien mieć maksymalnie 20 znaków"
+            "error.size.postCode": "Kod pocztowy powinien mieć maksymalnie 20 znaków",
+
+            //successes
+            "success.accessLevelStateChanged": "Stan poziomu dostępu został zmieniony",
+            "success.accessLevelAssigned": "Poziom dostępu przydzielony"
         }
     },
     en: {
@@ -334,7 +338,11 @@ const resources = {
             "error.size.city": "City should be no longer than 64 characters",
             "error.size.street": "Street should be no longer than 64 characters",
             "error.size.companyName": "Company name should be no longer than 64 characters",
-            "error.size.postCode": "Post code should be no longer than 20 characters"
+            "error.size.postCode": "Post code should be no longer than 20 characters",
+
+            //successes
+            "success.accessLevelStateChanged": "Access level state changed",
+            "success.accessLevelAssigned": "Access level assigned"
         }
     }
 }

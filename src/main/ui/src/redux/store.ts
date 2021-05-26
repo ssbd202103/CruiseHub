@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 import userReducer from './slices/userSlice'
 import tokenReducer from './slices/tokenSlice'
+import changeAccessLevelStateAccountReducer from "./slices/changeAccessLevelStateSlice";
 
 const reducer = {
     user: userReducer,
-    token: tokenReducer
+    token: tokenReducer,
+    changeAccessLevelStateAccount: changeAccessLevelStateAccountReducer
 }
 
 const store = configureStore({
