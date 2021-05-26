@@ -22,8 +22,9 @@ import {selectDarkMode} from "../../../redux/slices/userSlice";
 import {getAccountDetailsAbout, getAllAccounts} from "../../../Services/accountsService";
 import {selectToken} from "../../../redux/slices/tokenSlice";
 import {useSnackbarQueue} from "../../snackbar";
-import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
-
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import store from "../../../redux/store";
+import {setChangeAccessLevelStateAccount} from "../../../redux/slices/changeAccessLevelStateSlice";
 
 
 interface UnblockAccountParams {
@@ -34,7 +35,6 @@ interface UnblockAccountParams {
 }
 
 
-
 const unblockAccount = ({login, etag, version, token}: UnblockAccountParams) => {
     const json = JSON.stringify({
             login: login,
@@ -42,7 +42,7 @@ const unblockAccount = ({login, etag, version, token}: UnblockAccountParams) => 
         }
     );
     return axios.put('account/unblock', json, {
-        headers:{
+        headers: {
             'Content-Type': 'application/json',
             'If-Match': etag,
             'Authorization': `Bearer ${token}`
@@ -52,6 +52,7 @@ const unblockAccount = ({login, etag, version, token}: UnblockAccountParams) => 
         return response.status == 200;
     })
 };
+
 function refresh() {
     window.location.reload();
 }
@@ -62,7 +63,7 @@ const blockAccount = ({login, etag, version, token}: UnblockAccountParams) => {
             version: version,
         }
     );
-    return axios.put('account/block', json, {
+    return axios.put('/api/account/block', json, {
         headers:{
             'Content-Type': 'application/json',
             'If-Match': etag,
@@ -120,7 +121,7 @@ function createData(
 
 
 export interface RowProps {
-    row : ReturnType<typeof createData>,
+    row: ReturnType<typeof createData>,
     style: React.CSSProperties
 }
 
@@ -160,7 +161,7 @@ function Row(props: RowProps) {
 
     const setCurrentChangeAccessLevelStateAccount = async () => {
         getAccountDetailsAbout(row.login).then(res => {
-            sessionStorage.setItem("changeAccessLevelStateAccount", JSON.stringify(res.data));
+            store.dispatch(setChangeAccessLevelStateAccount(res.data))
         }).catch(error => {
             const message = error.response.data
             showError(t(message))
@@ -271,7 +272,7 @@ export default function AdminListClient() {
             const message = error.response.data
             showError(t(message))
         })
-    },[]);
+    }, []);
 
     function search(rows: any[]) {
         if (Array.isArray(rows) && rows.length) {
