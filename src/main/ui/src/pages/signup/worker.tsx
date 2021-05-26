@@ -12,7 +12,7 @@ import styles from '../../styles/auth.global.module.css'
 
 import {useTranslation} from 'react-i18next'
 import {useEffect, useState} from "react";
-import axios from "axios";
+import axios from "../../Services/URL";
 import Recaptcha from "react-recaptcha";
 import Popup from "../../PopupRecaptcha";
 import {useSelector} from "react-redux";

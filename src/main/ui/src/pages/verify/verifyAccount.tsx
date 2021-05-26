@@ -1,6 +1,6 @@
 import {useHistory, useLocation} from 'react-router-dom';
 
-import axios from "axios";
+import axios from "../../Services/URL";
 import AuthLayout from "../../layouts/AuthLayout";
 import {useTranslation} from "react-i18next";
 import styles from '../../styles/auth.global.module.css'

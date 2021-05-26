@@ -4,7 +4,7 @@ import {update} from "../redux/slices/tokenSlice";
 import {setUser, emptyUser} from "../redux/slices/userSlice";
 
 export function getUser(token: string) {
-    return axios.get('/self/account-details', {
+    return axios.get('self/account-details', {
         headers: {
             Authorization: token && `Bearer ${token}`
         }

@@ -10,7 +10,7 @@ import RoundedButton from '../../components/RoundedButton'
 import styles from '../../styles/auth.global.module.css'
 
 import {useTranslation} from 'react-i18next'
-import axios from "axios";
+import axios from "../../Services/URL";
 import {createRef, useEffect, useState} from "react";
 import Recaptcha from 'react-recaptcha'
 import Popup from "../../PopupRecaptcha";
@@ -84,7 +84,7 @@ export default function ClientSignUp() {
             }
         );
         await setButtonPopup(false)
-        axios.post('/api/auth/client/registration', json, {
+        axios.post('auth/client/registration', json, {
             headers: {
                 'Content-Type': 'application/json'
             }

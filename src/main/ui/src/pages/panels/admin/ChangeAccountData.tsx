@@ -9,7 +9,7 @@ import {useTranslation} from 'react-i18next';
 import styles from '../../../styles/ManageAccount.module.css'
 import RoundedButton from '../../../components/RoundedButton';
 import DarkedTextField from '../../../components/DarkedTextField';
-import axios from "axios";
+import axios from "../../../Services/URL";
 import {useSnackbarQueue} from "../../snackbar";
 import store from "../../../redux/store";
 
@@ -65,10 +65,7 @@ export default function ChangeAccountData() {
             version: currentAccount.version
 
         })
-        fetch("/api/account/change-account-data", {
-            method: "PUT",
-            mode: "same-origin",
-            body: json,
+        axios.put("account/change-account-data", json, {
             headers: {
                 "Authorization": `Bearer ${token}`,
                 "Content-Type": "application/json",
@@ -79,6 +76,8 @@ export default function ChangeAccountData() {
             const message = error.response.data
             showError(t(message))
         });
+
+
         showSuccess(t('successful action'))
         const result = await axios.get(`account/details/${currentAccount.login}`);
         sessionStorage.setItem("changeAccountData", JSON.stringify(result.data));
@@ -103,10 +102,7 @@ export default function ChangeAccountData() {
             accVersion: clientAddr.accVersion
         })
 
-        fetch("/api/account/change-client-data", {
-            method: "PUT",
-            mode: "same-origin",
-            body: json,
+        axios.put("account/change-client-data", json, {
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json",
@@ -117,6 +113,7 @@ export default function ChangeAccountData() {
             const message = error.response.data
             showError(t(message))
         });
+
         showSuccess(t('successful action'))
 
         const result = axios.get(`account/details/${currentAccount.login}`).then(res => {
@@ -136,10 +133,8 @@ export default function ChangeAccountData() {
             accVersion: businnesPhone.accVersion
 
         })
-        fetch("/api/account/change-business-worker-data", {
-            method: "PUT",
-            mode: "same-origin",
-            body: json,
+
+        axios.put("account/change-business-worker-data", json, {
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json",
@@ -150,6 +145,8 @@ export default function ChangeAccountData() {
             const message = error.response.data
             showError(t(message))
         });
+
+
         showSuccess(t('successful action'))
 
         axios.get(`account/details/${currentAccount.login}`).then(res => {

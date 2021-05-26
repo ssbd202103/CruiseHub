@@ -1,7 +1,7 @@
 import React, {useEffect, useReducer} from "react";
 import {useTranslation} from 'react-i18next'
 import RoundedButton from '../../../components/RoundedButton'
-import axios from "axios";
+import axios from "../../../Services/URL";
 import styles from '../../../styles/ManageAccount.module.css'
 import Grid from "@material-ui/core/Grid";
 import {useSnackbarQueue} from "../../snackbar";
@@ -37,7 +37,7 @@ export default function ChangeAccessLevelState() {
             showError(t(message))
         });
 
-        await axios.get(`/api/account/details/${changeAccessLevelStateAccount.login}`, {
+        await axios.get(`account/details/${changeAccessLevelStateAccount.login}`, {
             headers: {
                 "Authorization": `Bearer ${token}`
             }
