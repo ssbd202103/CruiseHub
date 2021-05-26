@@ -15,12 +15,14 @@ import {createRef, useEffect, useState} from "react";
 import Recaptcha from 'react-recaptcha'
 import Popup from "../../PopupRecaptcha";
 import {
-    CITY_REGEX, COUNTRY_REGEX,
+    CITY_REGEX,
+    COUNTRY_REGEX,
     EMAIL_REGEX,
     LOGIN_REGEX,
     NAME_REGEX,
     NUM_REGEX,
-    PASSWORD_REGEX, PHONE_NUMBER_REGEX,
+    PASSWORD_REGEX,
+    PHONE_NUMBER_REGEX,
     POST_CODE_REGEX,
     STREET_REGEX
 } from "../../regexConstants";
@@ -70,7 +72,7 @@ export default function ClientSignUp() {
                 login,
                 email,
                 password,
-                languageType: i18n.language,
+                languageType: i18n.language.toUpperCase(),
                 addressDto: {
                     houseNumber,
                     street,
@@ -81,7 +83,7 @@ export default function ClientSignUp() {
                 phoneNumber
             }
         );
-        setButtonPopup(false)
+        await setButtonPopup(false)
         axios.post('/api/auth/client/registration', json, {
             headers: {
                 'Content-Type': 'application/json'
@@ -89,7 +91,10 @@ export default function ClientSignUp() {
         }).catch(error => {
             const message = error.response.data
             showError(t(message))
-        });
+        }).then(() => {
+                showSuccess("DONE")
+            }
+        );
     }
 
 
@@ -113,7 +118,7 @@ export default function ClientSignUp() {
             showError(t("invalid.form"))
         } else {
             setButtonPopup(true)
-            showSuccess("DONE")
+            // showSuccess("DONE")
         }
     }
 
