@@ -9,6 +9,7 @@ import {useSnackbarQueue} from "../../snackbar";
 export default function Checkboxes() {
     const {t} = useTranslation()
     const showError = useSnackbarQueue('error')
+    const showSuccess = useSnackbarQueue('success')
     const [selectedAccessLevel, setSelectedAccessLevel] = React.useState("");
 
     const currentAccount = JSON.parse(sessionStorage.getItem("grantAccessLevelAccount") as string)
@@ -48,6 +49,7 @@ export default function Checkboxes() {
             const message = error.response.data
             showError(t(message))
         });
+        showSuccess(t('successful action'))
     }
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedAccessLevel(event.target.value)

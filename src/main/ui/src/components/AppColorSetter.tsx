@@ -10,7 +10,7 @@ import {useSnackbarQueue} from "../pages/snackbar";
 
 export default function AppColorSetter() {
     const {t} = useTranslation();
-
+    const showSuccess = useSnackbarQueue('success')
     const showError = useSnackbarQueue('error')
 
     const darkMode = useSelector(selectDarkMode)
@@ -21,6 +21,7 @@ export default function AppColorSetter() {
             const message = error.response.data
             showError(t(message))
         });
+        showSuccess(t('successful action'))
     }
 
     return (

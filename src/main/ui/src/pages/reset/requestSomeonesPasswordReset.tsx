@@ -13,6 +13,7 @@ import {getUser} from "../../Services/userService";
 const RequestSomeonePasswordReset = () => {
     const {t} = useTranslation()
     const showError = useSnackbarQueue('error')
+    const showSuccess = useSnackbarQueue('success')
 
     const currentAccount = JSON.parse(sessionStorage.getItem("resetPasswordAccount") as string)
 
@@ -29,6 +30,7 @@ const RequestSomeonePasswordReset = () => {
                 const message = error.response.data
                 showError(t(message))
             });
+        showSuccess(t('successful action'))
     }
     return (
         <AuthLayout>

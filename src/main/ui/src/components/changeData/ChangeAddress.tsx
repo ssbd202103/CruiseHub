@@ -17,6 +17,7 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
     const {t} = useTranslation()
 
     const showError = useSnackbarQueue('error')
+    const showSuccess = useSnackbarQueue('success')
 
     const address = useSelector(selectAddress)
 
@@ -66,7 +67,7 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
             const message = error.response.data
             showError(t(message))
         });
-
+        showSuccess(t('successful action'))
     }
 
 

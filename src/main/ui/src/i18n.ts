@@ -154,7 +154,8 @@ const resources = {
             'passwords are not equal': 'Hasła nie są identyczne',
             'emails are not equal': 'Emaile nie są identyczne',
             'error.houseNumber.NaN': 'Podany numer domu nie jest liczbą',
-            'no options': 'Brak opcji'
+            'no options': 'Brak opcji',
+            'successful action': 'Akcja udała się'
         }
     },
     en: {
@@ -309,7 +310,8 @@ const resources = {
             'passwords are not equal': 'Passwords are not equal',
             'emails are not equal': "Emails are not equal",
             'error.houseNumber.NaN': 'Given house number is not a number',
-            'no options': 'No options'
+            'no options': 'No options',
+            'successful action': 'The action was successful'
         }
     }
 }

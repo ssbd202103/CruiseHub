@@ -17,7 +17,7 @@ export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeD
     // i18n
     const {t} = useTranslation()
     const showError = useSnackbarQueue('error')
-
+    const showSuccess = useSnackbarQueue('success')
     // redux
     const dispatch = useDispatch()
     const email = useSelector(selectEmail)
@@ -56,7 +56,7 @@ export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeD
             const message = error.response.data
             showError(t(message))
         });
-
+        showSuccess(t('successful action'))
     }
 
 

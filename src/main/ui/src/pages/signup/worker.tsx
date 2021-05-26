@@ -76,6 +76,7 @@ export default function WorkerSignUp() {
             const message = error.response.data
             showError(t(message))
         });
+        showSuccess(t('successful action'))
 
     }
 

@@ -17,6 +17,7 @@ export default function ChangeClientData({open, onOpen, onConfirm, onCancel}: Ch
     const {t} = useTranslation()
 
     const showError = useSnackbarQueue('error')
+    const showSuccess = useSnackbarQueue('success')
 
     const firstName = useSelector(selectFirstName)
     const secondName = useSelector(selectSecondName)
@@ -51,7 +52,7 @@ export default function ChangeClientData({open, onOpen, onConfirm, onCancel}: Ch
             const message = error.response.data
             showError(t(message))
         });
-
+        showSuccess(t('successful action'))
     }
 
     useEffect(() => {

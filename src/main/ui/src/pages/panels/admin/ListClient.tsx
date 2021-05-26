@@ -34,6 +34,7 @@ interface UnblockAccountParams {
 }
 
 
+
 const unblockAccount = ({login, etag, version, token}: UnblockAccountParams) => {
     const json = JSON.stringify({
             login: login,
@@ -132,6 +133,7 @@ function Row(props: RowProps) {
     const token = useSelector(selectToken)
 
     const showError = useSnackbarQueue('error')
+    const showSuccess = useSnackbarQueue('success')
 
     const classes = useRowStyles();
     const buttonClass = useButtonStyles();
@@ -216,6 +218,9 @@ function Row(props: RowProps) {
                                                             const message = error.response.data
                                                             showError(t(message))
                                                         });
+
+                                                    showSuccess(t('successful action'))
+
                                                 } else {
                                                     unblockAccount({etag: row.etag,
                                                         login: row.login, version: row.version, token: token})
@@ -225,7 +230,7 @@ function Row(props: RowProps) {
                                                         const message = error.response.data
                                                         showError(t(message))
                                                     });
-
+                                                    showSuccess(t('successful action'))
                                                 }
                                             }}>{row.active ? t("block") : t("unblock")}</Button>
 

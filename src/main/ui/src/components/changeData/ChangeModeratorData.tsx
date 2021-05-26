@@ -17,7 +17,7 @@ export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}:
     const {t} = useTranslation()
 
     const showError = useSnackbarQueue('error')
-
+    const showSuccess = useSnackbarQueue('success')
     const firstName = useSelector(selectFirstName)
     const secondName = useSelector(selectSecondName)
 
@@ -47,7 +47,7 @@ export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}:
             const message = error.response.data
             showError(t(message))
         });
-
+        showSuccess(t('successful action'))
     }
 
 
