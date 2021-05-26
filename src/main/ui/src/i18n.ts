@@ -159,7 +159,14 @@ const resources = {
             'passwords are not equal': 'Hasła nie są identyczne',
             'emails are not equal': 'Emaile nie są identyczne',
             'error.houseNumber.NaN': 'Podany numer domu nie jest liczbą',
-            'no options': 'Brak opcji'
+            'no options': 'Brak opcji',
+            "error.size.phoneNumber": "Numer telefonu powinien mieć maksymalnie 15 znaków",
+            "error.size.name": "Nazwa powinna mieć maksymalnie 64 znaków",
+            "error.size.country": "Kraj powinna mieć maksymalnie 64 znaków",
+            "error.size.city": "Miasto powinno mieć maksymalnie 64 znaków",
+            "error.size.street": "Ulica powinna mieć maksymalnie 64 znaki",
+            "error.size.companyName": "Nazwa firmy powinna mieć maksymalnie 64 znaki",
+            "error.size.postCode": "Kod pocztowy powinien mieć maksymalnie 20 znaków"
         }
     },
     en: {
@@ -320,7 +327,14 @@ const resources = {
             'passwords are not equal': 'Passwords are not equal',
             'emails are not equal': "Emails are not equal",
             'error.houseNumber.NaN': 'Given house number is not a number',
-            'no options': 'No options'
+            'no options': 'No options',
+            "error.size.phoneNumber": "Phone number should be no longer than 15 characters",
+            "error.size.name": "Name should be no longer than 64 characters",
+            "error.size.country": "Country should be no longer than 64 characters",
+            "error.size.city": "City should be no longer than 64 characters",
+            "error.size.street": "Street should be no longer than 64 characters",
+            "error.size.companyName": "Company name should be no longer than 64 characters",
+            "error.size.postCode": "Post code should be no longer than 20 characters"
         }
     }
 }
