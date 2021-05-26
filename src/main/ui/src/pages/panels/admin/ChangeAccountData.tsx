@@ -97,7 +97,7 @@ export default function ChangeAccountData() {
                 "Authorization": `Bearer ${token}`
             }
         })
-
+        showSuccess(t('successful action'))
     }
     const changePersonalData = async () => {
         const {token} = store.getState()
@@ -120,6 +120,7 @@ export default function ChangeAccountData() {
             const message = error.response.data
             showError(t(message))
         });
+        showSuccess(t('successful action'))
         await axios.get(`/account/details/${currentAccount.login}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -132,13 +133,6 @@ export default function ChangeAccountData() {
             const message = error.response.data
             showError(t(message))
         });
-
-
-        showSuccess(t('successful action'))
-        const result = await axios.get(`account/details/${currentAccount.login}`);
-        sessionStorage.setItem("changeAccountData", JSON.stringify(result.data));
-        forceUpdate()
-        handleChangePerData()
 
     }
 
