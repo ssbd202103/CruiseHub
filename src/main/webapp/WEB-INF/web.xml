@@ -146,11 +146,7 @@
     </security-role>
 
     <security-role>
-        <role-name>addCruiseGroup</role-name>
-    </security-role>
-
-    <security-role>
-        <role-name>changeCruiseGroup</role-name>
+        <role-name>removeClientRating</role-name>
     </security-role>
 
     <security-role>
