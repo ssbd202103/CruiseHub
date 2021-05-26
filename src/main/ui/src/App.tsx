@@ -10,6 +10,7 @@ import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
 import {I18nextProvider, useTranslation} from 'react-i18next';
 import i18n from './i18n'
 
+import Panel from './pages/panel'
 import Home from './pages/home'
 import Signin from './pages/signin'
 import SignUpClient from './pages/signup/client'
@@ -25,10 +26,15 @@ import VerifyAccount from './pages/verify/verifyAccount';
 
 import {SnackbarKey, SnackbarProvider} from 'notistack';
 import {TransitionProps} from "@material-ui/core/transitions";
+import {useSelector} from "react-redux";
+import {selectActiveAccessLevel} from "./redux/slices/userSlice";
+
 
 
 function App() {
     const {t} = useTranslation()
+
+    const activeAccessLevel = useSelector(selectActiveAccessLevel)
 
     const notistackRef = createRef<SnackbarProvider>()
 
@@ -57,8 +63,16 @@ function App() {
                 <Router basename={process.env.REACT_APP_ROUTER_BASE || ''}>
                     <Switch>
                         <Route exact path="/">
-                            <Home/>
+                            <Panel />
                         </Route>
+
+                        {
+                            activeAccessLevel === "CLIENT" ? (
+                                <Route path="/profile">
+                                    <ClientPanel />
+                                </Route>
+                            ) : null
+                        }
 
                         <Route path="/signin">
                             <Signin/>
@@ -70,22 +84,6 @@ function App() {
 
                         <Route path="/signup/worker">
                             <SignUpWorker/>
-                        </Route>
-
-                        <Route path="/panels/workerPanel">
-                            <WorkerPanel/>
-                        </Route>
-
-                        <Route path="/panels/clientPanel">
-                            <ClientPanel/>
-                        </Route>
-
-                        <Route path="/panels/adminPanel">
-                            <AdminPanel/>
-                        </Route>
-
-                        <Route path="/panels/moderatorPanel">
-                            <ModeratorPanel/>
                         </Route>
 
                         <Route path="/reset/passwordReset/*">

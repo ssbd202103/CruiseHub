@@ -63,11 +63,11 @@ export default function ClientPanel() {
 
     return (
         <Grid container className={styles.wrapper}>
-            <Redirect to="/panels/clientPanel/cruises" />
+            <Redirect to="/profile/cruises" />
             <Grid item xs={2} md={3} xl={2}>
                 <PanelMenu color={!darkMode ? 'blue' : 'white-dark'}>
                     <List className={styles.menu + ' ' + styles['menu-' + (!darkMode ? 'light' : 'dark')]} component="nav" aria-label="panel menu">
-                        <Link to="/panels/clientPanel/cruises">
+                        <Link to="/profile/cruises">
                             <ListItem button>
                                 <ListItemIcon>
                                     <CruiseIcon style={{ fill: `var(--${!darkMode ? 'white' : 'dark'})` }} />
@@ -75,7 +75,7 @@ export default function ClientPanel() {
                                 <ListItemText> {t("cruises")} </ListItemText>
                             </ListItem>
                         </Link>
-                        <Link to="/panels/clientPanel/settings">
+                        <Link to="/profile/settings">
                             <ListItem button>
                                 <ListItemIcon>
                                     <SettingsIcon style={{ fill: `var(--${!darkMode ? 'white' : 'dark'})` }} />
@@ -99,10 +99,10 @@ export default function ClientPanel() {
             </Grid>
 
             <Grid item className={styles.content + ' ' + styles[`content-${!darkMode ? 'light' : 'dark'}`]} xs={10} md={9} xl={10}>
-                <Route exact path="/panels/clientPanel/cruises">
+                <Route exact path="/profile/cruises">
                     <div> {t("my cruises")} </div>
                 </Route>
-                <Route exact path="/panels/clientPanel/settings">
+                <Route exact path="/profile/settings">
                     <Grid container className={manageStyles.wrapper + ' ' + manageStyles[`text-${!darkMode ? 'white' : 'dark'}`]} >
                         <ChangeClientData
                             open={isDataEdit}

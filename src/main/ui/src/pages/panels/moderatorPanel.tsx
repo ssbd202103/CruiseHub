@@ -63,11 +63,11 @@ export default function ModeratorPanel() {
 
     return (
         <Grid container className={styles.wrapper}>
-            <Redirect to="/panels/moderatorPanel/accounts" />
+            <Redirect to="/accounts" />
             <Grid item xs={2} md={3} xl={2}>
                 <PanelMenu color={!darkModel ? 'pink-dark' : 'white'}>
                     <List className={styles.menu + ' ' + styles['menu-' + (!darkModel ? 'light' : 'dark')]} component="nav" aria-label="panel menu">
-                        <Link to="/panels/moderatorPanel/accounts">
+                        <Link to="/accounts">
                             <ListItem button>
                                 <ListItemIcon>
                                     <AccountsListIcon style={{ fill: `var(--${!darkModel ? 'white' : 'dark'})` }} />
@@ -75,7 +75,7 @@ export default function ModeratorPanel() {
                                 <ListItemText> {t("list accounts")} </ListItemText>
                             </ListItem>
                         </Link>
-                        <Link to="/panels/moderatorPanel/ManageWorkers">
+                        <Link to="/ManageWorkers">
                             <ListItem button>
                                 <ListItemIcon>
                                     <AccountsListIcon style={{ fill: `var(--${!darkModel ? 'white' : 'dark'})` }} />
@@ -83,7 +83,7 @@ export default function ModeratorPanel() {
                                 <ListItemText> {t("Manage business workers")} </ListItemText>
                             </ListItem>
                         </Link>
-                        <Link to="/panels/moderatorPanel/settings">
+                        <Link to="/settings">
                             <ListItem button>
                                 <ListItemIcon>
                                     <SettingsIcon style={{ fill: `var(--${!darkModel ? 'white' : 'dark'})` }} />
@@ -107,11 +107,11 @@ export default function ModeratorPanel() {
             </Grid>
 
             <Grid item className={styles.content + ' ' + styles[`content-${!darkModel ? 'light' : 'dark'}`]} xs={10} md={9} xl={10}>
-                <Route exact path="/panels/moderatorPanel/accounts">
+                <Route exact path="/accounts">
                     <h3> {t("list accounts")} </h3>
                     <ListClient />
                 </Route>
-                <Route exact path="/panels/moderatorPanel/settings">
+                <Route exact path="/settings">
                     <ChangeModeratorData
                         open={isDataEdit}
                         onOpen={handleIsDataEdit}
@@ -129,7 +129,7 @@ export default function ModeratorPanel() {
                         onCancel={() => {setIsPasswordEdit(false)}} />
                     <LogOutRoundedButton />
                 </Route>
-                <Route exact path="/panels/moderatorPanel/ManageWorkers">
+                <Route exact path="/ManageWorkers">
                     <ManageWorkers/>
                 </Route>
             </Grid>

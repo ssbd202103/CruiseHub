@@ -68,11 +68,11 @@ export default function AdminPanel() {
 
     return (
         <Grid container className={styles.wrapper}>
-            <Redirect to="/panels/adminPanel/accounts" />
+            <Redirect to="/accounts" />
             <Grid item xs={2} md={3} xl={2}>
                 <PanelMenu color={!darkMode ? 'yellow-dark' : 'white-light'}>
                     <List className={styles.menu + ' ' + styles['menu-' + (!darkMode ? 'light' : 'dark')]} component="nav" aria-label="panel menu">
-                        <Link to="/panels/adminPanel/accounts">
+                        <Link to="/accounts">
                             <ListItem button>
                                 <ListItemIcon>
                                     <AccountsListIcon style={{ fill: `var(--${!darkMode ? 'white' : 'dark'})` }} />
@@ -80,7 +80,7 @@ export default function AdminPanel() {
                                 <ListItemText> {t("list accounts")} </ListItemText>
                             </ListItem>
                         </Link>
-                        <Link to="/panels/adminPanel/settings">
+                        <Link to="/settings">
                             <ListItem button>
                                 <ListItemIcon>
                                     <SettingsIcon style={{ fill: `var(--${!darkMode ? 'white' : 'dark'})` }} />
@@ -104,11 +104,11 @@ export default function AdminPanel() {
             </Grid>
 
             <Grid item className={styles.content + ' ' + styles[`content-${!darkMode ? 'light' : 'dark'}`]} xs={10} md={9} xl={10}>
-                <Route exact path="/panels/adminPanel/accounts">
+                <Route path="/accounts">
                     <h3> {t("list accounts")} </h3>
                     <ListClient />
                 </Route>
-                <Route exact path="/panels/adminPanel/settings">
+                <Route path="/settings">
                     <ChangeAdministratorData
                         open={isDataEdit}
                         onOpen={handleIsDataEdit}
@@ -126,16 +126,16 @@ export default function AdminPanel() {
                         onCancel={() => {setIsPasswordEdit(false)}} />
                     <LogOutRoundedButton />
                 </Route>
-                <Route path="/panels/adminPanel/ChangeAccountData">
+                <Route path="/ChangeAccountData">
                     <ChangeAccountData/>
                 </Route>
-                <Route path="/panels/adminPanel/ChangeAccountPassword">
+                <Route path="/ChangeAccountPassword">
                     <ChangeAccountPassword/>
                 </Route>
-                <Route path="/panels/adminPanel/GrantAccessLevel">
+                <Route path="/GrantAccessLevel">
                     <GrantAccessLevel/>
                 </Route>
-                <Route path="/panels/adminPanel/ChangeAccessLevelState">
+                <Route path="/ChangeAccessLevelState">
                     <ChangeAccessLevelState/>
                 </Route>
             </Grid>

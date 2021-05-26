@@ -49,11 +49,11 @@ export default function WorkerPanel() {
 
     return (
         <Grid container className={styles.wrapper}>
-            <Redirect to="/panels/workerPanel/cruises" />
+            <Redirect to="/cruises" />
             <Grid item xs={2} md={3} xl={2}>
                 <PanelMenu color={!darkMode ? 'green-dark' : 'white'}>
                     <List className={styles.menu + ' ' + styles['menu-' + (!darkMode ? 'light' : 'dark')]} component="nav" aria-label="panel menu">
-                        <Link to="/panels/workerPanel/cruises">
+                        <Link to="/cruises">
                             <ListItem button>
                                 <ListItemIcon>
                                     <CruiseIcon style={{ fill: `var(--${!darkMode ? 'white' : 'dark'})` }} />
@@ -61,7 +61,7 @@ export default function WorkerPanel() {
                                 <ListItemText> {t("cruises")} </ListItemText>
                             </ListItem>
                         </Link>
-                        <Link to="/panels/workerPanel/settings">
+                        <Link to="/settings">
                             <ListItem button>
                                 <ListItemIcon>
                                     <SettingsIcon style={{ fill: `var(--${!darkMode ? 'white' : 'dark'})` }} />
@@ -87,10 +87,10 @@ export default function WorkerPanel() {
 
 
             <Grid item className={styles.content + ' ' + styles[`content-${!darkMode ? 'light' : 'dark'}`]} xs={10} md={9} xl={10}>
-                <Route exact path="/panels/workerPanel/cruises">
+                <Route exact path="/cruises">
                     <div> {t("my cruises")} </div>
                 </Route>
-                <Route exact path="/panels/workerPanel/settings">
+                <Route exact path="/settings">
                     <ChangeBusinessWorkerData
                         open={isDataEdit}
                         onOpen={handleIsDataEdit}
