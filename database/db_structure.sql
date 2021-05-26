@@ -21,9 +21,9 @@ create table alter_types
 create table accounts
 (
     id                                            bigint                              not null,
-    first_name                                    varchar(25)                         not null,
-    second_name                                   varchar(25)                         not null,
-    login                                         varchar(25)                         not null,
+    first_name                                    varchar(64)                         not null,
+    second_name                                   varchar(64)                         not null,
+    login                                         varchar(64)                         not null,
     email                                         varchar(64)                         not null,
     password_hash                                 varchar(64)                         not null, -- hash sha256
     confirmed                                     boolean   default false             not null,
@@ -115,10 +115,10 @@ create table addresses
 (
     id                   bigint                                                       not null,
     house_number         bigint check ((house_number >= 0) AND (house_number <= 999)) not null,
-    street               varchar(25)                                                  not null,
-    postal_code          varchar(6)                                                   not null,
-    city                 varchar(25)                                                  not null,
-    country              varchar(25)                                                  not null,
+    street               varchar(64)                                                  not null,
+    postal_code          varchar(20)                                                  not null,
+    city                 varchar(64)                                                  not null,
+    country              varchar(64)                                                  not null,
 
     creation_date_time   timestamp default CURRENT_TIMESTAMP                          not null,
     last_alter_date_time timestamp                                                    not null,
@@ -140,7 +140,7 @@ create sequence address_id_seq
 create table clients
 (
     id              bigint      not null, -- FOREIGN KEY
-    phone_number    varchar(12) not null,
+    phone_number    varchar(15) not null,
     home_address_id bigint      not null, -- FOREIGN KEY
 
     CONSTRAINT clients_id_pk_constraint PRIMARY KEY (id),
@@ -159,9 +159,9 @@ create table moderators
 create table companies
 (
     id                   bigint                               not null,
-    name                 varchar(25)                          not null,
+    name                 varchar(64)                          not null,
     address_id           bigint                               not null, -- FOREIGN KEY
-    phone_number         varchar(12)                          not null,
+    phone_number         varchar(15)                          not null,
     nip                  numeric(10) check (nip >= 999999999) not null,
 
     creation_date_time   timestamp default CURRENT_TIMESTAMP  not null,
@@ -201,11 +201,11 @@ create table business_workers
 create table cruise_addresses
 (
     id                   bigint                              not null,
-    street               varchar(25)                         not null,
+    street               varchar(64)                         not null,
     street_number        bigint check ((street_number >= 0) AND (street_number <= 999)),
-    harbor_name          varchar(25)                         not null,
-    city_name            varchar(25)                         not null,
-    country_name         varchar(25)                         not null,
+    harbor_name          varchar(64)                         not null,
+    city_name            varchar(64)                         not null,
+    country_name         varchar(64)                         not null,
 
     creation_date_time   timestamp default CURRENT_TIMESTAMP not null,
     last_alter_date_time timestamp                           not null,
@@ -227,7 +227,7 @@ create sequence cruise_addresses_id_seq
 create table cruise_pictures
 (
     id                   bigint                              not null,
-    img_name             varchar(25),
+    img_name             varchar(64),
     img                  bytea,                                        --nullable only for implementation time.
 
     creation_date_time   timestamp default CURRENT_TIMESTAMP not null,
@@ -313,7 +313,7 @@ create sequence cruises_id_seq
 create table attractions
 (
     id                   bigint                              not null,
-    name                 varchar(25)                         not null,
+    name                 varchar(64)                         not null,
     description          varchar                             not null,
     price                numeric(8, 2)                       not null,
     number_of_seats      bigint check (number_of_seats >= 0) not null,

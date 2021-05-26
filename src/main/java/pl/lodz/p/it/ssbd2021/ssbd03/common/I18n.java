@@ -41,6 +41,13 @@ public class I18n {
     public static final String REGEX_INVALID_PASSWORD = "error.regex.password";
     public static final String REGEX_INVALID_NAME = "error.regex.name";
     public static final String REGEX_INVALID_EMAIL = "error.regex.email";
+    public static final String PHONE_NUMBER_SIZE = "error.size.phoneNumber";
+    public static final String NAME_SIZE = "error.size.name";
+    public static final String COUNTRY_SIZE = "error.size.country";
+    public static final String CITY_SIZE = "error.size.city";
+    public static final String STREET_SIZE = "error.size.street";
+    public static final String COMPANY_SIZE = "error.size.companyName";
+    public static final String POST_CODE_SIZE = "error.size.postCode";
     public static final String REGEX_INVALID_COMPANY_NAME = "error.regex.companyName";
     public static final String REQUESTED_PASSWORD_RESET_SUBJECT = "account.request.reset.password.subject";
     public static final String REQUESTED_PASSWORD_RESET_BODY = "account.request.reset.password.body";
