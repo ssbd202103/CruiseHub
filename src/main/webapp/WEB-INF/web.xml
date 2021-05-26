@@ -159,7 +159,9 @@
     <security-role>
         <role-name>viewCruiseReservations</role-name>
     </security-role>
-
+    <security-role>
+        <role-name>changeOtherEmail</role-name>
+    </security-role>
 
     <security-constraint>
         <web-resource-collection>

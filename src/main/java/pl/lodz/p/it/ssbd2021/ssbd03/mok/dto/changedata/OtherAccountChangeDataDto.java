@@ -22,14 +22,11 @@ public class OtherAccountChangeDataDto extends AbstractAccountDto {
     private String newFirstName;
     @Name
     private String newSecondName;
-    @Email(message = REGEX_INVALID_EMAIL)
-    @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
-    private String newEmail;
 
 
-    public OtherAccountChangeDataDto(String login, long version, String newFirstName, String newSecondName, String newEmail) {
+
+    public OtherAccountChangeDataDto(String login, long version, String newFirstName, String newSecondName) {
         super(login, version);
-        this.newEmail = newEmail;
         this.newFirstName = newFirstName;
         this.newSecondName = newSecondName;
     }

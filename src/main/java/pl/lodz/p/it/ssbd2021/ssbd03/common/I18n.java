@@ -68,6 +68,8 @@ public class I18n {
     public static final String APP_FORBIDDEN = "error.forbidden";
     public static final String APP_INTERNAL_SERVER_ERROR = "error.internal.server";
     public static final String RATING_CONSTRAINT_ERROR = "error.constraint.rating";
+    public static final String REQUEST_EMAIL_CHANGE_SUBJECT = "account.request.change.email.subject";
+    public static final String REQUEST_EMAIL_CHANGE_BODY = "account.request.change.email.body";
 
     private ResourceBundle bundle;
 

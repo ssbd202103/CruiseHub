@@ -180,12 +180,10 @@ public interface AccountManagerLocal {
     /**
      * Zmienia email konta o podanym loginie
      *
-     * @param login    login konta
-     * @param version  wersja
-     * @param newEmail nowy email
+     * @param token    token z danymi uwierzytelniającymi
      */
 
-    void changeEmail(String login, long version, String newEmail) throws BaseAppException;
+    void changeEmail(String token) throws BaseAppException;
 
     /**
      * Zmień dane klienta
@@ -278,4 +276,26 @@ public interface AccountManagerLocal {
      */
     void confirmBusinessWorker(String login, long version) throws BaseAppException;
 
+    /**
+     * Metoda odpowiedzialna za wysłanie emaila z linkiem potwierdzającym zmianę adresu email.
+     * @param login login użytkownika
+     * @param newEmail nowy adres email
+     * @throws BaseAppException bazowy wyjątek aplikacji
+     */
+    void requestEmailChange(String login, String newEmail) throws BaseAppException;
+
+    /**
+     * Metoda odpowiedzialna za wysłanie emaila z linkiem potwierdzającym zmianę adresu email przez administratora.
+     * @param login login użytkownika
+     * @param newEmail nowy adres email
+     * @throws BaseAppException bazowy wyjątek aplikacji
+     */
+    void requestOtherEmailChange(String login, String newEmail) throws BaseAppException;
+
+    /**
+     * Zmienia email konta o podanym loginie przez Administrator
+     *
+     * @param token    token z danymi uwierzytelniającymi
+     */
+    void changeOtherEmail(String token) throws BaseAppException;
 }

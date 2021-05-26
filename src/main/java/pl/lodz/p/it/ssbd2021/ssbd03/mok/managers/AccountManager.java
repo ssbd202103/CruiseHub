@@ -230,6 +230,45 @@ public class AccountManager implements AccountManagerLocal {
         EmailService.sendEmailWithContent(account.getEmail().trim(), subject, contentHtml);
     }
 
+    @RolesAllowed("changeEmail")
+    @Override
+    public void requestEmailChange(String login, String newEmail) throws BaseAppException{
+        Account account = this.accountFacade.findByLogin(login);
+        if (!account.isConfirmed()) {
+            throw new AccountManagerException(PASSWORD_RESET_ACCOUNT_NOT_VERIFIED_ERROR);
+        }
+        Map<String, Object> claims = Map.of("version", account.getVersion(),"email",newEmail,"accessLevels", account.getAccessLevels()
+                .stream().map(accessLevel -> accessLevel.getAccessLevelType().name()).collect(Collectors.toList()));
+
+        String token = JWTHandler.createToken(claims, login);
+        TokenWrapper tokenWrapper = TokenWrapper.builder().token(token).account(account).used(false).build();
+        this.tokenWrapperFacade.create(tokenWrapper);
+        Locale locale = new Locale(account.getLanguageType().getName().name());
+        String subject = i18n.getMessage(REQUEST_EMAIL_CHANGE_SUBJECT, locale);
+        String body = i18n.getMessage(REQUEST_EMAIL_CHANGE_BODY, locale);
+        String contentHtml = "<a href=\"" + PropertiesReader.getSecurityProperties().getProperty("app.baseurl") + "/reset/changeEmail/" + token + "\">" + body + "</a>";
+        EmailService.sendEmailWithContent(account.getEmail().trim(), subject, contentHtml);
+    }
+
+    @RolesAllowed("changeOtherEmail")
+    @Override
+    public void requestOtherEmailChange(String login, String newEmail) throws BaseAppException{
+        Account account = this.accountFacade.findByLogin(login);
+        if (!account.isConfirmed()) {
+            throw new AccountManagerException(PASSWORD_RESET_ACCOUNT_NOT_VERIFIED_ERROR);
+        }
+        Map<String, Object> claims = Map.of("version", account.getVersion(),"email",newEmail,"accessLevels", account.getAccessLevels()
+                .stream().map(accessLevel -> accessLevel.getAccessLevelType().name()).collect(Collectors.toList()));
+
+        String token = JWTHandler.createToken(claims, login);
+        TokenWrapper tokenWrapper = TokenWrapper.builder().token(token).account(account).used(false).build();
+        this.tokenWrapperFacade.create(tokenWrapper);
+        Locale locale = new Locale(account.getLanguageType().getName().name());
+        String subject = i18n.getMessage(REQUEST_EMAIL_CHANGE_SUBJECT, locale);
+        String body = i18n.getMessage(REQUEST_EMAIL_CHANGE_BODY, locale);
+        String contentHtml = "<a href=\"" + PropertiesReader.getSecurityProperties().getProperty("app.baseurl") + "/reset/changeOtherEmail/" + token + "\">" + body + "</a>";
+        EmailService.sendEmailWithContent(account.getEmail().trim(), subject, contentHtml);
+    }
     @PermitAll
     @Override
     public void resetPassword(String login, String passwordHash, String token) throws BaseAppException {
@@ -375,7 +414,6 @@ public class AccountManager implements AccountManagerLocal {
         }
         targetAccount.setFirstName(updatedAccount.getFirstName());
         targetAccount.setSecondName(updatedAccount.getSecondName());
-        targetAccount.setEmail(updatedAccount.getEmail());
 
         setUpdatedMetadata(targetAccount);
         return targetAccount;
@@ -397,16 +435,66 @@ public class AccountManager implements AccountManagerLocal {
 
     @RolesAllowed("changeEmail")
     @Override
-    public void changeEmail(String login, long version, String newEmail) throws BaseAppException {
-        Account account = accountFacade.findByLogin(login);
-        if (!(account.getVersion() == version)) {
+    public void changeEmail(String token) throws BaseAppException {
+        JWTHandler.validateToken(token);
+
+        Map<String, Claim> claims = JWTHandler.getClaimsFromToken(token);
+        Date expire = JWTHandler.getExpirationTimeFromToken(token);
+
+        if (claims.get("sub").isNull() || claims.get("version").isNull()) {
+            throw new AccountManagerException(ACCOUNT_VERIFICATION_TOKEN_CONTENT_ERROR);
+        }
+
+        String login = claims.get("sub").asString();
+        if (expire.before(new Date())) {
+            throw new AccountManagerException(TOKEN_EXPIRED_ERROR);
+        }
+
+        Account account = this.accountFacade.findByLogin(login);
+
+        if (!(account.getVersion() == claims.get("version").asLong())) {
             throw FacadeException.optimisticLock();
         }
+        String newEmail = claims.get("email").asString();
+        TokenWrapper tokenWrapper = this.tokenWrapperFacade.findByToken(token);
+        tokenWrapper.setUsed(true);
+        this.tokenWrapperFacade.edit(tokenWrapper);
         account.setEmail(newEmail);
 
         setUpdatedMetadata(account);
     }
 
+
+    @RolesAllowed("changeOtherEmail")
+    @Override
+    public void changeOtherEmail(String token) throws BaseAppException {
+        JWTHandler.validateToken(token);
+
+        Map<String, Claim> claims = JWTHandler.getClaimsFromToken(token);
+        Date expire = JWTHandler.getExpirationTimeFromToken(token);
+
+        if (claims.get("sub").isNull() || claims.get("version").isNull()) {
+            throw new AccountManagerException(ACCOUNT_VERIFICATION_TOKEN_CONTENT_ERROR);
+        }
+
+        String login = claims.get("sub").asString();
+        if (expire.before(new Date())) {
+            throw new AccountManagerException(TOKEN_EXPIRED_ERROR);
+        }
+
+        Account account = this.accountFacade.findByLogin(login);
+
+        if (!(account.getVersion() == claims.get("version").asLong())) {
+            throw FacadeException.optimisticLock();
+        }
+        String newEmail = claims.get("email").asString();
+        TokenWrapper tokenWrapper = this.tokenWrapperFacade.findByToken(token);
+        tokenWrapper.setUsed(true);
+        this.tokenWrapperFacade.edit(tokenWrapper);
+        account.setEmail(newEmail);
+
+        setUpdatedMetadata(account);
+    }
     private AccessLevel getAccessLevel(Account from, AccessLevelType target) throws AccountManagerException {
         Optional<AccessLevel> optionalAccessLevel = from.getAccessLevels().stream()
                 .filter(accessLevel -> accessLevel.getAccessLevelType().equals(target)).findAny();

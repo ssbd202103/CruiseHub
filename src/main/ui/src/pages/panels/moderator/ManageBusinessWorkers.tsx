@@ -10,12 +10,12 @@ import Paper from '@material-ui/core/Paper';
 import {useTranslation} from "react-i18next";
 import {useSelector} from "react-redux";
 import {selectDarkMode} from "../../../redux/slices/userSlice";
-import {getAllAccounts} from "../../../Services/accountsService";
 import DarkedTextField from "../../../components/DarkedTextField";
 import store from "../../../redux/store";
 import axios from "../../../Services/URL";
 import { Button } from '@material-ui/core';
 import RoundedButton from "../../../components/RoundedButton";
+import {useSnackbarQueue} from "../../snackbar";
 
 const useRowStyles = makeStyles({
     root: {
@@ -55,6 +55,7 @@ export interface RowProps {
 
 function Row(props: RowProps) {
     const {t} = useTranslation()
+    const showError = useSnackbarQueue('error')
     const { row } = props;
     const { style } = props;
     const classes = useRowStyles();
@@ -71,7 +72,10 @@ function Row(props: RowProps) {
             <TableCell style={style}>{row.companyName}</TableCell>
             <TableCell style={style}>{row.companyPhoneNumber}</TableCell>
             <TableCell style={style}><Button onClick={() =>
-                confirmWorker({row})
+                confirmWorker({row}).catch(error => {
+                    const message = error.response.data
+                    showError(t(message))
+                })
 
             }>{t("confirm")}</Button></TableCell>
         </TableRow>
@@ -86,7 +90,7 @@ function getWorkers(){
         }
     })
 }
-function confirmWorker(props: any) {
+ function confirmWorker(props: any) {
     const {token} = store.getState()
     const { row } = props;
     const json = JSON.stringify({
@@ -103,7 +107,6 @@ function confirmWorker(props: any) {
         }
     })
 }
-
 export default function ModListClient() {
     const [, forceUpdate] = useReducer(x => x + 1, 0);
     const [users, setUsers] = useState([]);

@@ -22,6 +22,8 @@ import PasswordReset from "./pages/reset/passwordReset";
 import RequestPasswordReset from './pages/reset/requestPasswordReset';
 import RequestSomeonePasswordReset from './pages/reset/requestSomeonesPasswordReset';
 import VerifyAccount from './pages/verify/verifyAccount';
+import ChangeEmail from './pages/reset/changeEmail'
+import ChangeOtherEmail from './pages/reset/changeOtherEmail'
 
 import {SnackbarKey, SnackbarProvider} from 'notistack';
 import {TransitionProps} from "@material-ui/core/transitions";
@@ -90,6 +92,12 @@ function App() {
 
                         <Route path="/reset/passwordReset/*">
                             <PasswordReset/>
+                        </Route>
+                        <Route path="/reset/changeEmail/*">
+                            <ChangeEmail/>
+                        </Route>
+                        <Route path="/reset/changeOtherEmail/*">
+                            <ChangeOtherEmail/>
                         </Route>
 
                         <Route path="/reset/requestPassword">
