@@ -30,7 +30,7 @@ function PasswordReset(props: any) {
             password
         }
 
-        axios.put('/api/account/reset-password', json, {
+        axios.put('account/reset-password', json, {
             headers: {
                 'Content-Type': 'application/json'
             }

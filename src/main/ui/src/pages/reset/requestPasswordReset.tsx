@@ -17,7 +17,7 @@ const RequestPasswordReset = () => {
     const onFormSubmit = () => {
         // event.preventDefault()
         // console.log("hello world")
-        axios.post(`/api/account/request-password-reset/${login}`, {})
+        axios.post(`account/request-password-reset/${login}`, {})
             .catch(error => {
                 const message = error.response.data
                 showError(t(message))

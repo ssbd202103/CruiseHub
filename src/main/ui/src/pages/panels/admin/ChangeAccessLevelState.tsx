@@ -39,7 +39,7 @@ export default function ChangeAccessLevelState() {
         });
         showSuccess(t('successful action'))
 
-        axios.get(`/api/account/details/${currentAccount.login}`).then(res => {
+        axios.get(`account/details/${currentAccount.login}`).then(res => {
             sessionStorage.setItem("changeAccessLevelStateAccount", JSON.stringify(res.data));
             forceUpdate()
         }).catch(error => {

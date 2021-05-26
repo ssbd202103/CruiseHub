@@ -21,7 +21,7 @@ const RequestSomeonePasswordReset = () => {
     const {token} = store.getState()
     let login = currentAccount.login;
     const onFormSubmit = () => {
-        axios.post(`/api/account/request-someones-password-reset/${login}/${email}/`, null, {
+        axios.post(`account/request-someones-password-reset/${login}/${email}/`, null, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }

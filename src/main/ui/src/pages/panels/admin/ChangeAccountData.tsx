@@ -80,7 +80,7 @@ export default function ChangeAccountData() {
             showError(t(message))
         });
         showSuccess(t('successful action'))
-        const result = await axios.get(`/api/account/details/${currentAccount.login}`);
+        const result = await axios.get(`account/details/${currentAccount.login}`);
         sessionStorage.setItem("changeAccountData", JSON.stringify(result.data));
         forceUpdate()
         handleChangePerData()
@@ -118,7 +118,7 @@ export default function ChangeAccountData() {
         });
         showSuccess(t('successful action'))
 
-        const result = axios.get(`/api/account/details/${currentAccount.login}`).then(res => {
+        const result = axios.get(`account/details/${currentAccount.login}`).then(res => {
             sessionStorage.setItem("changeAccountData", JSON.stringify(res.data));
             forceUpdate()
             handleChangAddress()
@@ -150,7 +150,7 @@ export default function ChangeAccountData() {
         });
         showSuccess(t('successful action'))
 
-        axios.get(`/api/account/details/${currentAccount.login}`).then(res => {
+        axios.get(`account/details/${currentAccount.login}`).then(res => {
             sessionStorage.setItem("changeAccountData", JSON.stringify(res.data));
             forceUpdate()
             handleChangePhone()

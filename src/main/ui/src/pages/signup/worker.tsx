@@ -68,7 +68,7 @@ export default function WorkerSignUp() {
             companyName: company
         });
         setButtonPopup(false)
-        axios.post('/api/auth/business-worker/registration', json, {
+        axios.post('auth/business-worker/registration', json, {
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -82,7 +82,7 @@ export default function WorkerSignUp() {
 
     useEffect(() => {
         const getCompaniesList = async () => {
-            const {data} = await axios.get('/api/company/companies-info', {});
+            const {data} = await axios.get('company/companies-info', {});
             setCompaniesList(data.map((comp: { name: string }) => comp.name))
         }
         getCompaniesList()
