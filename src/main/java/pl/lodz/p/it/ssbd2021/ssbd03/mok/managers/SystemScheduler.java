@@ -17,10 +17,7 @@ import javax.inject.Inject;
 import javax.interceptor.Interceptors;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 import static javax.ejb.TransactionAttributeType.REQUIRES_NEW;
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.VERIFICATION_EMAIL_BODY;
@@ -44,20 +41,20 @@ public class SystemScheduler {
     private TokenWrapperFacade tokenWrapperFacade;
     @Inject
     private I18n ii18n;
-
+    private static final Properties securityProperties = PropertiesReader.getSecurityProperties();
     /**
      * Pobiera i usuwa niezatwierdzone konta, dla których minął 24-godzinny okres potwierdzenia
      */
     @Schedule(persistent = false)
     private void removeUnconfirmedAccounts() throws BaseAppException {
 
+
         List<Account> unconfirmed = accountFacade.getUnconfirmedAccounts();
         for (Account acc : unconfirmed
         ) {
-            if (acc.getCreationDateTime().plus(1, ChronoUnit.DAYS).isBefore(LocalDateTime.now())) {
-                String[] to = {acc.getEmail()};
+            if (acc.getCreationDateTime().plus( Long.parseLong(securityProperties.getProperty("remove.unconfirmed.accounts.time")), ChronoUnit.HOURS).isBefore(LocalDateTime.now())) {
                 Locale locale = new Locale(acc.getLanguageType().getName().name());
-                EmailService.sendFromGMail(to, ii18n.getMessage(I18n.REMOVE_UNCONFIRMED_ACCOUNT_SUBJECT, locale), ii18n.getMessage(I18n.REMOVE_UNCONFIRMED_ACCOUNT_BODY, locale));
+                EmailService.sendEmailWithContent(acc.getEmail(), ii18n.getMessage(I18n.REMOVE_UNCONFIRMED_ACCOUNT_SUBJECT, locale), ii18n.getMessage(I18n.REMOVE_UNCONFIRMED_ACCOUNT_BODY, locale));
                 accountFacade.remove(acc);
             }
         }
@@ -88,7 +85,7 @@ public class SystemScheduler {
         List<Account> unconfirmed = accountFacade.getUnconfirmedAccounts();
         for (Account acc : unconfirmed
         ) {
-            if (acc.getCreationDateTime().plus(12, ChronoUnit.HOURS).isBefore(LocalDateTime.now())) {
+            if (acc.getCreationDateTime().plus( Long.parseLong(securityProperties.getProperty("remove.unconfirmed.accounts.time"))/2, ChronoUnit.HOURS).isBefore(LocalDateTime.now())) {
                 Map<String, Object> claims = Map.of("version", acc.getVersion());
                 String token = JWTHandler.createTokenEmail(claims, acc.getLogin());
                 Locale locale = new Locale(acc.getLanguageType().getName().name());
