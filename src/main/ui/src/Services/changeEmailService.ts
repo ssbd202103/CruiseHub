@@ -1,8 +1,12 @@
 import store from "../redux/store";
 import axios from './URL'
 import {getUser} from "./userService";
+import {useSnackbarQueue} from "../pages/snackbar";
+import {useTranslation} from "react-i18next";
 
 export function changeEmail(newEmail: string) {
+
+
 
     const {
         user: {
@@ -12,6 +16,7 @@ export function changeEmail(newEmail: string) {
         },
         token
     } = store.getState()
+
 
     return axios.put('account/change-email', {
             newEmail,

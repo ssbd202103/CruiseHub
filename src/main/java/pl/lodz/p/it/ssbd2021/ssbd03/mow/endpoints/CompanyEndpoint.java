@@ -1,8 +1,10 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.endpoints.BaseEndpoint;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.BusinessWorkerDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.AddCompanyDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CompanyLightDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.changeCruiseGroup.CompanyDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.converters.CompanyMapper;
@@ -48,5 +50,12 @@ public class CompanyEndpoint extends BaseEndpoint implements CompanyEndpointLoca
     @Override
     public List<CompanyDto> getAllCompanies(String userLogin) throws BaseAppException {
         return null; // todo finish implementations
+    }
+
+    @RolesAllowed("addCompany")
+    @Override
+    public void addCompany(AddCompanyDto addCompanyDto) throws BaseAppException {
+        Company company = CompanyMapper.mapAddCompanyDtoToCompany(addCompanyDto);
+        companyManager.addCompany(company);
     }
 }

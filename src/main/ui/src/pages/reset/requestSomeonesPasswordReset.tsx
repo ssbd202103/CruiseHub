@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import axios from "axios";
+import axios from "../../Services/URL";
 import AuthLayout from "../../layouts/AuthLayout";
 import DarkedTextField from "../../components/DarkedTextField";
 import styles from "../../styles/auth.global.module.css";
@@ -13,6 +13,7 @@ import {getUser, updateToken} from "../../Services/userService";
 const RequestSomeonePasswordReset = () => {
     const {t} = useTranslation()
     const showError = useSnackbarQueue('error')
+    const showSuccess = useSnackbarQueue('success')
 
     const currentAccount = JSON.parse(sessionStorage.getItem("resetPasswordAccount") as string)
 
@@ -21,15 +22,17 @@ const RequestSomeonePasswordReset = () => {
     let login = currentAccount.login;
 
     const onFormSubmit = () => {
-        axios.post(`/api/account/request-someones-password-reset/${login}/${email}/`, null, {
+        axios.post(`account/request-someones-password-reset/${login}/${email}/`, null, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         }).catch(error => {
-            const message = error.response.data
-            showError(t(message))
-        });
+                const message = error.response.data
+                showError(t(message))
+            });
         updateToken()
+        showSuccess(t('successful action'))
+
     }
     return (
         <AuthLayout>

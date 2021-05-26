@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {ChangeEvent, useEffect, useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Collapse from '@material-ui/core/Collapse';
@@ -12,16 +12,20 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-import {Button} from "@material-ui/core";
+import {Button, TextField} from "@material-ui/core";
 import {Link} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import DarkedTextField from "../../../components/DarkedTextField";
-import axios from "axios";
+import axios from "../../../Services/URL";
 import {useSelector} from "react-redux";
 import {selectDarkMode} from "../../../redux/slices/userSlice";
 import {getAccountDetailsAbout, getAllAccounts} from "../../../Services/accountsService";
 import {selectToken} from "../../../redux/slices/tokenSlice";
 import {useSnackbarQueue} from "../../snackbar";
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import store from "../../../redux/store";
+import {setChangeAccessLevelStateAccount} from "../../../redux/slices/changeAccessLevelStateSlice";
+
 import {updateToken} from "../../../Services/userService";
 
 interface UnblockAccountParams {
@@ -38,8 +42,8 @@ const unblockAccount = ({login, etag, version, token}: UnblockAccountParams) => 
             version: version,
         }
     );
-    return axios.put('/api/account/unblock', json, {
-        headers:{
+    return axios.put('account/unblock', json, {
+        headers: {
             'Content-Type': 'application/json',
             'If-Match': etag,
             'Authorization': `Bearer ${token}`
@@ -49,6 +53,7 @@ const unblockAccount = ({login, etag, version, token}: UnblockAccountParams) => 
         return response.status == 200;
     })
 };
+
 function refresh() {
     window.location.reload();
 }
@@ -59,7 +64,7 @@ const blockAccount = ({login, etag, version, token}: UnblockAccountParams) => {
             version: version,
         }
     );
-    return axios.put('/api/account/block', json, {
+    return axios.put('account/block', json, {
         headers:{
             'Content-Type': 'application/json',
             'If-Match': etag,
@@ -118,7 +123,7 @@ function createData(
 
 
 export interface RowProps {
-    row : ReturnType<typeof createData>,
+    row: ReturnType<typeof createData>,
     style: React.CSSProperties
 }
 
@@ -131,6 +136,7 @@ function Row(props: RowProps) {
     const token = useSelector(selectToken)
 
     const showError = useSnackbarQueue('error')
+    const showSuccess = useSnackbarQueue('success')
 
     const classes = useRowStyles();
     const buttonClass = useButtonStyles();
@@ -157,7 +163,7 @@ function Row(props: RowProps) {
 
     const setCurrentChangeAccessLevelStateAccount = async () => {
         getAccountDetailsAbout(row.login).then(res => {
-            sessionStorage.setItem("changeAccessLevelStateAccount", JSON.stringify(res.data));
+            store.dispatch(setChangeAccessLevelStateAccount(res.data))
         }).catch(error => {
             const message = error.response.data
             showError(t(message))
@@ -215,6 +221,9 @@ function Row(props: RowProps) {
                                                             const message = error.response.data
                                                             showError(t(message))
                                                         });
+
+                                                    showSuccess(t('successful action'))
+
                                                 } else {
                                                     unblockAccount({etag: row.etag,
                                                         login: row.login, version: row.version, token: token})
@@ -224,7 +233,7 @@ function Row(props: RowProps) {
                                                         const message = error.response.data
                                                         showError(t(message))
                                                     });
-
+                                                    showSuccess(t('successful action'))
                                                 }
                                             }}>{row.active ? t("block") : t("unblock")}</Button>
 
@@ -265,29 +274,42 @@ export default function AdminListClient() {
             const message = error.response.data
             showError(t(message))
         })
-    },[]);
+    }, []);
 
     function search(rows: any[]) {
         if (Array.isArray(rows) && rows.length) {
-            return rows.filter(
-                row => row.props.row.firstName.toLowerCase().indexOf(searchInput.toLowerCase()) > -1 ||
-                       row.props.row.secondName.toLowerCase().indexOf(searchInput.toLowerCase()) > -1
+            const filteredAccount = rows.filter(
+                row => row.props.row.firstName.concat(" ", row.props.row.secondName).toLowerCase().
+                    indexOf(searchInput.toLowerCase())> -1
             );
+
+            filteredAccount.forEach(account => (accounts.includes(account.props.row.firstName + " " + account.props.row.secondName) ?
+                "" : accounts.push(account.props.row.firstName + " " + account.props.row.secondName)));
+            return filteredAccount
         } else {
             return rows;
         }
     }
 
     const {t} = useTranslation()
+
+    const accounts: String[] = [];
+
+
     return (
         <div>
             <div>
-                <DarkedTextField
-                    label={t('search account')}
-                    type="text"
-                    value={searchInput}
-                    onChange={(e) => setSearchInput(e.target.value)}
-                    style={{marginBottom: '20px'}} />
+                <Autocomplete
+                    options={accounts}
+                    inputValue={searchInput}
+                    style={{ width: 300 }}
+                    noOptionsText={t('no options')}
+                    onChange={(event, value) => {setSearchInput(value as string ?? '')}}
+                    renderInput={(params) => (
+                        <TextField {...params} label={t('search account')}  variant="outlined" onChange={(e) => setSearchInput(e.target.value)}/>
+                    )}
+                />
+
             </div>
             <TableContainer component={Paper} style={{
                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`

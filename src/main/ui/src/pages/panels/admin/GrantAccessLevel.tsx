@@ -5,11 +5,15 @@ import {useTranslation} from 'react-i18next'
 import RoundedButton from '../../../components/RoundedButton'
 import {useSnackbarQueue} from "../../snackbar";
 import {updateToken} from "../../../Services/userService";
+import axios from "../../../Services/URL";
+import store from "../../../redux/store";
 
 
 export default function Checkboxes() {
+    const {token} = store.getState()
     const {t} = useTranslation()
     const showError = useSnackbarQueue('error')
+    const showSuccess = useSnackbarQueue('success')
     const [selectedAccessLevel, setSelectedAccessLevel] = React.useState("");
 
     const currentAccount = JSON.parse(sessionStorage.getItem("grantAccessLevelAccount") as string)
@@ -23,32 +27,23 @@ export default function Checkboxes() {
             accountVersion: currentAccount.version
         }
 
-        // await axios.put("/api/account/grant-access-level", {
-        //     json,
-        //     mode: 'no-cors',
-        //     headers: {
-        //         "Content-Type": "application/json",
-        //         "Accept": "application/json",
-        //         "If-Match": currentAccount.etag
-        //     }
-        // })
-
-        /// above axios code results in java backend not seeing headers, most likely CORS issue,
-        //  no-cors mode does not resolve it for axios, it works with fetch though
-
-        fetch("/api/account/grant-access-level", {
-            method: "PUT",
-            mode: "same-origin",
-            body: JSON.stringify(json),
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json",
-                "If-Match": currentAccount.etag
+        await axios.put("account/grant-access-level",
+            json,
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    'Authorization': `Bearer ${token}`,
+                    "If-Match": currentAccount.etag
+                }
             }
+        ).then(() => {
+            showSuccess(t('success.accessLevelAssigned'));
         }).catch(error => {
             const message = error.response.data
             showError(t(message))
         });
+        showSuccess(t('successful action'))
         updateToken()
     }
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

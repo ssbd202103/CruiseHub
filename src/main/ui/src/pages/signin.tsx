@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom'
 import Box from '@material-ui/core/Box'
 import PasswordIcon from '@material-ui/icons/VpnKeyRounded'
 
-import { useHistory } from 'react-router-dom'
+import {useHistory} from 'react-router-dom'
 
 import AuthLayout from '../layouts/AuthLayout'
 import DarkedTextField from '../components/DarkedTextField'
@@ -12,7 +12,7 @@ import RoundedButton from '../components/RoundedButton'
 import {useTranslation} from 'react-i18next'
 
 import styles from '../styles/auth.global.module.css'
-import axios from "axios"
+import axios from "../Services/URL"
 import React, {useState} from "react"
 
 import {getUser} from "../Services/userService";
@@ -23,7 +23,6 @@ export default function SignIn() {
     const {t} = useTranslation();
 
     const showError = useSnackbarQueue('error')
-
     const history = useHistory();
 
     const [login, setLogin] = useState('')
@@ -35,7 +34,7 @@ export default function SignIn() {
             password: password
         })
 
-        axios.post('/api/auth/sign-in', json, {
+        axios.post('/auth/sign-in', json, {
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -63,7 +62,9 @@ export default function SignIn() {
                 }}
                 placeholder="login"
                 value={login}
-                onChange={event => {setLogin(event.target.value)}}
+                onChange={event => {
+                    setLogin(event.target.value)
+                }}
                 colorIgnored
             />
 
@@ -74,10 +75,12 @@ export default function SignIn() {
                     width: '70%',
                     margin: '20px 0'
                 }}
-                icon={(<PasswordIcon />)}
+                icon={(<PasswordIcon/>)}
                 placeholder="1234567890"
                 value={password}
-                onChange={event => {setPassword(event.target.value)}}
+                onChange={event => {
+                    setPassword(event.target.value)
+                }}
                 colorIgnored
             />
 

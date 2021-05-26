@@ -66,26 +66,15 @@ public class AuthController {
             try {
                 authEndpoint.updateIncorrectAuthenticateInfo(auth.getLogin(), httpServletRequest.getRemoteAddr(), LocalDateTime.now());
             } catch (BaseAppException e) {
-                return Response.status(Response.Status.UNAUTHORIZED).entity(e.getMessage()).
-                        header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
-                        .header("Access-Control-Allow-Credentials", "true")
-                        .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
-                        .header("Access-Control-Allow-Origin", "*")
-                        .build();
+                return Response.status(Response.Status.UNAUTHORIZED).entity(e.getMessage()).build();
             }
-            return Response.status(Response.Status.UNAUTHORIZED).entity(I18n.INCORRECT_PASSWORD).header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
-                    .header("Access-Control-Allow-Credentials", "true")
-                    .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD").header("Access-Control-Allow-Origin", "*")
-                    .build();
+            return Response.status(Response.Status.UNAUTHORIZED).entity(I18n.INCORRECT_PASSWORD).build();
         }
 
         token = authEndpoint.updateCorrectAuthenticateInfo(auth.getLogin(), httpServletRequest.getRemoteAddr(), LocalDateTime.now());
 
         return Response.ok()
                 .entity(token)
-                .header("Access-Control-Allow-Origin", "*").header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
-                .header("Access-Control-Allow-Credentials", "true")
-                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
                 .build();
     }
 
@@ -93,7 +82,7 @@ public class AuthController {
     @Path("/refresh-token/")
     @Produces(MediaType.TEXT_PLAIN)
     public String refreshJWTToken(@HeaderParam("Authorization") String tokenString) throws BaseAppException {
-        if(!tokenString.contains("Bearer ")) {
+        if (!tokenString.contains("Bearer ")) {
             throw new ControllerException("Invalid authorization header");
         }
         String token = tokenString.substring("Bearer ".length());

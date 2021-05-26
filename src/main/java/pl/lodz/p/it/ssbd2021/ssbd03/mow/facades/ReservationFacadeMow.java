@@ -95,4 +95,14 @@ public class ReservationFacadeMow extends AbstractFacade<Reservation> {
         }
     }
 
+    @RolesAllowed("viewSelfReservations")
+    public List<Reservation> findReservationByLogin(String login) throws BaseAppException {
+        TypedQuery<Reservation> tq = em.createNamedQuery("Reservation.findByLogin", Reservation.class);
+        tq.setParameter("login", login);
+        try {
+            return tq.getResultList();
+        } catch (NoResultException e) {
+            throw FacadeException.noSuchElement();
+        }
+    }
 }

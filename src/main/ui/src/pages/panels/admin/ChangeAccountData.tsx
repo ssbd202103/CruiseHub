@@ -9,13 +9,15 @@ import {useTranslation} from 'react-i18next';
 import styles from '../../../styles/ManageAccount.module.css'
 import RoundedButton from '../../../components/RoundedButton';
 import DarkedTextField from '../../../components/DarkedTextField';
-import axios from "axios";
+import axios from "../../../Services/URL";
 import {useSnackbarQueue} from "../../snackbar";
+import store from "../../../redux/store";
 import {updateToken} from "../../../Services/userService";
 
 export default function ChangeAccountData() {
     const {t} = useTranslation()
     const showError = useSnackbarQueue('error')
+    const showSuccess = useSnackbarQueue('success')
 
     const [, forceUpdate] = useReducer(x => x + 1, 0); // used to force component refresh on forceUpdate call
     const [ChangePerData, setPerData] = useState(false)
@@ -34,6 +36,7 @@ export default function ChangeAccountData() {
     const [phoneNumber, setPhoneNumber] = useState('')
 
     const [businessPhoneNumber, setBusinessPhoneNumber] = useState('')
+    const {token} = store.getState()
 
     //Functions for personal data change
     const handleChangePerData = () => {
@@ -63,11 +66,9 @@ export default function ChangeAccountData() {
             version: currentAccount.version
 
         })
-        fetch("/api/account/change-account-data", {
-            method: "PUT",
-            mode: "same-origin",
-            body: json,
+        axios.put("account/change-account-data", json, {
             headers: {
+                "Authorization": `Bearer ${token}`,
                 "Content-Type": "application/json",
                 "Accept": "application/json",
                 "If-Match": currentAccount.etag
@@ -76,7 +77,10 @@ export default function ChangeAccountData() {
             const message = error.response.data
             showError(t(message))
         });
-        const result = await axios.get(`/api/account/details/${currentAccount.login}`);
+
+
+        showSuccess(t('successful action'))
+        const result = await axios.get(`account/details/${currentAccount.login}`);
         sessionStorage.setItem("changeAccountData", JSON.stringify(result.data));
         forceUpdate()
         handleChangePerData()
@@ -100,21 +104,21 @@ export default function ChangeAccountData() {
             accVersion: clientAddr.accVersion
         })
 
-        fetch("/api/account/change-client-data", {
-            method: "PUT",
-            mode: "same-origin",
-            body: json,
+        axios.put("account/change-client-data", json, {
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json",
-                "If-Match": currentAccount.etag
+                "If-Match": currentAccount.etag,
+                "Authorization": `Bearer ${token}`
             }
         }).catch(error => {
             const message = error.response.data
             showError(t(message))
         });
 
-        const result = axios.get(`/api/account/details/${currentAccount.login}`).then(res => {
+        showSuccess(t('successful action'))
+
+        const result = axios.get(`account/details/${currentAccount.login}`).then(res => {
             sessionStorage.setItem("changeAccountData", JSON.stringify(res.data));
             forceUpdate()
             handleChangAddress()
@@ -131,21 +135,23 @@ export default function ChangeAccountData() {
             accVersion: businnesPhone.accVersion
 
         })
-        fetch("/api/account/change-business-worker-data", {
-            method: "PUT",
-            mode: "same-origin",
-            body: json,
+
+        axios.put("account/change-business-worker-data", json, {
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json",
-                "If-Match": currentAccount.etag
+                "If-Match": currentAccount.etag,
+                "Authorization": `Bearer ${token}`
             }
         }).catch(error => {
             const message = error.response.data
             showError(t(message))
         });
 
-        axios.get(`/api/account/details/${currentAccount.login}`).then(res => {
+
+        showSuccess(t('successful action'))
+
+        axios.get(`account/details/${currentAccount.login}`).then(res => {
             sessionStorage.setItem("changeAccountData", JSON.stringify(res.data));
             forceUpdate()
             handleChangePhone()
@@ -199,20 +205,26 @@ export default function ChangeAccountData() {
                         label={t("name")}
                         placeholder={currentAccount.firstName}
                         value={firstName}
-                        onChange={event => {setFirstName(event.target.value)}}/>
+                        onChange={event => {
+                            setFirstName(event.target.value)
+                        }}/>
                     <DarkedTextField
                         type="text"
                         label={t("surname")}
                         placeholder={currentAccount.secondName}
                         value={secondName}
-                        onChange={event => {setSecondName(event.target.value)}}/>
+                        onChange={event => {
+                            setSecondName(event.target.value)
+                        }}/>
 
                     <DarkedTextField
                         type="text"
                         label={t("new email")}
                         placeholder={t(currentAccount.email)}
                         value={email}
-                        onChange={event => {setEmail(event.target.value)}}/>
+                        onChange={event => {
+                            setEmail(event.target.value)
+                        }}/>
 
                 </div>
                 <RoundedButton color="blue"
@@ -265,37 +277,49 @@ export default function ChangeAccountData() {
                             label={t("street")}
                             placeholder={clientAddr ? clientAddr.address.street : ""}
                             value={street}
-                            onChange={event => {setStreet(event.target.value)}}/>
+                            onChange={event => {
+                                setStreet(event.target.value)
+                            }}/>
                         <DarkedTextField
                             type="text"
                             label={t("house number")}
                             placeholder={clientAddr ? clientAddr.address.houseNumber : ""}
                             value={houseNumber}
-                            onChange={event => {setHouseNumber(event.target.value)}}/>
+                            onChange={event => {
+                                setHouseNumber(event.target.value)
+                            }}/>
                         <DarkedTextField
                             type="text"
                             label={t("postal code")}
                             placeholder={clientAddr ? clientAddr.address.postalCode : ""}
                             value={postalCode}
-                            onChange={event => {setPostalCode(event.target.value)}}/>
+                            onChange={event => {
+                                setPostalCode(event.target.value)
+                            }}/>
                         <DarkedTextField
                             type="text"
                             label={t("city")}
                             placeholder={clientAddr ? clientAddr.address.city : ""}
                             value={city}
-                            onChange={event => {setCity(event.target.value)}}/>
+                            onChange={event => {
+                                setCity(event.target.value)
+                            }}/>
                         <DarkedTextField
                             type="text"
                             label={t("country")}
                             placeholder={clientAddr ? clientAddr.address.country : ""}
                             value={country}
-                            onChange={event => {setCountry(event.target.value)}}/>
+                            onChange={event => {
+                                setCountry(event.target.value)
+                            }}/>
                         <DarkedTextField
                             type="text"
                             label={t("phone number")}
                             placeholder={clientAddr ? clientAddr.phoneNumber : ""}
                             value={phoneNumber}
-                            onChange={event => {setPhoneNumber(event.target.value)}}/>
+                            onChange={event => {
+                                setPhoneNumber(event.target.value)
+                            }}/>
                     </div>
                     <RoundedButton
                         color="blue"
@@ -329,7 +353,9 @@ export default function ChangeAccountData() {
                             label={t("phone number")}
                             placeholder={businnesPhone ? businnesPhone.phoneNumber : ""}
                             value={businessPhoneNumber}
-                            onChange={event => {setBusinessPhoneNumber(event.target.value)}}/>
+                            onChange={event => {
+                                setBusinessPhoneNumber(event.target.value)
+                            }}/>
                     </div>
                     <RoundedButton
                         color="blue"

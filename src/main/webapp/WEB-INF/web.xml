@@ -5,6 +5,11 @@
          version="4.0">
     <default-context-path>/</default-context-path>
     <error-page>
+        <error-code>404</error-code>
+        <location>/index.html</location>
+    </error-page>
+    <error-page>
+        <error-code>401</error-code>
         <location>/index.html</location>
     </error-page>
     <!---->
@@ -146,11 +151,7 @@
     </security-role>
 
     <security-role>
-        <role-name>addCruiseGroup</role-name>
-    </security-role>
-
-    <security-role>
-        <role-name>changeCruiseGroup</role-name>
+        <role-name>removeClientRating</role-name>
     </security-role>
 
     <security-role>
@@ -160,15 +161,22 @@
         <role-name>viewCruiseReservations</role-name>
     </security-role>
 
+    <security-role>
+        <role-name>addCompany</role-name>
+    </security-role>
 
-    <security-constraint>
-        <web-resource-collection>
-            <web-resource-name>api</web-resource-name>
-            <url-pattern>/*</url-pattern>
-        </web-resource-collection>
-        <user-data-constraint>
-            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
-        </user-data-constraint>
-    </security-constraint>
+    <security-role>
+        <role-name>viewSelfReservations</role-name>
+    </security-role>
+
+    <!--    <security-constraint> todo-->
+<!--        <web-resource-collection>-->
+<!--            <web-resource-name>api</web-resource-name>-->
+<!--            <url-pattern>/*</url-pattern>-->
+<!--        </web-resource-collection>-->
+<!--        <user-data-constraint>-->
+<!--            <transport-guarantee>CONFIDENTIAL</transport-guarantee>-->
+<!--        </user-data-constraint>-->
+<!--    </security-constraint>-->
 
 </web-app>

@@ -36,4 +36,12 @@ public interface RatingManagerLocal {
      * @throws BaseAppException bazowy wyjątek aplikacji, zwracany w przypadku nieznależenia oceny
      */
     Rating getRating(String login, String cruiseGroupName) throws BaseAppException;
+
+    /**
+     * Usuwa ocenę klienta zgloszoną przez moderatora
+     * @param login login klienta
+     * @param cruiseGroupName nazwa grupy wycieczek, dla ktorej zostanie usunieta ocena
+     * @throws BaseAppException bazowy wyjątek aplikacji
+     */
+    void removeClientRating(String login, String cruiseGroupName) throws BaseAppException;
 }

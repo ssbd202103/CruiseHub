@@ -57,4 +57,10 @@ public class RatingManager implements RatingManagerLocal {
     public Rating getRating(String login, String cruiseGroupName) throws BaseAppException {
         return null; // todo finish implementation
     }
+
+    @RolesAllowed("removeClientRating")
+    @Override
+    public void removeClientRating(String login, String cruiseGroupName) throws BaseAppException {
+        // todo finish implementantion
+    }
 }

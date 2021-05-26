@@ -8,7 +8,7 @@ import java.util.ResourceBundle;
  */
 public class I18n {
     public static final String ETAG_IDENTITY_INTEGRITY_ERROR = "error.security.etag.integrity";
-    public static final String OPTIMISTIC_LOCK_EXCEPTION = "exception.optimistic";
+    public static final String OPTIMISTIC_LOCK_EXCEPTION = "error.integration.optimistic";
     public static final String NO_SUCH_ELEMENT_ERROR = "error.facade.noSuchElement";
     public static final String ACCESS_LEVEL_ALREADY_ASSIGNED_ERROR = "error.account.accessLevels.alreadyAssigned";
     public static final String ACCESS_LEVEL_NOT_ASSIGNED_ERROR = "error.account.accessLevels.notAssigned";
@@ -25,7 +25,7 @@ public class I18n {
     public static final String EMAIL_SERVICE_INACCESSIBLE = "error.emailService.inaccessible";
     public static final String PASSWORD_RESET_TOKEN_CONTENT_ERROR = "error.password.reset.contentError";
     public static final String PASSWORD_RESET_USED_TOKEN_ERROR = "error.password.reset.tokenUsed";
-    public static final String PASSWORD_RESET_ACCOUNT_NOT_VERIFIED_ERROR = "error.password.reset.account.notVerifiedError";
+    public static final String ACCOUNT_NOT_VERIFIED_ERROR = "error.account.notVerified";
     public static final String ACCOUNT_VERIFICATION_TOKEN_CONTENT_ERROR = "error.account.verification.contentError";
     public static final String TOKEN_EXPIRED_ERROR = "error.token.expired";
     public static final String TOKEN_REFRESH_ERROR = "error.token.refresh";
@@ -41,6 +41,13 @@ public class I18n {
     public static final String REGEX_INVALID_PASSWORD = "error.regex.password";
     public static final String REGEX_INVALID_NAME = "error.regex.name";
     public static final String REGEX_INVALID_EMAIL = "error.regex.email";
+    public static final String PHONE_NUMBER_SIZE = "error.size.phoneNumber";
+    public static final String NAME_SIZE = "error.size.name";
+    public static final String COUNTRY_SIZE = "error.size.country";
+    public static final String CITY_SIZE = "error.size.city";
+    public static final String STREET_SIZE = "error.size.street";
+    public static final String COMPANY_SIZE = "error.size.companyName";
+    public static final String POST_CODE_SIZE = "error.size.postCode";
     public static final String REGEX_INVALID_COMPANY_NAME = "error.regex.companyName";
     public static final String REQUESTED_PASSWORD_RESET_SUBJECT = "account.request.reset.password.subject";
     public static final String REQUESTED_PASSWORD_RESET_BODY = "account.request.reset.password.body";
@@ -68,6 +75,9 @@ public class I18n {
     public static final String APP_FORBIDDEN = "error.forbidden";
     public static final String APP_INTERNAL_SERVER_ERROR = "error.internal.server";
     public static final String RATING_CONSTRAINT_ERROR = "error.constraint.rating";
+
+    public static final String LOG_IN_SUBJECT = "log.in.subject";
+    public static final String LOG_IN_BODY = "log.in.body";
 
     private ResourceBundle bundle;
 

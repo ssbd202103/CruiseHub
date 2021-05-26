@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import axios from "axios";
+import axios from "../../Services/URL";
 import AuthLayout from "../../layouts/AuthLayout";
 import DarkedTextField from "../../components/DarkedTextField";
 import styles from "../../styles/auth.global.module.css";
@@ -10,17 +10,19 @@ import {useSnackbarQueue} from "../snackbar";
 const RequestPasswordReset = () => {
     const {t} = useTranslation()
     const showError = useSnackbarQueue('error')
+    const showSuccess = useSnackbarQueue('success')
 
     const [login, setLogin] = useState('')
 
     const onFormSubmit = () => {
         // event.preventDefault()
         // console.log("hello world")
-        axios.post(`/api/account/request-password-reset/${login}`, {})
+        axios.post(`account/request-password-reset/${login}`, {})
             .catch(error => {
                 const message = error.response.data
                 showError(t(message))
             });
+        showSuccess(t('successful action'))
     }
 
     return (

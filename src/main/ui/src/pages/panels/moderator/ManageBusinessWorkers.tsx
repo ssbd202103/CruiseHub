@@ -14,9 +14,10 @@ import {getAllAccounts} from "../../../Services/accountsService";
 import DarkedTextField from "../../../components/DarkedTextField";
 import store from "../../../redux/store";
 import axios from "../../../Services/URL";
-import { Button } from '@material-ui/core';
+import {Button} from '@material-ui/core';
 import RoundedButton from "../../../components/RoundedButton";
 import {updateToken} from "../../../Services/userService";
+import {useSnackbarQueue} from "../../snackbar";
 
 const useRowStyles = makeStyles({
     root: {
@@ -43,11 +44,12 @@ function createData(
         email: email,
         phoneNumber: phoneNumber,
         companyName: companyName,
-        companyPhoneNumber:  companyPhoneNumber,
+        companyPhoneNumber: companyPhoneNumber,
         version: version
 
     };
 }
+
 
 export interface RowProps {
     row: ReturnType<typeof createData>,
@@ -55,10 +57,11 @@ export interface RowProps {
 }
 
 function Row(props: RowProps) {
-    const {t} = useTranslation()
-    const { row } = props;
-    const { style } = props;
+    const {row} = props;
+    const {style} = props;
     const classes = useRowStyles();
+    const showSuccess = useSnackbarQueue('success')
+    const {t} = useTranslation()
 
     return (
         <TableRow className={classes.root}>
@@ -71,15 +74,20 @@ function Row(props: RowProps) {
             <TableCell style={style}>{row.phoneNumber}</TableCell>
             <TableCell style={style}>{row.companyName}</TableCell>
             <TableCell style={style}>{row.companyPhoneNumber}</TableCell>
-            <TableCell style={style}><Button onClick={() =>
-                confirmWorker({row})
+            <TableCell style={style}><Button onClick={() => {
+                if (confirmWorker({row})) {
+                    showSuccess(t('action success'))
+                }
+
+
+            }
 
             }>{t("confirm")}</Button></TableCell>
         </TableRow>
     );
 }
 
-function getWorkers(){
+function getWorkers() {
     const {token} = store.getState()
     return axios.get('account/unconfirmed-business-workers', {
         headers: {
@@ -88,14 +96,16 @@ function getWorkers(){
     })
     updateToken()
 }
+
 function confirmWorker(props: any) {
     const {token} = store.getState()
-    const { row } = props;
+    const {row} = props;
     const json = JSON.stringify({
         login: row.login,
         version: row.version
     })
-    return axios.put('account/confirm-business-worker', json, {
+
+    axios.put('account/confirm-business-worker', json, {
         headers: {
             "Content-Type": "application/json",
             "Accept": "application/json",
@@ -103,8 +113,11 @@ function confirmWorker(props: any) {
             "Authorization": `Bearer ${token}`,
 
         }
-    })
+    }).then(response => {
+        return response.status == 200;
+    }).catch(/*todo*/);
     updateToken()
+    return false;
 }
 
 export default function ModListClient() {
@@ -117,7 +130,7 @@ export default function ModListClient() {
         getWorkers().then(res => {
             setUsers(res.data)
         })
-    },[]);
+    }, []);
 
     function search(rows: any[]) {
         if (Array.isArray(rows) && rows.length) {
@@ -129,12 +142,13 @@ export default function ModListClient() {
             return rows;
         }
     }
-    const handleChange = () =>{
+
+    const handleChange = () => {
         forceUpdate()
 
-            getWorkers().then(res => {
-                setUsers(res.data)
-            })
+        getWorkers().then(res => {
+            setUsers(res.data)
+        })
 
     }
 
@@ -147,25 +161,52 @@ export default function ModListClient() {
                     type="text"
                     value={searchInput}
                     onChange={(e) => setSearchInput(e.target.value)}
-                    style={{marginBottom: '20px'}} />
+                    style={{marginBottom: '20px'}}/>
             </div>
             <TableContainer component={Paper}>
                 <Table aria-label="Business Workers">
                     <TableHead>
                         <TableRow>
-                            <TableCell style={{backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`, color: `var(--${!darkMode ? 'dark' : 'white-light'}`}}>{t("login")}</TableCell>
-                            <TableCell style={{backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`, color: `var(--${!darkMode ? 'dark' : 'white-light'}`}}>{t("first name")}</TableCell>
-                            <TableCell style={{backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`, color: `var(--${!darkMode ? 'dark' : 'white-light'}`}}>{t("last name")}</TableCell>
-                            <TableCell style={{backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`, color: `var(--${!darkMode ? 'dark' : 'white-light'}`}}>{t("email")}</TableCell>
-                            <TableCell style={{backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`, color: `var(--${!darkMode ? 'dark' : 'white-light'}`}}>{t("phone number")}</TableCell>
-                            <TableCell style={{backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`, color: `var(--${!darkMode ? 'dark' : 'white-light'}`}}>{t("company name")}</TableCell>
-                            <TableCell style={{backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`, color: `var(--${!darkMode ? 'dark' : 'white-light'}`}}>{t("company phone number")}</TableCell>
-                            <TableCell style={{backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`, color: `var(--${!darkMode ? 'dark' : 'white-light'}`}}>{t("confirm")}</TableCell>
+                            <TableCell style={{
+                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                            }}>{t("login")}</TableCell>
+                            <TableCell style={{
+                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                            }}>{t("first name")}</TableCell>
+                            <TableCell style={{
+                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                            }}>{t("last name")}</TableCell>
+                            <TableCell style={{
+                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                            }}>{t("email")}</TableCell>
+                            <TableCell style={{
+                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                            }}>{t("phone number")}</TableCell>
+                            <TableCell style={{
+                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                            }}>{t("company name")}</TableCell>
+                            <TableCell style={{
+                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                            }}>{t("company phone number")}</TableCell>
+                            <TableCell style={{
+                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                            }}>{t("confirm")}</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {search(users.map((user, index) => (
-                            <Row key={index} row={user} style={{backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`, color: `var(--${!darkMode ? 'dark' : 'white-light'}`}} />
+                            <Row key={index} row={user} style={{
+                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                            }}/>
                         )))}
                     </TableBody>
                 </Table>

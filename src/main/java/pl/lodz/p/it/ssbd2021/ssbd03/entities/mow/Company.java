@@ -34,7 +34,7 @@ public class Company extends BaseEntity {
     private long id;
 
     @Getter
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.REMOVE})
     @JoinColumn(name = "address_id")
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid

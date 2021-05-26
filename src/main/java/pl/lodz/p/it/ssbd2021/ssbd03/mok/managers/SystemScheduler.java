@@ -12,9 +12,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
 import javax.annotation.security.RunAs;
-import javax.ejb.Schedule;
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
+import javax.ejb.*;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
 import java.time.LocalDateTime;
@@ -24,6 +22,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import static javax.ejb.TransactionAttributeType.REQUIRES_NEW;
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.VERIFICATION_EMAIL_BODY;
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.VERIFICATION_EMAIL_SUBJECT;
 
@@ -36,6 +35,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.VERIFICATION_EMAIL_SUBJEC
 @Startup
 @RunAs("SYSTEM")
 @Interceptors(TrackingInterceptor.class)
+@TransactionAttribute(REQUIRES_NEW)
 public class SystemScheduler {
 
     @Inject
@@ -63,7 +63,7 @@ public class SystemScheduler {
         }
     }
 
-    @Schedule(hour = "*/12", minute = "*", second = "*", persistent = false)
+    @Schedule(hour = "*/12", persistent = false)
     private void removeUsedTokens() throws BaseAppException {
         List<TokenWrapper> tokens = tokenWrapperFacade.getUsedToken();
         for (TokenWrapper tw :
@@ -72,7 +72,7 @@ public class SystemScheduler {
         }
     }
 
-    @Schedule(hour = "*/12", minute = "*", second = "*", persistent = false)
+    @Schedule(hour = "*/12", persistent = false)
     private void removeUnusedTokens() throws BaseAppException {
         List<TokenWrapper> tokens = tokenWrapperFacade.getUnusedToken();
         for (TokenWrapper tw :
@@ -83,7 +83,7 @@ public class SystemScheduler {
         }
     }
 
-    @Schedule(hour = "*/12", minute = "*", second = "*", persistent = false)
+    @Schedule(hour = "*/12", persistent = false)
     private void sendActivationEmailWithToken() throws BaseAppException { // todo handle this exception
         List<Account> unconfirmed = accountFacade.getUnconfirmedAccounts();
         for (Account acc : unconfirmed

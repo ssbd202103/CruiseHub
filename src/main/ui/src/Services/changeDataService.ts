@@ -9,6 +9,10 @@ import {
     ChangeMode
 } from "../interfaces/changeInterfaces";
 import {getUser} from "./userService";
+import {useSnackbarQueue} from "../pages/snackbar";
+import {useTranslation} from "react-i18next";
+
+
 
 export function changeClientData(newFirstName: string, newSecondName: string, newPhoneNumber: string) {
     const {
@@ -19,6 +23,8 @@ export function changeClientData(newFirstName: string, newSecondName: string, ne
         },
         token
     } = store.getState()
+
+
 
     const newAddress = store.getState().user.accessLevels.find(accessLevel => accessLevel.accessLevelType === "CLIENT")?.address || {} as ChangeAddress
 
@@ -42,6 +48,7 @@ export function changeClientData(newFirstName: string, newSecondName: string, ne
 }
 
 export function changeClientAddress(newAddress: ChangeAddress) {
+
     const {
         user: {
             firstName: newFirstName,
@@ -75,6 +82,7 @@ export function changeClientAddress(newAddress: ChangeAddress) {
 }
 
 export function changeBusinessWorkerData(newFirstName: string, newSecondName: string, newPhoneNumber: string) {
+
     const {
         user: {
             login,
@@ -83,6 +91,8 @@ export function changeBusinessWorkerData(newFirstName: string, newSecondName: st
         },
         token
     } = store.getState()
+
+
 
     const changeAccountDataDto: BusinessWorkerChangeData = {
         newFirstName,
@@ -98,11 +108,13 @@ export function changeBusinessWorkerData(newFirstName: string, newSecondName: st
             "Authorization": `Bearer ${token}`
         }
     }).then(res => {
+
         return getUser(token)
     })
 }
 
 export function changeModeratorData(newFirstName: string, newSecondName: string) {
+
     const {
         user: {
             login,
@@ -125,11 +137,13 @@ export function changeModeratorData(newFirstName: string, newSecondName: string)
             "Authorization": `Bearer ${token}`
         }
     }).then(res => {
+
         return getUser(token)
     })
 }
 
 export function changeAdministratorData(newFirstName: string, newSecondName: string) {
+
     const {
         user: {
             login,
@@ -152,12 +166,14 @@ export function changeAdministratorData(newFirstName: string, newSecondName: str
             "Authorization": `Bearer ${token}`
         }
     }).then(res => {
+
         return getUser(token)
     })
 }
 
 
 export function changeDarkMode() {
+
     const {
         user: {
             login,
@@ -180,6 +196,7 @@ export function changeDarkMode() {
             'Authorization': `Bearer ${token}`
         }
     }).then(res => {
+
         return getUser(token)
     })
 }

@@ -116,19 +116,24 @@ const resources = {
             "error.account.accessLevels.doesNotExist": "Dany poziom dostępu nie istnieje!",
             "error.password.reset.tokenUsed": "Podany link aktywacyjny został już wykorzystany!",
             "error.account.verification.contentError": "Błędna zawartość tokenu do zatwierdzenia konta",
-            "error.account.verification.expireError": "Token wygasł",
+            "error.token.expired": "Token wygasł",
+            "error.token.refresh": "Token nie mógł być odświeżony",
             "error.account.verification.alreadyVerifiedError": "Dane konto zostało już zatwierdzone",
-            "error.token.decode": "Błąd podczas odczyty tokenu",
+            "error.token.decode": "Błąd podczas odczytu tokenu",
             "error.token.invalidate": "Niepoprawny token",
             "error.database.loginReserved": "Podany login jest juz użyty",
             "error.database.emailReserved": "Podany email jest już użyty",
             "error.constraintViolation": "Podane dane są niepoprawne",
             "error.constraint.positive": "Podana liczba musi być dodatnia",
-            "error.constraint.positiveOrZero": "Podana wartość musi być więszka lub równa 0",
+            "error.constraint.positiveOrZero": "Podana wartość musi być większa lub równa 0",
             "error.constraint.notEmpty": "Podane pole nie może być puste",
             "error.constraint.notNull": "Podana wartość nie może być zerem",
+            "error.constraint.rating": "Ocena powinna być liczbą z zakresu 1-5",
             "error.forbidden": "Operacja zabroniona",
             "error.internal.server": "Błąd wewnętrzny serwera",
+            "error.integration.optimistic": "Nieaktualny stan przesłanych danych",
+            "error.account.notVerified": "Konto niezweryfikowne",
+            "error.database.operation": "Błąd po stronie bazy danych",
 
             //auth errors
             "auth.incorrect.login": "Podany login jest niepoprawny",
@@ -153,7 +158,20 @@ const resources = {
             'error.fields': 'Zostały wprowadzone niepoprawne dane',
             'passwords are not equal': 'Hasła nie są identyczne',
             'emails are not equal': 'Emaile nie są identyczne',
-            'error.houseNumber.NaN': 'Podany numer domu nie jest liczbą'
+            'error.houseNumber.NaN': 'Podany numer domu nie jest liczbą',
+            'no options': 'Brak opcji',
+            "error.size.phoneNumber": "Numer telefonu powinien mieć maksymalnie 15 znaków",
+            "error.size.name": "Nazwa powinna mieć maksymalnie 64 znaków",
+            "error.size.country": "Kraj powinna mieć maksymalnie 64 znaków",
+            "error.size.city": "Miasto powinno mieć maksymalnie 64 znaków",
+            "error.size.street": "Ulica powinna mieć maksymalnie 64 znaki",
+            "error.size.companyName": "Nazwa firmy powinna mieć maksymalnie 64 znaki",
+            "error.size.postCode": "Kod pocztowy powinien mieć maksymalnie 20 znaków",
+
+            //successes
+            "success.accessLevelStateChanged": "Stan poziomu dostępu został zmieniony",
+            "success.accessLevelAssigned": "Poziom dostępu przydzielony",
+            'successful action': 'Akcja udała się'
         }
     },
     en: {
@@ -265,13 +283,15 @@ const resources = {
             "error.parsing.serialization": "Received data could not be serialized properly",
             "error.password.reset.wrongIdentity": "Request contains wrong identity",
             "error.email.incorrect": "Email address is incorrect",
+            "error.emailService.inaccessible": "Email service not available at the moment",
             "error.password.reset.contentError": "Invalid password reset token content",
-            "error.password.change.oldPasswordError": "Inserted old password is invalid",
+            "error.password.change.oldPasswordError": "Provided old password is invalid",
             "error.security.etag.creation": "Error during creating ETag",
             "error.account.accessLevels.doesNotExist": "Given access level does not exists",
             "error.password.reset.tokenUsed": "Given activation link has already been used",
             "error.account.verification.contentError": "Invalid token to confirm account",
-            "error.account.verification.expireError": "Token has expired",
+            "error.token.expired": "Token has expired",
+            "error.token.refresh": "Token could not be refreshed",
             "error.account.verification.alreadyVerifiedError": "Given account has already been confirmed",
             "error.token.decode": "Error during decoding token",
             "error.token.invalidate": "Invalid token",
@@ -282,8 +302,12 @@ const resources = {
             "error.constraint.positiveOrZero": "Given value must be greater or equal to zero",
             "error.constraint.notEmpty": "Given field can not be empty",
             "error.constraint.notNull": "Given value can not be null",
+            "error.constraint.rating": "Rating should be a number in range 1-5",
             "error.forbidden": "Operation forbidden",
             "error.internal.server": "Internal server error",
+            "error.integration.optimistic": "Outdated data provided",
+            "error.account.notVerified": "Account not verified",
+            "error.database.operation": "Database operation error",
 
             //auth errors
             "auth.incorrect.login": "Given login is incorrect",
@@ -307,7 +331,20 @@ const resources = {
             'error.fields': 'Given invalid data',
             'passwords are not equal': 'Passwords are not equal',
             'emails are not equal': "Emails are not equal",
-            'error.houseNumber.NaN': 'Given house number is not a number'
+            'error.houseNumber.NaN': 'Given house number is not a number',
+            'no options': 'No options',
+            "error.size.phoneNumber": "Phone number should be no longer than 15 characters",
+            "error.size.name": "Name should be no longer than 64 characters",
+            "error.size.country": "Country should be no longer than 64 characters",
+            "error.size.city": "City should be no longer than 64 characters",
+            "error.size.street": "Street should be no longer than 64 characters",
+            "error.size.companyName": "Company name should be no longer than 64 characters",
+            "error.size.postCode": "Post code should be no longer than 20 characters",
+            'successful action': 'The action was successful',
+
+            //successes
+            "success.accessLevelStateChanged": "Access level state changed",
+            "success.accessLevelAssigned": "Access level assigned"
         }
     }
 }

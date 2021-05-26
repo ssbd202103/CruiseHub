@@ -1,6 +1,6 @@
 import {useHistory, useLocation} from 'react-router-dom';
 
-import axios from "axios";
+import axios from "../../Services/URL";
 import AuthLayout from "../../layouts/AuthLayout";
 import {useTranslation} from "react-i18next";
 import styles from '../../styles/auth.global.module.css'
@@ -11,6 +11,7 @@ function VerifyAccount(props: any) {
     const location = useLocation();
     const {t} = useTranslation()
     const showError = useSnackbarQueue('error')
+    const showSuccess = useSnackbarQueue('success')
     const history = useHistory()
     const submitAccountVerification = async (event: any) => {
         event.preventDefault()
@@ -19,7 +20,7 @@ function VerifyAccount(props: any) {
             "token": location.pathname.toString().substring('/verify/accountVerification/'.length)
         }
 
-        await axios.put('/api/account/verify', json, {
+        await axios.put('account/verify', json, {
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -28,6 +29,7 @@ function VerifyAccount(props: any) {
                 const message = error.response.data
                 showError(t(message))
             });
+        showSuccess(t('successful action'))
     }
 
 

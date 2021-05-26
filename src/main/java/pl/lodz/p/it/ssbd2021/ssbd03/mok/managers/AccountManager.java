@@ -217,7 +217,7 @@ public class AccountManager implements AccountManagerLocal {
     public void requestPasswordReset(String login) throws BaseAppException {
         Account account = this.accountFacade.findByLogin(login);
         if (!account.isConfirmed()) {
-            throw new AccountManagerException(PASSWORD_RESET_ACCOUNT_NOT_VERIFIED_ERROR);
+            throw new AccountManagerException(ACCOUNT_NOT_VERIFIED_ERROR);
         }
         Map<String, Object> claims = Map.of("version", account.getVersion());
         String token = JWTHandler.createToken(claims, login);
@@ -246,7 +246,7 @@ public class AccountManager implements AccountManagerLocal {
 
         Account account = this.accountFacade.findByLogin(login);
         if (!account.isConfirmed()) {
-            throw new AccountManagerException(PASSWORD_RESET_ACCOUNT_NOT_VERIFIED_ERROR);
+            throw new AccountManagerException(ACCOUNT_NOT_VERIFIED_ERROR);
         }
 
         if (!(account.getVersion() == claims.get("version").asLong())) {
@@ -306,7 +306,7 @@ public class AccountManager implements AccountManagerLocal {
     public void requestSomeonesPasswordReset(String login, String email) throws BaseAppException {
         Account account = this.accountFacade.findByLogin(login);
         if (!account.isConfirmed()) {
-            throw new AccountManagerException(PASSWORD_RESET_ACCOUNT_NOT_VERIFIED_ERROR);
+            throw new AccountManagerException(ACCOUNT_NOT_VERIFIED_ERROR);
         }
         Map<String, Object> claims = Map.of("version", account.getVersion());
         Locale locale = new Locale(account.getLanguageType().getName().name());
@@ -518,12 +518,20 @@ public class AccountManager implements AccountManagerLocal {
 
     @PermitAll
     @Override
-    public String updateCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws BaseAppException {
-        Account account = this.accountFacade.updateAuthenticateInfo(login, IpAddr, time, true);
+    public String updateCorrectAuthenticateInfo(String login, String ipAddr, LocalDateTime time) throws BaseAppException {
+        Account account = this.accountFacade.updateAuthenticateInfo(login, ipAddr, time, true);
         account.setNumberOfAuthenticationFailures(0);
 
         Map<String, Object> map = Map.of("accessLevels", account.getAccessLevels()
                 .stream().map(accessLevel -> accessLevel.getAccessLevelType().name()).collect(Collectors.toList()));
+
+        if(account.getAccessLevels().stream().anyMatch(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.ADMINISTRATOR)) {
+            Locale locale = new Locale(account.getLanguageType().getName().name());
+            String body = i18n.getMessage(LOG_IN_BODY, locale);
+            body = String.format("%s %s",body,ipAddr);
+            String subject = i18n.getMessage(LOG_IN_SUBJECT, locale);
+            EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
+        }
         return JWTHandler.createToken(map, account.getLogin());
     }
 

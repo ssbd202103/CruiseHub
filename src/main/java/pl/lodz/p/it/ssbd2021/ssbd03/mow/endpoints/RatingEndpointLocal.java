@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.RatingDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.RemoveClientRatingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.RemoveRankingDto;
 
 public interface RatingEndpointLocal {
@@ -31,4 +32,10 @@ public interface RatingEndpointLocal {
      */
     RatingDto getRating(String login, String cruiseGroupName) throws BaseAppException;
 
+    /**
+     * Metoda służąca do usunięcia oceny klienta przez moderatora
+     * @param removeClientRatingDto obiekt dto przechowujący informacje odnosnie oceny do usunięcia
+     * @throws BaseAppException bazowy wyjątek aplikacji
+     */
+    void removeClientRating(RemoveClientRatingDto removeClientRatingDto) throws BaseAppException;
 }
