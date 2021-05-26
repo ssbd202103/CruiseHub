@@ -10,6 +10,7 @@ import {useSnackbarQueue} from "../snackbar";
 const RequestPasswordReset = () => {
     const {t} = useTranslation()
     const showError = useSnackbarQueue('error')
+    const showSuccess = useSnackbarQueue('success')
 
     const [login, setLogin] = useState('')
 
@@ -21,6 +22,7 @@ const RequestPasswordReset = () => {
                 const message = error.response.data
                 showError(t(message))
             });
+        showSuccess(t('successful action'))
     }
 
     return (

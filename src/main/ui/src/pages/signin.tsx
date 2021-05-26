@@ -23,7 +23,6 @@ export default function SignIn() {
     const {t} = useTranslation();
 
     const showError = useSnackbarQueue('error')
-
     const history = useHistory();
 
     const [login, setLogin] = useState('')

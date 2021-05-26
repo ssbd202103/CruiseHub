@@ -16,6 +16,7 @@ import store from "../../../redux/store";
 import axios from "../../../Services/URL";
 import { Button } from '@material-ui/core';
 import RoundedButton from "../../../components/RoundedButton";
+import {useSnackbarQueue} from "../../snackbar";
 
 const useRowStyles = makeStyles({
     root: {
@@ -48,16 +49,18 @@ function createData(
     };
 }
 
+
 export interface RowProps {
     row: ReturnType<typeof createData>,
     style: React.CSSProperties
 }
 
 function Row(props: RowProps) {
-    const {t} = useTranslation()
     const { row } = props;
     const { style } = props;
     const classes = useRowStyles();
+    const showSuccess = useSnackbarQueue('success')
+    const {t} = useTranslation()
 
     return (
         <TableRow className={classes.root}>
@@ -70,8 +73,13 @@ function Row(props: RowProps) {
             <TableCell style={style}>{row.phoneNumber}</TableCell>
             <TableCell style={style}>{row.companyName}</TableCell>
             <TableCell style={style}>{row.companyPhoneNumber}</TableCell>
-            <TableCell style={style}><Button onClick={() =>
-                confirmWorker({row})
+            <TableCell style={style}><Button onClick={() =>{
+                if(confirmWorker({row})) {
+                    showSuccess(t('action success'))
+                }
+
+
+            }
 
             }>{t("confirm")}</Button></TableCell>
         </TableRow>
@@ -93,7 +101,8 @@ function confirmWorker(props: any) {
         login: row.login,
         version: row.version
     })
-    return axios.put('account/confirm-business-worker', json, {
+
+     axios.put('account/confirm-business-worker', json, {
         headers: {
             "Content-Type": "application/json",
             "Accept": "application/json",
@@ -101,7 +110,10 @@ function confirmWorker(props: any) {
             "Authorization": `Bearer ${token}`,
 
         }
-    })
+    }).then(response => {
+         return response.status == 200;
+     }).catch(/*todo*/);
+    return false;
 }
 
 export default function ModListClient() {

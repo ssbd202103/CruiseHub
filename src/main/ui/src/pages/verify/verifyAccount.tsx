@@ -11,6 +11,7 @@ function VerifyAccount(props: any) {
     const location = useLocation();
     const {t} = useTranslation()
     const showError = useSnackbarQueue('error')
+    const showSuccess = useSnackbarQueue('success')
     const history = useHistory()
     const submitAccountVerification = async (event: any) => {
         event.preventDefault()
@@ -28,6 +29,7 @@ function VerifyAccount(props: any) {
                 const message = error.response.data
                 showError(t(message))
             });
+        showSuccess(t('successful action'))
     }
 
 

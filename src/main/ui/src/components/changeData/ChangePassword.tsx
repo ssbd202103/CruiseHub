@@ -15,6 +15,7 @@ export default function ChangePassword({open, onOpen, onConfirm, onCancel}: Chan
     const {t} = useTranslation()
 
     const showError = useSnackbarQueue('error')
+    const showSuccess = useSnackbarQueue('success')
 
     const [oldPassword, setOldPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
@@ -51,6 +52,8 @@ export default function ChangePassword({open, onOpen, onConfirm, onCancel}: Chan
             const message = error.response.data
             showError(t(message))
         });
+
+        showSuccess(t('successful action'))
     }
 
 

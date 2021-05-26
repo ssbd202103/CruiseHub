@@ -12,6 +12,7 @@ export default function ChangeAccessLevelState() {
     const {t} = useTranslation()
 
     const showError = useSnackbarQueue('error')
+    const showSuccess = useSnackbarQueue('success')
 
     const currentAccount = JSON.parse(sessionStorage.getItem("changeAccessLevelStateAccount") as string)
 
@@ -36,6 +37,7 @@ export default function ChangeAccessLevelState() {
             const message = error.response.data
             showError(t(message))
         });
+        showSuccess(t('successful action'))
 
         axios.get(`/api/account/details/${currentAccount.login}`).then(res => {
             sessionStorage.setItem("changeAccessLevelStateAccount", JSON.stringify(res.data));

@@ -19,7 +19,7 @@ function PasswordReset(props: any) {
     const [login, setLogin] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
-
+    const showSuccess = useSnackbarQueue('success')
 
     const submitPasswordReset = async (event: any) => {
         event.preventDefault()
@@ -38,6 +38,7 @@ function PasswordReset(props: any) {
             const message = error.response.data
             showError(t(message))
         });
+        showSuccess(t('successful action'))
     }
 
 
