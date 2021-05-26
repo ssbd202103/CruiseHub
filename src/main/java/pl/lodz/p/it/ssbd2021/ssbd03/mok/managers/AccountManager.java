@@ -234,9 +234,7 @@ public class AccountManager implements AccountManagerLocal {
     @Override
     public void requestEmailChange(String login, String newEmail) throws BaseAppException{
         Account account = this.accountFacade.findByLogin(login);
-        if (!account.isConfirmed()) {
-            throw new AccountManagerException(PASSWORD_RESET_ACCOUNT_NOT_VERIFIED_ERROR);
-        }
+
         Map<String, Object> claims = Map.of("version", account.getVersion(),"email",newEmail,"accessLevels", account.getAccessLevels()
                 .stream().map(accessLevel -> accessLevel.getAccessLevelType().name()).collect(Collectors.toList()));
 
@@ -254,9 +252,7 @@ public class AccountManager implements AccountManagerLocal {
     @Override
     public void requestOtherEmailChange(String login, String newEmail) throws BaseAppException{
         Account account = this.accountFacade.findByLogin(login);
-        if (!account.isConfirmed()) {
-            throw new AccountManagerException(PASSWORD_RESET_ACCOUNT_NOT_VERIFIED_ERROR);
-        }
+
         Map<String, Object> claims = Map.of("version", account.getVersion(),"email",newEmail,"accessLevels", account.getAccessLevels()
                 .stream().map(accessLevel -> accessLevel.getAccessLevelType().name()).collect(Collectors.toList()));
 
