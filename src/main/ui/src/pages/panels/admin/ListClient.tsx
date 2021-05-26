@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {ChangeEvent, useEffect, useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Collapse from '@material-ui/core/Collapse';
@@ -15,6 +15,7 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import {Button, TextField} from "@material-ui/core";
 import {Link} from "react-router-dom";
 import {useTranslation} from "react-i18next";
+import DarkedTextField from "../../../components/DarkedTextField";
 import axios from "axios";
 import {useSelector} from "react-redux";
 import {selectDarkMode} from "../../../redux/slices/userSlice";
@@ -118,6 +119,7 @@ function createData(
 }
 
 
+
 export interface RowProps {
     row: ReturnType<typeof createData>,
     style: React.CSSProperties
@@ -132,6 +134,7 @@ function Row(props: RowProps) {
     const token = useSelector(selectToken)
 
     const showError = useSnackbarQueue('error')
+    const showSuccess = useSnackbarQueue('success')
 
     const classes = useRowStyles();
     const buttonClass = useButtonStyles();
@@ -195,42 +198,40 @@ function Row(props: RowProps) {
                                 <TableBody>
                                     <TableRow>
                                         <TableCell align="center">
-                                            <Link to="/panels/adminPanel/ChangeAccountData">
-                                                <Button className={buttonClass.root}>{t("edit")}</Button>
-                                            </Link>
+                                                <Link to="/panels/adminPanel/ChangeAccountData">
+                                                    <Button className={buttonClass.root} >{t("edit")}</Button>
+                                                </Link>
 
-                                            {/*                                                <Link to="/panels/adminPanel/ChangeAccountPassword">
+{/*                                                <Link to="/panels/adminPanel/ChangeAccountPassword">
                                                     <Button className={buttonClass.root}>{t("change password")}</Button>
                                                 </Link>*/}
 
                                             <Link to="/reset/resetSomebodyPassword">
-                                                <Button onClick={setCurrentResetPasswordAccount}
-                                                        className={buttonClass.root}>{t("reset password")}</Button>
+                                                <Button onClick={setCurrentResetPasswordAccount} className={buttonClass.root}>{t("reset password")}</Button>
                                             </Link>
 
                                             <Button className={buttonClass.root} onClick={() => {
-                                                if (row.active) {
-                                                    blockAccount({
-                                                        etag: row.etag,
-                                                        login: row.login, version: row.version, token: token
-                                                    }).then(res => {
+                                                if(row.active) {
+                                                    blockAccount({etag: row.etag,
+                                                        login: row.login, version: row.version, token: token}).then(res => {
                                                         refresh()
                                                     }).catch(error => {
-                                                        const message = error.response.data
-                                                        showError(t(message))
-                                                    });
+                                                            const message = error.response.data
+                                                            showError(t(message))
+                                                        });
+
+                                                    showSuccess(t('successful action'))
+
                                                 } else {
-                                                    unblockAccount({
-                                                        etag: row.etag,
-                                                        login: row.login, version: row.version, token: token
-                                                    })
+                                                    unblockAccount({etag: row.etag,
+                                                        login: row.login, version: row.version, token: token})
                                                         .then(res => {
                                                             refresh()
                                                         }).catch(error => {
                                                         const message = error.response.data
                                                         showError(t(message))
                                                     });
-
+                                                    showSuccess(t('successful action'))
                                                 }
                                             }}>{row.active ? t("block") : t("unblock")}</Button>
 
@@ -276,7 +277,8 @@ export default function AdminListClient() {
     function search(rows: any[]) {
         if (Array.isArray(rows) && rows.length) {
             const filteredAccount = rows.filter(
-                row => row.props.row.firstName.concat(" ", row.props.row.secondName).toLowerCase().indexOf(searchInput.toLowerCase()) > -1
+                row => row.props.row.firstName.concat(" ", row.props.row.secondName).toLowerCase().
+                    indexOf(searchInput.toLowerCase())> -1
             );
 
             filteredAccount.forEach(account => (accounts.includes(account.props.row.firstName + " " + account.props.row.secondName) ?
@@ -298,14 +300,11 @@ export default function AdminListClient() {
                 <Autocomplete
                     options={accounts}
                     inputValue={searchInput}
-                    style={{width: 300}}
+                    style={{ width: 300 }}
                     noOptionsText={t('no options')}
-                    onChange={(event, value) => {
-                        setSearchInput(value as string ?? '')
-                    }}
+                    onChange={(event, value) => {setSearchInput(value as string ?? '')}}
                     renderInput={(params) => (
-                        <TextField {...params} label={t('search account')} variant="outlined"
-                                   onChange={(e) => setSearchInput(e.target.value)}/>
+                        <TextField {...params} label={t('search account')}  variant="outlined" onChange={(e) => setSearchInput(e.target.value)}/>
                     )}
                 />
 
@@ -317,23 +316,17 @@ export default function AdminListClient() {
                     <TableHead>
                         <TableRow>
                             <TableCell/>
-                            <TableCell
-                                style={{color: `var(--${!darkMode ? 'dark' : 'white'})`}}>{t("login")}</TableCell>
-                            <TableCell
-                                style={{color: `var(--${!darkMode ? 'dark' : 'white'})`}}>{t("first name")}</TableCell>
-                            <TableCell
-                                style={{color: `var(--${!darkMode ? 'dark' : 'white'})`}}>{t("last name")}</TableCell>
-                            <TableCell
-                                style={{color: `var(--${!darkMode ? 'dark' : 'white'})`}}>{t("email")}</TableCell>
-                            <TableCell
-                                style={{color: `var(--${!darkMode ? 'dark' : 'white'})`}}>{t("active")}</TableCell>
-                            <TableCell
-                                style={{color: `var(--${!darkMode ? 'dark' : 'white'})`}}>{t("access level")}</TableCell>
+                            <TableCell style={{color: `var(--${!darkMode ? 'dark' : 'white'})`}}>{t("login")}</TableCell>
+                            <TableCell style={{color: `var(--${!darkMode ? 'dark' : 'white'})`}}>{t("first name")}</TableCell>
+                            <TableCell style={{color: `var(--${!darkMode ? 'dark' : 'white'})`}}>{t("last name")}</TableCell>
+                            <TableCell style={{color: `var(--${!darkMode ? 'dark' : 'white'})`}}>{t("email")}</TableCell>
+                            <TableCell style={{color: `var(--${!darkMode ? 'dark' : 'white'})`}}>{t("active")}</TableCell>
+                            <TableCell style={{color: `var(--${!darkMode ? 'dark' : 'white'})`}}>{t("access level")}</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {search(users.map((user, index) => (
-                            <Row key={index} row={user} style={{color: `var(--${!darkMode ? 'dark' : 'white'})`}}/>
+                            <Row key={index} row={user} style={{color: `var(--${!darkMode ? 'dark' : 'white'})`}} />
                         )))}
                     </TableBody>
                 </Table>

@@ -42,6 +42,7 @@ export default function Checkboxes() {
             const message = error.response.data
             showError(t(message))
         });
+        showSuccess(t('successful action'))
     }
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedAccessLevel(event.target.value)

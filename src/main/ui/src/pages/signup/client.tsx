@@ -91,10 +91,8 @@ export default function ClientSignUp() {
         }).catch(error => {
             const message = error.response.data
             showError(t(message))
-        }).then(() => {
-                showSuccess("DONE")
-            }
-        );
+        });
+        showSuccess(t('successful action'))
     }
 
 
@@ -118,7 +116,6 @@ export default function ClientSignUp() {
             showError(t("invalid.form"))
         } else {
             setButtonPopup(true)
-            // showSuccess("DONE")
         }
     }
 

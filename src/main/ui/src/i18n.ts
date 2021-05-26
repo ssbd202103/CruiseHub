@@ -170,7 +170,8 @@ const resources = {
 
             //successes
             "success.accessLevelStateChanged": "Stan poziomu dostępu został zmieniony",
-            "success.accessLevelAssigned": "Poziom dostępu przydzielony"
+            "success.accessLevelAssigned": "Poziom dostępu przydzielony",
+            'successful action': 'Akcja udała się'
         }
     },
     en: {
@@ -339,6 +340,7 @@ const resources = {
             "error.size.street": "Street should be no longer than 64 characters",
             "error.size.companyName": "Company name should be no longer than 64 characters",
             "error.size.postCode": "Post code should be no longer than 20 characters",
+            'successful action': 'The action was successful',
 
             //successes
             "success.accessLevelStateChanged": "Access level state changed",

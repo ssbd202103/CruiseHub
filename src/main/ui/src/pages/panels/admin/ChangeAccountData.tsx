@@ -16,6 +16,7 @@ import store from "../../../redux/store";
 export default function ChangeAccountData() {
     const {t} = useTranslation()
     const showError = useSnackbarQueue('error')
+    const showSuccess = useSnackbarQueue('success')
 
     const [, forceUpdate] = useReducer(x => x + 1, 0); // used to force component refresh on forceUpdate call
     const [ChangePerData, setPerData] = useState(false)
@@ -78,6 +79,7 @@ export default function ChangeAccountData() {
             const message = error.response.data
             showError(t(message))
         });
+        showSuccess(t('successful action'))
         const result = await axios.get(`/api/account/details/${currentAccount.login}`);
         sessionStorage.setItem("changeAccountData", JSON.stringify(result.data));
         forceUpdate()
@@ -115,6 +117,7 @@ export default function ChangeAccountData() {
             const message = error.response.data
             showError(t(message))
         });
+        showSuccess(t('successful action'))
 
         const result = axios.get(`/api/account/details/${currentAccount.login}`).then(res => {
             sessionStorage.setItem("changeAccountData", JSON.stringify(res.data));
@@ -147,6 +150,7 @@ export default function ChangeAccountData() {
             const message = error.response.data
             showError(t(message))
         });
+        showSuccess(t('successful action'))
 
         axios.get(`/api/account/details/${currentAccount.login}`).then(res => {
             sessionStorage.setItem("changeAccountData", JSON.stringify(res.data));

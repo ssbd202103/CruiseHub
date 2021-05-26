@@ -51,8 +51,7 @@ export default function ChangeAccessLevelState() {
         });
 
     }
-    console.log(changeAccessLevelStateAccount)
-    console.log(changeAccessLevelStateAccount.accessLevels)
+
     return (
         <Grid container className={styles.wrapper}>
             <Grid item style={{display: "block"}} className={styles.item}>
