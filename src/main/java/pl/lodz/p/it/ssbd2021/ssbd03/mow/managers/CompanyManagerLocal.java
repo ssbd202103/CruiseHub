@@ -28,4 +28,11 @@ public interface CompanyManagerLocal {
      *                          lub naruszenia zasad biznesowych
      */
     List<BusinessWorker> getBusinessWorkersForCompany(String companyName) throws BaseAppException;
+
+    /**
+     * Dodaje nowa firme
+     * @param company obiekt klasy Company
+     * @throws BaseAppException bazowy wyjatek aplikacji
+     */
+    void addCompany(Company company) throws BaseAppException;
 }

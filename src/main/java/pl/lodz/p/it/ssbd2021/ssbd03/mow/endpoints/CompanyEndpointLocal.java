@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.BusinessWorkerDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.AddCompanyDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CompanyLightDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.changeCruiseGroup.CompanyDto;
 
@@ -36,4 +37,11 @@ public interface CompanyEndpointLocal {
      * @return lista obiektów dto prezentujące informacje o fimach
      */
     List<CompanyDto> getAllCompanies(String userLogin) throws BaseAppException;
+
+    /**
+     * Metoda sluzaca do dodania nowej firmy
+     * @param addCompanyDto obiekt klasy AddCompanyDto zawierajacy informacje od uzytkownika potrzebne do utworzenia nowej firmy
+     * @throws BaseAppException bazowy wyjatek aplikacji
+     */
+    void addCompany(AddCompanyDto addCompanyDto) throws BaseAppException;
 }
