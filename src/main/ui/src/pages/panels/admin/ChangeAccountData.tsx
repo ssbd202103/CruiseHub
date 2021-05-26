@@ -9,7 +9,8 @@ import {useTranslation} from 'react-i18next';
 import styles from '../../../styles/ManageAccount.module.css'
 import RoundedButton from '../../../components/RoundedButton';
 import DarkedTextField from '../../../components/DarkedTextField';
-import axios from '../../../Services/URL'
+
+import axios from "../../../Services/URL";
 import {useSnackbarQueue} from "../../snackbar";
 import store from "../../../redux/store";
 import {getUser} from "../../../Services/userService";
@@ -131,8 +132,10 @@ export default function ChangeAccountData() {
             const message = error.response.data
             showError(t(message))
         });
+
+
         showSuccess(t('successful action'))
-        const result = await axios.get(`/api/account/details/${currentAccount.login}`);
+        const result = await axios.get(`account/details/${currentAccount.login}`);
         sessionStorage.setItem("changeAccountData", JSON.stringify(result.data));
         forceUpdate()
         handleChangePerData()
@@ -157,6 +160,7 @@ export default function ChangeAccountData() {
             accVersion: clientAddr.accVersion
         })
 
+
         await axios.put("/account/change-client-data", json, {
             headers: {
                 "Content-Type": "application/json",
@@ -168,6 +172,7 @@ export default function ChangeAccountData() {
             const message = error.response.data
             showError(t(message))
         });
+
         showSuccess(t('successful action'))
 
         await axios.get(`/account/details/${currentAccount.login}`, {
@@ -203,6 +208,8 @@ export default function ChangeAccountData() {
             const message = error.response.data
             showError(t(message))
         });
+
+
         showSuccess(t('successful action'))
 
         await axios.get(`/account/details/${currentAccount.login}`, {

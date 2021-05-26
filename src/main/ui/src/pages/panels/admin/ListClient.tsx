@@ -16,7 +16,7 @@ import {Button, TextField} from "@material-ui/core";
 import {Link} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import DarkedTextField from "../../../components/DarkedTextField";
-import axios from "axios";
+import axios from "../../../Services/URL";
 import {useSelector} from "react-redux";
 import {selectDarkMode} from "../../../redux/slices/userSlice";
 import {getAccountDetailsAbout, getAllAccounts} from "../../../Services/accountsService";
@@ -41,7 +41,7 @@ const unblockAccount = ({login, etag, version, token}: UnblockAccountParams) => 
             version: version,
         }
     );
-    return axios.put('/api/account/unblock', json, {
+    return axios.put('account/unblock', json, {
         headers: {
             'Content-Type': 'application/json',
             'If-Match': etag,
@@ -63,8 +63,8 @@ const blockAccount = ({login, etag, version, token}: UnblockAccountParams) => {
             version: version,
         }
     );
-    return axios.put('/api/account/block', json, {
-        headers: {
+    return axios.put('account/block', json, {
+        headers:{
             'Content-Type': 'application/json',
             'If-Match': etag,
             'Authorization': `Bearer ${token}`

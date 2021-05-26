@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import axios from "axios";
+import axios from "../../Services/URL";
 import AuthLayout from "../../layouts/AuthLayout";
 import DarkedTextField from "../../components/DarkedTextField";
 import styles from "../../styles/auth.global.module.css";
@@ -21,7 +21,7 @@ const RequestSomeonePasswordReset = () => {
     const {token} = store.getState()
     let login = currentAccount.login;
     const onFormSubmit = () => {
-        axios.post(`/api/account/request-someones-password-reset/${login}/${email}/`, null, {
+        axios.post(`account/request-someones-password-reset/${login}/${email}/`, null, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }

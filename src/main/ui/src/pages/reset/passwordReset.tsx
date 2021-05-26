@@ -1,7 +1,7 @@
 import {useLocation} from 'react-router-dom';
 
 import React, {useState} from 'react';
-import axios from "axios";
+import axios from "../../Services/URL";
 import AuthLayout from "../../layouts/AuthLayout";
 import DarkedTextField from "../../components/DarkedTextField";
 import {useTranslation} from "react-i18next";
@@ -30,7 +30,7 @@ function PasswordReset(props: any) {
             password
         }
 
-        axios.put('/api/account/reset-password', json, {
+        axios.put('account/reset-password', json, {
             headers: {
                 'Content-Type': 'application/json'
             }

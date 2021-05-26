@@ -189,6 +189,7 @@
             <id>dev-without-ui</id>
             <properties>
                 <app.baseurl>https://localhost:8181</app.baseurl>
+                <app.frontend.url>http://localhost:3000</app.frontend.url>
             </properties>
             <activation>
                 <property>
@@ -202,6 +203,7 @@
             <id>dev</id>
             <properties>
                 <app.baseurl>https://localhost:8181</app.baseurl>
+                <app.frontend.url>http://localhost:8080</app.frontend.url>
             </properties>
             <activation>
                 <property>
@@ -295,6 +297,7 @@
             <properties>
                 <!--                <app.baseurl>http://studapp.it.p.lodz.pl:8003</app.baseurl>-->
                 <app.baseurl>https://172.16.0.84:8403</app.baseurl>
+                <app.frontend.url>https://172.16.0.84:8403</app.frontend.url>
             </properties>
             <activation>
                 <activeByDefault>true</activeByDefault>

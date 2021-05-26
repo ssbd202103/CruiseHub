@@ -12,7 +12,7 @@ import styles from '../../styles/auth.global.module.css'
 
 import {useTranslation} from 'react-i18next'
 import {useEffect, useState} from "react";
-import axios from "axios";
+import axios from "../../Services/URL";
 import Recaptcha from "react-recaptcha";
 import Popup from "../../PopupRecaptcha";
 import {useSelector} from "react-redux";
@@ -68,7 +68,7 @@ export default function WorkerSignUp() {
             companyName: company
         });
         setButtonPopup(false)
-        axios.post('/api/auth/business-worker/registration', json, {
+        axios.post('auth/business-worker/registration', json, {
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -82,7 +82,7 @@ export default function WorkerSignUp() {
 
     useEffect(() => {
         const getCompaniesList = async () => {
-            const {data} = await axios.get('/api/company/companies-info', {});
+            const {data} = await axios.get('company/companies-info', {});
             setCompaniesList(data.map((comp: { name: string }) => comp.name))
         }
         getCompaniesList()

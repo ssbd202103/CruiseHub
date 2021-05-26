@@ -4,7 +4,7 @@ import React from "react";
 import {useTranslation} from 'react-i18next'
 import RoundedButton from '../../../components/RoundedButton'
 import {useSnackbarQueue} from "../../snackbar";
-import axios from "axios";
+import axios from "../../../Services/URL";
 import store from "../../../redux/store";
 
 
@@ -26,7 +26,7 @@ export default function Checkboxes() {
             accountVersion: currentAccount.version
         }
 
-        await axios.put("/api/account/grant-access-level",
+        await axios.put("account/grant-access-level",
             json,
             {
                 headers: {
