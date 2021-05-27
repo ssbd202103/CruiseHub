@@ -29,12 +29,33 @@ public interface AuthenticateEndpointLocal {
      */
     String updateCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws BaseAppException;
 
+
     /**
-     * Metoda odpowiedzialna za odświeżanie tokenu JWT
-     * @param token Aktualny token JWT
-     * @return token Odnowiony token JWT
-     * @throws BaseAppException Bazowy wyjątek aplikacyjny, rzucany w przypadku gdy przekazany token nie jest ważny,
-     * lub jego podmiot nie jest upoważniony do ponownego uwierzytelnienia
+     * Metoda odpowiedzialna za weryfikacje logowania dwu etapowego (kodu) oraz edycję pól w bazie danych w przypadku poprawnego logowania.
+     * @param login Login użytkownika
+     * @param code kod do dwufazowego uwierzytelnienia
+     * @param IpAddr Adres IP użytkownika
+     * @param time Czas
+     * @return Token JWT
+     * @throws BaseAppException bazowy wyjątek aplikacji
      */
+
+    String authWCodeUpdateCorrectAuthenticateInfo(String login, String code, String IpAddr, LocalDateTime time) throws BaseAppException;
+
+    /**
+     * Metoda odpowiadajaca za wysłanie e-mail służącego do dwufazowego uwierzytelnienia
+     *
+     * @param login
+     * @throws BaseAppException
+     */
+   void sendAuthenticationCodeEmail(String login) throws BaseAppException;
+
+        /**
+         * Metoda odpowiedzialna za odświeżanie tokenu JWT
+         * @param token Aktualny token JWT
+         * @return token Odnowiony token JWT
+         * @throws BaseAppException Bazowy wyjątek aplikacyjny, rzucany w przypadku gdy przekazany token nie jest ważny,
+         * lub jego podmiot nie jest upoważniony do ponownego uwierzytelnienia
+         */
     String refreshToken(String token) throws BaseAppException;
 }

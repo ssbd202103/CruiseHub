@@ -44,6 +44,7 @@ public class ReservationEndpoint extends BaseEndpoint implements ReservationEndp
     }
 
     //TODO how to get current user ?
+    @RolesAllowed("getWorkerCruiseReservations")
     @Override
     public List<CruiseReservationDto> viewWorkerCruiseReservations(UUID cruise_uuid) throws BaseAppException {
         List<CruiseReservationDto> res = new ArrayList<>();

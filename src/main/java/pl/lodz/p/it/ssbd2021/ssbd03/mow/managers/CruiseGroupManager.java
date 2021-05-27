@@ -51,6 +51,7 @@ public class CruiseGroupManager implements CruiseGroupManagerLocal {
         return cruiseGroupFacadeMow.findAll();
     }
 
+    @RolesAllowed("deactivateCruiseGroup")
     @Override
     public CruiseGroup deactivateCruiseGroup(String name, Long version) throws BaseAppException {
         CruiseGroup cruiseGroup = this.cruiseGroupFacadeMow.findByName(name);

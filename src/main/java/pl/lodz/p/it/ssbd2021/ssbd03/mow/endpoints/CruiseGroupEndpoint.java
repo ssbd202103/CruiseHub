@@ -61,6 +61,7 @@ public class CruiseGroupEndpoint extends BaseEndpoint implements CruiseGroupEndp
         return res;
     }
 
+    @RolesAllowed("deactivateCruiseGroup")
     @Override
     public void deactivateCruiseGroup(String name, Long version) throws BaseAppException {
         this.cruiseGroupManager.deactivateCruiseGroup(name, version);

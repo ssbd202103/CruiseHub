@@ -42,6 +42,10 @@ const RequestSomeonePasswordReset = () => {
             <h1 className={styles.h1}>{login}</h1>
             <DarkedTextField
                 label={t("email") + ' *'}
+                style={{
+                    width: '70%',
+                    margin: '20px 0'
+                }}
                 placeholder="email"
                 className={styles.input}
                 value={email}
@@ -50,6 +54,7 @@ const RequestSomeonePasswordReset = () => {
                 }}
                 colorIgnored
             />
+
             <Link to="/panels/adminPanel/accounts">
                 <RoundedButton
                     onClick={onFormSubmit}

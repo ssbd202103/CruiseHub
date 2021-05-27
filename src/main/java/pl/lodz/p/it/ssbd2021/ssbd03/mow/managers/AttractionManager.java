@@ -5,6 +5,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.AttractionFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
 import javax.inject.Inject;
@@ -21,11 +22,13 @@ public class AttractionManager implements AttractionManagerLocal {
     @Inject
     private AttractionFacadeMow attractionFacadeMow;
 
+
     @Override
     public List<Attraction> getAllAttractions() throws BaseAppException {
         return attractionFacadeMow.findAll();
     }
 
+    @RolesAllowed("deleteAttraction")
     @Override
     public void deleteAttraction(String name) throws BaseAppException {
         Attraction attraction = this.attractionFacadeMow.findByName(name);
