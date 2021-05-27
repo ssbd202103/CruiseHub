@@ -111,7 +111,7 @@ public class AccountEndpoint extends BaseEndpoint implements AccountEndpointLoca
     @RolesAllowed("selfGetAccountDetails")
     @Override
     public AccountDetailsViewDto getSelfDetails() throws BaseAppException {
-        return AccountMapper.toAccountDetailsViewDto(accountManager.getCurrentUser());
+        return AccountMapper.toAccountDetailsViewFilteringAccessLevels(accountManager.getCurrentUser());
     }
 
     @RolesAllowed("getAllAccounts")

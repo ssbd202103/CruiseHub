@@ -24,6 +24,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDt
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ACCESS_LEVEL_DOES_NOT_EXIST_ERROR;
 
@@ -132,7 +133,23 @@ public class AccountMapper {
                 account.getEmail(), account.isConfirmed(), account.isActive(), account.getLanguageType().getName(),
                 account.getAccessLevels().stream()
                         .map(AccountMapper::toAccessLevelDetailsViewDto)
-                        .collect(Collectors.toSet()), account.getVersion());
+                        .collect(Collectors.toSet()),
+                account.getVersion());
+    }
+
+    /**
+     * Mapuje obiekt klasy Account na obiekt przesyłowy klasy AccountDetailsViewDto filtrując tylko aktywne poziomy dostępu
+     *
+     * @param account Konto poddawane konwersji
+     * @return Reprezentacja konta w postaci obiektu przesyłowego AccountDetailsViewDto
+     */
+    public static AccountDetailsViewDto toAccountDetailsViewFilteringAccessLevels(Account account) throws BaseAppException {
+        return new AccountDetailsViewDto(account.getFirstName(), account.getSecondName(), account.isDarkMode(), account.getLogin(),
+                account.getEmail(), account.isConfirmed(), account.isActive(), account.getLanguageType().getName(),
+                getAuthorizedAccessLevels(account)
+                        .map(AccountMapper::toAccessLevelDetailsViewDto)
+                        .collect(Collectors.toSet()),
+                account.getVersion());
     }
 
     private static AccessLevelDetailsViewDto toAccessLevelDetailsViewDto(AccessLevel accessLevel) {
@@ -151,6 +168,17 @@ public class AccountMapper {
             default:
                 return null; // Statement will never execute unless new AccessLevel ENUM is added to the model
         }
+    }
+
+    private static Stream<AccessLevel> getAuthorizedAccessLevels(Account account) {
+        return account.getAccessLevels().stream()
+                .filter(accessLevel -> {
+                    if (accessLevel instanceof BusinessWorker) {
+                        BusinessWorker bw = (BusinessWorker) accessLevel;
+                        return bw.isEnabled() && bw.isConfirmed();
+                    }
+                    return accessLevel.isEnabled();
+                });
     }
 
     private static AddressDto toAddressDto(Address address) {
@@ -213,12 +241,8 @@ public class AccountMapper {
         account.setLastAlterDateTime(time);
     }
 
-    private static LocalDateTime getNowLocalDateTime() {
-        return LocalDateTime.now();
-    }
-
     public static Account extractAccountFromClientChangeDataDto(ClientChangeDataDto clientChangeDataDto) {
-        LocalDateTime now = getNowLocalDateTime();
+        LocalDateTime now = LocalDateTime.now();
 
         Account account = new Account();
         setAccountChangeDataDtoFields(account, clientChangeDataDto, now);
@@ -239,7 +263,7 @@ public class AccountMapper {
     }
 
     public static Account extractAccountFromBusinessWorkerChangeDataDto(BusinessWorkerChangeDataDto businessWorkerChangeDataDto) {
-        LocalDateTime now = getNowLocalDateTime();
+        LocalDateTime now = LocalDateTime.now();
 
         Account account = new Account();
 
@@ -253,7 +277,7 @@ public class AccountMapper {
     }
 
     public static Account extractAccountFromModeratorChangeDataDto(ModeratorChangeDataDto moderatorChangeDataDto) {
-        LocalDateTime now = getNowLocalDateTime();
+        LocalDateTime now = LocalDateTime.now();
 
         Account account = new Account();
 
@@ -263,7 +287,7 @@ public class AccountMapper {
     }
 
     public static Account extractAccountFromAdministratorChangeDataDto(AdministratorChangeDataDto administratorChangeDataDto) {
-        LocalDateTime now = getNowLocalDateTime();
+        LocalDateTime now = LocalDateTime.now();
 
         Account account = new Account();
 
@@ -309,6 +333,7 @@ public class AccountMapper {
 
     /**
      * Mapuje oiekt klasy account na obiekt dto BusinessWorkerWithCompanyDto
+     *
      * @param account konto użytkownika podawane konwersji
      * @return obiekt dto BusinessWorkerWithCompanyDto
      * @throws BaseAppException Bazowy wyjątek aplikacji
