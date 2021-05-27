@@ -1,7 +1,8 @@
 import {createSelector, createSlice, PayloadAction} from '@reduxjs/toolkit'
 import i18n from "i18next";
+import {saveUser} from "../../Services/userService";
 
-export interface IUserSliceState {
+export interface ILoginUserSliceState {
     firstName: string,
     secondName: string,
     email: string,
@@ -10,12 +11,18 @@ export interface IUserSliceState {
     darkMode: boolean,
     version: number,
     languageType: string,
-    accessLevels: Array<IAccessLevel>
+    accessLevels: Array<IAccessLevel>,
 }
+
+export interface IUserSliceState extends ILoginUserSliceState {
+    activeAccessLevel: AccessLevelType,
+}
+
+export type AccessLevelType = "CLIENT" | "BUSINESS_WORKER" | "MODERATOR" | "ADMINISTRATOR" | "";
 
 export interface IAccessLevel {
     '@type': "client" | "businessWorker" | "moderator" | "administrator",
-    accessLevelType: "CLIENT" | "BUSINESS_WORKER" | "MODERATOR" | "ADMINISTRATOR",
+    accessLevelType: AccessLevelType,
     address?: {
         houseNumber: number,
         street: string,
@@ -37,11 +44,17 @@ const userSlice = createSlice({
         email: '',
         languageType: window.navigator.languages[1].toUpperCase() === "EN" ? "EN" : "PL",
         accessLevels: [] as Array<IAccessLevel>,
+        activeAccessLevel: '',
         etag: '',
         version: 0
     } as IUserSliceState,
     reducers: {
-        setUser: (state: IUserSliceState, {payload}: PayloadAction<IUserSliceState>) => payload,
+        setUser: (state: IUserSliceState, {payload}: PayloadAction<ILoginUserSliceState>) => ({
+            ...payload,
+            activeAccessLevel:
+                payload.accessLevels
+                    .find(accessLevel => accessLevel.accessLevelType === state.activeAccessLevel)?.accessLevelType || payload.accessLevels[0].accessLevelType //state.activeAccessLevel || payload.accessLevels[0].accessLevelType
+        }),
         changeEmail: (state: IUserSliceState, {payload}: PayloadAction<string>) => {
             state.email = payload
         },
@@ -57,14 +70,19 @@ const userSlice = createSlice({
                 email: '',
                 languageType,
                 accessLevels: [] as Array<IAccessLevel>,
+                activeAccessLevel: '',
                 etag: '',
                 version: 0
-            }
+            } as IUserSliceState
+        },
+        setActiveAccessLevel: (state: IUserSliceState, {payload}: PayloadAction<AccessLevelType>) => {
+            state.activeAccessLevel = payload
+            sessionStorage.setItem('cruisehub_user', JSON.stringify({...state, activeAccessLevel: payload}))
         }
     }
 })
 
-export const {setUser, changeEmail, emptyUser} = userSlice.actions
+export const {setUser, changeEmail, emptyUser, setActiveAccessLevel} = userSlice.actions
 
 const selectSelf = (state: { user: IUserSliceState }) => state
 
@@ -90,6 +108,11 @@ export const getAccessLevelLabels = createSelector(selectSelf, state =>
     state.user.accessLevels.map((accessLevel: IAccessLevel) => accessLevel.accessLevelType)
 )
 
+export const selectOtherAccessLevel = createSelector(selectSelf, state =>
+    state.user.accessLevels
+        .map((accessLevel: IAccessLevel) => accessLevel.accessLevelType)
+        .filter(label => label !== state.user.activeAccessLevel))
+
 export const selectPhoneNumber = (accessLevelLabel: "CLIENT" | "BUSINESS_WORKER") =>
     createSelector(selectSelf,
         state => state.user.accessLevels.find(accessLevel => accessLevel.accessLevelType === accessLevelLabel)?.phoneNumber || "-1")
@@ -104,5 +127,7 @@ export const selectAddress =
                 city: "",
                 country: ""
             })
+
+export const selectActiveAccessLevel = createSelector(selectSelf, state => state.user.activeAccessLevel)
 
 export default userSlice.reducer

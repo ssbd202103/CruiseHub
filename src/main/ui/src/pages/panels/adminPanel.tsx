@@ -27,6 +27,8 @@ import LogOutRoundedButton from "../../components/LogOutRoundedButton";
 import ChangeEmail from "../../components/changeData/ChangeEmail";
 import ChangePassword from "../../components/changeData/ChangePassword";
 import ChangeAdministratorData from "../../components/changeData/ChangeAdministratorData";
+import Header from "../../components/Header";
+import RequestSomeonePasswordReset from "../reset/requestSomeonesPasswordReset";
 
 export default function AdminPanel() {
     const {t} = useTranslation()
@@ -67,78 +69,73 @@ export default function AdminPanel() {
     }
 
     return (
-        <Grid container className={styles.wrapper}>
-            <Redirect to="/panels/adminPanel/accounts" />
-            <Grid item xs={2} md={3} xl={2}>
-                <PanelMenu color={!darkMode ? 'yellow-dark' : 'white-light'}>
-                    <List className={styles.menu + ' ' + styles['menu-' + (!darkMode ? 'light' : 'dark')]} component="nav" aria-label="panel menu">
-                        <Link to="/panels/adminPanel/accounts">
-                            <ListItem button>
-                                <ListItemIcon>
-                                    <AccountsListIcon style={{ fill: `var(--${!darkMode ? 'white' : 'dark'})` }} />
-                                </ListItemIcon>
-                                <ListItemText> {t("list accounts")} </ListItemText>
-                            </ListItem>
-                        </Link>
-                        <Link to="/panels/adminPanel/settings">
-                            <ListItem button>
-                                <ListItemIcon>
-                                    <SettingsIcon style={{ fill: `var(--${!darkMode ? 'white' : 'dark'})` }} />
-                                </ListItemIcon>
-                                <ListItemText>{t("settings")}</ListItemText>
-                            </ListItem>
-                        </Link>
-                        <Link to="/">
-                            <ListItem button>
-                                <ListItemIcon>
-                                    <GoBackIcon style={{fill: `var(--${!darkMode ? 'white' : 'dark'})` }} />
-                                </ListItemIcon>
-                                <ListItemText>{t("go back")}</ListItemText>
-                            </ListItem>
-                        </Link>
-                        <ListItem button>
-                            <AppColorSetter />
-                        </ListItem>
-                    </List>
-                </PanelMenu>
-            </Grid>
+        <>
+            <Header />
+            <Grid container className={styles.wrapper}>
+                <Redirect to="/accounts" />
+                <Grid item xs={2} md={3} xl={2}>
+                    <PanelMenu color={!darkMode ? 'yellow-dark' : 'white-light'}>
+                        <List className={styles.menu + ' ' + styles['menu-' + (!darkMode ? 'light' : 'dark')]} component="nav" aria-label="panel menu">
+                            <Link to="/accounts">
+                                <ListItem button>
+                                    <ListItemIcon>
+                                        <AccountsListIcon style={{ fill: `var(--${!darkMode ? 'white' : 'dark'})` }} />
+                                    </ListItemIcon>
+                                    <ListItemText> {t("list accounts")} </ListItemText>
+                                </ListItem>
+                            </Link>
+                            <Link to="/settings">
+                                <ListItem button>
+                                    <ListItemIcon>
+                                        <SettingsIcon style={{ fill: `var(--${!darkMode ? 'white' : 'dark'})` }} />
+                                    </ListItemIcon>
+                                    <ListItemText>{t("settings")}</ListItemText>
+                                </ListItem>
+                            </Link>
+                        </List>
+                    </PanelMenu>
+                </Grid>
 
-            <Grid item className={styles.content + ' ' + styles[`content-${!darkMode ? 'light' : 'dark'}`]} xs={10} md={9} xl={10}>
-                <Route exact path="/panels/adminPanel/accounts">
-                    <h3> {t("list accounts")} </h3>
-                    <ListClient />
-                </Route>
-                <Route exact path="/panels/adminPanel/settings">
-                    <ChangeAdministratorData
-                        open={isDataEdit}
-                        onOpen={handleIsDataEdit}
-                        onConfirm={() => {setIsDataEdit(false)}}
-                        onCancel={() => {setIsDataEdit(false)}} />
-                    <ChangeEmail
-                        open={isEmailEdit}
-                        onOpen={handleIsEmailEdit}
-                        onConfirm={() => {setIsEmailEdit(false)}}
-                        onCancel={() => {setIsEmailEdit(false)}} />
-                    <ChangePassword
-                        open={isPasswordEdit}
-                        onOpen={handleIsPasswordEdit}
-                        onConfirm={() => {setIsPasswordEdit(false)}}
-                        onCancel={() => {setIsPasswordEdit(false)}} />
-                    <LogOutRoundedButton />
-                </Route>
-                <Route path="/panels/adminPanel/ChangeAccountData">
-                    <ChangeAccountData/>
-                </Route>
-                <Route path="/panels/adminPanel/ChangeAccountPassword">
-                    <ChangeAccountPassword/>
-                </Route>
-                <Route path="/panels/adminPanel/GrantAccessLevel">
-                    <GrantAccessLevel/>
-                </Route>
-                <Route path="/panels/adminPanel/ChangeAccessLevelState">
-                    <ChangeAccessLevelState/>
-                </Route>
+                <Grid item className={styles.content + ' ' + styles[`content-${!darkMode ? 'light' : 'dark'}`]} xs={10} md={9} xl={10}>
+                    <Route path="/accounts">
+                        <h3> {t("list accounts")} </h3>
+                        <ListClient />
+                    </Route>
+                    <Route path="/settings">
+                        <ChangeAdministratorData
+                            open={isDataEdit}
+                            onOpen={handleIsDataEdit}
+                            onConfirm={() => {setIsDataEdit(false)}}
+                            onCancel={() => {setIsDataEdit(false)}} />
+                        <ChangeEmail
+                            open={isEmailEdit}
+                            onOpen={handleIsEmailEdit}
+                            onConfirm={() => {setIsEmailEdit(false)}}
+                            onCancel={() => {setIsEmailEdit(false)}} />
+                        <ChangePassword
+                            open={isPasswordEdit}
+                            onOpen={handleIsPasswordEdit}
+                            onConfirm={() => {setIsPasswordEdit(false)}}
+                            onCancel={() => {setIsPasswordEdit(false)}} />
+                        <LogOutRoundedButton />
+                    </Route>
+                    <Route path="/ChangeAccountData">
+                        <ChangeAccountData/>
+                    </Route>
+                    <Route path="/ChangeAccountPassword">
+                        <ChangeAccountPassword/>
+                    </Route>
+                    <Route path="/GrantAccessLevel">
+                        <GrantAccessLevel/>
+                    </Route>
+                    <Route path="/ChangeAccessLevelState">
+                        <ChangeAccessLevelState/>
+                    </Route>
+                    <Route path="/reset/resetSomebodyPassword">
+                        <RequestSomeonePasswordReset/>
+                    </Route>
+                </Grid>
             </Grid>
-        </Grid>
+        </>
     )
 }
