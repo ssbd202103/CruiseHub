@@ -68,7 +68,12 @@ export default function ClientSignUp() {
     const [houseNumberRegexError, setHouseNumberRegexError] = useState(false)
 
 
-    async function verifyCallback() {
+    const verifyCallback = () => {
+        setButtonPopup(false)
+        setButtonPopupAcceptAction(true)
+    }
+
+    const handleConfirm = () => {
         const json = JSON.stringify({
                 firstName,
                 secondName,
@@ -86,23 +91,19 @@ export default function ClientSignUp() {
                 phoneNumber
             }
         );
-        await setButtonPopup(false)
-        setButtonPopupAcceptAction(true)
-        if(isAccepted) {
-            axios.post('/api/auth/client/registration', json, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).catch(error => {
-                const message = error.response.data
-                showError(t(message))
-            }).then(res=>{
 
-                showSuccess(t('successful action'))
-            });
-        }
-
-
+        axios.post('/api/auth/client/registration', json, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(res=>{
+            setButtonPopupAcceptAction(false)
+            showSuccess(t('successful action'))
+        }).catch(error => {
+            setButtonPopupAcceptAction(false)
+            const message = error.response.data
+            showError(t(message))
+        })
     }
 
 
@@ -345,7 +346,12 @@ export default function ClientSignUp() {
                         />
                     </div>
                 </Popup>
-                <PopupAcceptAction trigger={buttonPopupAcceptAction} onClick={(value) => {setIsAccepted(value)}} />
+                <PopupAcceptAction
+                    open={buttonPopupAcceptAction}
+                    onConfirm={handleConfirm}
+                    onCancel={() => {setButtonPopupAcceptAction(false)
+                    }}
+                />
 
 
                 <RoundedButton

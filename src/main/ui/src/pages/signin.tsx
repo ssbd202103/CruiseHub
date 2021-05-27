@@ -18,6 +18,7 @@ import React, {useState} from "react"
 import {getUser} from "../Services/userService";
 
 import {useSnackbarQueue} from "./snackbar";
+import PopupAcceptAction from "../PopupAcceptAction";
 
 export default function SignIn() {
     const {t} = useTranslation();
@@ -42,7 +43,6 @@ export default function SignIn() {
         }).then(res => {
             getUser(res.data)
             history.push('/')
-            showSuccess(t('successful action'))
         }).catch(error => {
             const message = error.response.data
             showError(t(message))
@@ -95,8 +95,9 @@ export default function SignIn() {
                         padding: '10px 0'
                     }}
                     color="pink"
-                    onClick={auth}
+                    onClick={()=>auth}
                 >{t("signin")}</RoundedButton>
+
                 <Link to="signup/client">
                     <a className={styles.link}>{t("i don't have an account")}</a>
                 </Link>

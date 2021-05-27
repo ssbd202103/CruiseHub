@@ -6,11 +6,14 @@ import styles from "../../styles/auth.global.module.css";
 import {useTranslation} from "react-i18next";
 import RoundedButton from "../../components/RoundedButton";
 import {useSnackbarQueue} from "../snackbar";
+import PopupAcceptAction from "../../PopupAcceptAction";
 
 const RequestPasswordReset = () => {
     const {t} = useTranslation()
     const showError = useSnackbarQueue('error')
     const showSuccess = useSnackbarQueue('success')
+
+    const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
 
     const [login, setLogin] = useState('')
 
@@ -18,12 +21,14 @@ const RequestPasswordReset = () => {
         // event.preventDefault()
         // console.log("hello world")
         axios.post(`/api/account/request-password-reset/${login}`, {})
-            .catch(error => {
+            .then(res=>{
+            setButtonPopupAcceptAction(false)
+            showSuccess(t('successful action'))
+              }).catch(error => {
+                setButtonPopupAcceptAction(false)
                 const message = error.response.data
                 showError(t(message))
-            }).then(res=>{
-            showSuccess(t('successful action'))
-        });
+            });
 
     }
 
@@ -36,8 +41,14 @@ const RequestPasswordReset = () => {
                 value={login}
                 onChange={event => {setLogin(event.target.value)}}
             />
+            <PopupAcceptAction
+                open={buttonPopupAcceptAction}
+                onConfirm={onFormSubmit}
+                onCancel={() => {setButtonPopupAcceptAction(false)
+                }}
+            />
             <RoundedButton
-                onClick={onFormSubmit}
+                onClick={()=>setButtonPopupAcceptAction(true)}
                 style={{width: '100%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
                 color="pink"
             >Send email </RoundedButton>

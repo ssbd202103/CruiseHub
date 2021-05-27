@@ -27,6 +27,7 @@ import {
 } from "../../regexConstants";
 import {useSnackbarQueue} from "../snackbar";
 import i18n from "i18next";
+import PopupAcceptAction from "../../PopupAcceptAction";
 
 
 export default function WorkerSignUp() {
@@ -56,7 +57,16 @@ export default function WorkerSignUp() {
     const [emailRegexError, setEmailRegexError] = useState(false)
     const [phoneNumberRegexError, setPhoneNumberRegexError] = useState(false)
 
-    async function verifyCallback() {
+    const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
+    const [isAccepted, setIsAccepted] = useState(false);
+
+    const verifyCallback = () => {
+        setButtonPopup(false)
+        setButtonPopupAcceptAction(true)
+
+    }
+
+    const handleConfirm = () => {
         const json = JSON.stringify({
             firstName,
             secondName,
@@ -67,19 +77,18 @@ export default function WorkerSignUp() {
             phoneNumber,
             companyName: company
         });
-        setButtonPopup(false)
         axios.post('/api/auth/business-worker/registration', json, {
             headers: {
                 'Content-Type': 'application/json'
             }
+        }).then(res=>{
+            setButtonPopupAcceptAction(false)
+            showSuccess(t('successful action'))
         }).catch(error => {
+            setButtonPopupAcceptAction(false)
             const message = error.response.data
             showError(t(message))
-        }).then(res=>{
-            showSuccess(t('successful action'))
         });
-
-
     }
 
     useEffect(() => {
@@ -315,6 +324,12 @@ export default function WorkerSignUp() {
                         />
                     </div>
                 </Popup>
+                <PopupAcceptAction
+                    open={buttonPopupAcceptAction}
+                    onConfirm={handleConfirm}
+                    onCancel={() => {setButtonPopupAcceptAction(false)
+                    }}
+                />
                 <Link to="client">
                     <a className={styles.link}>{t("i am a client")}</a>
                 </Link>

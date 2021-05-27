@@ -12,6 +12,7 @@ import DarkedTextField from '../../../components/DarkedTextField';
 import axios from "axios";
 import {useSnackbarQueue} from "../../snackbar";
 import store from "../../../redux/store";
+import PopupAcceptAction from "../../../PopupAcceptAction";
 
 export default function ChangeAccountData() {
     const {t} = useTranslation()
@@ -36,6 +37,9 @@ export default function ChangeAccountData() {
 
     const [businessPhoneNumber, setBusinessPhoneNumber] = useState('')
     const {token} = store.getState()
+    const [buttonPopupAcceptChangeNumber, setButtonPopupAcceptChangeNumber] = useState(false);
+    const [buttonPopupAcceptChangeData, setButtonPopupAcceptChangeData] = useState(false);
+    const [buttonPopupAcceptChangeAddress, setButtonPopupAcceptChangeAddress] = useState(false);
 
     //Functions for personal data change
     const handleChangePerData = () => {
@@ -75,11 +79,13 @@ export default function ChangeAccountData() {
                 "Accept": "application/json",
                 "If-Match": currentAccount.etag
             }
+        }).then(res =>{
+            setButtonPopupAcceptChangeData(false)
+            showSuccess(t('successful action'))
         }).catch(error => {
+            setButtonPopupAcceptChangeData(false)
             const message = error.response.data
             showError(t(message))
-        }).then(res =>{
-            showSuccess(t('successful action'))
         });
 
         const result = await axios.get(`/api/account/details/${currentAccount.login}`);
@@ -115,11 +121,13 @@ export default function ChangeAccountData() {
                 "If-Match": currentAccount.etag,
                 "Authorization": `Bearer ${token}`
             }
+        }).then(res =>{
+            setButtonPopupAcceptChangeAddress(false)
+            showSuccess(t('successful action'))
         }).catch(error => {
+            setButtonPopupAcceptChangeAddress(false)
             const message = error.response.data
             showError(t(message))
-        }).then(res =>{
-            showSuccess(t('successful action'))
         });
 
         const result = axios.get(`/api/account/details/${currentAccount.login}`).then(res => {
@@ -149,11 +157,13 @@ export default function ChangeAccountData() {
                 "If-Match": currentAccount.etag,
                 "Authorization": `Bearer ${token}`
             }
+        }).then(res =>{
+            setButtonPopupAcceptChangeNumber(false)
+            showSuccess(t('successful action'))
         }).catch(error => {
+            setButtonPopupAcceptChangeNumber(false)
             const message = error.response.data
             showError(t(message))
-        }).then(res =>{
-            showSuccess(t('successful action'))
         });
 
         axios.get(`/api/account/details/${currentAccount.login}`).then(res => {
@@ -174,6 +184,7 @@ export default function ChangeAccountData() {
     const businnesPhone = businessAccount.accessLevels.find((data: any) => (data.accessLevelType.includes("BUSINESS_WORKER")))
 
     return (
+        <>
         <Grid container className={styles.wrapper}>
             <Grid item style={{display: ChangePerData ? "none" : "block"}} className={styles.item}>
                 <h3>{t("personal data")}</h3>
@@ -233,7 +244,7 @@ export default function ChangeAccountData() {
 
                 </div>
                 <RoundedButton color="blue"
-                               onClick={changePersonalData}
+                               onClick={()=>setButtonPopupAcceptChangeData(true)}
                 >{t("confirm")}</RoundedButton>
                 <RoundedButton color="pink"
                                onClick={handleChangePerData}
@@ -328,7 +339,7 @@ export default function ChangeAccountData() {
                     </div>
                     <RoundedButton
                         color="blue"
-                        onClick={changeAddress}
+                        onClick={()=>setButtonPopupAcceptChangeAddress(true)}
                     >{t("confirm")}</RoundedButton><RoundedButton
                     color="pink"
                     onClick={handleChangAddress}
@@ -364,7 +375,7 @@ export default function ChangeAccountData() {
                     </div>
                     <RoundedButton
                         color="blue"
-                        onClick={changeBusinessPhone}
+                        onClick={()=>setButtonPopupAcceptChangeNumber(true)}
                     >{t("confirm")}</RoundedButton>
                     <RoundedButton
                         color="pink"
@@ -381,5 +392,24 @@ export default function ChangeAccountData() {
                 </Link>
             </Grid>
         </Grid>
+            <PopupAcceptAction
+                open={buttonPopupAcceptChangeAddress}
+                onConfirm={changeAddress}
+                onCancel={() => {setButtonPopupAcceptChangeAddress(false)
+                }}
+            />
+            <PopupAcceptAction
+                open={buttonPopupAcceptChangeNumber}
+                onConfirm={changeBusinessPhone}
+                onCancel={() => {setButtonPopupAcceptChangeNumber(false)
+            }}
+            />
+            <PopupAcceptAction
+                open={buttonPopupAcceptChangeData}
+                onConfirm={changePersonalData}
+                onCancel={() => {setButtonPopupAcceptChangeData(false)
+            }}
+        />
+        </>
     )
 }

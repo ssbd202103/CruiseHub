@@ -12,6 +12,7 @@ import {changeClientAddress} from "../../Services/changeDataService";
 import Recaptcha from "react-recaptcha";
 import Popup from "../../PopupRecaptcha";
 import {useSnackbarQueue} from "../../pages/snackbar";
+import PopupAcceptAction from "../../PopupAcceptAction";
 
 export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: ChangeDataComponentProps) {
     const {t} = useTranslation()
@@ -26,6 +27,8 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
     const [postalCode, setPostalCode] = useState('')
     const [city, setCity] = useState('')
     const [country, setCountry] = useState('')
+
+    const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
 
     const [buttonPopup, setButtonPopup] = useState(false);
 
@@ -63,8 +66,10 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
             setCity('')
             setCountry('')
             onConfirm()
+            setButtonPopupAcceptAction(true)
             showSuccess(t('successful action'))
         }).catch(error => {
+            setButtonPopupAcceptAction(true)
             const message = error.response.data
             showError(t(message))
         });
@@ -150,8 +155,14 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
                         />
                     </div>
                 </Popup>
-                <ConfirmCancelButtonGroup
+                <PopupAcceptAction
+                    open={buttonPopupAcceptAction}
                     onConfirm={changeAddress}
+                    onCancel={() => {setButtonPopupAcceptAction(false)
+                    }}
+                />
+                <ConfirmCancelButtonGroup
+                    onConfirm={()=>setButtonPopupAcceptAction(true)}
                     onCancel={handleCancel} />
             </Grid>
         </>

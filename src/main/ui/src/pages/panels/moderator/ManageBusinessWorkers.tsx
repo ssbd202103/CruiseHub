@@ -17,6 +17,7 @@ import axios from "../../../Services/URL";
 import { Button } from '@material-ui/core';
 import RoundedButton from "../../../components/RoundedButton";
 import {useSnackbarQueue} from "../../snackbar";
+import PopupAcceptAction from "../../../PopupAcceptAction";
 
 const useRowStyles = makeStyles({
     root: {
@@ -61,9 +62,23 @@ function Row(props: RowProps) {
     const classes = useRowStyles();
     const showSuccess = useSnackbarQueue('success')
     const {t} = useTranslation()
+    const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
+
 
     return (
         <TableRow className={classes.root}>
+            <PopupAcceptAction
+                open={buttonPopupAcceptAction}
+                onConfirm={() => {
+                    if(confirmWorker({row})){
+                        showSuccess(t('action success'))
+                    }
+                    setButtonPopupAcceptAction(false)
+                }
+                }
+                onCancel={() => {setButtonPopupAcceptAction(false)
+                }}
+            />
             <TableCell component="th" scope="row" style={style}>
                 {row.login}
             </TableCell>
@@ -74,11 +89,7 @@ function Row(props: RowProps) {
             <TableCell style={style}>{row.companyName}</TableCell>
             <TableCell style={style}>{row.companyPhoneNumber}</TableCell>
             <TableCell style={style}><Button onClick={() =>{
-                if(confirmWorker({row})) {
-                    showSuccess(t('action success'))
-                }
-
-
+                setButtonPopupAcceptAction(true)
             }
 
             }>{t("confirm")}</Button></TableCell>
@@ -102,6 +113,7 @@ function confirmWorker(props: any) {
         version: row.version
     })
 
+
      axios.put('account/confirm-business-worker', json, {
         headers: {
             "Content-Type": "application/json",
@@ -121,6 +133,7 @@ export default function ModListClient() {
     const [users, setUsers] = useState([]);
     const [searchInput, setSearchInput] = useState("");
     const darkMode = useSelector(selectDarkMode)
+
 
     useEffect(() => {
         getWorkers().then(res => {
@@ -157,6 +170,7 @@ export default function ModListClient() {
                     onChange={(e) => setSearchInput(e.target.value)}
                     style={{marginBottom: '20px'}} />
             </div>
+
             <TableContainer component={Paper}>
                 <Table aria-label="Business Workers">
                     <TableHead>
@@ -180,5 +194,6 @@ export default function ModListClient() {
             </TableContainer>
             <RoundedButton color={"blue"} onClick={handleChange}>{t("Refresh")}</RoundedButton>
         </div>
+
     );
 }

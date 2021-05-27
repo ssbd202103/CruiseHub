@@ -7,21 +7,25 @@ import {useSelector} from "react-redux";
 import {selectDarkMode} from '../redux/slices/userSlice'
 import {changeDarkMode} from '../Services/changeDataService'
 import {useSnackbarQueue} from "../pages/snackbar";
+import PopupAcceptAction from "../PopupAcceptAction";
+import {useState} from "react";
 
 export default function AppColorSetter() {
     const {t} = useTranslation();
     const showSuccess = useSnackbarQueue('success')
     const showError = useSnackbarQueue('error')
-
+    const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
     const darkMode = useSelector(selectDarkMode)
 
     const handleClick = () => {
         //TODO
-        changeDarkMode().catch(error => {
+        changeDarkMode().then(res=>{
+            setButtonPopupAcceptAction(false)
+            showSuccess(t('successful action'))
+        }).catch(error => {
+            setButtonPopupAcceptAction(false)
             const message = error.response.data
             showError(t(message))
-        }).then(res=>{
-            showSuccess(t('successful action'))
         });
 
     }
@@ -35,7 +39,7 @@ export default function AppColorSetter() {
             fontSize: '1.4rem',
             alignItems: 'center'
         }}
-             onClick={handleClick}
+             onClick={()=>setButtonPopupAcceptAction(true)}
         >
             <p>{t("color")}</p>
             <IconButton>
@@ -49,6 +53,12 @@ export default function AppColorSetter() {
                             style={{fill: 'var(--white)'}} />
                 }
             </IconButton>
+            <PopupAcceptAction
+                open={buttonPopupAcceptAction}
+                onConfirm={handleClick}
+                onCancel={() => {setButtonPopupAcceptAction(false)
+                }}
+            />
         </div>
     )
 }

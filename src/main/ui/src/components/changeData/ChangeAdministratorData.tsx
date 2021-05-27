@@ -12,6 +12,7 @@ import {changeAdministratorData} from "../../Services/changeDataService";
 import Recaptcha from "react-recaptcha";
 import Popup from "../../PopupRecaptcha";
 import {useSnackbarQueue} from "../../pages/snackbar";
+import PopupAcceptAction from "../../PopupAcceptAction";
 
 export default function ChangeAdministratorData({open, onOpen, onConfirm, onCancel}: ChangeDataComponentProps) {
     const {t} = useTranslation()
@@ -23,6 +24,8 @@ export default function ChangeAdministratorData({open, onOpen, onConfirm, onCanc
     const secondName = useSelector(selectSecondName)
 
     const [buttonPopup, setButtonPopup] = useState(false);
+
+    const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
 
     const [firstNameValue, setFirstNameValue] = useState('')
     const [secondNameValue, setSecondNameValue] = useState('')
@@ -44,8 +47,10 @@ export default function ChangeAdministratorData({open, onOpen, onConfirm, onCanc
             setFirstNameValue('')
             setSecondNameValue('')
             onConfirm()
+            setButtonPopupAcceptAction(false)
             showSuccess(t('successful action'))
         }).catch(error => {
+            setButtonPopupAcceptAction(false)
             const message = error.response.data
             showError(t(message))
         });
@@ -108,8 +113,14 @@ export default function ChangeAdministratorData({open, onOpen, onConfirm, onCanc
                         />
                     </div>
                 </Popup>
-                <ConfirmCancelButtonGroup
+                <PopupAcceptAction
+                    open={buttonPopupAcceptAction}
                     onConfirm={changeData}
+                    onCancel={() => {setButtonPopupAcceptAction(false)
+                    }}
+                />
+                <ConfirmCancelButtonGroup
+                    onConfirm={()=>setButtonPopupAcceptAction(true)}
                     onCancel={handleCancel} />
             </Grid>
         </>

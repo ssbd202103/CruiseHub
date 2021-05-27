@@ -25,6 +25,7 @@ import {useSnackbarQueue} from "../../snackbar";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import store from "../../../redux/store";
 import {setChangeAccessLevelStateAccount} from "../../../redux/slices/changeAccessLevelStateSlice";
+import PopupAcceptAction from "../../../PopupAcceptAction";
 
 
 interface UnblockAccountParams {
@@ -33,49 +34,6 @@ interface UnblockAccountParams {
     version: bigint,
     token: string
 }
-
-
-const unblockAccount = ({login, etag, version, token}: UnblockAccountParams) => {
-    const json = JSON.stringify({
-            login: login,
-            version: version,
-        }
-    );
-    return axios.put('/api/account/unblock', json, {
-        headers: {
-            'Content-Type': 'application/json',
-            'If-Match': etag,
-            'Authorization': `Bearer ${token}`
-        }
-
-    }).then(response => {
-
-        return response.status == 200;
-    })
-};
-
-function refresh() {
-    window.location.reload();
-}
-
-const blockAccount = ({login, etag, version, token}: UnblockAccountParams) => {
-    const json = JSON.stringify({
-            login: login,
-            version: version,
-        }
-    );
-    return axios.put('/api/account/block', json, {
-        headers: {
-            'Content-Type': 'application/json',
-            'If-Match': etag,
-            'Authorization': `Bearer ${token}`
-        }
-
-    }).then(response => {
-
-        return response.status == 200;
-    });
-};
 
 const useRowStyles = makeStyles({
     root: {
@@ -128,6 +86,48 @@ export interface RowProps {
 }
 
 function Row(props: RowProps) {
+    const unblockAccount = ({login, etag, version, token}: UnblockAccountParams) => {
+        const json = JSON.stringify({
+                login: login,
+                version: version,
+            }
+        );
+        return axios.put('/api/account/unblock', json, {
+            headers: {
+                'Content-Type': 'application/json',
+                'If-Match': etag,
+                'Authorization': `Bearer ${token}`
+            }
+        }).then(response => {
+
+            return response.status == 200;
+        })
+    };
+
+    function refresh() {
+        window.location.reload();
+    }
+
+    const blockAccount = ({login, etag, version, token}: UnblockAccountParams) => {
+        const json = JSON.stringify({
+                login: login,
+                version: version,
+            }
+        );
+        return axios.put('/api/account/block', json, {
+            headers: {
+                'Content-Type': 'application/json',
+                'If-Match': etag,
+                'Authorization': `Bearer ${token}`
+            }
+
+        }).then(response => {
+
+            return response.status == 200;
+        });
+    };
+    const [buttonPopupAcceptBlock, setButtonPopupAcceptBlock] = useState(false);
+    const [buttonPopupAcceptUnblock, setButtonPopupAcceptUnblock] = useState(false);
     const {row} = props;
     const {style} = props;
     const {t} = useTranslation();
@@ -214,28 +214,43 @@ function Row(props: RowProps) {
 
                                             <Button className={buttonClass.root} onClick={() => {
                                                 if(row.active) {
-                                                    blockAccount({etag: row.etag,
-                                                        login: row.login, version: row.version, token: token}).then(res => {
+                                                    setButtonPopupAcceptBlock(true)
+
+                                                } else {
+                                                    setButtonPopupAcceptUnblock(true)
+                                                }
+                                            }}>{row.active ? t("block") : t("unblock")}</Button>
+                                            <PopupAcceptAction
+                                                open={buttonPopupAcceptBlock}
+                                                onConfirm={()=>blockAccount({etag: row.etag,
+                                                    login: row.login, version: row.version, token: token}).then(res => {
+                                                    setButtonPopupAcceptBlock(false)
+                                                    refresh()
+                                                    showSuccess(t('successful action'))
+                                                }).catch(error => {
+                                                    setButtonPopupAcceptBlock(false)
+                                                    const message = error.response.data
+                                                    showError(t(message))
+                                                })}
+                                                onCancel={() => {setButtonPopupAcceptBlock(false)
+                                                }}
+                                            />
+                                            <PopupAcceptAction
+                                                open={buttonPopupAcceptUnblock}
+                                                onConfirm={()=>unblockAccount({etag: row.etag,
+                                                    login: row.login, version: row.version, token: token})
+                                                    .then(res => {
+                                                        setButtonPopupAcceptUnblock(false)
                                                         refresh()
                                                         showSuccess(t('successful action'))
                                                     }).catch(error => {
-                                                            const message = error.response.data
-                                                            showError(t(message))
-                                                        });
-
-                                                } else {
-                                                    unblockAccount({etag: row.etag,
-                                                        login: row.login, version: row.version, token: token})
-                                                        .then(res => {
-                                                            refresh()
-                                                            showSuccess(t('successful action'))
-                                                        }).catch(error => {
+                                                        setButtonPopupAcceptUnblock(false)
                                                         const message = error.response.data
                                                         showError(t(message))
-                                                    });
-                                                }
-                                            }}>{row.active ? t("block") : t("unblock")}</Button>
-
+                                                    })}
+                                                onCancel={() => {setButtonPopupAcceptUnblock(false)
+                                                }}
+                                            />
                                             <Link to="/panels/adminPanel/GrantAccessLevel/">
                                                 <Button onClick={setCurrentGrantAccessLevelAccount}
                                                         className={buttonClass.root}>{t("grant access level")}</Button>

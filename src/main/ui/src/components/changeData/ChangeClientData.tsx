@@ -12,6 +12,7 @@ import {changeClientData} from "../../Services/changeDataService";
 import Recaptcha from "react-recaptcha";
 import Popup from "../../PopupRecaptcha";
 import {useSnackbarQueue} from "../../pages/snackbar";
+import PopupAcceptAction from "../../PopupAcceptAction";
 
 export default function ChangeClientData({open, onOpen, onConfirm, onCancel}: ChangeDataComponentProps) {
     const {t} = useTranslation()
@@ -26,6 +27,8 @@ export default function ChangeClientData({open, onOpen, onConfirm, onCancel}: Ch
     const [firstNameValue, setFirstNameValue] = useState('')
     const [secondNameValue, setSecondNameValue] = useState('')
     const [phoneNumberValue, setPhoneNumberValue] = useState('')
+
+    const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
 
     const [buttonPopup, setButtonPopup] = useState(false);
 
@@ -48,8 +51,10 @@ export default function ChangeClientData({open, onOpen, onConfirm, onCancel}: Ch
             setSecondNameValue('')
             setPhoneNumberValue('')
             onConfirm()
+            setButtonPopupAcceptAction(false)
             showSuccess(t('successful action'))
         }).catch(error => {
+            setButtonPopupAcceptAction(false)
             const message = error.response.data
             showError(t(message))
         });
@@ -122,10 +127,16 @@ export default function ChangeClientData({open, onOpen, onConfirm, onCancel}: Ch
                             />
                         </div>
                     </Popup>
+                    <PopupAcceptAction
+                        open={buttonPopupAcceptAction}
+                        onConfirm={changeData}
+                        onCancel={() => {setButtonPopupAcceptAction(false)
+                        }}
+                    />
                 </div>
 
                 <ConfirmCancelButtonGroup
-                    onConfirm={changeData}
+                    onConfirm={()=>setButtonPopupAcceptAction(true)}
                     onCancel={handleCancel} />
             </Grid>
         </>

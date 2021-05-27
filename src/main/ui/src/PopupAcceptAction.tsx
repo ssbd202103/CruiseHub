@@ -1,27 +1,34 @@
 import React from "react";
 import Button from '@material-ui/core/Button';
 import {useTranslation} from "react-i18next";
+import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@material-ui/core";
 
 export interface PopupAcceptActionProps {
-    trigger: boolean,
-    onClick: (value: boolean) => void
+    open: boolean,
+    onConfirm: () => void,
+    onCancel: () => void
 }
 
-export default function PopupAcceptAction({trigger, onClick}: PopupAcceptActionProps) {
+export default function PopupAcceptAction({open, onConfirm, onCancel}: PopupAcceptActionProps) {
     const {t} = useTranslation()
 
-    return trigger ? (
-            <div className="popup">
-                <div className="popup-inner">
-                    <Button className="close-btn" onClick={()=> {onClick(false)
-                                                                    trigger=false}}>{"x"}</Button>
-                    <h3>{t("accept.action")}</h3>
-                    <Button className="close-btn" onClick={()=> {onClick(true)
-                                                                      trigger=false}}>{(t('yes'))}</Button>
-                    <Button className="close-btn" onClick={()=> {onClick(false)
-                                                                       trigger=false}}>{(t('no'))}</Button>
-                </div>
-            </div>
-    ) : null;
+    return (
+        <Dialog
+            open={open}
+            onClose={onCancel}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+        >
+            <DialogTitle id="alert-dialog-title">{(t('accept.action'))} </DialogTitle>
+            <DialogActions>
+                <Button onClick={onConfirm} color="primary">
+                    {(t('yes'))}
+                </Button>
+                <Button onClick={onCancel} color="primary" autoFocus>
+                    {(t('no'))}
+                </Button>
+            </DialogActions>
+        </Dialog>
 
+    );
 }
