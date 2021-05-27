@@ -63,11 +63,12 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
             setCity('')
             setCountry('')
             onConfirm()
+            showSuccess(t('successful action'))
         }).catch(error => {
             const message = error.response.data
             showError(t(message))
         });
-        showSuccess(t('successful action'))
+
     }
 
 

@@ -29,8 +29,10 @@ const RequestSomeonePasswordReset = () => {
             .catch(error => {
                 const message = error.response.data
                 showError(t(message))
-            });
-        showSuccess(t('successful action'))
+            }).then(res =>{
+            showSuccess(t('successful action'))
+        });
+
     }
     return (
         <AuthLayout>

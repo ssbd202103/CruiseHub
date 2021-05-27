@@ -13,7 +13,6 @@ export function changeOwnPassword(oldPassword: string, newPassword: string) {
         token
     } = store.getState()
 
-    console.log(oldPassword, newPassword)
 
     return axios.put('self/change-password', {
         login: login,

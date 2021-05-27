@@ -49,6 +49,7 @@ const unblockAccount = ({login, etag, version, token}: UnblockAccountParams) => 
         }
 
     }).then(response => {
+
         return response.status == 200;
     })
 };
@@ -71,6 +72,7 @@ const blockAccount = ({login, etag, version, token}: UnblockAccountParams) => {
         }
 
     }).then(response => {
+
         return response.status == 200;
     });
 };
@@ -215,23 +217,22 @@ function Row(props: RowProps) {
                                                     blockAccount({etag: row.etag,
                                                         login: row.login, version: row.version, token: token}).then(res => {
                                                         refresh()
+                                                        showSuccess(t('successful action'))
                                                     }).catch(error => {
                                                             const message = error.response.data
                                                             showError(t(message))
                                                         });
-
-                                                    showSuccess(t('successful action'))
 
                                                 } else {
                                                     unblockAccount({etag: row.etag,
                                                         login: row.login, version: row.version, token: token})
                                                         .then(res => {
                                                             refresh()
+                                                            showSuccess(t('successful action'))
                                                         }).catch(error => {
                                                         const message = error.response.data
                                                         showError(t(message))
                                                     });
-                                                    showSuccess(t('successful action'))
                                                 }
                                             }}>{row.active ? t("block") : t("unblock")}</Button>
 

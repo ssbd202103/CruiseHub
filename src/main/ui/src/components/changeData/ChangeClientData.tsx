@@ -48,11 +48,12 @@ export default function ChangeClientData({open, onOpen, onConfirm, onCancel}: Ch
             setSecondNameValue('')
             setPhoneNumberValue('')
             onConfirm()
+            showSuccess(t('successful action'))
         }).catch(error => {
             const message = error.response.data
             showError(t(message))
         });
-        showSuccess(t('successful action'))
+
     }
 
     useEffect(() => {

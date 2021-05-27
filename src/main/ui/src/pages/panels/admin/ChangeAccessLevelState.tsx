@@ -35,6 +35,8 @@ export default function ChangeAccessLevelState() {
         }).catch(error => {
             const message = error.response.data
             showError(t(message))
+        }).then(res => {
+            showSuccess(t('success.accessLevelStateChanged'))
         });
 
         await axios.get(`/api/account/details/${changeAccessLevelStateAccount.login}`, {
@@ -43,7 +45,6 @@ export default function ChangeAccessLevelState() {
             }
         }).then(res => {
             store.dispatch(setChangeAccessLevelStateAccount(res.data));
-            showSuccess(t('success.accessLevelStateChanged'))
             forceUpdate()
         }).catch(error => {
             const message = error.response.data

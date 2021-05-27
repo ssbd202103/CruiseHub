@@ -48,12 +48,13 @@ export default function ChangePassword({open, onOpen, onConfirm, onCancel}: Chan
             setNewPassword('')
             setConfirmNewPassword('')
             onConfirm()
+            showSuccess(t('successful action'))
         }).catch(error => {
             const message = error.response.data
             showError(t(message))
         });
 
-        showSuccess(t('successful action'))
+
     }
 
 

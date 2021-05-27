@@ -43,11 +43,12 @@ export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}:
             setFirstNameValue('')
             setSecondNameValue('')
             onConfirm()
+            showSuccess(t('successful action'))
         }).catch(error => {
             const message = error.response.data
             showError(t(message))
         });
-        showSuccess(t('successful action'))
+
     }
 
 

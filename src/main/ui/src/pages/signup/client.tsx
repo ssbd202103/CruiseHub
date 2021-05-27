@@ -28,6 +28,7 @@ import {
 } from "../../regexConstants";
 import {useSnackbarQueue} from "../snackbar";
 import i18n from "i18next";
+import PopupAcceptAction from "../../PopupAcceptAction";
 
 
 export default function ClientSignUp() {
@@ -51,6 +52,8 @@ export default function ClientSignUp() {
     const [phoneNumber, setPhoneNumber] = useState('')
 
     const [buttonPopup, setButtonPopup] = useState(false);
+    const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
+    const [isAccepted, setIsAccepted] = useState(false);
 
     const [loginRegexError, setLoginRegexError] = useState(false)
     const [passwordRegexError, setPasswordRegexError] = useState(false)
@@ -84,15 +87,22 @@ export default function ClientSignUp() {
             }
         );
         await setButtonPopup(false)
-        axios.post('/api/auth/client/registration', json, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).catch(error => {
-            const message = error.response.data
-            showError(t(message))
-        });
-        showSuccess(t('successful action'))
+        setButtonPopupAcceptAction(true)
+        if(isAccepted) {
+            axios.post('/api/auth/client/registration', json, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).catch(error => {
+                const message = error.response.data
+                showError(t(message))
+            }).then(res=>{
+
+                showSuccess(t('successful action'))
+            });
+        }
+
+
     }
 
 
@@ -335,6 +345,9 @@ export default function ClientSignUp() {
                         />
                     </div>
                 </Popup>
+                <PopupAcceptAction trigger={buttonPopupAcceptAction} onClick={(value) => {setIsAccepted(value)}} />
+
+
                 <RoundedButton
                     onClick={clientSignUpFun}
                     style={{width: '50%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}

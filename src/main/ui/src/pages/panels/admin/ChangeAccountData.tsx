@@ -78,8 +78,10 @@ export default function ChangeAccountData() {
         }).catch(error => {
             const message = error.response.data
             showError(t(message))
+        }).then(res =>{
+            showSuccess(t('successful action'))
         });
-        showSuccess(t('successful action'))
+
         const result = await axios.get(`/api/account/details/${currentAccount.login}`);
         sessionStorage.setItem("changeAccountData", JSON.stringify(result.data));
         forceUpdate()
@@ -116,8 +118,9 @@ export default function ChangeAccountData() {
         }).catch(error => {
             const message = error.response.data
             showError(t(message))
+        }).then(res =>{
+            showSuccess(t('successful action'))
         });
-        showSuccess(t('successful action'))
 
         const result = axios.get(`/api/account/details/${currentAccount.login}`).then(res => {
             sessionStorage.setItem("changeAccountData", JSON.stringify(res.data));
@@ -149,8 +152,9 @@ export default function ChangeAccountData() {
         }).catch(error => {
             const message = error.response.data
             showError(t(message))
+        }).then(res =>{
+            showSuccess(t('successful action'))
         });
-        showSuccess(t('successful action'))
 
         axios.get(`/api/account/details/${currentAccount.login}`).then(res => {
             sessionStorage.setItem("changeAccountData", JSON.stringify(res.data));

@@ -75,8 +75,10 @@ export default function WorkerSignUp() {
         }).catch(error => {
             const message = error.response.data
             showError(t(message))
+        }).then(res=>{
+            showSuccess(t('successful action'))
         });
-        showSuccess(t('successful action'))
+
 
     }
 
@@ -87,7 +89,6 @@ export default function WorkerSignUp() {
         }
         getCompaniesList()
     }, [company]);
-    console.log(companiesList)
 
 
     const workerSignUpFun = async () => {
@@ -106,7 +107,6 @@ export default function WorkerSignUp() {
 
         } else {
             setButtonPopup(true)
-            showSuccess("DONE")
         }
 
     }

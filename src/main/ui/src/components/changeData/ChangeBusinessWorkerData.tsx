@@ -54,11 +54,12 @@ export default function ChangeBusinessWorkerData({open, onOpen, onConfirm, onCan
             setSecondNameValue('')
             setPhoneNumberValue('')
             onConfirm()
+            showSuccess(t('successful action'))
         }).catch(error => {
             const message = error.response.data
             showError(t(message))
         });
-        showSuccess(t('successful action'))
+
     }
 
     useEffect(() => {

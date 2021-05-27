@@ -171,7 +171,12 @@ const resources = {
             //successes
             "success.accessLevelStateChanged": "Stan poziomu dostępu został zmieniony",
             "success.accessLevelAssigned": "Poziom dostępu przydzielony",
-            'successful action': 'Akcja udała się'
+            'successful action': 'Akcja udała się',
+
+            'accept.action': 'Czy chcesz wykonac te akcje',
+
+            'yes':'Tak',
+            'no':'Nie'
         }
     },
     en: {
@@ -344,7 +349,12 @@ const resources = {
 
             //successes
             "success.accessLevelStateChanged": "Access level state changed",
-            "success.accessLevelAssigned": "Access level assigned"
+            "success.accessLevelAssigned": "Access level assigned",
+
+            'accept.action': 'Do you want to do this action?',
+
+            'yes':'Yes',
+            'no':'No'
         }
     }
 }

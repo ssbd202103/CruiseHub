@@ -140,7 +140,6 @@ export default function ModListClient() {
     }
     const handleChange = () =>{
         forceUpdate()
-
             getWorkers().then(res => {
                 setUsers(res.data)
             })
