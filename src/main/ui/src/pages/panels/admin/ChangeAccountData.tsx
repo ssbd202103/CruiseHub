@@ -13,7 +13,7 @@ import DarkedTextField from '../../../components/DarkedTextField';
 import axios from "../../../Services/URL";
 import {useSnackbarQueue} from "../../snackbar";
 import store from "../../../redux/store";
-import {getUser} from "../../../Services/userService";
+import {getUser, refreshToken} from "../../../Services/userService";
 
 
 export default function ChangeAccountData() {
