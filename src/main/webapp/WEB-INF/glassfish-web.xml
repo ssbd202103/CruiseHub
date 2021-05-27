@@ -271,4 +271,23 @@
         <group-name>CLIENT</group-name>
     </security-role-mapping>
 
+    <security-role-mapping>
+        <role-name>addCruise</role-name>
+        <group-name>BUSINESS_WORKER</group-name>
+    </security-role-mapping>
+
+    <security-role-mapping>
+        <role-name>deactivateCruise</role-name>
+        <group-name>BUSINESS_WORKER</group-name>
+        <group-name>MODERATOR</group-name>
+        <group-name>ADMINISTRATOR</group-name>
+    </security-role-mapping>
+
+    <security-role-mapping>
+        <role-name>editCruise</role-name>
+        <group-name>BUSINESS_WORKER</group-name>
+    </security-role-mapping>
+
+
+
 </glassfish-web-app>

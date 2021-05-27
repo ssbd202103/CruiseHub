@@ -32,11 +32,14 @@ public class CruiseEndpoint extends BaseEndpoint implements CruiseEndpointLocal 
     @Inject
     private CruiseManagerLocal cruiseManagerLocal;
 
+
+    @RolesAllowed("addCruise")
     @Override
     public void addCruise(NewCruiseDto newCruiseDto) throws BaseAppException {
         cruiseManagerLocal.addCruise(CruiseMapper.mapNewCruiseDtoToCruise(newCruiseDto), newCruiseDto.getCruiseName());
     }
 
+    @RolesAllowed("deactivateCruise")
     @Override
     public void deactivateCruise(DeactivateCruiseDto deactivateCruiseDto) throws BaseAppException {
         cruiseManagerLocal.deactivateCruise(deactivateCruiseDto.getUuid(), deactivateCruiseDto.getVersion());
@@ -55,6 +58,8 @@ public class CruiseEndpoint extends BaseEndpoint implements CruiseEndpointLocal 
     public void publishCruise(PublishCruiseDto publishCruiseDto) throws BaseAppException {
         // todo finish implementation
     }
+
+    @RolesAllowed("editCruise")
     @Override
     public void editCruise(EditCruiseDto editCruiseDto) throws BaseAppException {
         cruiseManagerLocal.editCruise(editCruiseDto.getDescription(), editCruiseDto.getStartDate(), editCruiseDto.getEndDate(),

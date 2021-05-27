@@ -198,6 +198,19 @@
         <role-name>removeRating</role-name>
     </security-role>
 
+    <security-role>
+        <role-name>addCruise</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>deactivateCruise</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>editCruise</role-name>
+    </security-role>
+
+
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>api</web-resource-name>
