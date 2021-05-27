@@ -13,12 +13,13 @@ import {selectDarkMode} from "../../../redux/slices/userSlice";
 import DarkedTextField from "../../../components/DarkedTextField";
 import store from "../../../redux/store";
 import axios from "../../../Services/URL";
-import {Button} from '@material-ui/core';
+import {Button, TextField} from '@material-ui/core';
 import RoundedButton from "../../../components/RoundedButton";
 import {refreshToken} from "../../../Services/userService";
 import {useSnackbarQueue} from "../../snackbar";
 import useHandleError from "../../../errorHandler";
 import PopupAcceptAction from "../../../PopupAcceptAction";
+import Autocomplete from "@material-ui/lab/Autocomplete";
 
 const useRowStyles = makeStyles({
     root: {
@@ -145,14 +146,19 @@ export default function ModListClient() {
 
     function search(rows: any[]) {
         if (Array.isArray(rows) && rows.length) {
-            return rows.filter(
-                row => row.props.row.firstName.toLowerCase().indexOf(searchInput.toLowerCase()) > -1 ||
-                    row.props.row.secondName.toLowerCase().indexOf(searchInput.toLowerCase()) > -1
+            const filteredAccount = rows.filter(
+                row => row.props.row.firstName.concat(" ", row.props.row.secondName).toLowerCase().indexOf(searchInput.toLowerCase()) > -1
             );
+
+            filteredAccount.forEach(account => (accounts.includes(account.props.row.firstName + " " + account.props.row.secondName) ?
+                "" : accounts.push(account.props.row.firstName + " " + account.props.row.secondName)));
+            return filteredAccount
         } else {
             return rows;
         }
     }
+
+    const accounts: String[] = [];
 
     const handleChange = () => {
         forceUpdate()
@@ -168,12 +174,19 @@ export default function ModListClient() {
     return (
         <div>
             <div>
-                <DarkedTextField
-                    label={t('search business workers')}
-                    type="text"
-                    value={searchInput}
-                    onChange={(e) => setSearchInput(e.target.value)}
-                    style={{marginBottom: '20px'}}/>
+                <Autocomplete
+                    options={accounts}
+                    inputValue={searchInput}
+                    style={{width: 300}}
+                    noOptionsText={t('no options')}
+                    onChange={(event, value) => {
+                        setSearchInput(value as string ?? '')
+                    }}
+                    renderInput={(params) => (
+                        <TextField {...params} label={t('search business worker')} variant="outlined"
+                                   onChange={(e) => setSearchInput(e.target.value)}/>
+                    )}
+                />
             </div>
 
             <TableContainer component={Paper}>
