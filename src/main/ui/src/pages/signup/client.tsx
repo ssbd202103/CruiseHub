@@ -173,11 +173,21 @@ export default function ClientSignUp() {
                 />
             </Box>
 
+            <Box
+                style={{
+                    display: "flex",
+                    width: '100%',
+                    padding: 0
+                }}
+            >
             <DarkedTextField
                 label={t("login") + ' *'}
                 placeholder="examplelogin"
                 className={styles.input}
                 value={login}
+                style={{
+                    marginRight: 20
+                }}
                 onChange={event => {
                     setLogin(event.target.value)
                     setLoginRegexError(!LOGIN_REGEX.test(event.target.value))
@@ -200,7 +210,7 @@ export default function ClientSignUp() {
                 colorIgnored
                 regexError={emailRegexError}
             />
-
+            </Box>
             <Box
                 style={{
                     display: "flex",
@@ -271,11 +281,20 @@ export default function ClientSignUp() {
                 regexError={postalCodeRegexError}
             />
             </Box>
-
+            <Box
+                style={{
+                    display: "flex",
+                    width: '100%',
+                    padding: 0
+                }}
+            >
             <DarkedTextField
                 label={t("country") + ' *'}
                 placeholder="country"
                 className={styles.input}
+                style={{
+                    marginRight: 20
+                }}
                 value={country}
                 onChange={event => {
                     setCountry(event.target.value)
@@ -297,7 +316,7 @@ export default function ClientSignUp() {
                 colorIgnored
                 regexError={phoneNumberRegexError}
             />
-
+            </Box>
             <Box
                 style={{
                     display: "flex",
