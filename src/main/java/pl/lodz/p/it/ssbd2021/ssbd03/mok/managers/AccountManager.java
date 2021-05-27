@@ -461,7 +461,7 @@ public class AccountManager implements AccountManagerLocal {
     }
 
 
-    @RolesAllowed("changeOtherEmail")
+    @RolesAllowed("changeEmail")
     @Override
     public void changeOtherEmail(String token) throws BaseAppException {
         JWTHandler.validateToken(token);
