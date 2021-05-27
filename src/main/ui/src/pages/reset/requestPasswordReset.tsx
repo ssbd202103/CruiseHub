@@ -23,7 +23,7 @@ const RequestPasswordReset = () => {
                 const message = error.response.data
                 showError(t(message))
             }).then(res => {
-            //refreshToken()
+            refreshToken()
             showSuccess(t('successful action'))
         });
     }

@@ -83,7 +83,7 @@ export default function ModListClient() {
             const message = error.response.data
             showError(t(message))
         }).then(res => {
-            //refreshToken()
+            refreshToken()
         });
     }, []);
 

@@ -73,7 +73,7 @@ const blockAccount = ({login, etag, version, token}: UnblockAccountParams) => {
         }
 
     }).then(response => {
-        //refreshToken()
+        refreshToken()
         return response.status == 200;
     });
 };
@@ -149,7 +149,7 @@ function Row(props: RowProps) {
             const message = error.response.data
             showError(t(message))
         }).then(res => {
-            //refreshToken()
+            refreshToken()
         });
 
     }
@@ -271,7 +271,7 @@ export default function AdminListClient() {
     useEffect(() => {
         getAllAccounts().then(res => {
             setUsers(res.data)
-            //refreshToken()
+            refreshToken()
         }).catch(error => {
             const message = error.response.data
             showError(t(message))

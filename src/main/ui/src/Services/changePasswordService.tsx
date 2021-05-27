@@ -28,7 +28,7 @@ export function changeOwnPassword(oldPassword: string, newPassword: string) {
         }
     }).then(res => {
         return getUser(token).then(res => {
-            //refreshToken()
+            refreshToken()
         })
     })
 }
