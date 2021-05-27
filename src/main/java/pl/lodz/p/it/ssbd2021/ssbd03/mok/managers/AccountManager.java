@@ -467,6 +467,19 @@ public class AccountManager implements AccountManagerLocal {
     @RolesAllowed("changeEmail")
     @Override
     public void changeEmail(String token) throws BaseAppException {
+        TokenWrapper tokenW;
+        try {
+            tokenW  = this.tokenWrapperFacade.findByToken(token);
+        } catch (BaseAppException e){
+            if(e.getMessage().equals(NO_SUCH_ELEMENT_ERROR)){
+                throw new AccountManagerException(TOKEN_INVALIDATE_ERROR);
+            } else {
+                throw new AccountManagerException(e.getMessage(),e);
+            }
+        }
+        if(tokenW.isUsed()){
+            throw new AccountManagerException(TOKEN_ALREADY_USED_ERROR);
+        }
         JWTHandler.validateToken(token);
 
         Map<String, Claim> claims = JWTHandler.getClaimsFromToken(token);
@@ -759,60 +772,6 @@ public class AccountManager implements AccountManagerLocal {
             e.setAlteredBy(creator);
             e.setCreatedBy(creator);
         }
-    }
-
-    @RolesAllowed("authenticatedUser")
-    public void changeMode(String login, boolean newMode) throws BaseAppException {
-        Account account = accountFacade.findByLogin(login);
-
-        account.setDarkMode(newMode);
-        setUpdatedMetadata(account);
-    }
-
-    @RolesAllowed("authenticatedUser")
-    public String refreshJWTToken(String token) throws BaseAppException {
-        Map<String, Claim> claims = JWTHandler.getClaimsFromToken(token);
-
-        try {
-            String login = claims.get("sub").asString();
-            Set<String> accessLevelsFromToken = new HashSet<>(claims.get("accessLevels").asList(String.class));
-            Account account = accountFacade.findByLogin(login);
-            if (!canUserRefreshToken(account, accessLevelsFromToken)) {
-                throw new AccountManagerException(TOKEN_REFRESH_ERROR);
-            }
-            return JWTHandler.refreshToken(token);
-        } catch (NullPointerException e) {
-            throw new AccountManagerException(TOKEN_REFRESH_ERROR);
-        }
-    }
-
-    private boolean canUserRefreshToken(Account account, Set<String> tokenAccessLevels) {
-
-        Set<String> accountValidAccessLevels = account.getAccessLevels().stream()
-                .filter(accessLevel -> {
-                            if (accessLevel instanceof BusinessWorker) {
-                                BusinessWorker bw = (BusinessWorker) accessLevel;
-                                return bw.isEnabled() && bw.isConfirmed();
-                            }
-                            return accessLevel.isEnabled();
-                        }
-                )
-                .map(a -> a.getAccessLevelType().name()).collect(Collectors.toSet());
-
-        boolean accessLevelsValid = tokenAccessLevels.equals(accountValidAccessLevels) && !tokenAccessLevels.isEmpty();
-
-        return account.isActive() && account.isConfirmed() && accessLevelsValid;
-    }
-    @RolesAllowed("ConfirmBusinessWorker")
-    @Override
-    public void confirmBusinessWorker(String login, long version) throws BaseAppException {
-        Account account = accountFacade.findByLogin(login);
-        BusinessWorker worker= (BusinessWorker) getAccessLevel(account,AccessLevelType.BUSINESS_WORKER);
-        if (!(worker.getVersion() == version)) {
-            throw FacadeException.optimisticLock();
-        }
-        worker.setConfirmed(true);
-        setUpdatedMetadata(worker);
     }
 
     @PermitAll

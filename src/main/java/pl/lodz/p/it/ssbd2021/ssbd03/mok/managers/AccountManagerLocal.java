@@ -298,7 +298,7 @@ public interface AccountManagerLocal {
      * @param token    token z danymi uwierzytelniającymi
      */
     void changeOtherEmail(String token) throws BaseAppException;
-}
+
     /**
      *
      * @param login
@@ -319,4 +319,4 @@ public interface AccountManagerLocal {
 
     String authWCodeUpdateCorrectAuthenticateInfo(String login, String code, String IpAddr, LocalDateTime time) throws BaseAppException;
 
-    }
+}

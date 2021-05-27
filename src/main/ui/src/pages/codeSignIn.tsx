@@ -60,7 +60,7 @@ export default function CodeSignIn() {
                     width: '70%',
                     margin: '20px 0'
                 }}
-                placeholder="code"
+                placeholder={t("code")}
                 value={code}
                 onChange={event => {setCode(event.target.value)}}
                 colorIgnored

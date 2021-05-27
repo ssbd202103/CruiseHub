@@ -150,7 +150,6 @@ export default function ClientSignUp() {
                     colorIgnored
                 />
 
-
                 <DarkedTextField
                     label={t("surname") + ' *'}
                     placeholder="Doe"
@@ -164,6 +163,19 @@ export default function ClientSignUp() {
                     regexError={secondNameRegexError}
                 />
             </Box>
+
+            <DarkedTextField
+                label={t("login") + ' *'}
+                placeholder="examplelogin"
+                className={styles.input}
+                value={login}
+                onChange={event => {
+                    setLogin(event.target.value)
+                    setLoginRegexError(!LOGIN_REGEX.test(event.target.value))
+                }}
+                colorIgnored
+                regexError={loginRegexError}
+            />
 
             <DarkedTextField
                 type="email"
@@ -180,19 +192,28 @@ export default function ClientSignUp() {
                 regexError={emailRegexError}
             />
 
-            <DarkedTextField
-                label={t("login") + ' *'}
-                placeholder="examplelogin"
-                className={styles.input}
-                value={login}
-                onChange={event => {
-                    setLogin(event.target.value)
-                    setLoginRegexError(!LOGIN_REGEX.test(event.target.value))
+            <Box
+                style={{
+                    display: "flex",
+                    width: '100%',
+                    padding: 0
                 }}
-                colorIgnored
-                regexError={loginRegexError}
-            />
-
+            >
+                <DarkedTextField
+                    label={t("street") + ' *'}
+                    placeholder="street"
+                    className={styles.input}
+                    style={{
+                        marginRight: 20
+                    }}
+                    value={street}
+                    onChange={event => {
+                        setStreet(event.target.value)
+                        setStreetRegexError(!STREET_REGEX.test(event.target.value))
+                    }}
+                    colorIgnored
+                    regexError={streetRegexError}
+                />
             <DarkedTextField
                 label={t("houseNumber") + ' *'}
                 placeholder="house number"
@@ -205,18 +226,28 @@ export default function ClientSignUp() {
                 colorIgnored
                 regexError={houseNumberRegexError}
             />
-
+            </Box>
+            <Box
+                style={{
+                    display: "flex",
+                    width: '100%',
+                    padding: 0
+                }}
+            >
             <DarkedTextField
-                label={t("street") + ' *'}
-                placeholder="street"
+                label={t("city") + ' *'}
+                placeholder="city"
                 className={styles.input}
-                value={street}
+                style={{
+                    marginRight: 20
+                }}
+                value={city}
                 onChange={event => {
-                    setStreet(event.target.value)
-                    setStreetRegexError(!STREET_REGEX.test(event.target.value))
+                    setCity(event.target.value)
+                    setCityRegexError(!CITY_REGEX.test(event.target.value))
                 }}
                 colorIgnored
-                regexError={streetRegexError}
+                regexError={cityRegexError}
             />
             <DarkedTextField
                 label={t("postalCode") + ' *'}
@@ -230,18 +261,8 @@ export default function ClientSignUp() {
                 colorIgnored
                 regexError={postalCodeRegexError}
             />
-            <DarkedTextField
-                label={t("city") + ' *'}
-                placeholder="city"
-                className={styles.input}
-                value={city}
-                onChange={event => {
-                    setCity(event.target.value)
-                    setCityRegexError(!CITY_REGEX.test(event.target.value))
-                }}
-                colorIgnored
-                regexError={cityRegexError}
-            />
+            </Box>
+
             <DarkedTextField
                 label={t("country") + ' *'}
                 placeholder="country"

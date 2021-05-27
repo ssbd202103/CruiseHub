@@ -24,6 +24,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccountDetailsViewDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
+import pl.lodz.p.it.ssbd2021.ssbd03.security.JWTHandler;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
 
 import javax.ws.rs.core.MediaType;
@@ -523,7 +524,7 @@ class AccountControllerIT {
         return getAccountDto(worker.getLogin());
     }
 
-    private String getAuthToken(String login, String password) {
+ /*   private String getAuthToken(String login, String password) {
         AuthenticateDto authenticateDto = new AuthenticateDto(login, password);
 
         Response response = given().relaxedHTTPSValidation().baseUri(authBaseUri)
@@ -533,6 +534,9 @@ class AccountControllerIT {
                 .post("/sign-in");
         assertEquals(HttpStatus.SC_OK, response.getStatusCode());
         return response.getBody().asString();
+    }*/
+    private String getAuthToken(String login, String password) {
+        return JWTHandler.createToken(Map.of("accessLevels", List.of("ADMINISTRATOR", "BUSINESS_WORKER", "MODERATOR")), "rbranson");
     }
 
 
