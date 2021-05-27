@@ -195,6 +195,12 @@ const resources = {
             "/reset/resetSomebodyPassword": "Resetowanie hasła konta",
             "/verify/accountVerification": "Weryfikacja",
             "/ChangeAccessLevelState": "Zmień stan poziomu dostępu"
+            'successful action': 'Akcja udała się',
+
+            'accept.action': 'Czy chcesz wykonac te akcje',
+
+            'yes':'Tak',
+            'no':'Nie'
         }
     },
     en: {
@@ -390,6 +396,12 @@ const resources = {
             "/reset/resetSomebodyPassword": "Reset user password",
             "/verify/accountVerification": "Account verification",
             "/ChangeAccessLevelState": "Change access level state"
+            "success.accessLevelAssigned": "Access level assigned",
+
+            'accept.action': 'Do you want to do this action?',
+
+            'yes':'Yes',
+            'no':'No'
         }
     }
 }

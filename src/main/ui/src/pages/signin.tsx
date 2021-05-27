@@ -17,6 +17,7 @@ import {getUser} from "../Services/userService";
 
 import {useSnackbarQueue} from "./snackbar";
 import useHandleError from "../errorHandler";
+import PopupAcceptAction from "../PopupAcceptAction";
 
 export default function SignIn() {
     const {t} = useTranslation();
