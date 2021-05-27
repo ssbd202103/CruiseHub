@@ -1,9 +1,10 @@
 import store from "../redux/store";
 import axios from './URL'
-import {getUser} from "./userService";
+import {getUser, refreshToken} from "./userService";
+import {useSnackbarQueue} from "../pages/snackbar";
+import {useTranslation} from "react-i18next";
 
 export function changeOwnPassword(oldPassword: string, newPassword: string) {
-
     const {
         user: {
             login,
@@ -26,6 +27,8 @@ export function changeOwnPassword(oldPassword: string, newPassword: string) {
             "Authorization": `Bearer ${token}`
         }
     }).then(res => {
-        return getUser(token)
+        return getUser(token).then(res => {
+            refreshToken()
+        })
     })
 }

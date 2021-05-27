@@ -47,8 +47,9 @@ export default function ChangeAdministratorData({open, onOpen, onConfirm, onCanc
         }).catch(error => {
             const message = error.response.data
             showError(t(message))
+        }).then(res => {
+            showSuccess(t('successful action'))
         });
-        showSuccess(t('successful action'))
     }
 
     useEffect(() => {
@@ -90,13 +91,17 @@ export default function ChangeAdministratorData({open, onOpen, onConfirm, onCanc
                         label={t("name")}
                         placeholder="Michał"
                         value={firstNameValue}
-                        onChange={event => {setFirstNameValue(event.target.value)}} />
+                        onChange={event => {
+                            setFirstNameValue(event.target.value)
+                        }}/>
                     <DarkedTextField
                         type="text"
                         label={t("surname")}
                         placeholder="Blazymur"
                         value={secondNameValue}
-                        onChange={event => {setSecondNameValue(event.target.value)}} />
+                        onChange={event => {
+                            setSecondNameValue(event.target.value)
+                        }}/>
                 </div>
                 <Popup trigger={buttonPopup} setTrigger={setButtonPopup}>
                     <div>
@@ -109,7 +114,7 @@ export default function ChangeAdministratorData({open, onOpen, onConfirm, onCanc
                 </Popup>
                 <ConfirmCancelButtonGroup
                     onConfirm={changeData}
-                    onCancel={handleCancel} />
+                    onCancel={handleCancel}/>
             </Grid>
         </>
     )

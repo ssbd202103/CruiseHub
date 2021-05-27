@@ -1,4 +1,4 @@
-import { useTranslation } from "react-i18next";
+import {useTranslation} from "react-i18next";
 import LightThemeIcon from '@material-ui/icons/WbSunnyRounded';
 import DarkThemeIcon from '@material-ui/icons/Brightness3Rounded';
 import {IconButton} from "@material-ui/core";
@@ -20,8 +20,9 @@ export default function AppColorSetter() {
         changeDarkMode().catch(error => {
             const message = error.response.data
             showError(t(message))
+        }).then(res => {
+            showSuccess(t('successful action'))
         });
-        showSuccess(t('successful action'))
     }
 
     return (
@@ -41,10 +42,10 @@ export default function AppColorSetter() {
                     darkMode ?
                         <DarkThemeIcon
                             fontSize="large"
-                            style={{fill: 'var(--dark)'}} /> :
+                            style={{fill: 'var(--dark)'}}/> :
                         <LightThemeIcon
                             fontSize="large"
-                            style={{fill: 'var(--white)'}} />
+                            style={{fill: 'var(--white)'}}/>
                 }
             </IconButton>
         </div>

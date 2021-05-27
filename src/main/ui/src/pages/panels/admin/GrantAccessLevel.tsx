@@ -4,6 +4,7 @@ import React from "react";
 import {useTranslation} from 'react-i18next'
 import RoundedButton from '../../../components/RoundedButton'
 import {useSnackbarQueue} from "../../snackbar";
+import {refreshToken} from "../../../Services/userService";
 import axios from "../../../Services/URL";
 import store from "../../../redux/store";
 
@@ -38,11 +39,11 @@ export default function Checkboxes() {
             }
         ).then(() => {
             showSuccess(t('success.accessLevelAssigned'));
+            refreshToken()
         }).catch(error => {
             const message = error.response.data
             showError(t(message))
         });
-        showSuccess(t('successful action'))
     }
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedAccessLevel(event.target.value)

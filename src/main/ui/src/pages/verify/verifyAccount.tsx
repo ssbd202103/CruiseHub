@@ -24,12 +24,14 @@ function VerifyAccount(props: any) {
             headers: {
                 'Content-Type': 'application/json'
             }
-        }).then(res =>{history.push("/signin")})
+        }).then(res =>{
+            history.push("/signin")
+            showSuccess(t('successful action'))
+        })
             .catch(error => {
                 const message = error.response.data
                 showError(t(message))
             });
-        showSuccess(t('successful action'))
     }
 
 

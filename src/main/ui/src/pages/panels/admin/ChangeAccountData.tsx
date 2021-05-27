@@ -77,7 +77,6 @@ export default function ChangeAccountData() {
         setChangChangAddress(state => !state)
         setPerData(false)
         setChangePhone(false)
-        setMail(false)
     }
     const handleChangePhone = () => {
         setChangChangAddress(false)
@@ -96,8 +95,9 @@ export default function ChangeAccountData() {
             headers: {
                 "Authorization": `Bearer ${token}`
             }
+        }).then(res => {
+            showSuccess(t('successful action'))
         })
-        showSuccess(t('successful action'))
     }
     const changePersonalData = async () => {
         const {token} = store.getState()
@@ -105,6 +105,7 @@ export default function ChangeAccountData() {
             login: currentAccount.login,
             newFirstName: firstName,
             newSecondName: secondName,
+            newEmail: email,
             version: currentAccount.version
 
         })
@@ -119,7 +120,11 @@ export default function ChangeAccountData() {
         }).catch(error => {
             const message = error.response.data
             showError(t(message))
+        }).then(res=>{
+            showSuccess(t('successful action'))
+            refreshToken()
         });
+
         showSuccess(t('successful action'))
         await axios.get(`/account/details/${currentAccount.login}`, {
             headers: {
@@ -155,7 +160,7 @@ export default function ChangeAccountData() {
         })
 
 
-        await axios.put("/account/change-client-data", json, {
+        await axios.put("account/change-client-data", json, {
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json",
@@ -165,9 +170,10 @@ export default function ChangeAccountData() {
         }).catch(error => {
             const message = error.response.data
             showError(t(message))
+        }).then(res => {
+            showSuccess(t('successful action'))
         });
 
-        showSuccess(t('successful action'))
 
         await axios.get(`/account/details/${currentAccount.login}`, {
             headers: {
@@ -183,7 +189,6 @@ export default function ChangeAccountData() {
         });
     }
     const changeBusinessPhone = async () => {
-        const {token} = store.getState()
         const json = JSON.stringify({
             login: currentAccount.login,
             version: currentAccount.version,
@@ -201,10 +206,10 @@ export default function ChangeAccountData() {
         }).catch(error => {
             const message = error.response.data
             showError(t(message))
+        }).then(res => {
+            refreshToken()
+            showSuccess(t('successful action'))
         });
-
-
-        showSuccess(t('successful action'))
 
         await axios.get(`/account/details/${currentAccount.login}`, {
             headers: {

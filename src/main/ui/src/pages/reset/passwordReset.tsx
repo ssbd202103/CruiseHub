@@ -9,6 +9,7 @@ import PasswordIcon from "@material-ui/icons/VpnKeyRounded";
 import styles from '../../styles/auth.global.module.css'
 import RoundedButton from "../../components/RoundedButton";
 import {useSnackbarQueue} from "../snackbar";
+import {refreshToken} from "../../Services/userService";
 
 
 function PasswordReset(props: any) {
@@ -37,8 +38,10 @@ function PasswordReset(props: any) {
         }).catch(error => {
             const message = error.response.data
             showError(t(message))
+        }).then(res => {
+            refreshToken()
+            showSuccess(t('successful action'))
         });
-        showSuccess(t('successful action'))
     }
 
 
@@ -51,7 +54,9 @@ function PasswordReset(props: any) {
                         placeholder="login"
                         className={styles.input}
                         value={login}
-                        onChange={event => {setLogin(event.target.value)}}
+                        onChange={event => {
+                            setLogin(event.target.value)
+                        }}
                     />
 
                     <DarkedTextField
@@ -62,7 +67,9 @@ function PasswordReset(props: any) {
                         style={{marginRight: 20}}
                         icon={(<PasswordIcon/>)}
                         value={password}
-                        onChange={event => {setPassword(event.target.value)}}
+                        onChange={event => {
+                            setPassword(event.target.value)
+                        }}
 
                     />
 
@@ -73,7 +80,9 @@ function PasswordReset(props: any) {
                         className={styles.input}
                         icon={(<PasswordIcon/>)}
                         value={confirmPassword}
-                        onChange={event => {setConfirmPassword(event.target.value)}}
+                        onChange={event => {
+                            setConfirmPassword(event.target.value)
+                        }}
                     />
 
                     <RoundedButton

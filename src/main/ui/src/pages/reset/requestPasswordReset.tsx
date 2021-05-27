@@ -6,6 +6,7 @@ import styles from "../../styles/auth.global.module.css";
 import {useTranslation} from "react-i18next";
 import RoundedButton from "../../components/RoundedButton";
 import {useSnackbarQueue} from "../snackbar";
+import {refreshToken} from "../../Services/userService";
 
 const RequestPasswordReset = () => {
     const {t} = useTranslation()
@@ -21,8 +22,10 @@ const RequestPasswordReset = () => {
             .catch(error => {
                 const message = error.response.data
                 showError(t(message))
-            });
-        showSuccess(t('successful action'))
+            }).then(res => {
+            refreshToken()
+            showSuccess(t('successful action'))
+        });
     }
 
     return (

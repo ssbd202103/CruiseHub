@@ -13,6 +13,7 @@ import {selectDarkMode} from "../../../redux/slices/userSlice";
 import {getAllAccounts} from "../../../Services/accountsService";
 import DarkedTextField from "../../../components/DarkedTextField";
 import {useSnackbarQueue} from "../../snackbar";
+import {refreshToken} from "../../../Services/userService";
 import {TextField} from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 
@@ -48,14 +49,14 @@ export interface RowProps {
 }
 
 function Row(props: RowProps) {
-    const { row } = props;
-    const { style } = props;
+    const {row} = props;
+    const {style} = props;
     const classes = useRowStyles();
 
     return (
         <TableRow className={classes.root}>
             <TableCell component="th" scope="row" style={style}>
-            {row.login}
+                {row.login}
             </TableCell>
             <TableCell style={style}>{row.firstName}</TableCell>
             <TableCell style={style}>{row.secondName}</TableCell>
@@ -65,7 +66,6 @@ function Row(props: RowProps) {
         </TableRow>
     );
 }
-
 
 
 export default function ModListClient() {
@@ -82,14 +82,15 @@ export default function ModListClient() {
         }).catch(error => {
             const message = error.response.data
             showError(t(message))
+        }).then(res => {
+            refreshToken()
         });
-    },[]);
+    }, []);
 
     function search(rows: any[]) {
         if (Array.isArray(rows) && rows.length) {
             const filteredAccount = rows.filter(
-                row => row.props.row.firstName.concat(" ", row.props.row.secondName).toLowerCase().
-                indexOf(searchInput.toLowerCase())> -1
+                row => row.props.row.firstName.concat(" ", row.props.row.secondName).toLowerCase().indexOf(searchInput.toLowerCase()) > -1
             );
 
             filteredAccount.forEach(account => (accounts.includes(account.props.row.firstName + " " + account.props.row.secondName) ?
@@ -108,28 +109,52 @@ export default function ModListClient() {
             <Autocomplete
                 options={accounts}
                 inputValue={searchInput}
-                style={{ width: 300 }}
+                style={{width: 300}}
                 noOptionsText={t('no options')}
-                onChange={(event, value) => {setSearchInput(value as string ?? '')}}
+                onChange={(event, value) => {
+                    setSearchInput(value as string ?? '')
+                }}
                 renderInput={(params) => (
-                    <TextField {...params} label={t('search account')}  variant="outlined" onChange={(e) => setSearchInput(e.target.value)}/>
+                    <TextField {...params} label={t('search account')} variant="outlined"
+                               onChange={(e) => setSearchInput(e.target.value)}/>
                 )}
             />
             <TableContainer component={Paper}>
                 <Table aria-label="Clients">
                     <TableHead>
                         <TableRow>
-                            <TableCell style={{backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`, color: `var(--${!darkMode ? 'dark' : 'white-light'}`}}>{t("login")}</TableCell>
-                            <TableCell style={{backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`, color: `var(--${!darkMode ? 'dark' : 'white-light'}`}}>{t("first name")}</TableCell>
-                            <TableCell style={{backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`, color: `var(--${!darkMode ? 'dark' : 'white-light'}`}}>{t("last name")}</TableCell>
-                            <TableCell style={{backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`, color: `var(--${!darkMode ? 'dark' : 'white-light'}`}}>{t("email")}</TableCell>
-                            <TableCell style={{backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`, color: `var(--${!darkMode ? 'dark' : 'white-light'}`}}>{t("active")}</TableCell>
-                            <TableCell style={{backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`, color: `var(--${!darkMode ? 'dark' : 'white-light'}`}}>{t("access level")}</TableCell>
+                            <TableCell style={{
+                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                            }}>{t("login")}</TableCell>
+                            <TableCell style={{
+                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                            }}>{t("first name")}</TableCell>
+                            <TableCell style={{
+                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                            }}>{t("last name")}</TableCell>
+                            <TableCell style={{
+                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                            }}>{t("email")}</TableCell>
+                            <TableCell style={{
+                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                            }}>{t("active")}</TableCell>
+                            <TableCell style={{
+                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                            }}>{t("access level")}</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {search(users.map((user, index) => (
-                            <Row key={index} row={user} style={{backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`, color: `var(--${!darkMode ? 'dark' : 'white-light'}`}} />
+                            <Row key={index} row={user} style={{
+                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                            }}/>
                         )))}
                     </TableBody>
                 </Table>
