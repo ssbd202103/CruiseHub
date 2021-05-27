@@ -7,11 +7,12 @@ import {useSelector} from "react-redux";
 import {selectDarkMode} from '../redux/slices/userSlice'
 import {changeDarkMode} from '../Services/changeDataService'
 import {useSnackbarQueue} from "../pages/snackbar";
+import useHandleError from "../errorHandler";
 
 export default function AppColorSetter() {
     const {t} = useTranslation();
     const showSuccess = useSnackbarQueue('success')
-    const showError = useSnackbarQueue('error')
+    const handleError = useHandleError()
 
     const darkMode = useSelector(selectDarkMode)
 
@@ -19,7 +20,7 @@ export default function AppColorSetter() {
         //TODO
         changeDarkMode().catch(error => {
             const message = error.response.data
-            showError(t(message))
+            handleError(message)
         }).then(res => {
             showSuccess(t('successful action'))
         });

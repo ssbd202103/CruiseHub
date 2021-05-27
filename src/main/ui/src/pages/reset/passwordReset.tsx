@@ -10,12 +10,13 @@ import styles from '../../styles/auth.global.module.css'
 import RoundedButton from "../../components/RoundedButton";
 import {useSnackbarQueue} from "../snackbar";
 import {refreshToken} from "../../Services/userService";
+import useHandleError from "../../errorHandler";
 
 
 function PasswordReset(props: any) {
     const location = useLocation();
     const {t} = useTranslation()
-    const showError = useSnackbarQueue('error')
+    const handleError = useHandleError()
 
     const [login, setLogin] = useState('')
     const [password, setPassword] = useState('')
@@ -37,7 +38,7 @@ function PasswordReset(props: any) {
             }
         }).catch(error => {
             const message = error.response.data
-            showError(t(message))
+            handleError(message)
         }).then(res => {
             refreshToken()
             showSuccess(t('successful action'))

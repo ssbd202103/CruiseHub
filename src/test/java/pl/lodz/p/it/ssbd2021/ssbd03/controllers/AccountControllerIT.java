@@ -345,8 +345,11 @@ class AccountControllerIT {
 
 
     private ClientForRegistrationDto getSampleClientForRegistrationDto() {
-        AddressDto address = new AddressDto(1L, "Bortnyka", "30-302", "Pluzhne", "Ukraine");
-        return new ClientForRegistrationDto("Artur", "Radiuk", randomAlphanumeric(15), randomAlphanumeric(10) + "@gmail.com",
+//        AddressDto address = new AddressDto(1L, "Bortnyka", "30-302", "Pluzhne", "Ukraine");
+//        return new ClientForRegistrationDto("Artur", "Radiuk", randomAlphanumeric(15), randomAlphanumeric(10) + "@gmail.com",
+//                "abcABC123*", LanguageType.PL, address, "123456789");
+        AddressDto address = new AddressDto(11111111L, "**", "12", "*", "Ukraine");
+        return new ClientForRegistrationDto("Artur", "1278", randomAlphanumeric(15), randomAlphanumeric(10) + "@gmail.com",
                 "abcABC123*", LanguageType.PL, address, "123456789");
     }
 

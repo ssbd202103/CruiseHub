@@ -6,11 +6,12 @@ import {useTranslation} from "react-i18next";
 import styles from '../../styles/auth.global.module.css'
 import RoundedButton from "../../components/RoundedButton";
 import {useSnackbarQueue} from "../snackbar";
+import useHandleError from "../../errorHandler";
 
 function VerifyAccount(props: any) {
     const location = useLocation();
     const {t} = useTranslation()
-    const showError = useSnackbarQueue('error')
+    const handleError = useHandleError()
     const showSuccess = useSnackbarQueue('success')
     const history = useHistory()
     const submitAccountVerification = async (event: any) => {
@@ -30,7 +31,7 @@ function VerifyAccount(props: any) {
         })
             .catch(error => {
                 const message = error.response.data
-                showError(t(message))
+                handleError(message)
             });
     }
 

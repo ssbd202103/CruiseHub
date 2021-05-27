@@ -27,6 +27,7 @@ import store from "../../../redux/store";
 import {setChangeAccessLevelStateAccount} from "../../../redux/slices/changeAccessLevelStateSlice";
 
 import {refreshToken} from "../../../Services/userService";
+import useHandleError from "../../../errorHandler";
 
 interface UnblockAccountParams {
     login: string;
@@ -134,7 +135,7 @@ function Row(props: RowProps) {
     const [buttonText, setButtonText] = useState("true");
     const token = useSelector(selectToken)
 
-    const showError = useSnackbarQueue('error')
+    const handleError = useHandleError()
     const showSuccess = useSnackbarQueue('success')
 
     const classes = useRowStyles();
@@ -146,7 +147,7 @@ function Row(props: RowProps) {
             setOpen(state => !state);
         }).catch(error => {
             const message = error.response.data
-            showError(t(message))
+            handleError(message)
         }).then(res => {
             refreshToken()
         });
@@ -167,7 +168,7 @@ function Row(props: RowProps) {
             store.dispatch(setChangeAccessLevelStateAccount(res.data))
         }).catch(error => {
             const message = error.response.data
-            showError(t(message))
+            handleError(message)
         });
     }
 
@@ -224,7 +225,7 @@ function Row(props: RowProps) {
                                                         showSuccess(t('successful action'))
                                                     }).catch(error => {
                                                         const message = error.response.data
-                                                        showError(t(message))
+                                                        handleError(message)
                                                     });
 
 
@@ -238,7 +239,7 @@ function Row(props: RowProps) {
                                                             showSuccess(t('successful action'))
                                                         }).catch(error => {
                                                         const message = error.response.data
-                                                        showError(t(message))
+                                                        handleError(message)
                                                     });
                                                 }
                                             }}>{row.active ? t("block") : t("unblock")}</Button>
@@ -269,7 +270,7 @@ export default function AdminListClient() {
     const [users, setUsers] = useState([]);
     const [searchInput, setSearchInput] = useState("");
 
-    const showError = useSnackbarQueue('error')
+    const handleError = useHandleError()
 
     const darkMode = useSelector(selectDarkMode)
 
@@ -279,7 +280,7 @@ export default function AdminListClient() {
             refreshToken()
         }).catch(error => {
             const message = error.response.data
-            showError(t(message))
+            handleError(message)
         })
     }, []);
 

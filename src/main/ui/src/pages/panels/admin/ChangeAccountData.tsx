@@ -14,11 +14,12 @@ import axios from "../../../Services/URL";
 import {useSnackbarQueue} from "../../snackbar";
 import store from "../../../redux/store";
 import {getUser, refreshToken} from "../../../Services/userService";
+import useHandleError from "../../../errorHandler";
 
 
 export default function ChangeAccountData() {
     const {t} = useTranslation()
-    const showError = useSnackbarQueue('error')
+    const handleError = useHandleError()
 
     const showSuccess = useSnackbarQueue('success')
 
@@ -119,7 +120,7 @@ export default function ChangeAccountData() {
             }
         }).catch(error => {
             const message = error.response.data
-            showError(t(message))
+            handleError(message)
         }).then(res=>{
             showSuccess(t('successful action'))
             refreshToken()
@@ -136,7 +137,7 @@ export default function ChangeAccountData() {
             handleChangePerData()
         }).catch(error => {
             const message = error.response.data
-            showError(t(message))
+            handleError(message)
         });
 
     }
@@ -169,7 +170,7 @@ export default function ChangeAccountData() {
             }
         }).catch(error => {
             const message = error.response.data
-            showError(t(message))
+            handleError(message)
         }).then(res => {
             showSuccess(t('successful action'))
         });
@@ -185,7 +186,7 @@ export default function ChangeAccountData() {
             handleChangAddress()
         }).catch(error => {
             const message = error.response.data
-            showError(t(message))
+            handleError(message)
         });
     }
     const changeBusinessPhone = async () => {
@@ -205,7 +206,7 @@ export default function ChangeAccountData() {
             }
         }).catch(error => {
             const message = error.response.data
-            showError(t(message))
+            handleError(message)
         }).then(res => {
             refreshToken()
             showSuccess(t('successful action'))
@@ -221,7 +222,7 @@ export default function ChangeAccountData() {
             handleChangePhone()
         }).catch(error => {
             const message = error.response.data
-            showError(t(message))
+            handleError(message)
         });
 
     }

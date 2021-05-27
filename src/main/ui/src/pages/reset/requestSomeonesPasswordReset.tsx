@@ -9,10 +9,11 @@ import {Link} from "react-router-dom";
 import {useSnackbarQueue} from "../snackbar";
 import store from "../../redux/store";
 import {getUser, refreshToken} from "../../Services/userService";
+import useHandleError from "../../errorHandler";
 
 const RequestSomeonePasswordReset = () => {
     const {t} = useTranslation()
-    const showError = useSnackbarQueue('error')
+    const handleError = useHandleError()
     const showSuccess = useSnackbarQueue('success')
 
     const currentAccount = JSON.parse(sessionStorage.getItem("resetPasswordAccount") as string)
@@ -28,7 +29,7 @@ const RequestSomeonePasswordReset = () => {
             }
         }).catch(error => {
             const message = error.response.data
-            showError(t(message))
+            handleError(message)
         }).then(res => {
             refreshToken()
             showSuccess(t('successful action'))

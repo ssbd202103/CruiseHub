@@ -17,6 +17,7 @@ import {Button} from '@material-ui/core';
 import RoundedButton from "../../../components/RoundedButton";
 import {refreshToken} from "../../../Services/userService";
 import {useSnackbarQueue} from "../../snackbar";
+import useHandleError from "../../../errorHandler";
 
 const useRowStyles = makeStyles({
     root: {
@@ -56,7 +57,7 @@ export interface RowProps {
 }
 
 function Row(props: RowProps) {
-    const showError = useSnackbarQueue('error')
+    const handleError = useHandleError()
     const { row } = props;
     const { style } = props;
     const classes = useRowStyles();

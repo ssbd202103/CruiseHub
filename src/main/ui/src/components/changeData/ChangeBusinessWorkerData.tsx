@@ -11,6 +11,7 @@ import {changeBusinessWorkerData} from "../../Services/changeDataService";
 import Recaptcha from "react-recaptcha";
 import Popup from "../../PopupRecaptcha";
 import {useSnackbarQueue} from "../../pages/snackbar";
+import useHandleError from "../../errorHandler";
 
 export interface ChangeBusinessWorkerProps {
     open: boolean,
@@ -22,7 +23,7 @@ export interface ChangeBusinessWorkerProps {
 export default function ChangeBusinessWorkerData({open, onOpen, onConfirm, onCancel}: ChangeBusinessWorkerProps) {
     const {t} = useTranslation()
 
-    const showError = useSnackbarQueue('error')
+    const handleError = useHandleError()
     const showSuccess = useSnackbarQueue('success')
 
     const firstName = useSelector(selectFirstName)
@@ -45,7 +46,7 @@ export default function ChangeBusinessWorkerData({open, onOpen, onConfirm, onCan
     function verifyCallback(){
         setButtonPopup(false)
         if (!firstNameValue || !secondNameValue || !phoneNumberValue) {
-            showError(t('error.fields'))
+            handleError('error.fields')
             return
         }
 
@@ -56,7 +57,7 @@ export default function ChangeBusinessWorkerData({open, onOpen, onConfirm, onCan
             onConfirm()
         }).catch(error => {
             const message = error.response.data
-            showError(t(message))
+            handleError(message)
         }).then(res =>{
             showSuccess(t('successful action'))
         });

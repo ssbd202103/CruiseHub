@@ -12,11 +12,12 @@ import {changeModeratorData} from "../../Services/changeDataService";
 import Recaptcha from "react-recaptcha";
 import Popup from "../../PopupRecaptcha";
 import {useSnackbarQueue} from "../../pages/snackbar";
+import useHandleError from "../../errorHandler";
 
 export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}: ChangeDataComponentProps) {
     const {t} = useTranslation()
 
-    const showError = useSnackbarQueue('error')
+    const handleError = useHandleError()
     const showSuccess = useSnackbarQueue('success')
     const firstName = useSelector(selectFirstName)
     const secondName = useSelector(selectSecondName)
@@ -35,7 +36,7 @@ export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}:
     function verifyCallback(){
         setButtonPopup(false)
         if (!firstNameValue || !secondNameValue) {
-            showError(t('error.fields'))
+            handleError('error.fields')
             return;
         }
 
@@ -45,7 +46,7 @@ export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}:
             onConfirm()
         }).catch(error => {
             const message = error.response.data
-            showError(t(message))
+            handleError(message)
         }).then(res=>{
             showSuccess(t('successful action'))
         });

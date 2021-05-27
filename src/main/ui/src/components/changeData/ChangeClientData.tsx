@@ -12,11 +12,12 @@ import {changeClientData} from "../../Services/changeDataService";
 import Recaptcha from "react-recaptcha";
 import Popup from "../../PopupRecaptcha";
 import {useSnackbarQueue} from "../../pages/snackbar";
+import useHandleError from "../../errorHandler";
 
 export default function ChangeClientData({open, onOpen, onConfirm, onCancel}: ChangeDataComponentProps) {
     const {t} = useTranslation()
 
-    const showError = useSnackbarQueue('error')
+    const handleError = useHandleError()
     const showSuccess = useSnackbarQueue('success')
 
     const firstName = useSelector(selectFirstName)
@@ -39,7 +40,7 @@ export default function ChangeClientData({open, onOpen, onConfirm, onCancel}: Ch
     function verifyCallback(){
         setButtonPopup(false)
         if (!firstNameValue || !secondNameValue || !phoneNumberValue) {
-            showError(t('error.fields'))
+            handleError('error.fields')
             return;
         }
 
@@ -50,7 +51,7 @@ export default function ChangeClientData({open, onOpen, onConfirm, onCancel}: Ch
             onConfirm()
         }).catch(error => {
             const message = error.response.data
-            showError(t(message))
+            handleError(message)
         }).then(res=>{
             showSuccess(t('successful action'))
         });

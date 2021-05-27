@@ -7,12 +7,13 @@ import {useSnackbarQueue} from "../../snackbar";
 import {refreshToken} from "../../../Services/userService";
 import axios from "../../../Services/URL";
 import store from "../../../redux/store";
+import useHandleError from "../../../errorHandler";
 
 
 export default function Checkboxes() {
     const {token} = store.getState()
     const {t} = useTranslation()
-    const showError = useSnackbarQueue('error')
+    const handleError = useHandleError()
     const showSuccess = useSnackbarQueue('success')
     const [selectedAccessLevel, setSelectedAccessLevel] = React.useState("");
 
@@ -42,7 +43,7 @@ export default function Checkboxes() {
             refreshToken()
         }).catch(error => {
             const message = error.response.data
-            showError(t(message))
+            handleError(message)
         });
     }
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

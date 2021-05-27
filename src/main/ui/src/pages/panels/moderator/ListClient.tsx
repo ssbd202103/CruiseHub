@@ -16,6 +16,7 @@ import {useSnackbarQueue} from "../../snackbar";
 import {refreshToken} from "../../../Services/userService";
 import {TextField} from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
+import useHandleError from "../../../errorHandler";
 
 const useRowStyles = makeStyles({
     root: {
@@ -72,7 +73,7 @@ export default function ModListClient() {
     const [users, setUsers] = useState([]);
     const [searchInput, setSearchInput] = useState("");
 
-    const showError = useSnackbarQueue('error')
+    const handleError = useHandleError()
 
     const darkMode = useSelector(selectDarkMode)
 
@@ -81,7 +82,7 @@ export default function ModListClient() {
             setUsers(res.data)
         }).catch(error => {
             const message = error.response.data
-            showError(t(message))
+            handleError(message)
         }).then(res => {
             refreshToken()
         });

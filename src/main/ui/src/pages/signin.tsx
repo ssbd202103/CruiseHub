@@ -18,11 +18,12 @@ import React, {useState} from "react"
 import {getUser} from "../Services/userService";
 
 import {useSnackbarQueue} from "./snackbar";
+import useHandleError from "../errorHandler";
 
 export default function SignIn() {
     const {t} = useTranslation();
 
-    const showError = useSnackbarQueue('error')
+    const handleError = useHandleError()
     const showSuccess = useSnackbarQueue('success')
 
     const history = useHistory();
@@ -46,7 +47,7 @@ export default function SignIn() {
             showSuccess(t('successful action'))
         }).catch(error => {
             const message = error.response.data
-            showError(t(message))
+            handleError(message)
         })
     }
 

@@ -8,6 +8,7 @@ import {useSnackbarQueue} from "../../snackbar";
 import store from "../../../redux/store";
 import {setChangeAccessLevelStateAccount} from "../../../redux/slices/changeAccessLevelStateSlice";
 import {refreshToken} from "../../../Services/userService";
+import useHandleError from "../../../errorHandler";
 
 
 export default function ChangeAccessLevelState() {
@@ -15,7 +16,7 @@ export default function ChangeAccessLevelState() {
     const {t} = useTranslation()
     const {token, changeAccessLevelStateAccount} = store.getState()
 
-    const showError = useSnackbarQueue('error')
+    const handleError = useHandleError()
     const showSuccess = useSnackbarQueue('success')
 
     const handleChangeAccessLevelState = async (accessLevel: string, enabled: boolean) => {
@@ -35,7 +36,7 @@ export default function ChangeAccessLevelState() {
             }
         }).catch(error => {
             const message = error.response.data
-            showError(t(message))
+            handleError(message)
         });
 
         await axios.get(`account/details/${changeAccessLevelStateAccount.login}`, {
@@ -49,7 +50,7 @@ export default function ChangeAccessLevelState() {
             refreshToken()
         }).catch(error => {
             const message = error.response.data
-            showError(t(message))
+            handleError(message)
         });
     }
 

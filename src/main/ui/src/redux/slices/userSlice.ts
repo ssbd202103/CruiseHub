@@ -35,7 +35,7 @@ const userSlice = createSlice({
         login: '',
         darkMode: false,
         email: '',
-        languageType: window.navigator.languages[1].toUpperCase() === "EN" ? "EN" : "PL",
+        languageType: window.navigator.languages[0].toUpperCase() === "EN" ? "EN" : "PL",
         accessLevels: [] as Array<IAccessLevel>,
         etag: '',
         version: 0

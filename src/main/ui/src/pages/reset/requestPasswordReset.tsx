@@ -6,26 +6,27 @@ import styles from "../../styles/auth.global.module.css";
 import {useTranslation} from "react-i18next";
 import RoundedButton from "../../components/RoundedButton";
 import {useSnackbarQueue} from "../snackbar";
-import {refreshToken} from "../../Services/userService";
+import useHandleError from "../../errorHandler";
 
 const RequestPasswordReset = () => {
     const {t} = useTranslation()
-    const showError = useSnackbarQueue('error')
     const showSuccess = useSnackbarQueue('success')
+    const handleError = useHandleError()
 
     const [login, setLogin] = useState('')
+    let x = null
 
     const onFormSubmit = () => {
         // event.preventDefault()
         // console.log("hello world")
         axios.post(`account/request-password-reset/${login}`, {})
+            .then(res => {
+                showSuccess(t('successful action'))
+            })
             .catch(error => {
                 const message = error.response.data
-                showError(t(message))
-            }).then(res => {
-            refreshToken()
-            showSuccess(t('successful action'))
-        });
+                handleError(message)
+            });
     }
 
     return (
@@ -35,7 +36,9 @@ const RequestPasswordReset = () => {
                 placeholder="login"
                 className={styles.input}
                 value={login}
-                onChange={event => {setLogin(event.target.value)}}
+                onChange={event => {
+                    setLogin(event.target.value)
+                }}
             />
             <RoundedButton
                 onClick={onFormSubmit}

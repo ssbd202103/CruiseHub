@@ -12,14 +12,14 @@ import {useSnackbarQueue} from "../snackbar";
 import Grid from "@material-ui/core/Grid";
 import {Link} from "@material-ui/core";
 import {getUser} from "../../Services/userService";
+import useHandleError from "../../errorHandler";
 
 
 export default function PasswordReset(props: any) {
     const location = useLocation();
     const {t} = useTranslation();
     const history = useHistory();
-    const showError = useSnackbarQueue('error')
-
+    const handleError = useHandleError()
 
 
     const submitPasswordReset = async (event: any) => {
@@ -39,7 +39,7 @@ export default function PasswordReset(props: any) {
             history.push('/')
         }).catch(error => {
             const message = error.response.data
-            showError(t(message))
+            handleError(message)
         });
     }
 

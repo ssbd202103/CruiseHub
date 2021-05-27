@@ -10,11 +10,12 @@ import {ConfirmCancelButtonGroup} from "../ConfirmCancelButtonGroup";
 import Recaptcha from "react-recaptcha";
 import Popup from "../../PopupRecaptcha";
 import {useSnackbarQueue} from "../../pages/snackbar";
+import useHandleError from "../../errorHandler";
 
 export default function ChangePassword({open, onOpen, onConfirm, onCancel}: ChangeDataComponentProps) {
     const {t} = useTranslation()
 
-    const showError = useSnackbarQueue('error')
+    const handleError = useHandleError()
     const showSuccess = useSnackbarQueue('success')
 
     const [oldPassword, setOldPassword] = useState('')
@@ -33,12 +34,12 @@ export default function ChangePassword({open, onOpen, onConfirm, onCancel}: Chan
     async function verifyCallback() {
         setButtonPopup(false)
         if (!oldPassword || !newPassword || !confirmNewPassword) {
-            showError(t('error.fields'))
+            handleError('error.fields')
             return;
         }
 
         if (newPassword != confirmNewPassword) {
-            showError(t('passwords are not equal'));
+            handleError('passwords are not equal');
             return;
         }
 
@@ -50,7 +51,7 @@ export default function ChangePassword({open, onOpen, onConfirm, onCancel}: Chan
             onConfirm()
         }).catch(error => {
             const message = error.response.data
-            showError(t(message))
+            handleError(message)
         }).then(res=>{
             showSuccess(t('successful action'))
         });

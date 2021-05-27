@@ -12,11 +12,12 @@ import {changeClientAddress} from "../../Services/changeDataService";
 import Recaptcha from "react-recaptcha";
 import Popup from "../../PopupRecaptcha";
 import {useSnackbarQueue} from "../../pages/snackbar";
+import useHandleError from "../../errorHandler";
 
 export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: ChangeDataComponentProps) {
     const {t} = useTranslation()
 
-    const showError = useSnackbarQueue('error')
+    const handleError = useHandleError()
     const showSuccess = useSnackbarQueue('success')
 
     const address = useSelector(selectAddress)
@@ -41,12 +42,12 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
     async function verifyCallback() {
         setButtonPopup(false)
         if (!houseNumber || !street || !postalCode || !city || !country) {
-            showError(t('error.fields'))
+            handleError('error.fields')
             return
         }
 
         if (isNaN(Number(houseNumber))) {
-            showError(t('error.houseNumber.NaN'))
+            handleError('error.houseNumber.NaN')
             return
         }
 
@@ -65,7 +66,7 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
             onConfirm()
         }).catch(error => {
             const message = error.response.data
-            showError(t(message))
+            handleError(message)
         }).then(res => {
             showSuccess(t('successful action'))
         });

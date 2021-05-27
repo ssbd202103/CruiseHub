@@ -27,11 +27,12 @@ import {
 } from "../../regexConstants";
 import {useSnackbarQueue} from "../snackbar";
 import i18n from "i18next";
+import useHandleError from "../../errorHandler";
 
 
 export default function WorkerSignUp() {
     const {t} = useTranslation()
-    const showError = useSnackbarQueue('error')
+    const handleError = useHandleError()
     const showSuccess = useSnackbarQueue('success')
 
     const [firstName, setFirstName] = useState('')
@@ -74,7 +75,7 @@ export default function WorkerSignUp() {
             }
         }).catch(error => {
             const message = error.response.data
-            showError(t(message))
+            handleError(message)
         }).then(res => {
             showSuccess(t('successful action'))
         });
@@ -103,7 +104,7 @@ export default function WorkerSignUp() {
         if (!LOGIN_REGEX.test(login) || !PASSWORD_REGEX.test(password) || !NAME_REGEX.test(firstName) ||
             !NAME_REGEX.test(secondName) || !EMAIL_REGEX.test(email) || !PHONE_NUMBER_REGEX.test(phoneNumber)) {
 
-            showError(t("invalid.form"))
+            handleError("invalid.form")
 
         } else {
             setButtonPopup(true)
