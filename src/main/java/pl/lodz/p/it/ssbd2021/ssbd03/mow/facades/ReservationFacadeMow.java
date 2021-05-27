@@ -70,6 +70,7 @@ public class ReservationFacadeMow extends AbstractFacade<Reservation> {
         }
     }
 
+    @RolesAllowed("getWorkerCruiseReservations")
     public List<Reservation> findWorkerCruiseReservations(long id) throws BaseAppException {
         //TODO Metoda znajdujaca id uzytkownika który jest aktualnie uzytkujacy jako bisnez worker / zmienić query
         //
