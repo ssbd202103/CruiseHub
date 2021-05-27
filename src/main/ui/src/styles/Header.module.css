@@ -2,12 +2,12 @@
     top: 0;
     left: 0;
     right: 0;
-    height: var(--header-height);
     display: flex;
+    height: var(--header-height);
+    padding: 20px 60px;
     justify-content: space-between;
     align-items: center;
-
-    padding: 20px 60px;
+    position: relative;
     z-index: 3001;
 }
 

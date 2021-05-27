@@ -178,7 +178,23 @@ const resources = {
             //successes
             "success.accessLevelStateChanged": "Stan poziomu dostępu został zmieniony",
             "success.accessLevelAssigned": "Poziom dostępu przydzielony",
-            'successful action': 'Akcja udała się'
+            'successful action': 'Akcja udała się',
+
+            //paths
+            "/": "Strona główna",
+            "/profile": "Profil",
+            "/cruises": "Wycieczki",
+            "/settings": "Ustawienia",
+            "/profile/cruises": "Wycieczki",
+            "/profile/settings": "Ustawienia",
+            "/accounts": "Konta",
+            "/ChangeAccountData": "Zmiana danych konta",
+            "/GrantAccessLevel": "Przydzielenie dostępu kontowi",
+            "/reset/passwordReset": "Resetowanie hasła",
+            "/reset/changeEmail": "Zmiana maila konta",
+            "/reset/resetSomebodyPassword": "Resetowanie hasła konta",
+            "/verify/accountVerification": "Weryfikacja",
+            "/ChangeAccessLevelState": "Zmień stan poziomu dostępu"
         }
     },
     en: {
@@ -357,7 +373,23 @@ const resources = {
 
             //successes
             "success.accessLevelStateChanged": "Access level state changed",
-            "success.accessLevelAssigned": "Access level assigned"
+            "success.accessLevelAssigned": "Access level assigned",
+
+            //paths
+            "/": "Home",
+            "/profile": "Profile",
+            "/cruises": "Cruises",
+            "/settings": "Settings",
+            "/profile/cruises": "Cruises",
+            "/profile/settings": "Settings",
+            "/accounts": "Accounts",
+            "/ChangeAccountData": "Change account data",
+            "/GrantAccessLevel": "Grant access level",
+            "/reset/passwordReset": "Password request",
+            "/reset/changeEmail": "Change email",
+            "/reset/resetSomebodyPassword": "Reset user password",
+            "/verify/accountVerification": "Account verification",
+            "/ChangeAccessLevelState": "Change access level state"
         }
     }
 }

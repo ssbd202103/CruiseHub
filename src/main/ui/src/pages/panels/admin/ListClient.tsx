@@ -239,12 +239,12 @@ function Row(props: RowProps) {
                                                 }
                                             }}>{row.active ? t("block") : t("unblock")}</Button>
 
-                                            <Link to="/GrantAccessLevel/">
+                                            <Link to="/GrantAccessLevel">
                                                 <Button onClick={setCurrentGrantAccessLevelAccount}
                                                         className={buttonClass.root}>{t("grant access level")}</Button>
                                             </Link>
 
-                                            <Link to="/ChangeAccessLevelState/">
+                                            <Link to="/ChangeAccessLevelState">
                                                 <Button onClick={setCurrentChangeAccessLevelStateAccount}
                                                         className={buttonClass.root}>{t("change access level state")}</Button>
                                             </Link>

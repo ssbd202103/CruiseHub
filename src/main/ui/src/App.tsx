@@ -101,13 +101,13 @@ function App() {
                             <SignUpWorker/>
                         </Route>
 
-                        <Route path="/reset/passwordReset/*">
+                        <Route path="/reset/passwordReset">
                             <PasswordReset/>
                         </Route>
-                        <Route path="/reset/changeEmail/*">
+                        <Route path="/reset/changeEmail">
                             <ChangeEmail/>
                         </Route>
-                        <Route path="/reset/changeOtherEmail/*">
+                        <Route path="/reset/changeOtherEmail">
                             <ChangeOtherEmail/>
                         </Route>
 
@@ -118,7 +118,7 @@ function App() {
                         <Route path="/reset/resetSomebodyPassword">
                             <RequestSomeonePasswordReset/>
                         </Route>
-                        <Route path="/verify/accountVerification/*">
+                        <Route path="/verify/accountVerification">
                             <VerifyAccount/>
                         </Route>
 
