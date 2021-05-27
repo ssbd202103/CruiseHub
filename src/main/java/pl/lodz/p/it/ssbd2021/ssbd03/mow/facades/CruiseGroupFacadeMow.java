@@ -7,6 +7,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
@@ -31,6 +32,7 @@ public class CruiseGroupFacadeMow extends AbstractFacade<CruiseGroup> {
         return em;
     }
 
+    @RolesAllowed("getAllCruiseGroupsList")
     @Override
     public List<CruiseGroup> findAll() throws FacadeException { //TODO throws FacadeException {
         return super.findAll();

@@ -224,10 +224,10 @@
     </security-role-mapping>
 
     <security-role-mapping>
-        <role-name>getAllCruiseGroups</role-name>
-        <group-name>ADMINISTRATOR</group-name>
-        <group-name>MODERATOR</group-name>
+        <role-name>getAllCruiseGroupsList</role-name>
         <group-name>BUSINESS_WORKER</group-name>
+        <group-name>MODERATOR</group-name>
+        <group-name>ADMINISTRATOR</group-name>
     </security-role-mapping>
 
     <security-role-mapping>
@@ -242,6 +242,16 @@
 
     <security-role-mapping>
         <role-name>viewSelfReservations</role-name>
+        <group-name>CLIENT</group-name>
+    </security-role-mapping>
+
+    <security-role-mapping>
+        <role-name>createRating</role-name>
+        <group-name>CLIENT</group-name>
+    </security-role-mapping>
+
+    <security-role-mapping>
+        <role-name>removeRating</role-name>
         <group-name>CLIENT</group-name>
     </security-role-mapping>
 

@@ -52,7 +52,7 @@ public class CruiseGroupEndpoint extends BaseEndpoint implements CruiseGroupEndp
 
 
     @Override
-    @RolesAllowed("getAllCruiseGroups")
+    @RolesAllowed("getAllCruiseGroupsList")
     public List<CruiseGroupDto> getCruiseGroupsInfo() throws FacadeException {
         List<CruiseGroupDto> res = new ArrayList<>();
         for (CruiseGroup cruiseGroup : cruiseGroupManager.getAllCruiseGroups()) {

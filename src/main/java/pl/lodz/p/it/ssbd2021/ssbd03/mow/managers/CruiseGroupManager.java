@@ -45,7 +45,8 @@ public class CruiseGroupManager implements CruiseGroupManagerLocal {
         return null; //todo
     }
 
-    @RolesAllowed("getAllCruiseGroups")
+
+    @RolesAllowed("getAllCruiseGroupsList")
     @Override
     public List<CruiseGroup> getAllCruiseGroups() throws FacadeException {
         return cruiseGroupFacadeMow.findAll();
