@@ -1,9 +1,7 @@
-import {Link} from 'react-router-dom'
+import {Link, useHistory} from 'react-router-dom'
 
 import Box from '@material-ui/core/Box'
 import PasswordIcon from '@material-ui/icons/VpnKeyRounded'
-
-import {useHistory} from 'react-router-dom'
 
 import AuthLayout from '../layouts/AuthLayout'
 import DarkedTextField from '../components/DarkedTextField'
@@ -108,7 +106,7 @@ export default function SignIn() {
                 </Link>
 
                 <Link to="/reset/requestPassword">
-                    <a className={styles.link}>Zapomniałem hasło</a>
+                    <a className={styles.link}>`{t("forgot password")}`</a>
                 </Link>
 
             </Box>

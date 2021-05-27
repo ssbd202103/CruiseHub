@@ -32,6 +32,7 @@ const resources = {
             "signin.welcome": "Witamy ponownie",
             "signin.subtitle": "Bardzo się cieszymy, że znów jesteś z nami",
             "i don't have an account": "Nie mam konta",
+            "forgot password": "Zapomniałem hasła",
             "refresh": "Odśwież",
             //signup
             "signup": "Zarejestruj",
@@ -210,7 +211,7 @@ const resources = {
             "signin": "Sign in",
             "signin.welcome": "Welcome back",
             "signin.subtitle": "We are very glad to see you again",
-            "i don't have an account": "I don't have an account",
+            "forgot password": "Forgot password",
             "refresh": "Refresh",
             //signup
             "signup": "Sign up",
