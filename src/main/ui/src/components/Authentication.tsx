@@ -50,7 +50,8 @@ export default function Authentication() {
     }
 
     const handleMenuItemClick = (accessLevel: AccessLevelType) => () => {
-        dispatch(setActiveAccessLevel(accessLevel))
+            dispatch(setActiveAccessLevel(accessLevel))
+            history.push('/')
     }
 
     const handleLogOut = () => {
@@ -121,6 +122,11 @@ export default function Authentication() {
                         </Popper>
                         <Button
                             className={styles.link}
+                            style={{
+                                marginRight: 20,
+                                color: 'var(--white)',
+                                fontFamily: 'Montserrat, sans-serif'
+                            }}
                             onClick={activeAccessLevel ? () => {history.push('/profile')} : undefined}
                         >
                             {firstName + ' ' + secondName}

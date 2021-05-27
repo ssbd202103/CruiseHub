@@ -1,5 +1,5 @@
 .wrapper.wrapper {
-    height: 100%;
+    height: calc(100vh - var(--header-height))
 }
 
 .profile.profile {
@@ -30,4 +30,17 @@
     font-weight: 500;
     font-size: 1.2rem;
 
+}
+
+.menu.menu * {
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 1.2rem;
+}
+
+.menu-light * {
+    color: var(--white);
+}
+
+.menu-dark * {
+    color: var(--dark);
 }

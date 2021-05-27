@@ -1,6 +1,8 @@
-import React, {ComponentType, createRef} from 'react';
+import React, {ComponentType, createRef, useEffect} from 'react';
 import Button from "@material-ui/core/Button";
 import Slide from "@material-ui/core/Slide"
+
+import {Link, Redirect} from 'react-router-dom';
 
 import 'normalize.css'
 import './styles/globals.css';
@@ -10,7 +12,8 @@ import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
 import {I18nextProvider, useTranslation} from 'react-i18next';
 import i18n from './i18n'
 
-import Panel from './pages/panel'
+import {ReactComponent as SVG404} from './404.svg'
+
 import Home from './pages/home'
 import Signin from './pages/signin'
 import SignUpClient from './pages/signup/client'
@@ -28,10 +31,16 @@ import {SnackbarKey, SnackbarProvider} from 'notistack';
 import {TransitionProps} from "@material-ui/core/transitions";
 import {useSelector} from "react-redux";
 import {selectActiveAccessLevel} from "./redux/slices/userSlice";
+import {getSavedUser} from "./Services/userService";
+import RoundedButton from "./components/RoundedButton";
 
 
 
 function App() {
+    useEffect(() => {
+        getSavedUser()
+    }, [])
+
     const {t} = useTranslation()
 
     const activeAccessLevel = useSelector(selectActiveAccessLevel)
@@ -61,10 +70,14 @@ function App() {
                 TransitionComponent={Slide as ComponentType<TransitionProps>}
             >
                 <Router basename={process.env.REACT_APP_ROUTER_BASE || ''}>
+                    <Redirect to={'/'} />
                     <Switch>
-                        <Route exact path="/">
-                            <Panel />
-                        </Route>
+                        <Route exact={["", "CLIENT"].includes(activeAccessLevel)} path="/" component={
+                            activeAccessLevel === "ADMINISTRATOR" ? AdminPanel :
+                                activeAccessLevel === "MODERATOR" ? ModeratorPanel :
+                                    activeAccessLevel === "BUSINESS_WORKER" ? WorkerPanel : Home
+                        }
+                        />
 
                         {
                             activeAccessLevel === "CLIENT" ? (
@@ -102,9 +115,29 @@ function App() {
                         </Route>
 
                         <Route path="*">
-                            <div>404 not found</div>
+                            <div style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                width: '100%',
+                                height: '100vh',
+                                fontFamily: "'Montserrat', sans-serif",
+                                fontSize: '2rem'
+                            }}>
+                                <div>
+                                    <SVG404 />
+                                </div>
+                                <div>{t("404")}</div>
+                                <Link to="/">
+                                    <RoundedButton color="pink" style={{
+                                        fontSize: '1.8rem',
+                                        padding: 10,
+                                        marginTop: 30
+                                    }}>{t("go back")}</RoundedButton>
+                                </Link>
+                            </div>
                         </Route>
-
                     </Switch>
                 </Router>
             </SnackbarProvider>

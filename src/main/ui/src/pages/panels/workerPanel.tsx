@@ -19,6 +19,7 @@ import ChangeBusinessWorkerData from "../../components/changeData/ChangeBusiness
 import {useState} from "react";
 import ChangeEmail from "../../components/changeData/ChangeEmail";
 import ChangePassword from "../../components/changeData/ChangePassword";
+import Header from "../../components/Header";
 
 export default function WorkerPanel() {
     const {t} = useTranslation()
@@ -48,67 +49,59 @@ export default function WorkerPanel() {
     }
 
     return (
-        <Grid container className={styles.wrapper}>
-            <Redirect to="/cruises" />
-            <Grid item xs={2} md={3} xl={2}>
-                <PanelMenu color={!darkMode ? 'green-dark' : 'white'}>
-                    <List className={styles.menu + ' ' + styles['menu-' + (!darkMode ? 'light' : 'dark')]} component="nav" aria-label="panel menu">
-                        <Link to="/cruises">
-                            <ListItem button>
-                                <ListItemIcon>
-                                    <CruiseIcon style={{ fill: `var(--${!darkMode ? 'white' : 'dark'})` }} />
-                                </ListItemIcon>
-                                <ListItemText> {t("cruises")} </ListItemText>
-                            </ListItem>
-                        </Link>
-                        <Link to="/settings">
-                            <ListItem button>
-                                <ListItemIcon>
-                                    <SettingsIcon style={{ fill: `var(--${!darkMode ? 'white' : 'dark'})` }} />
-                                </ListItemIcon>
-                                <ListItemText>{t("settings")}</ListItemText>
-                            </ListItem>
-                        </Link>
-                        <Link to="/">
-                            <ListItem button>
-                                <ListItemIcon>
-                                    <GoBackIcon style={{fill: `var(--${!darkMode ? 'white' : 'dark'})` }} />
-                                </ListItemIcon>
-                                <ListItemText>{t("go back")}</ListItemText>
-                            </ListItem>
-                        </Link>
-                        <ListItem button>
-                            <AppColorSetter />
-                        </ListItem>
-                    </List>
-                </PanelMenu>
+        <>
+            <Header />
+            <Grid container className={styles.wrapper}>
+                <Redirect to="/cruises" />
+                <Grid item xs={2} md={3} xl={2}>
+                    <PanelMenu color={!darkMode ? 'green-dark' : 'white'}>
+                        <List className={styles.menu + ' ' + styles['menu-' + (!darkMode ? 'light' : 'dark')]} component="nav" aria-label="panel menu">
+                            <Link to="/cruises">
+                                <ListItem button>
+                                    <ListItemIcon>
+                                        <CruiseIcon style={{ fill: `var(--${!darkMode ? 'white' : 'dark'})` }} />
+                                    </ListItemIcon>
+                                    <ListItemText> {t("cruises")} </ListItemText>
+                                </ListItem>
+                            </Link>
+                            <Link to="/settings">
+                                <ListItem button>
+                                    <ListItemIcon>
+                                        <SettingsIcon style={{ fill: `var(--${!darkMode ? 'white' : 'dark'})` }} />
+                                    </ListItemIcon>
+                                    <ListItemText>{t("settings")}</ListItemText>
+                                </ListItem>
+                            </Link>
+                        </List>
+                    </PanelMenu>
+                </Grid>
+
+
+
+                <Grid item className={styles.content + ' ' + styles[`content-${!darkMode ? 'light' : 'dark'}`]} xs={10} md={9} xl={10}>
+                    <Route exact path="/cruises">
+                        <div> {t("my cruises")} </div>
+                    </Route>
+                    <Route exact path="/settings">
+                        <ChangeBusinessWorkerData
+                            open={isDataEdit}
+                            onOpen={handleIsDataEdit}
+                            onConfirm={() => {setIsDataEdit(false)}}
+                            onCancel={() => {setIsDataEdit(false)}} />
+                        <ChangeEmail
+                            open={isEmailEdit}
+                            onOpen={handleIsEmailEdit}
+                            onConfirm={() => {setIsEmailEdit(false)}}
+                            onCancel={() => {setIsEmailEdit(false)}} />
+                        <ChangePassword
+                            open={isPasswordEdit}
+                            onOpen={handleIsPasswordEdit}
+                            onConfirm={() => {setIsPasswordEdit(false)}}
+                            onCancel={() => {setIsPasswordEdit(false)}} />
+                        <LogOutRoundedButton />
+                    </Route>
+                </Grid>
             </Grid>
-
-
-
-            <Grid item className={styles.content + ' ' + styles[`content-${!darkMode ? 'light' : 'dark'}`]} xs={10} md={9} xl={10}>
-                <Route exact path="/cruises">
-                    <div> {t("my cruises")} </div>
-                </Route>
-                <Route exact path="/settings">
-                    <ChangeBusinessWorkerData
-                        open={isDataEdit}
-                        onOpen={handleIsDataEdit}
-                        onConfirm={() => {setIsDataEdit(false)}}
-                        onCancel={() => {setIsDataEdit(false)}} />
-                    <ChangeEmail
-                        open={isEmailEdit}
-                        onOpen={handleIsEmailEdit}
-                        onConfirm={() => {setIsEmailEdit(false)}}
-                        onCancel={() => {setIsEmailEdit(false)}} />
-                    <ChangePassword
-                        open={isPasswordEdit}
-                        onOpen={handleIsPasswordEdit}
-                        onConfirm={() => {setIsPasswordEdit(false)}}
-                        onCancel={() => {setIsPasswordEdit(false)}} />
-                    <LogOutRoundedButton />
-                </Route>
-            </Grid>
-        </Grid>
+        </>
     )
 }

@@ -4,6 +4,7 @@ import {initReactI18next} from 'react-i18next'
 const resources = {
     pl: {
         translation: {
+            "404": "Niestety, nie udało nam się znaleść potrzebnej Ci strony :(",
             "CLIENT": "Klient",
             "BUSINESS_WORKER": "Pracownik firmy",
             "MODERATOR": "moderator",
@@ -168,6 +169,7 @@ const resources = {
     },
     en: {
         translation: {
+            "404": "Unfortunately, we cannot find the desired page :(",
             "CLIENT": "Client",
             "BUSINESS_WORKER": "Business worker",
             "MODERATOR": "Moderator",

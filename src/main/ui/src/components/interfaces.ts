@@ -4,3 +4,11 @@ export interface ChangeDataComponentProps {
     onConfirm(): void,
     onCancel(): void
 }
+
+export type Color =
+    "pink" | "pink-dark" | "pink-light" |
+    "blue" | "blue-dark" | "blue-light" |
+    "green" | "green-dark" | "green-light" |
+    "yellow" | "yellow-dark" | "yellow-light" |
+    "dark" | "dark-dark" | "dark-light" |
+    "white" | "white-dark" | "white-light";

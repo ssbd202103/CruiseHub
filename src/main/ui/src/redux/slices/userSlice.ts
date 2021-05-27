@@ -1,5 +1,6 @@
 import {createSelector, createSlice, PayloadAction} from '@reduxjs/toolkit'
 import i18n from "i18next";
+import {saveUser} from "../../Services/userService";
 
 export interface ILoginUserSliceState {
     firstName: string,
@@ -14,12 +15,10 @@ export interface ILoginUserSliceState {
 }
 
 export interface IUserSliceState extends ILoginUserSliceState {
-    activeAccessLevel: ActiveAccessLevelType,
+    activeAccessLevel: AccessLevelType,
 }
 
-export type AccessLevelType = "CLIENT" | "BUSINESS_WORKER" | "MODERATOR" | "ADMINISTRATOR";
-
-export type ActiveAccessLevelType = AccessLevelType | "GUEST"
+export type AccessLevelType = "CLIENT" | "BUSINESS_WORKER" | "MODERATOR" | "ADMINISTRATOR" | "";
 
 export interface IAccessLevel {
     '@type': "client" | "businessWorker" | "moderator" | "administrator",
@@ -45,14 +44,16 @@ const userSlice = createSlice({
         email: '',
         languageType: window.navigator.languages[1].toUpperCase() === "EN" ? "EN" : "PL",
         accessLevels: [] as Array<IAccessLevel>,
-        activeAccessLevel: "GUEST",
+        activeAccessLevel: '',
         etag: '',
         version: 0
     } as IUserSliceState,
     reducers: {
         setUser: (state: IUserSliceState, {payload}: PayloadAction<ILoginUserSliceState>) => ({
             ...payload,
-            activeAccessLevel: payload.accessLevels[0].accessLevelType
+            activeAccessLevel:
+                payload.accessLevels
+                    .find(accessLevel => accessLevel.accessLevelType === state.activeAccessLevel)?.accessLevelType || payload.accessLevels[0].accessLevelType //state.activeAccessLevel || payload.accessLevels[0].accessLevelType
         }),
         changeEmail: (state: IUserSliceState, {payload}: PayloadAction<string>) => {
             state.email = payload
@@ -69,13 +70,14 @@ const userSlice = createSlice({
                 email: '',
                 languageType,
                 accessLevels: [] as Array<IAccessLevel>,
-                activeAccessLevel: "GUEST",
+                activeAccessLevel: '',
                 etag: '',
                 version: 0
             } as IUserSliceState
         },
         setActiveAccessLevel: (state: IUserSliceState, {payload}: PayloadAction<AccessLevelType>) => {
             state.activeAccessLevel = payload
+            sessionStorage.setItem('cruisehub_user', JSON.stringify({...state, activeAccessLevel: payload}))
         }
     }
 })
