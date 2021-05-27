@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.facades;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.common.facades.AbstractFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
@@ -42,5 +43,8 @@ public class CruiseFacadeMow extends AbstractFacade<Cruise> {
         }
     }
 
-
+    @Override
+    public void create(Cruise entity) throws FacadeException {
+        super.create(entity);
+    }
 }
