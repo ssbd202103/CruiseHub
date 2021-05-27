@@ -91,8 +91,9 @@ export default function ClientSignUp() {
         }).catch(error => {
             const message = error.response.data
             showError(t(message))
+        }).then(res => {
+            showSuccess(t('successful action'))
         });
-        showSuccess(t('successful action'))
     }
 
 

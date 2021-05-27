@@ -12,7 +12,7 @@ import DarkedTextField from '../../../components/DarkedTextField';
 import axios from "../../../Services/URL";
 import {useSnackbarQueue} from "../../snackbar";
 import store from "../../../redux/store";
-import {updateToken} from "../../../Services/userService";
+import {refreshToken} from "../../../Services/userService";
 
 export default function ChangeAccountData() {
     const {t} = useTranslation()
@@ -76,15 +76,18 @@ export default function ChangeAccountData() {
         }).catch(error => {
             const message = error.response.data
             showError(t(message))
+        }).then(res => {
+            showSuccess(t('successful action'))
         });
 
 
-        showSuccess(t('successful action'))
-        const result = await axios.get(`account/details/${currentAccount.login}`);
-        sessionStorage.setItem("changeAccountData", JSON.stringify(result.data));
-        forceUpdate()
-        handleChangePerData()
-        updateToken()
+        await axios.get(`account/details/${currentAccount.login}`).then(res => {
+            sessionStorage.setItem("changeAccountData", JSON.stringify(res.data));
+            forceUpdate()
+            handleChangePerData()
+            refreshToken()
+        })
+
     }
 
 
@@ -114,9 +117,10 @@ export default function ChangeAccountData() {
         }).catch(error => {
             const message = error.response.data
             showError(t(message))
+        }).then(res => {
+            showSuccess(t('successful action'))
         });
 
-        showSuccess(t('successful action'))
 
         const result = axios.get(`account/details/${currentAccount.login}`).then(res => {
             sessionStorage.setItem("changeAccountData", JSON.stringify(res.data));
@@ -146,10 +150,10 @@ export default function ChangeAccountData() {
         }).catch(error => {
             const message = error.response.data
             showError(t(message))
+        }).then(res => {
+            refreshToken()
+            showSuccess(t('successful action'))
         });
-
-
-        showSuccess(t('successful action'))
 
         axios.get(`account/details/${currentAccount.login}`).then(res => {
             sessionStorage.setItem("changeAccountData", JSON.stringify(res.data));

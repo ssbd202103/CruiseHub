@@ -7,7 +7,7 @@ import Grid from "@material-ui/core/Grid";
 import {useSnackbarQueue} from "../../snackbar";
 import store from "../../../redux/store";
 import {setChangeAccessLevelStateAccount} from "../../../redux/slices/changeAccessLevelStateSlice";
-import {updateToken} from "../../../Services/userService";
+import {refreshToken} from "../../../Services/userService";
 
 
 export default function ChangeAccessLevelState() {
@@ -46,13 +46,11 @@ export default function ChangeAccessLevelState() {
             store.dispatch(setChangeAccessLevelStateAccount(res.data));
             showSuccess(t('success.accessLevelStateChanged'))
             forceUpdate()
+            refreshToken()
         }).catch(error => {
             const message = error.response.data
             showError(t(message))
         });
-
-        updateToken()
-
     }
 
     return (

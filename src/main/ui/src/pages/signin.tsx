@@ -23,6 +23,8 @@ export default function SignIn() {
     const {t} = useTranslation();
 
     const showError = useSnackbarQueue('error')
+    const showSuccess = useSnackbarQueue('success')
+
     const history = useHistory();
 
     const [login, setLogin] = useState('')
@@ -41,6 +43,7 @@ export default function SignIn() {
         }).then(res => {
             getUser(res.data)
             history.push('/')
+            showSuccess(t('successful action'))
         }).catch(error => {
             const message = error.response.data
             showError(t(message))

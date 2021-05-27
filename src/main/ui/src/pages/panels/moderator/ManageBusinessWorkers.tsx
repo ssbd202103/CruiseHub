@@ -16,7 +16,7 @@ import store from "../../../redux/store";
 import axios from "../../../Services/URL";
 import {Button} from '@material-ui/core';
 import RoundedButton from "../../../components/RoundedButton";
-import {updateToken} from "../../../Services/userService";
+import {refreshToken} from "../../../Services/userService";
 import {useSnackbarQueue} from "../../snackbar";
 
 const useRowStyles = makeStyles({
@@ -78,8 +78,6 @@ function Row(props: RowProps) {
                 if (confirmWorker({row})) {
                     showSuccess(t('action success'))
                 }
-
-
             }
 
             }>{t("confirm")}</Button></TableCell>
@@ -94,7 +92,6 @@ function getWorkers() {
             'Authorization': `Bearer ${token}`
         }
     })
-    updateToken()
 }
 
 function confirmWorker(props: any) {
@@ -116,7 +113,6 @@ function confirmWorker(props: any) {
     }).then(response => {
         return response.status == 200;
     }).catch(/*todo*/);
-    updateToken()
     return false;
 }
 
@@ -129,6 +125,7 @@ export default function ModListClient() {
     useEffect(() => {
         getWorkers().then(res => {
             setUsers(res.data)
+            refreshToken()
         })
     }, []);
 
@@ -148,6 +145,7 @@ export default function ModListClient() {
 
         getWorkers().then(res => {
             setUsers(res.data)
+            refreshToken()
         })
 
     }

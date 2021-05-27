@@ -8,7 +8,7 @@ import RoundedButton from "../../components/RoundedButton";
 import {Link} from "react-router-dom";
 import {useSnackbarQueue} from "../snackbar";
 import store from "../../redux/store";
-import {getUser, updateToken} from "../../Services/userService";
+import {getUser, refreshToken} from "../../Services/userService";
 
 const RequestSomeonePasswordReset = () => {
     const {t} = useTranslation()
@@ -27,11 +27,13 @@ const RequestSomeonePasswordReset = () => {
                 'Authorization': `Bearer ${token}`
             }
         }).catch(error => {
-                const message = error.response.data
-                showError(t(message))
-            });
-        updateToken()
-        showSuccess(t('successful action'))
+            const message = error.response.data
+            showError(t(message))
+        }).then(res => {
+            refreshToken()
+            showSuccess(t('successful action'))
+        });
+
 
     }
     return (

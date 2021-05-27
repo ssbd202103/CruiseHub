@@ -19,7 +19,7 @@ export function logOut() {
     store.dispatch(emptyUser())
 }
 
-export function updateToken() {
+export function refreshToken() {
     const decodedToken: any = jwt_decode(store.getState().token)
     let expireTime = new Date(decodedToken.exp * 1000)
     let currentTime = new Date()
@@ -27,7 +27,7 @@ export function updateToken() {
 
     console.log(differenceInSeconds < 60 * 19 && differenceInSeconds > 0)
     if (differenceInSeconds < 60 * 19 && differenceInSeconds > 0) {
-        return axios.post('/api/auth/refresh-token/', {}, {
+        return axios.post('auth/refresh-token/', {}, {
             headers: {
                 'Authorization': `Bearer ${store.getState().token}`
             }

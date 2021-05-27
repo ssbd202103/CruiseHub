@@ -66,10 +66,10 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
         }).catch(error => {
             const message = error.response.data
             showError(t(message))
+        }).then(res => {
+            showSuccess(t('successful action'))
         });
-        showSuccess(t('successful action'))
     }
-
 
 
     const changeAddress = () => {
@@ -78,7 +78,7 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
 
     return (
         <>
-            <Grid item  style={{display: open ? "none" : "block"}} className={styles.item}>
+            <Grid item style={{display: open ? "none" : "block"}} className={styles.item}>
                 <h3>{t("address")}</h3>
                 <div>
                     <div>
@@ -106,7 +106,7 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
                     >{t("address change btn")}</RoundedButton>
                 </div>
             </Grid>
-            <Grid item  style={{display:open  ? "block" : "none"}} className={styles['change-item']}>
+            <Grid item style={{display: open ? "block" : "none"}} className={styles['change-item']}>
                 <h3>{t("address change")}</h3>
                 <div>
                     <DarkedTextField
@@ -114,31 +114,41 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
                         label={t("street")}
                         placeholder="11-Listopada 28"
                         value={street}
-                        onChange={event => {setStreet(event.target.value)}} />
+                        onChange={event => {
+                            setStreet(event.target.value)
+                        }}/>
                     <DarkedTextField
                         type="text"
                         label={t("house number")}
                         placeholder="23"
                         value={houseNumber}
-                        onChange={event => {setHouseNumber(event.target.value)}} />
+                        onChange={event => {
+                            setHouseNumber(event.target.value)
+                        }}/>
                     <DarkedTextField
                         type="text"
                         label={t("postal code")}
                         placeholder="91-345"
                         value={postalCode}
-                        onChange={event => {setPostalCode(event.target.value)}} />
+                        onChange={event => {
+                            setPostalCode(event.target.value)
+                        }}/>
                     <DarkedTextField
                         type="text"
                         label={t("city")}
                         placeholder="Zakopianka"
                         value={city}
-                        onChange={event => {setCity(event.target.value)}} />
+                        onChange={event => {
+                            setCity(event.target.value)
+                        }}/>
                     <DarkedTextField
                         type="text"
                         label={t("country")}
                         placeholder="Zanzibar"
                         value={country}
-                        onChange={event => {setCountry(event.target.value)}} />
+                        onChange={event => {
+                            setCountry(event.target.value)
+                        }}/>
                 </div>
                 <Popup trigger={buttonPopup} setTrigger={setButtonPopup}>
                     <div>
@@ -151,7 +161,7 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
                 </Popup>
                 <ConfirmCancelButtonGroup
                     onConfirm={changeAddress}
-                    onCancel={handleCancel} />
+                    onCancel={handleCancel}/>
             </Grid>
         </>
     )
