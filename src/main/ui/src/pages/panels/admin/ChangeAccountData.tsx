@@ -122,7 +122,7 @@ export default function ChangeAccountData() {
             showError(t(message))
         }).then(res=>{
             showSuccess(t('successful action'))
-            refreshToken()
+            //refreshToken()
         });
 
         showSuccess(t('successful action'))
@@ -207,7 +207,7 @@ export default function ChangeAccountData() {
             const message = error.response.data
             showError(t(message))
         }).then(res => {
-            refreshToken()
+            //refreshToken()
             showSuccess(t('successful action'))
         });
 

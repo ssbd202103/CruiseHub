@@ -39,7 +39,7 @@ function PasswordReset(props: any) {
             const message = error.response.data
             showError(t(message))
         }).then(res => {
-            refreshToken()
+            //refreshToken()
             showSuccess(t('successful action'))
         });
     }

@@ -46,7 +46,7 @@ export default function ChangeAccessLevelState() {
             store.dispatch(setChangeAccessLevelStateAccount(res.data));
             showSuccess(t('success.accessLevelStateChanged'))
             forceUpdate()
-            refreshToken()
+            //refreshToken()
         }).catch(error => {
             const message = error.response.data
             showError(t(message))

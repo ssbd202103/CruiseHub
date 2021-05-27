@@ -20,6 +20,7 @@
     --dark: #474646;
     --dark-dark: #111111;
     --header-height: 76px;
+    --header-breadcrumb: 50px;
 }
 
 body *,

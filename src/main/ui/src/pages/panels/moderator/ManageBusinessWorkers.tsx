@@ -121,7 +121,7 @@ export default function ModListClient() {
     useEffect(() => {
         getWorkers().then(res => {
             setUsers(res.data)
-            refreshToken()
+            //refreshToken()
         })
     }, []);
 
@@ -141,7 +141,7 @@ export default function ModListClient() {
 
         getWorkers().then(res => {
             setUsers(res.data)
-            refreshToken()
+            //refreshToken()
         })
 
     }

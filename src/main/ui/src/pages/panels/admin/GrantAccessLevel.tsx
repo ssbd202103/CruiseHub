@@ -39,7 +39,7 @@ export default function Checkboxes() {
             }
         ).then(() => {
             showSuccess(t('success.accessLevelAssigned'));
-            refreshToken()
+            //refreshToken()
         }).catch(error => {
             const message = error.response.data
             showError(t(message))
