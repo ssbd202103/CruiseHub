@@ -17,7 +17,6 @@ export default function AppColorSetter() {
     const darkMode = useSelector(selectDarkMode)
 
     const handleClick = () => {
-        //TODO
         changeDarkMode().catch(error => {
             const message = error.response.data
             handleError(message)

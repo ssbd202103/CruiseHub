@@ -1,5 +1,5 @@
 import React from "react";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {Link, useHistory} from "react-router-dom";
 import styles from "../styles/Header.module.css";
 import RoundedButton from "./RoundedButton";
@@ -14,28 +14,27 @@ import {
     Fade,
     ClickAwayListener
 } from '@material-ui/core'
-import {getAccessLevelLabels, isUserEmpty, selectFirstName, selectSecondName} from "../redux/slices/userSlice";
+import {
+    selectOtherAccessLevel,
+    isUserEmpty,
+    selectActiveAccessLevel,
+    selectFirstName,
+    selectSecondName, AccessLevelType, setActiveAccessLevel
+} from "../redux/slices/userSlice";
 import {logOut} from "../Services/userService";
-
-const panels = {
-    "CLIENT": 'clientPanel',
-    "BUSINESS_WORKER": 'workerPanel',
-    "MODERATOR": 'moderatorPanel',
-    "ADMINISTRATOR": 'adminPanel'
-}
 
 
 export default function Authentication() {
     const {t} = useTranslation()
     const history = useHistory()
+    const dispatch = useDispatch()
 
     const isEmpty = useSelector(isUserEmpty)
 
     const firstName = useSelector(selectFirstName)
     const secondName = useSelector(selectSecondName)
-    const accessLevelLabels = useSelector(getAccessLevelLabels)
-
-    console.log(accessLevelLabels)
+    const activeAccessLevel = useSelector(selectActiveAccessLevel)
+    const accessLevelLabels = useSelector(selectOtherAccessLevel)
 
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
     const [open, setOpen] = React.useState(false);
@@ -50,8 +49,9 @@ export default function Authentication() {
         setAnchorEl(null)
     }
 
-    const handleMenuItemClick = (panel: string) => () => {
-        history.push(`/panels/${panel}`)
+    const handleMenuItemClick = (accessLevel: AccessLevelType) => () => {
+            dispatch(setActiveAccessLevel(accessLevel))
+            history.push('/')
     }
 
     const handleLogOut = () => {
@@ -87,7 +87,7 @@ export default function Authentication() {
                                 marginRight: 20,
                                 color: 'var(--white)',
                                 fontFamily: 'Montserrat, sans-serif'
-                            }}>{firstName + ' ' + secondName}</Button>
+                            }}>{t(activeAccessLevel)}</Button>
 
                         <Popper open={open} anchorEl={anchorEl} placement="bottom-end" transition style={{zIndex:5001}}>
                             {({ TransitionProps }) => (
@@ -104,8 +104,8 @@ export default function Authentication() {
                                                                             fontFamily: 'Montserrat, sans-serif',
                                                                             fontSize: '1.2rem'
                                                                         }}
-                                                                        onClick={handleMenuItemClick(panels[label])}
-                                                                    >{t(panels[label])}</MenuItem>
+                                                                        onClick={handleMenuItemClick(label)}
+                                                                    >{t(label)}</MenuItem>
                                                                 )
                                                             )
                                                         }
@@ -120,7 +120,17 @@ export default function Authentication() {
                                 </Fade>
                             )}
                         </Popper>
-
+                        <Button
+                            className={styles.link}
+                            style={{
+                                marginRight: 20,
+                                color: 'var(--white)',
+                                fontFamily: 'Montserrat, sans-serif'
+                            }}
+                            onClick={activeAccessLevel ? () => {history.push('/profile')} : undefined}
+                        >
+                            {firstName + ' ' + secondName}
+                        </Button>
                         <RoundedButton
                             color="pink"
                             style={{

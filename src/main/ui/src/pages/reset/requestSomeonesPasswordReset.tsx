@@ -48,6 +48,7 @@ const RequestSomeonePasswordReset = () => {
                 onChange={event => {
                     setEmail(event.target.value)
                 }}
+                colorIgnored
             />
             <Link to="/panels/adminPanel/accounts">
                 <RoundedButton

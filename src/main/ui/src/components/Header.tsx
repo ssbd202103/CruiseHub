@@ -12,13 +12,13 @@ import {useSelector} from "react-redux";
 import {selectDarkMode} from "../redux/slices/userSlice";
 import Authentication from "./Authentication";
 
-function Header() {
+function Header({fixed = false}: {fixed?: boolean}) {
     const {t} = useTranslation()
 
     const darkMode = useSelector(selectDarkMode)
 
     return (
-        <Box className={styles.wrapper + ' ' + styles[`wrapper-${!darkMode ? 'light' : 'dark'}`]}>
+        <Box className={styles.wrapper + ' ' + styles[`wrapper-${!darkMode ? 'light' : 'dark'}`]} style={{position: fixed ? 'fixed' : 'static'}}>
             <Brand/>
             <Authentication />
         </Box>

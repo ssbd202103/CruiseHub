@@ -1,32 +1,49 @@
-import {Box} from '@material-ui/core'
-
+import {Box, List, ListItem, ListItemIcon, ListItemText} from '@material-ui/core'
+import {Link} from 'react-router-dom';
 import styles from '../styles/PanelMenu.module.css'
 import {useSelector} from "react-redux";
-import {selectDarkMode} from "../redux/slices/userSlice";
+import {selectDarkMode, selectEmail, selectFirstName, selectSecondName} from "../redux/slices/userSlice";
+import {Color} from "./interfaces";
+import React from "react";
+import AppColorSetter from "./AppColorSetter";
+import GoBackIcon from '@material-ui/icons/ArrowBackRounded';
+import {useTranslation} from "react-i18next";
 
 
 export interface PanelMenuProps {
-    color: "pink" | "pink-dark" | "pink-light" |
-        "blue" | "blue-dark" | "blue-light" |
-        "green" | "green-dark" | "green-light" |
-        "yellow" | "yellow-dark" | "yellow-light" |
-        "dark" | "dark-dark" | "dark-light" |
-        "white" | "white-dark" | "white-light"
+    color: Color,
     children?: any
 }
 
 
 export default function PanelMenu(props: PanelMenuProps) {
-
     const darkMode = useSelector(selectDarkMode)
+    const firstname = useSelector(selectFirstName)
+    const secondName = useSelector(selectSecondName)
+    const email = useSelector(selectEmail)
+
+    const {t} = useTranslation()
 
     return (
         <Box className={styles.wrapper} style={{backgroundColor: `var(--${props.color})`}}>
             <Box className={styles.profile + ' ' + styles[`profile-${!darkMode ? 'light' : 'dark'}`]}>
-                <div className={styles.name}>Jan Kowalski</div>
-                <div className={styles.email}>jan.kowalski@gmail.com</div>
+                <div className={styles.name}>{firstname + ' ' + secondName}</div>
+                <div className={styles.email}>{email}</div>
             </Box>
-            {props.children}
+            <List className={styles.menu + ' ' + styles['menu-' + (!darkMode ? 'light' : 'dark')]} component="nav" aria-label="panel menu">
+                {props.children}
+                <Link to="/">
+                    <ListItem button>
+                        <ListItemIcon>
+                            <GoBackIcon style={{fill: `var(--${!darkMode ? 'white' : 'dark'})` }} />
+                        </ListItemIcon>
+                        <ListItemText>{t("go back")}</ListItemText>
+                    </ListItem>
+                </Link>
+                <ListItem button>
+                    <AppColorSetter />
+                </ListItem>
+            </List>
         </Box>
     )
 }

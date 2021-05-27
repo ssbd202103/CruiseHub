@@ -173,6 +173,15 @@
         <role-name>changeOtherEmail</role-name>
     </security-role>
 
+    <security-role>
+        <role-name>addCruiseGroup</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>changeCruiseGroup</role-name>
+    </security-role>
+
+
     <!--    <security-constraint> todo-->
 <!--        <web-resource-collection>-->
 <!--            <web-resource-name>api</web-resource-name>-->

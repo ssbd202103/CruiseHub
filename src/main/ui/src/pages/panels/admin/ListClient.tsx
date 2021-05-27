@@ -22,12 +22,13 @@ import {selectDarkMode} from "../../../redux/slices/userSlice";
 import {getAccountDetailsAbout, getAllAccounts} from "../../../Services/accountsService";
 import {selectToken} from "../../../redux/slices/tokenSlice";
 import {useSnackbarQueue} from "../../snackbar";
-import Autocomplete from '@material-ui/lab/Autocomplete';
 import store from "../../../redux/store";
 import {setChangeAccessLevelStateAccount} from "../../../redux/slices/changeAccessLevelStateSlice";
+import Autocomplete, {createFilterOptions} from '@material-ui/lab/Autocomplete';
 
 import {refreshToken} from "../../../Services/userService";
 import useHandleError from "../../../errorHandler";
+
 
 interface UnblockAccountParams {
     login: string;
@@ -202,14 +203,9 @@ function Row(props: RowProps) {
                                 <TableBody>
                                     <TableRow>
                                         <TableCell align="center">
-                                            <Link to="/panels/adminPanel/ChangeAccountData">
+                                            <Link to="/ChangeAccountData">
                                                 <Button className={buttonClass.root}>{t("edit")}</Button>
                                             </Link>
-
-                                            {/*                                                <Link to="/panels/adminPanel/ChangeAccountPassword">
-                                                    <Button className={buttonClass.root}>{t("change password")}</Button>
-                                                </Link>*/}
-
                                             <Link to="/reset/resetSomebodyPassword">
                                                 <Button onClick={setCurrentResetPasswordAccount}
                                                         className={buttonClass.root}>{t("reset password")}</Button>
@@ -228,7 +224,6 @@ function Row(props: RowProps) {
                                                         handleError(message)
                                                     });
 
-
                                                 } else {
                                                     unblockAccount({
                                                         etag: row.etag,
@@ -244,12 +239,12 @@ function Row(props: RowProps) {
                                                 }
                                             }}>{row.active ? t("block") : t("unblock")}</Button>
 
-                                            <Link to="/panels/adminPanel/GrantAccessLevel/">
+                                            <Link to="/GrantAccessLevel/">
                                                 <Button onClick={setCurrentGrantAccessLevelAccount}
                                                         className={buttonClass.root}>{t("grant access level")}</Button>
                                             </Link>
 
-                                            <Link to="/panels/adminPanel/ChangeAccessLevelState/">
+                                            <Link to="/ChangeAccessLevelState/">
                                                 <Button onClick={setCurrentChangeAccessLevelStateAccount}
                                                         className={buttonClass.root}>{t("change access level state")}</Button>
                                             </Link>

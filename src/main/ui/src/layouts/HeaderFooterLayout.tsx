@@ -11,7 +11,7 @@ export default function HeaderFooterLayout({children}: LayoutProps) {
 
     return (
         <Box style={{backgroundColor: `var(--${!darkMode ? 'white' : 'dark'}`}}>
-            <Header />
+            <Header fixed />
             {children}
             <Footer />
         </Box>
