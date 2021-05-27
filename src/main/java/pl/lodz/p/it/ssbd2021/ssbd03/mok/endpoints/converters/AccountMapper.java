@@ -52,7 +52,7 @@ public class AccountMapper {
      */
     public static Account extractAccountFromClientForRegistrationDto(ClientForRegistrationDto client) {
         return new Account(client.getFirstName(), client.getSecondName(),
-                client.getLogin(), client.getEmail(), DigestUtils.sha256Hex(client.getPassword()),
+                client.getLogin(), client.getEmail().toLowerCase(), DigestUtils.sha256Hex(client.getPassword()),
                 new LanguageTypeWrapper(client.getLanguageType()));
     }
 
@@ -88,7 +88,7 @@ public class AccountMapper {
      */
     public static Account extractAccountFromBusinessWorkerForRegistrationDto(BusinessWorkerForRegistrationDto bw) {
         return new Account(bw.getFirstName(), bw.getSecondName(),
-                bw.getLogin(), bw.getEmail(), DigestUtils.sha256Hex(bw.getPassword()),
+                bw.getLogin(), bw.getEmail().toLowerCase(), DigestUtils.sha256Hex(bw.getPassword()),
                 new LanguageTypeWrapper(bw.getLanguageType()));
     }
 

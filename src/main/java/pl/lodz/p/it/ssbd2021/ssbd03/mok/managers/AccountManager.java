@@ -455,7 +455,7 @@ public class AccountManager implements AccountManagerLocal {
         TokenWrapper tokenWrapper = this.tokenWrapperFacade.findByToken(token);
         tokenWrapper.setUsed(true);
         this.tokenWrapperFacade.edit(tokenWrapper);
-        account.setEmail(newEmail);
+        account.setEmail(newEmail.toLowerCase());
 
         setUpdatedMetadata(account);
     }
