@@ -200,9 +200,7 @@ const resources = {
             "/reset/changeEmail": "Zmiana maila konta",
             "/reset/resetSomebodyPassword": "Resetowanie hasła konta",
             "/verify/accountVerification": "Weryfikacja",
-            "/ChangeAccessLevelState": "Zmień stan poziomu dostępu"
-            'successful action': 'Akcja udała się',
-
+            "/ChangeAccessLevelState": "Zmień stan poziomu dostępu",
             'accept.action': 'Czy chcesz wykonac te akcje',
 
             'yes':'Tak',
@@ -407,8 +405,7 @@ const resources = {
             "/reset/changeEmail": "Change email",
             "/reset/resetSomebodyPassword": "Reset user password",
             "/verify/accountVerification": "Account verification",
-            "/ChangeAccessLevelState": "Change access level state"
-            "success.accessLevelAssigned": "Access level assigned",
+            "/ChangeAccessLevelState": "Change access level state",
 
             'accept.action': 'Do you want to do this action?',
 

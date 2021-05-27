@@ -180,7 +180,7 @@ export default function ChangeAccountData() {
         }).catch(error => {
             setButtonPopupAcceptChangeAddress(false)
             const message = error.response.data
-            showError(t(message))
+            handleError(t(message))
         });
 
 
@@ -218,7 +218,7 @@ export default function ChangeAccountData() {
         }).catch(error => {
             setButtonPopupAcceptChangeNumber(false)
             const message = error.response.data
-            showError(t(message))
+            handleError(t(message))
         });
 
         await axios.get(`/account/details/${currentAccount.login}`, {

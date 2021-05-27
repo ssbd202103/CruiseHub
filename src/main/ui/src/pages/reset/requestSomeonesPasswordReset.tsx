@@ -8,9 +8,8 @@ import RoundedButton from "../../components/RoundedButton";
 import {Link} from "react-router-dom";
 import {useSnackbarQueue} from "../snackbar";
 import store from "../../redux/store";
-import {getUser, refreshToken} from "../../Services/userService";
+import {refreshToken} from "../../Services/userService";
 import useHandleError from "../../errorHandler";
-import {getUser} from "../../Services/userService";
 import PopupAcceptAction from "../../PopupAcceptAction";
 
 const RequestSomeonePasswordReset = () => {
