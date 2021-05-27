@@ -55,12 +55,12 @@ export default function CodeSignIn() {
             <h2 className={styles.h2}>{login}</h2>
             <DarkedTextField
                 type="text"
-                label={t("Code") + ' *'}
+                label={t("code") + ' *'}
                 style={{
                     width: '70%',
                     margin: '20px 0'
                 }}
-                placeholder="Code"
+                placeholder="code"
                 value={code}
                 onChange={event => {setCode(event.target.value)}}
                 colorIgnored

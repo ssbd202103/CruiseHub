@@ -1,8 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.security;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.TokenWrapper;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.ControllerException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AuthenticateCodeDto;
@@ -11,12 +9,9 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegist
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.AccountEndpointLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.AuthenticateEndpointLocal;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacadeMok;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.TokenWrapperFacade;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.security.auth.login.AccountException;
 import javax.security.enterprise.credential.Credential;
 import javax.security.enterprise.identitystore.CredentialValidationResult;
 import javax.security.enterprise.identitystore.IdentityStoreHandler;
@@ -40,9 +35,6 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.utils.TransactionRepeater.tryAndRepea
 public class AuthController {
 
     @Inject
-    private AccountFacadeMok accountFacade;
-
-    @Inject
     private IdentityStoreHandler identityStoreHandler;
 
     @Context
@@ -54,16 +46,11 @@ public class AuthController {
     @Inject
     private AccountEndpointLocal accountEndpoint;
 
-    @Inject
-    private TokenWrapperFacade tokenWrapperFacade;
-
-    //todo refactor it
-
     /**
-     * Metoda służąca do logowania
+     * Metoda służąca do logowania + wysyła kod na e-mail służący do dwufazowego uwierzytelnienia
      *
      * @param auth Login oraz hasło użytkownika
-     * @return Token JWT
+     * @return
      */
     @Path("/sign-in")
     @POST
@@ -72,30 +59,17 @@ public class AuthController {
     public Response auth(@Valid @NotNull(message = CONSTRAINT_NOT_NULL) AuthenticateDto auth) throws BaseAppException {
         Credential credential = auth.toCredential();
         CredentialValidationResult result = identityStoreHandler.validate(credential);
-        String token;
 
         if (result.getStatus() != CredentialValidationResult.Status.VALID) {
             try {
                 authEndpoint.updateIncorrectAuthenticateInfo(auth.getLogin(), httpServletRequest.getRemoteAddr(), LocalDateTime.now());
             } catch (BaseAppException e) {
-                return Response.status(Response.Status.UNAUTHORIZED).entity(e.getMessage()).
-                        header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
-                        .header("Access-Control-Allow-Credentials", "true")
-                        .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
-                        .header("Access-Control-Allow-Origin", "*")
-                        .build();
+                return Response.status(Response.Status.UNAUTHORIZED).entity(e.getMessage()).build();
             }
-            return Response.status(Response.Status.UNAUTHORIZED).entity(I18n.INCORRECT_PASSWORD).header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
-                    .header("Access-Control-Allow-Credentials", "true")
-                    .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD").header("Access-Control-Allow-Origin", "*")
-                    .build();
+            return Response.status(Response.Status.UNAUTHORIZED).entity(I18n.INCORRECT_PASSWORD).build();
         }
        authEndpoint.sendAuthenticationCodeEmail(auth.getLogin());
-        return Response.ok()
-                .header("Access-Control-Allow-Origin", "*").header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
-                .header("Access-Control-Allow-Credentials", "true")
-                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
-                .build();
+        return Response.ok().build();
     }
 
     @POST
@@ -135,29 +109,21 @@ public class AuthController {
     }
 
     /**
-     * Metoda służąca do logowania
+     * Metoda służąca do logowania przy użyciu kodu wysłanego przy pierwszej fazie logowania
      *
-     * @param auth Login oraz kod
+     * @param auth Login oraz kod wysłany w emailu
      * @return Token JWT
+     * @throws BaseAppException
      */
     @Path("/code-sign-in")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response doubleAuth(@Valid @NotNull(message = CONSTRAINT_NOT_NULL) AuthenticateCodeDto auth) throws BaseAppException {
-       authEndpoint.verifySignCode(auth.getLogin(), auth.getCode(),  httpServletRequest.getRemoteAddr(), LocalDateTime.now());
-
         String token;
-
-        token = authEndpoint.signInCorrectAuthenticateInfo(auth.getLogin(), httpServletRequest.getRemoteAddr(), LocalDateTime.now(), auth.getCode());
-
+        token = authEndpoint.authWCodeUpdateCorrectAuthenticateInfo(auth.getLogin(), auth.getCode(),  httpServletRequest.getRemoteAddr(), LocalDateTime.now());
         return Response.ok()
                 .entity(token)
-                .header("Access-Control-Allow-Origin", "*").header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
-                .header("Access-Control-Allow-Credentials", "true")
-                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
                 .build();
     }
-
-
 }

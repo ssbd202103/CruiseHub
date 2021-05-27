@@ -237,17 +237,6 @@ public interface AccountManagerLocal {
     String updateCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws BaseAppException;
 
     /**
-     *
-     * @param login
-     * @param IpAddr
-     * @param time
-     * @param kod
-     * @return
-     * @throws BaseAppException
-     */
-    String signInCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time, String kod) throws BaseAppException;
-
-    /**
      * Metoda odpowiedzialna za zmiane hasła akutalnego użytkownika
      *
      * @throws BaseAppException Bazowy wyjątek aplikacji rzucany w przypadku gdy stare hasło nie jest zgodne z tym z bazy danych
@@ -296,14 +285,17 @@ public interface AccountManagerLocal {
      */
     void sendAuthenticationCodeEmail(String login) throws BaseAppException;
 
-    /**
-     *
-     * @param login
-     * @param code
-     * @return
-     * @throws BaseAppException
-     */
-    void verifySignCode(String login, String code, String IpAddr, LocalDateTime time) throws BaseAppException;
 
+    /**
+     * Metoda odpowiedzialna za weryfikacje logowania dwu etapowego (kodu) oraz edycję pól w bazie danych w przypadku poprawnego logowania.
+     * @param login Login użytkownika
+     * @param code kod do dwufazowego uwierzytelnienia
+     * @param IpAddr Adres IP użytkownika
+     * @param time Czas
+     * @return Token JWT
+     * @throws BaseAppException bazowy wyjątek aplikacji
+     */
+
+    String authWCodeUpdateCorrectAuthenticateInfo(String login, String code, String IpAddr, LocalDateTime time) throws BaseAppException;
 
     }

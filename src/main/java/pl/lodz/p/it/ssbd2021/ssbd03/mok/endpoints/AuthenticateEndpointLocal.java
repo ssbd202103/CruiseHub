@@ -29,30 +29,25 @@ public interface AuthenticateEndpointLocal {
      */
     String updateCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws BaseAppException;
 
-    /**
-     *
-     * @param login
-     * @param IpAddr
-     * @param time
-     * @return
-     * @throws BaseAppException
-     */
-    String signInCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time, String kod) throws BaseAppException;
 
     /**
+     * Metoda odpowiedzialna za weryfikacje logowania dwu etapowego (kodu) oraz edycję pól w bazie danych w przypadku poprawnego logowania.
+     * @param login Login użytkownika
+     * @param code kod do dwufazowego uwierzytelnienia
+     * @param IpAddr Adres IP użytkownika
+     * @param time Czas
+     * @return Token JWT
+     * @throws BaseAppException bazowy wyjątek aplikacji
+     */
+
+    String authWCodeUpdateCorrectAuthenticateInfo(String login, String code, String IpAddr, LocalDateTime time) throws BaseAppException;
+
+    /**
+     * Metoda odpowiadajaca za wysłanie e-mail służącego do dwufazowego uwierzytelnienia
      *
      * @param login
-     * @param code
-     * @return
      * @throws BaseAppException
      */
-    void verifySignCode(String login, String code, String IpAddr, LocalDateTime time) throws BaseAppException;
-
-        /**
-         *
-         * @param login
-         * @throws BaseAppException
-         */
    void sendAuthenticationCodeEmail(String login) throws BaseAppException;
 
         /**

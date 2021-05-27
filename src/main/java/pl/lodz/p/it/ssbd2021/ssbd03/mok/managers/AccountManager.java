@@ -237,6 +237,21 @@ public class AccountManager implements AccountManagerLocal {
     @PermitAll
     @Override
     public void resetPassword(String login, String passwordHash, String token) throws BaseAppException {
+
+        TokenWrapper tokenW;
+        try {
+            tokenW  = this.tokenWrapperFacade.findByToken(token);
+        } catch (BaseAppException e){
+            if(e.getMessage().equals(NO_SUCH_ELEMENT_ERROR)){
+                throw new AccountManagerException(TOKEN_INVALIDATE_ERROR);
+            } else {
+                throw new AccountManagerException(e.getMessage(),e);
+            }
+        }
+        if(tokenW.isUsed()){
+            throw new AccountManagerException(TOKEN_ALREADY_USED_ERROR);
+        }
+
         JWTHandler.validateToken(token);
 
         Map<String, Claim> claims = JWTHandler.getClaimsFromToken(token);
@@ -271,8 +286,22 @@ public class AccountManager implements AccountManagerLocal {
     @PermitAll
     @Override
     public void verifyAccount(String token) throws BaseAppException {
-        JWTHandler.validateToken(token);
 
+        TokenWrapper tokenW;
+        try {
+            tokenW  = this.tokenWrapperFacade.findByToken(token);
+        } catch (BaseAppException e){
+            if(e.getMessage().equals(NO_SUCH_ELEMENT_ERROR)){
+                throw new AccountManagerException(TOKEN_INVALIDATE_ERROR);
+            } else {
+                throw new AccountManagerException(e.getMessage(),e);
+            }
+        }
+        if(tokenW.isUsed()){
+            throw new AccountManagerException(TOKEN_ALREADY_USED_ERROR);
+        }
+
+        JWTHandler.validateToken(token);
         Map<String, Claim> claims = JWTHandler.getClaimsFromToken(token);
         Date expire = JWTHandler.getExpirationTimeFromToken(token);
 
@@ -295,9 +324,8 @@ public class AccountManager implements AccountManagerLocal {
         }
 
         account.setConfirmed(true);
-        TokenWrapper tokenWrapper = this.tokenWrapperFacade.findByToken(token);
-        tokenWrapper.setUsed(true);
-        this.tokenWrapperFacade.edit(tokenWrapper);
+        tokenW.setUsed(true);
+        this.tokenWrapperFacade.edit(tokenW);
         setUpdatedMetadataWithModifier(account, account);
         Locale locale = new Locale(account.getLanguageType().getName().name());
         String body = i18n.getMessage(ACTIVATE_ACCOUNT_BODY, locale);
@@ -525,20 +553,12 @@ public class AccountManager implements AccountManagerLocal {
     public String updateCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws BaseAppException {
         Account account = this.accountFacade.updateAuthenticateInfo(login, IpAddr, time, true);
         account.setNumberOfAuthenticationFailures(0);
-
+        accountFacade.edit(account);
         Map<String, Object> map = Map.of("accessLevels", account.getAccessLevels()
                 .stream().map(accessLevel -> accessLevel.getAccessLevelType().name()).collect(Collectors.toList()));
         return JWTHandler.createToken(map, account.getLogin());
     }
 
-    @PermitAll
-    @Override
-    public String signInCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time, String kod) throws BaseAppException {
-        TokenWrapper tokenWrapper = this.tokenWrapperFacade.findByToken(kod);
-        tokenWrapper.setUsed(true);
-        this.tokenWrapperFacade.edit(tokenWrapper);
-        return updateCorrectAuthenticateInfo(login, IpAddr, time);
-    }
 
     @RolesAllowed("authenticatedUser")
     @Override
@@ -657,20 +677,33 @@ public class AccountManager implements AccountManagerLocal {
 
     @PermitAll
     @Override
-    public void verifySignCode(String login, String code, String IpAddr, LocalDateTime time) throws BaseAppException {
+    public String authWCodeUpdateCorrectAuthenticateInfo(String login, String code, String IpAddr, LocalDateTime time) throws BaseAppException {
         Account account = this.accountFacade.findByLogin(login);
-        TokenWrapper kod = this.tokenWrapperFacade.findByToken(code);
-        if(kod.isUsed()){
+        TokenWrapper verificationCode;
+        try {
+            verificationCode = this.tokenWrapperFacade.findByToken(code);
+        } catch (BaseAppException e){
+            if(e.getMessage().equals(NO_SUCH_ELEMENT_ERROR)){
+                throw new AccountManagerException(CODE_IS_INCORRECT_ERROR);
+            } else {
+                throw new AccountManagerException(e.getMessage(),e);
+            }
+        }
+        if(verificationCode.isUsed()){
             updateIncorrectAuthenticateInfo(login,IpAddr, time);
             throw new AccountManagerException(CODE_ALREADY_USED_ERROR);
         }
-        if(kod.getCreationDateTime().plus(5, ChronoUnit.MINUTES).isBefore(LocalDateTime.now())){
+        if(verificationCode.getCreationDateTime().plus(5, ChronoUnit.MINUTES).isBefore(time)){
             updateIncorrectAuthenticateInfo(login,IpAddr, time);
             throw new AccountManagerException(CODE_EXPIRE_ERROR);
         }
-        if(account.getId() != kod.getAccount().getId()){
+        if(account.getId() != verificationCode.getAccount().getId()){
             updateIncorrectAuthenticateInfo(login,IpAddr, time);
-            throw new AccountManagerException(CODE_DONT_MATCH_ERROR);
+            throw new AccountManagerException(CODE_IS_INCORRECT_ERROR);
         }
+        verificationCode.setUsed(true);
+        this.tokenWrapperFacade.edit(verificationCode);
+        return updateCorrectAuthenticateInfo(login, IpAddr, time);
     }
 }
+

@@ -32,6 +32,7 @@ public class I18n {
     public static final String ACCOUNT_VERIFICATION_TOKEN_ALREADY_VERIFIED_ERROR = "error.account.verification.alreadyVerifiedError";
     public static final String TOKEN_DECODE_ERROR = "error.token.decode";
     public static final String TOKEN_INVALIDATE_ERROR = "error.token.invalidate";
+    public static final String TOKEN_ALREADY_USED_ERROR = "error.token.alreadyUsedError";
     public static final String REGEX_INVALID_POST_CODE = "error.regex.postCode";
     public static final String REGEX_INVALID_CITY = "error.regex.city";
     public static final String REGEX_INVALID_COUNTRY = "error.regex.country";
@@ -62,6 +63,7 @@ public class I18n {
     public static final String CODE_DONT_MATCH_ERROR = "error.code.dontMatchError";
     public static final String CODE_EXPIRE_ERROR = "error.code.expireError";
     public static final String CODE_ALREADY_USED_ERROR = "error.code.alreadyUsedError";
+    public static final String CODE_IS_INCORRECT_ERROR = "error.code.incorrectCodeError";
     public static final String DATABASE_OPERATION_ERROR = "error.database.operation";
     public static final String LOGIN_RESERVED_ERROR = "error.database.loginReserved";
     public static final String EMAIL_RESERVED_ERROR = "error.database.emailReserved";
