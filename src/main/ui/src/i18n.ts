@@ -204,7 +204,9 @@ const resources = {
             'accept.action': 'Czy chcesz wykonac te akcje',
 
             'yes':'Tak',
-            'no':'Nie'
+            'no':'Nie',
+
+            "update":"Odśwież"
         }
     },
     en: {
@@ -410,7 +412,8 @@ const resources = {
             'accept.action': 'Do you want to do this action?',
 
             'yes':'Yes',
-            'no':'No'
+            'no':'No',
+            "update":"Update"
         }
     }
 }

@@ -13,6 +13,7 @@ import {selectDarkMode} from "../redux/slices/userSlice";
 import Authentication from "./Authentication";
 import Breadcrumb from "./Breadcrumb";
 
+
 function Header({fixed = false}: {fixed?: boolean}) {
     const {t} = useTranslation()
 
@@ -26,7 +27,14 @@ function Header({fixed = false}: {fixed?: boolean}) {
              }}
         >
             <Brand/>
-            <Authentication />
+            <Box style={{
+                display: 'flex',
+                height: '100%',
+                alignItems: 'center'
+            }}>
+                <RoundedButton style={{marginRight: 50}} color={"dark"} onClick={() => {window.location.reload()}}>{t('update')}</RoundedButton>
+                <Authentication />
+            </Box>
         </Box>
     )
 }

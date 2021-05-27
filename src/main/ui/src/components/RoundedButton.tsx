@@ -1,10 +1,11 @@
 import Button from '@material-ui/core/Button'
 import {makeStyles} from '@material-ui/styles'
 import * as React from 'react'
+import {Color} from './interfaces'
 
 export interface RoundedButtonProps {
     readonly className?: string,
-    readonly color: "pink" | "yellow" | "green" | "blue" | "white"
+    readonly color: Color,
     readonly children?: any,
     readonly style?: React.CSSProperties,
     readonly onClick?: React.MouseEventHandler<any>
