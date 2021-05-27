@@ -1,9 +1,8 @@
 import store from "../redux/store";
 import axios from "../Services/URL"
-import {setToken} from "../redux/slices/tokenSlice";
-import {setUser, emptyUser} from "../redux/slices/userSlice";
+import {clearToken, setToken} from "../redux/slices/tokenSlice";
+import {emptyUser, IUserSliceState, setUser} from "../redux/slices/userSlice";
 import jwt_decode from "jwt-decode";
-import {IUserSliceState} from "../redux/slices/userSlice";
 
 export function getUser(token: string) {
     return axios.get('self/account-details', {
@@ -29,8 +28,10 @@ export function getSavedUser() {
 }
 
 export function logOut() {
-    store.dispatch(emptyUser())
+    // store.dispatch(emptyUser())
+    // store.dispatch(clearToken())
     sessionStorage.clear()
+    document.location.replace('/')
 }
 
 export function saveUser(user: IUserSliceState, token: string | null = null) {

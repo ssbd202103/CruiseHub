@@ -106,7 +106,7 @@ export default function SignIn() {
                 </Link>
 
                 <Link to="/reset/requestPassword">
-                    <a className={styles.link}>`{t("forgot password")}`</a>
+                    <a className={styles.link}>{t("forgot password")}</a>
                 </Link>
 
             </Box>
