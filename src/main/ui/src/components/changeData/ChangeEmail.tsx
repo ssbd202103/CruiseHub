@@ -13,6 +13,7 @@ import Recaptcha from "react-recaptcha";
 import Popup from "../../PopupRecaptcha";
 import {useSnackbarQueue} from "../../pages/snackbar";
 import useHandleError from "../../errorHandler";
+import PopupAcceptAction from "../../PopupAcceptAction";
 
 export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeDataComponentProps) {
     // i18n
@@ -36,6 +37,7 @@ export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeD
 
     const [buttonPopup, setButtonPopup] = useState(false);
 
+    const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
 
     function verifyCallback(){
         setButtonPopup(false)
@@ -53,11 +55,12 @@ export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeD
             setEmailValue('')
             setConfirmEmailValue('')
             onConfirm()
+            setButtonPopupAcceptAction(false)
+            showSuccess(t('successful action'))
         }).catch(error => {
+            setButtonPopupAcceptAction(false)
             const message = error.response.data
             handleError(message)
-        }).then(res=>{
-            showSuccess(t('successful action'))
         });
     }
 
@@ -107,8 +110,14 @@ export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeD
                         />
                     </div>
                 </Popup>
-                <ConfirmCancelButtonGroup
+                <PopupAcceptAction
+                    open={buttonPopupAcceptAction}
                     onConfirm={changeEmail}
+                    onCancel={() => {setButtonPopupAcceptAction(false)
+                    }}
+                />
+                <ConfirmCancelButtonGroup
+                    onConfirm={()=>setButtonPopupAcceptAction(true)}
                     onCancel={handleCancel} />
             </Grid>
         </>

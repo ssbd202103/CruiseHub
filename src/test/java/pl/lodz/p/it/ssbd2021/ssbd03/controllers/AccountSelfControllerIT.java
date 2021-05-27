@@ -18,8 +18,11 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.AccountChangeOwnPasswordD
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.ChangeModeDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
+import pl.lodz.p.it.ssbd2021.ssbd03.security.JWTHandler;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import static io.restassured.RestAssured.given;
@@ -148,7 +151,7 @@ class AccountSelfControllerIT {
         given().relaxedHTTPSValidation().baseUri(authBaseUri).contentType("application/json").body(client).post("/client/registration");
         return getAccountDto(client.getLogin());
     }
-    private String getAuthToken(String login, String password) {
+/*    private String getAuthToken(String login, String password) {
         AuthenticateDto authenticateDto = new AuthenticateDto(login, password);
 
         Response response = given().relaxedHTTPSValidation().baseUri(authBaseUri)
@@ -158,7 +161,11 @@ class AccountSelfControllerIT {
                 .post("/sign-in");
         assertEquals(HttpStatus.SC_OK, response.getStatusCode());
         return response.getBody().asString();
+    }*/
+    private String getAuthToken(String login, String password) {
+        return JWTHandler.createToken(Map.of("accessLevels", List.of("ADMINISTRATOR", "BUSINESS_WORKER", "MODERATOR")), "rbranson");
     }
+
     private AccountDto getAccountDto(String login) throws JsonProcessingException {
         String authToken = this.getAuthToken("rbranson", "abcABC123*");
         return objectMapper.readValue(given().relaxedHTTPSValidation().baseUri(accountBaseUri).header(new Header("Authorization", "Bearer " + authToken)).get("/" + login).thenReturn().asString(), AccountDto.class);

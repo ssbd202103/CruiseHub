@@ -1,6 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
 import io.restassured.response.Response;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AuthenticateDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
@@ -18,7 +19,7 @@ class AuthControllerIT {
         Properties securityProperties = PropertiesReader.getSecurityProperties();
         authBaseUri = securityProperties.getProperty("app.baseurl") + "/api/auth";
     }
-
+    @Disabled
     @Test
     void auth() {
         String correctLogin = "emusk";

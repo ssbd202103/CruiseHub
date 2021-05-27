@@ -244,6 +244,22 @@
         <role-name>viewSelfReservations</role-name>
         <group-name>CLIENT</group-name>
     </security-role-mapping>
+    <security-role-mapping>
+        <role-name>deactivateCruiseGroup</role-name>
+        <group-name>ADMINISTRATOR</group-name>
+        <group-name>BUSINESS_WORKER</group-name>
+    </security-role-mapping>
+
+    <security-role-mapping>
+        <role-name>deleteAttraction</role-name>
+        <group-name>BUSINESS_WORKER</group-name>
+    </security-role-mapping>
+
+    <security-role-mapping>
+        <role-name>getWorkerCruiseReservations</role-name>
+        <group-name>BUSINESS_WORKER</group-name>
+    </security-role-mapping>
+
 
     <security-role-mapping>
         <role-name>createRating</role-name>

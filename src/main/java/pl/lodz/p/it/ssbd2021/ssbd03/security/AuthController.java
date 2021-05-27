@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.security;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.ControllerException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AuthenticateCodeDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AuthenticateDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
@@ -45,13 +46,11 @@ public class AuthController {
     @Inject
     private AccountEndpointLocal accountEndpoint;
 
-    //todo refactor it
-
     /**
-     * Metoda służąca do logowania
+     * Metoda służąca do logowania + wysyła kod na e-mail służący do dwufazowego uwierzytelnienia
      *
      * @param auth Login oraz hasło użytkownika
-     * @return Token JWT
+     * @return
      */
     @Path("/sign-in")
     @POST
@@ -60,7 +59,6 @@ public class AuthController {
     public Response auth(@Valid @NotNull(message = CONSTRAINT_NOT_NULL) AuthenticateDto auth) throws BaseAppException {
         Credential credential = auth.toCredential();
         CredentialValidationResult result = identityStoreHandler.validate(credential);
-        String token;
 
         if (result.getStatus() != CredentialValidationResult.Status.VALID) {
             try {
@@ -70,12 +68,8 @@ public class AuthController {
             }
             return Response.status(Response.Status.UNAUTHORIZED).entity(I18n.INCORRECT_PASSWORD).build();
         }
-
-        token = authEndpoint.updateCorrectAuthenticateInfo(auth.getLogin(), httpServletRequest.getRemoteAddr(), LocalDateTime.now());
-
-        return Response.ok()
-                .entity(token)
-                .build();
+       authEndpoint.sendAuthenticationCodeEmail(auth.getLogin());
+        return Response.ok().build();
     }
 
     @POST
@@ -114,4 +108,22 @@ public class AuthController {
         tryAndRepeat(() -> accountEndpoint.createBusinessWorkerAccount(businessWorkerForRegistrationDto));
     }
 
+    /**
+     * Metoda służąca do logowania przy użyciu kodu wysłanego przy pierwszej fazie logowania
+     *
+     * @param auth Login oraz kod wysłany w emailu
+     * @return Token JWT
+     * @throws BaseAppException
+     */
+    @Path("/code-sign-in")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response doubleAuth(@Valid @NotNull(message = CONSTRAINT_NOT_NULL) AuthenticateCodeDto auth) throws BaseAppException {
+        String token;
+        token = authEndpoint.authWCodeUpdateCorrectAuthenticateInfo(auth.getLogin(), auth.getCode(),  httpServletRequest.getRemoteAddr(), LocalDateTime.now());
+        return Response.ok()
+                .entity(token)
+                .build();
+    }
 }

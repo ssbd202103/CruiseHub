@@ -180,7 +180,16 @@
     <security-role>
         <role-name>changeCruiseGroup</role-name>
     </security-role>
-    
+    <security-role>
+        <role-name>deactivateCruiseGroup</role-name>
+    </security-role>
+    <security-role>
+        <role-name>deleteAttraction</role-name>
+    </security-role>
+    <security-role>
+        <role-name>getWorkerCruiseReservations</role-name>
+    </security-role>
+
     <security-role>
         <role-name>createRating</role-name>
     </security-role>
@@ -189,14 +198,14 @@
         <role-name>removeRating</role-name>
     </security-role>
 
-    <!--    <security-constraint> todo-->
-<!--        <web-resource-collection>-->
-<!--            <web-resource-name>api</web-resource-name>-->
-<!--            <url-pattern>/*</url-pattern>-->
-<!--        </web-resource-collection>-->
-<!--        <user-data-constraint>-->
-<!--            <transport-guarantee>CONFIDENTIAL</transport-guarantee>-->
-<!--        </user-data-constraint>-->
-<!--    </security-constraint>-->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>api</web-resource-name>
+            <url-pattern>/*</url-pattern>
+        </web-resource-collection>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
 
 </web-app>

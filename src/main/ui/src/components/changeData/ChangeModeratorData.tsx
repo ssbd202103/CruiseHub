@@ -13,6 +13,7 @@ import Recaptcha from "react-recaptcha";
 import Popup from "../../PopupRecaptcha";
 import {useSnackbarQueue} from "../../pages/snackbar";
 import useHandleError from "../../errorHandler";
+import PopupAcceptAction from "../../PopupAcceptAction";
 
 export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}: ChangeDataComponentProps) {
     const {t} = useTranslation()
@@ -24,6 +25,8 @@ export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}:
 
     const [firstNameValue, setFirstNameValue] = useState('')
     const [secondNameValue, setSecondNameValue] = useState('')
+
+    const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
 
     const [buttonPopup, setButtonPopup] = useState(false);
 
@@ -44,11 +47,12 @@ export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}:
             setFirstNameValue('')
             setSecondNameValue('')
             onConfirm()
+            setButtonPopupAcceptAction(false)
+            showSuccess(t('successful action'))
         }).catch(error => {
+            setButtonPopupAcceptAction(false)
             const message = error.response.data
             handleError(message)
-        }).then(res=>{
-            showSuccess(t('successful action'))
         });
     }
 
@@ -59,10 +63,7 @@ export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}:
     }, [firstName, secondName])
 
     const changeData = () => {
-
         setButtonPopup(true)
-
-
 
     }
 
@@ -112,8 +113,14 @@ export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}:
                         />
                     </div>
                 </Popup>
-                <ConfirmCancelButtonGroup
+                <PopupAcceptAction
+                    open={buttonPopupAcceptAction}
                     onConfirm={changeData}
+                    onCancel={() => {setButtonPopupAcceptAction(false)
+                    }}
+                />
+                <ConfirmCancelButtonGroup
+                    onConfirm={()=>setButtonPopupAcceptAction(true)}
                     onCancel={handleCancel} />
             </Grid>
         </>

@@ -298,4 +298,25 @@ public interface AccountManagerLocal {
      * @param token    token z danymi uwierzytelniającymi
      */
     void changeOtherEmail(String token) throws BaseAppException;
+
+    /**
+     *
+     * @param login
+     * @throws BaseAppException
+     */
+    void sendAuthenticationCodeEmail(String login) throws BaseAppException;
+
+
+    /**
+     * Metoda odpowiedzialna za weryfikacje logowania dwu etapowego (kodu) oraz edycję pól w bazie danych w przypadku poprawnego logowania.
+     * @param login Login użytkownika
+     * @param code kod do dwufazowego uwierzytelnienia
+     * @param IpAddr Adres IP użytkownika
+     * @param time Czas
+     * @return Token JWT
+     * @throws BaseAppException bazowy wyjątek aplikacji
+     */
+
+    String authWCodeUpdateCorrectAuthenticateInfo(String login, String code, String IpAddr, LocalDateTime time) throws BaseAppException;
+
 }

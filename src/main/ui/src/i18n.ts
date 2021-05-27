@@ -34,6 +34,7 @@ const resources = {
             "i don't have an account": "Nie mam konta",
             "forgot password": "Zapomniałem hasła",
             "refresh": "Odśwież",
+            "code": "Kod weryfikacyjny",
             //signup
             "signup": "Zarejestruj",
             "signup.welcome": "Witamy",
@@ -119,6 +120,10 @@ const resources = {
             "error.emailService.inaccessible": "Serwis pocztowy jest niedostępny",
             "error.password.reset.contentError": "Błędna zawartość tokenu do resetowania hasła",
             "error.password.change.oldPasswordError": "Podane stare hasło jest niepoprawne",
+            "error.code.dontMatchError": "Podany kod nie jest poprawny",
+            "error.code.expireError": "Podany kod wygasł",
+            "error.code.alreadyUsedError": "Podany kod został już użyty",
+            "error.code.incorrectCodeError":"Podany kod jest niepoprawny",
             "error.security.etag.creation": "Błąd podczas tworzenia nagłówka ETag",
             "error.account.accessLevels.doesNotExist": "Dany poziom dostępu nie istnieje!",
             "error.password.reset.tokenUsed": "Podany link aktywacyjny został już wykorzystany!",
@@ -128,6 +133,7 @@ const resources = {
             "error.account.verification.alreadyVerifiedError": "Dane konto zostało już zatwierdzone",
             "error.token.decode": "Błąd podczas odczytu tokenu",
             "error.token.invalidate": "Niepoprawny token",
+            "error.token.alreadyUsedError": "Ten link został już wcześniej użyty",
             "error.database.loginReserved": "Podany login jest juz użyty",
             "error.database.emailReserved": "Podany email jest już użyty",
             "error.constraintViolation": "Podane dane są niepoprawne",
@@ -194,7 +200,11 @@ const resources = {
             "/reset/changeEmail": "Zmiana maila konta",
             "/reset/resetSomebodyPassword": "Resetowanie hasła konta",
             "/verify/accountVerification": "Weryfikacja",
-            "/ChangeAccessLevelState": "Zmień stan poziomu dostępu"
+            "/ChangeAccessLevelState": "Zmień stan poziomu dostępu",
+            'accept.action': 'Czy chcesz wykonac te akcje',
+
+            'yes':'Tak',
+            'no':'Nie'
         }
     },
     en: {
@@ -229,6 +239,7 @@ const resources = {
             "signin.subtitle": "We are very glad to see you again",
             "forgot password": "Forgot password",
             "refresh": "Refresh",
+            "code": "Authentication Code",
             //signup
             "signup": "Sign up",
             "signup.welcome": "Welcome",
@@ -315,6 +326,10 @@ const resources = {
             "error.emailService.inaccessible": "Email service not available at the moment",
             "error.password.reset.contentError": "Invalid password reset token content",
             "error.password.change.oldPasswordError": "Provided old password is invalid",
+            "error.code.dontMatchError": "Inserted code is not correct",
+            "error.code.expireError": "Inserted code expire",
+            "error.code.alreadyUsedError": "Inserted code is already used",
+            "error.code.incorrectCodeError":"Inserted code is incorrect",
             "error.security.etag.creation": "Error during creating ETag",
             "error.account.accessLevels.doesNotExist": "Given access level does not exists",
             "error.password.reset.tokenUsed": "Given activation link has already been used",
@@ -324,6 +339,7 @@ const resources = {
             "error.account.verification.alreadyVerifiedError": "Given account has already been confirmed",
             "error.token.decode": "Error during decoding token",
             "error.token.invalidate": "Invalid token",
+            "error.token.alreadyUsedError": "This link has already been used before",
             "error.database.loginReserved": "Given login is already in use",
             "error.database.emailReserved": "Given email is already in use",
             "error.constraintViolation": "Incorrect data",
@@ -389,7 +405,12 @@ const resources = {
             "/reset/changeEmail": "Change email",
             "/reset/resetSomebodyPassword": "Reset user password",
             "/verify/accountVerification": "Account verification",
-            "/ChangeAccessLevelState": "Change access level state"
+            "/ChangeAccessLevelState": "Change access level state",
+
+            'accept.action': 'Do you want to do this action?',
+
+            'yes':'Yes',
+            'no':'No'
         }
     }
 }
