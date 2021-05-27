@@ -1,4 +1,4 @@
-import React, {useEffect, useReducer} from "react";
+import React, {useEffect, useReducer, useState} from "react";
 import {useTranslation} from 'react-i18next'
 import RoundedButton from '../../../components/RoundedButton'
 import axios from "../../../Services/URL";
@@ -9,15 +9,17 @@ import store from "../../../redux/store";
 import {setChangeAccessLevelStateAccount} from "../../../redux/slices/changeAccessLevelStateSlice";
 import {refreshToken} from "../../../Services/userService";
 import useHandleError from "../../../errorHandler";
+import PopupAcceptAction from "../../../PopupAcceptAction";
 
 
 export default function ChangeAccessLevelState() {
     const [, forceUpdate] = useReducer(x => x + 1, 0); // used to force component refresh on forceUpdate call
     const {t} = useTranslation()
     const {token, changeAccessLevelStateAccount} = store.getState()
-
     const handleError = useHandleError()
     const showSuccess = useSnackbarQueue('success')
+
+    const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
 
     const handleChangeAccessLevelState = async (accessLevel: string, enabled: boolean) => {
         const json = {
@@ -34,7 +36,11 @@ export default function ChangeAccessLevelState() {
                 "If-Match": changeAccessLevelStateAccount.etag,
                 "Authorization": `Bearer ${token}`
             }
+        }).then(res => {
+            setButtonPopupAcceptAction(false)
+            showSuccess(t('success.accessLevelStateChanged'))
         }).catch(error => {
+            setButtonPopupAcceptAction(false)
             const message = error.response.data
             handleError(message)
         });
@@ -52,6 +58,7 @@ export default function ChangeAccessLevelState() {
             const message = error.response.data
             handleError(message)
         });
+
     }
 
     return (
@@ -61,9 +68,15 @@ export default function ChangeAccessLevelState() {
                     <div>
                         <h4>{accessLevel.accessLevelType}</h4>
                         <RoundedButton color="blue"
-                                       onClick={() => handleChangeAccessLevelState(accessLevel.accessLevelType, !accessLevel.enabled)}
+                                       onClick={() => setButtonPopupAcceptAction(true)}
                         >{accessLevel.enabled ? t("disable") : t("enable")}
                         </RoundedButton>
+                        <PopupAcceptAction
+                            open={buttonPopupAcceptAction}
+                            onConfirm={() => handleChangeAccessLevelState(accessLevel.accessLevelType, !accessLevel.enabled)}
+                            onCancel={() => {setButtonPopupAcceptAction(false)
+                            }}
+                        />
                         <br/>
                     </div>
                 )) : <RoundedButton color={"blue"} onClick={forceUpdate}>{t("refresh")}</RoundedButton>}

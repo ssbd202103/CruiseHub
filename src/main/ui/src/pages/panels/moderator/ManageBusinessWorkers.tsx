@@ -18,6 +18,7 @@ import RoundedButton from "../../../components/RoundedButton";
 import {refreshToken} from "../../../Services/userService";
 import {useSnackbarQueue} from "../../snackbar";
 import useHandleError from "../../../errorHandler";
+import PopupAcceptAction from "../../../PopupAcceptAction";
 
 const useRowStyles = makeStyles({
     root: {
@@ -63,9 +64,23 @@ function Row(props: RowProps) {
     const classes = useRowStyles();
     const showSuccess = useSnackbarQueue('success')
     const {t} = useTranslation()
+    const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
+
 
     return (
         <TableRow className={classes.root}>
+            <PopupAcceptAction
+                open={buttonPopupAcceptAction}
+                onConfirm={() => {
+                    if(confirmWorker({row})){
+                        showSuccess(t('action success'))
+                    }
+                    setButtonPopupAcceptAction(false)
+                }
+                }
+                onCancel={() => {setButtonPopupAcceptAction(false)
+                }}
+            />
             <TableCell component="th" scope="row" style={style}>
                 {row.login}
             </TableCell>
@@ -75,8 +90,10 @@ function Row(props: RowProps) {
             <TableCell style={style}>{row.phoneNumber}</TableCell>
             <TableCell style={style}>{row.companyName}</TableCell>
             <TableCell style={style}>{row.companyPhoneNumber}</TableCell>
-            <TableCell style={style}><Button onClick={() =>
-                confirmWorker({row})
+            <TableCell style={style}><Button onClick={() =>{
+                setButtonPopupAcceptAction(true)
+            }
+
             }>{t("confirm")}</Button></TableCell>
         </TableRow>
     );
@@ -108,8 +125,8 @@ function getWorkers() {
 
         }
     }).then(response => {
-        return response.status == 200;
-    }).catch(/*todo*/);
+         return response.status == 200;
+     }).catch(/*todo*/);
     return false;
 }
 
@@ -158,6 +175,7 @@ export default function ModListClient() {
                     onChange={(e) => setSearchInput(e.target.value)}
                     style={{marginBottom: '20px'}}/>
             </div>
+
             <TableContainer component={Paper}>
                 <Table aria-label="Business Workers">
                     <TableHead>
@@ -208,5 +226,6 @@ export default function ModListClient() {
             </TableContainer>
             <RoundedButton color={"blue"} onClick={handleChange}>{t("Refresh")}</RoundedButton>
         </div>
+
     );
 }
