@@ -28,6 +28,7 @@ import ChangeEmail from "../../components/changeData/ChangeEmail";
 import ChangePassword from "../../components/changeData/ChangePassword";
 import ChangeAdministratorData from "../../components/changeData/ChangeAdministratorData";
 import Header from "../../components/Header";
+import RequestSomeonePasswordReset from "../reset/requestSomeonesPasswordReset";
 
 export default function AdminPanel() {
     const {t} = useTranslation()
@@ -129,6 +130,9 @@ export default function AdminPanel() {
                     </Route>
                     <Route path="/ChangeAccessLevelState">
                         <ChangeAccessLevelState/>
+                    </Route>
+                    <Route path="/reset/resetSomebodyPassword">
+                        <RequestSomeonePasswordReset/>
                     </Route>
                 </Grid>
             </Grid>

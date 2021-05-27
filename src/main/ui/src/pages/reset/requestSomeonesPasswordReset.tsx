@@ -38,14 +38,17 @@ const RequestSomeonePasswordReset = () => {
                 placeholder="email"
                 className={styles.input}
                 value={email}
-                onChange={event => {setEmail(event.target.value)}}
+                onChange={event => {
+                    setEmail(event.target.value)
+                }}
+                colorIgnored
             />
             <Link to="/panels/adminPanel/accounts">
-            <RoundedButton
-                onClick={onFormSubmit}
-                style={{width: '100%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
-                color="pink"
-            >Send email </RoundedButton>
+                <RoundedButton
+                    onClick={onFormSubmit}
+                    style={{width: '100%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
+                    color="pink"
+                >Send email </RoundedButton>
             </Link>
         </AuthLayout>
 
