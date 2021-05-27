@@ -1,6 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.managers;
 
 import com.auth0.jwt.interfaces.Claim;
+import com.nimbusds.jose.shaded.json.JSONObject;
 import org.apache.commons.codec.digest.DigestUtils;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
@@ -34,13 +35,16 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
+import javax.swing.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
+import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 
 /**
  * Klasa która zarządza logiką biznesową kont
@@ -527,6 +531,14 @@ public class AccountManager implements AccountManagerLocal {
         return JWTHandler.createToken(map, account.getLogin());
     }
 
+    @PermitAll
+    @Override
+    public String signInCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time, String kod) throws BaseAppException {
+        TokenWrapper tokenWrapper = this.tokenWrapperFacade.findByToken(kod);
+        tokenWrapper.setUsed(true);
+        this.tokenWrapperFacade.edit(tokenWrapper);
+        return updateCorrectAuthenticateInfo(login, IpAddr, time);
+    }
 
     @RolesAllowed("authenticatedUser")
     @Override
@@ -627,5 +639,38 @@ public class AccountManager implements AccountManagerLocal {
         }
         worker.setConfirmed(true);
         setUpdatedMetadata(worker);
+    }
+
+    @PermitAll
+    @Override
+    public void sendAuthenticationCodeEmail(String login) throws BaseAppException {
+        Account account = accountFacade.findByLogin(login);
+        Locale locale = new Locale(account.getLanguageType().getName().name());
+        String subject = i18n.getMessage(AUTH_CODE_EMAIL_SUBJECT, locale);
+        String body = i18n.getMessage(AUTH_CODE_EMAIL_BODY, locale);
+        String kod = randomAlphanumeric(9);
+        TokenWrapper tokenWrapper = TokenWrapper.builder().token(kod).account(account).used(false).build();
+        this.tokenWrapperFacade.create(tokenWrapper);
+        String contentHtml = "<p>" + body + "<br>" +  kod + "</p>";
+        EmailService.sendEmailWithContent(account.getEmail().trim(), subject, contentHtml);
+    }
+
+    @PermitAll
+    @Override
+    public void verifySignCode(String login, String code, String IpAddr, LocalDateTime time) throws BaseAppException {
+        Account account = this.accountFacade.findByLogin(login);
+        TokenWrapper kod = this.tokenWrapperFacade.findByToken(code);
+        if(kod.isUsed()){
+            updateIncorrectAuthenticateInfo(login,IpAddr, time);
+            throw new AccountManagerException(CODE_ALREADY_USED_ERROR);
+        }
+        if(kod.getCreationDateTime().plus(5, ChronoUnit.MINUTES).isBefore(LocalDateTime.now())){
+            updateIncorrectAuthenticateInfo(login,IpAddr, time);
+            throw new AccountManagerException(CODE_EXPIRE_ERROR);
+        }
+        if(account.getId() != kod.getAccount().getId()){
+            updateIncorrectAuthenticateInfo(login,IpAddr, time);
+            throw new AccountManagerException(CODE_DONT_MATCH_ERROR);
+        }
     }
 }

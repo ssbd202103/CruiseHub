@@ -22,6 +22,7 @@ import PasswordReset from "./pages/reset/passwordReset";
 import RequestPasswordReset from './pages/reset/requestPasswordReset';
 import RequestSomeonePasswordReset from './pages/reset/requestSomeonesPasswordReset';
 import VerifyAccount from './pages/verify/verifyAccount';
+import CodeSignIn from './pages/codeSignIn';
 
 import {SnackbarKey, SnackbarProvider} from 'notistack';
 import {TransitionProps} from "@material-ui/core/transitions";
@@ -101,6 +102,9 @@ function App() {
                         </Route>
                         <Route path="/verify/accountVerification/*">
                             <VerifyAccount/>
+                        </Route>
+                        <Route path="/codeSignIn">
+                            <CodeSignIn/>
                         </Route>
 
                         <Route path="*">

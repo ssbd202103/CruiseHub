@@ -1,16 +1,22 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.security;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.TokenWrapper;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.ControllerException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AuthenticateCodeDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AuthenticateDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.AccountEndpointLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.AuthenticateEndpointLocal;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacadeMok;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.TokenWrapperFacade;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.security.auth.login.AccountException;
 import javax.security.enterprise.credential.Credential;
 import javax.security.enterprise.identitystore.CredentialValidationResult;
 import javax.security.enterprise.identitystore.IdentityStoreHandler;
@@ -34,6 +40,9 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.utils.TransactionRepeater.tryAndRepea
 public class AuthController {
 
     @Inject
+    private AccountFacadeMok accountFacade;
+
+    @Inject
     private IdentityStoreHandler identityStoreHandler;
 
     @Context
@@ -44,6 +53,9 @@ public class AuthController {
 
     @Inject
     private AccountEndpointLocal accountEndpoint;
+
+    @Inject
+    private TokenWrapperFacade tokenWrapperFacade;
 
     //todo refactor it
 
@@ -78,11 +90,8 @@ public class AuthController {
                     .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD").header("Access-Control-Allow-Origin", "*")
                     .build();
         }
-
-        token = authEndpoint.updateCorrectAuthenticateInfo(auth.getLogin(), httpServletRequest.getRemoteAddr(), LocalDateTime.now());
-
+       authEndpoint.sendAuthenticationCodeEmail(auth.getLogin());
         return Response.ok()
-                .entity(token)
                 .header("Access-Control-Allow-Origin", "*").header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
                 .header("Access-Control-Allow-Credentials", "true")
                 .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
@@ -124,5 +133,31 @@ public class AuthController {
     public void createBusinessWorker(@Valid @NotNull(message = CONSTRAINT_NOT_NULL) BusinessWorkerForRegistrationDto businessWorkerForRegistrationDto) throws BaseAppException {
         tryAndRepeat(() -> accountEndpoint.createBusinessWorkerAccount(businessWorkerForRegistrationDto));
     }
+
+    /**
+     * Metoda służąca do logowania
+     *
+     * @param auth Login oraz kod
+     * @return Token JWT
+     */
+    @Path("/code-sign-in")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response doubleAuth(@Valid @NotNull(message = CONSTRAINT_NOT_NULL) AuthenticateCodeDto auth) throws BaseAppException {
+       authEndpoint.verifySignCode(auth.getLogin(), auth.getCode(),  httpServletRequest.getRemoteAddr(), LocalDateTime.now());
+
+        String token;
+
+        token = authEndpoint.signInCorrectAuthenticateInfo(auth.getLogin(), httpServletRequest.getRemoteAddr(), LocalDateTime.now(), auth.getCode());
+
+        return Response.ok()
+                .entity(token)
+                .header("Access-Control-Allow-Origin", "*").header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+                .header("Access-Control-Allow-Credentials", "true")
+                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+                .build();
+    }
+
 
 }

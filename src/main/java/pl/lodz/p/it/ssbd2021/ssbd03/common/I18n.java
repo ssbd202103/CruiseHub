@@ -46,6 +46,8 @@ public class I18n {
     public static final String REQUESTED_PASSWORD_RESET_BODY = "account.request.reset.password.body";
     public static final String VERIFICATION_EMAIL_SUBJECT = "account.verification.subject";
     public static final String VERIFICATION_EMAIL_BODY = "account.verification.body";
+    public static final String AUTH_CODE_EMAIL_SUBJECT = "auth.code.email.subject";
+    public static final String AUTH_CODE_EMAIL_BODY = "auth.code.email.body";
     public static final String REMOVE_UNCONFIRMED_ACCOUNT_SUBJECT = "account.remove.unconfirmed.subject";
     public static final String REMOVE_UNCONFIRMED_ACCOUNT_BODY = "account.remove.unconfirmed.body";
     public static final String BLOCKED_ACCOUNT_SUBJECT = "account.block.subject";
@@ -57,6 +59,9 @@ public class I18n {
     public static final String INCORRECT_LOGIN = "auth.incorrect.login";
     public static final String INCORRECT_PASSWORD = "auth.incorrect.password";
     public static final String PASSWORDS_DONT_MATCH_ERROR = "error.password.change.oldPasswordError";
+    public static final String CODE_DONT_MATCH_ERROR = "error.code.dontMatchError";
+    public static final String CODE_EXPIRE_ERROR = "error.code.expireError";
+    public static final String CODE_ALREADY_USED_ERROR = "error.code.alreadyUsedError";
     public static final String DATABASE_OPERATION_ERROR = "error.database.operation";
     public static final String LOGIN_RESERVED_ERROR = "error.database.loginReserved";
     public static final String EMAIL_RESERVED_ERROR = "error.database.emailReserved";

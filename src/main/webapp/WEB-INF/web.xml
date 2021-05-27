@@ -145,6 +145,15 @@
         <role-name>getBusinessWorkersForCompany</role-name>
     </security-role>
 
+    <security-role>
+        <role-name>deactivateCruiseGroup</role-name>
+    </security-role>
+    <security-role>
+        <role-name>deleteAttraction</role-name>
+    </security-role>
+    <security-role>
+        <role-name>getWorkerCruiseReservations</role-name>
+    </security-role>
 
     <security-constraint>
         <web-resource-collection>

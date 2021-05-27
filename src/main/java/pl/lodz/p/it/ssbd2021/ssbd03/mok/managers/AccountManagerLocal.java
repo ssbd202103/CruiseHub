@@ -237,6 +237,17 @@ public interface AccountManagerLocal {
     String updateCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws BaseAppException;
 
     /**
+     *
+     * @param login
+     * @param IpAddr
+     * @param time
+     * @param kod
+     * @return
+     * @throws BaseAppException
+     */
+    String signInCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time, String kod) throws BaseAppException;
+
+    /**
      * Metoda odpowiedzialna za zmiane hasła akutalnego użytkownika
      *
      * @throws BaseAppException Bazowy wyjątek aplikacji rzucany w przypadku gdy stare hasło nie jest zgodne z tym z bazy danych
@@ -278,4 +289,21 @@ public interface AccountManagerLocal {
      */
     void confirmBusinessWorker(String login, long version) throws BaseAppException;
 
-}
+    /**
+     *
+     * @param login
+     * @throws BaseAppException
+     */
+    void sendAuthenticationCodeEmail(String login) throws BaseAppException;
+
+    /**
+     *
+     * @param login
+     * @param code
+     * @return
+     * @throws BaseAppException
+     */
+    void verifySignCode(String login, String code, String IpAddr, LocalDateTime time) throws BaseAppException;
+
+
+    }

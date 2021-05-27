@@ -39,6 +39,24 @@ public class AuthenticateEndpoint extends BaseEndpoint implements AuthenticateEn
         return accountManager.updateCorrectAuthenticateInfo(login, IpAddr, time);
     }
 
+    @PermitAll
+    @Override
+    public String signInCorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time, String kod) throws BaseAppException {
+        return accountManager.signInCorrectAuthenticateInfo(login, IpAddr, time, kod);
+    }
+
+    @PermitAll
+    @Override
+    public void sendAuthenticationCodeEmail(String login) throws BaseAppException {
+        accountManager.sendAuthenticationCodeEmail(login);
+    }
+
+    @PermitAll
+    @Override
+    public void verifySignCode(String login, String code, String IpAddr, LocalDateTime time) throws BaseAppException{
+        accountManager.verifySignCode(login, code, IpAddr, time);
+    }
+
     @RolesAllowed("authenticatedUser")
     @Override
     public String refreshToken(String token) throws BaseAppException {

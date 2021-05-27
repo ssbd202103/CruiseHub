@@ -14,6 +14,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.converters.CruiseGroupMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.managers.CruiseGroupManagerLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
@@ -57,6 +58,7 @@ public class CruiseGroupEndpoint extends BaseEndpoint implements CruiseGroupEndp
         return res;
     }
 
+    @RolesAllowed("deactivateCruiseGroup")
     @Override
     public void deactivateCruiseGroup(String name, Long version) throws BaseAppException {
         this.cruiseGroupManager.deactivateCruiseGroup(name, version);

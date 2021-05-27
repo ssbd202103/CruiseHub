@@ -14,10 +14,14 @@ import {useTranslation} from 'react-i18next'
 import styles from '../styles/auth.global.module.css'
 import axios from "axios"
 import React, {useState} from "react"
+import {setLogin as setLoginAction} from '../redux/slices/userSlice'
+
 
 import {getUser} from "../Services/userService";
 
 import {useSnackbarQueue} from "./snackbar";
+import store from "../redux/store";
+import {useDispatch} from "react-redux";
 
 export default function SignIn() {
     const {t} = useTranslation();
@@ -25,7 +29,7 @@ export default function SignIn() {
     const showError = useSnackbarQueue('error')
 
     const history = useHistory();
-
+    const dispatch = useDispatch();
     const [login, setLogin] = useState('')
     const [password, setPassword] = useState('')
 
@@ -40,14 +44,13 @@ export default function SignIn() {
                 'Content-Type': 'application/json'
             }
         }).then(res => {
-            getUser(res.data)
-            history.push('/')
-        }).catch(error => {
+            dispatch(setLoginAction(login))
+            history.push('/codeSignIn')
+            }).catch(error => {
             const message = error.response.data
             showError(t(message))
         })
     }
-
 
     return (
         <AuthLayout>

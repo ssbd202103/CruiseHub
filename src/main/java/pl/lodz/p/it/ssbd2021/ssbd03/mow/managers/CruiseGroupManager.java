@@ -9,6 +9,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseGroupFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
@@ -49,6 +50,7 @@ public class CruiseGroupManager implements CruiseGroupManagerLocal {
         return cruiseGroupFacadeMow.findAll();
     }
 
+    @RolesAllowed("deactivateCruiseGroup")
     @Override
     public CruiseGroup deactivateCruiseGroup(String name, Long version) throws BaseAppException {
         CruiseGroup cruiseGroup = this.cruiseGroupFacadeMow.findByName(name);
