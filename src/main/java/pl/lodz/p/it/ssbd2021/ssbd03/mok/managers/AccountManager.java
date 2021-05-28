@@ -504,6 +504,9 @@ public class AccountManager implements AccountManagerLocal {
             throw FacadeException.optimisticLock();
         }
         String newEmail = claims.get("email").asString();
+        if(this.accountFacade.isEmailPresent(newEmail)){
+            throw new AccountManagerException(EMAIL_RESERVED_ERROR);
+        }
         TokenWrapper tokenWrapper = this.tokenWrapperFacade.findByToken(token);
         tokenWrapper.setUsed(true);
         this.tokenWrapperFacade.edit(tokenWrapper);
