@@ -51,6 +51,7 @@ export default function ChangeAccountData() {
     const [buttonPopupAcceptChangeNumber, setButtonPopupAcceptChangeNumber] = useState(false);
     const [buttonPopupAcceptChangeData, setButtonPopupAcceptChangeData] = useState(false);
     const [buttonPopupAcceptChangeAddress, setButtonPopupAcceptChangeAddress] = useState(false);
+    const [buttonPopupAcceptChangeMail, setButtonPopupAcceptChangeMail] = useState(false);
 
     useEffect(() => {
         setFirstName(currentAccount.firstName);
@@ -101,9 +102,15 @@ export default function ChangeAccountData() {
             headers: {
                 "Authorization": `Bearer ${token}`
             }
-        }).then(res => {
+        }).then(res =>{
+            setButtonPopupAcceptChangeMail(false)
+            refreshToken()
             showSuccess(t('successful action'))
-        })
+        },error =>{
+            setButtonPopupAcceptChangeMail(false)
+            const message = error.response.data
+            handleError(message)
+        });
     }
     const changePersonalData = async () => {
         const {token} = store.getState()
@@ -127,7 +134,7 @@ export default function ChangeAccountData() {
             setButtonPopupAcceptChangeData(false)
             refreshToken()
             showSuccess(t('successful action'))
-        }).catch(error => {
+        },error =>{
             setButtonPopupAcceptChangeData(false)
             const message = error.response.data
             handleError(message)
@@ -141,7 +148,7 @@ export default function ChangeAccountData() {
             sessionStorage.setItem("changeAccountData", JSON.stringify(res.data));
             forceUpdate()
             handleChangePerData()
-        }).catch(error => {
+        },error =>{
             const message = error.response.data
             handleError(message)
         });
@@ -192,7 +199,7 @@ export default function ChangeAccountData() {
             sessionStorage.setItem("changeAccountData", JSON.stringify(res.data));
             forceUpdate()
             handleChangAddress()
-        }).catch(error => {
+        },error =>{
             const message = error.response.data
             handleError(message)
         });
@@ -215,10 +222,10 @@ export default function ChangeAccountData() {
         }).then(res =>{
             setButtonPopupAcceptChangeNumber(false)
             showSuccess(t('successful action'))
-        }).catch(error => {
-            setButtonPopupAcceptChangeNumber(false)
+        },error =>{
             const message = error.response.data
-            handleError(t(message))
+            setButtonPopupAcceptChangeNumber(false)
+            handleError(message)
         });
 
         await axios.get(`/account/details/${currentAccount.login}`, {
@@ -229,7 +236,7 @@ export default function ChangeAccountData() {
             sessionStorage.setItem("changeAccountData", JSON.stringify(res.data));
             forceUpdate()
             handleChangePhone()
-        }).catch(error => {
+        },error =>{
             const message = error.response.data
             handleError(message)
         });
@@ -312,7 +319,7 @@ export default function ChangeAccountData() {
                     </div>
                 <div>
                     <RoundedButton color="blue"
-                                   onClick={changeMail}
+                                   onClick={()=>setButtonPopupAcceptChangeData(true)}
                     >{t("confirm")}</RoundedButton>
                     <RoundedButton color="pink"
                                    onClick={handleChangeMail}
@@ -455,8 +462,8 @@ export default function ChangeAccountData() {
 
     </Grid>
     <Grid item>
-        <Link to="/panels/adminPanel/accounts">
-            <RoundedButton color="pink">
+        <Link to="/accounts">
+            <RoundedButton color="pink" >
                 {t("go back")}
             </RoundedButton>
         </Link>
@@ -478,6 +485,12 @@ export default function ChangeAccountData() {
         open={buttonPopupAcceptChangeData}
         onConfirm={changePersonalData}
         onCancel={() => {setButtonPopupAcceptChangeData(false)
+        }}
+    />
+    <PopupAcceptAction
+        open={buttonPopupAcceptChangeMail}
+        onConfirm={changeMail}
+        onCancel={() => {setButtonPopupAcceptChangeMail(false)
         }}
     />
 </>

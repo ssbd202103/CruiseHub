@@ -27,7 +27,6 @@ import RequestPasswordReset from './pages/reset/requestPasswordReset';
 import RequestSomeonePasswordReset from './pages/reset/requestSomeonesPasswordReset';
 import VerifyAccount from './pages/verify/verifyAccount';
 import ChangeEmail from './pages/reset/changeEmail'
-import ChangeOtherEmail from './pages/reset/changeOtherEmail'
 import CodeSignIn from './pages/codeSignIn';
 
 import {SnackbarKey, SnackbarProvider} from 'notistack';
@@ -107,9 +106,6 @@ function App() {
                         </Route>
                         <Route path="/reset/changeEmail">
                             <ChangeEmail/>
-                        </Route>
-                        <Route path="/reset/changeOtherEmail">
-                            <ChangeOtherEmail/>
                         </Route>
 
                         <Route path="/reset/requestPassword">

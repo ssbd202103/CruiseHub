@@ -240,7 +240,9 @@ public class AccountManager implements AccountManagerLocal {
     @Override
     public void requestEmailChange(String login, String newEmail) throws BaseAppException {
         Account account = this.accountFacade.findByLogin(login);
-
+        if(this.accountFacade.isEmailPresent(newEmail)){
+            throw new AccountManagerException(EMAIL_RESERVED_ERROR);
+        }
         Map<String, Object> claims = Map.of("version", account.getVersion(), "email", newEmail, "accessLevels", account.getAccessLevels()
                 .stream().map(accessLevel -> accessLevel.getAccessLevelType().name()).collect(Collectors.toList()));
 
@@ -258,7 +260,9 @@ public class AccountManager implements AccountManagerLocal {
     @Override
     public void requestOtherEmailChange(String login, String newEmail) throws BaseAppException {
         Account account = this.accountFacade.findByLogin(login);
-
+        if(this.accountFacade.isEmailPresent(newEmail)){
+            throw new AccountManagerException(EMAIL_RESERVED_ERROR);
+        }
         Map<String, Object> claims = Map.of("version", account.getVersion(), "email", newEmail, "accessLevels", account.getAccessLevels()
                 .stream().map(accessLevel -> accessLevel.getAccessLevelType().name()).collect(Collectors.toList()));
 
@@ -268,7 +272,7 @@ public class AccountManager implements AccountManagerLocal {
         Locale locale = new Locale(account.getLanguageType().getName().name());
         String subject = i18n.getMessage(REQUEST_EMAIL_CHANGE_SUBJECT, locale);
         String body = i18n.getMessage(REQUEST_EMAIL_CHANGE_BODY, locale);
-        String contentHtml = "<a href=\"" + PropertiesReader.getSecurityProperties().getProperty("app.baseurl") + "/reset/changeOtherEmail/" + token + "\">" + body + "</a>";
+        String contentHtml = "<a href=\"" + PropertiesReader.getSecurityProperties().getProperty("app.baseurl") + "/reset/changeEmail/" + token + "\">" + body + "</a>";
         EmailService.sendEmailWithContent(account.getEmail().trim(), subject, contentHtml);
     }
 
@@ -509,36 +513,6 @@ public class AccountManager implements AccountManagerLocal {
     }
 
 
-    @RolesAllowed("changeEmail")
-    @Override
-    public void changeOtherEmail(String token) throws BaseAppException {
-        JWTHandler.validateToken(token);
-
-        Map<String, Claim> claims = JWTHandler.getClaimsFromToken(token);
-        Date expire = JWTHandler.getExpirationTimeFromToken(token);
-
-        if (claims.get("sub").isNull() || claims.get("version").isNull()) {
-            throw new AccountManagerException(ACCOUNT_VERIFICATION_TOKEN_CONTENT_ERROR);
-        }
-
-        String login = claims.get("sub").asString();
-        if (expire.before(new Date())) {
-            throw new AccountManagerException(TOKEN_EXPIRED_ERROR);
-        }
-
-        Account account = this.accountFacade.findByLogin(login);
-
-        if (!(account.getVersion() == claims.get("version").asLong())) {
-            throw FacadeException.optimisticLock();
-        }
-        String newEmail = claims.get("email").asString();
-        TokenWrapper tokenWrapper = this.tokenWrapperFacade.findByToken(token);
-        tokenWrapper.setUsed(true);
-        this.tokenWrapperFacade.edit(tokenWrapper);
-        account.setEmail(newEmail.toLowerCase());
-
-        setUpdatedMetadata(account);
-    }
 
     private AccessLevel getAccessLevel(Account from, AccessLevelType target) throws AccountManagerException {
         Optional<AccessLevel> optionalAccessLevel = from.getAccessLevels().stream()
@@ -715,6 +689,9 @@ public class AccountManager implements AccountManagerLocal {
         BusinessWorker worker = (BusinessWorker) getAccessLevel(account, AccessLevelType.BUSINESS_WORKER);
         if (!(worker.getVersion() == version)) {
             throw FacadeException.optimisticLock();
+        }
+        if(worker.isConfirmed()){
+            throw new AccountManagerException(BUSINESS_WORKER_CONFIRMED);
         }
         worker.setConfirmed(true);
         setUpdatedMetadata(worker);
