@@ -292,12 +292,6 @@ public interface AccountManagerLocal {
      */
     void requestOtherEmailChange(String login, String newEmail) throws BaseAppException;
 
-    /**
-     * Zmienia email konta o podanym loginie przez Administrator
-     *
-     * @param token    token z danymi uwierzytelniającymi
-     */
-    void changeOtherEmail(String token) throws BaseAppException;
 
     /**
      *

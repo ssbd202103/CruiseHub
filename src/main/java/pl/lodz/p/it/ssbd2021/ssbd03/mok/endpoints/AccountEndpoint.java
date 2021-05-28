@@ -216,11 +216,6 @@ public class AccountEndpoint extends BaseEndpoint implements AccountEndpointLoca
         accountManager.changeEmail(accountVerificationDto.getToken());
     }
 
-    @RolesAllowed("changeEmail")
-    @Override
-    public void changeOtherEmail(AccountVerificationDto accountVerificationDto) throws BaseAppException {
-        accountManager.changeOtherEmail(accountVerificationDto.getToken());
-    }
 
     @RolesAllowed("changeClientData")
     @Override

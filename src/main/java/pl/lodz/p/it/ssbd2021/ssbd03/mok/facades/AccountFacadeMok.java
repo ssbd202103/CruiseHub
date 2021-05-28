@@ -89,6 +89,14 @@ public class AccountFacadeMok extends AbstractFacade<Account> {
         return tqq.getResultList();
 
     }
+    @PermitAll
+    public boolean isEmailPresent(String email) {
+        TypedQuery<Account> tqq = em.createNamedQuery("Account.isEmailPresent", Account.class);
+        tqq.setParameter("email", email);
+         if(tqq.getResultList().size()>0) return true;
+         else return false;
+
+    }
 
     public List<AccessLevel> getUnconfirmedBusinessWorkers() {
         TypedQuery<AccessLevel> tqq = em.createNamedQuery("BusinessWorker.findALlUnconfirmed", AccessLevel.class);

@@ -147,6 +147,7 @@ const resources = {
             "error.integration.optimistic": "Nieaktualny stan przesłanych danych",
             "error.account.notVerified": "Konto niezweryfikowne",
             "error.database.operation": "Błąd po stronie bazy danych",
+            "error.business.worker.confirmed": "Pracownik jest już zatwierdzony",
 
             //auth errors
             "auth.incorrect.login": "Podany login jest niepoprawny",
@@ -353,6 +354,7 @@ const resources = {
             "error.integration.optimistic": "Outdated data provided",
             "error.account.notVerified": "Account not verified",
             "error.database.operation": "Database operation error",
+            "error.business.worker.confirmed": "Worker is already confirmed",
 
             //auth errors
             "auth.incorrect.login": "Given login is incorrect",

@@ -66,15 +66,38 @@ function Row(props: RowProps) {
     const {t} = useTranslation()
     const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
 
+    const confirmWorker = (props: any)=> {
+        const {token} = store.getState()
+        const {row} = props;
+        const json = JSON.stringify({
+            login: row.login,
+            version: row.version
+        })
 
+        axios.put('account/confirm-business-worker', json, {
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "If-Match": row.etag,
+                "Authorization": `Bearer ${token}`,
+
+            }
+        }).then(res =>{
+            refreshToken()
+            showSuccess(t('successful action'))
+            getWorkers()
+        },error =>{
+            const message = error.response.data
+            handleError(message)
+        });
+        return false;
+    }
     return (
         <TableRow className={classes.root}>
             <PopupAcceptAction
                 open={buttonPopupAcceptAction}
                 onConfirm={() => {
-                    if(confirmWorker({row})){
-                        showSuccess(t('action success'))
-                    }
+                    confirmWorker({row})
                     setButtonPopupAcceptAction(false)
                 }
                 }
@@ -108,27 +131,7 @@ function getWorkers() {
     })
 }
 
- function confirmWorker(props: any) {
-    const {token} = store.getState()
-    const {row} = props;
-    const json = JSON.stringify({
-        login: row.login,
-        version: row.version
-    })
 
-    axios.put('account/confirm-business-worker', json, {
-        headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-            "If-Match": row.etag,
-            "Authorization": `Bearer ${token}`,
-
-        }
-    }).then(response => {
-         return response.status == 200;
-     }).catch(/*todo*/);
-    return false;
-}
 
 export default function ModListClient() {
     const [, forceUpdate] = useReducer(x => x + 1, 0);

@@ -38,7 +38,7 @@ export default function PasswordReset(props: any) {
             }
         }).then(res => {
             history.push('/')
-        }).catch(error => {
+        },error => {
             const message = error.response.data
             handleError(message)
         });
