@@ -6,6 +6,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.common.dto.MetadataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.ControllerException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountMetadataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountVerificationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.AccountEndpointLocal;
@@ -140,6 +141,13 @@ public class AccountSelfController {
         tryAndRepeat(() -> this.accountEndpoint.changeEmail(accountVerificationDto));
     }
 
+    /**
+     * Zmienia obecny motyw graficnzy
+     *
+     * @param changeModeDto Postać Dto przesyłanych danych
+     * @param etag          Nagłówek If-Match żądania
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
     @PUT
     @Path("/change-theme-mode")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -151,13 +159,26 @@ public class AccountSelfController {
         tryAndRepeat(() -> accountEndpoint.changeMode(changeModeDto));
     }
 
+    /**
+     * Pobiera metadane obecnego użytkownika
+     *
+     * @return Postać DTO metadanych
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
     @GET
     @Path("/metadata")
     @Produces(MediaType.APPLICATION_JSON)
-    public MetadataDto getSelfAccountMetadata() throws BaseAppException {
+    public AccountMetadataDto getSelfAccountMetadata() throws BaseAppException {
         return tryAndRepeat(() -> accountEndpoint.getSelfMetadata());
     }
 
+    /**
+     * Pobiera metadane wybranego poziomu dostępu obecnie zalogowanego użytkownika
+     *
+     * @param accessLevel Wybrany poziom dostępu
+     * @return Reprezentacja DTO metadanych
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
     @GET
     @Path("/metadata/access-level/{access-level}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -171,6 +192,12 @@ public class AccountSelfController {
         return tryAndRepeat(() -> accountEndpoint.getSelfAccessLevelMetadata(accessLevelType));
     }
 
+    /**
+     * Pobiera metadane adresu obecnie zalogowanego klienta
+     *
+     * @return Reprezentacja DTO metadanych
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
     @GET
     @Path("/metadata/address/")
     @Produces(MediaType.APPLICATION_JSON)

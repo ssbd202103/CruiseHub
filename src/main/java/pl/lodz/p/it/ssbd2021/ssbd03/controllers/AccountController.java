@@ -28,7 +28,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
-import java.util.Locale;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 import static pl.lodz.p.it.ssbd2021.ssbd03.utils.TransactionRepeater.tryAndRepeat;
@@ -139,7 +138,6 @@ public class AccountController {
      *
      * @param blockAccountDto Obiekt z loginem użytkownika do zablokowania oraz wersją
      * @param etag            Wartość etaga
-     * @return Respons wraz z kodem
      */
     @ETagFilterBinding
     @PUT
@@ -155,7 +153,6 @@ public class AccountController {
     /**
      * @param unblockAccountDto Obiekt posiadający login użytkownika którego mamy odblokować
      * @param etag              Wartość etaga
-     * @return Zwraca kod potwierdzający poprawne bądź niepoprawne wykonanie
      */
     @ETagFilterBinding
     @PUT
@@ -210,7 +207,6 @@ public class AccountController {
      * Metoda odpowiedzialna za resetowanie hasła
      *
      * @param passwordResetDto obiekt dto przechowujący niezbędne dane do resetowania hasła
-     * @return Odpowiedź serwera w postaci JSON
      */
     @PUT
     @Path("/reset-password")
@@ -222,7 +218,6 @@ public class AccountController {
      * Metoda odpowiedzialna za zgłoszenia życzenia resetowania hasła
      *
      * @param login login użytkownika
-     * @return Odpowiedź serwera w postaci JSON
      */
     @POST
     @Path("/request-password-reset/{login}")
@@ -235,7 +230,6 @@ public class AccountController {
      *
      * @param login login użytkownika
      * @param email e-mail użytkownika
-     * @return Odpowiedź serwera w postaci JSON
      */
     @POST
     @Path("/request-someones-password-reset/{login}/{email}")
@@ -249,7 +243,6 @@ public class AccountController {
      * Metoda odpowiedzialna za weryfikowanie konta
      *
      * @param accountVerificationDto obiekt dto przechowujący niezbędne dane do resetowania hasła
-     * @return Odpowiedź serwera w postaci JSON
      */
     @PUT
     @Path("/verify")
@@ -362,13 +355,30 @@ public class AccountController {
         tryAndRepeat(() -> accountEndpoint.requestOtherEmailChange(accountChangeEmailDto));
     }
 
+
+    /**
+     * Pobiera metadane użytkownika
+     *
+     * @param login Login użytkownika
+     * @return Postać DTO metadanych
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
     @GET
     @Path("/metadata/{login}")
     @Produces(MediaType.APPLICATION_JSON)
-    public MetadataDto getAccountMetadata(@PathParam("login") String login) throws BaseAppException {
+    public AccountMetadataDto getAccountMetadata(@PathParam("login") String login) throws BaseAppException {
         return tryAndRepeat(() -> accountEndpoint.getAccountMetadata(login));
     }
 
+
+    /**
+     * Pobiera metadane wybranego poziomu dostępu użytkownika
+     *
+     * @param login       Login użytkownika
+     * @param accessLevel Wybrany poziom dostępu
+     * @return Reprezentacja DTO metadanych
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
     @GET
     @Path("/metadata/access-level/{access-level}/{login}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -383,6 +393,14 @@ public class AccountController {
         return tryAndRepeat(() -> accountEndpoint.getAccessLevelMetadata(login, accessLevelType));
     }
 
+
+    /**
+     * Pobiera metadane adresu danego użytkownika
+     *
+     * @param login Login użytkownika
+     * @return Reprezentacja DTO metadanych
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
     @GET
     @Path("/metadata/address/{login}")
     @Produces(MediaType.APPLICATION_JSON)

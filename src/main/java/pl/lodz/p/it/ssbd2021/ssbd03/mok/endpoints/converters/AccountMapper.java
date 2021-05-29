@@ -374,4 +374,18 @@ public class AccountMapper {
                 account.getVersion()
         );
     }
+
+    public static AccountMetadataDto toAccountMetadataDto(Account account) {
+        return new AccountMetadataDto(account.getCreationDateTime(),
+                account.getLastAlterDateTime(),
+                account.getCreatedBy().getLogin(),
+                account.getAlteredBy().getLogin(),
+                account.getAlterType().getName(),
+                account.getVersion(),
+                account.getLastIncorrectAuthenticationDateTime(),
+                account.getLastIncorrectAuthenticationLogicalAddress(),
+                account.getLastCorrectAuthenticationDateTime(),
+                account.getLastCorrectAuthenticationLogicalAddress(),
+                account.getNumberOfAuthenticationFailures());
+    }
 }

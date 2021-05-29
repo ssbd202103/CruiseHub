@@ -3,7 +3,6 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.dto.MetadataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changes.ChangeAccessLevelStateDto;
@@ -249,7 +248,7 @@ public interface AccountEndpointLocal {
      * @param changeModeDto obiekt dto posiadający niezbędne dane do zmienienia motywu
      */
 
-    void changeMode(ChangeModeDto changeModeDto) throws BaseAppException, FacadeException;
+    void changeMode(ChangeModeDto changeModeDto) throws BaseAppException;
 
     /**
      * Metoda opdowiedzialna za pobranie wszystkich niezatwierdzonych pracowników firm
@@ -291,7 +290,7 @@ public interface AccountEndpointLocal {
      * @return Reprezentacja DTO metadanych
      * @throws BaseAppException Wyjątek bazowy aplikacji w przypadku niezlezienia konta lub naruszenia zasad biznesowych
      */
-    MetadataDto getAccountMetadata(String login) throws BaseAppException;
+    AccountMetadataDto getAccountMetadata(String login) throws BaseAppException;
 
     /**
      * Metoda pobierające metadane dla danego poziomu dostepu użytkownika
@@ -320,7 +319,7 @@ public interface AccountEndpointLocal {
      * @return Reprezentacja DTO metadanych
      * @throws BaseAppException Wyjątek bazowy aplikacji w przypadku niezlezienia konta lub naruszenia zasad biznesowych
      */
-    MetadataDto getSelfMetadata() throws BaseAppException;
+    AccountMetadataDto getSelfMetadata() throws BaseAppException;
 
     /**
      * Metoda pobierające metadane danego poziomu dostępu obecnego użytkownika

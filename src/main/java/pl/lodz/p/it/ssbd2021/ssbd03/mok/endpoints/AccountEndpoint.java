@@ -308,8 +308,8 @@ public class AccountEndpoint extends BaseEndpoint implements AccountEndpointLoca
 
     @RolesAllowed("getMetadata")
     @Override
-    public MetadataDto getAccountMetadata(String login) throws BaseAppException {
-        return MetadataMapper.toMetadataDto(accountManager.getAccountByLogin(login));
+    public AccountMetadataDto getAccountMetadata(String login) throws BaseAppException {
+        return AccountMapper.toAccountMetadataDto(accountManager.getAccountByLogin(login));
     }
 
     @RolesAllowed("getMetadata")
@@ -327,8 +327,8 @@ public class AccountEndpoint extends BaseEndpoint implements AccountEndpointLoca
 
     @RolesAllowed("authenticatedUser")
     @Override
-    public MetadataDto getSelfMetadata() throws BaseAppException {
-        return MetadataMapper.toMetadataDto(accountManager.getCurrentUser());
+    public AccountMetadataDto getSelfMetadata() throws BaseAppException {
+        return AccountMapper.toAccountMetadataDto(accountManager.getCurrentUser());
     }
 
     @RolesAllowed("authenticatedUser")
