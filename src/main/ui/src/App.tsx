@@ -26,7 +26,7 @@ import PasswordReset from "./pages/reset/passwordReset";
 import RequestPasswordReset from './pages/reset/requestPasswordReset';
 import RequestSomeonePasswordReset from './pages/reset/requestSomeonesPasswordReset';
 import VerifyAccount from './pages/verify/verifyAccount';
-import ChangeEmail from './pages/reset/changeEmail'
+import ChangeEmail from './pages/reset/ChangeEmail'
 import CodeSignIn from './pages/codeSignIn';
 
 import {SnackbarKey, SnackbarProvider} from 'notistack';

@@ -1,7 +1,7 @@
 import {useHistory, useLocation} from 'react-router-dom';
 
 import React, {useState} from 'react';
-import axios from "axios";
+import axios from "../../Services/URL";
 import AuthLayout from "../../layouts/AuthLayout";
 import DarkedTextField from "../../components/DarkedTextField";
 import {useTranslation} from "react-i18next";
@@ -15,7 +15,7 @@ import {getUser} from "../../Services/userService";
 import useHandleError from "../../errorHandler";
 
 
-export default function PasswordReset(props: any) {
+export default function ChangeEmail(props: any) {
     const location = useLocation();
     const {t} = useTranslation();
     const history = useHistory();
@@ -30,7 +30,7 @@ export default function PasswordReset(props: any) {
             "token": location.pathname.toString().substring('/reset/changeEmail/'.length)
         }
 
-        axios.put('/api/account/change-email', json, {
+        axios.put('account/change-email', json, {
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json",
