@@ -71,8 +71,7 @@ export default function ClientSignUp() {
 
 
     const verifyCallback = () => {
-        setButtonPopup(false)
-        setButtonPopupAcceptAction(true)
+        handleConfirm()
     }
 
     const handleConfirm = () => {
@@ -98,11 +97,11 @@ export default function ClientSignUp() {
                 'Content-Type': 'application/json'
             }
         }).then(res=>{
-           setButtonPopupAcceptAction(false)
+            setButtonPopup(false)
             history.push('/')
             showSuccess(t('successful action'))
         }).catch(error => {
-            setButtonPopupAcceptAction(false)
+            setButtonPopup(false)
             const message = error.response.data
             handleError(message)
         });
@@ -128,7 +127,7 @@ export default function ClientSignUp() {
             !COUNTRY_REGEX.test(country) || !PHONE_NUMBER_REGEX.test(phoneNumber)) {
             handleError("invalid.form")
         } else {
-            setButtonPopup(true)
+            setButtonPopupAcceptAction(true)
         }
     }
 
@@ -390,7 +389,10 @@ export default function ClientSignUp() {
                 </Popup>
                 <PopupAcceptAction
                     open={buttonPopupAcceptAction}
-                    onConfirm={handleConfirm}
+                    onConfirm={()=> {
+                        setButtonPopup(true)
+                        setButtonPopupAcceptAction(false)
+                    }}
                     onCancel={() => {setButtonPopupAcceptAction(false)
                     }}
                 />
