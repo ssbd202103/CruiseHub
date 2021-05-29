@@ -121,7 +121,6 @@ export default function ModeratorPanel() {
                             onOpen={handleIsPasswordEdit}
                             onConfirm={() => {setIsPasswordEdit(false)}}
                             onCancel={() => {setIsPasswordEdit(false)}} />
-                        <LogOutRoundedButton />
                     </Route>
                     <Route exact path="/ManageWorkers">
                         <ManageWorkers/>

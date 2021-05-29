@@ -75,7 +75,6 @@ export default function ChangePassword({open, onOpen, onConfirm, onCancel}: Chan
     return (
         <>
             <Grid item style={{display: open ? "none" : "block"}} className={styles.item}>
-                <h3>{t("password")}</h3>
                 <RoundedButton color="blue"
                                onClick={onOpen}
                 >{t("password change btn")}</RoundedButton>
