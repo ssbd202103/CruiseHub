@@ -324,4 +324,23 @@ public class AccountEndpoint extends BaseEndpoint implements AccountEndpointLoca
         Client client = (Client) accountManager.getAccountAccessLevel(login, AccessLevelType.CLIENT);
         return MetadataMapper.toMetadataDto(client.getHomeAddress());
     }
+
+    @RolesAllowed("authenticatedUser")
+    @Override
+    public MetadataDto getSelfMetadata() throws BaseAppException {
+        return MetadataMapper.toMetadataDto(accountManager.getCurrentUser());
+    }
+
+    @RolesAllowed("authenticatedUser")
+    @Override
+    public MetadataDto getSelfAccessLevelMetadata(AccessLevelType accessLevelType) throws BaseAppException {
+        return MetadataMapper.toMetadataDto(accountManager.getCurrentUserAccessLevel(accessLevelType));
+    }
+
+    @RolesAllowed("authenticatedUser")
+    @Override
+    public MetadataDto getSelfAddressMetadata() throws BaseAppException {
+        Client client = (Client) accountManager.getCurrentUserAccessLevel(AccessLevelType.CLIENT);
+        return MetadataMapper.toMetadataDto(client.getHomeAddress());
+    }
 }

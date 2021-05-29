@@ -28,6 +28,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
+import java.util.Locale;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 import static pl.lodz.p.it.ssbd2021.ssbd03.utils.TransactionRepeater.tryAndRepeat;
@@ -362,21 +363,28 @@ public class AccountController {
     }
 
     @GET
-    @Path("/account-metadata/{login}")
+    @Path("/metadata/{login}")
     @Produces(MediaType.APPLICATION_JSON)
     public MetadataDto getAccountMetadata(@PathParam("login") String login) throws BaseAppException {
         return tryAndRepeat(() -> accountEndpoint.getAccountMetadata(login));
     }
 
     @GET
-    @Path("/client-metadata/{login}")
+    @Path("/metadata/access-level/{access-level}/{login}")
     @Produces(MediaType.APPLICATION_JSON)
-    public MetadataDto getAccountAccessLevelsMetadata(@PathParam("login") String login) throws BaseAppException {
-        return tryAndRepeat(() -> accountEndpoint.getAccessLevelMetadata(login, AccessLevelType.CLIENT));
+    public MetadataDto getAccountAccessLevelMetadata(@PathParam("login") String login,
+                                                     @PathParam("access-level") String accessLevel) throws BaseAppException {
+        AccessLevelType accessLevelType;
+        try {
+            accessLevelType = AccessLevelType.valueOf(accessLevel.toUpperCase().replace('-', '_'));
+        } catch (IllegalArgumentException e) {
+            throw new ControllerException(ACCESS_LEVEL_PARSE_ERROR);
+        }
+        return tryAndRepeat(() -> accountEndpoint.getAccessLevelMetadata(login, accessLevelType));
     }
 
     @GET
-    @Path("/address-metadata/{login}")
+    @Path("/metadata/address/{login}")
     @Produces(MediaType.APPLICATION_JSON)
     public MetadataDto getClientAddressMetadata(@PathParam("login") String login) throws BaseAppException {
         return tryAndRepeat(() -> accountEndpoint.getAddressMetadata(login));

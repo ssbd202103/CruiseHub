@@ -125,6 +125,7 @@ const resources = {
             "error.account.accessLevels.notAssignable": "Nie można przydzielić podanego poziomu dostępu",
             "error.account.accessLevels.alreadyDisabled": "Poziom dostępu jest już zablokowany",
             "error.account.accessLevels.alreadyEnabled": "Poziom dostępu nie jest zablokowany",
+            "error.account.accessLevels.parse": "Podany poziom dostępu nie może być poprawnie odczytany",
             "error.security.etag.empty": "Żądanie nie zawiera wymaganego nagłówka ETag",
             "error.security.etag.invalid": "Nagłówek ETag żądania nie przechodzi walidacji",
             "error.security.etag.integrity": "Nagłówek ETag nie jest spójny z przekazanymi danymi",
@@ -137,7 +138,7 @@ const resources = {
             "error.code.dontMatchError": "Podany kod nie jest poprawny",
             "error.code.expireError": "Podany kod wygasł",
             "error.code.alreadyUsedError": "Podany kod został już użyty",
-            "error.code.incorrectCodeError":"Podany kod jest niepoprawny",
+            "error.code.incorrectCodeError": "Podany kod jest niepoprawny",
             "error.security.etag.creation": "Błąd podczas tworzenia nagłówka ETag",
             "error.account.accessLevels.doesNotExist": "Dany poziom dostępu nie istnieje!",
             "error.password.reset.tokenUsed": "Podany link aktywacyjny został już wykorzystany!",
@@ -218,10 +219,10 @@ const resources = {
             "/ChangeAccessLevelState": "Zmień stan poziomu dostępu",
             'accept.action': 'Czy chcesz wykonac te akcje',
 
-            'yes':'Tak',
-            'no':'Nie',
+            'yes': 'Tak',
+            'no': 'Nie',
 
-            "update":"Odśwież"
+            "update": "Odśwież"
         }
     },
     en: {
@@ -349,6 +350,7 @@ const resources = {
             "error.account.accessLevels.notAssignable": "Cannot assign this access level",
             "error.account.accessLevels.alreadyDisabled": "Access level is already disabled",
             "error.account.accessLevels.alreadyEnabled": "Access level is already enabled",
+            "error.account.accessLevels.parse": "Provided access level could not be parsed",
             "error.security.etag.empty": "Request does not contain necessary ETag header",
             "error.security.etag.invalid": "Request's ETag header does not pass validation",
             "error.security.etag.integrity": "Request's ETag header does not match provided data",
@@ -361,7 +363,7 @@ const resources = {
             "error.code.dontMatchError": "Inserted code is not correct",
             "error.code.expireError": "Inserted code expire",
             "error.code.alreadyUsedError": "Inserted code is already used",
-            "error.code.incorrectCodeError":"Inserted code is incorrect",
+            "error.code.incorrectCodeError": "Inserted code is incorrect",
             "error.security.etag.creation": "Error during creating ETag",
             "error.account.accessLevels.doesNotExist": "Given access level does not exists",
             "error.password.reset.tokenUsed": "Given activation link has already been used",
@@ -442,9 +444,9 @@ const resources = {
 
             'accept.action': 'Do you want to do this action?',
 
-            'yes':'Yes',
-            'no':'No',
-            "update":"Refresh"
+            'yes': 'Yes',
+            'no': 'No',
+            "update": "Refresh"
         }
     }
 }

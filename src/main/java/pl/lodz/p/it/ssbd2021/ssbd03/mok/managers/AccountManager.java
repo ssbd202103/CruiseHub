@@ -520,6 +520,13 @@ public class AccountManager implements AccountManagerLocal {
         return getAccessLevel(account, accessLevelType);
     }
 
+    @RolesAllowed("authenticatedUser")
+    @Override
+    public AccessLevel getCurrentUserAccessLevel(AccessLevelType accessLevelType) throws BaseAppException {
+        Account account = getCurrentUser();
+        return getAccessLevel(account, accessLevelType);
+    }
+
 
     private AccessLevel getAccessLevel(Account account, AccessLevelType accessLevelType) throws AccountManagerException {
         Optional<AccessLevel> optionalAccessLevel = account.getAccessLevels().stream()

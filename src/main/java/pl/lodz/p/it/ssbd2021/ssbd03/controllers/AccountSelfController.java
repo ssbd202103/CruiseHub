@@ -2,6 +2,8 @@ package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.dto.MetadataDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.ControllerException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountVerificationDto;
@@ -19,8 +21,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import static javax.ws.rs.core.Response.Status.NOT_ACCEPTABLE;
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ETAG_IDENTITY_INTEGRITY_ERROR;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 import static pl.lodz.p.it.ssbd2021.ssbd03.utils.TransactionRepeater.tryAndRepeat;
 
 @Path("/self")
@@ -150,5 +151,31 @@ public class AccountSelfController {
         tryAndRepeat(() -> accountEndpoint.changeMode(changeModeDto));
     }
 
+    @GET
+    @Path("/metadata")
+    @Produces(MediaType.APPLICATION_JSON)
+    public MetadataDto getSelfAccountMetadata() throws BaseAppException {
+        return tryAndRepeat(() -> accountEndpoint.getSelfMetadata());
+    }
+
+    @GET
+    @Path("/metadata/access-level/{access-level}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public MetadataDto getSelfAccessLevelMetadata(@PathParam("access-level") String accessLevel) throws BaseAppException {
+        AccessLevelType accessLevelType;
+        try {
+            accessLevelType = AccessLevelType.valueOf(accessLevel.toUpperCase().replace('-', '_'));
+        } catch (IllegalArgumentException e) {
+            throw new ControllerException(ACCESS_LEVEL_PARSE_ERROR);
+        }
+        return tryAndRepeat(() -> accountEndpoint.getSelfAccessLevelMetadata(accessLevelType));
+    }
+
+    @GET
+    @Path("/metadata/address/")
+    @Produces(MediaType.APPLICATION_JSON)
+    public MetadataDto getSelfAddressMetadata() throws BaseAppException {
+        return tryAndRepeat(() -> accountEndpoint.getSelfAddressMetadata());
+    }
 
 }

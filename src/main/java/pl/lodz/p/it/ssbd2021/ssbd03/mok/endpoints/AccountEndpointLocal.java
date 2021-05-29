@@ -313,5 +313,32 @@ public interface AccountEndpointLocal {
      *                          użytkownik nie będzie klientem lub naruszone zostaną inne zasady biznesowe
      */
     MetadataDto getAddressMetadata(String login) throws BaseAppException;
+
+    /**
+     * Metoda pobierające metadane obecnego użytkownika
+     *
+     * @return Reprezentacja DTO metadanych
+     * @throws BaseAppException Wyjątek bazowy aplikacji w przypadku niezlezienia konta lub naruszenia zasad biznesowych
+     */
+    MetadataDto getSelfMetadata() throws BaseAppException;
+
+    /**
+     * Metoda pobierające metadane danego poziomu dostępu obecnego użytkownika
+     *
+     * @return Reprezentacja DTO metadanych
+     * @throws BaseAppException Wyjątek bazowy aplikacji w przypadku niezlezienia konta lub poziomu dostępu,
+     *                          lub naruszenia zasad biznesowych
+     */
+    MetadataDto getSelfAccessLevelMetadata(AccessLevelType accessLevelType) throws BaseAppException;
+
+    /**
+     * Metoda pobierające metadane adresu obecnie zalogowanego klienta
+     *
+     * @return Reprezentacja DTO metadanych
+     * @throws BaseAppException Wyjątek bazowy aplikacji w przypadku gdy konto nie zostanie znalezione,
+     *                          użytkownik nie będzie klientem lub naruszone zostaną inne zasady biznesowe
+     */
+    MetadataDto getSelfAddressMetadata() throws BaseAppException;
+
 }
 

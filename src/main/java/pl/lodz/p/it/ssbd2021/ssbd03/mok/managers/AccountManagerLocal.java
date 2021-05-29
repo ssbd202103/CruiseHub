@@ -330,4 +330,15 @@ public interface AccountManagerLocal {
      *                          lub przy naruszeniu zasad biznesowych
      */
     AccessLevel getAccountAccessLevel(String login, AccessLevelType accessLevelType) throws BaseAppException;
+
+
+    /**
+     * Zwraca wybrany poziom dostępu przypisany do konta
+     *
+     * @param accessLevelType Typ wybranego poziomu dostępu
+     * @return Poziom dostępu
+     * @throws BaseAppException Bazowy wyjątek aplikacji w przypadku nieznalezienia konta lub poziomu dostępu,
+     *                          lub przy naruszeniu zasad biznesowych
+     */
+    AccessLevel getCurrentUserAccessLevel(AccessLevelType accessLevelType) throws BaseAppException;
 }

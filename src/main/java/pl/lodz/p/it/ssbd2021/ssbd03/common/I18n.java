@@ -85,9 +85,9 @@ public class I18n {
     public static final String REQUEST_EMAIL_CHANGE_SUBJECT = "account.request.change.email.subject";
     public static final String REQUEST_EMAIL_CHANGE_BODY = "account.request.change.email.body";
     public static final String BUSINESS_WORKER_CONFIRMED = "error.business.worker.confirmed";
-
     public static final String LOG_IN_SUBJECT = "log.in.subject";
     public static final String LOG_IN_BODY = "log.in.body";
+    public static final String ACCESS_LEVEL_PARSE_ERROR = "error.account.accessLevels.parse";
 
     private ResourceBundle bundle;
 
