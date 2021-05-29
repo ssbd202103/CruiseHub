@@ -12,7 +12,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.EndpointException;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.JWTException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
@@ -283,13 +282,7 @@ public class AccountEndpoint extends BaseEndpoint implements AccountEndpointLoca
 
     @RolesAllowed("authenticatedUser")
     public void changeMode(ChangeModeDto changeModeDto) throws BaseAppException {
-        Long version = getAccountByLogin(changeModeDto.getLogin()).getVersion();
-
-        if (!version.equals(changeModeDto.getVersion())) {
-            throw FacadeException.optimisticLock();
-        }
-
-        this.accountManager.changeMode(changeModeDto.getLogin(), changeModeDto.isNewMode());
+        this.accountManager.changeMode(changeModeDto.getLogin(), changeModeDto.isNewMode(), changeModeDto.getVersion());
     }
 
     @RolesAllowed("ConfirmBusinessWorker")
@@ -304,6 +297,7 @@ public class AccountEndpoint extends BaseEndpoint implements AccountEndpointLoca
     public void requestEmailChange(AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException {
         accountManager.requestEmailChange(accountChangeEmailDto.getLogin(), accountChangeEmailDto.getNewEmail());
     }
+
     @RolesAllowed("changeOtherEmail")
     @Override
     public void requestOtherEmailChange(AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException {
