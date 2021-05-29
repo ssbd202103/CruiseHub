@@ -11,7 +11,7 @@ import {useTranslation} from 'react-i18next'
 
 import styles from '../styles/auth.global.module.css'
 import axios from "../Services/URL"
-import React, {useState} from "react"
+import React, {useEffect, useState} from "react"
 import {setLogin as setLoginAction} from '../redux/slices/userSlice'
 
 
@@ -34,24 +34,34 @@ export default function SignIn() {
     const [login, setLogin] = useState('')
     const [password, setPassword] = useState('')
 
-    const auth = async () => {
-        const json = JSON.stringify({
-            login: login,
-            password: password
-        })
+    const [loginEmptyError, setLoginEmptyError] = useState(false)
+    const [passwordEmptyError, setPasswordEmptyError] = useState(false)
 
-        axios.post('/auth/sign-in', json, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(res => {
-            dispatch(setLoginAction(login))
-            history.push('/codeSignIn')
-            showSuccess(t('successful action'))
-        }).catch(error => {
-            const message = error.response.data
-            handleError(message)
-        })
+
+    const auth = () => {
+        if (login === "" || password === "") {
+            login ? setPasswordEmptyError(true) : setLoginEmptyError(true)
+            handleError("fill.login.password.fields")
+        } else {
+            const json = JSON.stringify({
+                login: login,
+                password: password
+            })
+            axios.post('/auth/sign-in', json, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(res => {
+                dispatch(setLoginAction(login))
+                history.push('/codeSignIn')
+                showSuccess(t('successful action'))
+            }).catch(error => {
+                const message = error.response.data
+                handleError(message)
+            })
+        }
+
+
     }
 
     return (
@@ -70,8 +80,10 @@ export default function SignIn() {
                 value={login}
                 onChange={event => {
                     setLogin(event.target.value)
+                    event.target.value ? setLoginEmptyError(false) : setLoginEmptyError(true)
                 }}
                 colorIgnored
+                regexError={loginEmptyError}
             />
 
             <DarkedTextField
@@ -86,7 +98,9 @@ export default function SignIn() {
                 value={password}
                 onChange={event => {
                     setPassword(event.target.value)
+                    event.target.value ? setPasswordEmptyError(false) : setPasswordEmptyError(true)
                 }}
+                regexError={passwordEmptyError}
                 colorIgnored
             />
 
