@@ -92,7 +92,7 @@ export default function Checkboxes() {
                     onCancel={() => {setButtonPopupAcceptAction(false)
                     }}
                 />
-                <Link to="/panels/adminPanel/accounts">
+                <Link to="/accounts">
                     <RoundedButton color="pink">
                         {t("go back")}
                     </RoundedButton>

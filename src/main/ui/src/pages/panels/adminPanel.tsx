@@ -14,7 +14,6 @@ import {Link, Redirect, Route} from 'react-router-dom'
 import PanelMenu from '../../components/PanelMenu'
 
 import ChangeAccountData from "./admin/ChangeAccountData"
-import ChangeAccountPassword from "./admin/ChangeAccountPassword"
 import GrantAccessLevel from "./admin/GrantAccessLevel"
 import ChangeAccessLevelState from "./admin/ChangeAccessLevelState"
 
@@ -74,7 +73,7 @@ export default function AdminPanel() {
             <Header />
             <Breadcrumb />
             <Grid container className={styles.wrapper}>
-                <Redirect to="/accounts" />
+                <Redirect to="/accounts"  />
                 <Grid item xs={2} md={3} xl={2}>
                     <PanelMenu color={!darkMode ? 'yellow-dark' : 'white-light'}>
                         <List className={styles.menu + ' ' + styles['menu-' + (!darkMode ? 'light' : 'dark')]} component="nav" aria-label="panel menu">
@@ -94,12 +93,13 @@ export default function AdminPanel() {
                                     <ListItemText>{t("settings")}</ListItemText>
                                 </ListItem>
                             </Link>
+
                         </List>
                     </PanelMenu>
                 </Grid>
 
                 <Grid item className={styles.content + ' ' + styles[`content-${!darkMode ? 'light' : 'dark'}`]} xs={10} md={9} xl={10}>
-                    <Route path="/accounts">
+                    <Route exact path="/accounts">
                         <h3> {t("list accounts")} </h3>
                         <ListClient />
                     </Route>
@@ -120,16 +120,14 @@ export default function AdminPanel() {
                             onConfirm={() => {setIsPasswordEdit(false)}}
                             onCancel={() => {setIsPasswordEdit(false)}} />
                     </Route>
-                    <Route path="/ChangeAccountData">
+
+                    <Route path="/accounts/change_account_data">
                         <ChangeAccountData/>
                     </Route>
-                    <Route path="/ChangeAccountPassword">
-                        <ChangeAccountPassword/>
-                    </Route>
-                    <Route path="/GrantAccessLevel">
+                    <Route path="/accounts/grant_access_level">
                         <GrantAccessLevel/>
                     </Route>
-                    <Route path="/ChangeAccessLevelState">
+                    <Route path="/accounts/change_access_level_state">
                         <ChangeAccessLevelState/>
                     </Route>
                     <Route path="/reset/resetSomebodyPassword">

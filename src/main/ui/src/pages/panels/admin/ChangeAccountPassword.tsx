@@ -55,10 +55,10 @@ export default function ChangeAccountPassword() {
                         color="blue"
                         onClick={changePassword}
                     >{t("confirm")}</RoundedButton>
-                    
+
                 </Grid>
                 <Grid item>
-                    <Link to="/panels/adminPanel/accounts">
+                    <Link to="/accounts">
                         <RoundedButton color="pink">
                             {t("go back")}
                         </RoundedButton>

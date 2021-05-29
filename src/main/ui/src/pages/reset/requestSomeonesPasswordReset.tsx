@@ -59,7 +59,7 @@ const RequestSomeonePasswordReset = () => {
                 colorIgnored
             />
 
-            <Link to="/panels/adminPanel/accounts">
+            <Link to="accounts">
             <RoundedButton
                 onClick={()=>setButtonPopupAcceptAction(true)}
                 style={{width: '100%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}

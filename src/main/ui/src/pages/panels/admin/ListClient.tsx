@@ -204,7 +204,7 @@ function Row(props: RowProps) {
                                 <TableBody>
                                     <TableRow>
                                         <TableCell align="center">
-                                            <Link to="/ChangeAccountData">
+                                            <Link to="/accounts/change_account_data">
                                                 <Button className={buttonClass.root}>{t("edit")}</Button>
                                             </Link>
                                             <Link to="/reset/resetSomebodyPassword">
@@ -252,12 +252,12 @@ function Row(props: RowProps) {
                                                 }}
                                             />
 
-                                            <Link to="/panels/adminPanel/GrantAccessLevel/">
+                                            <Link to="/accounts/grant_access_level">
                                                 <Button onClick={setCurrentGrantAccessLevelAccount}
                                                         className={buttonClass.root}>{t("grant access level")}</Button>
                                             </Link>
 
-                                            <Link to="/ChangeAccessLevelState">
+                                            <Link to="/accounts/change_access_level_state">
                                                 <Button onClick={setCurrentChangeAccessLevelStateAccount}
                                                         className={buttonClass.root}>{t("change access level state")}</Button>
                                             </Link>

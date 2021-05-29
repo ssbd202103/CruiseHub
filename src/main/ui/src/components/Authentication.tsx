@@ -143,20 +143,6 @@ export default function Authentication() {
                     </>
                 )
             }
-
-
-            {/*<Link to="panels/adminPanel">*/}
-            {/*    <a style={{marginRight: 20}} className={styles.link}>{t("adminPanel")}</a>*/}
-            {/*</Link>*/}
-            {/*<Link to="panels/moderatorPanel">*/}
-            {/*    <a style={{marginRight: 20}} className={styles.link}>{t("moderatorPanel")}</a>*/}
-            {/*</Link>*/}
-            {/*<Link to="panels/clientPanel">*/}
-            {/*    <a style={{marginRight: 20}} className={styles.link}>{t("clientPanel")}</a>*/}
-            {/*</Link>*/}
-            {/*<Link to="panels/workerPanel">*/}
-            {/*    <a style={{marginRight: 20}} className={styles.link}>{t("workerPanel")}</a>*/}
-            {/*</Link>*/}
         </Box>
     )
 }
