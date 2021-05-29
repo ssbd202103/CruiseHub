@@ -1,4 +1,4 @@
-import {Link} from 'react-router-dom'
+import {Link, useHistory} from 'react-router-dom'
 
 import Box from '@material-ui/core/Box'
 import EmailIcon from '@material-ui/icons/AlternateEmail'
@@ -37,6 +37,7 @@ export default function ClientSignUp() {
     const handleError = useHandleError()
     const showSuccess = useSnackbarQueue('success')
 
+    const history = useHistory();
     const [firstName, setFirstName] = useState('')
     const [secondName, setSecondName] = useState('')
     const [login, setLogin] = useState('')
@@ -97,7 +98,8 @@ export default function ClientSignUp() {
                 'Content-Type': 'application/json'
             }
         }).then(res=>{
-            setButtonPopupAcceptAction(false)
+           setButtonPopupAcceptAction(false)
+            history.push('/')
             showSuccess(t('successful action'))
         }).catch(error => {
             setButtonPopupAcceptAction(false)
