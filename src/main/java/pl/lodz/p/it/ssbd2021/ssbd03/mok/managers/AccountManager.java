@@ -37,9 +37,12 @@ import javax.interceptor.Interceptors;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 
 /**
@@ -193,11 +196,12 @@ public class AccountManager implements AccountManagerLocal {
     @Override
     public List<Account> getAllUnconfirmedBusinessWorkers() throws BaseAppException {
         List<Account> res = new ArrayList<>();
-       for(AccessLevel account : accountFacade.getUnconfirmedBusinessWorkers()) {
-               res.add(account.getAccount());
-       }
-       return res;
+        for (AccessLevel account : accountFacade.getUnconfirmedBusinessWorkers()) {
+            res.add(account.getAccount());
+        }
+        return res;
     }
+
     @RolesAllowed("blockUser")
     @Override
     public Account blockUser(String login, long version) throws BaseAppException {
@@ -232,10 +236,12 @@ public class AccountManager implements AccountManagerLocal {
 
     @RolesAllowed("changeEmail")
     @Override
-    public void requestEmailChange(String login, String newEmail) throws BaseAppException{
+    public void requestEmailChange(String login, String newEmail) throws BaseAppException {
         Account account = this.accountFacade.findByLogin(login);
-
-        Map<String, Object> claims = Map.of("version", account.getVersion(),"email",newEmail,"accessLevels", account.getAccessLevels()
+        if (this.accountFacade.isEmailPresent(newEmail)) {
+            throw new AccountManagerException(EMAIL_RESERVED_ERROR);
+        }
+        Map<String, Object> claims = Map.of("version", account.getVersion(), "email", newEmail, "accessLevels", account.getAccessLevels()
                 .stream().map(accessLevel -> accessLevel.getAccessLevelType().name()).collect(Collectors.toList()));
 
         String token = JWTHandler.createToken(claims, login);
@@ -250,10 +256,12 @@ public class AccountManager implements AccountManagerLocal {
 
     @RolesAllowed("changeOtherEmail")
     @Override
-    public void requestOtherEmailChange(String login, String newEmail) throws BaseAppException{
+    public void requestOtherEmailChange(String login, String newEmail) throws BaseAppException {
         Account account = this.accountFacade.findByLogin(login);
-
-        Map<String, Object> claims = Map.of("version", account.getVersion(),"email",newEmail,"accessLevels", account.getAccessLevels()
+        if (this.accountFacade.isEmailPresent(newEmail)) {
+            throw new AccountManagerException(EMAIL_RESERVED_ERROR);
+        }
+        Map<String, Object> claims = Map.of("version", account.getVersion(), "email", newEmail, "accessLevels", account.getAccessLevels()
                 .stream().map(accessLevel -> accessLevel.getAccessLevelType().name()).collect(Collectors.toList()));
 
         String token = JWTHandler.createToken(claims, login);
@@ -262,12 +270,28 @@ public class AccountManager implements AccountManagerLocal {
         Locale locale = new Locale(account.getLanguageType().getName().name());
         String subject = i18n.getMessage(REQUEST_EMAIL_CHANGE_SUBJECT, locale);
         String body = i18n.getMessage(REQUEST_EMAIL_CHANGE_BODY, locale);
-        String contentHtml = "<a href=\"" + PropertiesReader.getSecurityProperties().getProperty("app.baseurl") + "/reset/changeOtherEmail/" + token + "\">" + body + "</a>";
+        String contentHtml = "<a href=\"" + PropertiesReader.getSecurityProperties().getProperty("app.baseurl") + "/reset/changeEmail/" + token + "\">" + body + "</a>";
         EmailService.sendEmailWithContent(account.getEmail().trim(), subject, contentHtml);
     }
+
     @PermitAll
     @Override
     public void resetPassword(String login, String passwordHash, String token) throws BaseAppException {
+
+        TokenWrapper tokenW;
+        try {
+            tokenW = this.tokenWrapperFacade.findByToken(token);
+        } catch (BaseAppException e) {
+            if (e.getMessage().equals(NO_SUCH_ELEMENT_ERROR)) {
+                throw new AccountManagerException(TOKEN_INVALIDATE_ERROR);
+            } else {
+                throw new AccountManagerException(e.getMessage(), e);
+            }
+        }
+        if (tokenW.isUsed()) {
+            throw new AccountManagerException(TOKEN_ALREADY_USED_ERROR);
+        }
+
         JWTHandler.validateToken(token);
 
         Map<String, Claim> claims = JWTHandler.getClaimsFromToken(token);
@@ -302,8 +326,22 @@ public class AccountManager implements AccountManagerLocal {
     @PermitAll
     @Override
     public void verifyAccount(String token) throws BaseAppException {
-        JWTHandler.validateToken(token);
 
+        TokenWrapper tokenW;
+        try {
+            tokenW = this.tokenWrapperFacade.findByToken(token);
+        } catch (BaseAppException e) {
+            if (e.getMessage().equals(NO_SUCH_ELEMENT_ERROR)) {
+                throw new AccountManagerException(TOKEN_INVALIDATE_ERROR);
+            } else {
+                throw new AccountManagerException(e.getMessage(), e);
+            }
+        }
+        if (tokenW.isUsed()) {
+            throw new AccountManagerException(TOKEN_ALREADY_USED_ERROR);
+        }
+
+        JWTHandler.validateToken(token);
         Map<String, Claim> claims = JWTHandler.getClaimsFromToken(token);
         Date expire = JWTHandler.getExpirationTimeFromToken(token);
 
@@ -326,9 +364,8 @@ public class AccountManager implements AccountManagerLocal {
         }
 
         account.setConfirmed(true);
-        TokenWrapper tokenWrapper = this.tokenWrapperFacade.findByToken(token);
-        tokenWrapper.setUsed(true);
-        this.tokenWrapperFacade.edit(tokenWrapper);
+        tokenW.setUsed(true);
+        this.tokenWrapperFacade.edit(tokenW);
         setUpdatedMetadataWithModifier(account, account);
         Locale locale = new Locale(account.getLanguageType().getName().name());
         String body = i18n.getMessage(ACTIVATE_ACCOUNT_BODY, locale);
@@ -432,6 +469,19 @@ public class AccountManager implements AccountManagerLocal {
     @RolesAllowed("changeEmail")
     @Override
     public void changeEmail(String token) throws BaseAppException {
+        TokenWrapper tokenW;
+        try {
+            tokenW = this.tokenWrapperFacade.findByToken(token);
+        } catch (BaseAppException e) {
+            if (e.getMessage().equals(NO_SUCH_ELEMENT_ERROR)) {
+                throw new AccountManagerException(TOKEN_INVALIDATE_ERROR);
+            } else {
+                throw new AccountManagerException(e.getMessage(), e);
+            }
+        }
+        if (tokenW.isUsed()) {
+            throw new AccountManagerException(TOKEN_ALREADY_USED_ERROR);
+        }
         JWTHandler.validateToken(token);
 
         Map<String, Claim> claims = JWTHandler.getClaimsFromToken(token);
@@ -452,6 +502,9 @@ public class AccountManager implements AccountManagerLocal {
             throw FacadeException.optimisticLock();
         }
         String newEmail = claims.get("email").asString();
+        if (this.accountFacade.isEmailPresent(newEmail)) {
+            throw new AccountManagerException(EMAIL_RESERVED_ERROR);
+        }
         TokenWrapper tokenWrapper = this.tokenWrapperFacade.findByToken(token);
         tokenWrapper.setUsed(true);
         this.tokenWrapperFacade.edit(tokenWrapper);
@@ -461,36 +514,6 @@ public class AccountManager implements AccountManagerLocal {
     }
 
 
-    @RolesAllowed("changeEmail")
-    @Override
-    public void changeOtherEmail(String token) throws BaseAppException {
-        JWTHandler.validateToken(token);
-
-        Map<String, Claim> claims = JWTHandler.getClaimsFromToken(token);
-        Date expire = JWTHandler.getExpirationTimeFromToken(token);
-
-        if (claims.get("sub").isNull() || claims.get("version").isNull()) {
-            throw new AccountManagerException(ACCOUNT_VERIFICATION_TOKEN_CONTENT_ERROR);
-        }
-
-        String login = claims.get("sub").asString();
-        if (expire.before(new Date())) {
-            throw new AccountManagerException(TOKEN_EXPIRED_ERROR);
-        }
-
-        Account account = this.accountFacade.findByLogin(login);
-
-        if (!(account.getVersion() == claims.get("version").asLong())) {
-            throw FacadeException.optimisticLock();
-        }
-        String newEmail = claims.get("email").asString();
-        TokenWrapper tokenWrapper = this.tokenWrapperFacade.findByToken(token);
-        tokenWrapper.setUsed(true);
-        this.tokenWrapperFacade.edit(tokenWrapper);
-        account.setEmail(newEmail.toLowerCase());
-
-        setUpdatedMetadata(account);
-    }
     private AccessLevel getAccessLevel(Account from, AccessLevelType target) throws AccountManagerException {
         Optional<AccessLevel> optionalAccessLevel = from.getAccessLevels().stream()
                 .filter(accessLevel -> accessLevel.getAccessLevelType().equals(target)).findAny();
@@ -606,19 +629,36 @@ public class AccountManager implements AccountManagerLocal {
         Account account = this.accountFacade.updateAuthenticateInfo(login, ipAddr, time, true);
         account.setNumberOfAuthenticationFailures(0);
 
-        Map<String, Object> map = Map.of("accessLevels", account.getAccessLevels()
-                .stream().map(accessLevel -> accessLevel.getAccessLevelType().name()).collect(Collectors.toList()));
+        Map<String, Object> map = Map.of("accessLevels", getAuthorizedAccessLevels(account)
+                .map(accessLevel -> accessLevel.getAccessLevelType().name()).collect(Collectors.toList()));
 
-        if(account.getAccessLevels().stream().anyMatch(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.ADMINISTRATOR)) {
+        if (account.getAccessLevels().stream().anyMatch(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.ADMINISTRATOR)) {
             Locale locale = new Locale(account.getLanguageType().getName().name());
             String body = i18n.getMessage(LOG_IN_BODY, locale);
-            body = String.format("%s %s",body,ipAddr);
+            body = String.format("%s %s", body, ipAddr);
             String subject = i18n.getMessage(LOG_IN_SUBJECT, locale);
             EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
         }
         return JWTHandler.createToken(map, account.getLogin());
     }
 
+
+    @RolesAllowed("authenticatedUser")
+    public String refreshJWTToken(String token) throws BaseAppException {
+        Map<String, Claim> claims = JWTHandler.getClaimsFromToken(token);
+
+        try {
+            String login = claims.get("sub").asString();
+            Set<String> accessLevelsFromToken = new HashSet<>(claims.get("accessLevels").asList(String.class));
+            Account account = accountFacade.findByLogin(login);
+            if (!canUserRefreshToken(account, accessLevelsFromToken)) {
+                throw new AccountManagerException(TOKEN_REFRESH_ERROR);
+            }
+            return JWTHandler.refreshToken(token);
+        } catch (NullPointerException e) {
+            throw new AccountManagerException(TOKEN_REFRESH_ERROR);
+        }
+    }
 
     @RolesAllowed("authenticatedUser")
     @Override
@@ -640,6 +680,54 @@ public class AccountManager implements AccountManagerLocal {
     @RolesAllowed("authenticatedUser")
     public Account getCurrentUser() throws BaseAppException {
         return accountFacade.findByLogin(context.getUserPrincipal().getName());
+    }
+
+    @RolesAllowed("ConfirmBusinessWorker")
+    @Override
+    public void confirmBusinessWorker(String login, long version) throws BaseAppException {
+        Account account = accountFacade.findByLogin(login);
+        BusinessWorker worker = (BusinessWorker) getAccessLevel(account, AccessLevelType.BUSINESS_WORKER);
+        if (!(worker.getVersion() == version)) {
+            throw FacadeException.optimisticLock();
+        }
+        if (worker.isConfirmed()) {
+            throw new AccountManagerException(BUSINESS_WORKER_CONFIRMED);
+        }
+        worker.setConfirmed(true);
+        setUpdatedMetadata(worker);
+    }
+
+    @RolesAllowed("authenticatedUser")
+    public void changeMode(String login, boolean newMode, long version) throws BaseAppException {
+        Account account = accountFacade.findByLogin(login);
+
+        if (!(account.getVersion() == version)) {
+            throw FacadeException.optimisticLock();
+        }
+
+        account.setDarkMode(newMode);
+        setUpdatedMetadata(account);
+    }
+
+    private boolean canUserRefreshToken(Account account, Set<String> tokenAccessLevels) {
+
+        Set<String> accountValidAccessLevels = getAuthorizedAccessLevels(account)
+                .map(a -> a.getAccessLevelType().name()).collect(Collectors.toSet());
+
+        boolean accessLevelsValid = tokenAccessLevels.equals(accountValidAccessLevels) && !tokenAccessLevels.isEmpty();
+
+        return account.isActive() && account.isConfirmed() && accessLevelsValid;
+    }
+
+    private Stream<AccessLevel> getAuthorizedAccessLevels(Account account) {
+        return account.getAccessLevels().stream()
+                .filter(accessLevel -> {
+                    if (accessLevel instanceof BusinessWorker) {
+                        BusinessWorker bw = (BusinessWorker) accessLevel;
+                        return bw.isEnabled() && bw.isConfirmed();
+                    }
+                    return accessLevel.isEnabled();
+                });
     }
 
     private void setUpdatedMetadataWithModifier(Account modifier, BaseEntity... entities) throws BaseAppException {
@@ -667,57 +755,49 @@ public class AccountManager implements AccountManagerLocal {
         }
     }
 
-    @RolesAllowed("authenticatedUser")
-    public void changeMode(String login, boolean newMode) throws BaseAppException {
-        Account account = accountFacade.findByLogin(login);
-
-        account.setDarkMode(newMode);
-        setUpdatedMetadata(account);
-    }
-
-    @RolesAllowed("authenticatedUser")
-    public String refreshJWTToken(String token) throws BaseAppException {
-        Map<String, Claim> claims = JWTHandler.getClaimsFromToken(token);
-
-        try {
-            String login = claims.get("sub").asString();
-            Set<String> accessLevelsFromToken = new HashSet<>(claims.get("accessLevels").asList(String.class));
-            Account account = accountFacade.findByLogin(login);
-            if (!canUserRefreshToken(account, accessLevelsFromToken)) {
-                throw new AccountManagerException(TOKEN_REFRESH_ERROR);
-            }
-            return JWTHandler.refreshToken(token);
-        } catch (NullPointerException e) {
-            throw new AccountManagerException(TOKEN_REFRESH_ERROR);
-        }
-    }
-
-    private boolean canUserRefreshToken(Account account, Set<String> tokenAccessLevels) {
-
-        Set<String> accountValidAccessLevels = account.getAccessLevels().stream()
-                .filter(accessLevel -> {
-                            if (accessLevel instanceof BusinessWorker) {
-                                BusinessWorker bw = (BusinessWorker) accessLevel;
-                                return bw.isEnabled() && bw.isConfirmed();
-                            }
-                            return accessLevel.isEnabled();
-                        }
-                )
-                .map(a -> a.getAccessLevelType().name()).collect(Collectors.toSet());
-
-        boolean accessLevelsValid = tokenAccessLevels.equals(accountValidAccessLevels) && !tokenAccessLevels.isEmpty();
-
-        return account.isActive() && account.isConfirmed() && accessLevelsValid;
-    }
-    @RolesAllowed("ConfirmBusinessWorker")
+    @PermitAll
     @Override
-    public void confirmBusinessWorker(String login, long version) throws BaseAppException {
+    public void sendAuthenticationCodeEmail(String login) throws BaseAppException {
         Account account = accountFacade.findByLogin(login);
-        BusinessWorker worker= (BusinessWorker) getAccessLevel(account,AccessLevelType.BUSINESS_WORKER);
-        if (!(worker.getVersion() == version)) {
-            throw FacadeException.optimisticLock();
+        Locale locale = new Locale(account.getLanguageType().getName().name());
+        String subject = i18n.getMessage(AUTH_CODE_EMAIL_SUBJECT, locale);
+        String body = i18n.getMessage(AUTH_CODE_EMAIL_BODY, locale);
+        String kod = randomAlphanumeric(9);
+        TokenWrapper tokenWrapper = TokenWrapper.builder().token(kod).account(account).used(false).build();
+        this.tokenWrapperFacade.create(tokenWrapper);
+        String contentHtml = "<p>" + body + "<br>" + kod + "</p>";
+        EmailService.sendEmailWithContent(account.getEmail().trim(), subject, contentHtml);
+    }
+
+    @PermitAll
+    @Override
+    public String authWCodeUpdateCorrectAuthenticateInfo(String login, String code, String IpAddr, LocalDateTime time) throws BaseAppException {
+        Account account = this.accountFacade.findByLogin(login);
+        TokenWrapper verificationCode;
+        try {
+            verificationCode = this.tokenWrapperFacade.findByToken(code);
+        } catch (BaseAppException e) {
+            if (e.getMessage().equals(NO_SUCH_ELEMENT_ERROR)) {
+                throw new AccountManagerException(CODE_IS_INCORRECT_ERROR);
+            } else {
+                throw new AccountManagerException(e.getMessage(), e);
+            }
         }
-        worker.setConfirmed(true);
-        setUpdatedMetadata(worker);
+        if (verificationCode.isUsed()) {
+            updateIncorrectAuthenticateInfo(login, IpAddr, time);
+            throw new AccountManagerException(CODE_ALREADY_USED_ERROR);
+        }
+        if (verificationCode.getCreationDateTime().plus(5, ChronoUnit.MINUTES).isBefore(time)) {
+            updateIncorrectAuthenticateInfo(login, IpAddr, time);
+            throw new AccountManagerException(CODE_EXPIRE_ERROR);
+        }
+        if (account.getId() != verificationCode.getAccount().getId()) {
+            updateIncorrectAuthenticateInfo(login, IpAddr, time);
+            throw new AccountManagerException(CODE_IS_INCORRECT_ERROR);
+        }
+        verificationCode.setUsed(true);
+        this.tokenWrapperFacade.edit(verificationCode);
+        return updateCorrectAuthenticateInfo(login, IpAddr, time);
     }
 }
+

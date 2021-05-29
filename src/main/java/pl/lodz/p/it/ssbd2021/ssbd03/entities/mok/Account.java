@@ -26,6 +26,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account.LOGIN_CONSTRAINT
         @NamedQuery(name = "Account.findByLogin", query = "SELECT acc FROM accounts acc WHERE acc.login = :login"),
         @NamedQuery(name = "Account.findById", query = "SELECT acc FROM accounts acc WHERE acc.id = :id"),
         @NamedQuery(name = "Account.findUnconfirmedAccounts", query = "SELECT acc FROM accounts acc WHERE acc.confirmed = false"),
+        @NamedQuery(name = "Account.isEmailPresent", query = "SELECT acc FROM accounts acc WHERE acc.email = :email"),
 })
 @Table(
         indexes = {

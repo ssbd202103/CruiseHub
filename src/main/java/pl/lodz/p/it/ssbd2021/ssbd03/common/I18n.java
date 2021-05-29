@@ -32,6 +32,7 @@ public class I18n {
     public static final String ACCOUNT_VERIFICATION_TOKEN_ALREADY_VERIFIED_ERROR = "error.account.verification.alreadyVerifiedError";
     public static final String TOKEN_DECODE_ERROR = "error.token.decode";
     public static final String TOKEN_INVALIDATE_ERROR = "error.token.invalidate";
+    public static final String TOKEN_ALREADY_USED_ERROR = "error.token.alreadyUsedError";
     public static final String REGEX_INVALID_POST_CODE = "error.regex.postCode";
     public static final String REGEX_INVALID_CITY = "error.regex.city";
     public static final String REGEX_INVALID_COUNTRY = "error.regex.country";
@@ -53,6 +54,8 @@ public class I18n {
     public static final String REQUESTED_PASSWORD_RESET_BODY = "account.request.reset.password.body";
     public static final String VERIFICATION_EMAIL_SUBJECT = "account.verification.subject";
     public static final String VERIFICATION_EMAIL_BODY = "account.verification.body";
+    public static final String AUTH_CODE_EMAIL_SUBJECT = "auth.code.email.subject";
+    public static final String AUTH_CODE_EMAIL_BODY = "auth.code.email.body";
     public static final String REMOVE_UNCONFIRMED_ACCOUNT_SUBJECT = "account.remove.unconfirmed.subject";
     public static final String REMOVE_UNCONFIRMED_ACCOUNT_BODY = "account.remove.unconfirmed.body";
     public static final String BLOCKED_ACCOUNT_SUBJECT = "account.block.subject";
@@ -64,6 +67,10 @@ public class I18n {
     public static final String INCORRECT_LOGIN = "auth.incorrect.login";
     public static final String INCORRECT_PASSWORD = "auth.incorrect.password";
     public static final String PASSWORDS_DONT_MATCH_ERROR = "error.password.change.oldPasswordError";
+    public static final String CODE_DONT_MATCH_ERROR = "error.code.dontMatchError";
+    public static final String CODE_EXPIRE_ERROR = "error.code.expireError";
+    public static final String CODE_ALREADY_USED_ERROR = "error.code.alreadyUsedError";
+    public static final String CODE_IS_INCORRECT_ERROR = "error.code.incorrectCodeError";
     public static final String DATABASE_OPERATION_ERROR = "error.database.operation";
     public static final String LOGIN_RESERVED_ERROR = "error.database.loginReserved";
     public static final String EMAIL_RESERVED_ERROR = "error.database.emailReserved";
@@ -77,6 +84,7 @@ public class I18n {
     public static final String RATING_CONSTRAINT_ERROR = "error.constraint.rating";
     public static final String REQUEST_EMAIL_CHANGE_SUBJECT = "account.request.change.email.subject";
     public static final String REQUEST_EMAIL_CHANGE_BODY = "account.request.change.email.body";
+    public static final String BUSINESS_WORKER_CONFIRMED = "error.business.worker.confirmed";
 
     public static final String LOG_IN_SUBJECT = "log.in.subject";
     public static final String LOG_IN_BODY = "log.in.body";

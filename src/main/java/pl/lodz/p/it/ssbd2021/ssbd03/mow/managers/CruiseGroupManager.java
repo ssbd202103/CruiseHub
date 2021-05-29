@@ -45,12 +45,14 @@ public class CruiseGroupManager implements CruiseGroupManagerLocal {
         return null; //todo
     }
 
-    @RolesAllowed("getAllCruiseGroups")
+
+    @RolesAllowed("getAllCruiseGroupsList")
     @Override
     public List<CruiseGroup> getAllCruiseGroups() throws FacadeException {
         return cruiseGroupFacadeMow.findAll();
     }
 
+    @RolesAllowed("deactivateCruiseGroup")
     @Override
     public CruiseGroup deactivateCruiseGroup(String name, Long version) throws BaseAppException {
         CruiseGroup cruiseGroup = this.cruiseGroupFacadeMow.findByName(name);

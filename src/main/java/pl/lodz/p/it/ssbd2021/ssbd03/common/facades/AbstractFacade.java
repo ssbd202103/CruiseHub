@@ -1,4 +1,4 @@
-package pl.lodz.p.it.ssbd2021.ssbd03.mok.facades;
+package pl.lodz.p.it.ssbd2021.ssbd03.common.facades;
 
 import org.hibernate.exception.ConstraintViolationException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;

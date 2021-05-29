@@ -355,16 +355,4 @@ public class AccountController {
     public void requestOtherEmailChange(AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException {
         tryAndRepeat(() -> this.accountEndpoint.requestOtherEmailChange(accountChangeEmailDto));
     }
-
-    /**
-     * Zmień mail według podanych w dto danych
-     *
-     * @param accountVerificationDto obiekt dto z tokenem
-     */
-    @PUT
-    @Path("/change-other-email")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void changeOtherEmail(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid AccountVerificationDto accountVerificationDto) throws BaseAppException {
-        tryAndRepeat(() -> this.accountEndpoint.changeOtherEmail(accountVerificationDto));
-    }
 }

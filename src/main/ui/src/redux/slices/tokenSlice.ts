@@ -4,13 +4,14 @@ const tokenSlice = createSlice({
     name: 'token',
     initialState: '',
     reducers: {
-        update: (state: string, {payload}: PayloadAction<string>) => payload
+        setToken: (state: string, {payload}: PayloadAction<string>) => payload,
+        clearToken: () => ''
     }
 })
 
-export const {update} = tokenSlice.actions
+export const {setToken, clearToken} = tokenSlice.actions
 
-const selectSelf = (state: {token: string}) => state
+const selectSelf = (state: { token: string }) => state
 
 export const selectToken = createSelector(selectSelf, state => state.token)
 

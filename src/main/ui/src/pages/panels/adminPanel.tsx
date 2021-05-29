@@ -29,6 +29,7 @@ import ChangePassword from "../../components/changeData/ChangePassword";
 import ChangeAdministratorData from "../../components/changeData/ChangeAdministratorData";
 import Header from "../../components/Header";
 import RequestSomeonePasswordReset from "../reset/requestSomeonesPasswordReset";
+import Breadcrumb from "../../components/Breadcrumb";
 
 export default function AdminPanel() {
     const {t} = useTranslation()
@@ -71,6 +72,7 @@ export default function AdminPanel() {
     return (
         <>
             <Header />
+            <Breadcrumb />
             <Grid container className={styles.wrapper}>
                 <Redirect to="/accounts" />
                 <Grid item xs={2} md={3} xl={2}>

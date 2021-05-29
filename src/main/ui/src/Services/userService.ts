@@ -1,9 +1,8 @@
 import store from "../redux/store";
 import axios from "../Services/URL"
-import {update} from "../redux/slices/tokenSlice";
-import {setUser, emptyUser} from "../redux/slices/userSlice";
+import {clearToken, setToken} from "../redux/slices/tokenSlice";
+import {emptyUser, IUserSliceState, setUser} from "../redux/slices/userSlice";
 import jwt_decode from "jwt-decode";
-import {IUserSliceState} from "../redux/slices/userSlice";
 
 export function getUser(token: string) {
     return axios.get('self/account-details', {
@@ -11,7 +10,7 @@ export function getUser(token: string) {
             'Authorization': `Bearer ${token}`
         }
     }).then(res => {
-        store.dispatch(update(token))
+        store.dispatch(setToken(token))
         store.dispatch(setUser(res.data))
 
         saveUser(res.data as IUserSliceState, token)
@@ -23,14 +22,16 @@ export function getSavedUser() {
     const savedUser = sessionStorage.getItem('cruisehub_user');
 
     if (savedToken && savedUser) {
-        store.dispatch(update(savedToken))
+        store.dispatch(setToken(savedToken))
         store.dispatch(setUser(JSON.parse(savedUser) as IUserSliceState))
     }
 }
 
 export function logOut() {
-    store.dispatch(emptyUser())
+    // store.dispatch(emptyUser())
+    // store.dispatch(clearToken())
     sessionStorage.clear()
+    document.location.replace('/')
 }
 
 export function saveUser(user: IUserSliceState, token: string | null = null) {
@@ -51,7 +52,7 @@ export function refreshToken() {
                 'Authorization': `Bearer ${store.getState().token}`
             }
         }).then(res => {
-            store.dispatch(update(res.data))
+            store.dispatch(setToken(res.data))
         }).catch(error => {
             logOut()
         })

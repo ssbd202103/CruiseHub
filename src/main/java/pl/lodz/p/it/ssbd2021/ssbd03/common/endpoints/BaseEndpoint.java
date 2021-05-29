@@ -1,4 +1,4 @@
-package pl.lodz.p.it.ssbd2021.ssbd03.entities.common.endpoints;
+package pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints;
 
 import lombok.extern.java.Log;
 

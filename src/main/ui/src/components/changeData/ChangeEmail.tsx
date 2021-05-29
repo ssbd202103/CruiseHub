@@ -12,11 +12,13 @@ import {ChangeDataComponentProps} from '../interfaces'
 import Recaptcha from "react-recaptcha";
 import Popup from "../../PopupRecaptcha";
 import {useSnackbarQueue} from "../../pages/snackbar";
+import useHandleError from "../../errorHandler";
+import PopupAcceptAction from "../../PopupAcceptAction";
 
 export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeDataComponentProps) {
     // i18n
     const {t} = useTranslation()
-    const showError = useSnackbarQueue('error')
+    const handleError = useHandleError()
     const showSuccess = useSnackbarQueue('success')
     // redux
     const dispatch = useDispatch()
@@ -35,16 +37,17 @@ export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeD
 
     const [buttonPopup, setButtonPopup] = useState(false);
 
+    const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
 
     function verifyCallback(){
         setButtonPopup(false)
         if (!emailValue || !confirmEmailValue) {
-            showError(t('error.fields'))
+            handleError('error.fields')
             return;
         }
 
         if (emailValue !== confirmEmailValue) {
-            showError(t('emails are not equal'))
+            handleError('emails are not equal')
             return;
         }
 
@@ -52,11 +55,12 @@ export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeD
             setEmailValue('')
             setConfirmEmailValue('')
             onConfirm()
-        }).catch(error => {
-            const message = error.response.data
-            showError(t(message))
-        }).then(res=>{
+            setButtonPopupAcceptAction(false)
             showSuccess(t('successful action'))
+        }).catch(error => {
+            setButtonPopupAcceptAction(false)
+            const message = error.response.data
+            handleError(message)
         });
     }
 
@@ -106,8 +110,14 @@ export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeD
                         />
                     </div>
                 </Popup>
-                <ConfirmCancelButtonGroup
+                <PopupAcceptAction
+                    open={buttonPopupAcceptAction}
                     onConfirm={changeEmail}
+                    onCancel={() => {setButtonPopupAcceptAction(false)
+                    }}
+                />
+                <ConfirmCancelButtonGroup
+                    onConfirm={()=>setButtonPopupAcceptAction(true)}
                     onCancel={handleCancel} />
             </Grid>
         </>

@@ -28,11 +28,13 @@ import {
 } from "../../regexConstants";
 import {useSnackbarQueue} from "../snackbar";
 import i18n from "i18next";
+import useHandleError from "../../errorHandler";
+import PopupAcceptAction from "../../PopupAcceptAction";
 
 
 export default function ClientSignUp() {
     const {t} = useTranslation()
-    const showError = useSnackbarQueue('error')
+    const handleError = useHandleError()
     const showSuccess = useSnackbarQueue('success')
 
     const [firstName, setFirstName] = useState('')
@@ -51,6 +53,8 @@ export default function ClientSignUp() {
     const [phoneNumber, setPhoneNumber] = useState('')
 
     const [buttonPopup, setButtonPopup] = useState(false);
+    const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
+    const [isAccepted, setIsAccepted] = useState(false);
 
     const [loginRegexError, setLoginRegexError] = useState(false)
     const [passwordRegexError, setPasswordRegexError] = useState(false)
@@ -65,7 +69,12 @@ export default function ClientSignUp() {
     const [houseNumberRegexError, setHouseNumberRegexError] = useState(false)
 
 
-    async function verifyCallback() {
+    const verifyCallback = () => {
+        setButtonPopup(false)
+        setButtonPopupAcceptAction(true)
+    }
+
+    const handleConfirm = () => {
         const json = JSON.stringify({
                 firstName,
                 secondName,
@@ -83,16 +92,17 @@ export default function ClientSignUp() {
                 phoneNumber
             }
         );
-        await setButtonPopup(false)
         axios.post('auth/client/registration', json, {
             headers: {
                 'Content-Type': 'application/json'
             }
-        }).catch(error => {
-            const message = error.response.data
-            showError(t(message))
-        }).then(res => {
+        }).then(res=>{
+            setButtonPopupAcceptAction(false)
             showSuccess(t('successful action'))
+        }).catch(error => {
+            setButtonPopupAcceptAction(false)
+            const message = error.response.data
+            handleError(message)
         });
     }
 
@@ -114,7 +124,7 @@ export default function ClientSignUp() {
             !NAME_REGEX.test(secondName) || !EMAIL_REGEX.test(email) || !NUM_REGEX.test(houseNumber) ||
             !STREET_REGEX.test(street) || !POST_CODE_REGEX.test(postalCode) || !CITY_REGEX.test(city) ||
             !COUNTRY_REGEX.test(country) || !PHONE_NUMBER_REGEX.test(phoneNumber)) {
-            showError(t("invalid.form"))
+            handleError("invalid.form")
         } else {
             setButtonPopup(true)
         }
@@ -135,7 +145,7 @@ export default function ClientSignUp() {
             >
                 <DarkedTextField
                     label={t("name") + ' *'}
-                    placeholder="John"
+                    placeholder={t("nameExample")}
                     className={styles.input}
                     style={{
                         marginRight: 20
@@ -149,10 +159,9 @@ export default function ClientSignUp() {
                     colorIgnored
                 />
 
-
                 <DarkedTextField
                     label={t("surname") + ' *'}
-                    placeholder="Doe"
+                    placeholder={t("surnameExample")}
                     className={styles.input}
                     value={secondName}
                     onChange={event => {
@@ -164,10 +173,33 @@ export default function ClientSignUp() {
                 />
             </Box>
 
+            <Box
+                style={{
+                    display: "flex",
+                    width: '100%',
+                    padding: 0
+                }}
+            >
+            <DarkedTextField
+                label={t("login") + ' *'}
+                placeholder={t("login")}
+                className={styles.input}
+                value={login}
+                style={{
+                    marginRight: 20
+                }}
+                onChange={event => {
+                    setLogin(event.target.value)
+                    setLoginRegexError(!LOGIN_REGEX.test(event.target.value))
+                }}
+                colorIgnored
+                regexError={loginRegexError}
+            />
+
             <DarkedTextField
                 type="email"
                 label={t("email") + ' *'}
-                placeholder="example@Email.com"
+                placeholder={t("emailExample")}
                 className={styles.input}
                 icon={(<EmailIcon/>)}
                 value={email}
@@ -178,23 +210,32 @@ export default function ClientSignUp() {
                 colorIgnored
                 regexError={emailRegexError}
             />
-
-            <DarkedTextField
-                label={t("login") + ' *'}
-                placeholder="examplelogin"
-                className={styles.input}
-                value={login}
-                onChange={event => {
-                    setLogin(event.target.value)
-                    setLoginRegexError(!LOGIN_REGEX.test(event.target.value))
+            </Box>
+            <Box
+                style={{
+                    display: "flex",
+                    width: '100%',
+                    padding: 0
                 }}
-                colorIgnored
-                regexError={loginRegexError}
-            />
-
+            >
+                <DarkedTextField
+                    label={t("street") + ' *'}
+                    placeholder={t("streetExample")}
+                    className={styles.input}
+                    style={{
+                        marginRight: 20
+                    }}
+                    value={street}
+                    onChange={event => {
+                        setStreet(event.target.value)
+                        setStreetRegexError(!STREET_REGEX.test(event.target.value))
+                    }}
+                    colorIgnored
+                    regexError={streetRegexError}
+                />
             <DarkedTextField
                 label={t("houseNumber") + ' *'}
-                placeholder="house number"
+                placeholder={t("houseNumberExample")}
                 className={styles.input}
                 value={houseNumber}
                 onChange={event => {
@@ -204,35 +245,21 @@ export default function ClientSignUp() {
                 colorIgnored
                 regexError={houseNumberRegexError}
             />
-
-            <DarkedTextField
-                label={t("street") + ' *'}
-                placeholder="street"
-                className={styles.input}
-                value={street}
-                onChange={event => {
-                    setStreet(event.target.value)
-                    setStreetRegexError(!STREET_REGEX.test(event.target.value))
+            </Box>
+            <Box
+                style={{
+                    display: "flex",
+                    width: '100%',
+                    padding: 0
                 }}
-                colorIgnored
-                regexError={streetRegexError}
-            />
-            <DarkedTextField
-                label={t("postalCode") + ' *'}
-                placeholder="postal code"
-                className={styles.input}
-                value={postalCode}
-                onChange={event => {
-                    setPostalCode(event.target.value)
-                    setPostalCodeRegexError(!POST_CODE_REGEX.test(event.target.value))
-                }}
-                colorIgnored
-                regexError={postalCodeRegexError}
-            />
+            >
             <DarkedTextField
                 label={t("city") + ' *'}
-                placeholder="city"
+                placeholder={t("cityExample")}
                 className={styles.input}
+                style={{
+                    marginRight: 20
+                }}
                 value={city}
                 onChange={event => {
                     setCity(event.target.value)
@@ -242,9 +269,32 @@ export default function ClientSignUp() {
                 regexError={cityRegexError}
             />
             <DarkedTextField
-                label={t("country") + ' *'}
-                placeholder="country"
+                label={t("postalCode") + ' *'}
+                placeholder={t("postalCodeExample")}
                 className={styles.input}
+                value={postalCode}
+                onChange={event => {
+                    setPostalCode(event.target.value)
+                    setPostalCodeRegexError(!POST_CODE_REGEX.test(event.target.value))
+                }}
+                colorIgnored
+                regexError={postalCodeRegexError}
+            />
+            </Box>
+            <Box
+                style={{
+                    display: "flex",
+                    width: '100%',
+                    padding: 0
+                }}
+            >
+            <DarkedTextField
+                label={t("country") + ' *'}
+                placeholder={t("countryExample")}
+                className={styles.input}
+                style={{
+                    marginRight: 20
+                }}
                 value={country}
                 onChange={event => {
                     setCountry(event.target.value)
@@ -256,7 +306,7 @@ export default function ClientSignUp() {
 
             <DarkedTextField
                 label={t("phoneNumber") + ' *'}
-                placeholder="phone number"
+                placeholder={t("phoneNumberExample")}
                 className={styles.input}
                 value={phoneNumber}
                 onChange={event => {
@@ -266,7 +316,7 @@ export default function ClientSignUp() {
                 colorIgnored
                 regexError={phoneNumberRegexError}
             />
-
+            </Box>
             <Box
                 style={{
                     display: "flex",
@@ -336,6 +386,14 @@ export default function ClientSignUp() {
                         />
                     </div>
                 </Popup>
+                <PopupAcceptAction
+                    open={buttonPopupAcceptAction}
+                    onConfirm={handleConfirm}
+                    onCancel={() => {setButtonPopupAcceptAction(false)
+                    }}
+                />
+
+
                 <RoundedButton
                     onClick={clientSignUpFun}
                     style={{width: '50%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}

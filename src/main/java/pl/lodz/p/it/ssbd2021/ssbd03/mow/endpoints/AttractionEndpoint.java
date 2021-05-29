@@ -1,6 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.endpoints.BaseEndpoint;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints.BaseEndpoint;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.AddAttractionDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.EditAttractionDto;
@@ -29,6 +29,7 @@ public class AttractionEndpoint extends BaseEndpoint implements AttractionEndpoi
         return companyManager.getAllCompanies().stream().map(CompanyMapper::mapCompanyToCompanyLightDto).collect(Collectors.toList());
     }*/
 
+    @RolesAllowed("deleteAttraction")
     @Override
     public void deleteAttraction(String name) throws BaseAppException {
         this.attractionManager.deleteAttraction(name);

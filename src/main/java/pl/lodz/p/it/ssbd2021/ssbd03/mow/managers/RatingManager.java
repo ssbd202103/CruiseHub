@@ -36,6 +36,7 @@ public class RatingManager implements RatingManagerLocal {
     @Inject
     CruiseGroupFacadeMow cruiseGroupFacadeMow;
 
+    @RolesAllowed("createRating")
     @Override
     public void createRating(String login, String cruiseName, Integer rating) throws BaseAppException {
         Account account = accountFacadeMow.findByLogin(login);
@@ -45,6 +46,7 @@ public class RatingManager implements RatingManagerLocal {
         ratingFacade.create(r);
     }
 
+    @RolesAllowed("removeRating")
     @Override
     public void removeRating(String login, String cruiseName) throws BaseAppException {
         Rating r = ratingFacade.findByCruiseNameAndAccountLogin(cruiseName, login);

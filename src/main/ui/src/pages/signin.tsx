@@ -1,9 +1,7 @@
-import {Link} from 'react-router-dom'
+import {Link, useHistory} from 'react-router-dom'
 
 import Box from '@material-ui/core/Box'
 import PasswordIcon from '@material-ui/icons/VpnKeyRounded'
-
-import {useHistory} from 'react-router-dom'
 
 import AuthLayout from '../layouts/AuthLayout'
 import DarkedTextField from '../components/DarkedTextField'
@@ -14,19 +12,25 @@ import {useTranslation} from 'react-i18next'
 import styles from '../styles/auth.global.module.css'
 import axios from "../Services/URL"
 import React, {useState} from "react"
+import {setLogin as setLoginAction} from '../redux/slices/userSlice'
+
 
 import {getUser} from "../Services/userService";
 
 import {useSnackbarQueue} from "./snackbar";
+import useHandleError from "../errorHandler";
+import store from "../redux/store";
+import {useDispatch} from "react-redux";
+import PopupAcceptAction from "../PopupAcceptAction";
 
 export default function SignIn() {
     const {t} = useTranslation();
 
-    const showError = useSnackbarQueue('error')
+    const handleError = useHandleError()
     const showSuccess = useSnackbarQueue('success')
 
     const history = useHistory();
-
+    const dispatch = useDispatch();
     const [login, setLogin] = useState('')
     const [password, setPassword] = useState('')
 
@@ -41,15 +45,14 @@ export default function SignIn() {
                 'Content-Type': 'application/json'
             }
         }).then(res => {
-            getUser(res.data)
-            history.push('/')
+            dispatch(setLoginAction(login))
+            history.push('/codeSignIn')
             showSuccess(t('successful action'))
         }).catch(error => {
             const message = error.response.data
-            showError(t(message))
+            handleError(message)
         })
     }
-
 
     return (
         <AuthLayout>
@@ -107,7 +110,7 @@ export default function SignIn() {
                 </Link>
 
                 <Link to="/reset/requestPassword">
-                    <a className={styles.link}>Zapomniałem hasło</a>
+                    <a className={styles.link}>{t("forgot password")}</a>
                 </Link>
 
             </Box>

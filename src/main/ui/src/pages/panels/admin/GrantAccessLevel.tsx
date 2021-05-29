@@ -1,22 +1,27 @@
 import {Box, FormControlLabel, FormGroup, Radio, RadioGroup} from "@material-ui/core";
 import {Link} from 'react-router-dom';
-import React from "react";
+import React, {useState} from "react";
 import {useTranslation} from 'react-i18next'
 import RoundedButton from '../../../components/RoundedButton'
 import {useSnackbarQueue} from "../../snackbar";
 import {refreshToken} from "../../../Services/userService";
 import axios from "../../../Services/URL";
 import store from "../../../redux/store";
+import useHandleError from "../../../errorHandler";
+import PopupAcceptAction from "../../../PopupAcceptAction";
 
 
 export default function Checkboxes() {
     const {token} = store.getState()
     const {t} = useTranslation()
-    const showError = useSnackbarQueue('error')
+    const handleError = useHandleError()
     const showSuccess = useSnackbarQueue('success')
     const [selectedAccessLevel, setSelectedAccessLevel] = React.useState("");
 
     const currentAccount = JSON.parse(sessionStorage.getItem("grantAccessLevelAccount") as string)
+
+    const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
+
 
     const handleConfirm = async () => {
         if (!["Moderator", "Administrator"].includes(selectedAccessLevel)) return;
@@ -38,11 +43,13 @@ export default function Checkboxes() {
                 }
             }
         ).then(() => {
+            setButtonPopupAcceptAction(false)
             showSuccess(t('success.accessLevelAssigned'));
             refreshToken()
         }).catch(error => {
+            setButtonPopupAcceptAction(false)
             const message = error.response.data
-            showError(t(message))
+            handleError(message)
         });
     }
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,7 +60,6 @@ export default function Checkboxes() {
         <div>
             <FormGroup row>
                 <RadioGroup onChange={handleChange} value={selectedAccessLevel} row>
-
                     {
                         currentAccount!.accessLevels.includes("MODERATOR") ? null :
                             <FormControlLabel
@@ -76,10 +82,16 @@ export default function Checkboxes() {
                 </RadioGroup>
             </FormGroup>
             <Box style={{marginTop: 16}}>
-                <RoundedButton onClick={handleConfirm} color="blue" style={{marginRight: 16}}>
+                <RoundedButton onClick={()=>setButtonPopupAcceptAction(true)} color="blue" style={{marginRight: 16}}>
                     {t("confirm")}
 
                 </RoundedButton>
+                <PopupAcceptAction
+                    open={buttonPopupAcceptAction}
+                    onConfirm={handleConfirm}
+                    onCancel={() => {setButtonPopupAcceptAction(false)
+                    }}
+                />
                 <Link to="/panels/adminPanel/accounts">
                     <RoundedButton color="pink">
                         {t("go back")}

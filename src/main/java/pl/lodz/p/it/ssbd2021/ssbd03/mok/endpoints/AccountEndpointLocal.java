@@ -279,11 +279,5 @@ public interface AccountEndpointLocal {
      */
     void requestOtherEmailChange(AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException;
 
-    /**
-     * Metoda opdowiedzialna za zmiane maila przez Administratora
-     *
-     * @param accountVerificationDto dto z tokenem
-     */
-    void changeOtherEmail(AccountVerificationDto accountVerificationDto) throws BaseAppException;
 }
 

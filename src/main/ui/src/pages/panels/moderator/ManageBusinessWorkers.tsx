@@ -13,10 +13,13 @@ import {selectDarkMode} from "../../../redux/slices/userSlice";
 import DarkedTextField from "../../../components/DarkedTextField";
 import store from "../../../redux/store";
 import axios from "../../../Services/URL";
-import {Button} from '@material-ui/core';
+import {Button, TextField} from '@material-ui/core';
 import RoundedButton from "../../../components/RoundedButton";
 import {refreshToken} from "../../../Services/userService";
 import {useSnackbarQueue} from "../../snackbar";
+import useHandleError from "../../../errorHandler";
+import PopupAcceptAction from "../../../PopupAcceptAction";
+import Autocomplete from "@material-ui/lab/Autocomplete";
 
 const useRowStyles = makeStyles({
     root: {
@@ -56,15 +59,52 @@ export interface RowProps {
 }
 
 function Row(props: RowProps) {
-    const showError = useSnackbarQueue('error')
+    const handleError = useHandleError()
     const { row } = props;
     const { style } = props;
     const classes = useRowStyles();
     const showSuccess = useSnackbarQueue('success')
     const {t} = useTranslation()
+    const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
 
+    const confirmWorker = (props: any)=> {
+        const {token} = store.getState()
+        const {row} = props;
+        const json = JSON.stringify({
+            login: row.login,
+            version: row.version
+        })
+
+        axios.put('account/confirm-business-worker', json, {
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "If-Match": row.etag,
+                "Authorization": `Bearer ${token}`,
+
+            }
+        }).then(res =>{
+            refreshToken()
+            showSuccess(t('successful action'))
+            getWorkers()
+        },error =>{
+            const message = error.response.data
+            handleError(message)
+        });
+        return false;
+    }
     return (
         <TableRow className={classes.root}>
+            <PopupAcceptAction
+                open={buttonPopupAcceptAction}
+                onConfirm={() => {
+                    confirmWorker({row})
+                    setButtonPopupAcceptAction(false)
+                }
+                }
+                onCancel={() => {setButtonPopupAcceptAction(false)
+                }}
+            />
             <TableCell component="th" scope="row" style={style}>
                 {row.login}
             </TableCell>
@@ -74,8 +114,10 @@ function Row(props: RowProps) {
             <TableCell style={style}>{row.phoneNumber}</TableCell>
             <TableCell style={style}>{row.companyName}</TableCell>
             <TableCell style={style}>{row.companyPhoneNumber}</TableCell>
-            <TableCell style={style}><Button onClick={() =>
-                confirmWorker({row})
+            <TableCell style={style}><Button onClick={() =>{
+                setButtonPopupAcceptAction(true)
+            }
+
             }>{t("confirm")}</Button></TableCell>
         </TableRow>
     );
@@ -90,27 +132,7 @@ function getWorkers() {
     })
 }
 
- function confirmWorker(props: any) {
-    const {token} = store.getState()
-    const {row} = props;
-    const json = JSON.stringify({
-        login: row.login,
-        version: row.version
-    })
 
-    axios.put('account/confirm-business-worker', json, {
-        headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-            "If-Match": row.etag,
-            "Authorization": `Bearer ${token}`,
-
-        }
-    }).then(response => {
-        return response.status == 200;
-    }).catch(/*todo*/);
-    return false;
-}
 
 export default function ModListClient() {
     const [, forceUpdate] = useReducer(x => x + 1, 0);
@@ -127,14 +149,19 @@ export default function ModListClient() {
 
     function search(rows: any[]) {
         if (Array.isArray(rows) && rows.length) {
-            return rows.filter(
-                row => row.props.row.firstName.toLowerCase().indexOf(searchInput.toLowerCase()) > -1 ||
-                    row.props.row.secondName.toLowerCase().indexOf(searchInput.toLowerCase()) > -1
+            const filteredAccount = rows.filter(
+                row => row.props.row.firstName.concat(" ", row.props.row.secondName).toLowerCase().indexOf(searchInput.toLowerCase()) > -1
             );
+
+            filteredAccount.forEach(account => (accounts.includes(account.props.row.firstName + " " + account.props.row.secondName) ?
+                "" : accounts.push(account.props.row.firstName + " " + account.props.row.secondName)));
+            return filteredAccount
         } else {
             return rows;
         }
     }
+
+    const accounts: String[] = [];
 
     const handleChange = () => {
         forceUpdate()
@@ -150,13 +177,21 @@ export default function ModListClient() {
     return (
         <div>
             <div>
-                <DarkedTextField
-                    label={t('search business workers')}
-                    type="text"
-                    value={searchInput}
-                    onChange={(e) => setSearchInput(e.target.value)}
-                    style={{marginBottom: '20px'}}/>
+                <Autocomplete
+                    options={accounts}
+                    inputValue={searchInput}
+                    style={{width: 300}}
+                    noOptionsText={t('no options')}
+                    onChange={(event, value) => {
+                        setSearchInput(value as string ?? '')
+                    }}
+                    renderInput={(params) => (
+                        <TextField {...params} label={t('search business worker')} variant="outlined"
+                                   onChange={(e) => setSearchInput(e.target.value)}/>
+                    )}
+                />
             </div>
+
             <TableContainer component={Paper}>
                 <Table aria-label="Business Workers">
                     <TableHead>
@@ -207,5 +242,6 @@ export default function ModListClient() {
             </TableContainer>
             <RoundedButton color={"blue"} onClick={handleChange}>{t("Refresh")}</RoundedButton>
         </div>
+
     );
 }

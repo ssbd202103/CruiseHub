@@ -1,11 +1,13 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.facades;
 
 
+import pl.lodz.p.it.ssbd2021.ssbd03.common.facades.AbstractFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
@@ -30,18 +32,19 @@ public class CruiseGroupFacadeMow extends AbstractFacade<CruiseGroup> {
         return em;
     }
 
+    @RolesAllowed("getAllCruiseGroupsList")
     @Override
-    public List<CruiseGroup> findAll() { //TODO throws FacadeException {
+    public List<CruiseGroup> findAll() throws FacadeException { //TODO throws FacadeException {
         return super.findAll();
     }
 
     @Override
-    public void edit(CruiseGroup entity) { //TODo throws FacadeException {
+    public void edit(CruiseGroup entity) throws FacadeException { //TODo throws FacadeException {
         super.edit(entity);
     }
 
     @Override
-    public void create(CruiseGroup entity) { //TODO throws FacadeException {
+    public void create(CruiseGroup entity) throws FacadeException { //TODO throws FacadeException {
         super.create(entity);
     }
 

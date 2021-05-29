@@ -1,6 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.facades;
 
 import org.hibernate.exception.ConstraintViolationException;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.facades.AbstractFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.CompanyFacadeException;

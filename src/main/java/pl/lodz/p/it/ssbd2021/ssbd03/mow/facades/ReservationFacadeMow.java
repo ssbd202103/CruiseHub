@@ -3,7 +3,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.facades;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Reservation;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AbstractFacade;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.facades.AbstractFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
 import javax.annotation.security.RolesAllowed;
@@ -70,6 +70,7 @@ public class ReservationFacadeMow extends AbstractFacade<Reservation> {
         }
     }
 
+    @RolesAllowed("getWorkerCruiseReservations")
     public List<Reservation> findWorkerCruiseReservations(long id) throws BaseAppException {
         //TODO Metoda znajdujaca id uzytkownika który jest aktualnie uzytkujacy jako bisnez worker / zmienić query
         //

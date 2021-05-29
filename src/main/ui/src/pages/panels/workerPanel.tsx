@@ -16,10 +16,11 @@ import {selectDarkMode} from "../../redux/slices/userSlice";
 import AppColorSetter from "../../components/AppColorSetter";
 import LogOutRoundedButton from "../../components/LogOutRoundedButton";
 import ChangeBusinessWorkerData from "../../components/changeData/ChangeBusinessWorkerData";
-import {useState} from "react";
+import React, {useState} from "react";
 import ChangeEmail from "../../components/changeData/ChangeEmail";
 import ChangePassword from "../../components/changeData/ChangePassword";
 import Header from "../../components/Header";
+import Breadcrumb from "../../components/Breadcrumb";
 
 export default function WorkerPanel() {
     const {t} = useTranslation()
@@ -51,6 +52,7 @@ export default function WorkerPanel() {
     return (
         <>
             <Header />
+            <Breadcrumb />
             <Grid container className={styles.wrapper}>
                 <Redirect to="/cruises" />
                 <Grid item xs={2} md={3} xl={2}>

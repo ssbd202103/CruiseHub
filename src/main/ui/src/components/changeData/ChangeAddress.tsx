@@ -12,11 +12,13 @@ import {changeClientAddress} from "../../Services/changeDataService";
 import Recaptcha from "react-recaptcha";
 import Popup from "../../PopupRecaptcha";
 import {useSnackbarQueue} from "../../pages/snackbar";
+import useHandleError from "../../errorHandler";
+import PopupAcceptAction from "../../PopupAcceptAction";
 
 export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: ChangeDataComponentProps) {
     const {t} = useTranslation()
 
-    const showError = useSnackbarQueue('error')
+    const handleError = useHandleError()
     const showSuccess = useSnackbarQueue('success')
 
     const address = useSelector(selectAddress)
@@ -26,6 +28,8 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
     const [postalCode, setPostalCode] = useState('')
     const [city, setCity] = useState('')
     const [country, setCountry] = useState('')
+
+    const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
 
     const [buttonPopup, setButtonPopup] = useState(false);
 
@@ -41,12 +45,12 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
     async function verifyCallback() {
         setButtonPopup(false)
         if (!houseNumber || !street || !postalCode || !city || !country) {
-            showError(t('error.fields'))
+            handleError('error.fields')
             return
         }
 
         if (isNaN(Number(houseNumber))) {
-            showError(t('error.houseNumber.NaN'))
+            handleError('error.houseNumber.NaN')
             return
         }
 
@@ -63,11 +67,12 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
             setCity('')
             setCountry('')
             onConfirm()
-        }).catch(error => {
-            const message = error.response.data
-            showError(t(message))
-        }).then(res => {
+            setButtonPopupAcceptAction(true)
             showSuccess(t('successful action'))
+        }).catch(error => {
+            setButtonPopupAcceptAction(true)
+            const message = error.response.data
+            handleError(message)
         });
     }
 
@@ -159,9 +164,15 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
                         />
                     </div>
                 </Popup>
-                <ConfirmCancelButtonGroup
+                <PopupAcceptAction
+                    open={buttonPopupAcceptAction}
                     onConfirm={changeAddress}
-                    onCancel={handleCancel}/>
+                    onCancel={() => {setButtonPopupAcceptAction(false)
+                    }}
+                />
+                <ConfirmCancelButtonGroup
+                    onConfirm={()=>setButtonPopupAcceptAction(true)}
+                    onCancel={handleCancel} />
             </Grid>
         </>
     )

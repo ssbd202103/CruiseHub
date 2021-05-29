@@ -42,7 +42,7 @@ const userSlice = createSlice({
         login: '',
         darkMode: false,
         email: '',
-        languageType: window.navigator.languages[1].toUpperCase() === "EN" ? "EN" : "PL",
+        languageType: window.navigator.languages[0].toUpperCase() === "EN" ? "EN" : "PL",
         accessLevels: [] as Array<IAccessLevel>,
         activeAccessLevel: '',
         etag: '',
@@ -57,6 +57,9 @@ const userSlice = createSlice({
         }),
         changeEmail: (state: IUserSliceState, {payload}: PayloadAction<string>) => {
             state.email = payload
+        },
+        setLogin: (state: IUserSliceState, {payload}: PayloadAction<string>) => {
+            state.login = payload
         },
         emptyUser: (state: IUserSliceState) => {
             const languageType = window.navigator.languages[1]
@@ -82,7 +85,7 @@ const userSlice = createSlice({
     }
 })
 
-export const {setUser, changeEmail, emptyUser, setActiveAccessLevel} = userSlice.actions
+export const {setUser, changeEmail, emptyUser, setActiveAccessLevel, setLogin} = userSlice.actions
 
 const selectSelf = (state: { user: IUserSliceState }) => state
 

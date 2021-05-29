@@ -47,7 +47,7 @@ public class CruiseManager implements CruiseManagerLocal {
     @Inject
     private CruiseGroupFacadeMow cruiseGroupFacadeMow;
 
-
+    @RolesAllowed("addCruise")
     @Override
     public void addCruise(Cruise cruise, String cruiseGroupName) throws BaseAppException {
         CruiseGroup cruiseGroup = cruiseGroupFacadeMow.findByName(cruiseGroupName);
@@ -58,6 +58,7 @@ public class CruiseManager implements CruiseManagerLocal {
 
     }
 
+    @RolesAllowed("deactivateCruise")
     @Override
     public void deactivateCruise(UUID uuid, Long version) throws BaseAppException {
         Account account = accountFacade.findByLogin(securityContext.getUserPrincipal().getName());
@@ -69,6 +70,7 @@ public class CruiseManager implements CruiseManagerLocal {
         setAlterTypeAndAlterCruise(cruise, accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE), account);
     }
 
+    @RolesAllowed("editCruise")
     @Override
     public void editCruise(String description, LocalDateTime startDate, LocalDateTime endDate, UUID uuid, Long version) throws BaseAppException {
         Cruise cruiseToEdit = cruiseFacadeMow.findByUUID(uuid);

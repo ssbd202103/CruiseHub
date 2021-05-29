@@ -1,10 +1,13 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.facades;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.common.facades.AbstractFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -32,6 +35,7 @@ public class CruiseFacadeMow extends AbstractFacade<Cruise> {
         return em;
     }
 
+    @PermitAll
     public Cruise findByUUID(UUID uuid) throws BaseAppException {
         TypedQuery<Cruise> tq = em.createNamedQuery("Cruise.findByUUID", Cruise.class);
         tq.setParameter("uuid", uuid.toString());
@@ -42,5 +46,9 @@ public class CruiseFacadeMow extends AbstractFacade<Cruise> {
         }
     }
 
-
+    @RolesAllowed("addCruise")
+    @Override
+    public void create(Cruise entity) throws FacadeException {
+        super.create(entity);
+    }
 }

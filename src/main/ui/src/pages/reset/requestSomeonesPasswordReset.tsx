@@ -8,12 +8,15 @@ import RoundedButton from "../../components/RoundedButton";
 import {Link} from "react-router-dom";
 import {useSnackbarQueue} from "../snackbar";
 import store from "../../redux/store";
-import {getUser, refreshToken} from "../../Services/userService";
+import {refreshToken} from "../../Services/userService";
+import useHandleError from "../../errorHandler";
+import PopupAcceptAction from "../../PopupAcceptAction";
 
 const RequestSomeonePasswordReset = () => {
     const {t} = useTranslation()
-    const showError = useSnackbarQueue('error')
+    const handleError = useHandleError()
     const showSuccess = useSnackbarQueue('success')
+    const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
 
     const currentAccount = JSON.parse(sessionStorage.getItem("resetPasswordAccount") as string)
 
@@ -26,12 +29,14 @@ const RequestSomeonePasswordReset = () => {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
-        }).catch(error => {
-            const message = error.response.data
-            showError(t(message))
         }).then(res => {
             refreshToken()
+            setButtonPopupAcceptAction(false)
             showSuccess(t('successful action'))
+        }).catch(error => {
+            setButtonPopupAcceptAction(false)
+            const message = error.response.data
+            handleError(message)
         });
 
 
@@ -41,6 +46,10 @@ const RequestSomeonePasswordReset = () => {
             <h1 className={styles.h1}>{login}</h1>
             <DarkedTextField
                 label={t("email") + ' *'}
+                style={{
+                    width: '70%',
+                    margin: '20px 0'
+                }}
                 placeholder="email"
                 className={styles.input}
                 value={email}
@@ -49,12 +58,19 @@ const RequestSomeonePasswordReset = () => {
                 }}
                 colorIgnored
             />
+
             <Link to="/panels/adminPanel/accounts">
-                <RoundedButton
-                    onClick={onFormSubmit}
-                    style={{width: '100%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
-                    color="pink"
-                >Send email </RoundedButton>
+            <RoundedButton
+                onClick={()=>setButtonPopupAcceptAction(true)}
+                style={{width: '100%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
+                color="pink"
+            >Send email </RoundedButton>
+            <PopupAcceptAction
+                open={buttonPopupAcceptAction}
+                onConfirm={onFormSubmit}
+                onCancel={() => {setButtonPopupAcceptAction(false)
+                }}
+            />
             </Link>
         </AuthLayout>
 

@@ -22,6 +22,7 @@ import ChangeModeratorData from "../../components/changeData/ChangeModeratorData
 import ManageWorkers from "./moderator/ManageBusinessWorkers";
 import ChangeAccountData from "./admin/ChangeAccountData";
 import Header from "../../components/Header";
+import Breadcrumb from "../../components/Breadcrumb";
 
 
 export default function ModeratorPanel() {
@@ -65,6 +66,7 @@ export default function ModeratorPanel() {
     return (
         <>
             <Header />
+            <Breadcrumb />
             <Grid container className={styles.wrapper}>
                 <Redirect to="/accounts" />
                 <Grid item xs={2} md={3} xl={2}>

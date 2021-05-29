@@ -23,6 +23,7 @@ import ChangePassword from "../../components/changeData/ChangePassword";
 import ChangeAddress from "../../components/changeData/ChangeAddress";
 import LogOutRoundedButton from "../../components/LogOutRoundedButton";
 import Header from "../../components/Header";
+import Breadcrumb from "../../components/Breadcrumb";
 
 export default function ClientPanel() {
     const { t } = useTranslation()
@@ -65,6 +66,7 @@ export default function ClientPanel() {
     return (
         <>
             <Header />
+            <Breadcrumb />
             <Grid container className={styles.wrapper}>
                 <Redirect to="/profile/cruises" />
                 <Grid item xs={2} md={3} xl={2}>

@@ -3,9 +3,10 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.facades;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Rating;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AbstractFacade;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.facades.AbstractFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.interceptor.Interceptors;
@@ -52,11 +53,13 @@ public class RatingFacadeMow extends AbstractFacade<Rating> {
         }
     }
 
+    @RolesAllowed("removeRating")
     @Override
     public void remove(Rating entity) throws FacadeException {
         super.remove(entity);
     }
 
+    @RolesAllowed("createRating")
     @Override
     public void create(Rating entity) throws FacadeException {
         super.create(entity);

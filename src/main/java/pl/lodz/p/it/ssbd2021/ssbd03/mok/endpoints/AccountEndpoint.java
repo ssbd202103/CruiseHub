@@ -3,7 +3,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints;
 import lombok.extern.java.Log;
 import org.apache.commons.codec.digest.DigestUtils;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.endpoints.BaseEndpoint;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints.BaseEndpoint;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.TokenWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
@@ -12,7 +12,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.EndpointException;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.JWTException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
@@ -111,7 +110,7 @@ public class AccountEndpoint extends BaseEndpoint implements AccountEndpointLoca
     @RolesAllowed("selfGetAccountDetails")
     @Override
     public AccountDetailsViewDto getSelfDetails() throws BaseAppException {
-        return AccountMapper.toAccountDetailsViewDto(accountManager.getCurrentUser());
+        return AccountMapper.toAccountDetailsViewFilteringAccessLevels(accountManager.getCurrentUser());
     }
 
     @RolesAllowed("getAllAccounts")
@@ -216,11 +215,6 @@ public class AccountEndpoint extends BaseEndpoint implements AccountEndpointLoca
         accountManager.changeEmail(accountVerificationDto.getToken());
     }
 
-    @RolesAllowed("changeEmail")
-    @Override
-    public void changeOtherEmail(AccountVerificationDto accountVerificationDto) throws BaseAppException {
-        accountManager.changeOtherEmail(accountVerificationDto.getToken());
-    }
 
     @RolesAllowed("changeClientData")
     @Override
@@ -288,13 +282,7 @@ public class AccountEndpoint extends BaseEndpoint implements AccountEndpointLoca
 
     @RolesAllowed("authenticatedUser")
     public void changeMode(ChangeModeDto changeModeDto) throws BaseAppException {
-        Long version = getAccountByLogin(changeModeDto.getLogin()).getVersion();
-
-        if (!version.equals(changeModeDto.getVersion())) {
-            throw FacadeException.optimisticLock();
-        }
-
-        this.accountManager.changeMode(changeModeDto.getLogin(), changeModeDto.isNewMode());
+        this.accountManager.changeMode(changeModeDto.getLogin(), changeModeDto.isNewMode(), changeModeDto.getVersion());
     }
 
     @RolesAllowed("ConfirmBusinessWorker")
@@ -309,6 +297,7 @@ public class AccountEndpoint extends BaseEndpoint implements AccountEndpointLoca
     public void requestEmailChange(AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException {
         accountManager.requestEmailChange(accountChangeEmailDto.getLogin(), accountChangeEmailDto.getNewEmail());
     }
+
     @RolesAllowed("changeOtherEmail")
     @Override
     public void requestOtherEmailChange(AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException {

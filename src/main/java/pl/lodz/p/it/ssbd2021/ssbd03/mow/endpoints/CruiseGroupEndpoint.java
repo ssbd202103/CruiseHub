@@ -1,7 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
 
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.endpoints.BaseEndpoint;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints.BaseEndpoint;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseAddress;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruisePicture;
@@ -52,7 +52,7 @@ public class CruiseGroupEndpoint extends BaseEndpoint implements CruiseGroupEndp
 
 
     @Override
-    @RolesAllowed("getAllCruiseGroups")
+    @RolesAllowed("getAllCruiseGroupsList")
     public List<CruiseGroupDto> getCruiseGroupsInfo() throws FacadeException {
         List<CruiseGroupDto> res = new ArrayList<>();
         for (CruiseGroup cruiseGroup : cruiseGroupManager.getAllCruiseGroups()) {
@@ -61,6 +61,7 @@ public class CruiseGroupEndpoint extends BaseEndpoint implements CruiseGroupEndp
         return res;
     }
 
+    @RolesAllowed("deactivateCruiseGroup")
     @Override
     public void deactivateCruiseGroup(String name, Long version) throws BaseAppException {
         this.cruiseGroupManager.deactivateCruiseGroup(name, version);

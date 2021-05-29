@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.facades;
 
 import lombok.extern.java.Log;
 import org.hibernate.exception.ConstraintViolationException;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.facades.AbstractFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
@@ -86,6 +87,14 @@ public class AccountFacadeMok extends AbstractFacade<Account> {
     public List<Account> getUnconfirmedAccounts() {
         TypedQuery<Account> tqq = em.createNamedQuery("Account.findUnconfirmedAccounts", Account.class);
         return tqq.getResultList();
+
+    }
+    @PermitAll
+    public boolean isEmailPresent(String email) {
+        TypedQuery<Account> tqq = em.createNamedQuery("Account.isEmailPresent", Account.class);
+        tqq.setParameter("email", email);
+         if(tqq.getResultList().size()>0) return true;
+         else return false;
 
     }
 

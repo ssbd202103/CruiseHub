@@ -27,11 +27,13 @@ import {
 } from "../../regexConstants";
 import {useSnackbarQueue} from "../snackbar";
 import i18n from "i18next";
+import useHandleError from "../../errorHandler";
+import PopupAcceptAction from "../../PopupAcceptAction";
 
 
 export default function WorkerSignUp() {
     const {t} = useTranslation()
-    const showError = useSnackbarQueue('error')
+    const handleError = useHandleError()
     const showSuccess = useSnackbarQueue('success')
 
     const [firstName, setFirstName] = useState('')
@@ -56,7 +58,16 @@ export default function WorkerSignUp() {
     const [emailRegexError, setEmailRegexError] = useState(false)
     const [phoneNumberRegexError, setPhoneNumberRegexError] = useState(false)
 
-    async function verifyCallback() {
+    const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
+    const [isAccepted, setIsAccepted] = useState(false);
+
+    const verifyCallback = () => {
+        setButtonPopup(false)
+        setButtonPopupAcceptAction(true)
+
+    }
+
+    const handleConfirm = () => {
         const json = JSON.stringify({
             firstName,
             secondName,
@@ -72,13 +83,14 @@ export default function WorkerSignUp() {
             headers: {
                 'Content-Type': 'application/json'
             }
-        }).catch(error => {
-            const message = error.response.data
-            showError(t(message))
-        }).then(res => {
+        }).then(res=>{
+            setButtonPopupAcceptAction(false)
             showSuccess(t('successful action'))
+        }).catch(error => {
+            setButtonPopupAcceptAction(false)
+            const message = error.response.data
+            handleError(message)
         });
-
     }
 
     useEffect(() => {
@@ -88,7 +100,6 @@ export default function WorkerSignUp() {
         }
         getCompaniesList()
     }, [company]);
-    console.log(companiesList)
 
 
     const workerSignUpFun = async () => {
@@ -103,11 +114,10 @@ export default function WorkerSignUp() {
         if (!LOGIN_REGEX.test(login) || !PASSWORD_REGEX.test(password) || !NAME_REGEX.test(firstName) ||
             !NAME_REGEX.test(secondName) || !EMAIL_REGEX.test(email) || !PHONE_NUMBER_REGEX.test(phoneNumber)) {
 
-            showError(t("invalid.form"))
+            handleError("invalid.form")
 
         } else {
             setButtonPopup(true)
-            showSuccess("DONE")
         }
 
     }
@@ -126,7 +136,7 @@ export default function WorkerSignUp() {
             >
                 <DarkedTextField
                     label={t("name") + ' *'}
-                    placeholder="John"
+                    placeholder={t("nameExample")}
                     className={styles.input}
                     style={{
                         marginRight: 20
@@ -143,7 +153,7 @@ export default function WorkerSignUp() {
 
                 <DarkedTextField
                     label={t("surname") + ' *'}
-                    placeholder="Doe"
+                    placeholder={t("surnameExample")}
                     className={styles.input}
                     value={secondName}
                     onChange={event => {
@@ -177,7 +187,7 @@ export default function WorkerSignUp() {
                 <DarkedTextField
                     type="email"
                     label={t("email") + ' *'}
-                    placeholder="example@Email(message = REGEX_INVALID_EMAIL).com"
+                    placeholder={t("emailExample")}
                     className={styles.input}
                     icon={(<EmailIcon/>)}
                     value={email}
@@ -203,7 +213,7 @@ export default function WorkerSignUp() {
 
                 <DarkedTextField
                     label={t("login") + ' *'}
-                    placeholder="examplelogin"
+                    placeholder={t("login")}
                     className={styles.input}
                     style={{
                         marginRight: 20
@@ -219,7 +229,7 @@ export default function WorkerSignUp() {
 
                 <DarkedTextField
                     label={t("phoneNumber") + ' *'}
-                    placeholder="examplenumber"
+                    placeholder={t("phoneNumberExample")}
                     className={styles.input}
                     value={phoneNumber}
                     onChange={event => {
@@ -316,6 +326,12 @@ export default function WorkerSignUp() {
                         />
                     </div>
                 </Popup>
+                <PopupAcceptAction
+                    open={buttonPopupAcceptAction}
+                    onConfirm={handleConfirm}
+                    onCancel={() => {setButtonPopupAcceptAction(false)
+                    }}
+                />
                 <Link to="client">
                     <a className={styles.link}>{t("i am a client")}</a>
                 </Link>

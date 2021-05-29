@@ -12,11 +12,13 @@ import {changeClientData} from "../../Services/changeDataService";
 import Recaptcha from "react-recaptcha";
 import Popup from "../../PopupRecaptcha";
 import {useSnackbarQueue} from "../../pages/snackbar";
+import useHandleError from "../../errorHandler";
+import PopupAcceptAction from "../../PopupAcceptAction";
 
 export default function ChangeClientData({open, onOpen, onConfirm, onCancel}: ChangeDataComponentProps) {
     const {t} = useTranslation()
 
-    const showError = useSnackbarQueue('error')
+    const handleError = useHandleError()
     const showSuccess = useSnackbarQueue('success')
 
     const firstName = useSelector(selectFirstName)
@@ -26,6 +28,8 @@ export default function ChangeClientData({open, onOpen, onConfirm, onCancel}: Ch
     const [firstNameValue, setFirstNameValue] = useState('')
     const [secondNameValue, setSecondNameValue] = useState('')
     const [phoneNumberValue, setPhoneNumberValue] = useState('')
+
+    const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
 
     const [buttonPopup, setButtonPopup] = useState(false);
 
@@ -39,7 +43,7 @@ export default function ChangeClientData({open, onOpen, onConfirm, onCancel}: Ch
     function verifyCallback(){
         setButtonPopup(false)
         if (!firstNameValue || !secondNameValue || !phoneNumberValue) {
-            showError(t('error.fields'))
+            handleError('error.fields')
             return;
         }
 
@@ -48,12 +52,14 @@ export default function ChangeClientData({open, onOpen, onConfirm, onCancel}: Ch
             setSecondNameValue('')
             setPhoneNumberValue('')
             onConfirm()
-        }).catch(error => {
-            const message = error.response.data
-            showError(t(message))
-        }).then(res=>{
+            setButtonPopupAcceptAction(false)
             showSuccess(t('successful action'))
+        }).catch(error => {
+            setButtonPopupAcceptAction(false)
+            const message = error.response.data
+            handleError(t(message))
         });
+
     }
 
     useEffect(() => {
@@ -122,10 +128,16 @@ export default function ChangeClientData({open, onOpen, onConfirm, onCancel}: Ch
                             />
                         </div>
                     </Popup>
+                    <PopupAcceptAction
+                        open={buttonPopupAcceptAction}
+                        onConfirm={changeData}
+                        onCancel={() => {setButtonPopupAcceptAction(false)
+                        }}
+                    />
                 </div>
 
                 <ConfirmCancelButtonGroup
-                    onConfirm={changeData}
+                    onConfirm={()=>setButtonPopupAcceptAction(true)}
                     onCancel={handleCancel} />
             </Grid>
         </>
