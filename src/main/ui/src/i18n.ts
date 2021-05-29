@@ -223,7 +223,8 @@ const resources = {
             'no': 'Nie',
 
             "update": "Odśwież",
-            "fill.login.password.fields": "Pola login oraz hasla muszą być wypełniona"
+            "fill.login.password.fields": "Pola login oraz hasla muszą być wypełniona",
+            "error.unauthorized": "Token sesyjny prawdopodobnie wygasł, zaloguj się ponownie"
         }
     },
     en: {
@@ -447,7 +448,8 @@ const resources = {
             'yes': 'Yes',
             'no': 'No',
             "update": "Refresh",
-            "fill.login.password.fields": "Fill login and password fields"
+            "fill.login.password.fields": "Fill login and password fields",
+            "error.unauthorized": "Session token is probably expired, please login one more time"
         }
     }
 }

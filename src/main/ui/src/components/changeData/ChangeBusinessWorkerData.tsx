@@ -63,7 +63,7 @@ export default function ChangeBusinessWorkerData({open, onOpen, onConfirm, onCan
         }).catch(error => {
             setButtonPopupAcceptAction(false)
             const message = error.response.data
-            handleError(message)
+            handleError(message, error.response.status)
         });
     }
 

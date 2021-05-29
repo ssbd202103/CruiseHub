@@ -42,7 +42,7 @@ export default function ChangeAccessLevelState() {
         }).catch(error => {
             setButtonPopupAcceptAction(false)
             const message = error.response.data
-            handleError(message)
+            handleError(message, error.response.status)
         });
 
         await axios.get(`account/details/${changeAccessLevelStateAccount.login}`, {
@@ -56,7 +56,7 @@ export default function ChangeAccessLevelState() {
             refreshToken()
         }).catch(error => {
             const message = error.response.data
-            handleError(message)
+            handleError(message, error.response.status)
         });
 
     }

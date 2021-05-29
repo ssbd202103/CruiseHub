@@ -57,7 +57,7 @@ export default function ChangeClientData({open, onOpen, onConfirm, onCancel}: Ch
         }).catch(error => {
             setButtonPopupAcceptAction(false)
             const message = error.response.data
-            handleError(t(message))
+            handleError(message, error.response.status)
         });
 
     }

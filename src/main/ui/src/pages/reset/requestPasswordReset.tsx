@@ -34,7 +34,7 @@ const RequestPasswordReset = () => {
                 })
                 .catch(error => {
                     const message = error.response.data
-                    handleError(message)
+                    handleError(message, error.response.status)
                 });
         }
         setButtonPopupAcceptAction(false)

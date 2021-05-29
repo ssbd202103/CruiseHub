@@ -36,7 +36,7 @@ function VerifyAccount(props: any) {
             .catch(error => {
                 setButtonPopupAcceptAction(false)
                 const message = error.response.data
-                handleError(t(message))
+                handleError(message, error.response.status)
         });
 
     }

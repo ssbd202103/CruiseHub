@@ -3,7 +3,7 @@ import Slide from "@material-ui/core/Slide";
 import {ComponentType} from "react";
 import {TransitionProps} from "@material-ui/core/transitions";
 
-export function useSnackbarQueue(variant: 'error' | 'success') {
+export function useSnackbarQueue(variant: 'error' | 'success' | 'warning') {
     const {enqueueSnackbar} = useSnackbar();
 
     return (message: string) => {

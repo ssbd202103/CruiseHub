@@ -1,12 +1,20 @@
 import {useSnackbarQueue} from "./pages/snackbar";
 import {useTranslation} from "react-i18next";
+import {logOut} from "./Services/userService";
 
 
 function useHandleError() {
     const showError = useSnackbarQueue('error')
     const {t} = useTranslation()
+    const showWarning = useSnackbarQueue('warning')
 
-    return (error: string | any) => {
+    return (error: string | any, status: number = 0) => {
+        if (status == 401) {
+            showWarning(t("error.unauthorized"))
+            setTimeout(logOut, 3000)
+            return
+        }
+
         if (typeof error === 'string') {
             showError(t(error))
             return
