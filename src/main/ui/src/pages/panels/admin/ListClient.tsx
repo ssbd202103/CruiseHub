@@ -94,7 +94,7 @@ function Row(props: RowProps) {
                 version: version,
             }
         );
-        return axios.put('/api/account/unblock', json, {
+        return axios.put('account/unblock', json, {
             headers: {
                 'Content-Type': 'application/json',
                 'If-Match': etag,
@@ -116,7 +116,7 @@ function Row(props: RowProps) {
                 version: version,
             }
         );
-        return axios.put('/api/account/block', json, {
+        return axios.put('account/block', json, {
             headers: {
                 'Content-Type': 'application/json',
                 'If-Match': etag,
