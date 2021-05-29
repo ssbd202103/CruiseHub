@@ -17,15 +17,12 @@ export default function AppColorSetter() {
     const handleError = useHandleError()
 
     const showError = useSnackbarQueue('error')
-    const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
     const darkMode = useSelector(selectDarkMode)
 
     const handleClick = () => {
         changeDarkMode().then(res=>{
-            setButtonPopupAcceptAction(false)
             showSuccess(t('successful action'))
         }).catch(error => {
-            setButtonPopupAcceptAction(false)
             const message = error.response.data
             showError(t(message))
         });
@@ -40,7 +37,7 @@ export default function AppColorSetter() {
             fontSize: '1.4rem',
             alignItems: 'center'
         }}
-             onClick={()=>setButtonPopupAcceptAction(true)}
+             onClick={handleClick}
         >
             <p>{t("color")}</p>
             <IconButton>
@@ -54,12 +51,6 @@ export default function AppColorSetter() {
                             style={{fill: 'var(--white)'}}/>
                 }
             </IconButton>
-            <PopupAcceptAction
-                open={buttonPopupAcceptAction}
-                onConfirm={handleClick}
-                onCancel={() => {setButtonPopupAcceptAction(false)
-                }}
-            />
         </div>
     )
 }
