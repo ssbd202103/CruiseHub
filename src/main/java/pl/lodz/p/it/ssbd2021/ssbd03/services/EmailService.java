@@ -56,7 +56,7 @@ public class EmailService {
             message.setFrom(new InternetAddress(EMAIL_USER));
 
             message.setSubject(subject);
-            message.setContent(contentHtml, "text/html");
+            message.setContent(contentHtml, "text/html; charset=UTF-8");
 
             Transport transport = session.getTransport("smtp");
 
@@ -105,7 +105,7 @@ public class EmailService {
             }
 
             message.setSubject(subject);
-            message.setText(body);
+            message.setContent(body, "text/html; charset=UTF-8");
 
             Transport transport = session.getTransport("smtp");
 
