@@ -1,7 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.managers;
 
 import com.auth0.jwt.interfaces.Claim;
-import com.nimbusds.jose.shaded.json.JSONObject;
 import org.apache.commons.codec.digest.DigestUtils;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
@@ -35,7 +34,6 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
-import javax.swing.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
 import java.time.LocalDateTime;
@@ -44,8 +42,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 
 /**
  * Klasa która zarządza logiką biznesową kont
@@ -240,7 +238,7 @@ public class AccountManager implements AccountManagerLocal {
     @Override
     public void requestEmailChange(String login, String newEmail) throws BaseAppException {
         Account account = this.accountFacade.findByLogin(login);
-        if(this.accountFacade.isEmailPresent(newEmail)){
+        if (this.accountFacade.isEmailPresent(newEmail)) {
             throw new AccountManagerException(EMAIL_RESERVED_ERROR);
         }
         Map<String, Object> claims = Map.of("version", account.getVersion(), "email", newEmail, "accessLevels", account.getAccessLevels()
@@ -260,7 +258,7 @@ public class AccountManager implements AccountManagerLocal {
     @Override
     public void requestOtherEmailChange(String login, String newEmail) throws BaseAppException {
         Account account = this.accountFacade.findByLogin(login);
-        if(this.accountFacade.isEmailPresent(newEmail)){
+        if (this.accountFacade.isEmailPresent(newEmail)) {
             throw new AccountManagerException(EMAIL_RESERVED_ERROR);
         }
         Map<String, Object> claims = Map.of("version", account.getVersion(), "email", newEmail, "accessLevels", account.getAccessLevels()
@@ -282,15 +280,15 @@ public class AccountManager implements AccountManagerLocal {
 
         TokenWrapper tokenW;
         try {
-            tokenW  = this.tokenWrapperFacade.findByToken(token);
-        } catch (BaseAppException e){
-            if(e.getMessage().equals(NO_SUCH_ELEMENT_ERROR)){
+            tokenW = this.tokenWrapperFacade.findByToken(token);
+        } catch (BaseAppException e) {
+            if (e.getMessage().equals(NO_SUCH_ELEMENT_ERROR)) {
                 throw new AccountManagerException(TOKEN_INVALIDATE_ERROR);
             } else {
-                throw new AccountManagerException(e.getMessage(),e);
+                throw new AccountManagerException(e.getMessage(), e);
             }
         }
-        if(tokenW.isUsed()){
+        if (tokenW.isUsed()) {
             throw new AccountManagerException(TOKEN_ALREADY_USED_ERROR);
         }
 
@@ -331,15 +329,15 @@ public class AccountManager implements AccountManagerLocal {
 
         TokenWrapper tokenW;
         try {
-            tokenW  = this.tokenWrapperFacade.findByToken(token);
-        } catch (BaseAppException e){
-            if(e.getMessage().equals(NO_SUCH_ELEMENT_ERROR)){
+            tokenW = this.tokenWrapperFacade.findByToken(token);
+        } catch (BaseAppException e) {
+            if (e.getMessage().equals(NO_SUCH_ELEMENT_ERROR)) {
                 throw new AccountManagerException(TOKEN_INVALIDATE_ERROR);
             } else {
-                throw new AccountManagerException(e.getMessage(),e);
+                throw new AccountManagerException(e.getMessage(), e);
             }
         }
-        if(tokenW.isUsed()){
+        if (tokenW.isUsed()) {
             throw new AccountManagerException(TOKEN_ALREADY_USED_ERROR);
         }
 
@@ -473,15 +471,15 @@ public class AccountManager implements AccountManagerLocal {
     public void changeEmail(String token) throws BaseAppException {
         TokenWrapper tokenW;
         try {
-            tokenW  = this.tokenWrapperFacade.findByToken(token);
-        } catch (BaseAppException e){
-            if(e.getMessage().equals(NO_SUCH_ELEMENT_ERROR)){
+            tokenW = this.tokenWrapperFacade.findByToken(token);
+        } catch (BaseAppException e) {
+            if (e.getMessage().equals(NO_SUCH_ELEMENT_ERROR)) {
                 throw new AccountManagerException(TOKEN_INVALIDATE_ERROR);
             } else {
-                throw new AccountManagerException(e.getMessage(),e);
+                throw new AccountManagerException(e.getMessage(), e);
             }
         }
-        if(tokenW.isUsed()){
+        if (tokenW.isUsed()) {
             throw new AccountManagerException(TOKEN_ALREADY_USED_ERROR);
         }
         JWTHandler.validateToken(token);
@@ -504,7 +502,7 @@ public class AccountManager implements AccountManagerLocal {
             throw FacadeException.optimisticLock();
         }
         String newEmail = claims.get("email").asString();
-        if(this.accountFacade.isEmailPresent(newEmail)){
+        if (this.accountFacade.isEmailPresent(newEmail)) {
             throw new AccountManagerException(EMAIL_RESERVED_ERROR);
         }
         TokenWrapper tokenWrapper = this.tokenWrapperFacade.findByToken(token);
@@ -514,7 +512,6 @@ public class AccountManager implements AccountManagerLocal {
 
         setUpdatedMetadata(account);
     }
-
 
 
     private AccessLevel getAccessLevel(Account from, AccessLevelType target) throws AccountManagerException {
@@ -693,7 +690,7 @@ public class AccountManager implements AccountManagerLocal {
         if (!(worker.getVersion() == version)) {
             throw FacadeException.optimisticLock();
         }
-        if(worker.isConfirmed()){
+        if (worker.isConfirmed()) {
             throw new AccountManagerException(BUSINESS_WORKER_CONFIRMED);
         }
         worker.setConfirmed(true);
@@ -701,8 +698,12 @@ public class AccountManager implements AccountManagerLocal {
     }
 
     @RolesAllowed("authenticatedUser")
-    public void changeMode(String login, boolean newMode) throws BaseAppException {
+    public void changeMode(String login, boolean newMode, long version) throws BaseAppException {
         Account account = accountFacade.findByLogin(login);
+
+        if (!(account.getVersion() == version)) {
+            throw FacadeException.optimisticLock();
+        }
 
         account.setDarkMode(newMode);
         setUpdatedMetadata(account);
@@ -764,7 +765,7 @@ public class AccountManager implements AccountManagerLocal {
         String kod = randomAlphanumeric(9);
         TokenWrapper tokenWrapper = TokenWrapper.builder().token(kod).account(account).used(false).build();
         this.tokenWrapperFacade.create(tokenWrapper);
-        String contentHtml = "<p>" + body + "<br>" +  kod + "</p>";
+        String contentHtml = "<p>" + body + "<br>" + kod + "</p>";
         EmailService.sendEmailWithContent(account.getEmail().trim(), subject, contentHtml);
     }
 
@@ -775,23 +776,23 @@ public class AccountManager implements AccountManagerLocal {
         TokenWrapper verificationCode;
         try {
             verificationCode = this.tokenWrapperFacade.findByToken(code);
-        } catch (BaseAppException e){
-            if(e.getMessage().equals(NO_SUCH_ELEMENT_ERROR)){
+        } catch (BaseAppException e) {
+            if (e.getMessage().equals(NO_SUCH_ELEMENT_ERROR)) {
                 throw new AccountManagerException(CODE_IS_INCORRECT_ERROR);
             } else {
-                throw new AccountManagerException(e.getMessage(),e);
+                throw new AccountManagerException(e.getMessage(), e);
             }
         }
-        if(verificationCode.isUsed()){
-            updateIncorrectAuthenticateInfo(login,IpAddr, time);
+        if (verificationCode.isUsed()) {
+            updateIncorrectAuthenticateInfo(login, IpAddr, time);
             throw new AccountManagerException(CODE_ALREADY_USED_ERROR);
         }
-        if(verificationCode.getCreationDateTime().plus(5, ChronoUnit.MINUTES).isBefore(time)){
-            updateIncorrectAuthenticateInfo(login,IpAddr, time);
+        if (verificationCode.getCreationDateTime().plus(5, ChronoUnit.MINUTES).isBefore(time)) {
+            updateIncorrectAuthenticateInfo(login, IpAddr, time);
             throw new AccountManagerException(CODE_EXPIRE_ERROR);
         }
-        if(account.getId() != verificationCode.getAccount().getId()){
-            updateIncorrectAuthenticateInfo(login,IpAddr, time);
+        if (account.getId() != verificationCode.getAccount().getId()) {
+            updateIncorrectAuthenticateInfo(login, IpAddr, time);
             throw new AccountManagerException(CODE_IS_INCORRECT_ERROR);
         }
         verificationCode.setUsed(true);

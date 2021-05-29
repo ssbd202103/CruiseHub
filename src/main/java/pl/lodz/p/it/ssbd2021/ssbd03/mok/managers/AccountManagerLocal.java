@@ -180,7 +180,7 @@ public interface AccountManagerLocal {
     /**
      * Zmienia email konta o podanym loginie
      *
-     * @param token    token z danymi uwierzytelniającymi
+     * @param token token z danymi uwierzytelniającymi
      */
 
     void changeEmail(String token) throws BaseAppException;
@@ -248,21 +248,24 @@ public interface AccountManagerLocal {
      *
      * @param login   login użytkownika dla którego należy zmienić motyw
      * @param newMode flaga nowego motywu
+     * @param version wersja przesyłanego konta
      * @throws BaseAppException Bazowy wyjątek aplikacji
      */
-    void changeMode(String login, boolean newMode) throws BaseAppException;
+    void changeMode(String login, boolean newMode, long version) throws BaseAppException;
 
     /**
      * Metoda odpowiedzialna za odświeżanie tokenu JWT
+     *
      * @param token Aktualny token JWT
      * @return token Odnowiony token JWT
      * @throws BaseAppException Bazowy wyjątek aplikacyjny, rzucany w przypadku gdy przekazany token nie jest ważny,
-     * lub jego podmiot nie jest upoważniony do ponownego uwierzytelnienia
+     *                          lub jego podmiot nie jest upoważniony do ponownego uwierzytelnienia
      */
     String refreshJWTToken(String token) throws BaseAppException;
 
     /**
      * Metoda opdowiedzialna za pobranie wszystkich niezatwierdzonych pracowników firm
+     *
      * @return lista obiektow account
      * @throws BaseAppException Bazowy wyjątek aplikacji
      */
@@ -270,7 +273,8 @@ public interface AccountManagerLocal {
 
     /**
      * Metoda odpowiedzialna za potwierdzenie pracownika firmy
-     * @param login login pracownika firmy
+     *
+     * @param login   login pracownika firmy
      * @param version wersja na potrzeby blokady optymistycznej
      * @throws BaseAppException bazowy wyjątek aplikacji
      */
@@ -278,7 +282,8 @@ public interface AccountManagerLocal {
 
     /**
      * Metoda odpowiedzialna za wysłanie emaila z linkiem potwierdzającym zmianę adresu email.
-     * @param login login użytkownika
+     *
+     * @param login    login użytkownika
      * @param newEmail nowy adres email
      * @throws BaseAppException bazowy wyjątek aplikacji
      */
@@ -286,7 +291,8 @@ public interface AccountManagerLocal {
 
     /**
      * Metoda odpowiedzialna za wysłanie emaila z linkiem potwierdzającym zmianę adresu email przez administratora.
-     * @param login login użytkownika
+     *
+     * @param login    login użytkownika
      * @param newEmail nowy adres email
      * @throws BaseAppException bazowy wyjątek aplikacji
      */
@@ -294,7 +300,6 @@ public interface AccountManagerLocal {
 
 
     /**
-     *
      * @param login
      * @throws BaseAppException
      */
@@ -303,10 +308,11 @@ public interface AccountManagerLocal {
 
     /**
      * Metoda odpowiedzialna za weryfikacje logowania dwu etapowego (kodu) oraz edycję pól w bazie danych w przypadku poprawnego logowania.
-     * @param login Login użytkownika
-     * @param code kod do dwufazowego uwierzytelnienia
+     *
+     * @param login  Login użytkownika
+     * @param code   kod do dwufazowego uwierzytelnienia
      * @param IpAddr Adres IP użytkownika
-     * @param time Czas
+     * @param time   Czas
      * @return Token JWT
      * @throws BaseAppException bazowy wyjątek aplikacji
      */
