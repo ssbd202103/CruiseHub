@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.entities.common;
 
 import lombok.Getter;
 import lombok.Setter;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.IdentifiableEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 
@@ -15,7 +16,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_POSITIVE_OR_ZERO_ERROR;
 
 @MappedSuperclass
-public abstract class BaseEntity {
+public abstract class BaseEntity implements IdentifiableEntity {
     @Getter
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @Column(name = "creation_date_time", updatable = false)

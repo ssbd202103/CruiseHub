@@ -96,5 +96,10 @@ public class Cruise extends BaseEntity {
 
     public Cruise() {
     }
+
+    @Override
+    public Long getIdentifier() {
+        return id;
+    }
 }
 

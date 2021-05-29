@@ -40,4 +40,9 @@ public class CruisePicture extends BaseEntity {
 
     public CruisePicture() {
     }
+
+    @Override
+    public Long getIdentifier() {
+        return id;
+    }
 }

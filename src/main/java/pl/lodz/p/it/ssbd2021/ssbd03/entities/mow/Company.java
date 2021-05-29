@@ -69,4 +69,9 @@ public class Company extends BaseEntity {
 
     public Company() {
     }
+
+    @Override
+    public Long getIdentifier() {
+        return id;
+    }
 }

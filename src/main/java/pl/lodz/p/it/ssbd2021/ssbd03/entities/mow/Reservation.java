@@ -83,4 +83,9 @@ public class Reservation extends BaseEntity {
 
     public Reservation() {
     }
+
+    @Override
+    public Long getIdentifier() {
+        return id;
+    }
 }
