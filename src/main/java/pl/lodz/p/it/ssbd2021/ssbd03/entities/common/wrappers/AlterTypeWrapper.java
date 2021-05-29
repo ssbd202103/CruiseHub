@@ -29,6 +29,7 @@ public class AlterTypeWrapper {
 
     @Enumerated(EnumType.STRING)
     @Column(unique = true)
+    @Getter
     @Setter
     @NotNull(message = CONSTRAINT_NOT_NULL)
     private AlterType name;

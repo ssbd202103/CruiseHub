@@ -2,8 +2,11 @@ package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.dto.MetadataDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.ControllerException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountMetadataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountVerificationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.AccountEndpointLocal;
@@ -19,8 +22,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import static javax.ws.rs.core.Response.Status.NOT_ACCEPTABLE;
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ETAG_IDENTITY_INTEGRITY_ERROR;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 import static pl.lodz.p.it.ssbd2021.ssbd03.utils.TransactionRepeater.tryAndRepeat;
 
 @Path("/self")
@@ -139,6 +141,13 @@ public class AccountSelfController {
         tryAndRepeat(() -> this.accountEndpoint.changeEmail(accountVerificationDto));
     }
 
+    /**
+     * Zmienia obecny motyw graficnzy
+     *
+     * @param changeModeDto Postać Dto przesyłanych danych
+     * @param etag          Nagłówek If-Match żądania
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
     @PUT
     @Path("/change-theme-mode")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -150,5 +159,50 @@ public class AccountSelfController {
         tryAndRepeat(() -> accountEndpoint.changeMode(changeModeDto));
     }
 
+    /**
+     * Pobiera metadane obecnego użytkownika
+     *
+     * @return Postać DTO metadanych
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
+    @GET
+    @Path("/metadata")
+    @Produces(MediaType.APPLICATION_JSON)
+    public AccountMetadataDto getSelfAccountMetadata() throws BaseAppException {
+        return tryAndRepeat(() -> accountEndpoint.getSelfMetadata());
+    }
+
+    /**
+     * Pobiera metadane wybranego poziomu dostępu obecnie zalogowanego użytkownika
+     *
+     * @param accessLevel Wybrany poziom dostępu
+     * @return Reprezentacja DTO metadanych
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
+    @GET
+    @Path("/metadata/access-level/{access-level}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public MetadataDto getSelfAccessLevelMetadata(@PathParam("access-level") String accessLevel) throws BaseAppException {
+        AccessLevelType accessLevelType;
+        try {
+            accessLevelType = AccessLevelType.valueOf(accessLevel.toUpperCase().replace('-', '_'));
+        } catch (IllegalArgumentException e) {
+            throw new ControllerException(ACCESS_LEVEL_PARSE_ERROR);
+        }
+        return tryAndRepeat(() -> accountEndpoint.getSelfAccessLevelMetadata(accessLevelType));
+    }
+
+    /**
+     * Pobiera metadane adresu obecnie zalogowanego klienta
+     *
+     * @return Reprezentacja DTO metadanych
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
+    @GET
+    @Path("/metadata/address/")
+    @Produces(MediaType.APPLICATION_JSON)
+    public MetadataDto getSelfAddressMetadata() throws BaseAppException {
+        return tryAndRepeat(() -> accountEndpoint.getSelfAddressMetadata());
+    }
 
 }

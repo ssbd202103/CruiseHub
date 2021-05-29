@@ -513,10 +513,24 @@ public class AccountManager implements AccountManagerLocal {
         setUpdatedMetadata(account);
     }
 
+    @RolesAllowed("getMetadata")
+    @Override
+    public AccessLevel getAccountAccessLevel(String login, AccessLevelType accessLevelType) throws BaseAppException {
+        Account account = accountFacade.findByLogin(login);
+        return getAccessLevel(account, accessLevelType);
+    }
 
-    private AccessLevel getAccessLevel(Account from, AccessLevelType target) throws AccountManagerException {
-        Optional<AccessLevel> optionalAccessLevel = from.getAccessLevels().stream()
-                .filter(accessLevel -> accessLevel.getAccessLevelType().equals(target)).findAny();
+    @RolesAllowed("authenticatedUser")
+    @Override
+    public AccessLevel getCurrentUserAccessLevel(AccessLevelType accessLevelType) throws BaseAppException {
+        Account account = getCurrentUser();
+        return getAccessLevel(account, accessLevelType);
+    }
+
+
+    private AccessLevel getAccessLevel(Account account, AccessLevelType accessLevelType) throws AccountManagerException {
+        Optional<AccessLevel> optionalAccessLevel = account.getAccessLevels().stream()
+                .filter(accessLevel -> accessLevel.getAccessLevelType().equals(accessLevelType)).findAny();
 
         return optionalAccessLevel.orElseThrow(() -> new AccountManagerException(ACCESS_LEVEL_DOES_NOT_EXIST_ERROR));
     }

@@ -2,6 +2,8 @@ package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.dto.MetadataDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.ControllerException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
@@ -120,13 +122,14 @@ public class AccountController {
 
     /**
      * Pobiera listę wszystkich niezatwierdzonych pracowników firm
+     *
      * @return lista dto z pracownikami firm
      * @throws BaseAppException bazowy wyjątek aplikacji
      */
     @GET
     @Path("/unconfirmed-business-workers")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<BusinessWorkerWithCompanyDto> getAllUnconfirmedBusinessWorkers() throws BaseAppException{
+    public List<BusinessWorkerWithCompanyDto> getAllUnconfirmedBusinessWorkers() throws BaseAppException {
         return tryAndRepeat(() -> accountEndpoint.getAllUnconfirmedBusinessWorkers());
     }
 
@@ -135,7 +138,6 @@ public class AccountController {
      *
      * @param blockAccountDto Obiekt z loginem użytkownika do zablokowania oraz wersją
      * @param etag            Wartość etaga
-     * @return Respons wraz z kodem
      */
     @ETagFilterBinding
     @PUT
@@ -151,7 +153,6 @@ public class AccountController {
     /**
      * @param unblockAccountDto Obiekt posiadający login użytkownika którego mamy odblokować
      * @param etag              Wartość etaga
-     * @return Zwraca kod potwierdzający poprawne bądź niepoprawne wykonanie
      */
     @ETagFilterBinding
     @PUT
@@ -206,7 +207,6 @@ public class AccountController {
      * Metoda odpowiedzialna za resetowanie hasła
      *
      * @param passwordResetDto obiekt dto przechowujący niezbędne dane do resetowania hasła
-     * @return Odpowiedź serwera w postaci JSON
      */
     @PUT
     @Path("/reset-password")
@@ -218,7 +218,6 @@ public class AccountController {
      * Metoda odpowiedzialna za zgłoszenia życzenia resetowania hasła
      *
      * @param login login użytkownika
-     * @return Odpowiedź serwera w postaci JSON
      */
     @POST
     @Path("/request-password-reset/{login}")
@@ -231,7 +230,6 @@ public class AccountController {
      *
      * @param login login użytkownika
      * @param email e-mail użytkownika
-     * @return Odpowiedź serwera w postaci JSON
      */
     @POST
     @Path("/request-someones-password-reset/{login}/{email}")
@@ -245,7 +243,6 @@ public class AccountController {
      * Metoda odpowiedzialna za weryfikowanie konta
      *
      * @param accountVerificationDto obiekt dto przechowujący niezbędne dane do resetowania hasła
-     * @return Odpowiedź serwera w postaci JSON
      */
     @PUT
     @Path("/verify")
@@ -330,15 +327,16 @@ public class AccountController {
 
     /**
      * Potwierdz danego pracownika firmy
+     *
      * @param blockAccountDto dto zawierające wersje oraz login danego pracownika
-     * @param etag Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
+     * @param etag            Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
      * @throws BaseAppException bazowy wyjątek apklikacji
      */
     @PUT
     @Path("/confirm-business-worker")
     @ETagFilterBinding
     @Consumes(MediaType.APPLICATION_JSON)
-    public void confirmBusinessWorker(BlockAccountDto blockAccountDto,@HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) String etag) throws BaseAppException {
+    public void confirmBusinessWorker(BlockAccountDto blockAccountDto, @HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) String etag) throws BaseAppException {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, blockAccountDto)) {
             throw ControllerException.etagIdentityIntegrity();
         }
@@ -348,11 +346,65 @@ public class AccountController {
     @POST
     @Path("/request-email-change")
     public void requestEmailChange(AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException {
-        tryAndRepeat(() -> this.accountEndpoint.requestEmailChange(accountChangeEmailDto));
+        tryAndRepeat(() -> accountEndpoint.requestEmailChange(accountChangeEmailDto));
     }
+
     @POST
     @Path("/request-other-email-change")
     public void requestOtherEmailChange(AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException {
-        tryAndRepeat(() -> this.accountEndpoint.requestOtherEmailChange(accountChangeEmailDto));
+        tryAndRepeat(() -> accountEndpoint.requestOtherEmailChange(accountChangeEmailDto));
+    }
+
+
+    /**
+     * Pobiera metadane użytkownika
+     *
+     * @param login Login użytkownika
+     * @return Postać DTO metadanych
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
+    @GET
+    @Path("/metadata/{login}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public AccountMetadataDto getAccountMetadata(@PathParam("login") String login) throws BaseAppException {
+        return tryAndRepeat(() -> accountEndpoint.getAccountMetadata(login));
+    }
+
+
+    /**
+     * Pobiera metadane wybranego poziomu dostępu użytkownika
+     *
+     * @param login       Login użytkownika
+     * @param accessLevel Wybrany poziom dostępu
+     * @return Reprezentacja DTO metadanych
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
+    @GET
+    @Path("/metadata/access-level/{access-level}/{login}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public MetadataDto getAccountAccessLevelMetadata(@PathParam("login") String login,
+                                                     @PathParam("access-level") String accessLevel) throws BaseAppException {
+        AccessLevelType accessLevelType;
+        try {
+            accessLevelType = AccessLevelType.valueOf(accessLevel.toUpperCase().replace('-', '_'));
+        } catch (IllegalArgumentException e) {
+            throw new ControllerException(ACCESS_LEVEL_PARSE_ERROR);
+        }
+        return tryAndRepeat(() -> accountEndpoint.getAccessLevelMetadata(login, accessLevelType));
+    }
+
+
+    /**
+     * Pobiera metadane adresu danego użytkownika
+     *
+     * @param login Login użytkownika
+     * @return Reprezentacja DTO metadanych
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
+    @GET
+    @Path("/metadata/address/{login}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public MetadataDto getClientAddressMetadata(@PathParam("login") String login) throws BaseAppException {
+        return tryAndRepeat(() -> accountEndpoint.getAddressMetadata(login));
     }
 }
