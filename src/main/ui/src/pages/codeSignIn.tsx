@@ -24,24 +24,29 @@ export default function CodeSignIn() {
     const login = useSelector(selectLogin);
     const [code, setCode] = useState('')
     const handleError = useHandleError()
+    const [codeEmptyError, setCodeEmptyError] = useState(false)
 
     const codeAuth = async () => {
-        const json = JSON.stringify({
-            login: login,
-            code: code
-        })
+        if (code === "") {
+            handleError("Fill code field")
+        } else {
+            const json = JSON.stringify({
+                login: login,
+                code: code
+            })
 
-        await axios.post('auth/code-sign-in', json, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(res => {
-            getUser(res.data)
-            history.push('/')
-        }).catch(error => {
-            const message = error.response.data
-            handleError(t(message))
-        })
+            await axios.post('auth/code-sign-in', json, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(res => {
+                getUser(res.data)
+                history.push('/')
+            }).catch(error => {
+                const message = error.response.data
+                handleError(t(message))
+            })
+        }
     }
 
     return (
@@ -59,8 +64,10 @@ export default function CodeSignIn() {
                 value={code}
                 onChange={event => {
                     setCode(event.target.value)
+                    event.target.value ? setCodeEmptyError(false) : setCodeEmptyError(true)
                 }}
                 colorIgnored
+                regexError={codeEmptyError}
             />
             <Box style={{
                 width: '70%',

@@ -222,7 +222,8 @@ const resources = {
             'yes': 'Tak',
             'no': 'Nie',
 
-            "update": "Odśwież"
+            "update": "Odśwież",
+            "fill.login.password.fields": "Pola login oraz hasla muszą być wypełniona"
         }
     },
     en: {
@@ -350,7 +351,6 @@ const resources = {
             "error.account.accessLevels.notAssignable": "Cannot assign this access level",
             "error.account.accessLevels.alreadyDisabled": "Access level is already disabled",
             "error.account.accessLevels.alreadyEnabled": "Access level is already enabled",
-            "error.account.accessLevels.parse": "Provided access level could not be parsed",
             "error.security.etag.empty": "Request does not contain necessary ETag header",
             "error.security.etag.invalid": "Request's ETag header does not pass validation",
             "error.security.etag.integrity": "Request's ETag header does not match provided data",
@@ -446,7 +446,8 @@ const resources = {
 
             'yes': 'Yes',
             'no': 'No',
-            "update": "Refresh"
+            "update": "Refresh",
+            "fill.login.password.fields": "Fill login and password fields"
         }
     }
 }
