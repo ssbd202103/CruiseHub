@@ -145,7 +145,7 @@ export default function ClientSignUp() {
             >
                 <DarkedTextField
                     label={t("name") + ' *'}
-                    placeholder="John"
+                    placeholder={t("nameExample")}
                     className={styles.input}
                     style={{
                         marginRight: 20
@@ -161,7 +161,7 @@ export default function ClientSignUp() {
 
                 <DarkedTextField
                     label={t("surname") + ' *'}
-                    placeholder="Doe"
+                    placeholder={t("surnameExample")}
                     className={styles.input}
                     value={secondName}
                     onChange={event => {
@@ -182,7 +182,7 @@ export default function ClientSignUp() {
             >
             <DarkedTextField
                 label={t("login") + ' *'}
-                placeholder="examplelogin"
+                placeholder={t("login")}
                 className={styles.input}
                 value={login}
                 style={{
@@ -199,7 +199,7 @@ export default function ClientSignUp() {
             <DarkedTextField
                 type="email"
                 label={t("email") + ' *'}
-                placeholder="example@Email.com"
+                placeholder={t("emailExample")}
                 className={styles.input}
                 icon={(<EmailIcon/>)}
                 value={email}
@@ -220,7 +220,7 @@ export default function ClientSignUp() {
             >
                 <DarkedTextField
                     label={t("street") + ' *'}
-                    placeholder="street"
+                    placeholder={t("streetExample")}
                     className={styles.input}
                     style={{
                         marginRight: 20
@@ -235,7 +235,7 @@ export default function ClientSignUp() {
                 />
             <DarkedTextField
                 label={t("houseNumber") + ' *'}
-                placeholder="house number"
+                placeholder={t("houseNumberExample")}
                 className={styles.input}
                 value={houseNumber}
                 onChange={event => {
@@ -255,7 +255,7 @@ export default function ClientSignUp() {
             >
             <DarkedTextField
                 label={t("city") + ' *'}
-                placeholder="city"
+                placeholder={t("cityExample")}
                 className={styles.input}
                 style={{
                     marginRight: 20
@@ -270,7 +270,7 @@ export default function ClientSignUp() {
             />
             <DarkedTextField
                 label={t("postalCode") + ' *'}
-                placeholder="postal code"
+                placeholder={t("postalCodeExample")}
                 className={styles.input}
                 value={postalCode}
                 onChange={event => {
@@ -290,7 +290,7 @@ export default function ClientSignUp() {
             >
             <DarkedTextField
                 label={t("country") + ' *'}
-                placeholder="country"
+                placeholder={t("countryExample")}
                 className={styles.input}
                 style={{
                     marginRight: 20
@@ -306,7 +306,7 @@ export default function ClientSignUp() {
 
             <DarkedTextField
                 label={t("phoneNumber") + ' *'}
-                placeholder="phone number"
+                placeholder={t("phoneNumberExample")}
                 className={styles.input}
                 value={phoneNumber}
                 onChange={event => {

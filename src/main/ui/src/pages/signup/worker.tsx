@@ -136,7 +136,7 @@ export default function WorkerSignUp() {
             >
                 <DarkedTextField
                     label={t("name") + ' *'}
-                    placeholder="John"
+                    placeholder={t("nameExample")}
                     className={styles.input}
                     style={{
                         marginRight: 20
@@ -153,7 +153,7 @@ export default function WorkerSignUp() {
 
                 <DarkedTextField
                     label={t("surname") + ' *'}
-                    placeholder="Doe"
+                    placeholder={t("surnameExample")}
                     className={styles.input}
                     value={secondName}
                     onChange={event => {
@@ -187,7 +187,7 @@ export default function WorkerSignUp() {
                 <DarkedTextField
                     type="email"
                     label={t("email") + ' *'}
-                    placeholder="example@Email(message = REGEX_INVALID_EMAIL).com"
+                    placeholder={t("emailExample")}
                     className={styles.input}
                     icon={(<EmailIcon/>)}
                     value={email}
@@ -213,7 +213,7 @@ export default function WorkerSignUp() {
 
                 <DarkedTextField
                     label={t("login") + ' *'}
-                    placeholder="examplelogin"
+                    placeholder={t("login")}
                     className={styles.input}
                     style={{
                         marginRight: 20
@@ -229,7 +229,7 @@ export default function WorkerSignUp() {
 
                 <DarkedTextField
                     label={t("phoneNumber") + ' *'}
-                    placeholder="examplenumber"
+                    placeholder={t("phoneNumberExample")}
                     className={styles.input}
                     value={phoneNumber}
                     onChange={event => {

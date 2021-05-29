@@ -39,7 +39,7 @@ const RequestPasswordReset = () => {
         <AuthLayout>
             <DarkedTextField
                 label={t("login") + ' *'}
-                placeholder="login"
+                placeholder={t("login")}
                 className={styles.input}
                 value={login}
                 onChange={event => {
@@ -56,7 +56,7 @@ const RequestPasswordReset = () => {
                 onClick={()=>setButtonPopupAcceptAction(true)}
                 style={{width: '100%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
                 color="pink"
-            >Send email </RoundedButton>
+            >{t("sendEmail")}</RoundedButton>
 
         </AuthLayout>
 
