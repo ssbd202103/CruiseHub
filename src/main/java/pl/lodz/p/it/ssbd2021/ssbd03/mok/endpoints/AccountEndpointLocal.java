@@ -1,5 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.common.dto.MetadataDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
@@ -267,6 +269,7 @@ public interface AccountEndpointLocal {
 
     /**
      * Metoda opdowiedzialna za zmiane maila
+     *
      * @param accountChangeEmailDto obiekt dto posiadający login oraz nowy adres email
      * @throws BaseAppException Bazowy wyjątek aplikacji
      */
@@ -274,10 +277,41 @@ public interface AccountEndpointLocal {
 
     /**
      * Metoda opdowiedzialna za wysłanie linku aktywacyjnego
+     *
      * @param accountChangeEmailDto obiekt dto posiadający login oraz nowy adres email
      * @throws BaseAppException Bazowy wyjątek aplikacji
      */
-    void requestOtherEmailChange(AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException;
+    void requestOtherEmailChange(AccountChangeEmailDto
+                                         accountChangeEmailDto) throws BaseAppException;
 
+    /**
+     * Metoda pobierające metadane dla danego użytkownika
+     *
+     * @param login Login użytkownika
+     * @return Reprezentacja DTO metadanych
+     * @throws BaseAppException Wyjątek bazowy aplikacji w przypadku niezlezienia konta lub naruszenia zasad biznesowych
+     */
+    MetadataDto getAccountMetadata(String login) throws BaseAppException;
+
+    /**
+     * Metoda pobierające metadane dla danego poziomu dostepu użytkownika
+     *
+     * @param login           Login użytkownika
+     * @param accessLevelType Wybrany poziom dostepu
+     * @return Reprezentacja DTO metadanych
+     * @throws BaseAppException Wyjątek bazowy aplikacji w przypadku niezlezienia konta lub poziomu dostępu,
+     *                          lub naruszenia zasad biznesowych
+     */
+    MetadataDto getAccessLevelMetadata(String login, AccessLevelType accessLevelType) throws BaseAppException;
+
+    /**
+     * Metoda pobierające metadane adresu danego klienta
+     *
+     * @param login Login użytkownika
+     * @return Reprezentacja DTO metadanych
+     * @throws BaseAppException Wyjątek bazowy aplikacji w przypadku gdy konto nie zostanie znalezione,
+     *                          użytkownik nie będzie klientem lub naruszone zostaną inne zasady biznesowe
+     */
+    MetadataDto getAddressMetadata(String login) throws BaseAppException;
 }
 

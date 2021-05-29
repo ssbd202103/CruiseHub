@@ -2,6 +2,8 @@ package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.dto.MetadataDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.ControllerException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
@@ -120,13 +122,14 @@ public class AccountController {
 
     /**
      * Pobiera listę wszystkich niezatwierdzonych pracowników firm
+     *
      * @return lista dto z pracownikami firm
      * @throws BaseAppException bazowy wyjątek aplikacji
      */
     @GET
     @Path("/unconfirmed-business-workers")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<BusinessWorkerWithCompanyDto> getAllUnconfirmedBusinessWorkers() throws BaseAppException{
+    public List<BusinessWorkerWithCompanyDto> getAllUnconfirmedBusinessWorkers() throws BaseAppException {
         return tryAndRepeat(() -> accountEndpoint.getAllUnconfirmedBusinessWorkers());
     }
 
@@ -330,15 +333,16 @@ public class AccountController {
 
     /**
      * Potwierdz danego pracownika firmy
+     *
      * @param blockAccountDto dto zawierające wersje oraz login danego pracownika
-     * @param etag Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
+     * @param etag            Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
      * @throws BaseAppException bazowy wyjątek apklikacji
      */
     @PUT
     @Path("/confirm-business-worker")
     @ETagFilterBinding
     @Consumes(MediaType.APPLICATION_JSON)
-    public void confirmBusinessWorker(BlockAccountDto blockAccountDto,@HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) String etag) throws BaseAppException {
+    public void confirmBusinessWorker(BlockAccountDto blockAccountDto, @HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) String etag) throws BaseAppException {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, blockAccountDto)) {
             throw ControllerException.etagIdentityIntegrity();
         }
@@ -348,11 +352,33 @@ public class AccountController {
     @POST
     @Path("/request-email-change")
     public void requestEmailChange(AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException {
-        tryAndRepeat(() -> this.accountEndpoint.requestEmailChange(accountChangeEmailDto));
+        tryAndRepeat(() -> accountEndpoint.requestEmailChange(accountChangeEmailDto));
     }
+
     @POST
     @Path("/request-other-email-change")
     public void requestOtherEmailChange(AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException {
-        tryAndRepeat(() -> this.accountEndpoint.requestOtherEmailChange(accountChangeEmailDto));
+        tryAndRepeat(() -> accountEndpoint.requestOtherEmailChange(accountChangeEmailDto));
+    }
+
+    @GET
+    @Path("/account-metadata/{login}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public MetadataDto getAccountMetadata(@PathParam("login") String login) throws BaseAppException {
+        return tryAndRepeat(() -> accountEndpoint.getAccountMetadata(login));
+    }
+
+    @GET
+    @Path("/client-metadata/{login}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public MetadataDto getAccountAccessLevelsMetadata(@PathParam("login") String login) throws BaseAppException {
+        return tryAndRepeat(() -> accountEndpoint.getAccessLevelMetadata(login, AccessLevelType.CLIENT));
+    }
+
+    @GET
+    @Path("/address-metadata/{login}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public MetadataDto getClientAddressMetadata(@PathParam("login") String login) throws BaseAppException {
+        return tryAndRepeat(() -> accountEndpoint.getAddressMetadata(login));
     }
 }

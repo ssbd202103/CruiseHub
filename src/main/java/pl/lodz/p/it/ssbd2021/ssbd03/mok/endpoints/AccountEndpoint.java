@@ -3,7 +3,9 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints;
 import lombok.extern.java.Log;
 import org.apache.commons.codec.digest.DigestUtils;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.dto.MetadataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints.BaseEndpoint;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.mappers.MetadataMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.TokenWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
@@ -302,5 +304,24 @@ public class AccountEndpoint extends BaseEndpoint implements AccountEndpointLoca
     @Override
     public void requestOtherEmailChange(AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException {
         accountManager.requestOtherEmailChange(accountChangeEmailDto.getLogin(), accountChangeEmailDto.getNewEmail());
+    }
+
+    @RolesAllowed("getMetadata")
+    @Override
+    public MetadataDto getAccountMetadata(String login) throws BaseAppException {
+        return MetadataMapper.toMetadataDto(accountManager.getAccountByLogin(login));
+    }
+
+    @RolesAllowed("getMetadata")
+    @Override
+    public MetadataDto getAccessLevelMetadata(String login, AccessLevelType accessLevelType) throws BaseAppException {
+        return MetadataMapper.toMetadataDto(accountManager.getAccountAccessLevel(login, accessLevelType));
+    }
+
+    @RolesAllowed("getMetadata")
+    @Override
+    public MetadataDto getAddressMetadata(String login) throws BaseAppException {
+        Client client = (Client) accountManager.getAccountAccessLevel(login, AccessLevelType.CLIENT);
+        return MetadataMapper.toMetadataDto(client.getHomeAddress());
     }
 }

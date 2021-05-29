@@ -210,6 +210,9 @@
         <role-name>editCruise</role-name>
     </security-role>
 
+    <security-role>
+        <role-name>getMetadata</role-name>
+    </security-role>
 
     <security-constraint>
         <web-resource-collection>

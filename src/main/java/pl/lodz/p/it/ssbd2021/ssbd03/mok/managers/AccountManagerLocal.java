@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.managers;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address;
@@ -319,4 +320,14 @@ public interface AccountManagerLocal {
 
     String authWCodeUpdateCorrectAuthenticateInfo(String login, String code, String IpAddr, LocalDateTime time) throws BaseAppException;
 
+    /**
+     * Zwraca wybrany poziom dostępu przypisany do konta
+     *
+     * @param login           Login użytkownika
+     * @param accessLevelType Typ wybranego poziomu dostępu
+     * @return Poziom dostępu
+     * @throws BaseAppException Bazowy wyjątek aplikacji w przypadku nieznalezienia konta lub poziomu dostępu,
+     *                          lub przy naruszeniu zasad biznesowych
+     */
+    AccessLevel getAccountAccessLevel(String login, AccessLevelType accessLevelType) throws BaseAppException;
 }
