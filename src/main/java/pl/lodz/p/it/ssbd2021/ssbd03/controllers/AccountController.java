@@ -382,8 +382,8 @@ public class AccountController {
     @GET
     @Path("/metadata/access-level/{access-level}/{login}")
     @Produces(MediaType.APPLICATION_JSON)
-    public MetadataDto getAccountAccessLevelMetadata(@PathParam("login") String login,
-                                                     @PathParam("access-level") String accessLevel) throws BaseAppException {
+    public MetadataDto getAccessLevelMetadata(@PathParam("login") String login,
+                                              @PathParam("access-level") String accessLevel) throws BaseAppException {
         AccessLevelType accessLevelType;
         try {
             accessLevelType = AccessLevelType.valueOf(accessLevel.toUpperCase().replace('-', '_'));

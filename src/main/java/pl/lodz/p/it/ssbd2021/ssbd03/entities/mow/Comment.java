@@ -52,6 +52,11 @@ public class Comment extends BaseEntity {
 
     public Comment() {
     }
+
+    @Override
+    public Long getIdentifier() {
+        return id;
+    }
 }
 
 

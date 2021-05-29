@@ -59,4 +59,9 @@ public class Address extends BaseEntity {
         this.city = city;
         this.country = country;
     }
+
+    @Override
+    public Long getIdentifier() {
+        return id;
+    }
 }

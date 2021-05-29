@@ -61,4 +61,9 @@ public class Rating extends BaseEntity {
 
     public Rating() {
     }
+
+    @Override
+    public Long getIdentifier() {
+        return id;
+    }
 }

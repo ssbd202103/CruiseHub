@@ -98,6 +98,11 @@ public class CruiseGroup extends BaseEntity {
 
     public CruiseGroup() {
     }
+
+    @Override
+    public Long getIdentifier() {
+        return id;
+    }
 }
 
 

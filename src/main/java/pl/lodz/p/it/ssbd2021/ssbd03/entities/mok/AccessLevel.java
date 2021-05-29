@@ -51,4 +51,10 @@ public abstract class AccessLevel extends BaseEntity {
         //using Class as HashCode to avoid any possible duplicate same access level associated with account
         return this.getClass().hashCode();
     }
+
+    @Override
+    public Long getIdentifier() {
+        return id;
+    }
+
 }

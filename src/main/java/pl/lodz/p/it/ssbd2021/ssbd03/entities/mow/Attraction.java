@@ -91,5 +91,10 @@ public class Attraction extends BaseEntity {
 
     public Attraction() {
     }
+
+    @Override
+    public Long getIdentifier() {
+        return id;
+    }
 }
 

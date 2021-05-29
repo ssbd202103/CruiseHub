@@ -188,5 +188,8 @@ public class Account extends BaseEntity {
         this.setAlteredBy(this);
     }
 
-
+    @Override
+    public Long getIdentifier() {
+        return id;
+    }
 }

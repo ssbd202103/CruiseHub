@@ -24,7 +24,7 @@ public class CruiseAddress extends BaseEntity {
     @SequenceGenerator(name = "CRUISE_ADDRESS_SEQ_GEN", sequenceName = "cruise_addresses_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CRUISE_ADDRESS_SEQ_GEN")
     @Column(name = "id")
-    private int id;
+    private Long id;
 
     @Getter
     @Setter
@@ -65,6 +65,11 @@ public class CruiseAddress extends BaseEntity {
     }
 
     public CruiseAddress() {
+    }
+
+    @Override
+    public Long getIdentifier() {
+        return id;
     }
 }
 
