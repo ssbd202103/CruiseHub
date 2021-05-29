@@ -28,7 +28,7 @@ export default function CodeSignIn() {
 
     const codeAuth = async () => {
         if (code === "") {
-            handleError("Fill code field")
+            handleError("invalid.form")
         } else {
             const json = JSON.stringify({
                 login: login,
@@ -44,7 +44,7 @@ export default function CodeSignIn() {
                 history.push('/')
             }).catch(error => {
                 const message = error.response.data
-                handleError(t(message))
+                handleError(message, error.response.status)
             })
         }
     }
