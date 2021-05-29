@@ -46,6 +46,37 @@ const useRowStyles = makeStyles({
     },
 });
 
+const unblockAccount = ({login, etag, version, token}: UnblockAccountParams) => {
+    const json = JSON.stringify({
+            login: login,
+            version: version,
+        }
+    );
+    return axios.put('account/unblock', json, {
+        headers: {
+            'Content-Type': 'application/json',
+            'If-Match': etag,
+            'Authorization': `Bearer ${token}`
+        }
+    })
+};
+
+const blockAccount = ({login, etag, version, token}: UnblockAccountParams) => {
+    const json = JSON.stringify({
+            login: login,
+            version: version,
+        }
+    );
+    return axios.put('account/block', json, {
+        headers: {
+            'Content-Type': 'application/json',
+            'If-Match': etag,
+            'Authorization': `Bearer ${token}`
+        }
+
+    });
+};
+
 const useButtonStyles = makeStyles({
     root: {
         fontFamily: '"Montserrat", sans-serif',
@@ -88,48 +119,12 @@ export interface RowProps {
 }
 
 function Row(props: RowProps) {
-    const unblockAccount = ({login, etag, version, token}: UnblockAccountParams) => {
-        const json = JSON.stringify({
-                login: login,
-                version: version,
-            }
-        );
-        return axios.put('account/unblock', json, {
-            headers: {
-                'Content-Type': 'application/json',
-                'If-Match': etag,
-                'Authorization': `Bearer ${token}`
-            }
-        }).then(response => {
 
-            return response.status == 200;
-        })
-    };
 
     function refresh() {
         window.location.reload();
     }
 
-    const blockAccount = ({login, etag, version, token}: UnblockAccountParams) => {
-        const json = JSON.stringify({
-                login: login,
-                version: version,
-            }
-        );
-        return axios.put('account/block', json, {
-            headers: {
-                'Content-Type': 'application/json',
-                'If-Match': etag,
-                'Authorization': `Bearer ${token}`
-            }
-
-        }).then(response => {
-
-            return response.status == 200;
-        });
-    };
-    const [buttonPopupAcceptBlock, setButtonPopupAcceptBlock] = useState(false);
-    const [buttonPopupAcceptUnblock, setButtonPopupAcceptUnblock] = useState(false);
     const {row} = props;
     const {style} = props;
     const {t} = useTranslation();
@@ -214,43 +209,27 @@ function Row(props: RowProps) {
 
                                             <Button className={buttonClass.root} onClick={() => {
                                                 if(row.active) {
-                                                    setButtonPopupAcceptBlock(true)
-
-                                                } else {
-                                                    setButtonPopupAcceptUnblock(true)
-                                                }
-                                            }}>{row.active ? t("block") : t("unblock")}</Button>
-                                            <PopupAcceptAction
-                                                open={buttonPopupAcceptBlock}
-                                                onConfirm={()=>blockAccount({etag: row.etag,
-                                                    login: row.login, version: row.version, token: token}).then(res => {
-                                                    setButtonPopupAcceptBlock(false)
-                                                    refresh()
-                                                    showSuccess(t('successful action'))
-                                                }).catch(error => {
-                                                    setButtonPopupAcceptBlock(false)
-                                                    const message = error.response.data
-                                                    handleError(t(message))
-                                                })}
-                                                onCancel={() => {setButtonPopupAcceptBlock(false)
-                                                }}
-                                            />
-                                            <PopupAcceptAction
-                                                open={buttonPopupAcceptUnblock}
-                                                onConfirm={()=>unblockAccount({etag: row.etag,
-                                                    login: row.login, version: row.version, token: token})
-                                                    .then(res => {
-                                                        setButtonPopupAcceptUnblock(false)
+                                                    blockAccount({etag: row.etag,
+                                                        login: row.login, version: row.version, token: token
+                                                    }).then(res => {
                                                         refresh()
                                                         showSuccess(t('successful action'))
                                                     }).catch(error => {
-                                                        setButtonPopupAcceptUnblock(false)
                                                         const message = error.response.data
                                                         handleError(t(message))
-                                                    })}
-                                                onCancel={() => {setButtonPopupAcceptUnblock(false)
-                                                }}
-                                            />
+                                                    })
+                                                } else {
+                                                    unblockAccount({etag: row.etag,
+                                                        login: row.login, version: row.version, token: token})
+                                                        .then(res => {
+                                                            refresh()
+                                                            showSuccess(t('successful action'))
+                                                        }).catch(error => {
+                                                            const message = error.response.data
+                                                            handleError(t(message))
+                                                    })
+                                                }
+                                            }}>{row.active ? t("block") : t("unblock")}</Button>
 
                                             <Link to="/accounts/grant_access_level">
                                                 <Button onClick={setCurrentGrantAccessLevelAccount}
