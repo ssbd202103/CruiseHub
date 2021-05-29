@@ -72,7 +72,8 @@ function App() {
                 TransitionComponent={Slide as ComponentType<TransitionProps>}
             >
                 <Router basename={process.env.REACT_APP_ROUTER_BASE || ''}>
-                    <Redirect to={'/'} />
+
+                  <Redirect to={'/'} />
                     <Switch>
                         <Route exact={["", "CLIENT"].includes(activeAccessLevel)} path="/" component={
                             activeAccessLevel === "ADMINISTRATOR" ? AdminPanel :

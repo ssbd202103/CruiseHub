@@ -119,7 +119,6 @@ export default function ClientPanel() {
                                 onConfirm={() => {setIsPasswordEdit(false)}}
                                 onCancel={() => {setIsPasswordEdit(false)}} />
                         </Grid>
-                        <LogOutRoundedButton />
                     </Route>
                 </Grid>
             </Grid>

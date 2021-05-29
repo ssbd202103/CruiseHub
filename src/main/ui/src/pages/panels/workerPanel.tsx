@@ -100,7 +100,8 @@ export default function WorkerPanel() {
                             onOpen={handleIsPasswordEdit}
                             onConfirm={() => {setIsPasswordEdit(false)}}
                             onCancel={() => {setIsPasswordEdit(false)}} />
-                        <LogOutRoundedButton />
+                        {/* <LogOutRoundedButton /> */}
+                        <h3>worker</h3>
                     </Route>
                 </Grid>
             </Grid>

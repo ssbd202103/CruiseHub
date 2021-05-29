@@ -119,7 +119,6 @@ export default function AdminPanel() {
                             onOpen={handleIsPasswordEdit}
                             onConfirm={() => {setIsPasswordEdit(false)}}
                             onCancel={() => {setIsPasswordEdit(false)}} />
-                        <LogOutRoundedButton />
                     </Route>
                     <Route path="/ChangeAccountData">
                         <ChangeAccountData/>

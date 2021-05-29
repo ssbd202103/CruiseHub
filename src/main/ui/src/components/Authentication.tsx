@@ -22,6 +22,7 @@ import {
     selectSecondName, AccessLevelType, setActiveAccessLevel
 } from "../redux/slices/userSlice";
 import {logOut} from "../Services/userService";
+import LogOutRoundedButton from "./LogOutRoundedButton";
 
 
 export default function Authentication() {
@@ -131,7 +132,8 @@ export default function Authentication() {
                         >
                             {firstName + ' ' + secondName}
                         </Button>
-                        <RoundedButton
+                        <LogOutRoundedButton />
+{/*                        <RoundedButton
                             color="pink"
                             style={{
                                 fontSize: '1rem',
@@ -139,7 +141,7 @@ export default function Authentication() {
                                 textTransform: 'none'
                             }}
                             onClick={handleLogOut}
-                        >{t("logout")}</RoundedButton>
+                        >{t("logout")}</RoundedButton>*/}
                     </>
                 )
             }
