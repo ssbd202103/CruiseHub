@@ -28,8 +28,7 @@ export default function ChangeAccountPassword() {
     return (
         <Grid container className={styles.wrapper}>
                 <Grid item  style={{display: ChangPasswd ? "none" : "block"}} className={styles.item}>
-                    {/*<h3>{t("password")}</h3>*/}
-                    <h3>m,atula</h3>
+                    <h3>{t("password")}</h3>
                     <RoundedButton color="blue"
                             onClick={handleChangPasswd}
                     >{t("password change btn")}</RoundedButton>
