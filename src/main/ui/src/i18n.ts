@@ -259,13 +259,14 @@ const resources = {
             "forgot password": "Forgot password",
             "refresh": "Refresh",
             "code": "Authentication Code",
+            "i don't have an account": "I don't have an account",
             //signup
             "signup": "Sign up",
             "signup.welcome": "Welcome",
             "i have an account": "I have an account",
             "houseNumber": "House number",
             "postalCode": "Postal code",
-            "exampleEmail": "example@email.com",
+            "emailExample": "example@email.com",
             "streetExample": "Baker Street",
             "houseNumberExample": "221b",
             "cityExample": "London",
@@ -443,7 +444,7 @@ const resources = {
 
             'yes':'Yes',
             'no':'No',
-            "update":"Update"
+            "update":"Refresh"
         }
     }
 }
@@ -451,8 +452,8 @@ const resources = {
 i18n
     .use(initReactI18next)
     .init({
-        lng: 'pl',
-        fallbackLng: 'en',
+        lng: 'en',
+        fallbackLng: 'pl',
 
         resources
     })
