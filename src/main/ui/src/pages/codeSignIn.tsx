@@ -1,9 +1,6 @@
-import {Link} from 'react-router-dom'
+import {useHistory} from 'react-router-dom'
 
 import Box from '@material-ui/core/Box'
-import PasswordIcon from '@material-ui/icons/VpnKeyRounded'
-
-import { useHistory } from 'react-router-dom'
 
 import AuthLayout from '../layouts/AuthLayout'
 import DarkedTextField from '../components/DarkedTextField'
@@ -12,23 +9,21 @@ import RoundedButton from '../components/RoundedButton'
 import {useTranslation} from 'react-i18next'
 
 import styles from '../styles/auth.global.module.css'
-import axios from "axios"
 import React, {useState} from "react"
 
 import {getUser} from "../Services/userService";
-
-import {useSnackbarQueue} from "./snackbar";
 import {useSelector} from "react-redux";
 import {selectLogin} from "../redux/slices/userSlice";
+import useHandleError from "../errorHandler";
+import axios from "../Services/URL"
 
 export default function CodeSignIn() {
     const {t} = useTranslation();
 
-    const showError = useSnackbarQueue('error')
-
     const history = useHistory();
     const login = useSelector(selectLogin);
     const [code, setCode] = useState('')
+    const handleError = useHandleError()
 
     const codeAuth = async () => {
         const json = JSON.stringify({
@@ -36,7 +31,7 @@ export default function CodeSignIn() {
             code: code
         })
 
-        axios.post('/api/auth/code-sign-in', json, {
+        await axios.post('auth/code-sign-in', json, {
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -45,7 +40,7 @@ export default function CodeSignIn() {
             history.push('/')
         }).catch(error => {
             const message = error.response.data
-            showError(t(message))
+            handleError(t(message))
         })
     }
 
@@ -62,7 +57,9 @@ export default function CodeSignIn() {
                 }}
                 placeholder={t("code")}
                 value={code}
-                onChange={event => {setCode(event.target.value)}}
+                onChange={event => {
+                    setCode(event.target.value)
+                }}
                 colorIgnored
             />
             <Box style={{
