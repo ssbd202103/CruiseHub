@@ -1,6 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.managers;
 
 import com.auth0.jwt.interfaces.Claim;
+import lombok.extern.java.Log;
 import org.apache.commons.codec.digest.DigestUtils;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
@@ -34,6 +35,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
+import javax.persistence.NoResultException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
 import java.time.LocalDateTime;
@@ -49,7 +51,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
  * Klasa która zarządza logiką biznesową kont
  */
 
-//@Stateless todo check why stateless throws exceptions occasionally
+@Log
 @Stateful
 @TransactionAttribute(TransactionAttributeType.MANDATORY)
 @RunAs("SYSTEM")
@@ -588,8 +590,7 @@ public class AccountManager implements AccountManagerLocal {
     @Override
     public void updateIncorrectAuthenticateInfo(String login, String IpAddr, LocalDateTime time) throws BaseAppException {
 
-        this.accountFacade.updateAuthenticateInfo(login, IpAddr, time, false);
-        Account account = accountFacade.findByLogin(login);
+        Account account = updateAuthenticateInfo(login, IpAddr, time, false);
         if (account.getNumberOfAuthenticationFailures() >= Long.parseLong(securityProperties.getProperty("max.incorrect.logins"))) {
             account.setActive(false);
             accountFacade.edit(account);
@@ -641,8 +642,9 @@ public class AccountManager implements AccountManagerLocal {
     @PermitAll
     @Override
     public String updateCorrectAuthenticateInfo(String login, String ipAddr, LocalDateTime time) throws BaseAppException {
-        Account account = this.accountFacade.updateAuthenticateInfo(login, ipAddr, time, true);
+        Account account = updateAuthenticateInfo(login, ipAddr, time, true);
         account.setNumberOfAuthenticationFailures(0);
+        setUpdatedMetadataWithModifier(account, account);
 
         Map<String, Object> map = Map.of("accessLevels", getAuthorizedAccessLevels(account)
                 .map(accessLevel -> accessLevel.getAccessLevelType().name()).collect(Collectors.toList()));
@@ -771,6 +773,41 @@ public class AccountManager implements AccountManagerLocal {
     }
 
     @PermitAll
+    public Account updateAuthenticateInfo(String login, String ipAddr, LocalDateTime time, boolean isAuthValid) throws BaseAppException {
+
+        Account account = accountFacade.findByLogin(login);
+        String loggedString;
+        try {
+            if (isAuthValid) {
+                //todo check if user is admin and send email with authentication time and logical address if so
+                account.setLastCorrectAuthenticationDateTime(time);
+                account.setLastCorrectAuthenticationLogicalAddress(ipAddr);
+                account.setNumberOfAuthenticationFailures(0);
+
+                loggedString = String.format("Correct authentication for user %s" +
+                                "\nAuthentication time: %s" +
+                                "\nOrigin logical address: %s",
+                        login, time, ipAddr);
+                log.info(loggedString);
+            } else {
+                account.setLastIncorrectAuthenticationDateTime(time);
+                account.setLastIncorrectAuthenticationLogicalAddress(ipAddr);
+                account.setNumberOfAuthenticationFailures(account.getNumberOfAuthenticationFailures() + 1);
+
+                loggedString = String.format("Authentication failure for user %s" +
+                                "\nAuthentication time: %s" +
+                                "\nOrigin logical address: %s" +
+                                "\nNumber of consecutive authentication failures: %d",
+                        login, time, ipAddr, account.getNumberOfAuthenticationFailures());
+                log.warning(loggedString);
+            }
+        } catch (NoResultException e) {
+            throw FacadeException.noSuchElement();
+        }
+        return account;
+    }
+
+    @PermitAll
     @Override
     public void sendAuthenticationCodeEmail(String login) throws BaseAppException {
         Account account = accountFacade.findByLogin(login);
@@ -781,37 +818,37 @@ public class AccountManager implements AccountManagerLocal {
         TokenWrapper tokenWrapper = TokenWrapper.builder().token(kod).account(account).used(false).build();
         this.tokenWrapperFacade.create(tokenWrapper);
         String contentHtml = "<p>" + body + "<br>" + kod + "</p>";
-//        EmailService.sendEmailWithContent(account.getEmail().trim(), subject, contentHtml);
+        EmailService.sendEmailWithContent(account.getEmail().trim(), subject, contentHtml);
     }
 
     @PermitAll
     @Override
     public String authWCodeUpdateCorrectAuthenticateInfo(String login, String code, String IpAddr, LocalDateTime time) throws BaseAppException {
-//        Account account = this.accountFacade.findByLogin(login);
-//        TokenWrapper verificationCode;
-//        try {
-//            verificationCode = this.tokenWrapperFacade.findByToken(code);
-//        } catch (BaseAppException e) {
-//            if (e.getMessage().equals(NO_SUCH_ELEMENT_ERROR)) {
-//                throw new AccountManagerException(CODE_IS_INCORRECT_ERROR);
-//            } else {
-//                throw new AccountManagerException(e.getMessage(), e);
-//            }
-//        }
-//        if (verificationCode.isUsed()) {
-//            updateIncorrectAuthenticateInfo(login, IpAddr, time);
-//            throw new AccountManagerException(CODE_ALREADY_USED_ERROR);
-//        }
-//        if (verificationCode.getCreationDateTime().plus(5, ChronoUnit.MINUTES).isBefore(time)) {
-//            updateIncorrectAuthenticateInfo(login, IpAddr, time);
-//            throw new AccountManagerException(CODE_EXPIRE_ERROR);
-//        }
-//        if (account.getId() != verificationCode.getAccount().getId()) {
-//            updateIncorrectAuthenticateInfo(login, IpAddr, time);
-//            throw new AccountManagerException(CODE_IS_INCORRECT_ERROR);
-//        }
-//        verificationCode.setUsed(true);
-//        this.tokenWrapperFacade.edit(verificationCode);
+        Account account = this.accountFacade.findByLogin(login);
+        TokenWrapper verificationCode;
+        try {
+            verificationCode = this.tokenWrapperFacade.findByToken(code);
+        } catch (BaseAppException e) {
+            if (e.getMessage().equals(NO_SUCH_ELEMENT_ERROR)) {
+                throw new AccountManagerException(CODE_IS_INCORRECT_ERROR);
+            } else {
+                throw new AccountManagerException(e.getMessage(), e);
+            }
+        }
+        if (verificationCode.isUsed()) {
+            updateIncorrectAuthenticateInfo(login, IpAddr, time);
+            throw new AccountManagerException(CODE_ALREADY_USED_ERROR);
+        }
+        if (verificationCode.getCreationDateTime().plus(5, ChronoUnit.MINUTES).isBefore(time)) {
+            updateIncorrectAuthenticateInfo(login, IpAddr, time);
+            throw new AccountManagerException(CODE_EXPIRE_ERROR);
+        }
+        if (account.getId() != verificationCode.getAccount().getId()) {
+            updateIncorrectAuthenticateInfo(login, IpAddr, time);
+            throw new AccountManagerException(CODE_IS_INCORRECT_ERROR);
+        }
+        verificationCode.setUsed(true);
+        this.tokenWrapperFacade.edit(verificationCode);
         return updateCorrectAuthenticateInfo(login, IpAddr, time);
     }
 }
