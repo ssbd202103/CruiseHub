@@ -16,7 +16,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 @Retention(RUNTIME)
 @Constraint(validatedBy = {})
 @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
-@Size(max = 15, message = PHONE_NUMBER_SIZE)
+@Size(min = 7, max = 15, message = PHONE_NUMBER_SIZE)
 @Pattern(regexp = ValidationRegex.PHONE_NUMBER, message = REGEX_INVALID_PHONE_NUMBER)
 public @interface PhoneNumber {
     String message() default REGEX_INVALID_PHONE_NUMBER;
