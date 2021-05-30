@@ -54,7 +54,6 @@ export default function WorkerPanel() {
             <Header />
             <Breadcrumb />
             <Grid container className={styles.wrapper}>
-                <Redirect to="/cruises" />
                 <Grid item xs={2} md={3} xl={2}>
                     <PanelMenu color={!darkMode ? 'green-dark' : 'white'}>
                         <List className={styles.menu + ' ' + styles['menu-' + (!darkMode ? 'light' : 'dark')]} component="nav" aria-label="panel menu">
