@@ -112,9 +112,6 @@ function App() {
                             <RequestPasswordReset/>
                         </Route>
 
-                        <Route path="/reset/resetSomebodyPassword">
-                            <RequestSomeonePasswordReset/>
-                        </Route>
                         <Route path="/verify/accountVerification">
                             <VerifyAccount/>
                         </Route>

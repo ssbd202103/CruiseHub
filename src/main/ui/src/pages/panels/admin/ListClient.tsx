@@ -199,7 +199,7 @@ function Row(props: RowProps) {
                                             <Link to="/accounts/change_account_data">
                                                 <Button className={buttonClass.root}>{t("edit")}</Button>
                                             </Link>
-                                            <Link to="/reset/resetSomebodyPassword">
+                                            <Link to="/accounts/resetSomebodyPassword">
                                                 <Button onClick={setCurrentResetPasswordAccount}
                                                         className={buttonClass.root}>{t("reset password")}</Button>
                                             </Link>

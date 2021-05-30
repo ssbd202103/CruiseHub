@@ -59,6 +59,8 @@ const resources = {
             "i am a client": "Jestem klientem",
             //reset password
             "sendEmail": "Wyślij e-mail",
+            "reset": "Resetowanie hasła użytkownika: ",
+            "itsPassword": "",
             //ManageAccount
             "manage account": "Zarządzaj kontem",
             "personal data": "Dane presonalne",
@@ -285,6 +287,8 @@ const resources = {
             "i am a client": "I'm a client",
             //reset password
             "sendEmail": "Send e-mail",
+            "reset": "Reset ",
+            "itsPassword": "'s password",
             //ManageAccount
             "manage account": "Manage account",
             "personal data": "Personal Data",

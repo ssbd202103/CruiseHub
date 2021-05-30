@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {useHistory, useLocation} from 'react-router-dom';
 import axios from "../../Services/URL";
 import AuthLayout from "../../layouts/AuthLayout";
 import DarkedTextField from "../../components/DarkedTextField";
@@ -12,8 +13,10 @@ import {refreshToken} from "../../Services/userService";
 import useHandleError from "../../errorHandler";
 import PopupAcceptAction from "../../PopupAcceptAction";
 
-const RequestSomeonePasswordReset = () => {
+export default function RequestSomeonePasswordReset () {
     const {t} = useTranslation()
+    const location = useLocation();
+    const history = useHistory();
     const handleError = useHandleError()
     const showSuccess = useSnackbarQueue('success')
     const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
@@ -31,6 +34,7 @@ const RequestSomeonePasswordReset = () => {
             }
         }).then(res => {
             refreshToken()
+            history.push('/')
             setButtonPopupAcceptAction(false)
             showSuccess(t('successful action'))
         }).catch(error => {
@@ -42,8 +46,8 @@ const RequestSomeonePasswordReset = () => {
 
     }
     return (
-        <AuthLayout>
-            <h1 className={styles.h1}>{login}</h1>
+            <div>
+            <h3 className={styles.h1}>{t("reset")}{login}{t("itsPassword")}</h3>
             <DarkedTextField
                 label={t("email") + ' *'}
                 style={{
@@ -56,15 +60,14 @@ const RequestSomeonePasswordReset = () => {
                 onChange={event => {
                     setEmail(event.target.value)
                 }}
-                colorIgnored
             />
 
             <Link to="accounts">
             <RoundedButton
                 onClick={()=>setButtonPopupAcceptAction(true)}
-                style={{width: '100%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
+                style={{width: '50%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
                 color="pink"
-            >Send email </RoundedButton>
+            >{t("reset password")} </RoundedButton>
             <PopupAcceptAction
                 open={buttonPopupAcceptAction}
                 onConfirm={onFormSubmit}
@@ -72,9 +75,7 @@ const RequestSomeonePasswordReset = () => {
                 }}
             />
             </Link>
-        </AuthLayout>
-
+                </div>
     );
 };
 
-export default RequestSomeonePasswordReset;
