@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.entities.common;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.IdentifiableEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
@@ -16,6 +17,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_POSITIVE_OR_ZERO_ERROR;
 
 @MappedSuperclass
+@ToString
 public abstract class BaseEntity implements IdentifiableEntity {
     @Getter
     @NotNull(message = CONSTRAINT_NOT_NULL)
@@ -34,6 +36,7 @@ public abstract class BaseEntity implements IdentifiableEntity {
     @JoinColumn(name = "created_by_id", updatable = false)
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid
+    @ToString.Exclude
     private Account createdBy;
 
     @Getter
@@ -42,6 +45,7 @@ public abstract class BaseEntity implements IdentifiableEntity {
     @JoinColumn(name = "altered_by_id")
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid
+    @ToString.Exclude
     private Account alteredBy;
 
     @Getter
@@ -50,6 +54,7 @@ public abstract class BaseEntity implements IdentifiableEntity {
     @OneToOne(cascade = {CascadeType.PERSIST})
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid
+    @ToString.Exclude
     private AlterTypeWrapper alterType;
 
     @Getter

@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.entities.mow;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 
@@ -27,13 +28,14 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
         // @NamedQuery(name = "Reservation.findWorkerCruiseReservations", query = "SELECT reservation FROM reservations reservation WHERE reservation.cruise = :id and reservation.cruise IN (SELECT id FROM cruises WHERE cruises_groups.id IN (SELECT id FROM cruises_groups WHERE company.id IN (SELECT id FROM companies WHERE companies.id IN (select business_workers.company FROM business_workers WHERE id = :id))) ) ")
 })
 @Entity(name = "reservations")
+@ToString
 public class Reservation extends BaseEntity {
 
     @Getter
     @Id
     @SequenceGenerator(name = "RESERVATION_SEQ_GEN", sequenceName = "reservations_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RESERVATION_SEQ_GEN")
-    @Column(name = "id")
+    @ToString.Exclude
     private long id;
 
     @Getter
@@ -52,6 +54,7 @@ public class Reservation extends BaseEntity {
     @JoinColumn(name = "cruise_id")
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid
+    @ToString.Exclude
     private Cruise cruise;
 
     @Getter
@@ -65,6 +68,7 @@ public class Reservation extends BaseEntity {
     @JoinColumn(name = "client_id")
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid
+    @ToString.Exclude
     private Client client;
 
     @Getter
@@ -73,6 +77,7 @@ public class Reservation extends BaseEntity {
             joinColumns = @JoinColumn(name = "reservation_id"),
             inverseJoinColumns = @JoinColumn(name = "attraction_id")
     )
+    @ToString.Exclude
     private final List<Attraction> attractions = new ArrayList<>();
 
     public Reservation(long numberOfSeats, Cruise cruise, Client client) {

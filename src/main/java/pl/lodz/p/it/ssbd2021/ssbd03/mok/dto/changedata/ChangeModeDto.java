@@ -1,10 +1,15 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AbstractAccountDto;
 
-@Data
-//@NoArgsConstructor
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
 public class ChangeModeDto extends AbstractAccountDto {
     private boolean newMode;
 
@@ -14,7 +19,4 @@ public class ChangeModeDto extends AbstractAccountDto {
         this.newMode = newMode;
     }
 
-    public ChangeModeDto() {
-        System.out.println("HELLO");
-    }
 }
