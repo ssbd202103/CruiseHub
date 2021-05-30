@@ -48,27 +48,26 @@ export default function ChangeAdministratorData({open, onOpen, onConfirm, onCanc
         }
 
         changeAdministratorData(firstNameValue, secondNameValue).then(res => {
-            setButtonPopupAcceptAction(false)
             showSuccess(t('successful action'))
             onConfirm()
         }).catch(error => {
             handleErase()
-            setButtonPopupAcceptAction(false)
             const message = error.response.data
             handleError(message, error.response.status)
             onCancel()
         });
     }
 
-    const changeData = () => {
-        //TODO
-        setButtonPopup(true)
-    }
-
     useEffect(() => {
         setFirstNameValue(firstName)
         setSecondNameValue(secondName)
     }, [firstName, secondName])
+
+    const changeData = () => {
+        //TODO
+        setButtonPopup(true)
+        setButtonPopupAcceptAction(false)
+    }
 
     return (
         <>

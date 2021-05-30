@@ -49,25 +49,25 @@ export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}:
 
         changeModeratorData(firstNameValue, secondNameValue).then(res => {
             onConfirm()
-            setButtonPopupAcceptAction(false)
             showSuccess(t('successful action'))
         }).catch(error => {
             handleErase()
-            setButtonPopupAcceptAction(false)
             const message = error.response.data
             handleError(message, error.response.status)
             onCancel()
         });
     }
 
-    const changeData = () => {
-        setButtonPopup(true)
-    }
 
     useEffect(() => {
         setFirstNameValue(firstName)
         setSecondNameValue(secondName)
     }, [firstName, secondName])
+
+    const changeData = () => {
+        setButtonPopup(true)
+        setButtonPopupAcceptAction(false)
+    }
 
     return (
         <>

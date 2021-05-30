@@ -58,21 +58,13 @@ export default function ChangeBusinessWorkerData({open, onOpen, onConfirm, onCan
         }
 
         changeBusinessWorkerData(firstNameValue, secondNameValue, phoneNumberValue).then(res => {
-            setButtonPopupAcceptAction(false)
-            showSuccess(t('successful action'))
             onConfirm()
+            showSuccess(t('successful action'))
         }).catch(error => {
-            handleErase()
-            setButtonPopupAcceptAction(false)
             const message = error.response.data
             handleError(message, error.response.status)
             onCancel()
         });
-    }
-
-    const changeData = () => {
-        //TODO
-        setButtonPopup(true)
     }
 
     useEffect(() => {
@@ -80,6 +72,12 @@ export default function ChangeBusinessWorkerData({open, onOpen, onConfirm, onCan
         setSecondNameValue(secondName)
         setPhoneNumberValue(phoneNumber)
     }, [firstName, secondName, phoneNumber])
+
+    const changeData = () => {
+        //TODO
+        setButtonPopup(true)
+        setButtonPopupAcceptAction(false)
+    }
 
     return (
         <>
