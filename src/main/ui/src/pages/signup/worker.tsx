@@ -91,7 +91,7 @@ export default function WorkerSignUp() {
         }).catch(error => {
             setButtonPopupAcceptAction(false)
             const message = error.response.data
-            handleError(message)
+            handleError(message, error.response.status)
         });
     }
 

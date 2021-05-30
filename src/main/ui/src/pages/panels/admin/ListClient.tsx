@@ -15,7 +15,6 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import {Button, TextField} from "@material-ui/core";
 import {Link} from "react-router-dom";
 import {useTranslation} from "react-i18next";
-import DarkedTextField from "../../../components/DarkedTextField";
 import axios from "../../../Services/URL";
 import {useSelector} from "react-redux";
 import {selectDarkMode} from "../../../redux/slices/userSlice";
@@ -25,11 +24,9 @@ import {useSnackbarQueue} from "../../snackbar";
 import store from "../../../redux/store";
 import {setChangeAccessLevelStateAccount} from "../../../redux/slices/changeAccessLevelStateSlice";
 import Autocomplete, {createFilterOptions} from '@material-ui/lab/Autocomplete';
-
 import {refreshToken} from "../../../Services/userService";
 import useHandleError from "../../../errorHandler";
 import PopupAcceptAction from "../../../PopupAcceptAction";
-
 
 interface UnblockAccountParams {
     login: string;
@@ -144,7 +141,7 @@ function Row(props: RowProps) {
             setOpen(state => !state);
         }).catch(error => {
             const message = error.response.data
-            handleError(message)
+            handleError(message, error.response.status)
         }).then(res => {
             refreshToken()
         });
@@ -165,7 +162,7 @@ function Row(props: RowProps) {
             store.dispatch(setChangeAccessLevelStateAccount(res.data))
         }).catch(error => {
             const message = error.response.data
-            handleError(message)
+            handleError(message, error.response.status)
         });
     }
 
@@ -267,7 +264,7 @@ export default function AdminListClient() {
             refreshToken()
         }).catch(error => {
             const message = error.response.data
-            handleError(message)
+            handleError(message, error.response.status)
         })
     }, []);
 

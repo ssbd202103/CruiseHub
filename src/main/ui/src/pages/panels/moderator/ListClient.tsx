@@ -82,7 +82,7 @@ export default function ModListClient() {
             setUsers(res.data)
         }).catch(error => {
             const message = error.response.data
-            handleError(message)
+            handleError(message, error.response.status)
         }).then(res => {
             refreshToken()
         });

@@ -60,7 +60,7 @@ export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeD
         }).catch(error => {
             setButtonPopupAcceptAction(false)
             const message = error.response.data
-            handleError(message)
+            handleError(message, error.response.status)
         });
     }
 
