@@ -73,7 +73,6 @@ function App() {
             >
                 <Router basename={process.env.REACT_APP_ROUTER_BASE || ''}>
 
-                  <Redirect to={'/'} />
                     <Switch>
                         <Route exact={["", "CLIENT"].includes(activeAccessLevel)} path="/" component={
                             activeAccessLevel === "ADMINISTRATOR" ? AdminPanel :
