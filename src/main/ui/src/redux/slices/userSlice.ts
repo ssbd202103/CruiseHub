@@ -1,6 +1,5 @@
 import {createSelector, createSlice, PayloadAction} from '@reduxjs/toolkit'
 import i18n from "i18next";
-import {saveUser} from "../../Services/userService";
 
 export interface ILoginUserSliceState {
     firstName: string,
@@ -42,29 +41,31 @@ const userSlice = createSlice({
         login: '',
         darkMode: false,
         email: '',
-        languageType: window.navigator.languages[0].toUpperCase() === "EN" ? "EN" : "PL",
+        languageType: window.navigator.languages[0].substring(0,2).toUpperCase() === "EN" ? "EN" : "PL",
         accessLevels: [] as Array<IAccessLevel>,
         activeAccessLevel: '',
         etag: '',
         version: 0
     } as IUserSliceState,
     reducers: {
-        setUser: (state: IUserSliceState, {payload}: PayloadAction<ILoginUserSliceState>) => ({
-            ...payload,
-            activeAccessLevel:
-                payload.accessLevels
-                    .find(accessLevel => accessLevel.accessLevelType === state.activeAccessLevel)?.accessLevelType || payload.accessLevels[0].accessLevelType //state.activeAccessLevel || payload.accessLevels[0].accessLevelType
-        }),
+        setUser: (state: IUserSliceState, {payload}: PayloadAction<ILoginUserSliceState>) => {
+            return {
+                ...payload,
+                activeAccessLevel: sessionStorage.getItem('cruisehub_active_al') as AccessLevelType ||
+                    payload.accessLevels.find(accessLevel => accessLevel.accessLevelType === state.activeAccessLevel)?.accessLevelType ||
+                    payload.accessLevels[0].accessLevelType
+                }
+        },
         changeEmail: (state: IUserSliceState, {payload}: PayloadAction<string>) => {
             state.email = payload
         },
         setLogin: (state: IUserSliceState, {payload}: PayloadAction<string>) => {
             state.login = payload
         },
-        emptyUser: (state: IUserSliceState) => {
+        emptyUser: () => {
             const languageType = window.navigator.languages[1]
                 .toUpperCase() === "PL" ? "PL" : "EN"
-            i18n.changeLanguage(languageType)
+
             return {
                 firstName: '',
                 secondName: '',
@@ -78,9 +79,11 @@ const userSlice = createSlice({
                 version: 0
             } as IUserSliceState
         },
-        setActiveAccessLevel: (state: IUserSliceState, {payload}: PayloadAction<AccessLevelType>) => {
-            state.activeAccessLevel = payload
-            sessionStorage.setItem('cruisehub_user', JSON.stringify({...state, activeAccessLevel: payload}))
+        setActiveAccessLevel: (state: IUserSliceState, {payload}: PayloadAction<AccessLevelType | null>) => {
+            if (payload) {
+                state.activeAccessLevel = payload
+                sessionStorage.setItem('cruisehub_active_al', payload)
+            }
         }
     }
 })
@@ -132,5 +135,7 @@ export const selectAddress =
             })
 
 export const selectActiveAccessLevel = createSelector(selectSelf, state => state.user.activeAccessLevel)
+
+export const selectLanguage = createSelector(selectSelf, state => state.user.languageType)
 
 export default userSlice.reducer

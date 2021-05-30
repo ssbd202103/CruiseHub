@@ -32,45 +32,34 @@ import CodeSignIn from './pages/codeSignIn';
 import {SnackbarKey, SnackbarProvider} from 'notistack';
 import {TransitionProps} from "@material-ui/core/transitions";
 import {useSelector} from "react-redux";
-import {selectActiveAccessLevel} from "./redux/slices/userSlice";
-import {getSavedUser} from "./Services/userService";
+import {selectActiveAccessLevel, selectLanguage} from "./redux/slices/userSlice";
+import {loadUserWithSavedToken, logOut} from "./Services/userService";
 import RoundedButton from "./components/RoundedButton";
+import useHandleError from "./errorHandler";
+import {useSnackbarQueue} from "./pages/snackbar";
 
 
 
 function App() {
+    const {t} = useTranslation()
+
+    const handleError = useHandleError()
+    const showWarning = useSnackbarQueue('warning')
+
     useEffect(() => {
-        getSavedUser()
+        loadUserWithSavedToken().catch(error => {
+            handleError(t(error.response.data))
+            showWarning(t('redirect in') + ' 3s')
+
+            setTimeout(logOut, 3000)
+        })
     }, [])
 
-    const {t} = useTranslation()
+
 
     const activeAccessLevel = useSelector(selectActiveAccessLevel)
 
-    const notistackRef = createRef<SnackbarProvider>()
-
-    const handleDismiss = (key: SnackbarKey) => () => {
-        notistackRef.current?.closeSnackbar(key)
-    }
-
     return (
-        <I18nextProvider i18n={i18n}>
-            <SnackbarProvider
-                ref={notistackRef}
-
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left'
-                }}
-
-                action={key => (
-                    <Button onClick={handleDismiss(key)} style={{color: 'white'}}>
-                        {t('dismiss')}
-                    </Button>
-                )}
-
-                TransitionComponent={Slide as ComponentType<TransitionProps>}
-            >
                 <Router basename={process.env.REACT_APP_ROUTER_BASE || ''}>
 
                     <Switch>
@@ -148,8 +137,7 @@ function App() {
                         </Route>
                     </Switch>
                 </Router>
-            </SnackbarProvider>
-        </I18nextProvider>
+
     );
 }
 
