@@ -1,10 +1,7 @@
 import {Link, Route} from 'react-router-dom';
-import LayoutProps from "./LayoutProps";
 import Header from "../components/Header";
 import Breadcrumb from "../components/Breadcrumb";
 import {Color} from "../components/interfaces";
-import {JSXElementConstructor} from "react";
-import {CSSProperties} from '@material-ui/styles';
 import styles from "../styles/moderatorPanel.module.css";
 import Grid from "@material-ui/core/Grid";
 import {useSelector} from "react-redux";
