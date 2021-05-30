@@ -51,10 +51,8 @@ export default function ChangePassword({open, onOpen, onConfirm, onCancel}: Chan
         changeOwnPasswordService(oldPassword, newPassword).then(res => {
             setConfirmNewPassword('')
             onConfirm()
-            setButtonPopupAcceptAction(false)
             showSuccess(t('successful action'))
         }).catch(error => {
-            setButtonPopupAcceptAction(false)
             const message = error.response.data
             try {
                 handleError(JSON.parse(message),error.response.status);
@@ -72,6 +70,7 @@ export default function ChangePassword({open, onOpen, onConfirm, onCancel}: Chan
 
     const changePassword = async () => {
         setButtonPopup(true)
+        setButtonPopupAcceptAction(false)
     }
 
     return (

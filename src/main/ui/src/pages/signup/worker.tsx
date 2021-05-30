@@ -63,8 +63,7 @@ export default function WorkerSignUp() {
     const [isAccepted, setIsAccepted] = useState(false);
 
     const verifyCallback = () => {
-        setButtonPopup(false)
-        setButtonPopupAcceptAction(true)
+        handleConfirm()
 
     }
 
@@ -75,21 +74,20 @@ export default function WorkerSignUp() {
             login,
             email,
             password,
-            languageType: i18n.language,
+            languageType: i18n.language.toUpperCase(),
             phoneNumber,
             companyName: company
         });
-        setButtonPopup(false)
         axios.post('auth/business-worker/registration', json, {
             headers: {
                 'Content-Type': 'application/json'
             }
         }).then(res=>{
-           setButtonPopupAcceptAction(false)
+            setButtonPopup(false)
             history.push('/')
             showSuccess(t('successful action'))
         }).catch(error => {
-            setButtonPopupAcceptAction(false)
+            setButtonPopup(false)
             const message = error.response.data
             handleError(message, error.response.status)
         });
@@ -119,7 +117,7 @@ export default function WorkerSignUp() {
             handleError("invalid.form")
 
         } else {
-            setButtonPopup(true)
+            setButtonPopupAcceptAction(true)
         }
 
     }
@@ -330,7 +328,10 @@ export default function WorkerSignUp() {
                 </Popup>
                 <PopupAcceptAction
                     open={buttonPopupAcceptAction}
-                    onConfirm={handleConfirm}
+                    onConfirm={()=> {
+                        setButtonPopup(true)
+                        setButtonPopupAcceptAction(false)
+                    }}
                     onCancel={() => {setButtonPopupAcceptAction(false)
                     }}
                 />

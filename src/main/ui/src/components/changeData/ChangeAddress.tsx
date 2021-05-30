@@ -62,12 +62,17 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
             city,
             country
         }).then(res => {
-            setButtonPopupAcceptAction(true)
+            setButtonPopupAcceptAction(false)
+            setHouseNumber('')
+            setStreet('')
+            setPostalCode('')
+            setCity('')
+            setCountry('')
             showSuccess(t('successful action'))
             onConfirm()
         }).catch(error => {
             handleErase()
-            setButtonPopupAcceptAction(true)
+            setButtonPopupAcceptAction(false)
             const message = error.response.data
             handleError(message, error.response.status)
             onCancel()
