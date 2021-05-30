@@ -48,10 +48,7 @@ function App() {
 
     useEffect(() => {
         loadUserWithSavedToken().catch(error => {
-            handleError(t(error.response.data))
-            showWarning(t('redirect in') + ' 3s')
-
-            setTimeout(logOut, 3000)
+            handleError('error.response.data',error.response.status)
         })
     }, [])
 
