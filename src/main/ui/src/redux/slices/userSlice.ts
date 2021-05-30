@@ -103,12 +103,11 @@ export const isUserEmpty = createSelector(selectSelf, state => {
     const {
         firstName,
         secondName,
-        login,
         email,
         etag
     } = state.user
 
-    return !firstName && !secondName && !login && !email && !etag
+    return !firstName && !secondName  && !email && !etag
 })
 export const getAccessLevelLabels = createSelector(selectSelf, state =>
     state.user.accessLevels.map((accessLevel: IAccessLevel) => accessLevel.accessLevelType)
