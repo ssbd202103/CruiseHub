@@ -48,10 +48,9 @@ export default function ChangeAdministratorData({open, onOpen, onConfirm, onCanc
             setFirstNameValue('')
             setSecondNameValue('')
             onConfirm()
-            setButtonPopupAcceptAction(false)
+
             showSuccess(t('successful action'))
         }).catch(error => {
-            setButtonPopupAcceptAction(false)
             const message = error.response.data
             handleError(message, error.response.status)
         });
@@ -65,6 +64,7 @@ export default function ChangeAdministratorData({open, onOpen, onConfirm, onCanc
     const changeData = () => {
         //TODO
         setButtonPopup(true)
+        setButtonPopupAcceptAction(false)
     }
 
     return (

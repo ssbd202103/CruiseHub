@@ -55,10 +55,8 @@ export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeD
             setEmailValue('')
             setConfirmEmailValue('')
             onConfirm()
-            setButtonPopupAcceptAction(false)
             showSuccess(t('successful action'))
         }).catch(error => {
-            setButtonPopupAcceptAction(false)
             const message = error.response.data
             handleError(message, error.response.status)
         });
@@ -68,6 +66,7 @@ export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeD
 
     const changeEmail = () => {
         setButtonPopup(true)
+        setButtonPopupAcceptAction(false)
 
     }
 

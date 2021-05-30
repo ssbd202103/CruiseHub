@@ -47,10 +47,9 @@ export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}:
             setFirstNameValue('')
             setSecondNameValue('')
             onConfirm()
-            setButtonPopupAcceptAction(false)
+
             showSuccess(t('successful action'))
         }).catch(error => {
-            setButtonPopupAcceptAction(false)
             const message = error.response.data
             handleError(message, error.response.status)
         });
@@ -64,7 +63,7 @@ export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}:
 
     const changeData = () => {
         setButtonPopup(true)
-
+        setButtonPopupAcceptAction(false)
     }
 
     return (
