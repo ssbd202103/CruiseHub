@@ -103,14 +103,14 @@ export default function ChangeAccountData() {
             headers: {
                 "Authorization": `Bearer ${token}`
             }
-        }).catch(error => {
-            setButtonPopupAcceptChangeMail(false)
-            const message = error.response.data
-            handleError(message, error.response.status)
         }).then(res => {
             setButtonPopupAcceptChangeMail(false)
             refreshToken()
             showSuccess(t('successful action'))
+        }).catch(error => {
+            setButtonPopupAcceptChangeMail(false)
+            const message = error.response.data
+            handleError(message, error.response.status)
         }).finally(closeAll);
     }
     const changePersonalData = async () => {
@@ -320,7 +320,7 @@ export default function ChangeAccountData() {
                         </div>
                         <div>
                             <RoundedButton color="blue"
-                                           onClick={() => setButtonPopupAcceptChangeData(true)}
+                                           onClick={() => setButtonPopupAcceptChangeMail(true)}
                             >{t("confirm")}</RoundedButton>
                             <RoundedButton color="pink"
                                            onClick={handleChangeMail}
