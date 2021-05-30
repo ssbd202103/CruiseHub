@@ -18,7 +18,7 @@ import {useTranslation} from "react-i18next";
 import axios from "../../../Services/URL";
 import {useSelector} from "react-redux";
 import {selectDarkMode} from "../../../redux/slices/userSlice";
-import {getAccountDetailsAbout, getAllAccounts} from "../../../Services/accountsService";
+import {getAccountDetailsAbout, getAllAccounts, getAccountMetadataDetailsAbout} from "../../../Services/accountsService";
 import {selectToken} from "../../../redux/slices/tokenSlice";
 import {useSnackbarQueue} from "../../snackbar";
 import store from "../../../redux/store";
@@ -138,16 +138,17 @@ function Row(props: RowProps) {
     const handleSetOpen = async () => {
         getAccountDetailsAbout(row.login).then(res => {
             sessionStorage.setItem("changeAccountData", JSON.stringify(res.data));
-            setOpen(state => !state);
-        }).catch(error => {
-            const message = error.response.data
-            handleError(message, error.response.status)
         }).then(res => {
-            refreshToken()
+            getAccountMetadataDetailsAbout(row.login).then(respo => {
+                sessionStorage.setItem("changeAccountDataMta", JSON.stringify(respo.data));
+                setOpen(state => !state);
+                refreshToken();
+            }, error => {
+                const message = error.response.data
+                handleError(message, error.response.status)
+            });
         });
-
     }
-
     const setCurrentGrantAccessLevelAccount = () => {
         sessionStorage.setItem('grantAccessLevelAccount', JSON.stringify(row));
     }

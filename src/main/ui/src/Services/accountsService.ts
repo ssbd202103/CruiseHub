@@ -20,3 +20,23 @@ export function getAccountDetailsAbout(login: string) {
         }
     })
 }
+
+export function getAccountMetadataDetailsAbout(login: string) {
+    const {token} = store.getState()
+
+    return axios.get(`account/metadata/${login}`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+}
+    export function getSelfMetadataDetails(){
+        const {token} = store.getState()
+
+        return axios.get(`settings/metadata`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+
+}

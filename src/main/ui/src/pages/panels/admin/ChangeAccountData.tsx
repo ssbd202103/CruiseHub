@@ -25,6 +25,7 @@ export default function ChangeAccountData() {
     const showSuccess = useSnackbarQueue('success')
 
     const currentAccount = JSON.parse(sessionStorage.getItem("changeAccountData") as string)
+    const currentAccountMTD = JSON.parse(sessionStorage.getItem("changeAccountDataMta") as string)
     const clientAccount = JSON.parse(sessionStorage.getItem("changeAccountData") as string)
     const businessAccount = JSON.parse(sessionStorage.getItem("changeAccountData") as string)
     const acLevel = currentAccount.accessLevels.map((accessLevel: any) => accessLevel.accessLevelType)
@@ -46,6 +47,18 @@ export default function ChangeAccountData() {
     const [country, setCountry] = useState('')
     const [phoneNumber, setPhoneNumber] = useState('')
 
+    const [alterType, setAlterType] = useState('')
+    const [alteredBy, setAlteredBy] = useState('')
+    const [createdBy, setCreatedBy] = useState('')
+    const [creationDateTime, setCreationDateTime] = useState('')
+    const [lastAlterDateTime, setLastAlterDateTime] = useState('')
+    const [lastCorrectAuthenticationDateTime, setLastCorrectAuthenticationDateTime] = useState('')
+    const [lastCorrectAuthenticationLogicalAddress, setLastCorrectAuthenticationLogicalAddress] = useState('')
+    const [lastIncorrectAuthenticationDateTime, setLastIncorrectAuthenticationDateTime] = useState('')
+    const [lastIncorrectAuthenticationLogicalAddress, setLastIncorrectAuthenticationLogicalAddress] = useState('')
+    const [numberOfAuthenticationFailures, setNumberOfAuthenticationFailures] = useState('')
+    const [version, setVersion] = useState('')
+
     const [businessPhoneNumber, setBusinessPhoneNumber] = useState('')
     const {token} = store.getState()
     const [buttonPopupAcceptChangeNumber, setButtonPopupAcceptChangeNumber] = useState(false);
@@ -53,9 +66,26 @@ export default function ChangeAccountData() {
     const [buttonPopupAcceptChangeAddress, setButtonPopupAcceptChangeAddress] = useState(false);
     const [buttonPopupAcceptChangeMail, setButtonPopupAcceptChangeMail] = useState(false);
 
+
     useEffect(() => {
         setFirstName(currentAccount.firstName);
         setSecondName(currentAccount.secondName);
+        setAlterType(currentAccountMTD.alterType);
+        setAlteredBy(currentAccountMTD.alteredBy);
+        setCreatedBy(currentAccountMTD.createdBy);
+        if(currentAccountMTD.creationDateTime !=null)
+        setCreationDateTime(currentAccountMTD.creationDateTime.dayOfMonth +" / " + currentAccountMTD.creationDateTime.month +" / "+ currentAccountMTD.creationDateTime.year +"    "+ currentAccountMTD.creationDateTime.hour +":"+ currentAccountMTD.creationDateTime.minute )
+        if(currentAccountMTD.lastAlterDateTime !=null)
+        setLastAlterDateTime(currentAccountMTD.lastAlterDateTime.dayOfMonth +" / " + currentAccountMTD.lastAlterDateTime.month +" / "+ currentAccountMTD.lastAlterDateTime.year +"    "+ currentAccountMTD.lastAlterDateTime.hour +":"+ currentAccountMTD.lastAlterDateTime.minute);
+        if(currentAccountMTD.lastCorrectAuthenticationDateTime !=null)
+        setLastCorrectAuthenticationDateTime(currentAccountMTD.lastCorrectAuthenticationDateTime.dayOfMonth +" / " + currentAccountMTD.lastCorrectAuthenticationDateTime.month +" / "+ currentAccountMTD.lastCorrectAuthenticationDateTime.year +"    "+ currentAccountMTD.lastCorrectAuthenticationDateTime.hour +":"+ currentAccountMTD.creationDateTime.minute);
+        setLastCorrectAuthenticationLogicalAddress(currentAccountMTD.lastCorrectAuthenticationLogicalAddress)
+        if(currentAccountMTD.lastIncorrectAuthenticationDateTime !=null)
+        setLastIncorrectAuthenticationDateTime(currentAccountMTD.lastIncorrectAuthenticationDateTime.dayOfMonth +" / " + currentAccountMTD.lastIncorrectAuthenticationDateTime.month +" / "+ currentAccountMTD.lastIncorrectAuthenticationDateTime.year +"    "+ currentAccountMTD.lastIncorrectAuthenticationDateTime.hour +":"+ currentAccountMTD.lastIncorrectAuthenticationDateTime.minute);
+        setLastIncorrectAuthenticationLogicalAddress(currentAccountMTD.lastIncorrectAuthenticationLogicalAddress);
+        setNumberOfAuthenticationFailures(currentAccountMTD.numberOfAuthenticationFailures)
+        setVersion(currentAccountMTD.version);
+
         if (clientAddr) {
             setStreet(clientAddr.address.street);
             setPostalCode(clientAddr.address.postalCode);
@@ -326,11 +356,26 @@ export default function ChangeAccountData() {
                             >{t("cancel")}</RoundedButton>
                         </div>
                     </Grid>
+                    <div>
+                        <tr>
+                            <td><h4>{t("alterType")}</h4></td> <td><h4>{t("alteredBy")}</h4></td> <td><h4>{t("createdBy")}</h4></td>
+                            <td><h4>{t("creationDateTime")}</h4></td> <td><h4>{t("lastAlterDateTime")}</h4></td> <td><h4>{t("lastCorrectAuthenticationDateTime")}</h4></td>
+                            <td><h4>{t("lastCorrectAuthenticationLogicalAddress")}</h4></td> <td><h4>{t("lastIncorrectAuthenticationDateTime")}</h4></td> <td><h4>{t("lastIncorrectAuthenticationLogicalAddress")}</h4></td>
+                            <td><h4>{t("numberOfAuthenticationFailures")}</h4></td> <td><h4>{t("version")}</h4></td>
+                        </tr>
+                        <tr>
+                            <td><h4>{alterType}</h4></td><td><h4>{alteredBy}</h4></td><td><h4>{createdBy}</h4></td>
+                            <td><h4>{creationDateTime}</h4></td><td><h4>{lastAlterDateTime}</h4></td><td><h4>{lastCorrectAuthenticationDateTime}</h4></td>
+                            <td><h4>{lastCorrectAuthenticationLogicalAddress}</h4></td><td><h4>{lastIncorrectAuthenticationDateTime}</h4></td><td><h4>{lastIncorrectAuthenticationLogicalAddress}</h4></td>
+                           <td><h4>{numberOfAuthenticationFailures}</h4></td><td><h4>{version}</h4></td>
+                    </tr>
+                    </div>
                 </Grid>
                 <Grid item style={{display: acLevel.includes('CLIENT') ? "block" : "none"}} className={styles.item}>
                     <Grid item style={{display: ChangAddress ? "none" : "block"}} className={styles.item}>
                         <h3>{t("address")}</h3>
-
+                        //TODO eh
+                        <h1>Test do danych persdoalanych adress</h1>
                         <div>
                             <div>
                                 <h4>{t("street")}</h4>
@@ -364,6 +409,8 @@ export default function ChangeAccountData() {
                     </Grid>
                     <Grid item style={{display: ChangAddress ? "block" : "none"}} className={styles['change-item']}>
                         <h3>{t("address change")}</h3>
+                        <h1>Test do danych persdoalanych adress</h1>
+
                         <div>
                             <DarkedTextField
                                 type="text"
@@ -429,6 +476,8 @@ export default function ChangeAccountData() {
                     <Grid item style={{display: ChangePhone ? "none" : "block"}} className={styles.item}>
                         <div>
                             <div>
+                                <h1>Test do danych persdoalanych tell</h1>
+
                                 <h4>{t("phone number")}</h4>
                                 <p>{businnesPhone ? businnesPhone.phoneNumber : ""}</p>
                             </div>
@@ -441,6 +490,8 @@ export default function ChangeAccountData() {
                     <Grid item style={{display: ChangePhone ? "block" : "none"}} className={styles['change-item']}>
                         <h4>{t("phone number")}</h4>
                         <div>
+                            <h1>Test do danych persdoalanych telefon</h1>
+
                             <DarkedTextField
                                 type="text"
                                 label={t("phone number")}
