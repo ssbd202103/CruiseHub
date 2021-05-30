@@ -7,6 +7,8 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -33,16 +35,19 @@ public class TokenWrapperFacade extends AbstractFacade<TokenWrapper> {
         super(TokenWrapper.class);
     }
 
+    @RolesAllowed("SYSTEM")
     public List<TokenWrapper> getUsedToken() {
         TypedQuery<TokenWrapper> tq = em.createNamedQuery("TokenWrapper.findUsed", TokenWrapper.class);
         return tq.getResultList();
     }
 
+    @RolesAllowed("SYSTEM")
     public List<TokenWrapper> getUnusedToken() {
         TypedQuery<TokenWrapper> tq = em.createNamedQuery("TokenWrapper.findUnused", TokenWrapper.class);
         return tq.getResultList();
     }
 
+    @PermitAll
     public TokenWrapper findByToken(String token) throws BaseAppException {
         TypedQuery<TokenWrapper> tq = em.createNamedQuery("TokenWrapper.findByToken", TokenWrapper.class);
         tq.setParameter("token", token);
@@ -53,16 +58,19 @@ public class TokenWrapperFacade extends AbstractFacade<TokenWrapper> {
         }
     }
 
+    @PermitAll
     @Override
     public void create(TokenWrapper entity) throws FacadeException {
         super.create(entity);
     }
 
+    @PermitAll
     @Override
     public void edit(TokenWrapper entity) throws FacadeException {
         super.edit(entity);
     }
 
+    @RolesAllowed("SYSTEM")
     @Override
     public void remove(TokenWrapper entity) throws FacadeException {
         super.remove(entity);

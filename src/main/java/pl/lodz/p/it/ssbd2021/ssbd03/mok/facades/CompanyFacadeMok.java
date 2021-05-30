@@ -8,6 +8,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.CompanyFacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
+import javax.annotation.security.PermitAll;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -36,6 +37,7 @@ public class CompanyFacadeMok extends AbstractFacade<Company> {
         return em;
     }
 
+    @PermitAll
     public Company getCompanyByName(String companyName) throws BaseAppException {
         TypedQuery<Company> tq = em.createNamedQuery("Company.findByName", Company.class);
         tq.setParameter("name", companyName);

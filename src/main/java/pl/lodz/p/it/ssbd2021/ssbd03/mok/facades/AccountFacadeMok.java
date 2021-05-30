@@ -177,6 +177,7 @@ public class AccountFacadeMok extends AbstractFacade<Account> {
         return account;
     }
 
+    @RolesAllowed("SYSTEM")
     @Override
     public void remove(Account entity) throws FacadeException {
         super.remove(entity);
