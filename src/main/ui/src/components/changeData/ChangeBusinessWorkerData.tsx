@@ -31,18 +31,22 @@ export default function ChangeBusinessWorkerData({open, onOpen, onConfirm, onCan
     const secondName = useSelector(selectSecondName)
     const phoneNumber = useSelector(selectPhoneNumber("CLIENT"))
 
-    const [firstNameValue, setFirstNameValue] = useState('')
-    const [secondNameValue, setSecondNameValue] = useState('')
-    const [phoneNumberValue, setPhoneNumberValue] = useState('')
+    const [firstNameValue, setFirstNameValue] = useState(firstName)
+    const [secondNameValue, setSecondNameValue] = useState(secondName)
+    const [phoneNumberValue, setPhoneNumberValue] = useState(phoneNumber)
 
     const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
 
     const [buttonPopup, setButtonPopup] = useState(false);
 
+    const handleErase = () => {
+        setFirstNameValue(firstName)
+        setSecondNameValue(secondName)
+        setPhoneNumberValue(phoneNumber)
+    }
+
     const handleCancel = () => {
-        setFirstNameValue('')
-        setSecondNameValue('')
-        setPhoneNumberValue('')
+        handleErase()
         onCancel()
     }
 
@@ -54,17 +58,20 @@ export default function ChangeBusinessWorkerData({open, onOpen, onConfirm, onCan
         }
 
         changeBusinessWorkerData(firstNameValue, secondNameValue, phoneNumberValue).then(res => {
-            setFirstNameValue('')
-            setSecondNameValue('')
-            setPhoneNumberValue('')
-            onConfirm()
             setButtonPopupAcceptAction(false)
             showSuccess(t('successful action'))
+            onConfirm()
         }).catch(error => {
             setButtonPopupAcceptAction(false)
             const message = error.response.data
             handleError(message, error.response.status)
-        });
+            onCancel()
+        }).finally(handleErase);
+    }
+
+    const changeData = () => {
+        //TODO
+        setButtonPopup(true)
     }
 
     useEffect(() => {
@@ -72,11 +79,6 @@ export default function ChangeBusinessWorkerData({open, onOpen, onConfirm, onCan
         setSecondNameValue(secondName)
         setPhoneNumberValue(phoneNumber)
     }, [firstName, secondName, phoneNumber])
-
-    const changeData = () => {
-        //TODO
-        setButtonPopup(true)
-    }
 
     return (
         <>

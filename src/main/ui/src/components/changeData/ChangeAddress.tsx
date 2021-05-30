@@ -3,7 +3,7 @@ import Grid from "@material-ui/core/Grid";
 import styles from "../../styles/ManageAccount.module.css";
 import RoundedButton from "../RoundedButton";
 import DarkedTextField from "../DarkedTextField";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {useSelector} from "react-redux";
 import {selectAddress} from "../../redux/slices/userSlice";
@@ -23,22 +23,27 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
 
     const address = useSelector(selectAddress)
 
-    const [houseNumber, setHouseNumber] = useState('')
-    const [street, setStreet] = useState('')
-    const [postalCode, setPostalCode] = useState('')
-    const [city, setCity] = useState('')
-    const [country, setCountry] = useState('')
+    const [houseNumber, setHouseNumber] = useState(address.houseNumber)
+    const [street, setStreet] = useState(address.street)
+    const [postalCode, setPostalCode] = useState(address.street)
+    const [city, setCity] = useState(address.city)
+    const [country, setCountry] = useState(address.country)
 
     const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
 
     const [buttonPopup, setButtonPopup] = useState(false);
 
+    const handleErase = () => {
+        setHouseNumber(address.houseNumber)
+        setStreet(address.street)
+        setPostalCode(address.postalCode)
+        setCity(address.city)
+        setCountry(address.country)
+
+    }
+
     const handleCancel = () => {
-        setHouseNumber('')
-        setStreet('')
-        setPostalCode('')
-        setCity('')
-        setCountry('')
+        handleErase()
         onCancel()
     }
 
@@ -61,25 +66,29 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
             city,
             country
         }).then(res => {
-            setHouseNumber('')
-            setStreet('')
-            setPostalCode('')
-            setCity('')
-            setCountry('')
-            onConfirm()
             setButtonPopupAcceptAction(true)
             showSuccess(t('successful action'))
+            onConfirm()
         }).catch(error => {
             setButtonPopupAcceptAction(true)
             const message = error.response.data
             handleError(message, error.response.status)
-        });
+            onCancel()
+        }).finally(handleErase);
     }
 
 
     const changeAddress = () => {
         setButtonPopup(true)
     }
+
+    useEffect(() => {
+        setHouseNumber(address.houseNumber)
+        setPostalCode(address.postalCode)
+        setStreet(address.street)
+        setCity(address.city)
+        setCountry(address.country)
+    }, [address])
 
     return (
         <>
@@ -128,7 +137,7 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
                         placeholder="23"
                         value={houseNumber}
                         onChange={event => {
-                            setHouseNumber(event.target.value)
+                            setHouseNumber(Number(event.target.value))
                         }}/>
                     <DarkedTextField
                         type="text"

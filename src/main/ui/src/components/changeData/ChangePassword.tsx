@@ -49,8 +49,6 @@ export default function ChangePassword({open, onOpen, onConfirm, onCancel}: Chan
 
 
         changeOwnPasswordService(oldPassword, newPassword).then(res => {
-            setOldPassword('')
-            setNewPassword('')
             setConfirmNewPassword('')
             onConfirm()
             setButtonPopupAcceptAction(false)
@@ -63,6 +61,10 @@ export default function ChangePassword({open, onOpen, onConfirm, onCancel}: Chan
             } catch (e) {
                 handleError(message, error.response.status)
             }
+            onCancel()
+        }).finally(() => {
+            setOldPassword('')
+            setNewPassword('')
         });
 
     }
