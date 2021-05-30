@@ -52,8 +52,6 @@ export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeD
         }
 
         changeEmailService(emailValue).then(res => {
-            setEmailValue('')
-            setConfirmEmailValue('')
             onConfirm()
             setButtonPopupAcceptAction(false)
             showSuccess(t('successful action'))
@@ -61,6 +59,10 @@ export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeD
             setButtonPopupAcceptAction(false)
             const message = error.response.data
             handleError(message, error.response.status)
+            onCancel()
+        }).finally(() => {
+            setEmailValue('')
+            setConfirmEmailValue('')
         });
     }
 
@@ -87,7 +89,7 @@ export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeD
                 <h3>{t("email change")}</h3>
                 <div>
                     <DarkedTextField
-                        type="text"
+                        type="email"
                         label={t("new email")}
                         placeholder={t("new email")}
                         value={emailValue}

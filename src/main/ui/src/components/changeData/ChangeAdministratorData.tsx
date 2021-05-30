@@ -28,12 +28,15 @@ export default function ChangeAdministratorData({open, onOpen, onConfirm, onCanc
 
     const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
 
-    const [firstNameValue, setFirstNameValue] = useState('')
-    const [secondNameValue, setSecondNameValue] = useState('')
+    const [firstNameValue, setFirstNameValue] = useState(firstName)
+    const [secondNameValue, setSecondNameValue] = useState(secondName)
+
+    const handleErase = () => {
+        setFirstNameValue(firstName)
+        setSecondNameValue(secondName)
+    }
 
     const handleCancel = () => {
-        setFirstNameValue('')
-        setSecondNameValue('')
         onCancel()
     }
 
@@ -45,27 +48,26 @@ export default function ChangeAdministratorData({open, onOpen, onConfirm, onCanc
         }
 
         changeAdministratorData(firstNameValue, secondNameValue).then(res => {
-            setFirstNameValue('')
-            setSecondNameValue('')
-            onConfirm()
             setButtonPopupAcceptAction(false)
             showSuccess(t('successful action'))
+            onConfirm()
         }).catch(error => {
             setButtonPopupAcceptAction(false)
             const message = error.response.data
             handleError(message, error.response.status)
-        });
+            onCancel()
+        }).finally(handleErase);
+    }
+
+    const changeData = () => {
+        //TODO
+        setButtonPopup(true)
     }
 
     useEffect(() => {
         setFirstNameValue(firstName)
         setSecondNameValue(secondName)
     }, [firstName, secondName])
-
-    const changeData = () => {
-        //TODO
-        setButtonPopup(true)
-    }
 
     return (
         <>

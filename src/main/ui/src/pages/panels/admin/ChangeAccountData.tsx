@@ -66,30 +66,31 @@ export default function ChangeAccountData() {
         }
         if (businnesPhone) setBusinessPhoneNumber(businnesPhone.phoneNumber);
     }, [])
-    //Functions for personal data change
-    const handleChangePerData = () => {
-        setPerData(state => !state)
+
+    const closeAll = () => {
+        setPerData(false)
         setChangChangAddress(false)
         setChangePhone(false)
         setMail(false)
     }
+
+    //Functions for personal data change
+    const handleChangePerData = () => {
+        closeAll()
+        setPerData(true)
+    }
     const handleChangeMail = () => {
-        setMail(state => !state)
-        setChangChangAddress(false)
-        setChangePhone(false)
-        setPerData(false)
+        closeAll()
+        setMail(true)
     }
     //Functions for address data change
     const handleChangAddress = () => {
-        setChangChangAddress(state => !state)
-        setPerData(false)
-        setChangePhone(false)
+        closeAll()
+        setChangChangAddress(true)
     }
     const handleChangePhone = () => {
-        setChangChangAddress(false)
-        setPerData(false)
-        setChangePhone(state => !state)
-        setMail(false)
+        closeAll()
+        setChangePhone(true)
     }
 
     const changeMail = async () => {
@@ -110,7 +111,7 @@ export default function ChangeAccountData() {
             setButtonPopupAcceptChangeMail(false)
             refreshToken()
             showSuccess(t('successful action'))
-        });
+        }).finally(closeAll);
     }
     const changePersonalData = async () => {
         const {token} = store.getState()
@@ -138,7 +139,7 @@ export default function ChangeAccountData() {
             setButtonPopupAcceptChangeData(false)
             const message = error.response.data
             handleError(message, error.response.status)
-        });
+        }).finally(closeAll);
 
         await axios.get(`/account/details/${currentAccount.login}`, {
             headers: {
@@ -188,7 +189,7 @@ export default function ChangeAccountData() {
             setButtonPopupAcceptChangeAddress(false)
             const message = error.response.data
             handleError(message, error.response.status)
-        });
+        }).finally(closeAll);
 
 
         await axios.get(`/account/details/${currentAccount.login}`, {
@@ -226,7 +227,7 @@ export default function ChangeAccountData() {
             const message = error.response.data
             setButtonPopupAcceptChangeNumber(false)
             handleError(message, error.response.status)
-        });
+        }).finally(closeAll);
 
         await axios.get(`/account/details/${currentAccount.login}`, {
             headers: {
