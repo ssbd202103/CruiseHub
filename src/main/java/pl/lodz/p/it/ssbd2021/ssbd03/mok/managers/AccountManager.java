@@ -189,7 +189,8 @@ public class AccountManager implements AccountManagerLocal {
     @RolesAllowed("getAllAccounts")
     @Override
     public List<Account> getAllAccounts() throws BaseAppException {
-        return accountFacade.findAll();
+        Account currentUser = getCurrentUser();
+        return accountFacade.findAll().stream().filter(acc -> !acc.getLogin().equals(currentUser.getLogin())).collect(Collectors.toList());
     }
 
     @RolesAllowed("getAllUnconfirmedBusinessWorkers")
@@ -780,37 +781,37 @@ public class AccountManager implements AccountManagerLocal {
         TokenWrapper tokenWrapper = TokenWrapper.builder().token(kod).account(account).used(false).build();
         this.tokenWrapperFacade.create(tokenWrapper);
         String contentHtml = "<p>" + body + "<br>" + kod + "</p>";
-        EmailService.sendEmailWithContent(account.getEmail().trim(), subject, contentHtml);
+//        EmailService.sendEmailWithContent(account.getEmail().trim(), subject, contentHtml);
     }
 
     @PermitAll
     @Override
     public String authWCodeUpdateCorrectAuthenticateInfo(String login, String code, String IpAddr, LocalDateTime time) throws BaseAppException {
-        Account account = this.accountFacade.findByLogin(login);
-        TokenWrapper verificationCode;
-        try {
-            verificationCode = this.tokenWrapperFacade.findByToken(code);
-        } catch (BaseAppException e) {
-            if (e.getMessage().equals(NO_SUCH_ELEMENT_ERROR)) {
-                throw new AccountManagerException(CODE_IS_INCORRECT_ERROR);
-            } else {
-                throw new AccountManagerException(e.getMessage(), e);
-            }
-        }
-        if (verificationCode.isUsed()) {
-            updateIncorrectAuthenticateInfo(login, IpAddr, time);
-            throw new AccountManagerException(CODE_ALREADY_USED_ERROR);
-        }
-        if (verificationCode.getCreationDateTime().plus(5, ChronoUnit.MINUTES).isBefore(time)) {
-            updateIncorrectAuthenticateInfo(login, IpAddr, time);
-            throw new AccountManagerException(CODE_EXPIRE_ERROR);
-        }
-        if (account.getId() != verificationCode.getAccount().getId()) {
-            updateIncorrectAuthenticateInfo(login, IpAddr, time);
-            throw new AccountManagerException(CODE_IS_INCORRECT_ERROR);
-        }
-        verificationCode.setUsed(true);
-        this.tokenWrapperFacade.edit(verificationCode);
+//        Account account = this.accountFacade.findByLogin(login);
+//        TokenWrapper verificationCode;
+//        try {
+//            verificationCode = this.tokenWrapperFacade.findByToken(code);
+//        } catch (BaseAppException e) {
+//            if (e.getMessage().equals(NO_SUCH_ELEMENT_ERROR)) {
+//                throw new AccountManagerException(CODE_IS_INCORRECT_ERROR);
+//            } else {
+//                throw new AccountManagerException(e.getMessage(), e);
+//            }
+//        }
+//        if (verificationCode.isUsed()) {
+//            updateIncorrectAuthenticateInfo(login, IpAddr, time);
+//            throw new AccountManagerException(CODE_ALREADY_USED_ERROR);
+//        }
+//        if (verificationCode.getCreationDateTime().plus(5, ChronoUnit.MINUTES).isBefore(time)) {
+//            updateIncorrectAuthenticateInfo(login, IpAddr, time);
+//            throw new AccountManagerException(CODE_EXPIRE_ERROR);
+//        }
+//        if (account.getId() != verificationCode.getAccount().getId()) {
+//            updateIncorrectAuthenticateInfo(login, IpAddr, time);
+//            throw new AccountManagerException(CODE_IS_INCORRECT_ERROR);
+//        }
+//        verificationCode.setUsed(true);
+//        this.tokenWrapperFacade.edit(verificationCode);
         return updateCorrectAuthenticateInfo(login, IpAddr, time);
     }
 }
