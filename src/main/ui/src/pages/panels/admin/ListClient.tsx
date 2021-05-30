@@ -112,15 +112,15 @@ function createData(
 
 export interface RowProps {
     row: ReturnType<typeof createData>,
-    style: React.CSSProperties
+    style: React.CSSProperties,
+    onChange: () => Promise<any>,
 }
 
 function Row(props: RowProps) {
+    const {
+        onChange
+    } = props;
 
-
-    function refresh() {
-        window.location.reload();
-    }
 
     const {row} = props;
     const {style} = props;
@@ -224,8 +224,9 @@ function Row(props: RowProps) {
                                                         login: row.login, version: row.version, token: token
                                                     })
                                                         .then(res => {
-                                                            refresh()
-                                                            showSuccess(t('successful action'))
+                                                            onChange().then(() => {
+                                                                showSuccess(t('data.load.success'))
+                                                            })
                                                         }).catch(error => {
                                                         const message = error.response.data
                                                         handleError(t(message))
@@ -337,7 +338,7 @@ export default function AdminListClient() {
                     </TableHead>
                     <TableBody>
                         {search(users.map((user, index) => (
-                            <Row key={index} row={user} style={{color: `var(--${!darkMode ? 'dark' : 'white'})`}}/>
+                            <Row key={index} row={user} style={{color: `var(--${!darkMode ? 'dark' : 'white'})`}} onChange={getAccounts}/>
                         )))}
                     </TableBody>
                 </Table>

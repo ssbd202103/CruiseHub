@@ -227,6 +227,7 @@ const resources = {
             "error.unauthorized": "Token sesyjny prawdopodobnie wygasł, zaloguj się ponownie",
             'token.missing': 'Brak tokenu',
             'redirect in': 'Przekierowanie na główną stronę przez',
+            'data.load.success': 'Dane zostały załadowane',
         }
     },
     EN: {
@@ -454,6 +455,7 @@ const resources = {
             "error.unauthorized": "Session token is probably expired, please login one more time",
             'token.missing': 'Token is missing',
             'redirect in': 'Redirect to the main page in',
+            'data.load.success': 'Data has been downloaded',
         }
     }
 }
