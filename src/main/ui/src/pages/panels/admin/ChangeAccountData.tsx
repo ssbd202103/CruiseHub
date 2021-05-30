@@ -102,23 +102,26 @@ export default function ChangeAccountData() {
             headers: {
                 "Authorization": `Bearer ${token}`
             }
-        }).catch(error => {
-            setButtonPopupAcceptChangeMail(false)
-            const message = error.response.data
-            handleError(message)
         }).then(res => {
             setButtonPopupAcceptChangeMail(false)
             refreshToken()
             showSuccess(t('successful action'))
+        },error =>{
+            setButtonPopupAcceptChangeMail(false)
+            const message = error.response.data
+            handleError(message)
         });
     }
     const changePersonalData = async () => {
         const {token} = store.getState()
+       /* if (!firstName || !secondName) {
+            handleError('error.fields')
+            return;
+        }*/
         const json = JSON.stringify({
             login: currentAccount.login,
             newFirstName: firstName,
             newSecondName: secondName,
-            newEmail: email,
             version: currentAccount.version
 
         })
@@ -319,7 +322,7 @@ export default function ChangeAccountData() {
                         </div>
                         <div>
                             <RoundedButton color="blue"
-                                           onClick={() => setButtonPopupAcceptChangeData(true)}
+                                           onClick={() => setButtonPopupAcceptChangeMail(true)}
                             >{t("confirm")}</RoundedButton>
                             <RoundedButton color="pink"
                                            onClick={handleChangeMail}

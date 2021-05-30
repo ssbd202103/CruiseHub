@@ -347,12 +347,12 @@ public class AccountController {
 
     @POST
     @Path("/request-email-change")
-    public void requestEmailChange(AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException {
+    public void requestEmailChange(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException {
         tryAndRepeat(() -> this.accountEndpoint.requestEmailChange(accountChangeEmailDto));
     }
     @POST
     @Path("/request-other-email-change")
-    public void requestOtherEmailChange(AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException {
+    public void requestOtherEmailChange(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException {
         tryAndRepeat(() -> this.accountEndpoint.requestOtherEmailChange(accountChangeEmailDto));
     }
 }
