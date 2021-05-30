@@ -113,19 +113,19 @@ create table administrators
 
 create table addresses
 (
-    id                   bigint                                                       not null,
-    house_number         bigint check ((house_number >= 0) AND (house_number <= 999)) not null,
-    street               varchar(64)                                                  not null,
-    postal_code          varchar(20)                                                  not null,
-    city                 varchar(64)                                                  not null,
-    country              varchar(64)                                                  not null,
+    id                   bigint                              not null,
+    house_number         varchar(6)                          not null,
+    street               varchar(64)                         not null,
+    postal_code          varchar(20)                         not null,
+    city                 varchar(64)                         not null,
+    country              varchar(64)                         not null,
 
-    creation_date_time   timestamp default CURRENT_TIMESTAMP                          not null,
-    last_alter_date_time timestamp                                                    not null,
-    created_by_id        bigint                                                       not null, -- FOREIGN KEY
-    altered_by_id        bigint                                                       not null, -- FOREIGN KEY
-    alter_type_id        bigint                                                       not null, -- FOREIGN KEY
-    version              bigint check (version >= 0)                                  not null,
+    creation_date_time   timestamp default CURRENT_TIMESTAMP not null,
+    last_alter_date_time timestamp                           not null,
+    created_by_id        bigint                              not null, -- FOREIGN KEY
+    altered_by_id        bigint                              not null, -- FOREIGN KEY
+    alter_type_id        bigint                              not null, -- FOREIGN KEY
+    version              bigint check (version >= 0)         not null,
 
     CONSTRAINT address_primary_key_constraint PRIMARY KEY (id),
     CONSTRAINT address_alter_type_id_fk_constraint FOREIGN KEY (alter_type_id) REFERENCES alter_types (id),
@@ -186,10 +186,10 @@ create sequence companies_id_seq
 
 create table business_workers
 (
-    id                           bigint      not null, -- FOREIGN KEY
-    phone_number                 varchar(12) not null,
-    company_id                   bigint      not null,
-    confirmed bool        not null,
+    id           bigint      not null, -- FOREIGN KEY
+    phone_number varchar(12) not null,
+    company_id   bigint      not null,
+    confirmed    bool        not null,
 
     CONSTRAINT business_workers_id_pk_constraint PRIMARY KEY (id),
     CONSTRAINT business_workers_id_fk_constraint FOREIGN KEY (id) REFERENCES access_levels (id),

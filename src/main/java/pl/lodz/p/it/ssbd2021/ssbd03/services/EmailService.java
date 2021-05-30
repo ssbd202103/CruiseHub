@@ -37,37 +37,37 @@ public class EmailService {
      * @throws EmailServiceException wyjątek jest rzucany gdy email jest niepoprawny albo gdy wystąpił problem podłączenia się do serwisu smtp
      */
     public static void sendEmailWithContent(String recipientEmail, String subject, String contentHtml) throws EmailServiceException {
-        //todo uncomment it when needed
-        Properties properties = System.getProperties();
-
-        String host = "smtp.gmail.com";
-        properties.put("mail.smtp.starttls.enable", "true");
-        properties.put("mail.smtp.ssl.trust", host);
-        properties.put("mail.smtp.user", EMAIL_USER);
-        properties.put("mail.smtp.password", PASSWD);
-        properties.put("mail.smtp.port", "587");
-        properties.put("mail.smtp.auth", "true");
-
-        Session session = Session.getDefaultInstance(properties);
-        MimeMessage message = new MimeMessage(session);
-
-        try {
-            message.setRecipient(Message.RecipientType.TO, new InternetAddress(recipientEmail));
-            message.setFrom(new InternetAddress(EMAIL_USER));
-
-            message.setSubject(subject);
-            message.setContent(contentHtml, "text/html; charset=UTF-8");
-
-            Transport transport = session.getTransport("smtp");
-
-            transport.connect(host, EMAIL_USER, PASSWD);
-            transport.sendMessage(message, message.getAllRecipients());
-            transport.close();
-        } catch (AddressException ae) { // todo
-            throw new EmailServiceException(EMAIL_SERVICE_INCORRECT_EMAIL);
-        } catch (MessagingException me) { // todo
-            throw new EmailServiceException(EMAIL_SERVICE_INACCESSIBLE);
-        }
+//        //todo uncomment it when needed
+//        Properties properties = System.getProperties();
+//
+//        String host = "smtp.gmail.com";
+//        properties.put("mail.smtp.starttls.enable", "true");
+//        properties.put("mail.smtp.ssl.trust", host);
+//        properties.put("mail.smtp.user", EMAIL_USER);
+//        properties.put("mail.smtp.password", PASSWD);
+//        properties.put("mail.smtp.port", "587");
+//        properties.put("mail.smtp.auth", "true");
+//
+//        Session session = Session.getDefaultInstance(properties);
+//        MimeMessage message = new MimeMessage(session);
+//
+//        try {
+//            message.setRecipient(Message.RecipientType.TO, new InternetAddress(recipientEmail));
+//            message.setFrom(new InternetAddress(EMAIL_USER));
+//
+//            message.setSubject(subject);
+//            message.setContent(contentHtml, "text/html; charset=UTF-8");
+//
+//            Transport transport = session.getTransport("smtp");
+//
+//            transport.connect(host, EMAIL_USER, PASSWD);
+//            transport.sendMessage(message, message.getAllRecipients());
+//            transport.close();
+//        } catch (AddressException ae) { // todo
+//            throw new EmailServiceException(EMAIL_SERVICE_INCORRECT_EMAIL);
+//        } catch (MessagingException me) { // todo
+//            throw new EmailServiceException(EMAIL_SERVICE_INACCESSIBLE);
+//        }
     }
 
     /**

@@ -49,13 +49,9 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
             return
         }
 
-        if (isNaN(Number(houseNumber))) {
-            handleError('error.houseNumber.NaN')
-            return
-        }
 
         changeClientAddress({
-            houseNumber: Number(houseNumber),
+            houseNumber,
             street,
             postalCode,
             city,

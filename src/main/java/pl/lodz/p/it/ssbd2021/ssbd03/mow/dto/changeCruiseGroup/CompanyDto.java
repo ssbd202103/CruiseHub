@@ -11,7 +11,7 @@ public class CompanyDto {
     private String name;
     private String phoneNumber;
     private long NIP;
-    private long houseNumber;
+    private String houseNumber;
     private String street;
     private String postalCode;
     private String city;
