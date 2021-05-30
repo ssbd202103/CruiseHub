@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.entities.mow;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
 
 import javax.persistence.*;
@@ -25,6 +26,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise.UUID_CONSTRAINT;
 
         }
 )
+@ToString
 public class Cruise extends BaseEntity {
 
     public static final String UUID_CONSTRAINT = "cruises_uuid_unique_constraint";
@@ -33,7 +35,7 @@ public class Cruise extends BaseEntity {
     @Id
     @SequenceGenerator(name = "CRUISE_SEQ_GEN", sequenceName = "cruises_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CRUISE_SEQ_GEN")
-    @Column(name = "id")
+    @ToString.Exclude
     private long id;
 
 
@@ -76,6 +78,7 @@ public class Cruise extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "cruises_group_id")
     @Valid
+    @ToString.Exclude
     private CruiseGroup cruisesGroup;
 
     @Getter

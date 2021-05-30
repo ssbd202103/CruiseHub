@@ -5,7 +5,7 @@ export interface ChangeEmail extends AbstractAccount {
 }
 
 export interface ChangeAddress {
-    houseNumber: number,
+    houseNumber: string,
     street: string,
     postalCode: string,
     city: string,

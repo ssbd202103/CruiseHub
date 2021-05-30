@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.accesslevels;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AddressDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccessLevelDetailsViewDto;
@@ -16,6 +17,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 public class ClientDetailsViewDto extends AccessLevelDetailsViewDto {
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid

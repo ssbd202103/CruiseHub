@@ -47,7 +47,7 @@ export function changeClientData(newFirstName: string, newSecondName: string, ne
     })
 }
 
-export function changeClientAddress(newAddress: ChangeAddress) {
+export function changeClientAddress(newAddress: { country: string; city: string; street: string; postalCode: string; houseNumber: string }) {
 
     const {
         user: {

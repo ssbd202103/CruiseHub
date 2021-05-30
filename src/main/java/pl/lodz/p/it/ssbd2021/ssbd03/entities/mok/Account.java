@@ -39,7 +39,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account.LOGIN_CONSTRAINT
                 @UniqueConstraint(columnNames = "login", name = LOGIN_CONSTRAINT),
                 @UniqueConstraint(columnNames = "email", name = EMAIL_CONSTRAINT)}
 )
-
+@ToString
 public class Account extends BaseEntity {
     public static final String LOGIN_CONSTRAINT = "accounts_login_unique_constraint";
     public static final String EMAIL_CONSTRAINT = "accounts_email_unique_constraint";
@@ -48,7 +48,7 @@ public class Account extends BaseEntity {
     @Id
     @SequenceGenerator(name = "ACCOUNT_SEQ_GEN", sequenceName = "account_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ACCOUNT_SEQ_GEN")
-    @Column(name = "id")
+    @ToString.Exclude
     private long id;
 
     @Getter
@@ -80,6 +80,7 @@ public class Account extends BaseEntity {
     @Setter
     @Column(name = "password_hash", nullable = false)
     @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
+    @ToString.Exclude
     private String passwordHash;
 
     @Getter
@@ -113,6 +114,7 @@ public class Account extends BaseEntity {
     @OneToOne(cascade = {CascadeType.PERSIST})
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid
+    @ToString.Exclude
     private LanguageTypeWrapper languageType;
 
     @Getter
@@ -132,10 +134,10 @@ public class Account extends BaseEntity {
 
     @Getter
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "account")
-    @ToString.Exclude
     @Valid
     @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
     @NotNull(message = CONSTRAINT_NOT_NULL)
+    @ToString.Exclude
     private final Set<AccessLevel> accessLevels = new HashSet<>();
 
     public void setAccessLevel(AccessLevel accessLevel) {

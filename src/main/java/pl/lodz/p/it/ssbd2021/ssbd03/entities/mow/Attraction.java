@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.entities.mow;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
 
 import javax.persistence.*;
@@ -23,14 +24,14 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
         @NamedQuery(name = "Attraction.findByIdIfReserved", query = "SELECT att FROM attractions att WHERE att.name = :name"),
 
 })
-
+@ToString
 public class Attraction extends BaseEntity {
 
     @Getter
     @Id
     @SequenceGenerator(name = "ATTRACTION_SEQ_GEN", sequenceName = "attractions_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ATTRACTION_SEQ_GEN")
-    @Column(name = "id")
+    @ToString.Exclude
     private long id;
 
     @Getter
@@ -68,6 +69,7 @@ public class Attraction extends BaseEntity {
     @JoinColumn(name = "cruise_id")
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid
+    @ToString.Exclude
     private CruiseGroup cruise;
 
     public Attraction(String name, String description,

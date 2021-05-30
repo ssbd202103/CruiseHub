@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.entities.mow;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
 
 import javax.persistence.*;
@@ -19,14 +20,14 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 @NamedQueries({
         @NamedQuery(name = "CruiseGroup.findByName", query = "SELECT crg FROM cruises_groups crg WHERE crg.name = :name"),
 })
-
+@ToString
 public class CruiseGroup extends BaseEntity {
 
     @Getter
     @Id
     @SequenceGenerator(name = "CRUISES_GROUP_SEQ_GEN", sequenceName = "cruises_groups_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CRUISES_GROUP_SEQ_GEN")
-    @Column(name = "id")
+    @ToString.Exclude
     private long id;
 
     @Getter
@@ -35,6 +36,7 @@ public class CruiseGroup extends BaseEntity {
     @JoinColumn(name = "company_id")
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid
+    @ToString.Exclude
     private Company company;
 
 
@@ -44,6 +46,7 @@ public class CruiseGroup extends BaseEntity {
     @JoinColumn(name = "start_address_id")
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid
+    @ToString.Exclude
     private CruiseAddress address;
 
     @Getter
@@ -72,6 +75,7 @@ public class CruiseGroup extends BaseEntity {
     )
     @Valid
     @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
+    @ToString.Exclude
     private final List<CruisePicture> cruisePictures = new ArrayList<>();
 
     @Getter

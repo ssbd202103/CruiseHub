@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels;
 
+import lombok.ToString;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 
@@ -8,6 +9,7 @@ import javax.persistence.Entity;
 
 @Entity(name = "administrators")
 @DiscriminatorValue("Administrator")
+@ToString
 public class Administrator extends AccessLevel {
 
     @Override

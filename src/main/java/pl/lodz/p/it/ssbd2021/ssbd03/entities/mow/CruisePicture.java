@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.entities.mow;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
 
 import javax.persistence.*;
@@ -18,7 +19,7 @@ public class CruisePicture extends BaseEntity {
     @Id
     @SequenceGenerator(name = "CRUISE_PICTURE_SEQ_GEN", sequenceName = "cruise_pictures_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CRUISE_PICTURE_SEQ_GEN")
-    @Column(name = "id")
+    @ToString.Exclude
     private long id;
 
     @Getter

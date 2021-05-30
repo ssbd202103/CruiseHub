@@ -28,12 +28,15 @@ export default function ChangeAdministratorData({open, onOpen, onConfirm, onCanc
 
     const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
 
-    const [firstNameValue, setFirstNameValue] = useState('')
-    const [secondNameValue, setSecondNameValue] = useState('')
+    const [firstNameValue, setFirstNameValue] = useState(firstName)
+    const [secondNameValue, setSecondNameValue] = useState(secondName)
+
+    const handleErase = () => {
+        setFirstNameValue(firstName)
+        setSecondNameValue(secondName)
+    }
 
     const handleCancel = () => {
-        setFirstNameValue('')
-        setSecondNameValue('')
         onCancel()
     }
 
@@ -45,15 +48,13 @@ export default function ChangeAdministratorData({open, onOpen, onConfirm, onCanc
         }
 
         changeAdministratorData(firstNameValue, secondNameValue).then(res => {
-            setFirstNameValue('')
-            setSecondNameValue('')
-            onConfirm()
-            setButtonPopupAcceptAction(false)
             showSuccess(t('successful action'))
+            onConfirm()
         }).catch(error => {
-            setButtonPopupAcceptAction(false)
+            handleErase()
             const message = error.response.data
             handleError(message, error.response.status)
+            onCancel()
         });
     }
 
@@ -65,6 +66,7 @@ export default function ChangeAdministratorData({open, onOpen, onConfirm, onCanc
     const changeData = () => {
         //TODO
         setButtonPopup(true)
+        setButtonPopupAcceptAction(false)
     }
 
     return (

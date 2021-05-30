@@ -217,7 +217,7 @@ function Row(props: RowProps) {
 
                                                     }).catch(error => {
                                                         const message = error.response.data
-                                                        handleError(t(message))
+                                                        handleError(t(message),error.response.status)
                                                     })
                                                 } else {
                                                     unblockAccount({
@@ -230,7 +230,7 @@ function Row(props: RowProps) {
                                                             })
                                                         }).catch(error => {
                                                         const message = error.response.data
-                                                        handleError(t(message))
+                                                        handleError(t(message),error.response.data)
                                                     })
                                                 }
                                             }}>{row.active ? t("block") : t("unblock")}</Button>

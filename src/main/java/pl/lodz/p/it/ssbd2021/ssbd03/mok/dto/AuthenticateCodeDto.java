@@ -13,5 +13,4 @@ import javax.security.enterprise.credential.UsernamePasswordCredential;
 public class AuthenticateCodeDto {
     private String login;
     private String code;
-
 }

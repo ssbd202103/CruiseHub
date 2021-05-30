@@ -1,19 +1,8 @@
-import {Grid, List, ListItem, ListItemIcon, ListItemText} from '@material-ui/core'
-
-
-import {Link, Redirect, Route} from 'react-router-dom'
-
 import SettingsIcon from '@material-ui/icons/SettingsRounded'
 import CruiseIcon from '@material-ui/icons/CardTravelRounded'
-import GoBackIcon from '@material-ui/icons/ArrowBackRounded'
-
-import PanelMenu from '../../components/PanelMenu'
 
 import {useTranslation} from 'react-i18next'
 
-import styles from '../../styles/clientPanel.module.css'
-import manageStyles from '../../styles/ManageAccount.module.css'
-import AppColorSetter from "../../components/AppColorSetter";
 import {useSelector} from "react-redux";
 import {selectDarkMode} from "../../redux/slices/userSlice";
 import ChangeEmail from "../../components/changeData/ChangeEmail";
@@ -21,14 +10,10 @@ import React, {useState} from "react";
 import ChangeClientData from "../../components/changeData/ChangeClientData";
 import ChangePassword from "../../components/changeData/ChangePassword";
 import ChangeAddress from "../../components/changeData/ChangeAddress";
-import LogOutRoundedButton from "../../components/LogOutRoundedButton";
-import Header from "../../components/Header";
-import Breadcrumb from "../../components/Breadcrumb";
+import PanelLayout from "../../layouts/PanelLayout";
 
 export default function ClientPanel() {
     const { t } = useTranslation()
-
-    const darkMode = useSelector(selectDarkMode)
 
     const [isEmailEdit, setIsEmailEdit] = useState(false)
     const [isDataEdit, setIsDataEdit] = useState(false)
@@ -64,63 +49,52 @@ export default function ClientPanel() {
     }
 
     return (
-        <>
-            <Header />
-            <Breadcrumb />
-            <Grid container className={styles.wrapper}>
-                <Grid item xs={2} md={3} xl={2}>
-                    <PanelMenu color={!darkMode ? 'blue' : 'white-dark'}>
-                        <List className={styles.menu + ' ' + styles['menu-' + (!darkMode ? 'light' : 'dark')]} component="nav" aria-label="panel menu">
-                            <Link to="/profile/cruises">
-                                <ListItem button>
-                                    <ListItemIcon>
-                                        <CruiseIcon style={{ fill: `var(--${!darkMode ? 'white' : 'dark'})` }} />
-                                    </ListItemIcon>
-                                    <ListItemText> {t("cruises")} </ListItemText>
-                                </ListItem>
-                            </Link>
-                            <Link to="/profile/settings">
-                                <ListItem button>
-                                    <ListItemIcon>
-                                        <SettingsIcon style={{ fill: `var(--${!darkMode ? 'white' : 'dark'})` }} />
-                                    </ListItemIcon>
-                                    <ListItemText>{t("settings")}</ListItemText>
-                                </ListItem>
-                            </Link>
-                        </List>
-                    </PanelMenu>
-                </Grid>
-
-                <Grid item className={styles.content + ' ' + styles[`content-${!darkMode ? 'light' : 'dark'}`]} xs={10} md={9} xl={10}>
-                    <Route exact path="/profile/cruises">
-                        <div> {t("my cruises")} </div>
-                    </Route>
-                    <Route exact path="/profile/settings">
-                        <Grid container className={manageStyles.wrapper + ' ' + manageStyles[`text-${!darkMode ? 'white' : 'dark'}`]} >
+        <PanelLayout
+            color={{
+                light: 'blue',
+                dark: 'white-dark'
+            }}
+            menu={[
+                {
+                    link: '/profile/cruises',
+                    text: t('cruises'),
+                    Icon: CruiseIcon,
+                    Component: () => <></>
+                },
+                {
+                    link: '/profile/settings',
+                    text: t('settings'),
+                    Icon: SettingsIcon,
+                    Component: () => (
+                        <>
                             <ChangeClientData
                                 open={isDataEdit}
                                 onOpen={handleIsDataEdit}
                                 onConfirm={() => {setIsDataEdit(false)}}
-                                onCancel={() => {setIsDataEdit(false)}} />
+                                onCancel={() => {setIsDataEdit(false)}}
+                            />
                             <ChangeAddress
                                 open={isAddressEdit}
                                 onOpen={handleIsAddressEdit}
                                 onConfirm={() => {setIsAddressEdit(false)}}
-                                onCancel={() => {setIsAddressEdit(false)}} />
+                                onCancel={() => {setIsAddressEdit(false)}}
+                            />
                             <ChangeEmail
                                 open={isEmailEdit}
                                 onOpen={handleIsEmailEdit}
                                 onConfirm={() => {setIsEmailEdit(false)}}
-                                onCancel={() => {setIsEmailEdit(false)}} />
+                                onCancel={() => {setIsEmailEdit(false)}}
+                            />
                             <ChangePassword
                                 open={isPasswordEdit}
                                 onOpen={handleIsPasswordEdit}
                                 onConfirm={() => {setIsPasswordEdit(false)}}
-                                onCancel={() => {setIsPasswordEdit(false)}} />
-                        </Grid>
-                    </Route>
-                </Grid>
-            </Grid>
-        </>
+                                onCancel={() => {setIsPasswordEdit(false)}}
+                            />
+                        </>
+                    )
+                }
+            ]}
+        />
     )
 }

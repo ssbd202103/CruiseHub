@@ -36,7 +36,8 @@ public class TokenWrapper {
     @Id
     @SequenceGenerator(name = "USED_TOKENS_SEQ_GEN", sequenceName = "used_tokens_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USED_TOKENS_SEQ_GEN")
-    private long id;
+    @ToString.Exclude
+private long id;
 
     @Getter
     @NotEmpty(message = CONSTRAINT_NOT_EMPTY)

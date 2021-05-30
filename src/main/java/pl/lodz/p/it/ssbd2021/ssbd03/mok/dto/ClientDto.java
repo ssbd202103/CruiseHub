@@ -1,10 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
@@ -23,6 +20,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 @AllArgsConstructor
 @Getter
 @Setter
+@ToString
 public class ClientDto implements SignableEntity {
     @Login
     private String login;

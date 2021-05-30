@@ -20,11 +20,11 @@ export default function AppColorSetter() {
     const darkMode = useSelector(selectDarkMode)
 
     const handleClick = () => {
-        changeDarkMode().then(res=>{
+        changeDarkMode().then(res => {
             showSuccess(t('successful action'))
         }).catch(error => {
             const message = error.response.data
-            showError(t(message))
+            handleError(message, error.response.status)
         });
     }
 

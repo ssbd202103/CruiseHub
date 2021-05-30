@@ -23,7 +23,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account.EMAIL_CONSTRAINT;
@@ -89,12 +88,13 @@ public class AccountFacadeMok extends AbstractFacade<Account> {
         return tqq.getResultList();
 
     }
+
     @PermitAll
     public boolean isEmailPresent(String email) {
         TypedQuery<Account> tqq = em.createNamedQuery("Account.isEmailPresent", Account.class);
         tqq.setParameter("email", email);
-         if(tqq.getResultList().size()>0) return true;
-         else return false;
+        if (tqq.getResultList().size() > 0) return true;
+        else return false;
 
     }
 
@@ -133,41 +133,6 @@ public class AccountFacadeMok extends AbstractFacade<Account> {
         }
     }
 
-    @PermitAll
-    public Account updateAuthenticateInfo(String login, String ipAddr, LocalDateTime time, boolean isAuthValid) throws BaseAppException {
-
-        Account account = findByLogin(login);
-        String loggedString;
-        try {
-            if (isAuthValid) {
-                //todo check if user is admin and send email with authentication time and logical address if so
-                account.setLastCorrectAuthenticationDateTime(time);
-                account.setLastCorrectAuthenticationLogicalAddress(ipAddr);
-                account.setNumberOfAuthenticationFailures(0);
-
-                loggedString = String.format("Correct authentication for user %s" +
-                                "\nAuthentication time: %s" +
-                                "\nOrigin logical address: %s",
-                        login, time, ipAddr);
-                log.info(loggedString);
-            } else {
-                account.setLastIncorrectAuthenticationDateTime(time);
-                account.setLastIncorrectAuthenticationLogicalAddress(ipAddr);
-                account.setNumberOfAuthenticationFailures(account.getNumberOfAuthenticationFailures() + 1);
-
-                loggedString = String.format("Authentication failure for user %s" +
-                                "\nAuthentication time: %s" +
-                                "\nOrigin logical address: %s" +
-                                "\nNumber of consecutive authentication failures: %d",
-                        login, time, ipAddr, account.getNumberOfAuthenticationFailures());
-                log.warning(loggedString);
-            }
-        } catch (NoResultException e) {
-            throw FacadeException.noSuchElement();
-
-        }
-        return account;
-    }
 
     @Override
     public void remove(Account entity) throws FacadeException {

@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
 
 import javax.persistence.*;
@@ -17,14 +18,15 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWra
 @Table(
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = "name", name = NAME_CONSTRAINT),
-
         }
 )
+@ToString
 public class AlterTypeWrapper {
     public static final String NAME_CONSTRAINT = "alter_types_name_unique_constraint";
     @Getter
     @Id
     @GeneratedValue
+    @ToString.Exclude
     private long id;
 
     @Enumerated(EnumType.STRING)

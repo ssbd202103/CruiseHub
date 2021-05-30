@@ -70,6 +70,7 @@ public class JWTHandler {
      * @throws TokenExpiredException Wyjątek wygaśniętego tokenu
      */
     public static String refreshToken(String token) throws BaseAppException {
+        validateToken(token);
         DecodedJWT decodedToken = JWT.decode(token);
         if (decodedToken.getExpiresAt().before(new Date())) {
             throw JWTException.tokenExpired();

@@ -336,7 +336,7 @@ public class AccountController {
     @Path("/confirm-business-worker")
     @ETagFilterBinding
     @Consumes(MediaType.APPLICATION_JSON)
-    public void confirmBusinessWorker(BlockAccountDto blockAccountDto, @HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) String etag) throws BaseAppException {
+    public void confirmBusinessWorker(@Valid BlockAccountDto blockAccountDto, @HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) String etag) throws BaseAppException {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, blockAccountDto)) {
             throw ControllerException.etagIdentityIntegrity();
         }
@@ -345,16 +345,15 @@ public class AccountController {
 
     @POST
     @Path("/request-email-change")
-    public void requestEmailChange(AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException {
-        tryAndRepeat(() -> accountEndpoint.requestEmailChange(accountChangeEmailDto));
+    public void requestEmailChange(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException {
+        tryAndRepeat(() -> this.accountEndpoint.requestEmailChange(accountChangeEmailDto));
     }
 
     @POST
     @Path("/request-other-email-change")
-    public void requestOtherEmailChange(AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException {
-        tryAndRepeat(() -> accountEndpoint.requestOtherEmailChange(accountChangeEmailDto));
+    public void requestOtherEmailChange(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException {
+        tryAndRepeat(() -> this.accountEndpoint.requestOtherEmailChange(accountChangeEmailDto));
     }
-
 
     /**
      * Pobiera metadane użytkownika

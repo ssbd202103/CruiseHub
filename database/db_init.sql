@@ -93,11 +93,11 @@ values (-1);
 -- addresses start
 insert into addresses(id, house_number, street, postal_code, city, country,
                       creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id, version)
-values (-1, 1, 'street', '30-300', 'London', 'United Kingdom', now(), now(), -2, -2, -2, 0);
+values (-1, '1', 'street', '30-300', 'London', 'United Kingdom', now(), now(), -2, -2, -2, 0);
 
 insert into addresses(id, house_number, street, postal_code, city, country,
                       creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id, version)
-values (-2, 1, 'street', '30-300', 'Manchester', 'United Kingdom', now(), now(), -2, -3, -3, 0);
+values (-2, '1', 'street', '30-300', 'Manchester', 'United Kingdom', now(), now(), -2, -3, -3, 0);
 -- addresses end
 --
 --
@@ -283,11 +283,11 @@ values (-1, -2, -1, 'Not bad. Lorem ipsum dolor sit amet is weird', now(), now()
 insert into comments (id, account_id, cruise_id, comment, creation_date_time, last_alter_date_time, alter_type_id,
                       created_by_id,
                       altered_by_id, version)
-values (-2, -1, -2, 'It is one of the beatufiul travel in my life', now(), now(), -2, -1, -1, 0);
+values (-2, -1, -2, 'It is one of the beautiful travel in my life', now(), now(), -2, -1, -1, 0);
 insert into comments (id, account_id, cruise_id, comment, creation_date_time, last_alter_date_time, alter_type_id,
                       created_by_id,
                       altered_by_id, version)
-values (-3, -3, -3, 'It is the most beatufiul travel in the the Wolrd', now(), now(), -2, -1, -1, 0);
+values (-3, -3, -3, 'It is the most beautiful travel in the the World', now(), now(), -2, -1, -1, 0);
 --comments end
 --
 --

@@ -42,25 +42,27 @@ export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeD
     function verifyCallback(){
         setButtonPopup(false)
         if (!emailValue || !confirmEmailValue) {
+            setButtonPopupAcceptAction(false)
             handleError('error.fields')
             return;
         }
 
         if (emailValue !== confirmEmailValue) {
+            setButtonPopupAcceptAction(false)
             handleError('emails are not equal')
             return;
         }
 
         changeEmailService(emailValue).then(res => {
-            setEmailValue('')
-            setConfirmEmailValue('')
             onConfirm()
-            setButtonPopupAcceptAction(false)
             showSuccess(t('successful action'))
         }).catch(error => {
-            setButtonPopupAcceptAction(false)
             const message = error.response.data
             handleError(message, error.response.status)
+            onCancel()
+        }).finally(() => {
+            setEmailValue('')
+            setConfirmEmailValue('')
         });
     }
 
@@ -68,6 +70,7 @@ export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeD
 
     const changeEmail = () => {
         setButtonPopup(true)
+        setButtonPopupAcceptAction(false)
 
     }
 
@@ -87,7 +90,7 @@ export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeD
                 <h3>{t("email change")}</h3>
                 <div>
                     <DarkedTextField
-                        type="text"
+                        type="email"
                         label={t("new email")}
                         placeholder={t("new email")}
                         value={emailValue}

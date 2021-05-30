@@ -19,8 +19,10 @@ function useHandleError() {
             showError(t(error))
             return
         }
-        for (let message of Object.values(error.errors)) {
-            showError(t(message as string))
+        for (let messageArray of Object.values(error.errors)) {
+            for (const message of messageArray as Array<String>) {
+                showError(t(message as string))
+            }
         }
 
     }

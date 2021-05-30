@@ -1,10 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AbstractAccountDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.PhoneNumber;
 
@@ -17,6 +14,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_POSITIVE_OR_ZE
 
 @Setter
 @Getter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class OtherClientChangeDataDto extends AbstractAccountDto {

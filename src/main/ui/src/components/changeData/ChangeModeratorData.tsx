@@ -23,16 +23,20 @@ export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}:
     const firstName = useSelector(selectFirstName)
     const secondName = useSelector(selectSecondName)
 
-    const [firstNameValue, setFirstNameValue] = useState('')
-    const [secondNameValue, setSecondNameValue] = useState('')
+    const [firstNameValue, setFirstNameValue] = useState(firstName)
+    const [secondNameValue, setSecondNameValue] = useState(secondName)
 
     const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
 
     const [buttonPopup, setButtonPopup] = useState(false);
 
+    const handleErase = () => {
+        setFirstNameValue(firstName)
+        setSecondNameValue(secondName)
+    }
+
     const handleCancel = () => {
-        setFirstNameValue('')
-        setSecondNameValue('')
+        handleErase()
         onCancel()
     }
 
@@ -44,15 +48,13 @@ export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}:
         }
 
         changeModeratorData(firstNameValue, secondNameValue).then(res => {
-            setFirstNameValue('')
-            setSecondNameValue('')
             onConfirm()
-            setButtonPopupAcceptAction(false)
             showSuccess(t('successful action'))
         }).catch(error => {
-            setButtonPopupAcceptAction(false)
+            handleErase()
             const message = error.response.data
             handleError(message, error.response.status)
+            onCancel()
         });
     }
 
@@ -64,7 +66,7 @@ export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}:
 
     const changeData = () => {
         setButtonPopup(true)
-
+        setButtonPopupAcceptAction(false)
     }
 
     return (
