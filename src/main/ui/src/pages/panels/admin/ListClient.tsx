@@ -112,15 +112,15 @@ function createData(
 
 export interface RowProps {
     row: ReturnType<typeof createData>,
-    style: React.CSSProperties
+    style: React.CSSProperties,
+    onChange: () => Promise<any>,
 }
 
 function Row(props: RowProps) {
+    const {
+        onChange
+    } = props;
 
-
-    function refresh() {
-        window.location.reload();
-    }
 
     const {row} = props;
     const {style} = props;
@@ -205,25 +205,31 @@ function Row(props: RowProps) {
                                             </Link>
 
                                             <Button className={buttonClass.root} onClick={() => {
-                                                if(row.active) {
-                                                    blockAccount({etag: row.etag,
+                                                if (row.active) {
+                                                    blockAccount({
+                                                        etag: row.etag,
                                                         login: row.login, version: row.version, token: token
                                                     }).then(res => {
-                                                        refresh()
-                                                        showSuccess(t('successful action'))
+                                                        onChange().then(() => {
+                                                            showSuccess(t('data.load.success'))
+                                                        })
+
                                                     }).catch(error => {
                                                         const message = error.response.data
                                                         handleError(t(message))
                                                     })
                                                 } else {
-                                                    unblockAccount({etag: row.etag,
-                                                        login: row.login, version: row.version, token: token})
+                                                    unblockAccount({
+                                                        etag: row.etag,
+                                                        login: row.login, version: row.version, token: token
+                                                    })
                                                         .then(res => {
-                                                            refresh()
-                                                            showSuccess(t('successful action'))
+                                                            onChange().then(() => {
+                                                                showSuccess(t('data.load.success'))
+                                                            })
                                                         }).catch(error => {
-                                                            const message = error.response.data
-                                                            handleError(t(message))
+                                                        const message = error.response.data
+                                                        handleError(t(message))
                                                     })
                                                 }
                                             }}>{row.active ? t("block") : t("unblock")}</Button>
@@ -258,14 +264,18 @@ export default function AdminListClient() {
 
     const darkMode = useSelector(selectDarkMode)
 
-    useEffect(() => {
-        getAllAccounts().then(res => {
+    const getAccounts = () => {
+        return getAllAccounts().then(res => {
             setUsers(res.data)
             refreshToken()
         }).catch(error => {
             const message = error.response.data
             handleError(message, error.response.status)
         })
+    }
+
+    useEffect(() => {
+        getAccounts()
     }, []);
 
     function search(rows: any[]) {
@@ -328,7 +338,7 @@ export default function AdminListClient() {
                     </TableHead>
                     <TableBody>
                         {search(users.map((user, index) => (
-                            <Row key={index} row={user} style={{color: `var(--${!darkMode ? 'dark' : 'white'})`}}/>
+                            <Row key={index} row={user} style={{color: `var(--${!darkMode ? 'dark' : 'white'})`}} onChange={getAccounts}/>
                         )))}
                     </TableBody>
                 </Table>

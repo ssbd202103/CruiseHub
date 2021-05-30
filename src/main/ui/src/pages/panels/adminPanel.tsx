@@ -73,7 +73,6 @@ export default function AdminPanel() {
             <Header />
             <Breadcrumb />
             <Grid container className={styles.wrapper}>
-                <Redirect to="/accounts"  />
                 <Grid item xs={2} md={3} xl={2}>
                     <PanelMenu color={!darkMode ? 'yellow-dark' : 'white-light'}>
                         <List className={styles.menu + ' ' + styles['menu-' + (!darkMode ? 'light' : 'dark')]} component="nav" aria-label="panel menu">

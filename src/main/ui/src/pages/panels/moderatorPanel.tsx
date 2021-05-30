@@ -68,7 +68,6 @@ export default function ModeratorPanel() {
             <Header />
             <Breadcrumb />
             <Grid container className={styles.wrapper}>
-                <Redirect to="/accounts" />
                 <Grid item xs={2} md={3} xl={2}>
                     <PanelMenu color={!darkModel ? 'pink-dark' : 'white'}>
                         <List className={styles.menu + ' ' + styles['menu-' + (!darkModel ? 'light' : 'dark')]} component="nav" aria-label="panel menu">

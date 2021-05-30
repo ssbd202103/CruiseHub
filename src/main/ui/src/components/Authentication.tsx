@@ -127,7 +127,7 @@ export default function Authentication() {
                                 color: 'var(--white)',
                                 fontFamily: 'Montserrat, sans-serif'
                             }}
-                            onClick={activeAccessLevel ? () => {history.push('/profile')} : undefined}
+                            onClick={activeAccessLevel === "CLIENT" ? () => {history.push('/profile')} : undefined}
                         >
                             {firstName + ' ' + secondName}
                         </Button>

@@ -1,8 +1,9 @@
 import store from "../redux/store";
 import axios from "../Services/URL"
 import {clearToken, setToken} from "../redux/slices/tokenSlice";
-import {emptyUser, IUserSliceState, setUser} from "../redux/slices/userSlice";
+import {AccessLevelType, emptyUser, IUserSliceState, setActiveAccessLevel, setUser} from "../redux/slices/userSlice";
 import jwt_decode from "jwt-decode";
+import i18n from "i18next";
 
 export function getUser(token: string) {
     return axios.get('self/account-details', {
@@ -12,31 +13,42 @@ export function getUser(token: string) {
     }).then(res => {
         store.dispatch(setToken(token))
         store.dispatch(setUser(res.data))
-
-        saveUser(res.data as IUserSliceState, token)
+        i18n.changeLanguage(res.data.languageType)
+        saveToken(token)
     })
 }
 
-export function getSavedUser() {
+export function loadUserWithSavedToken() {
+    i18n.changeLanguage(store.getState().user.languageType)
+    console.log(i18n.language)
     const savedToken = sessionStorage.getItem('cruisehub_token') as string;
-    const savedUser = sessionStorage.getItem('cruisehub_user');
 
-    if (savedToken && savedUser) {
-        store.dispatch(setToken(savedToken))
-        store.dispatch(setUser(JSON.parse(savedUser) as IUserSliceState))
+    if (savedToken) {
+        return getUser(savedToken).then(res => {
+            store.dispatch(setActiveAccessLevel(sessionStorage.getItem('cruisehub_active_al') as AccessLevelType))
+            return res
+        })
     }
+
+    return new Promise((res, rej) => {
+        if (!['/', '/signin', '/signup/client', '/signup/worker'].includes(document.location.pathname)) {
+            rej({response: {data: 'token.missing'}})
+        }
+        res(null)
+    })
 }
 
 export function logOut() {
-    // store.dispatch(emptyUser())
-    // store.dispatch(clearToken())
+    store.dispatch(emptyUser())
+    console.log('language', store.getState().user.languageType)
+    i18n.changeLanguage(store.getState().user.languageType)
+    store.dispatch(clearToken())
     sessionStorage.clear()
     document.location.replace('/')
 }
 
-export function saveUser(user: IUserSliceState, token: string | null = null) {
+export function saveToken(token: string | null = null) {
     sessionStorage.setItem('cruisehub_token', token || store.getState().token)
-    sessionStorage.setItem('cruisehub_user', JSON.stringify(user))
 }
 
 export function refreshToken() {

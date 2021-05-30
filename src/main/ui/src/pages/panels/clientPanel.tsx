@@ -68,7 +68,6 @@ export default function ClientPanel() {
             <Header />
             <Breadcrumb />
             <Grid container className={styles.wrapper}>
-                <Redirect to="/profile/cruises" />
                 <Grid item xs={2} md={3} xl={2}>
                     <PanelMenu color={!darkMode ? 'blue' : 'white-dark'}>
                         <List className={styles.menu + ' ' + styles['menu-' + (!darkMode ? 'light' : 'dark')]} component="nav" aria-label="panel menu">

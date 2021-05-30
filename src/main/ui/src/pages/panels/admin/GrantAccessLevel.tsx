@@ -1,5 +1,5 @@
 import {Box, FormControlLabel, FormGroup, Radio, RadioGroup} from "@material-ui/core";
-import {Link} from 'react-router-dom';
+import {Link, useHistory} from 'react-router-dom';
 import React, {useState} from "react";
 import {useTranslation} from 'react-i18next'
 import RoundedButton from '../../../components/RoundedButton'
@@ -17,6 +17,7 @@ export default function Checkboxes() {
     const handleError = useHandleError()
     const showSuccess = useSnackbarQueue('success')
     const [selectedAccessLevel, setSelectedAccessLevel] = React.useState("");
+    const history = useHistory();
 
     const currentAccount = JSON.parse(sessionStorage.getItem("grantAccessLevelAccount") as string)
 
@@ -46,6 +47,7 @@ export default function Checkboxes() {
             setButtonPopupAcceptAction(false)
             showSuccess(t('success.accessLevelAssigned'));
             refreshToken()
+            history.push('/accounts')
         }).catch(error => {
             setButtonPopupAcceptAction(false)
             const message = error.response.data

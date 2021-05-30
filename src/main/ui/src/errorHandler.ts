@@ -9,7 +9,7 @@ function useHandleError() {
     const showWarning = useSnackbarQueue('warning')
 
     return (error: string | any, status: number = 0) => {
-        if (status == 401) {
+        if (status == 401 && error != "auth.incorrect.password" && error != "error.facade.noSuchElement") {
             showWarning(t("error.unauthorized"))
             setTimeout(logOut, 3000)
             return

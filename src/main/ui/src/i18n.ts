@@ -2,7 +2,7 @@ import i18n from 'i18next'
 import {initReactI18next} from 'react-i18next'
 
 const resources = {
-    pl: {
+    PL: {
         translation: {
             "404": "Niestety, nie udało nam się znaleść potrzebnej Ci strony :(",
             "CLIENT": "Klient",
@@ -224,10 +224,13 @@ const resources = {
 
             "update": "Odśwież",
             "fill.login.password.fields": "Pola login oraz hasla muszą być wypełniona",
-            "error.unauthorized": "Token sesyjny prawdopodobnie wygasł, zaloguj się ponownie"
+            "error.unauthorized": "Token sesyjny prawdopodobnie wygasł, zaloguj się ponownie",
+            'token.missing': 'Brak tokenu',
+            'redirect in': 'Przekierowanie na główną stronę przez',
+            'data.load.success': 'Dane zostały załadowane',
         }
     },
-    en: {
+    EN: {
         translation: {
             "404": "Unfortunately, we cannot find the desired page :(",
             "CLIENT": "Client",
@@ -449,7 +452,10 @@ const resources = {
             'no': 'No',
             "update": "Refresh",
             "fill.login.password.fields": "Fill login and password fields",
-            "error.unauthorized": "Session token is probably expired, please login one more time"
+            "error.unauthorized": "Session token is probably expired, please login one more time",
+            'token.missing': 'Token is missing',
+            'redirect in': 'Redirect to the main page in',
+            'data.load.success': 'Data has been downloaded',
         }
     }
 }
@@ -457,8 +463,8 @@ const resources = {
 i18n
     .use(initReactI18next)
     .init({
-        lng: 'en',
-        fallbackLng: 'pl',
+        lng: 'EN',
+        fallbackLng: 'PL',
 
         resources
     })
