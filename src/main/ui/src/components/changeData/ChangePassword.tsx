@@ -59,9 +59,9 @@ export default function ChangePassword({open, onOpen, onConfirm, onCancel}: Chan
             setButtonPopupAcceptAction(false)
             const message = error.response.data
             try {
-                handleError(JSON.parse(message));
+                handleError(JSON.parse(message),error.response.status);
             } catch (e) {
-                handleError(message)
+                handleError(message, error.response.status)
             }
         });
 

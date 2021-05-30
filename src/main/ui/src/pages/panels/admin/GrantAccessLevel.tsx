@@ -49,7 +49,7 @@ export default function Checkboxes() {
         }).catch(error => {
             setButtonPopupAcceptAction(false)
             const message = error.response.data
-            handleError(message)
+            handleError(message, error.response.status)
         });
     }
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -92,7 +92,7 @@ export default function Checkboxes() {
                     onCancel={() => {setButtonPopupAcceptAction(false)
                     }}
                 />
-                <Link to="/panels/adminPanel/accounts">
+                <Link to="/accounts">
                     <RoundedButton color="pink">
                         {t("go back")}
                     </RoundedButton>

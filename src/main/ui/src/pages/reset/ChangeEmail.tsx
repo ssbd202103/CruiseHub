@@ -40,7 +40,7 @@ export default function ChangeEmail(props: any) {
             history.push('/')
         },error => {
             const message = error.response.data
-            handleError(message)
+            handleError(message, error.response.status)
         });
     }
 

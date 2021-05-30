@@ -210,20 +210,21 @@ const resources = {
             "/profile/cruises": "Wycieczki",
             "/profile/settings": "Ustawienia",
             "/accounts": "Konta",
-            "/ChangeAccountData": "Zmiana danych konta",
-            "/GrantAccessLevel": "Przydzielenie dostępu kontowi",
+            "/accounts/change_account_data": "Zmiana danych konta",
+            "/accounts/grant_access_level": "Przydzielenie dostępu kontowi",
             "/reset/passwordReset": "Resetowanie hasła",
             "/reset/changeEmail": "Zmiana maila konta",
             "/reset/resetSomebodyPassword": "Resetowanie hasła konta",
             "/verify/accountVerification": "Weryfikacja",
-            "/ChangeAccessLevelState": "Zmień stan poziomu dostępu",
+            "/accounts/change_access_level_state": "Zmień stan poziomu dostępu",
             'accept.action': 'Czy chcesz wykonac te akcje',
 
             'yes': 'Tak',
             'no': 'Nie',
 
             "update": "Odśwież",
-            "fill.login.password.fields": "Pola login oraz hasla muszą być wypełniona"
+            "fill.login.password.fields": "Pola login oraz hasla muszą być wypełniona",
+            "error.unauthorized": "Token sesyjny prawdopodobnie wygasł, zaloguj się ponownie"
         }
     },
     en: {
@@ -434,20 +435,21 @@ const resources = {
             "/profile/cruises": "Cruises",
             "/profile/settings": "Settings",
             "/accounts": "Accounts",
-            "/ChangeAccountData": "Change account data",
-            "/GrantAccessLevel": "Grant access level",
+            "/accounts/change_account_data": "Change account data",
+            "/accounts/grant_access_level": "Grant access level",
             "/reset/passwordReset": "Password request",
             "/reset/changeEmail": "Change email",
             "/reset/resetSomebodyPassword": "Reset user password",
             "/verify/accountVerification": "Account verification",
-            "/ChangeAccessLevelState": "Change access level state",
+            "/accounts/change_access_level_state": "Change access level state",
 
             'accept.action': 'Do you want to do this action?',
 
             'yes': 'Yes',
             'no': 'No',
             "update": "Refresh",
-            "fill.login.password.fields": "Fill login and password fields"
+            "fill.login.password.fields": "Fill login and password fields",
+            "error.unauthorized": "Session token is probably expired, please login one more time"
         }
     }
 }

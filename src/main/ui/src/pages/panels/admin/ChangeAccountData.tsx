@@ -105,7 +105,7 @@ export default function ChangeAccountData() {
         }).catch(error => {
             setButtonPopupAcceptChangeMail(false)
             const message = error.response.data
-            handleError(message)
+            handleError(message, error.response.status)
         }).then(res => {
             setButtonPopupAcceptChangeMail(false)
             refreshToken()
@@ -137,7 +137,7 @@ export default function ChangeAccountData() {
         }, error => {
             setButtonPopupAcceptChangeData(false)
             const message = error.response.data
-            handleError(message)
+            handleError(message, error.response.status)
         });
 
         await axios.get(`/account/details/${currentAccount.login}`, {
@@ -150,7 +150,7 @@ export default function ChangeAccountData() {
             handleChangePerData()
         }, error => {
             const message = error.response.data
-            handleError(message)
+            handleError(message, error.response.status)
         });
 
     }
@@ -187,7 +187,7 @@ export default function ChangeAccountData() {
         }).catch(error => {
             setButtonPopupAcceptChangeAddress(false)
             const message = error.response.data
-            handleError(t(message))
+            handleError(message, error.response.status)
         });
 
 
@@ -201,7 +201,7 @@ export default function ChangeAccountData() {
             handleChangAddress()
         }, error => {
             const message = error.response.data
-            handleError(message)
+            handleError(message, error.response.status)
         });
     }
     const changeBusinessPhone = async () => {
@@ -225,7 +225,7 @@ export default function ChangeAccountData() {
         }, error => {
             const message = error.response.data
             setButtonPopupAcceptChangeNumber(false)
-            handleError(message)
+            handleError(message, error.response.status)
         });
 
         await axios.get(`/account/details/${currentAccount.login}`, {
@@ -238,7 +238,7 @@ export default function ChangeAccountData() {
             handleChangePhone()
         }, error => {
             const message = error.response.data
-            handleError(message)
+            handleError(message, error.response.status)
         });
 
     }

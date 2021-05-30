@@ -103,7 +103,7 @@ export default function ClientSignUp() {
         }).catch(error => {
             setButtonPopup(false)
             const message = error.response.data
-            handleError(message)
+            handleError(message, error.response.status)
         });
     }
 

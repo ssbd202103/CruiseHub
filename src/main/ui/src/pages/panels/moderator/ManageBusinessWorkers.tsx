@@ -89,7 +89,7 @@ function Row(props: RowProps) {
             getWorkers()
         },error =>{
             const message = error.response.data
-            handleError(message)
+            handleError(message, error.response.status)
         });
         return false;
     }

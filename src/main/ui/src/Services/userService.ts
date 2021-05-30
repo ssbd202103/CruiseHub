@@ -45,8 +45,7 @@ export function refreshToken() {
     let currentTime = new Date()
     let differenceInSeconds = (expireTime.getTime() - currentTime.getTime()) / 1000
 
-    console.log(differenceInSeconds < 60 * 19 && differenceInSeconds > 0)
-    if (differenceInSeconds < 60 * 19 && differenceInSeconds > 0) {
+    if (differenceInSeconds < 60 && differenceInSeconds > 0) {
         return axios.post('auth/refresh-token/', {}, {
             headers: {
                 'Authorization': `Bearer ${store.getState().token}`

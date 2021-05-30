@@ -52,7 +52,7 @@ export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}:
         }).catch(error => {
             setButtonPopupAcceptAction(false)
             const message = error.response.data
-            handleError(message)
+            handleError(message, error.response.status)
         });
     }
 
