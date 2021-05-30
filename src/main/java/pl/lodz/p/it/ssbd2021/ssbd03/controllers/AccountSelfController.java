@@ -73,7 +73,7 @@ public class AccountSelfController {
     @Path("/change-client-data")
     @Consumes(MediaType.APPLICATION_JSON)
     @ETagFilterBinding
-    public void changeClientData(ClientChangeDataDto clientChangeDataDto, @HeaderParam("If-Match") String etag) throws BaseAppException {
+    public void changeClientData(@Valid ClientChangeDataDto clientChangeDataDto, @HeaderParam("If-Match") String etag) throws BaseAppException {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, clientChangeDataDto)) {
             throw ControllerException.etagIdentityIntegrity();
         }
@@ -89,7 +89,7 @@ public class AccountSelfController {
     @Path("/change-business-worker-data")
     @Consumes(MediaType.APPLICATION_JSON)
     @ETagFilterBinding
-    public void changeBusinessWorkerData(BusinessWorkerChangeDataDto businessWorkerChangeDataDto, @HeaderParam("If-Match") String etag) throws BaseAppException {
+    public void changeBusinessWorkerData(@Valid BusinessWorkerChangeDataDto businessWorkerChangeDataDto, @HeaderParam("If-Match") String etag) throws BaseAppException {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, businessWorkerChangeDataDto)) {
             throw ControllerException.etagIdentityIntegrity();
         }
@@ -105,7 +105,7 @@ public class AccountSelfController {
     @Path("/change-moderator-data")
     @Consumes(MediaType.APPLICATION_JSON)
     @ETagFilterBinding
-    public Response changeModeratorData(ModeratorChangeDataDto moderatorChangeDataDto, @HeaderParam("If-Match") String etag) throws BaseAppException {
+    public Response changeModeratorData(@Valid ModeratorChangeDataDto moderatorChangeDataDto, @HeaderParam("If-Match") String etag) throws BaseAppException {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, moderatorChangeDataDto)) {
             return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
         }
@@ -122,7 +122,7 @@ public class AccountSelfController {
     @Path("/change-administrator-data")
     @Consumes(MediaType.APPLICATION_JSON)
     @ETagFilterBinding
-    public void changeAdministratorData(AdministratorChangeDataDto administratorChangeDataDto, @HeaderParam("If-Match") String etag) throws BaseAppException {
+    public void changeAdministratorData(@Valid AdministratorChangeDataDto administratorChangeDataDto, @HeaderParam("If-Match") String etag) throws BaseAppException {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, administratorChangeDataDto)) {
             throw ControllerException.etagIdentityIntegrity();
         }
@@ -152,7 +152,7 @@ public class AccountSelfController {
     @Path("/change-theme-mode")
     @Consumes(MediaType.APPLICATION_JSON)
     @ETagFilterBinding
-    public void changeMode(ChangeModeDto changeModeDto, @HeaderParam("If-Match") String etag) throws BaseAppException {
+    public void changeMode(@Valid ChangeModeDto changeModeDto, @HeaderParam("If-Match") String etag) throws BaseAppException {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, changeModeDto)) {
             throw ControllerException.etagIdentityIntegrity();
         }

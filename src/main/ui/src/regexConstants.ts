@@ -1,6 +1,6 @@
 import XRegExp from "xregexp"
 
-export const PHONE_NUMBER_REGEX = XRegExp('^\\+?(?:[\\s\\-/\\\\]?\\d){6,15}$');
+export const PHONE_NUMBER_REGEX = XRegExp('^\\+?(?:[\\s\\-/\\\\]?\\d){7,15}$');
 
 export const LOGIN_REGEX = XRegExp("^\\w{3,30}$")
 export const PASSWORD_REGEX = XRegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*\\W).{8,}$")
