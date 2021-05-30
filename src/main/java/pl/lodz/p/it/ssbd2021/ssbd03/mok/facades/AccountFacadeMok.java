@@ -15,6 +15,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
 import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -33,6 +34,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account.LOGIN_CONSTRAINT
 @TransactionAttribute(TransactionAttributeType.MANDATORY)
 @Interceptors(TrackingInterceptor.class)
 @Log
+@RolesAllowed("123")
 public class AccountFacadeMok extends AbstractFacade<Account> {
 
     @PersistenceContext(unitName = "ssbd03mokPU")
@@ -47,6 +49,7 @@ public class AccountFacadeMok extends AbstractFacade<Account> {
         return em;
     }
 
+    @PermitAll
     public AlterTypeWrapper getAlterTypeWrapperByAlterType(AlterType alterType) throws FacadeException {
         TypedQuery<AlterTypeWrapper> tq = em.createNamedQuery("AlterTypeWrapper.findByName", AlterTypeWrapper.class);
         tq.setParameter("name", alterType);
@@ -57,6 +60,7 @@ public class AccountFacadeMok extends AbstractFacade<Account> {
         }
     }
 
+    @PermitAll
     public LanguageTypeWrapper getLanguageTypeWrapperByLanguageType(LanguageType languageType) throws FacadeException {
         TypedQuery<LanguageTypeWrapper> tq = em.createNamedQuery("LanguageTypeWrapper.findByName", LanguageTypeWrapper.class);
         tq.setParameter("name", languageType);
@@ -67,6 +71,7 @@ public class AccountFacadeMok extends AbstractFacade<Account> {
         }
     }
 
+    @RolesAllowed("getAllAccounts")
     @Override
     public List<Account> findAll() throws FacadeException {
         return super.findAll();
@@ -84,11 +89,12 @@ public class AccountFacadeMok extends AbstractFacade<Account> {
     }
 
 
+    @RolesAllowed("SYSTEM")
     public List<Account> getUnconfirmedAccounts() {
         TypedQuery<Account> tqq = em.createNamedQuery("Account.findUnconfirmedAccounts", Account.class);
         return tqq.getResultList();
-
     }
+
     @PermitAll
     public boolean isEmailPresent(String email) {
         TypedQuery<Account> tqq = em.createNamedQuery("Account.isEmailPresent", Account.class);
@@ -98,12 +104,14 @@ public class AccountFacadeMok extends AbstractFacade<Account> {
 
     }
 
+    @RolesAllowed("getAllUnconfirmedBusinessWorkers")
     public List<AccessLevel> getUnconfirmedBusinessWorkers() {
         TypedQuery<AccessLevel> tqq = em.createNamedQuery("BusinessWorker.findALlUnconfirmed", AccessLevel.class);
         return tqq.getResultList();
 
     }
 
+    @PermitAll
     @Override
     public void edit(Account entity) throws FacadeException {
         try {
