@@ -41,7 +41,9 @@ export default function Authentication() {
 
     const handleCredClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
-        setOpen(prev => !prev);
+        if (accessLevelLabels.length) {
+            setOpen(prev => !prev);
+        }
     };
 
     const handleClose = () => {
