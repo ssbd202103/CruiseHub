@@ -66,11 +66,12 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
             showSuccess(t('successful action'))
             onConfirm()
         }).catch(error => {
+            handleErase()
             setButtonPopupAcceptAction(true)
             const message = error.response.data
             handleError(message, error.response.status)
             onCancel()
-        }).finally(handleErase);
+        });
     }
 
 
@@ -79,6 +80,7 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
     }
 
     useEffect(() => {
+        console.log(address)
         setHouseNumber(address.houseNumber)
         setPostalCode(address.postalCode)
         setStreet(address.street)
@@ -133,7 +135,7 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
                         placeholder="23"
                         value={houseNumber}
                         onChange={event => {
-                            setHouseNumber(Number(event.target.value))
+                            setHouseNumber(event.target.value)
                         }}/>
                     <DarkedTextField
                         type="text"

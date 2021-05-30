@@ -62,11 +62,12 @@ export default function ChangeBusinessWorkerData({open, onOpen, onConfirm, onCan
             showSuccess(t('successful action'))
             onConfirm()
         }).catch(error => {
+            handleErase()
             setButtonPopupAcceptAction(false)
             const message = error.response.data
             handleError(message, error.response.status)
             onCancel()
-        }).finally(handleErase);
+        });
     }
 
     const changeData = () => {
