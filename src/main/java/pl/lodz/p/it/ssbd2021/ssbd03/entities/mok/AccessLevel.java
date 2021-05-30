@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.entities.mok;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
 
 import javax.persistence.*;
@@ -14,12 +15,14 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "access_level", discriminatorType = DiscriminatorType.STRING)
 @Entity(name = "access_levels")
+@ToString
 public abstract class AccessLevel extends BaseEntity {
     @Getter
     @Id
     @SequenceGenerator(name = "ACCESS_LEVEL_SEQ_GEN", sequenceName = "access_level_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ACCESS_LEVEL_SEQ_GEN")
     @Column(name = "id")
+    @ToString.Exclude
     private long id;
 
     @Getter
@@ -32,6 +35,7 @@ public abstract class AccessLevel extends BaseEntity {
     @Setter
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid
+    @ToString.Exclude
     private Account account;
 
     public abstract AccessLevelType getAccessLevelType();

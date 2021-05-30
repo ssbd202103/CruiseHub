@@ -23,7 +23,7 @@ export interface IAccessLevel {
     '@type': "client" | "businessWorker" | "moderator" | "administrator",
     accessLevelType: AccessLevelType,
     address?: {
-        houseNumber: number,
+        houseNumber: string,
         street: string,
         postalCode: string,
         city: string,
@@ -127,7 +127,7 @@ export const selectAddress =
     createSelector(selectSelf,
         state => state.user.accessLevels.find(accessLevel => accessLevel.accessLevelType === "CLIENT")?.address ||
             {
-                houseNumber: 0,
+                houseNumber: "",
                 street: "",
                 postalCode: "",
                 city: "",

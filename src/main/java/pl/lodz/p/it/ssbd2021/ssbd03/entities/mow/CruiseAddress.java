@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.entities.mow;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.City;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Country;
@@ -17,14 +18,15 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_POSITIVE_ERROR
 
 
 @Entity(name = "cruise_addresses")
+@ToString
 public class CruiseAddress extends BaseEntity {
 
     @Getter
     @Id
     @SequenceGenerator(name = "CRUISE_ADDRESS_SEQ_GEN", sequenceName = "cruise_addresses_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CRUISE_ADDRESS_SEQ_GEN")
-    @Column(name = "id")
-    private Long id;
+    @ToString.Exclude
+    private long id;
 
     @Getter
     @Setter

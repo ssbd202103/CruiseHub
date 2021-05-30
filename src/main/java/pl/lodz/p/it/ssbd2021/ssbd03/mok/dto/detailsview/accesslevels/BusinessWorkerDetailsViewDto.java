@@ -3,12 +3,14 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.accesslevels;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccessLevelDetailsViewDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.CompanyName;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.PhoneNumber;
 
 @NoArgsConstructor
+@ToString
 @Getter
 @Setter
 public class BusinessWorkerDetailsViewDto extends AccessLevelDetailsViewDto {

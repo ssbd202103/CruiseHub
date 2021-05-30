@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.entities.mow;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 
@@ -20,14 +21,14 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.RATING_CONSTRAINT_ERROR;
         @NamedQuery(name = "Rating.findByCruiseGroupName", query = "SELECT r FROM ratings r WHERE r.cruiseGroup.name =:name"),
         @NamedQuery(name = "Rating.findByCruiseGroupNameAndAccountLogin", query = "SELECT r FROM ratings r WHERE r.cruiseGroup.name=:name AND r.account.login=:login")
 })
-
+@ToString
 public class Rating extends BaseEntity {
 
     @Getter
     @Id
     @SequenceGenerator(name = "RATING_SEQ_GEN", sequenceName = "ratings_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RATING_SEQ_GEN")
-    @Column(name = "id")
+    @ToString.Exclude
     private long id;
 
     @Getter
@@ -35,6 +36,7 @@ public class Rating extends BaseEntity {
     @JoinColumn(name = "account_id")
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid
+    @ToString.Exclude
     private Account account;
 
     @Getter
@@ -42,6 +44,7 @@ public class Rating extends BaseEntity {
     @JoinColumn(name = "cruise_group_id")
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid
+    @ToString.Exclude
     private CruiseGroup cruiseGroup;
 
     @Getter
@@ -52,8 +55,8 @@ public class Rating extends BaseEntity {
     private Integer rating;
 
     public Rating(@NotNull(message = CONSTRAINT_NOT_NULL) Account account,
-                  @NotNull(message = CONSTRAINT_NOT_NULL) CruiseGroup cruiseGroup, @
-                          NotNull(message = CONSTRAINT_NOT_NULL) Integer rating) {
+                  @NotNull(message = CONSTRAINT_NOT_NULL) CruiseGroup cruiseGroup,
+                  @NotNull(message = CONSTRAINT_NOT_NULL) Integer rating) {
         this.account = account;
         this.cruiseGroup = cruiseGroup;
         this.rating = rating;

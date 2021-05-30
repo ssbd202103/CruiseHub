@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Password;
 
@@ -18,6 +19,8 @@ public class PasswordResetDto {
     private String token;
     @Login
     private String login;
+
+    @ToString.Exclude
     @Password
     private String password;
 }

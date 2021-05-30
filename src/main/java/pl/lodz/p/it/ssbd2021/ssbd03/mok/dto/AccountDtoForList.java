@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
@@ -22,6 +23,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 public class AccountDtoForList implements SignableEntity {
 
     @Login

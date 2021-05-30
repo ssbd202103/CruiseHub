@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Name;
@@ -33,6 +34,7 @@ public class AdministratorForRegistrationDto {
     private String email;
 
     @Password
+    @ToString.Exclude
     private String password;
 
     @NotNull(message = CONSTRAINT_NOT_NULL)

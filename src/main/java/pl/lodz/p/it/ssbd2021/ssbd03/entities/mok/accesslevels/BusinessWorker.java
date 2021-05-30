@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company;
@@ -21,6 +22,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
 })
 
 @DiscriminatorValue("BusinessWorker")
+@ToString
 public class BusinessWorker extends AccessLevel {
 
     @Getter
@@ -41,6 +43,7 @@ public class BusinessWorker extends AccessLevel {
     @JoinColumn(updatable = false, nullable = false, name = "company_id")
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid
+    @ToString.Exclude
     private Company company;
 
     @Override

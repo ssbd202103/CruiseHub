@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
 
 import javax.persistence.*;
@@ -20,11 +21,13 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.LanguageTypeWra
                 @UniqueConstraint(columnNames = "name", name = NAME_CONSTRAINT)
         }
 )
+@ToString
 public class LanguageTypeWrapper {
     public static final String NAME_CONSTRAINT = "language_types_name_unique_constraint";
     @Getter
     @Id
     @GeneratedValue
+    @ToString.Exclude
     private long id;
 
     @Enumerated(EnumType.STRING)

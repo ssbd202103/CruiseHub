@@ -346,7 +346,7 @@ class AccountControllerIT {
 
 
     private ClientForRegistrationDto getSampleClientForRegistrationDto() {
-        AddressDto address = new AddressDto(1L, "Bortnyka", "30-302", "Pluzhne", "Ukraine");
+        AddressDto address = new AddressDto("1", "Bortnyka", "30-302", "Pluzhne", "Ukraine");
         return new ClientForRegistrationDto("Artur", "Radiuk", randomAlphanumeric(15), randomAlphanumeric(10) + "@gmail.com",
                 "abcABC123*", LanguageType.PL, address, "123456789");
     }
@@ -448,7 +448,7 @@ class AccountControllerIT {
                 .filter(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.CLIENT).findFirst().get().getAccVersion();
 
         String etag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
-        OtherAddressChangeDto newAddress = new OtherAddressChangeDto(100L, "Aleja Zmieniona", "94-690", "Lodz", "Polska");
+        OtherAddressChangeDto newAddress = new OtherAddressChangeDto("100", "Aleja Zmieniona", "94-690", "Lodz", "Polska");
         OtherClientChangeDataDto otherClientChangeDataDto = new OtherClientChangeDataDto(account.getLogin(), account.getVersion(),
                 "888888888",
                 newAddress,

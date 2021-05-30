@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.entities.mow;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 
@@ -19,7 +20,7 @@ public class Comment extends BaseEntity {
     @Id
     @SequenceGenerator(name = "COMMENT_SEQ_GEN", sequenceName = "comments_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "COMMENT_SEQ_GEN")
-    @Column(name = "id")
+    @ToString.Exclude
     private long id;
 
     @Getter
@@ -28,6 +29,7 @@ public class Comment extends BaseEntity {
     @JoinColumn(name = "account_id")
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid
+    @ToString.Exclude
     private Account account;
 
     @Getter
@@ -42,6 +44,7 @@ public class Comment extends BaseEntity {
     @JoinColumn(name = "cruise_id")
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid
+    @ToString.Exclude
     private Cruise cruise;
 
     public Comment(Account account, String content, Cruise cruise) {

@@ -34,6 +34,7 @@ public class I18n {
     public static final String TOKEN_INVALIDATE_ERROR = "error.token.invalidate";
     public static final String TOKEN_ALREADY_USED_ERROR = "error.token.alreadyUsedError";
     public static final String REGEX_INVALID_POST_CODE = "error.regex.postCode";
+    public static final String REGEX_INVALID_HOUSE_NUMBER = "error.regex.houseNumber";
     public static final String REGEX_INVALID_CITY = "error.regex.city";
     public static final String REGEX_INVALID_COUNTRY = "error.regex.country";
     public static final String REGEX_INVALID_STREET = "error.regex.street";

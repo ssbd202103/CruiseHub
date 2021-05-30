@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AddressDto;
 
 import javax.validation.Valid;
@@ -12,6 +13,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
 
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 public class ClientChangeDataDto extends ConsumerChangeDataDto {
     @NotNull(message = CONSTRAINT_NOT_NULL)
