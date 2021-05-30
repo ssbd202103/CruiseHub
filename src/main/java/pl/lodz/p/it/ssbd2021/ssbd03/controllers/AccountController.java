@@ -345,16 +345,15 @@ public class AccountController {
 
     @POST
     @Path("/request-email-change")
-    public void requestEmailChange(@Valid AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException {
-        tryAndRepeat(() -> accountEndpoint.requestEmailChange(accountChangeEmailDto));
+    public void requestEmailChange(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException {
+        tryAndRepeat(() -> this.accountEndpoint.requestEmailChange(accountChangeEmailDto));
     }
 
     @POST
     @Path("/request-other-email-change")
-    public void requestOtherEmailChange(@Valid AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException {
-        tryAndRepeat(() -> accountEndpoint.requestOtherEmailChange(accountChangeEmailDto));
+    public void requestOtherEmailChange(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException {
+        tryAndRepeat(() -> this.accountEndpoint.requestOtherEmailChange(accountChangeEmailDto));
     }
-
 
     /**
      * Pobiera metadane użytkownika
