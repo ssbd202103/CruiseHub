@@ -42,11 +42,13 @@ export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeD
     function verifyCallback(){
         setButtonPopup(false)
         if (!emailValue || !confirmEmailValue) {
+            setButtonPopupAcceptAction(false)
             handleError('error.fields')
             return;
         }
 
         if (emailValue !== confirmEmailValue) {
+            setButtonPopupAcceptAction(false)
             handleError('emails are not equal')
             return;
         }
