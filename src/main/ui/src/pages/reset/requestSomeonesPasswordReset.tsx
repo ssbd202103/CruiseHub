@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {useHistory, useLocation} from 'react-router-dom';
 import axios from "../../Services/URL";
 import AuthLayout from "../../layouts/AuthLayout";
 import DarkedTextField from "../../components/DarkedTextField";
@@ -11,12 +12,26 @@ import store from "../../redux/store";
 import {refreshToken} from "../../Services/userService";
 import useHandleError from "../../errorHandler";
 import PopupAcceptAction from "../../PopupAcceptAction";
+import EmailIcon from "@material-ui/icons/AlternateEmail";
+import {
+    CITY_REGEX, COUNTRY_REGEX,
+    EMAIL_REGEX,
+    LOGIN_REGEX,
+    NAME_REGEX,
+    NUM_REGEX,
+    PASSWORD_REGEX, PHONE_NUMBER_REGEX,
+    POST_CODE_REGEX,
+    STREET_REGEX
+} from "../../regexConstants";
 
-const RequestSomeonePasswordReset = () => {
+export default function RequestSomeonePasswordReset () {
     const {t} = useTranslation()
+    const location = useLocation();
+    const history = useHistory();
     const handleError = useHandleError()
     const showSuccess = useSnackbarQueue('success')
     const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
+    const [emailRegexError, setEmailRegexError] = useState(false);
 
     const currentAccount = JSON.parse(sessionStorage.getItem("resetPasswordAccount") as string)
 
@@ -31,6 +46,7 @@ const RequestSomeonePasswordReset = () => {
             }
         }).then(res => {
             refreshToken()
+             history.push('/accounts')
             setButtonPopupAcceptAction(false)
             showSuccess(t('successful action'))
         }).catch(error => {
@@ -38,43 +54,52 @@ const RequestSomeonePasswordReset = () => {
             const message = error.response.data
             handleError(message, error.response.status)
         });
-
-
     }
+
+        const resetEmailFun = async () => {
+            setEmailRegexError(!EMAIL_REGEX.test(email))
+
+            if (!EMAIL_REGEX.test(email)) {
+                handleError("invalid.form")
+            } else {
+                setButtonPopupAcceptAction(true)
+            }
+        }
+
+
     return (
-        <AuthLayout>
-            <h1 className={styles.h1}>{login}</h1>
+            <div>
+            <h3>{t("reset")}{login}{t("itsPassword")}</h3>
             <DarkedTextField
+                type="email"
                 label={t("email") + ' *'}
                 style={{
                     width: '70%',
                     margin: '20px 0'
                 }}
-                placeholder="email"
+                placeholder="E-mail"
                 className={styles.input}
+                icon={(<EmailIcon/>)}
                 value={email}
                 onChange={event => {
                     setEmail(event.target.value)
+                    setEmailRegexError(!EMAIL_REGEX.test(event.target.value))
                 }}
-                colorIgnored
+                regexError={emailRegexError}
             />
 
-            <Link to="accounts">
             <RoundedButton
-                onClick={()=>setButtonPopupAcceptAction(true)}
-                style={{width: '100%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
+                onClick={resetEmailFun}
+                style={{width: '50%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
                 color="pink"
-            >Send email </RoundedButton>
+            >{t("reset password")} </RoundedButton>
             <PopupAcceptAction
                 open={buttonPopupAcceptAction}
                 onConfirm={onFormSubmit}
                 onCancel={() => {setButtonPopupAcceptAction(false)
                 }}
             />
-            </Link>
-        </AuthLayout>
-
+            </div>
     );
 };
 
-export default RequestSomeonePasswordReset;

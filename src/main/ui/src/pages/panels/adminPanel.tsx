@@ -9,7 +9,7 @@ import SettingsIcon from '@material-ui/icons/SettingsRounded'
 import AccountsListIcon from '@material-ui/icons/PeopleAltRounded'
 import GoBackIcon from '@material-ui/icons/ArrowBackRounded'
 
-import {Link, Redirect, Route} from 'react-router-dom'
+import {Link, Redirect, Route, Switch} from 'react-router-dom'
 
 import PanelMenu from '../../components/PanelMenu'
 
@@ -129,7 +129,7 @@ export default function AdminPanel() {
                     <Route path="/accounts/change_access_level_state">
                         <ChangeAccessLevelState/>
                     </Route>
-                    <Route path="/reset/resetSomebodyPassword">
+                    <Route path="/accounts/resetSomebodyPassword">
                         <RequestSomeonePasswordReset/>
                     </Route>
                 </Grid>
