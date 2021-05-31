@@ -185,6 +185,7 @@ const resources = {
             "error.internal.server": "Błąd wewnętrzny serwera",
             "error.integration.optimistic": "Nieaktualny stan danych, odśwież stronę",
             "error.account.notVerified": "Konto niezweryfikowne",
+            "error.account.notActive": "Konto jest zablokowane",
             "error.database.operation": "Błąd po stronie bazy danych",
             "error.business.worker.confirmed": "Pracownik jest już zatwierdzony",
 
@@ -435,6 +436,7 @@ const resources = {
             "error.internal.server": "Internal server error",
             "error.integration.optimistic": "Outdated data provided, please reload the site",
             "error.account.notVerified": "Account not verified",
+            "error.account.notActive": "Account is blocked",
             "error.database.operation": "Database operation error",
             "error.business.worker.confirmed": "Worker is already confirmed",
 

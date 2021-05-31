@@ -38,7 +38,7 @@ import java.sql.Connection;
         className = "org.postgresql.ds.PGSimpleDataSource",
         user = "ssbd03mok",
         password = "mokpasswd",
-       serverName = "studdev.it.p.lodz.pl",
+        serverName = "studdev.it.p.lodz.pl",
         portNumber = 5432,
         databaseName = "ssbd03",
         isolationLevel = Connection.TRANSACTION_READ_COMMITTED,

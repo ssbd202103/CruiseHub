@@ -226,6 +226,9 @@ public class AccountManager implements AccountManagerLocal {
         if (!account.isConfirmed()) {
             throw new AccountManagerException(ACCOUNT_NOT_VERIFIED_ERROR);
         }
+        if (!account.isActive()) {
+            throw new AccountManagerException(ACCOUNT_NOT_ACTIVE_ERROR);
+        }
         Map<String, Object> claims = Map.of("version", account.getVersion());
         String token = JWTHandler.createToken(claims, login);
         TokenWrapper tokenWrapper = TokenWrapper.builder().token(token).account(account).used(false).build();
@@ -382,6 +385,9 @@ public class AccountManager implements AccountManagerLocal {
         Account account = this.accountFacade.findByLogin(login);
         if (!account.isConfirmed()) {
             throw new AccountManagerException(ACCOUNT_NOT_VERIFIED_ERROR);
+        }
+        if (!account.isActive()) {
+            throw new AccountManagerException(ACCOUNT_NOT_ACTIVE_ERROR);
         }
         Map<String, Object> claims = Map.of("version", account.getVersion());
         Locale locale = new Locale(account.getLanguageType().getName().name());
