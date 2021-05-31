@@ -48,3 +48,6 @@ a {
     align-items: center;
     height: inherit;
 }
+th, td {
+    padding: 15px;
+}

@@ -125,6 +125,20 @@ const resources = {
             "color": "Kolor",
             "color.light": "Jasny",
             "color.dark": "Ciemny",
+            //Metadate
+            "alterType": "Typ modyfikacji:",
+            "alteredBy": "Modyfikowany przez:",
+            "createdBy": "Stworzony przez:",
+            "creationDateTime": "Czas stworzenia:",
+            "lastAlterDateTime": "Czas ostatniej modyfikacji:",
+            "lastCorrectAuthenticationDateTime": "Czas ostatniej poprawnej autoryzacji:",
+            "lastCorrectAuthenticationLogicalAddress": "Adres IP ostatniej poprawnej autoryzacji:",
+            "lastIncorrectAuthenticationDateTime": "Czas ostatniej niepoprawnej autoryzacji:",
+            "lastIncorrectAuthenticationLogicalAddress": "Adres IP ostatniej niepoprawnej autoryzacji:",
+            "numberOfAuthenticationFailures": "Liczba niepoprawnych autoryzacji:",
+            "version": "Wersja:",
+
+
             //errors
             "error.facade.noSuchElement": "Nie znaleziono elementu w bazie danych",
             "error.account.accessLevels.alreadyAssigned": "Poziom dostępu jest już przydzielony do konta",
@@ -362,6 +376,18 @@ const resources = {
             "color": "Color",
             "color.light": "Light",
             "color.dark": "Dark",
+            //Metadate
+            "alterType": "Alter type:",
+            "alteredBy": "Altered by:",
+            "createdBy": "Created by:",
+            "creationDateTime": "Creation time:",
+            "lastAlterDateTime": "Last alter Time:",
+            "lastCorrectAuthenticationDateTime": "Last correct authentication time:",
+            "lastCorrectAuthenticationLogicalAddress": "Last correct authentication IP Address:",
+            "lastIncorrectAuthenticationDateTime": "Last incorrect authentication time:",
+            "lastIncorrectAuthenticationLogicalAddress": "Last incorrect authentication IP Address:",
+            "numberOfAuthenticationFailures": "Number of authentication failures:",
+            "version": "Version:",
             //errors
             "error.facade.noSuchElement": "No such element found in the database",
             "error.account.accessLevels.alreadyAssigned": "Access level already assigned to the account",

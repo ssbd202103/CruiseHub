@@ -22,6 +22,7 @@ export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}:
     const showSuccess = useSnackbarQueue('success')
     const firstName = useSelector(selectFirstName)
     const secondName = useSelector(selectSecondName)
+    const currentSelfMTD = JSON.parse(sessionStorage.getItem("changeSelfAccountDataMta") as string)
 
     const [firstNameValue, setFirstNameValue] = useState(firstName)
     const [secondNameValue, setSecondNameValue] = useState(secondName)
@@ -29,6 +30,18 @@ export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}:
     const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
 
     const [buttonPopup, setButtonPopup] = useState(false);
+
+    const [alterType, setAlterType] = useState('')
+    const [alteredBy, setAlteredBy] = useState('')
+    const [createdBy, setCreatedBy] = useState('')
+    const [creationDateTime, setCreationDateTime] = useState('')
+    const [lastAlterDateTime, setLastAlterDateTime] = useState('')
+    const [lastCorrectAuthenticationDateTime, setLastCorrectAuthenticationDateTime] = useState('')
+    const [lastCorrectAuthenticationLogicalAddress, setLastCorrectAuthenticationLogicalAddress] = useState('')
+    const [lastIncorrectAuthenticationDateTime, setLastIncorrectAuthenticationDateTime] = useState('')
+    const [lastIncorrectAuthenticationLogicalAddress, setLastIncorrectAuthenticationLogicalAddress] = useState('')
+    const [numberOfAuthenticationFailures, setNumberOfAuthenticationFailures] = useState('')
+    const [version, setVersion] = useState('')
 
     const handleErase = () => {
         setFirstNameValue(firstName)
@@ -58,10 +71,26 @@ export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}:
         });
     }
 
-
     useEffect(() => {
         setFirstNameValue(firstName)
         setSecondNameValue(secondName)
+
+        setAlterType(currentSelfMTD.alterType);
+        setAlteredBy(currentSelfMTD.alteredBy);
+        setCreatedBy(currentSelfMTD.createdBy);
+        if(currentSelfMTD.creationDateTime !=null)
+            setCreationDateTime(currentSelfMTD.creationDateTime.dayOfMonth +"/"+ currentSelfMTD.creationDateTime.month +" / "+ currentSelfMTD.creationDateTime.year +"    "+ currentSelfMTD.creationDateTime.hour +":"+ currentSelfMTD.creationDateTime.minute )
+        if(currentSelfMTD.lastAlterDateTime !=null)
+            setLastAlterDateTime(currentSelfMTD.lastAlterDateTime.dayOfMonth +"/"+ currentSelfMTD.lastAlterDateTime.month +" / "+ currentSelfMTD.lastAlterDateTime.year +"    "+ currentSelfMTD.lastAlterDateTime.hour +":"+ currentSelfMTD.lastAlterDateTime.minute);
+        if(currentSelfMTD.lastCorrectAuthenticationDateTime !=null)
+            setLastCorrectAuthenticationDateTime(currentSelfMTD.lastCorrectAuthenticationDateTime.dayOfMonth +"/"+ currentSelfMTD.lastCorrectAuthenticationDateTime.month +" / "+ currentSelfMTD.lastCorrectAuthenticationDateTime.year +"    "+ currentSelfMTD.lastCorrectAuthenticationDateTime.hour +":"+ currentSelfMTD.creationDateTime.minute);
+        setLastCorrectAuthenticationLogicalAddress(currentSelfMTD.lastCorrectAuthenticationLogicalAddress)
+        if(currentSelfMTD.lastIncorrectAuthenticationDateTime !=null)
+            setLastIncorrectAuthenticationDateTime(currentSelfMTD.lastIncorrectAuthenticationDateTime.dayOfMonth +"/"+ currentSelfMTD.lastIncorrectAuthenticationDateTime.month +" / "+ currentSelfMTD.lastIncorrectAuthenticationDateTime.year +"    "+ currentSelfMTD.lastIncorrectAuthenticationDateTime.hour +":"+ currentSelfMTD.lastIncorrectAuthenticationDateTime.minute);
+        setLastIncorrectAuthenticationLogicalAddress(currentSelfMTD.lastIncorrectAuthenticationLogicalAddress);
+        setNumberOfAuthenticationFailures(currentSelfMTD.numberOfAuthenticationFailures)
+        setVersion(currentSelfMTD.version);
+
     }, [firstName, secondName])
 
     const changeData = () => {
@@ -124,6 +153,18 @@ export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}:
                 <ConfirmCancelButtonGroup
                     onConfirm={()=>setButtonPopupAcceptAction(true)}
                     onCancel={handleCancel} />
+                <tr>
+                    <td><h4>{t("alterType")}</h4></td> <td><h4>{t("alteredBy")}</h4></td> <td><h4>{t("createdBy")}</h4></td>
+                    <td><h4>{t("creationDateTime")}</h4></td> <td><h4>{t("lastAlterDateTime")}</h4></td> <td><h4>{t("lastCorrectAuthenticationDateTime")}</h4></td>
+                    <td><h4>{t("lastCorrectAuthenticationLogicalAddress")}</h4></td> <td><h4>{t("lastIncorrectAuthenticationDateTime")}</h4></td> <td><h4>{t("lastIncorrectAuthenticationLogicalAddress")}</h4></td>
+                    <td><h4>{t("numberOfAuthenticationFailures")}</h4></td> <td><h4>{t("version")}</h4></td>
+                </tr>
+                <tr>
+                    <td><h4>{alterType}</h4></td><td><h4>{alteredBy}</h4></td><td><h4>{createdBy}</h4></td>
+                    <td><h4>{creationDateTime}</h4></td><td><h4>{lastAlterDateTime}</h4></td><td><h4>{lastCorrectAuthenticationDateTime}</h4></td>
+                    <td><h4>{lastCorrectAuthenticationLogicalAddress}</h4></td><td><h4>{lastIncorrectAuthenticationDateTime}</h4></td><td><h4>{lastIncorrectAuthenticationLogicalAddress}</h4></td>
+                    <td><h4>{numberOfAuthenticationFailures}</h4></td><td><h4>{version}</h4></td>
+                </tr>
             </Grid>
         </>
 )

@@ -18,7 +18,7 @@ import {useTranslation} from "react-i18next";
 import axios from "../../../Services/URL";
 import {useSelector} from "react-redux";
 import {selectDarkMode} from "../../../redux/slices/userSlice";
-import {getAccountDetailsAbout, getAllAccounts} from "../../../Services/accountsService";
+import {getAccountDetailsAbout, getAllAccounts, getAccountMetadataDetailsAbout,getAccountAccessLevelMetadata,getClientAddressMetadata} from "../../../Services/accountsService";
 import {selectToken} from "../../../redux/slices/tokenSlice";
 import {useSnackbarQueue} from "../../snackbar";
 import store from "../../../redux/store";
@@ -138,16 +138,30 @@ function Row(props: RowProps) {
     const handleSetOpen = async () => {
         getAccountDetailsAbout(row.login).then(res => {
             sessionStorage.setItem("changeAccountData", JSON.stringify(res.data));
-            setOpen(state => !state);
-        }).catch(error => {
-            const message = error.response.data
-            handleError(message, error.response.status)
         }).then(res => {
-            refreshToken()
-        });
-
-    }
-
+            getAccountMetadataDetailsAbout(row.login).then(respo => {
+                sessionStorage.setItem("changeAccountDataMta", JSON.stringify(respo.data));
+                setOpen(state => !state);
+                refreshToken();
+            }).then(res => {
+                if(row.accessLevels.includes("BUSINESS_WORKER")){
+                getAccountAccessLevelMetadata('BUSINESS_WORKER', row.login).then(respo => {
+                    sessionStorage.setItem("changeAccountAclDataMta", JSON.stringify(respo.data));
+                    refreshToken();
+                });
+                }
+                if(row.accessLevels.includes("CLIENT")) {
+                    getClientAddressMetadata(row.login).then(respo => {
+                        sessionStorage.setItem("changeAccountAddressDataMta", JSON.stringify(respo.data));
+                        refreshToken();
+                    }, error => {
+                        const message = error.response.data
+                        handleError(message, error.response.status)
+                    });
+                }
+                });
+            });
+        }
     const setCurrentGrantAccessLevelAccount = () => {
         sessionStorage.setItem('grantAccessLevelAccount', JSON.stringify(row));
     }

@@ -1,5 +1,5 @@
 import {useTranslation} from 'react-i18next'
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import ListClient from "./moderator/ListClient";
 
 import SettingsIcon from '@material-ui/icons/SettingsRounded'
@@ -12,10 +12,14 @@ import ChangePassword from "../../components/changeData/ChangePassword";
 import ChangeModeratorData from "../../components/changeData/ChangeModeratorData";
 import ManageWorkers from "./moderator/ManageBusinessWorkers";
 import PanelLayout from "../../layouts/PanelLayout";
-
+import {getSelfAddressMetadataDetails, getSelfMetadataDetails} from "../../Services/accountsService";
+import {refreshToken} from "../../Services/userService";
+import useHandleError from "../../errorHandler";
 
 export default function ModeratorPanel() {
     const {t} = useTranslation()
+    const handleError = useHandleError()
+
     const [listClient, setListClient] = useState(true)
     const handleListClient = () => {
         setListClient(state => !state)
@@ -35,18 +39,50 @@ export default function ModeratorPanel() {
     const [isPasswordEdit, setIsPasswordEdit] = useState(false)
 
     const handleIsEmailEdit = () => {
+        getSelfMetadataDetails().then(res => {
+            sessionStorage.setItem("changeSelfAccountDataMta", JSON.stringify(res.data));
+            refreshToken();
+        }, error => {
+            const message = error.response.data
+            handleError(message, error.response.status)
+        });
         setIsEmailEdit(true)
         setIsDataEdit(false)
         setIsPasswordEdit(false)
     }
+    useEffect(() => {
+        getSelfMetadataDetails().then(res => {
+            sessionStorage.setItem("changeSelfAccountDataMta", JSON.stringify(res.data));
+            sessionStorage.setItem("changeSelfAddressDataMta", JSON.stringify(res.data));
+            refreshToken();
+        }, error => {
+            const message = error.response.data
+            handleError(message, error.response.status)
+        });
+
+    }, [])
 
     const handleIsDataEdit = () => {
+        getSelfMetadataDetails().then(res => {
+            sessionStorage.setItem("changeSelfAccountDataMta", JSON.stringify(res.data));
+            refreshToken();
+        }, error => {
+            const message = error.response.data
+            handleError(message, error.response.status)
+        });
         setIsDataEdit(true)
         setIsEmailEdit(false)
         setIsPasswordEdit(false)
     }
 
     const handleIsPasswordEdit = () => {
+        getSelfMetadataDetails().then(res => {
+            sessionStorage.setItem("changeSelfAccountDataMta", JSON.stringify(res.data));
+            refreshToken();
+        }, error => {
+            const message = error.response.data
+            handleError(message, error.response.status)
+        });
         setIsPasswordEdit(true)
         setIsDataEdit(false)
         setIsEmailEdit(false)
