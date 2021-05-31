@@ -39,7 +39,11 @@ export default function RequestSomeonePasswordReset () {
     const {token} = store.getState()
     let login = currentAccount.login;
 
+
+
+
     const onFormSubmit = () => {
+        setButtonPopupAcceptAction(false)
         axios.post(`account/request-someones-password-reset/${login}/${email}/`, null, {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -47,10 +51,9 @@ export default function RequestSomeonePasswordReset () {
         }).then(res => {
             refreshToken()
              history.push('/accounts')
-            setButtonPopupAcceptAction(false)
+
             showSuccess(t('successful action'))
         }).catch(error => {
-            setButtonPopupAcceptAction(false)
             const message = error.response.data
             handleError(message, error.response.status)
         });

@@ -25,11 +25,11 @@ export default function ChangeEmail(props: any) {
     const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
 
     const resetPassword = () => {
-        setButtonPopupAcceptAction(false)
-        submitPasswordReset()
+        setButtonPopupAcceptAction(true)
     }
 
     const submitPasswordReset = async () => {
+        setButtonPopupAcceptAction(false)
         const json = {
             "token": location.pathname.toString().substring('/reset/changeEmail/'.length)
         }
@@ -53,13 +53,13 @@ export default function ChangeEmail(props: any) {
         <AuthLayout>
             <div>
                     <RoundedButton
-                        onClick={() => setButtonPopupAcceptAction(true)}
+                        onClick={resetPassword}
                         style={{width: '100%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
                         color="pink"
                     >{t("confrim email change")}</RoundedButton>
                     <PopupAcceptAction
                         open={buttonPopupAcceptAction}
-                        onConfirm={()=>resetPassword}
+                        onConfirm={submitPasswordReset}
                         onCancel={() => {setButtonPopupAcceptAction(false)
                         }}
                     />

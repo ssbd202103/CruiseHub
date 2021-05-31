@@ -26,9 +26,13 @@ function PasswordReset(props: any) {
 
     const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
 
+    const resetPassword = () => {
+        setButtonPopupAcceptAction(true)
+    }
 
-    const submitPasswordReset = async (event: any) => {
-        event.preventDefault()
+
+    const submitPasswordReset = async () => {
+        setButtonPopupAcceptAction(false)
 
         const json = {
             "token": location.pathname.toString().substring('/reset/passwordReset/'.length),
@@ -41,11 +45,9 @@ function PasswordReset(props: any) {
                 'Content-Type': 'application/json'
             }
         }).then(res => {
-            setButtonPopupAcceptAction(false)
             refreshToken()
             showSuccess(t('successful action'))
         }).catch(error => {
-            setButtonPopupAcceptAction(false)
             const message = error.response.data
             handleError(message, error.response.status)
         });
@@ -93,7 +95,7 @@ function PasswordReset(props: any) {
                     />
 
                     <RoundedButton
-                        onClick={()=>setButtonPopupAcceptAction(true)}
+                        onClick={resetPassword}
                         style={{width: '100%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
                         color="pink"
                     >Reset </RoundedButton>

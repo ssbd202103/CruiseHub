@@ -21,6 +21,11 @@ const RequestPasswordReset = () => {
     const [login, setLogin] = useState('')
     const [loginEmptyError, setLoginEmptyError] = useState(false)
 
+    const resetPassword = () => {
+        setButtonPopupAcceptAction(true)
+    }
+
+
     const onFormSubmit = () => {
         if (login === "") {
             setLoginEmptyError(true)
@@ -37,7 +42,6 @@ const RequestPasswordReset = () => {
                     handleError(message, error.response.status)
                 });
         }
-        setButtonPopupAcceptAction(false)
     }
 
     return (
@@ -61,7 +65,7 @@ const RequestPasswordReset = () => {
                 }}
             />
             <RoundedButton
-                onClick={() => setButtonPopupAcceptAction(true)}
+                onClick={resetPassword}
                 style={{width: '100%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
                 color="pink"
             >{t("sendEmail")}</RoundedButton>
