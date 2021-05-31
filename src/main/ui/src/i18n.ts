@@ -137,6 +137,8 @@ const resources = {
             "lastIncorrectAuthenticationLogicalAddress": "Adres IP ostatniej niepoprawnej autoryzacji:",
             "numberOfAuthenticationFailures": "Liczba niepoprawnych autoryzacji:",
             "version": "Wersja:",
+            //cruisecard
+            "cruiseExample": "Rejs po Morzu Śródziemnym",
 
 
             //errors
@@ -181,7 +183,7 @@ const resources = {
             "error.constraint.rating": "Ocena powinna być liczbą z zakresu 1-5",
             "error.forbidden": "Operacja zabroniona",
             "error.internal.server": "Błąd wewnętrzny serwera",
-            "error.integration.optimistic": "Nieaktualny stan przesłanych danych",
+            "error.integration.optimistic": "Nieaktualny stan danych, odśwież stronę",
             "error.account.notVerified": "Konto niezweryfikowne",
             "error.database.operation": "Błąd po stronie bazy danych",
             "error.business.worker.confirmed": "Pracownik jest już zatwierdzony",
@@ -239,13 +241,13 @@ const resources = {
             "/reset/resetSomebodyPassword": "Resetowanie hasła konta",
             "/verify/accountVerification": "Weryfikacja",
             "/accounts/change_access_level_state": "Zmień stan poziomu dostępu",
-            'accept.action': 'Czy chcesz wykonac te akcje',
+            'accept.action': 'Czy chcesz wykonać tę akcję',
 
             'yes': 'Tak',
             'no': 'Nie',
 
             "update": "Odśwież",
-            "fill.login.password.fields": "Pola login oraz hasla muszą być wypełniona",
+            "fill.login.password.fields": "Pola login oraz haslo muszą być wypełnione",
             "error.unauthorized": "Token sesyjny prawdopodobnie wygasł, zaloguj się ponownie",
             'token.missing': 'Brak tokenu',
             'redirect in': 'Przekierowanie na główną stronę przez',
@@ -388,6 +390,8 @@ const resources = {
             "lastIncorrectAuthenticationLogicalAddress": "Last incorrect authentication IP Address:",
             "numberOfAuthenticationFailures": "Number of authentication failures:",
             "version": "Version:",
+            //cruisecard
+            "cruiseExample": "Cruise on the Mediterranean Sea",
             //errors
             "error.facade.noSuchElement": "No such element found in the database",
             "error.account.accessLevels.alreadyAssigned": "Access level already assigned to the account",
@@ -429,7 +433,7 @@ const resources = {
             "error.constraint.rating": "Rating should be a number in range 1-5",
             "error.forbidden": "Operation forbidden",
             "error.internal.server": "Internal server error",
-            "error.integration.optimistic": "Outdated data provided",
+            "error.integration.optimistic": "Outdated data provided, please reload the site",
             "error.account.notVerified": "Account not verified",
             "error.database.operation": "Database operation error",
             "error.business.worker.confirmed": "Worker is already confirmed",
@@ -492,7 +496,7 @@ const resources = {
             'yes': 'Yes',
             'no': 'No',
             "update": "Refresh",
-            "fill.login.password.fields": "Fill login and password fields",
+            "fill.login.password.fields": "Fill in login and password fields",
             "error.unauthorized": "Session token is probably expired, please login one more time",
             'token.missing': 'Token is missing',
             'redirect in': 'Redirect to the main page in',
