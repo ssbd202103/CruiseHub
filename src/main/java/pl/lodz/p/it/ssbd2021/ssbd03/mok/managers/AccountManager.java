@@ -427,9 +427,6 @@ public class AccountManager implements AccountManagerLocal {
             throw new AccountManagerException(ACCOUNT_VERIFICATION_TOKEN_ALREADY_VERIFIED_ERROR);
         }
 
-        if (!(account.getVersion() == claims.get("version").asLong())) {
-            throw FacadeException.optimisticLock();
-        }
 
         account.setConfirmed(true);
         tokenW.setUsed(true);
