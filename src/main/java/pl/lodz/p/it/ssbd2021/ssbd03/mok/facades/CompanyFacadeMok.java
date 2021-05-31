@@ -49,6 +49,7 @@ public class CompanyFacadeMok extends AbstractFacade<Company> {
     }
 
     @Override
+    @PermitAll
     public void create(Company entity) throws FacadeException {
         try {
             super.create(entity);
@@ -60,6 +61,7 @@ public class CompanyFacadeMok extends AbstractFacade<Company> {
     }
 
     @Override
+    @PermitAll
     public void edit(Company entity) throws FacadeException {
         try {
             super.edit(entity);

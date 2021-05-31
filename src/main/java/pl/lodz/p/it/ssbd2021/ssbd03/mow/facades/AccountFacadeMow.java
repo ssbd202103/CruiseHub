@@ -10,6 +10,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
+import javax.annotation.security.PermitAll;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -25,7 +26,7 @@ import javax.persistence.TypedQuery;
 public class AccountFacadeMow extends AbstractFacade<Account> {
 
     @PersistenceContext(unitName = "ssbd03mowPU")
-    private EntityManager em;
+    private EntityManager   em;
 
     public AccountFacadeMow() {
         super(Account.class);
@@ -36,12 +37,14 @@ public class AccountFacadeMow extends AbstractFacade<Account> {
         return em;
     }
 
+    @PermitAll
     public AlterTypeWrapper getAlterTypeWrapperByAlterType(AlterType alterType) {
         TypedQuery<AlterTypeWrapper> tq = em.createNamedQuery("AlterTypeWrapper.findByName", AlterTypeWrapper.class);
         tq.setParameter("name", alterType);
         return tq.getSingleResult();
     }
 
+    @PermitAll
     public LanguageTypeWrapper getLanguageTypeWrapperByLanguageType(LanguageType languageType) {
         TypedQuery<LanguageTypeWrapper> tq = em.createNamedQuery("LanguageTypeWrapper.findByName", LanguageTypeWrapper.class);
         tq.setParameter("name", languageType);
@@ -49,6 +52,7 @@ public class AccountFacadeMow extends AbstractFacade<Account> {
     }
 
 
+    @PermitAll
     public Account findByLogin(String login) throws BaseAppException {
         TypedQuery<Account> tq = em.createNamedQuery("Account.findByLogin", Account.class);
         tq.setParameter("login", login);

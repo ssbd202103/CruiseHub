@@ -57,7 +57,7 @@ public class CompanyManager implements CompanyManagerLocal {
     }
 
     @RolesAllowed("authenticatedUser")
-    public Account getCurrentUser() throws BaseAppException {
+    private Account getCurrentUser() throws BaseAppException {
         return accountFacadeMow.findByLogin(context.getUserPrincipal().getName());
     }
 }

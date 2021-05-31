@@ -1,9 +1,9 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.facades;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.common.facades.AbstractFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Reservation;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
-import pl.lodz.p.it.ssbd2021.ssbd03.common.facades.AbstractFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
 import javax.annotation.security.RolesAllowed;
@@ -35,21 +35,14 @@ public class ReservationFacadeMow extends AbstractFacade<Reservation> {
         return em;
     }
 
-    @Override
-    public List<Reservation> findAll() throws FacadeException {
-        return super.findAll();
-    }
 
     @Override
-    public void edit(Reservation entity) throws FacadeException {
-        super.edit(entity);
-    }
-
-    @Override
+    @RolesAllowed("createReservation")
     public void create(Reservation entity) throws FacadeException {
         super.create(entity);
     }
 
+    @RolesAllowed("authenticatedUser")
     public Reservation findByUUID(UUID uuid) throws BaseAppException {
         TypedQuery<Reservation> tq = em.createNamedQuery("Reservation.findByUUID", Reservation.class);
         tq.setParameter("uuid", uuid);

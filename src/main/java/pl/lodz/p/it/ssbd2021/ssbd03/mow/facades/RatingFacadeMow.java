@@ -1,11 +1,12 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.facades;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.common.facades.AbstractFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Rating;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
-import pl.lodz.p.it.ssbd2021.ssbd03.common.facades.AbstractFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -30,6 +31,7 @@ public class RatingFacadeMow extends AbstractFacade<Rating> {
         super(Rating.class);
     }
 
+    @PermitAll
     public List<Rating> findByCruiseGroupName(String name) throws BaseAppException {
         TypedQuery<Rating> tq = em.createNamedQuery("Rating.findByCruiseGroupName", Rating.class);
         tq.setParameter("name", name);

@@ -110,6 +110,7 @@ public class CruiseManager implements CruiseManagerLocal {
     }
 
     @Override
+    @PermitAll
     public List<Cruise> getPublishedCruises() {
         // TODO
         return null;
