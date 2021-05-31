@@ -125,13 +125,13 @@ export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}:
                     <DarkedTextField
                         type="text"
                         label={t("name")}
-                        placeholder="Michał"
+                        placeholder={t("nameExample")}
                         value={firstNameValue}
                         onChange={event => {setFirstNameValue(event.target.value)}} />
                     <DarkedTextField
                         type="text"
                         label={t("surname")}
-                        placeholder="Blazymur"
+                        placeholder={t("surnameExample")}
                         value={secondNameValue}
                         onChange={event => {setSecondNameValue(event.target.value)}} />
                 </div>

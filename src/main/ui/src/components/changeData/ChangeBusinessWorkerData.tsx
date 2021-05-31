@@ -140,19 +140,19 @@ export default function ChangeBusinessWorkerData({open, onOpen, onConfirm, onCan
                     <DarkedTextField
                         type="text"
                         label={t("name")}
-                        placeholder="Michał"
+                        placeholder={t("nameExample")}
                         value={firstNameValue}
                         onChange={event => {setFirstNameValue(event.target.value)}}/>
                     <DarkedTextField
                         type="text"
                         label={t("surname")}
-                        placeholder="Blazymur"
+                        placeholder={t("surnameExample")}
                         value={secondNameValue}
                         onChange={event => {setSecondNameValue(event.target.value)}}/>
                     <DarkedTextField
                         type="text"
                         label={t("phone")}
-                        placeholder="+48-767-765-456"
+                        placeholder={t("phoneNumberExample")}
                         value={phoneNumberValue}
                         onChange={event => {setPhoneNumberValue(event.target.value)}}/>
                 </div>

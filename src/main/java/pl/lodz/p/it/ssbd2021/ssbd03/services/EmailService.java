@@ -38,7 +38,7 @@ public class EmailService {
      */
     public static void sendEmailWithContent(String recipientEmail, String subject, String contentHtml) throws EmailServiceException {
        //todo uncomment it when needed
-/*        Properties properties = System.getProperties();
+        Properties properties = System.getProperties();
 
         String host = "smtp.gmail.com";
         properties.put("mail.smtp.starttls.enable", "true");
@@ -55,7 +55,7 @@ public class EmailService {
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(recipientEmail));
             message.setFrom(new InternetAddress(EMAIL_USER));
 
-            message.setSubject(subject);
+            message.setSubject(subject, "UTF-8");
             message.setContent(contentHtml, "text/html; charset=UTF-8");
 
             Transport transport = session.getTransport("smtp");
@@ -67,7 +67,7 @@ public class EmailService {
             throw new EmailServiceException(EMAIL_SERVICE_INCORRECT_EMAIL);
         } catch (MessagingException me) { // todo
             throw new EmailServiceException(EMAIL_SERVICE_INACCESSIBLE);
-        }*/
+        }
     }
 
     /**

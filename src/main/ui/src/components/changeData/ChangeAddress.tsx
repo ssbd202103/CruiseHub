@@ -145,7 +145,7 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
                     <DarkedTextField
                         type="text"
                         label={t("street")}
-                        placeholder="11-Listopada 28"
+                        placeholder={t("streetExample")}
                         value={street}
                         onChange={event => {
                             setStreet(event.target.value)
@@ -153,7 +153,7 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
                     <DarkedTextField
                         type="text"
                         label={t("house number")}
-                        placeholder="23"
+                        placeholder={t("houseNumberExample")}
                         value={houseNumber}
                         onChange={event => {
                             setHouseNumber(event.target.value)
@@ -161,7 +161,7 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
                     <DarkedTextField
                         type="text"
                         label={t("postal code")}
-                        placeholder="91-345"
+                        placeholder={t("postalCodeExample")}
                         value={postalCode}
                         onChange={event => {
                             setPostalCode(event.target.value)
@@ -169,7 +169,7 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
                     <DarkedTextField
                         type="text"
                         label={t("city")}
-                        placeholder="Zakopianka"
+                        placeholder={t("cityExample")}
                         value={city}
                         onChange={event => {
                             setCity(event.target.value)
@@ -177,7 +177,7 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
                     <DarkedTextField
                         type="text"
                         label={t("country")}
-                        placeholder="Zanzibar"
+                        placeholder={t("countryExample")}
                         value={country}
                         onChange={event => {
                             setCountry(event.target.value)

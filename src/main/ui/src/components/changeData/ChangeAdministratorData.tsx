@@ -126,7 +126,7 @@ export default function ChangeAdministratorData({open, onOpen, onConfirm, onCanc
                     <DarkedTextField
                         type="text"
                         label={t("name")}
-                        placeholder="Michał"
+                        placeholder={t("nameExample")}
                         value={firstNameValue}
                         onChange={event => {
                             setFirstNameValue(event.target.value)
@@ -134,7 +134,7 @@ export default function ChangeAdministratorData({open, onOpen, onConfirm, onCanc
                     <DarkedTextField
                         type="text"
                         label={t("surname")}
-                        placeholder="Blazymur"
+                        placeholder={t("surnameExample")}
                         value={secondNameValue}
                         onChange={event => {
                             setSecondNameValue(event.target.value)
