@@ -17,12 +17,12 @@ function VerifyAccount(props: any) {
     const showSuccess = useSnackbarQueue('success')
     const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
     const history = useHistory()
-    function accountVerify () {
-        setButtonPopupAcceptAction(false)
-        submitAccountVerification()
+    const accountVerify = () =>{
+        setButtonPopupAcceptAction(true)
+
     }
     const submitAccountVerification = async () => {
-
+        setButtonPopupAcceptAction(false)
         const json = {
             "token": location.pathname.toString().substring('/verify/accountVerification/'.length)
         }
@@ -32,9 +32,11 @@ function VerifyAccount(props: any) {
                 'Content-Type': 'application/json'
             }
         }).then(res =>{
+            setButtonPopupAcceptAction(false)
             history.push("/signin")
             showSuccess(t('successful action'))
         }).catch(error => {
+            setButtonPopupAcceptAction(false)
             const message = error.response.data
             handleError(message, error.response.status)
         });
@@ -48,13 +50,13 @@ function VerifyAccount(props: any) {
                 <form onSubmit={submitAccountVerification}>
                     <h1 className={styles.h1}>{t("verifyAccount")}</h1>
                         <RoundedButton
-                            onClick={()=>setButtonPopupAcceptAction(true)}
+                            onClick={accountVerify}
                             style={{width: '100%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
                             color="pink"
                         >{t("verifyAccount")} </RoundedButton>
                     <PopupAcceptAction
                         open={buttonPopupAcceptAction}
-                        onConfirm={()=>accountVerify}
+                        onConfirm={submitAccountVerification}
                         onCancel={() => {setButtonPopupAcceptAction(false)
                         }}
                     />
