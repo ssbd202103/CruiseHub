@@ -72,6 +72,12 @@ public class AccountController {
         return mapper.writeValueAsString(tryAndRepeat(() -> accountEndpoint.getAccountDetailsByLogin(login)));
     }
 
+    /**
+     * Pobiera klienta przy pomocy loginu
+     * @param login Login klienta
+     * @return Odpowiedź z klientem
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
     @GET
     @Path("/client/{login}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -81,6 +87,12 @@ public class AccountController {
         return Response.ok().entity(client).header("ETag", ETag).build();
     }
 
+    /**
+     * Pobiera pracownika firmy przy pomocy loginu
+     * @param login Login pracownika
+     * @return Odpowiedź z pracownikiem
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
     @GET
     @Path("/business-worker/{login}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -90,6 +102,12 @@ public class AccountController {
         return Response.ok().entity(businessWorker).header("ETag", ETag).build();
     }
 
+    /**
+     * Pobiera moderatora przy pomocy loginu
+     * @param login Login moderatora
+     * @return Odpowiedź z moderatorem
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
     @GET
     @Path("/moderator/{login}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -99,6 +117,12 @@ public class AccountController {
         return Response.ok().entity(moderator).header("ETag", ETag).build();
     }
 
+    /**
+     * Pobiera administratora przy pomocy loginu
+     * @param login Login administratora
+     * @return Odpowiedź z administratorem
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
     @GET
     @Path("/administrator/{login}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -330,7 +354,7 @@ public class AccountController {
      *
      * @param blockAccountDto dto zawierające wersje oraz login danego pracownika
      * @param etag            Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
-     * @throws BaseAppException bazowy wyjątek apklikacji
+     * @throws BaseAppException bazowy wyjątek aplikacji
      */
     @PUT
     @Path("/confirm-business-worker")
@@ -343,12 +367,22 @@ public class AccountController {
         tryAndRepeat(() -> accountEndpoint.confirmBusinessWorker(blockAccountDto));
     }
 
+    /**
+     * Wysyła żądanie zmiany własnego emaila
+     * @param accountChangeEmailDto DTO z loginem, wersją i nowym emailem
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
     @POST
     @Path("/request-email-change")
     public void requestEmailChange(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException {
         tryAndRepeat(() -> this.accountEndpoint.requestEmailChange(accountChangeEmailDto));
     }
 
+    /**
+     * Wysyła żądanie zmiany cudzego emaila
+     * @param accountChangeEmailDto DTO z loginem, wersją i nowym emailem
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
     @POST
     @Path("/request-other-email-change")
     public void requestOtherEmailChange(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException {

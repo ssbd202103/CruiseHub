@@ -50,7 +50,7 @@ public class AuthController {
      * Metoda służąca do logowania + wysyła kod na e-mail służący do dwufazowego uwierzytelnienia
      *
      * @param auth Login oraz hasło użytkownika
-     * @return
+     * @return Odpowiedź http, w przypadku poprawnych danych token
      */
     @Path("/sign-in")
     @POST
@@ -72,6 +72,12 @@ public class AuthController {
         return Response.ok().build();
     }
 
+    /**
+     * Odswieza token uzytkownika
+     * @param tokenString Token
+     * @return Odswiezony token
+     * @throws BaseAppException Bazowy wyjatek aplikacji
+     */
     @POST
     @Path("/refresh-token/")
     @Produces(MediaType.TEXT_PLAIN)
@@ -113,7 +119,7 @@ public class AuthController {
      *
      * @param auth Login oraz kod wysłany w emailu
      * @return Token JWT
-     * @throws BaseAppException
+     * @throws BaseAppException Bazowy wyjatek aplikacji
      */
     @Path("/code-sign-in")
     @POST

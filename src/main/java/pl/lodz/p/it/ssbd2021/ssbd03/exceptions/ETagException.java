@@ -1,5 +1,8 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.exceptions;
 
+/**
+ * Klasa reprezentująca wyjątki związane z ETagiem
+ */
 public class ETagException extends BaseAppException {
     public ETagException(String message, Throwable cause) {
         super(message, cause);

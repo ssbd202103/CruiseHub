@@ -24,19 +24,19 @@ public interface ReservationManagerLocal {
     /**
      * Zwraca liste rezerwacji dla danej wycieczki zalogowanego buisnse-workera
      *
-     * @param cruise_uuid
-     * @return
-     * @throws BaseAppException
+     * @param cruise_uuid UUID wycieczki
+     * @return Listra rezerwacji dla danej wycieczki
+     * @throws BaseAppException Bazowy wyjatek aplikacji
      */
     List<Reservation> getWorkerCruiseReservations(UUID cruise_uuid) throws BaseAppException;
 
     /**
      * Usuwa wycieczke klienta podanego w obiekci dto
      *
-     * @param reservationVersion
-     * @param reservationUuid
-     * @param clientLogin
-     * @throws BaseAppException
+     * @param reservationVersion Wersja rezerwacji
+     * @param reservationUuid UUID rezerwacji
+     * @param clientLogin Login klienta
+     * @throws BaseAppException Bazowy wyjatek aplikacji
      */
     void removeClientReservation(long reservationVersion, UUID reservationUuid, String clientLogin) throws BaseAppException;
 

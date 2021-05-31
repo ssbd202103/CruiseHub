@@ -16,8 +16,8 @@ public interface AttractionManagerLocal {
     /**
      * Metoda odpowiedzialna za usuwanie atrkacji
      *
-     * @param name
-     * @throws BaseAppException
+     * @param name Nazwa atrakcji
+     * @throws BaseAppException Bazowy wyjatek aplikacji
      */
     void deleteAttraction(String name) throws BaseAppException;
 

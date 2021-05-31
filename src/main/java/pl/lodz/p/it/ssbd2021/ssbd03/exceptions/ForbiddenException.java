@@ -2,6 +2,9 @@ package pl.lodz.p.it.ssbd2021.ssbd03.exceptions;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.APP_FORBIDDEN;
 
+/**
+ * Klasa reprezentująca wyjątek 403
+ */
 public class ForbiddenException extends Exception { // zeby nie doszlo do naduzyc bedziemy recznie rzucac
     public ForbiddenException(String message) {
         super(message);
