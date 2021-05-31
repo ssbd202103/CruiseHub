@@ -382,7 +382,7 @@ public class AccountManager implements AccountManagerLocal {
 
         account.setPasswordHash(passwordHash);
 
-        setUpdatedMetadata(account);
+        setUpdatedMetadataWithModifier(account, account);
         this.accountFacade.edit(account);
 
         TokenWrapper tokenWrapper = this.tokenWrapperFacade.findByToken(token);
