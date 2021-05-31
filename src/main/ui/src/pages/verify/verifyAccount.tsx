@@ -18,8 +18,8 @@ function VerifyAccount(props: any) {
     const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
     const history = useHistory()
     const accountVerify = () =>{
-        submitAccountVerification
         setButtonPopupAcceptAction(false)
+        submitAccountVerification
     }
     const submitAccountVerification = async (event: any) => {
         event.preventDefault()

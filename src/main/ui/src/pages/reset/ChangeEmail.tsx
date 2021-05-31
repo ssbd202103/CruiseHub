@@ -13,6 +13,7 @@ import Grid from "@material-ui/core/Grid";
 import {Link} from "@material-ui/core";
 import {getUser} from "../../Services/userService";
 import useHandleError from "../../errorHandler";
+import PopupAcceptAction from "../../PopupAcceptAction";
 
 
 export default function ChangeEmail(props: any) {
@@ -21,7 +22,12 @@ export default function ChangeEmail(props: any) {
     const history = useHistory();
     const handleError = useHandleError()
 
+    const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
 
+    const resetPassword = () => {
+        setButtonPopupAcceptAction(false)
+        submitPasswordReset
+    }
 
     const submitPasswordReset = async (event: any) => {
         event.preventDefault()
@@ -49,10 +55,16 @@ export default function ChangeEmail(props: any) {
         <AuthLayout>
             <div>
                     <RoundedButton
-                        onClick={submitPasswordReset}
+                        onClick={() => setButtonPopupAcceptAction(true)}
                         style={{width: '100%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
                         color="pink"
                     >{t("confrim email change")}</RoundedButton>
+                    <PopupAcceptAction
+                        open={buttonPopupAcceptAction}
+                        onConfirm={()=>resetPassword}
+                        onCancel={() => {setButtonPopupAcceptAction(false)
+                        }}
+                    />
             </div>
         </AuthLayout>
     );
