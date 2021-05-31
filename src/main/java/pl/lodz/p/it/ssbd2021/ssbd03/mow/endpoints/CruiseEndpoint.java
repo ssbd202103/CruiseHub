@@ -12,6 +12,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.converters.CruiseMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.managers.CruiseManagerLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
 import javax.ejb.TransactionAttribute;
@@ -46,6 +47,7 @@ public class CruiseEndpoint extends BaseEndpoint implements CruiseEndpointLocal 
 
     }
 
+    @PermitAll
     @Override
     public CruiseDto getCruise(UUID uuid) throws BaseAppException {
         Cruise cruise = cruiseManagerLocal.getCruise(uuid);

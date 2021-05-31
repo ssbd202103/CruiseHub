@@ -45,8 +45,8 @@ public interface AuthenticateEndpointLocal {
     /**
      * Metoda odpowiadajaca za wysłanie e-mail służącego do dwufazowego uwierzytelnienia
      *
-     * @param login
-     * @throws BaseAppException
+     * @param login Login
+     * @throws BaseAppException Bazowy wyjątek aplikacji
      */
    void sendAuthenticationCodeEmail(String login) throws BaseAppException;
 

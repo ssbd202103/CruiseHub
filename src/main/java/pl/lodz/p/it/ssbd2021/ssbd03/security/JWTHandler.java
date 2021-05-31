@@ -50,6 +50,12 @@ public class JWTHandler {
                 .sign(algorithm);
     }
 
+    /**
+     * Metoda tworzaca nowy token emaila
+     * @param claims Zestaw par klucz-wartość w postaci Mapy reprezentujący stwierdzenia tokenu
+     * @param subject String określający podmiot tokenu
+     * @return Zwrócony token w postaci Stringa
+     */
     public static String createTokenEmail(Map<String, ?> claims, String subject) {
         Algorithm algorithm = Algorithm.HMAC256(getJWTSecret());
         return JWT.create()

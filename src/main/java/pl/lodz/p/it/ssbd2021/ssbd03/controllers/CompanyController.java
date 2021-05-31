@@ -20,6 +20,11 @@ public class CompanyController {
     @Inject
     private CompanyEndpointLocal companyEndpoint;
 
+    /**
+     * Pobiera informacje o firmach
+     * @return Lista firm
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
     @GET
     @Path("/companies-info")
     @Produces(MediaType.APPLICATION_JSON)

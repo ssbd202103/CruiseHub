@@ -242,6 +242,11 @@ public interface AccountManagerLocal {
      */
     void changeOwnPassword(String login, long version, String oldPassword, String newPassword) throws BaseAppException;
 
+    /**
+     * Metoda zwracajaca aktywnego uzytkownika
+     * @return Konto aktywnego uzytkownika
+     * @throws BaseAppException Bazowy wyjatek aplikacji
+     */
     Account getCurrentUser() throws BaseAppException;
 
     /**
@@ -301,8 +306,9 @@ public interface AccountManagerLocal {
 
 
     /**
-     * @param login
-     * @throws BaseAppException
+     * Metoda wysyla emaila z kodem uwierzytelniajacym
+     * @param login Login uzytkownika
+     * @throws BaseAppException Bazowy wyjatek aplikacji
      */
     void sendAuthenticationCodeEmail(String login) throws BaseAppException;
 

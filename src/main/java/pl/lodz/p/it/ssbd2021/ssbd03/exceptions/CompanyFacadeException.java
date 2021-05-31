@@ -2,6 +2,9 @@ package pl.lodz.p.it.ssbd2021.ssbd03.exceptions;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company.NIP_NAME_CONSTRAINT;
 
+/**
+ * Klasa reprezentująca wyjątki fasad firm
+ */
 public class CompanyFacadeException extends FacadeException {
 
     public CompanyFacadeException(String message) {

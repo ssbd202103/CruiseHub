@@ -15,6 +15,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Klasa zapewniajaca mechanizm do uwierzytelniania z tokenem jwt
+ */
 @RequestScoped
 public class CustomJWTAuthenticationMechanism implements HttpAuthenticationMechanism {
 
