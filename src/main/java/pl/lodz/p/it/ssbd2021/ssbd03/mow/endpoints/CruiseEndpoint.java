@@ -68,6 +68,7 @@ public class CruiseEndpoint extends BaseEndpoint implements CruiseEndpointLocal 
                 editCruiseDto.getUuid(), editCruiseDto.getVersion());
     }
 
+    @PermitAll
     @Override
     public List<Cruise> getPublishedCruises() throws BaseAppException {
         return cruiseManagerLocal.getPublishedCruises();

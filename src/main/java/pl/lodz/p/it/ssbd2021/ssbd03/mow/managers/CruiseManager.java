@@ -13,6 +13,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseGroupFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
 import javax.ejb.TransactionAttribute;
@@ -96,6 +97,7 @@ public class CruiseManager implements CruiseManagerLocal {
         cruise.setLastAlterDateTime(LocalDateTime.now());
     }
 
+    @PermitAll
     @Override
     public Cruise getCruise(UUID uuid) throws BaseAppException {
         return cruiseFacadeMow.findByUUID(uuid);
