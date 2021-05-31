@@ -8,14 +8,12 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.TokenWrapper;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Administrator;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.LanguageTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AccountManagerException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
@@ -919,6 +917,23 @@ public class AccountManager implements AccountManagerLocal {
         verificationCode.setUsed(true);
         this.tokenWrapperFacade.edit(verificationCode);
         return updateCorrectAuthenticateInfo(login, IpAddr, time);
+    }
+
+    @RolesAllowed("authenticatedUser")
+    @Override
+    public void changeLanguage(String login, long version) throws BaseAppException {
+        Account account = accountFacade.findByLogin(login);
+
+        if (!(account.getVersion() == version)) {
+            throw FacadeException.optimisticLock();
+        }
+
+        if (account.getLanguageType().getName() == LanguageType.EN) {
+            account.setLanguageType(accountFacade.getLanguageTypeWrapperByLanguageType(LanguageType.PL));
+        } else {
+            account.setLanguageType(accountFacade.getLanguageTypeWrapperByLanguageType(LanguageType.EN));
+        }
+        setUpdatedMetadata(account);
     }
 }
 

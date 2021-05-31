@@ -347,4 +347,13 @@ public interface AccountManagerLocal {
      *                          lub przy naruszeniu zasad biznesowych
      */
     AccessLevel getCurrentUserAccessLevel(AccessLevelType accessLevelType) throws BaseAppException;
+
+    /**
+     * Metoda zmienia jezyk uzytkownika
+     *
+     * @param login Login
+     * @param version Wersja
+     * @throws BaseAppException Bazowy wyjatek aplikacji
+     */
+    void changeLanguage(String login, long version) throws BaseAppException;
 }

@@ -141,6 +141,8 @@ const resources = {
             "cruiseExample": "Rejs po Morzu Śródziemnym",
 
 
+            //change language
+            "changeLanguage": "Zmień język",
             //errors
             "error.facade.noSuchElement": "Nie znaleziono elementu w bazie danych",
             "error.account.accessLevels.alreadyAssigned": "Poziom dostępu jest już przydzielony do konta",
@@ -393,6 +395,8 @@ const resources = {
             "version": "Version:",
             //cruisecard
             "cruiseExample": "Cruise on the Mediterranean Sea",
+            //change language
+            "changeLanguage": "Change language",
             //errors
             "error.facade.noSuchElement": "No such element found in the database",
             "error.account.accessLevels.alreadyAssigned": "Access level already assigned to the account",

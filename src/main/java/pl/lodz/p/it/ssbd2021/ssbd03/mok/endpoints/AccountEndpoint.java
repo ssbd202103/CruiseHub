@@ -239,6 +239,12 @@ public class AccountEndpoint extends BaseEndpoint implements AccountEndpointLoca
         accountManager.changeModeratorData(account);
     }
 
+    @RolesAllowed("authenticatedUser")
+    @Override
+    public void changeLanguage(ChangeLanguageDto changeLanguageDto) throws BaseAppException {
+        accountManager.changeLanguage(changeLanguageDto.getLogin(), changeLanguageDto.getVersion());
+    }
+
     @RolesAllowed("changeAdministratorData")
     @Override
     public void changeAdministratorData(AdministratorChangeDataDto administratorChangeDataDto) throws BaseAppException {

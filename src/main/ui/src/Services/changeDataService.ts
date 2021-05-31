@@ -6,7 +6,7 @@ import {
     BusinessWorkerChangeData,
     ModeratorChangeData,
     AdministratorChangeData,
-    ChangeMode
+    ChangeMode, ChangeLanguage
 } from "../interfaces/changeInterfaces";
 import {getUser} from "./userService";
 import {useSnackbarQueue} from "../pages/snackbar";
@@ -169,6 +169,33 @@ export function changeAdministratorData(newFirstName: string, newSecondName: str
 
         return getUser(token)
     })
+}
+
+export function changeLanguage() {
+
+    const {
+        user: {
+            login,
+            version,
+            etag
+        },
+        token
+    } = store.getState()
+
+    const changeLanguageDto: ChangeLanguage = {
+        login,
+        version
+    }
+
+    return axios.put('self/change-language', changeLanguageDto, {
+        headers: {
+            'If-Match': etag,
+            'Authorization': `Bearer ${token}`
+        }
+    }).then(res => {
+        return getUser(token)
+    })
+
 }
 
 

@@ -160,6 +160,23 @@ public class AccountSelfController {
     }
 
     /**
+     * Metoda zmienia jezyk uzytkownika
+     * @param changeLanguageDto Postać dto przesyłanych danych
+     * @param etag Nagłówek If-Match żądania
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
+    @PUT
+    @Path("/change-language")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @ETagFilterBinding
+    public void changeLanguage(@Valid ChangeLanguageDto changeLanguageDto, @HeaderParam("If-Match") String etag) throws BaseAppException {
+        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, changeLanguageDto)) {
+            throw ControllerException.etagIdentityIntegrity();
+        }
+        tryAndRepeat(() -> accountEndpoint.changeLanguage(changeLanguageDto));
+    }
+
+    /**
      * Pobiera metadane obecnego użytkownika
      *
      * @return Postać DTO metadanych
