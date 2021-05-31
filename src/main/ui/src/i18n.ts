@@ -190,8 +190,8 @@ const resources = {
             "error.business.worker.confirmed": "Pracownik jest już zatwierdzony",
 
             //auth errors
-            "auth.incorrect.login": "Podany login jest niepoprawny",
-            "auth.incorrect.password": "Podane hasło jest niepoprawne",
+            "auth.incorrect.login": "Błąd logowania",
+            "auth.incorrect.password": "Błąd logowania",
 
             ////regex errors
             "error.regex.postCode": "Niepoprawny format kodu pocztowego",
@@ -441,8 +441,8 @@ const resources = {
             "error.business.worker.confirmed": "Worker is already confirmed",
 
             //auth errors
-            "auth.incorrect.login": "Given login is incorrect",
-            "auth.incorrect.password": "Given password is incorrect",
+            "auth.incorrect.login": "Login error",
+            "auth.incorrect.password": "Login error",
 
             ////regex errors
             "error.regex.postCode": "Invalid post code format",
