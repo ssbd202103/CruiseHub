@@ -23,11 +23,6 @@ public class AttractionManager implements AttractionManagerLocal {
     private AttractionFacadeMow attractionFacadeMow;
 
 
-    @Override
-    public List<Attraction> getAllAttractions() throws BaseAppException {
-        return attractionFacadeMow.findAll();
-    }
-
     @RolesAllowed("deleteAttraction")
     @Override
     public void deleteAttraction(String name) throws BaseAppException {

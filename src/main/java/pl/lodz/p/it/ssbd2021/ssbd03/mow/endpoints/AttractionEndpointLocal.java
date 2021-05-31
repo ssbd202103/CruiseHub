@@ -12,14 +12,6 @@ import javax.ejb.Local;
 @Local
 public interface AttractionEndpointLocal {
 
-    //TODO Baza pod wypisanie wszytskich atrakcji
-    /*    *//**
-     * Zwraca lista obiektów dto prezentujące informacje o fimach
-     *
-     * @return lista obiektów reprezentjace informacje o firmach
-     *//*
-    List<CompanyLightDto> getCompaniesInfo() throws BaseAppException;*/
-
     /**
      * Metoda odpowiedzialna za wywołanie metody odpowiedzialnej za usunięcie atrkacji.
      *

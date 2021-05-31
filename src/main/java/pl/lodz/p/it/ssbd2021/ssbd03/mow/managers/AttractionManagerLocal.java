@@ -12,12 +12,6 @@ import java.util.List;
 @Local
 public interface AttractionManagerLocal {
 
-    /**
-     * Pobiera wszystkie obiekty firm z bazy
-     *
-     * @return the all companies
-     */
-    List<Attraction> getAllAttractions() throws BaseAppException;
 
     /**
      * Metoda odpowiedzialna za usuwanie atrkacji

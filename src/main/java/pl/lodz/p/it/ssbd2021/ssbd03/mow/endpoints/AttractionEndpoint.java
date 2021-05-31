@@ -23,11 +23,6 @@ public class AttractionEndpoint extends BaseEndpoint implements AttractionEndpoi
     @Inject
     private AttractionManagerLocal attractionManager;
 
-//TODO baza pod wypisanie atrakcji
- /*   @Override
-    public List<CompanyLightDto> getCompaniesInfo() throws BaseAppException {
-        return companyManager.getAllCompanies().stream().map(CompanyMapper::mapCompanyToCompanyLightDto).collect(Collectors.toList());
-    }*/
 
     @RolesAllowed("deleteAttraction")
     @Override
