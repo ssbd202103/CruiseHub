@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.common.facades;
 import org.hibernate.exception.ConstraintViolationException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 
+import javax.annotation.security.DenyAll;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
@@ -10,6 +11,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
+@DenyAll
 public abstract class AbstractFacade<T> {
 
     private final Class<T> entityClass;

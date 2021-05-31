@@ -29,7 +29,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
-import javax.annotation.security.RunAs;
 import javax.ejb.Stateful;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -54,7 +53,6 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 @Log
 @Stateful
 @TransactionAttribute(TransactionAttributeType.MANDATORY)
-@RunAs("SYSTEM")
 @Interceptors(TrackingInterceptor.class)
 public class AccountManager implements AccountManagerLocal {
 

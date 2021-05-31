@@ -15,6 +15,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
 import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -68,8 +69,7 @@ public class AccountFacadeMok extends AbstractFacade<Account> {
         }
     }
 
-    //    @RolesAllowed("getAllAccounts")
-    @PermitAll
+    @RolesAllowed("getAllAccounts")
     @Override
     public List<Account> findAll() throws FacadeException {
         return super.findAll();
@@ -87,8 +87,8 @@ public class AccountFacadeMok extends AbstractFacade<Account> {
     }
 
 
-    //    @RolesAllowed("SYSTEM")
     @PermitAll
+// @RolesAllowed("SYSTEM")
     public List<Account> getUnconfirmedAccounts() {
         TypedQuery<Account> tqq = em.createNamedQuery("Account.findUnconfirmedAccounts", Account.class);
         return tqq.getResultList();
@@ -98,13 +98,11 @@ public class AccountFacadeMok extends AbstractFacade<Account> {
     public boolean isEmailPresent(String email) {
         TypedQuery<Account> tqq = em.createNamedQuery("Account.isEmailPresent", Account.class);
         tqq.setParameter("email", email);
-        if (tqq.getResultList().size() > 0) return true;
-        else return false;
+        return tqq.getResultList().size() > 0;
 
     }
 
-    //    @RolesAllowed("getAllUnconfirmedBusinessWorkers")
-    @PermitAll
+    @RolesAllowed("getAllUnconfirmedBusinessWorkers")
     public List<AccessLevel> getUnconfirmedBusinessWorkers() {
         TypedQuery<AccessLevel> tqq = em.createNamedQuery("BusinessWorker.findALlUnconfirmed", AccessLevel.class);
         return tqq.getResultList();
@@ -142,8 +140,8 @@ public class AccountFacadeMok extends AbstractFacade<Account> {
     }
 
 
-    //    @RolesAllowed("SYSTEM")
     @PermitAll
+// @RolesAllowed("SYSTEM")
     @Override
     public void remove(Account entity) throws FacadeException {
         super.remove(entity);
