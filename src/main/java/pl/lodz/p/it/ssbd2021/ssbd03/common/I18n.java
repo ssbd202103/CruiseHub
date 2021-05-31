@@ -68,6 +68,7 @@ public class I18n {
     public static final String INCORRECT_LOGIN = "auth.incorrect.login";
     public static final String INCORRECT_PASSWORD = "auth.incorrect.password";
     public static final String PASSWORDS_DONT_MATCH_ERROR = "error.password.change.oldPasswordError";
+    public static final String PASSWORDS_ARE_THE_SAME_ERROR = "error.password.change.newAndOldPasswordAreTheSameErorr";
     public static final String CODE_DONT_MATCH_ERROR = "error.code.dontMatchError";
     public static final String CODE_EXPIRE_ERROR = "error.code.expireError";
     public static final String CODE_ALREADY_USED_ERROR = "error.code.alreadyUsedError";
