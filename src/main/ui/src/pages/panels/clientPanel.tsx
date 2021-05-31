@@ -6,7 +6,7 @@ import {useTranslation} from 'react-i18next'
 import {useSelector} from "react-redux";
 import {selectDarkMode} from "../../redux/slices/userSlice";
 import ChangeEmail from "../../components/changeData/ChangeEmail";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import ChangeClientData from "../../components/changeData/ChangeClientData";
 import ChangePassword from "../../components/changeData/ChangePassword";
 import ChangeAddress from "../../components/changeData/ChangeAddress";
@@ -27,6 +27,7 @@ export default function ClientPanel() {
     const handleIsEmailEdit = () => {
         getSelfMetadataDetails().then(res => {
             sessionStorage.setItem("changeSelfAccountDataMta", JSON.stringify(res.data));
+  //          sessionStorage.setItem("changeSelfAddressDataMta", JSON.stringify(res.data));
             refreshToken();
         }, error => {
             const message = error.response.data
@@ -41,6 +42,7 @@ export default function ClientPanel() {
     const handleIsDataEdit = () => {
         getSelfMetadataDetails().then(res => {
             sessionStorage.setItem("changeSelfAccountDataMta", JSON.stringify(res.data));
+  //          sessionStorage.setItem("changeSelfAddressDataMta", JSON.stringify(res.data));
             refreshToken();
         }, error => {
             const message = error.response.data
@@ -54,7 +56,7 @@ export default function ClientPanel() {
 
     const handleIsAddressEdit = () => {
         getSelfAddressMetadataDetails().then(res => {
-            sessionStorage.setItem("changeSelfAccountDataMta", JSON.stringify(res.data));
+            sessionStorage.setItem("changeSelfAddressDataMta", JSON.stringify(res.data));
             refreshToken();
         }, error => {
             const message = error.response.data
@@ -69,6 +71,7 @@ export default function ClientPanel() {
     const handleIsPasswordEdit = () => {
         getSelfMetadataDetails().then(res => {
             sessionStorage.setItem("changeSelfAccountDataMta", JSON.stringify(res.data));
+        //    sessionStorage.setItem("changeSelfAddressDataMta", JSON.stringify(res.data));
             refreshToken();
         }, error => {
             const message = error.response.data
@@ -79,7 +82,17 @@ export default function ClientPanel() {
         setIsEmailEdit(false)
         setIsAddressEdit(false)
     }
+    useEffect(() => {
+        getSelfMetadataDetails().then(res => {
+            sessionStorage.setItem("changeSelfAccountDataMta", JSON.stringify(res.data));
+            sessionStorage.setItem("changeSelfAddressDataMta", JSON.stringify(res.data));
+            refreshToken();
+        }, error => {
+            const message = error.response.data
+            handleError(message, error.response.status)
+        });
 
+    }, [])
     return (
         <PanelLayout
             color={{

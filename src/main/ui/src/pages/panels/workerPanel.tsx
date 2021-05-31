@@ -4,13 +4,17 @@ import CruiseIcon from '@material-ui/icons/CardTravelRounded'
 import {useSelector} from "react-redux";
 import {selectDarkMode} from "../../redux/slices/userSlice";
 import ChangeBusinessWorkerData from "../../components/changeData/ChangeBusinessWorkerData";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import ChangeEmail from "../../components/changeData/ChangeEmail";
 import ChangePassword from "../../components/changeData/ChangePassword";
 import PanelLayout from "../../layouts/PanelLayout";
+import {getSelfAddressMetadataDetails, getSelfMetadataDetails} from "../../Services/accountsService";
+import {refreshToken} from "../../Services/userService";
+import useHandleError from "../../errorHandler";
 
 export default function WorkerPanel() {
     const {t} = useTranslation()
+    const handleError = useHandleError()
 
     const darkMode = useSelector(selectDarkMode)
 
@@ -19,22 +23,54 @@ export default function WorkerPanel() {
     const [isPasswordEdit, setIsPasswordEdit] = useState(false)
 
     const handleIsEmailEdit = () => {
+        getSelfMetadataDetails().then(res => {
+            sessionStorage.setItem("changeSelfAccountDataMta", JSON.stringify(res.data));
+            refreshToken();
+        }, error => {
+            const message = error.response.data
+            handleError(message, error.response.status)
+        });
         setIsEmailEdit(true)
         setIsDataEdit(false)
         setIsPasswordEdit(false)
     }
 
     const handleIsDataEdit = () => {
+        getSelfMetadataDetails().then(res => {
+            sessionStorage.setItem("changeSelfAccountDataMta", JSON.stringify(res.data));
+            refreshToken();
+        }, error => {
+            const message = error.response.data
+            handleError(message, error.response.status)
+        });
         setIsDataEdit(true)
         setIsEmailEdit(false)
         setIsPasswordEdit(false)
     }
 
     const handleIsPasswordEdit = () => {
+        getSelfMetadataDetails().then(res => {
+            sessionStorage.setItem("changeSelfAccountDataMta", JSON.stringify(res.data));
+            refreshToken();
+        }, error => {
+            const message = error.response.data
+            handleError(message, error.response.status)
+        });
         setIsPasswordEdit(true)
         setIsDataEdit(false)
         setIsEmailEdit(false)
     }
+    useEffect(() => {
+        getSelfMetadataDetails().then(res => {
+            sessionStorage.setItem("changeSelfAccountDataMta", JSON.stringify(res.data));
+            sessionStorage.setItem("changeSelfAddressDataMta", JSON.stringify(res.data));
+            refreshToken();
+        }, error => {
+            const message = error.response.data
+            handleError(message, error.response.status)
+        });
+
+    }, [])
 
     return (
         <PanelLayout

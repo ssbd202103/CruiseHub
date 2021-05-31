@@ -20,6 +20,8 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
 
     const handleError = useHandleError()
     const showSuccess = useSnackbarQueue('success')
+    const currentSelfMTD = JSON.parse(sessionStorage.getItem("changeSelfAccountDataMta") as string)
+    const currentSelfAddressMTD = JSON.parse(sessionStorage.getItem("changeSelfAddressDataMta") as string)
 
     const address = useSelector(selectAddress)
 
@@ -28,6 +30,13 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
     const [postalCode, setPostalCode] = useState(address.street)
     const [city, setCity] = useState(address.city)
     const [country, setCountry] = useState(address.country)
+
+    const [alterTypeAdr, setAlterTypeAdr] = useState('')
+    const [alteredByAdr, setAlteredByAdr] = useState('')
+    const [createdByAdr, setCreatedByAdr] = useState('')
+    const [creationDateTimeAdr, setCreationDateTimeAdr] = useState('')
+    const [lastAlterDateTimeAdr, setLastAlterDateTimeAdr] = useState('')
+    const [versionAdr, setVersionAdr] = useState('')
 
     const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
 
@@ -91,6 +100,14 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
         setStreet(address.street)
         setCity(address.city)
         setCountry(address.country)
+        setAlterTypeAdr(currentSelfAddressMTD.alterType);
+        setAlteredByAdr(currentSelfAddressMTD.alteredBy);
+        setCreatedByAdr(currentSelfAddressMTD.createdBy);
+        if(currentSelfAddressMTD.creationDateTime !=null)
+            setCreationDateTimeAdr(currentSelfAddressMTD.creationDateTime.dayOfMonth +"/"+ currentSelfAddressMTD.creationDateTime.month +" / "+ currentSelfAddressMTD.creationDateTime.year +"    "+ currentSelfAddressMTD.creationDateTime.hour +":"+ currentSelfAddressMTD.creationDateTime.minute )
+        if(currentSelfAddressMTD.lastAlterDateTime !=null)
+            setLastAlterDateTimeAdr(currentSelfAddressMTD.lastAlterDateTime.dayOfMonth +"/"+ currentSelfAddressMTD.lastAlterDateTime.month +" / "+ currentSelfAddressMTD.lastAlterDateTime.year +"    "+ currentSelfAddressMTD.lastAlterDateTime.hour +":"+ currentSelfAddressMTD.lastAlterDateTime.minute);
+        setVersionAdr(currentSelfAddressMTD.version);
     }, [address])
 
     return (
@@ -185,6 +202,14 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
                 <ConfirmCancelButtonGroup
                     onConfirm={()=>setButtonPopupAcceptAction(true)}
                     onCancel={handleCancel} />
+                <tr>
+                    <td><h4>{t("alterType")}</h4></td> <td><h4>{t("alteredBy")}</h4></td> <td><h4>{t("createdBy")}</h4></td>
+                    <td><h4>{t("creationDateTime")}</h4></td> <td><h4>{t("lastAlterDateTime")}</h4></td><td><h4>{t("version")}</h4></td>
+                </tr>
+                <tr>
+                    <td><h4>{alterTypeAdr}</h4></td><td><h4>{alteredByAdr}</h4></td><td><h4>{createdByAdr}</h4></td>
+                    <td><h4>{creationDateTimeAdr}</h4></td><td><h4>{lastAlterDateTimeAdr}</h4></td><td><h4>{versionAdr}</h4></td>
+                </tr>
             </Grid>
         </>
     )

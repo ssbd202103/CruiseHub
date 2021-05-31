@@ -35,13 +35,15 @@ public class TokenWrapperFacade extends AbstractFacade<TokenWrapper> {
         super(TokenWrapper.class);
     }
 
-    @RolesAllowed("SYSTEM")
+//    @RolesAllowed("SYSTEM")
+    @PermitAll
     public List<TokenWrapper> getUsedToken() {
         TypedQuery<TokenWrapper> tq = em.createNamedQuery("TokenWrapper.findUsed", TokenWrapper.class);
         return tq.getResultList();
     }
 
-    @RolesAllowed("SYSTEM")
+    @PermitAll
+//    @RolesAllowed("SYSTEM")
     public List<TokenWrapper> getUnusedToken() {
         TypedQuery<TokenWrapper> tq = em.createNamedQuery("TokenWrapper.findUnused", TokenWrapper.class);
         return tq.getResultList();
@@ -70,7 +72,8 @@ public class TokenWrapperFacade extends AbstractFacade<TokenWrapper> {
         super.edit(entity);
     }
 
-    @RolesAllowed("SYSTEM")
+//    @RolesAllowed("SYSTEM")
+    @PermitAll
     @Override
     public void remove(TokenWrapper entity) throws FacadeException {
         super.remove(entity);

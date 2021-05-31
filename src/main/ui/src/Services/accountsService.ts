@@ -30,7 +30,30 @@ export function getAccountMetadataDetailsAbout(login: string) {
         }
     })
 }
-    export function getSelfMetadataDetails(){
+//TODO it takes only one access_level not more
+export function getAccountAccessLevelMetadata(access_level: string, login: string){
+    const {token} = store.getState()
+
+    return axios.get(`/account/metadata/access-level/${access_level}/${login}`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+
+}
+export function getClientAddressMetadata(login: string){
+    const {token} = store.getState()
+
+    return axios.get(`/account/metadata/address/${login}`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+
+}
+
+
+export function getSelfMetadataDetails(){
         const {token} = store.getState()
 
         return axios.get(`/self/metadata`, {
