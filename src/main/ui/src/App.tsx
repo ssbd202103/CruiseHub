@@ -47,10 +47,12 @@ function App() {
     const showWarning = useSnackbarQueue('warning')
 
     useEffect(() => {
-        loadUserWithSavedToken().catch(error => {
-            handleError('error.response.data',error.response.status)
-        })
-    }, [])
+        loadUserWithSavedToken()
+    //         .catch(error => {
+    //         handleError('error.response.data',error.response.status)
+    //     })
+    //
+        }, [])
 
 
 

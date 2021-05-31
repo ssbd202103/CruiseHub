@@ -52,12 +52,10 @@ export default function ChangeClientData({open, onOpen, onConfirm, onCancel}: Ch
         }
 
         changeClientData(firstNameValue, secondNameValue, phoneNumberValue).then(res => {
-            setButtonPopupAcceptAction(false)
             showSuccess(t('successful action'))
             onConfirm()
         }).catch(error => {
             handleErase();
-            setButtonPopupAcceptAction(false)
             const message = error.response.data
             handleError(message, error.response.status)
             onCancel()
@@ -68,6 +66,7 @@ export default function ChangeClientData({open, onOpen, onConfirm, onCancel}: Ch
     const changeData = () => {
         //TODO
         setButtonPopup(true)
+        setButtonPopupAcceptAction(false)
     }
 
     useEffect(() => {

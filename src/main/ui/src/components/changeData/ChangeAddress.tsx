@@ -62,7 +62,6 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
             city,
             country
         }).then(res => {
-            setButtonPopupAcceptAction(false)
             setHouseNumber('')
             setStreet('')
             setPostalCode('')
@@ -72,7 +71,6 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
             onConfirm()
         }).catch(error => {
             handleErase()
-            setButtonPopupAcceptAction(false)
             const message = error.response.data
             handleError(message, error.response.status)
             onCancel()
@@ -82,6 +80,7 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
 
     const changeAddress = () => {
         setButtonPopup(true)
+        setButtonPopupAcceptAction(false)
     }
 
     useEffect(() => {
