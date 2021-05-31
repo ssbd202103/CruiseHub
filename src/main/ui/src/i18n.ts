@@ -120,6 +120,8 @@ const resources = {
             "color": "Kolor",
             "color.light": "Jasny",
             "color.dark": "Ciemny",
+            //change language
+            "changeLanguage": "Zmień język",
             //errors
             "error.facade.noSuchElement": "Nie znaleziono elementu w bazie danych",
             "error.account.accessLevels.alreadyAssigned": "Poziom dostępu jest już przydzielony do konta",
@@ -352,6 +354,8 @@ const resources = {
             "color": "Color",
             "color.light": "Light",
             "color.dark": "Dark",
+            //change language
+            "changeLanguage": "Change language",
             //errors
             "error.facade.noSuchElement": "No such element found in the database",
             "error.account.accessLevels.alreadyAssigned": "Access level already assigned to the account",

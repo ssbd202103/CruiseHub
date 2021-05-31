@@ -184,6 +184,13 @@ public interface AccountEndpointLocal {
     void changeModeratorData(ModeratorChangeDataDto moderatorChangeDataDto) throws BaseAppException;
 
     /**
+     * Metoda zmienia jezyk uzytkownika
+     * @param changeLanguageDto Dto z loginem i wersją
+     * @throws BaseAppException Bazowy wyjatek aplikacji
+     */
+    void changeLanguage(ChangeLanguageDto changeLanguageDto) throws BaseAppException;
+
+    /**
      * Zmienia dane administratora o podanym loginie
      *
      * @param administratorChangeDataDto dto obiekt przechowujący informację o administratorze oraz zmienionych danych

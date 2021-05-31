@@ -37,6 +37,10 @@ export interface AdministratorChangeData extends AccountChangeData {
 
 }
 
+export interface ChangeLanguage extends AbstractAccount {
+
+}
+
 export interface ChangeMode extends AbstractAccount {
     newMode: boolean
 }

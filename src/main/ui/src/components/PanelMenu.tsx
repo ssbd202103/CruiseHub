@@ -8,6 +8,7 @@ import React from "react";
 import AppColorSetter from "./AppColorSetter";
 import GoBackIcon from '@material-ui/icons/ArrowBackRounded';
 import {useTranslation} from "react-i18next";
+import LanguageSetter from "./LanguageSetter";
 
 
 export interface PanelMenuProps {
@@ -42,6 +43,9 @@ export default function PanelMenu(props: PanelMenuProps) {
                 </Link>
                 <ListItem button>
                     <AppColorSetter />
+                </ListItem>
+                <ListItem button>
+                    <LanguageSetter />
                 </ListItem>
             </List>
         </Box>
