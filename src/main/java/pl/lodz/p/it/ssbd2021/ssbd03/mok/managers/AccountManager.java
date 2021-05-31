@@ -119,6 +119,10 @@ public class AccountManager implements AccountManagerLocal {
         Moderator moderator = new Moderator(true);
         setAccessLevelInitialMetadata(account, moderator, false);
         setUpdatedMetadata(account);
+        Locale locale = new Locale(account.getLanguageType().getName().name());
+        String subject = i18n.getMessage(ACCESS_LEVEL_GRANT_MODERATOR_SUBJECT, locale);
+        String body = i18n.getMessage(ACCESS_LEVEL_GRANT_MODERATOR_BODY, locale);
+        EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
         return account;
     }
 
@@ -136,6 +140,10 @@ public class AccountManager implements AccountManagerLocal {
         Administrator administrator = new Administrator(true);
         setAccessLevelInitialMetadata(account, administrator, false);
         setUpdatedMetadata(account);
+        Locale locale = new Locale(account.getLanguageType().getName().name());
+        String subject = i18n.getMessage(ACCESS_LEVEL_GRANT_ADMINISTRATOR_SUBJECT, locale);
+        String body = i18n.getMessage(ACCESS_LEVEL_GRANT_ADMINISTRATOR_BODY, locale);
+        EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
         return account;
     }
 
@@ -163,6 +171,62 @@ public class AccountManager implements AccountManagerLocal {
 
         accessLevel.setEnabled(enabled);
         setUpdatedMetadata(account, accessLevel);
+        Locale locale = new Locale(account.getLanguageType().getName().name());
+        if (enabled) {
+            switch (accountAccessLevel.get().getAccessLevelType()) {
+                case ADMINISTRATOR: {
+                    String subject = i18n.getMessage(ACCESS_LEVEL_REACTIVATE_ADMINISTRATOR_SUBJECT, locale);
+                    String body = i18n.getMessage(ACCESS_LEVEL_REACTIVATE_ADMINISTRATOR_BODY, locale);
+                    EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
+                    break;
+                }
+                case MODERATOR: {
+                    String subject = i18n.getMessage(ACCESS_LEVEL_REACTIVATE_MODERATOR_SUBJECT, locale);
+                    String body = i18n.getMessage(ACCESS_LEVEL_REACTIVATE_MODERATOR_BODY, locale);
+                    EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
+                    break;
+                }
+                case BUSINESS_WORKER: {
+                    String subject = i18n.getMessage(ACCESS_LEVEL_REACTIVATE_BUSINESS_WORKER_SUBJECT, locale);
+                    String body = i18n.getMessage(ACCESS_LEVEL_REACTIVATE_BUSINESS_WORKER_BODY, locale);
+                    EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
+                    break;
+                }
+                case CLIENT: {
+                    String subject = i18n.getMessage(ACCESS_LEVEL_REACTIVATE_CLIENT_SUBJECT, locale);
+                    String body = i18n.getMessage(ACCESS_LEVEL_REACTIVATE_CLIENT_BODY, locale);
+                    EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
+                    break;
+                }
+            }
+        } else {
+            switch (accountAccessLevel.get().getAccessLevelType()) {
+                case ADMINISTRATOR: {
+                    String subject = i18n.getMessage(ACCESS_LEVEL_DEACTIVATE_ADMINISTRATOR_SUBJECT, locale);
+                    String body = i18n.getMessage(ACCESS_LEVEL_DEACTIVATE_ADMINISTRATOR_BODY, locale);
+                    EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
+                    break;
+                }
+                case MODERATOR: {
+                    String subject = i18n.getMessage(ACCESS_LEVEL_DEACTIVATE_MODERATOR_SUBJECT, locale);
+                    String body = i18n.getMessage(ACCESS_LEVEL_DEACTIVATE_MODERATOR_BODY, locale);
+                    EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
+                    break;
+                }
+                case BUSINESS_WORKER: {
+                    String subject = i18n.getMessage(ACCESS_LEVEL_DEACTIVATE_BUSINESS_WORKER_SUBJECT, locale);
+                    String body = i18n.getMessage(ACCESS_LEVEL_DEACTIVATE_BUSINESS_WORKER_BODY, locale);
+                    EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
+                    break;
+                }
+                case CLIENT: {
+                    String subject = i18n.getMessage(ACCESS_LEVEL_DEACTIVATE_CLIENT_SUBJECT, locale);
+                    String body = i18n.getMessage(ACCESS_LEVEL_DEACTIVATE_CLIENT_BODY, locale);
+                    EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
+                    break;
+                }
+            }
+        }
         return account;
     }
 
@@ -653,7 +717,7 @@ public class AccountManager implements AccountManagerLocal {
         Map<String, Object> map = Map.of("accessLevels", getAuthorizedAccessLevels(account)
                 .map(accessLevel -> accessLevel.getAccessLevelType().name()).collect(Collectors.toList()));
 
-        if (account.getAccessLevels().stream().anyMatch(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.ADMINISTRATOR)) {
+        if (account.getAccessLevels().stream().anyMatch(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.ADMINISTRATOR && accessLevel.isEnabled())) {
             Locale locale = new Locale(account.getLanguageType().getName().name());
             String body = i18n.getMessage(LOG_IN_BODY, locale);
             body = String.format("%s %s", body, ipAddr);

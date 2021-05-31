@@ -89,7 +89,7 @@ const resources = {
             "old password": "Podaj stare hasło",
             "new password": "Wprowadź nowe hasło",
             "new password confirm": "Potwierdź nowe hasło",
-            "confrim email change": "Potwierdz zmiane maila",
+            "confrim email change": "Potwierdź zmianę maila",
             //workerPanel
             "workerPanel": "Panel pracownika",
             //adminPanel
