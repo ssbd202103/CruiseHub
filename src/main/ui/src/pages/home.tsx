@@ -15,11 +15,12 @@ export default function Home() {
     const {t} = useTranslation()
 
     const darkMode = useSelector(selectDarkMode)
+    const headersArray = t("mainPage.headers", {returnObjects: true})
 
     return (
         <HeaderFooterLayout>
             <header className={styles.header}>
-                <h1>Lorem ipsum dolor sit amet</h1>
+                <h1>{headersArray[Math.floor(Math.random() * headersArray.length)]}</h1>
                 <ArrowIcon className={styles.arrow}/>
             </header>
 
@@ -28,11 +29,12 @@ export default function Home() {
             </section>
 
             <section className={styles['top-cruises']}>
-                <h2 className={styles.h2} style={{color: `var(--${darkMode ? 'dark' : 'white'}`}}>{t("the best cruises")}</h2>
+                <h2 className={styles.h2}
+                    style={{color: `var(--${darkMode ? 'dark' : 'white'}`}}>{t("the best cruises")}</h2>
 
                 <div className={styles['cruises-grid']}>
-                    {[0,1,2,3,4,5,6,7,8].map(item => 
-                        <CruiseCard key={item} />)}
+                    {[0, 1, 2, 3, 4, 5, 6, 7, 8].map(item =>
+                        <CruiseCard key={item}/>)}
                 </div>
             </section>
         </HeaderFooterLayout>

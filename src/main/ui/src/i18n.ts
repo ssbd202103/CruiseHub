@@ -4,6 +4,11 @@ import {initReactI18next} from 'react-i18next'
 const resources = {
     PL: {
         translation: {
+            "mainPage.headers": ["Parostatkiem w piękny rejs", "Titanici, tylko bezpieczniejsze",
+                "Płynie płynie mydło w płynie po polskiej dolinie",
+                "Gdzie dzisiaj płyniemy?",
+                "Która wyspa tym razem?",
+                "Płyńmy z prądem!"],
             "404": "Niestety, nie udało nam się znaleść potrzebnej Ci strony :(",
             "CLIENT": "Klient",
             "BUSINESS_WORKER": "Pracownik firmy",
@@ -235,6 +240,10 @@ const resources = {
     },
     EN: {
         translation: {
+            "mainPage.headers": ["Titinics, but safer",
+                "Keep floating!",
+                "Boats are waiting!",
+                "Which island will you choose today?"],
             "404": "Unfortunately, we cannot find the desired page :(",
             "CLIENT": "Client",
             "BUSINESS_WORKER": "Business worker",

@@ -15,7 +15,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
 import javax.annotation.security.PermitAll;
-import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -33,7 +32,6 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account.LOGIN_CONSTRAINT
 @TransactionAttribute(TransactionAttributeType.MANDATORY)
 @Interceptors(TrackingInterceptor.class)
 @Log
-@RolesAllowed("123")
 public class AccountFacadeMok extends AbstractFacade<Account> {
 
     @PersistenceContext(unitName = "ssbd03mokPU")
@@ -70,7 +68,8 @@ public class AccountFacadeMok extends AbstractFacade<Account> {
         }
     }
 
-    @RolesAllowed("getAllAccounts")
+    //    @RolesAllowed("getAllAccounts")
+    @PermitAll
     @Override
     public List<Account> findAll() throws FacadeException {
         return super.findAll();
@@ -88,7 +87,8 @@ public class AccountFacadeMok extends AbstractFacade<Account> {
     }
 
 
-    @RolesAllowed("SYSTEM")
+    //    @RolesAllowed("SYSTEM")
+    @PermitAll
     public List<Account> getUnconfirmedAccounts() {
         TypedQuery<Account> tqq = em.createNamedQuery("Account.findUnconfirmedAccounts", Account.class);
         return tqq.getResultList();
@@ -103,7 +103,8 @@ public class AccountFacadeMok extends AbstractFacade<Account> {
 
     }
 
-    @RolesAllowed("getAllUnconfirmedBusinessWorkers")
+    //    @RolesAllowed("getAllUnconfirmedBusinessWorkers")
+    @PermitAll
     public List<AccessLevel> getUnconfirmedBusinessWorkers() {
         TypedQuery<AccessLevel> tqq = em.createNamedQuery("BusinessWorker.findALlUnconfirmed", AccessLevel.class);
         return tqq.getResultList();
@@ -141,7 +142,8 @@ public class AccountFacadeMok extends AbstractFacade<Account> {
     }
 
 
-    @RolesAllowed("SYSTEM")
+    //    @RolesAllowed("SYSTEM")
+    @PermitAll
     @Override
     public void remove(Account entity) throws FacadeException {
         super.remove(entity);
