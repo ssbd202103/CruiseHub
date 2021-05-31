@@ -5,11 +5,11 @@ const resources = {
     PL: {
         translation: {
             "mainPage.headers": ["Parostatkiem w piękny rejs", "Titanici, tylko bezpieczniejsze",
-                "Płynie płynie mydło w płynie po polskiej dolinie",
+                "Ahoj przygodo!",
                 "Gdzie dzisiaj płyniemy?",
                 "Która wyspa tym razem?",
                 "Płyńmy z prądem!"],
-            "404": "Niestety, nie udało nam się znaleść potrzebnej Ci strony :(",
+            "404": "Niestety, nie znaleźliśmy szukanej strony :(",
             "CLIENT": "Klient",
             "BUSINESS_WORKER": "Pracownik firmy",
             "MODERATOR": "Moderator",
