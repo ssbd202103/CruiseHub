@@ -31,11 +31,17 @@ public class CruiseFacadeMow extends AbstractFacade<Cruise> {
     }
 
     @Override
+    @RolesAllowed("editCruise")
+    protected void edit(Cruise entity) throws FacadeException {
+        super.edit(entity);
+    }
+
+    @Override
     protected EntityManager getEntityManager() {
         return em;
     }
 
-    @PermitAll
+    @RolesAllowed({"deactivateCruise", "editCruise", "viewCruiseReservations", "getWorkerCruiseReservations", "createReservation", "cancelReservation"})
     public Cruise findByUUID(UUID uuid) throws BaseAppException {
         TypedQuery<Cruise> tq = em.createNamedQuery("Cruise.findByUUID", Cruise.class);
         tq.setParameter("uuid", uuid.toString());

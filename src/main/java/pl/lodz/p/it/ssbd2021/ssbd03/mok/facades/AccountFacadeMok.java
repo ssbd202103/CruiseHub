@@ -32,7 +32,6 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account.LOGIN_CONSTRAINT
 @Stateless
 @TransactionAttribute(TransactionAttributeType.MANDATORY)
 @Interceptors(TrackingInterceptor.class)
-@Log
 public class AccountFacadeMok extends AbstractFacade<Account> {
 
     @PersistenceContext(unitName = "ssbd03mokPU")
@@ -147,16 +146,19 @@ public class AccountFacadeMok extends AbstractFacade<Account> {
         super.remove(entity);
     }
 
+    @PermitAll
     @Override
     public Account find(Object id) throws FacadeException {
         return super.find(id);
     }
 
+    @PermitAll
     @Override
     public List findRange(int[] range) throws FacadeException {
         return super.findRange(range);
     }
 
+    @PermitAll
     @Override
     public long count() throws FacadeException {
         return super.count();

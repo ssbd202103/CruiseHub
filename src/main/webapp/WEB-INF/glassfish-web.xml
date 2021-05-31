@@ -236,6 +236,18 @@
     </security-role-mapping>
 
     <security-role-mapping>
+        <role-name>editCompany</role-name>
+        <group-name>ADMINISTRATOR</group-name>
+        <group-name>BUSINESS_WORKER</group-name>
+    </security-role-mapping>
+
+    <security-role-mapping>
+        <role-name>getBusinessWorkersByCompanyName</role-name>
+        <group-name>ADMINISTRATOR</group-name>
+        <group-name>BUSINESS_WORKER</group-name>
+    </security-role-mapping>
+
+    <security-role-mapping>
         <role-name>removeClientRating</role-name>
         <group-name>MODERATOR</group-name>
     </security-role-mapping>

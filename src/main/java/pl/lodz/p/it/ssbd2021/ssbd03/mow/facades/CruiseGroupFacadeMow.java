@@ -7,6 +7,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.interceptor.Interceptors;
@@ -39,15 +40,18 @@ public class CruiseGroupFacadeMow extends AbstractFacade<CruiseGroup> {
     }
 
     @Override
+    @RolesAllowed("changeCruiseGroup")
     public void edit(CruiseGroup entity) throws FacadeException { //TODo throws FacadeException {
         super.edit(entity);
     }
 
     @Override
+    @RolesAllowed("addCruiseGroup")
     public void create(CruiseGroup entity) throws FacadeException { //TODO throws FacadeException {
         super.create(entity);
     }
 
+    @PermitAll
     public CruiseGroup findByName(String name) throws BaseAppException {
         TypedQuery<CruiseGroup> tq = em.createNamedQuery("CruiseGroup.findByName", CruiseGroup.class);
         tq.setParameter("name", name);

@@ -1,13 +1,14 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.facades;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.common.facades.AbstractFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
-import pl.lodz.p.it.ssbd2021.ssbd03.common.facades.AbstractFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
 import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.interceptor.Interceptors;
@@ -38,20 +39,24 @@ public class CompanyFacadeMow extends AbstractFacade<Company> {
 
     @PermitAll
     @Override
+    @RolesAllowed("getAllCompanies")
     public List<Company> findAll() throws FacadeException {
         return super.findAll();
     }
 
     @Override
+    @RolesAllowed("editCompany")
     public void edit(Company entity) throws FacadeException {
         super.edit(entity);
     }
 
     @Override
+    @RolesAllowed("addCompany")
     public void create(Company entity) throws FacadeException {
         super.create(entity);
     }
 
+    @PermitAll
     public Company getCompanyByName(String companyName) throws BaseAppException {
         TypedQuery<Company> tq = em.createNamedQuery("Company.findByName", Company.class);
         tq.setParameter("name", companyName);
@@ -62,7 +67,7 @@ public class CompanyFacadeMow extends AbstractFacade<Company> {
         }
     }
 
-
+    @RolesAllowed("getAllCompanies")
     public List<BusinessWorker> getBusinessWorkersByCompanyName(String companyName) throws BaseAppException {
         TypedQuery<BusinessWorker> tq = em.createNamedQuery("Company.findBusinessWorkersByCompanyName", BusinessWorker.class);
         tq.setParameter("companyName", companyName);
