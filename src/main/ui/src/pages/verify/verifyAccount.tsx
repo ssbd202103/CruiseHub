@@ -17,6 +17,10 @@ function VerifyAccount(props: any) {
     const showSuccess = useSnackbarQueue('success')
     const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
     const history = useHistory()
+    const accountVerify = () =>{
+        submitAccountVerification
+        setButtonPopupAcceptAction(false)
+    }
     const submitAccountVerification = async (event: any) => {
         event.preventDefault()
 
@@ -29,14 +33,11 @@ function VerifyAccount(props: any) {
                 'Content-Type': 'application/json'
             }
         }).then(res =>{
-            setButtonPopupAcceptAction(false)
             history.push("/signin")
             showSuccess(t('successful action'))
-        })
-            .catch(error => {
-                setButtonPopupAcceptAction(false)
-                const message = error.response.data
-                handleError(message, error.response.status)
+        }).catch(error => {
+            const message = error.response.data
+            handleError(message, error.response.status)
         });
 
     }
@@ -54,7 +55,7 @@ function VerifyAccount(props: any) {
                         >{t("verifyAccount")} </RoundedButton>
                     <PopupAcceptAction
                         open={buttonPopupAcceptAction}
-                        onConfirm={()=>submitAccountVerification}
+                        onConfirm={()=>accountVerify}
                         onCancel={() => {setButtonPopupAcceptAction(false)
                         }}
                     />
