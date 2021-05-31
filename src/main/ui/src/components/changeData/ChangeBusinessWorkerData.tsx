@@ -30,7 +30,7 @@ export default function ChangeBusinessWorkerData({open, onOpen, onConfirm, onCan
 
     const firstName = useSelector(selectFirstName)
     const secondName = useSelector(selectSecondName)
-    const phoneNumber = useSelector(selectPhoneNumber("CLIENT"))
+    const phoneNumber = useSelector(selectPhoneNumber("BUSINESS_WORKER"))
 
     const [firstNameValue, setFirstNameValue] = useState(firstName)
     const [secondNameValue, setSecondNameValue] = useState(secondName)
