@@ -860,9 +860,9 @@ public class AccountManager implements AccountManagerLocal {
         }
 
         if (account.getLanguageType().getName() == LanguageType.EN) {
-            account.setLanguageType(new LanguageTypeWrapper(LanguageType.PL));
+            account.setLanguageType(accountFacade.getLanguageTypeWrapperByLanguageType(LanguageType.PL));
         } else {
-            account.setLanguageType(new LanguageTypeWrapper(LanguageType.EN));
+            account.setLanguageType(accountFacade.getLanguageTypeWrapperByLanguageType(LanguageType.EN));
         }
         setUpdatedMetadata(account);
     }
