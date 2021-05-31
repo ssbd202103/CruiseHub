@@ -17,12 +17,11 @@ function VerifyAccount(props: any) {
     const showSuccess = useSnackbarQueue('success')
     const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
     const history = useHistory()
-    const accountVerify = () =>{
+    function accountVerify () {
         setButtonPopupAcceptAction(false)
-        submitAccountVerification
+        submitAccountVerification()
     }
-    const submitAccountVerification = async (event: any) => {
-        event.preventDefault()
+    const submitAccountVerification = async () => {
 
         const json = {
             "token": location.pathname.toString().substring('/verify/accountVerification/'.length)

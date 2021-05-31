@@ -26,12 +26,10 @@ export default function ChangeEmail(props: any) {
 
     const resetPassword = () => {
         setButtonPopupAcceptAction(false)
-        submitPasswordReset
+        submitPasswordReset()
     }
 
-    const submitPasswordReset = async (event: any) => {
-        event.preventDefault()
-
+    const submitPasswordReset = async () => {
         const json = {
             "token": location.pathname.toString().substring('/reset/changeEmail/'.length)
         }
