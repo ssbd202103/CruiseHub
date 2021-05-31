@@ -101,7 +101,7 @@ function PasswordReset(props: any) {
                     >Reset </RoundedButton>
                     <PopupAcceptAction
                         open={buttonPopupAcceptAction}
-                        onConfirm={()=>submitPasswordReset}
+                        onConfirm={submitPasswordReset}
                         onCancel={() => {setButtonPopupAcceptAction(false)
                         }}
                     />
