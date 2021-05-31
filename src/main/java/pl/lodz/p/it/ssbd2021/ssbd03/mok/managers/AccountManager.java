@@ -690,6 +690,10 @@ public class AccountManager implements AccountManagerLocal {
             throw new AccountManagerException(PASSWORDS_DONT_MATCH_ERROR);
         }
 
+        if (account.getPasswordHash().equals(DigestUtils.sha256Hex(newPassword))) {
+            throw new AccountManagerException(PASSWORDS_ARE_THE_SAME_ERROR);
+        }
+
         account.setPasswordHash(DigestUtils.sha256Hex(newPassword));
         setUpdatedMetadata(account);
     }
