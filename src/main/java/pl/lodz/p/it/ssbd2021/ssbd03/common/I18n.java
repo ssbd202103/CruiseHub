@@ -91,6 +91,26 @@ public class I18n {
     public static final String LOG_IN_SUBJECT = "log.in.subject";
     public static final String LOG_IN_BODY = "log.in.body";
     public static final String ACCESS_LEVEL_PARSE_ERROR = "error.account.accessLevels.parse";
+    public static final String ACCESS_LEVEL_GRANT_ADMINISTRATOR_SUBJECT = "account.accessLevels.grantAdministrator.subject";
+    public static final String ACCESS_LEVEL_GRANT_ADMINISTRATOR_BODY = "account.accessLevels.grantAdministrator.body";
+    public static final String ACCESS_LEVEL_GRANT_MODERATOR_SUBJECT = "account.accessLevels.grantModerator.subject";
+    public static final String ACCESS_LEVEL_GRANT_MODERATOR_BODY = "account.accessLevels.grantModerator.body";
+    public static final String ACCESS_LEVEL_DEACTIVATE_ADMINISTRATOR_SUBJECT = "account.accessLevels.deactivateAdministrator.subject";
+    public static final String ACCESS_LEVEL_DEACTIVATE_ADMINISTRATOR_BODY = "account.accessLevels.deactivateAdministrator.body";
+    public static final String ACCESS_LEVEL_REACTIVATE_ADMINISTRATOR_SUBJECT = "account.accessLevels.reactivateAdministrator.subject";
+    public static final String ACCESS_LEVEL_REACTIVATE_ADMINISTRATOR_BODY = "account.accessLevels.reactivateAdministrator.body";
+    public static final String ACCESS_LEVEL_DEACTIVATE_MODERATOR_SUBJECT = "account.accessLevels.deactivateModerator.subject";
+    public static final String ACCESS_LEVEL_DEACTIVATE_MODERATOR_BODY = "account.accessLevels.deactivateModerator.body";
+    public static final String ACCESS_LEVEL_REACTIVATE_MODERATOR_SUBJECT = "account.accessLevels.reactivateModerator.subject";
+    public static final String ACCESS_LEVEL_REACTIVATE_MODERATOR_BODY = "account.accessLevels.reactivateModerator.body";
+    public static final String ACCESS_LEVEL_DEACTIVATE_BUSINESS_WORKER_SUBJECT = "account.accessLevels.deactivateBusinessWorker.subject";
+    public static final String ACCESS_LEVEL_DEACTIVATE_BUSINESS_WORKER_BODY = "account.accessLevels.deactivateBusinessWorker.body";
+    public static final String ACCESS_LEVEL_REACTIVATE_BUSINESS_WORKER_SUBJECT = "account.accessLevels.reactivateBusinessWorker.subject";
+    public static final String ACCESS_LEVEL_REACTIVATE_BUSINESS_WORKER_BODY = "account.accessLevels.reactivateBusinessWorker.body";
+    public static final String ACCESS_LEVEL_DEACTIVATE_CLIENT_SUBJECT = "account.accessLevels.deactivateClient.subject";
+    public static final String ACCESS_LEVEL_DEACTIVATE_CLIENT_BODY = "account.accessLevels.deactivateClient.body";
+    public static final String ACCESS_LEVEL_REACTIVATE_CLIENT_SUBJECT = "account.accessLevels.reactivateClient.subject";
+    public static final String ACCESS_LEVEL_REACTIVATE_CLIENT_BODY = "account.accessLevels.reactivateClient.body";
 
     private ResourceBundle bundle;
 
