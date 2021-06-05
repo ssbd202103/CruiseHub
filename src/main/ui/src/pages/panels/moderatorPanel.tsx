@@ -15,6 +15,7 @@ import PanelLayout from "../../layouts/PanelLayout";
 import {getSelfAddressMetadataDetails, getSelfMetadataDetails} from "../../Services/accountsService";
 import {refreshToken} from "../../Services/userService";
 import useHandleError from "../../errorHandler";
+import ListCompany from "./moderator/ListCompany";
 
 export default function ModeratorPanel() {
     const {t} = useTranslation()
@@ -100,6 +101,12 @@ export default function ModeratorPanel() {
                     text: t('list accounts'),
                     Icon: AccountsListIcon,
                     Component: ListClient
+                },
+                {
+                    link: '/companies',
+                    Icon: AccountsListIcon,
+                    text: t('list companies'),
+                    Component: ListCompany
                 },
                 {
                     link: '/ManageWorkers',

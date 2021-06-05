@@ -36,7 +36,7 @@ public interface CompanyEndpointLocal {
      *
      * @return lista obiektów dto prezentujące informacje o fimach
      */
-    List<CompanyDto> getAllCompanies(String userLogin) throws BaseAppException;
+    List<CompanyDto> getAllCompanies() throws BaseAppException;
 
     /**
      * Metoda sluzaca do dodania nowej firmy

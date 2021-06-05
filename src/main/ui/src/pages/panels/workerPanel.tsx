@@ -11,6 +11,8 @@ import PanelLayout from "../../layouts/PanelLayout";
 import {getSelfAddressMetadataDetails, getSelfMetadataDetails} from "../../Services/accountsService";
 import {refreshToken} from "../../Services/userService";
 import useHandleError from "../../errorHandler";
+import AccountsListIcon from "@material-ui/icons/PeopleAltRounded";
+import ListCompany from "./moderator/ListCompany";
 
 export default function WorkerPanel() {
     const {t} = useTranslation()
@@ -84,6 +86,12 @@ export default function WorkerPanel() {
                     text: t('cruises'),
                     Icon: CruiseIcon,
                     Component: () => <></>
+                },
+                {
+                    link: '/companies',
+                    Icon: AccountsListIcon,
+                    text: t('list companies'),
+                    Component: ListCompany
                 },
                 {
                     link: '/settings',

@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CompanyLightDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.changeCruiseGroup.CompanyDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.CompanyEndpointLocal;
 
 import javax.enterprise.context.RequestScoped;
@@ -31,4 +32,18 @@ public class CompanyController {
     public List<CompanyLightDto> getAllCompaniesInfo() throws BaseAppException {
         return tryAndRepeat(() -> companyEndpoint.getCompaniesInfo());
     }
+
+    /**
+     * Pobiera informacje o firmach
+     * @return Lista firm
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
+    @GET
+    @Path("/companies")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<CompanyDto> getAllCompanies() throws BaseAppException {
+        return tryAndRepeat(() -> companyEndpoint.getAllCompanies());
+    }
+
+
 }
