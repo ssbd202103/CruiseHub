@@ -78,7 +78,7 @@ public class CruiseManager implements CruiseManagerLocal {
         if(!(version == cruiseToEdit.getVersion())) {
             throw FacadeException.optimisticLock();
         }
-        cruiseToEdit.setDescription(description);
+//        cruiseToEdit.setDescription(description);
         cruiseToEdit.setEndDate(endDate);
         cruiseToEdit.setStartDate(startDate);
         setAlterTypeAndAlterCruise(cruiseToEdit, accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE),

@@ -183,38 +183,41 @@ values (-3, 'PearlHarbort.jpg', null, now(), now(), -2, -1, -1, 0);
 --cruises_groups start
 insert into cruises_groups(id, company_id, name, number_of_seats, price, start_address_id, average_rating, active,
                            creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id,
-                           version)
-values (-1, -1, 'Przygoda', 24, 52, -1, 2.5, true, now(), now(), -2, -1, -1, 0);
+                           version, uuid, description)
+values (-1, -1, 'Przygoda', 24, 52, -1, 2.5, true, now(), now(), -2, -1, -1, 0, 'dd0ea0ca-bbac-11eb-8529-0242ac130003',
+        'The most Beautiful tour');
 insert into cruises_groups(id, company_id, name, number_of_seats, price, start_address_id, average_rating, active,
                            creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id,
-                           version)
-values (-2, -3, 'Santa Maria Beach', 42, 152, -2, 4.5, true, now(), now(), -2, -1, -1, 0);
+                           version, uuid, description)
+values (-2, -3, 'Santa Maria Beach', 42, 152, -2, 4.5, true, now(), now(), -2, -1, -1, 0,
+        'dd1ea0ca-bbac-11eb-8529-0242ac130003', 'Beautiful tour');
 insert into cruises_groups(id, company_id, name, number_of_seats, price, start_address_id, average_rating, active,
                            creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id,
-                           version)
-values (-3, -2, 'Beautiful Sandy Shores', 31, 502, -4, 5, true, now(), now(), -2, -1, -1, 0);
+                           version, uuid, description)
+values (-3, -2, 'Beautiful Sandy Shores', 31, 502, -4, 5, true, now(), now(), -2, -1, -1, 0,
+        'dd2ea0ca-bbac-11eb-8529-0242ac130003', 'Beautiful Beautiful tour');
 --cruises_groups end
 --
 --
 --
 --cruises start
-insert into cruises(id, uuid, start_date, end_date, active, description, cruises_group_id, available,
+insert into cruises(id, uuid, start_date, end_date, active, cruises_group_id, available,
                     creation_date_time,
                     last_alter_date_time, alter_type_id, created_by_id,
                     altered_by_id, version, published)
-values (-1, '581d626f-d421-47dd-89ef-b41bc30aa36c', now(), now(), true, 'Beautiful tour', -1, true, now(), now(), -2,
+values (-1, '581d626f-d421-47dd-89ef-b41bc30aa36c', now(), now(), true, -1, true, now(), now(), -2,
         -1, -1, 0, true);
-insert into cruises(id, uuid, start_date, end_date, active, description, cruises_group_id, available,
+insert into cruises(id, uuid, start_date, end_date, active, cruises_group_id, available,
                     creation_date_time,
                     last_alter_date_time, alter_type_id, created_by_id,
                     altered_by_id, version, published)
-values (-2, '181d626f-d421-47dd-89ef-b41bc30aa36c', now(), now(), false, 'Beautiful Beautiful tour', -2, true, now(),
+values (-2, '181d626f-d421-47dd-89ef-b41bc30aa36c', now(), now(), false, -2, true, now(),
         now(), -2, -1, -1, 0, true);
-insert into cruises(id, uuid, start_date, end_date, active, description, cruises_group_id, available,
+insert into cruises(id, uuid, start_date, end_date, active, cruises_group_id, available,
                     creation_date_time,
                     last_alter_date_time, alter_type_id, created_by_id,
                     altered_by_id, version, published)
-values (-3, '481d626f-d421-47dd-89ef-b41bc30aa36c', now(), now(), true, 'The most Beautiful tour', -3, false, now(),
+values (-3, '481d626f-d421-47dd-89ef-b41bc30aa36c', now(), now(), true, -3, false, now(),
         now(), -2, -1, -1, 0, true);
 --cruises end
 --
@@ -272,23 +275,6 @@ insert into ratings(id, account_id, cruise_group_id, rating, creation_date_time,
                     altered_by_id, version)
 values (-3, -3, -3, 5, now(), now(), -2, -1, -1, 0);
 --ratings end
---
---
---
---comments start
-insert into comments (id, account_id, cruise_id, comment, creation_date_time, last_alter_date_time, alter_type_id,
-                      created_by_id,
-                      altered_by_id, version)
-values (-1, -2, -1, 'Not bad. Lorem ipsum dolor sit amet is weird', now(), now(), -2, -1, -1, 0);
-insert into comments (id, account_id, cruise_id, comment, creation_date_time, last_alter_date_time, alter_type_id,
-                      created_by_id,
-                      altered_by_id, version)
-values (-2, -1, -2, 'It is one of the beautiful travel in my life', now(), now(), -2, -1, -1, 0);
-insert into comments (id, account_id, cruise_id, comment, creation_date_time, last_alter_date_time, alter_type_id,
-                      created_by_id,
-                      altered_by_id, version)
-values (-3, -3, -3, 'It is the most beautiful travel in the the World', now(), now(), -2, -1, -1, 0);
---comments end
 --
 --
 --

@@ -13,6 +13,7 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 
@@ -39,6 +40,16 @@ public class CruiseGroup extends BaseEntity {
     @ToString.Exclude
     private Company company;
 
+    @Getter
+    @NotNull(message = CONSTRAINT_NOT_NULL)
+    @Column(name = "uuid", nullable = false, unique = true, updatable = false)
+    private UUID uuid;
+
+    @Getter
+    @Setter
+    @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
+    @Column(name = "description")
+    private String description;
 
     @Getter
     @Setter
