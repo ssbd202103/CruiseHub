@@ -14,13 +14,9 @@ import javax.validation.constraints.PositiveOrZero;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 
-
 @Entity(name = "attractions")
 @NamedQueries({
         @NamedQuery(name = "Attraction.findByName", query = "SELECT att FROM attractions att WHERE att.name = :name"),
-        //TODO query that can delete
-        // @NamedQuery(name = "Attraction.deleteByName", query = "DELETE FROM attractions WHERE attractions.name= :name"),
-        //TODO query któe ma dostęn do reservation_attraction by sprawdzić czy już jakaś atrakcjia jest zarezerwowana
         @NamedQuery(name = "Attraction.findByIdIfReserved", query = "SELECT att FROM attractions att WHERE att.name = :name"),
 
 })

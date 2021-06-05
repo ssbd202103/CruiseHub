@@ -94,7 +94,6 @@ export default function ChangeAdministratorData({open, onOpen, onConfirm, onCanc
     }, [firstName, secondName])
 
     const changeData = () => {
-        //TODO
         setButtonPopup(true)
         setButtonPopupAcceptAction(false)
     }

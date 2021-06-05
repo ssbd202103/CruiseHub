@@ -27,7 +27,7 @@ public class TransactionRepeater {
             try {
                 return repeatInterface.execute();
             } catch (BaseAppException ignored) {
-            }
+            } //TODO QA CHECK information about exception and repeating transaction should be logged in catch block
         }
         return repeatInterface.execute();
     }

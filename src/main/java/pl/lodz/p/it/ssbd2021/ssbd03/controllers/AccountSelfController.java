@@ -105,12 +105,11 @@ public class AccountSelfController {
     @Path("/change-moderator-data")
     @Consumes(MediaType.APPLICATION_JSON)
     @ETagFilterBinding
-    public Response changeModeratorData(@Valid ModeratorChangeDataDto moderatorChangeDataDto, @HeaderParam("If-Match") String etag) throws BaseAppException {
+    public void changeModeratorData(@Valid ModeratorChangeDataDto moderatorChangeDataDto, @HeaderParam("If-Match") String etag) throws BaseAppException {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, moderatorChangeDataDto)) {
-            return Response.status(NOT_ACCEPTABLE).entity(ETAG_IDENTITY_INTEGRITY_ERROR).build();
+            throw ControllerException.etagIdentityIntegrity();
         }
         tryAndRepeat(() -> accountEndpoint.changeModeratorData(moderatorChangeDataDto));
-        return Response.noContent().build();
     }
 
     /**

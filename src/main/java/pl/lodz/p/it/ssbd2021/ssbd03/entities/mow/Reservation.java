@@ -18,6 +18,7 @@ import java.util.UUID;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 
+//TODO QA CHECK either implemented queries mentioned below or remove TODO tags
 //TODO sprawdzenie i powprawnienie Reservation.findWorkerCruiseReservations query
 @NamedQueries({
         @NamedQuery(name = "Reservation.findByUUID", query = "SELECT reservation FROM reservations reservation WHERE reservation.uuid = :uuid"),

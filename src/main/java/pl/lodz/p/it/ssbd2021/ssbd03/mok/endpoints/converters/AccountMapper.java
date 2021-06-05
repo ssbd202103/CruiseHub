@@ -241,6 +241,12 @@ public class AccountMapper {
         account.setLastAlterDateTime(time);
     }
 
+    /**
+     * Mapuje obiekt klasy dto na obiekt klasy modelu Account który jest wykorzystany do utrwalenia danych w bazie
+     *
+     * @param clientChangeDataDto obiekt klasy DTO
+     * @return obiekt klasy modelu który prezentuje konto o poziomie dostępu clienta
+     */
     public static Account extractAccountFromClientChangeDataDto(ClientChangeDataDto clientChangeDataDto) {
         LocalDateTime now = LocalDateTime.now();
 

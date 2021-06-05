@@ -104,7 +104,6 @@ export default function ChangeBusinessWorkerData({open, onOpen, onConfirm, onCan
     }, [firstName, secondName, phoneNumber])
 
     const changeData = () => {
-        //TODO
         setButtonPopup(true)
         setButtonPopupAcceptAction(false)
     }
