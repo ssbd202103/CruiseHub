@@ -245,6 +245,7 @@ const resources = {
             "/verify/accountVerification": "Weryfikacja",
             "/accounts/change_access_level_state": "Zmień stan poziomu dostępu",
             'accept.action': 'Czy chcesz wykonać tę akcję',
+            '/accounts/resetSomebodyPassword': 'Resetowanie hasła',
 
             'yes': 'Tak',
             'no': 'Nie',
@@ -255,6 +256,24 @@ const resources = {
             'token.missing': 'Brak tokenu',
             'redirect in': 'Przekierowanie na główną stronę przez',
             'data.load.success': 'Dane zostały załadowane',
+            // alter type
+            'UPDATE': 'Edycja',
+            'INSERT': 'Wstawienie',
+            'DELETE': 'Wycofanie',
+
+            // mięsiące
+            'JANUARY': 'Styczeń',
+            'FEBRUARY': 'Luty',
+            'MARCH': 'Marzec',
+            'APRIL': 'Kwiecień',
+            'MAJ': 'Maj',
+            'JUNE': 'Czerwiec',
+            'JULY': 'Lipiec',
+            'AUGUST': 'Sierpień',
+            'SEPTEMBER': 'Wrzesień',
+            'OCTOBER': 'Październik',
+            'NOVEMBER': 'Listopad',
+            'DECEMBER': 'Grudzień',
         }
     },
     EN: {
@@ -496,6 +515,7 @@ const resources = {
             "/reset/resetSomebodyPassword": "Reset user password",
             "/verify/accountVerification": "Account verification",
             "/accounts/change_access_level_state": "Change access level state",
+            "/accounts/resetSomebodyPassword": "Password reseting",
 
             'accept.action': 'Do you want to do this action?',
 
@@ -507,6 +527,25 @@ const resources = {
             'token.missing': 'Token is missing',
             'redirect in': 'Redirect to the main page in',
             'data.load.success': 'Data has been downloaded',
+
+            // alter type
+            'UPDATE': 'Update',
+            'INSERT': 'Insert',
+            'DELETE': 'Delete',
+
+            // mięsiące
+            'JANUARY': 'January',
+            'FEBRUARY': 'February',
+            'MARCH': 'March',
+            'APRIL': 'April',
+            'MAJ': 'Maj',
+            'JUNE': 'June',
+            'JULY': 'July',
+            'AUGUST': 'August',
+            'SEPTEMBER': 'September',
+            'OCTOBER': 'October',
+            'NOVEMBER': 'November',
+            'DECEMBER': 'December',
         }
     }
 }

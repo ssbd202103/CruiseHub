@@ -47,7 +47,6 @@ export default function ChangeAccessLevelState() {
             }
         }).then(res => {
             store.dispatch(setChangeAccessLevelStateAccount(res.data));
-            showSuccess(t('success.accessLevelStateChanged'))
             forceUpdate()
             refreshToken()
         }).catch(error => {
@@ -62,7 +61,7 @@ export default function ChangeAccessLevelState() {
             <Grid item style={{display: "block"}} className={styles.item}>
                 {changeAccessLevelStateAccount.login != "" ? changeAccessLevelStateAccount.accessLevels.map((accessLevel: any) => (
                     <div>
-                        <h4>{accessLevel.accessLevelType}</h4>
+                        <h4>{t(accessLevel.accessLevelType)}</h4>
                         <RoundedButton color="blue"
                                        onClick={() => handleChangeAccessLevelState(accessLevel.accessLevelType, !accessLevel.enabled)}
                         >{accessLevel.enabled ? t("disable") : t("enable")}
