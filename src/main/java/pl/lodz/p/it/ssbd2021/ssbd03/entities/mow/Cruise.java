@@ -7,24 +7,23 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
 
 import javax.persistence.*;
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_EMPTY;
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
 import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise.UUID_CONSTRAINT;
 
 @Entity(name = "cruises")
 @NamedQueries({
-        @NamedQuery(name = "Cruise.findByUUID", query = "SELECT c FROM cruises c WHERE c.uuid = :uuid")
+    @NamedQuery(name = "Cruise.findByUUID", query = "SELECT c FROM cruises c WHERE c.uuid = :uuid"),
+    @NamedQuery(name = "Cruise.findAllPublished", query = "SELECT c FROM cruises c WHERE c.published = true")
 })
 @Table(
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = "uuid", name = UUID_CONSTRAINT),
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = "uuid", name = UUID_CONSTRAINT),
 
-        }
+    }
 )
 @ToString
 public class Cruise extends BaseEntity {

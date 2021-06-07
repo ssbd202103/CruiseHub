@@ -69,8 +69,7 @@ public interface CruiseManagerLocal {
     /**
      * Zwraca wszystkie opublikowane wycieczki
      * @return Lista wycieczek
-     * @throws BaseAppException Bazowy wyjatek aplikacji
      */
-    List<Cruise> getPublishedCruises() throws BaseAppException;
+    List<Cruise> getPublishedCruises();
 
 }

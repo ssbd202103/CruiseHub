@@ -109,11 +109,10 @@ public class CruiseManager implements CruiseManagerLocal {
         // todo finish implementation
     }
 
-    @Override
     @PermitAll
+    @Override
     public List<Cruise> getPublishedCruises() {
-        // TODO
-        return null;
+        return cruiseFacadeMow.getPublishedCruises();
     }
 
 }
