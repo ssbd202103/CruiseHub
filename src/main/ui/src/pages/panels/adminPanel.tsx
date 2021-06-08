@@ -19,6 +19,7 @@ import PanelLayout from "../../layouts/PanelLayout";
 import {getSelfAddressMetadataDetails, getSelfMetadataDetails} from "../../Services/accountsService";
 import {refreshToken} from "../../Services/userService";
 import useHandleError from "../../errorHandler";
+import ListCruiseGroup from "../../components/ListCruiseGroup";
 export default function AdminPanel() {
     const {t} = useTranslation()
     const handleError = useHandleError()
@@ -102,6 +103,12 @@ export default function AdminPanel() {
                     Icon: AccountsListIcon,
                     text: t('list accounts'),
                     Component: ListClient
+                },
+                {
+                    link: '/listCruiseGroup',
+                    Icon: AccountsListIcon,
+                    text: t('listCruiseGroup'),
+                    Component: ListCruiseGroup
                 },
                 {
                     link: '/settings',

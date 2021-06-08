@@ -13,7 +13,7 @@ public class CruisePictureDto {
 
     private String dataURL;
 
-    private String file;
+    private String pictureName;
     @Positive
     private long version;
 

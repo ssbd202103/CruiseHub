@@ -248,6 +248,8 @@ const resources = {
             "/verify/accountVerification": "Weryfikacja",
             "/accounts/change_access_level_state": "Zmień stan poziomu dostępu",
             'accept.action': 'Czy chcesz wykonać tę akcję',
+            "/addCruiseGroup": "Dodaj grupę wycieczek",
+            "/listCruiseGroup": "Wyświetl grupę wycieczek",
 
             'yes': 'Tak',
             'no': 'Nie',
@@ -275,7 +277,8 @@ const resources = {
             "countryPlaceHolder":"Polska",
             "addPicture":"Dodaj zdjęcie",
             "removePicture": "Usuń zdjęcie",
-            "addCruise": "Dodaj grupę"
+            "addCruise": "Dodaj grupę",
+            "listCruiseGroup": "Wyświetl grupę wycieczek"
         }
     },
     EN: {
@@ -520,6 +523,8 @@ const resources = {
             "/reset/resetSomebodyPassword": "Reset user password",
             "/verify/accountVerification": "Account verification",
             "/accounts/change_access_level_state": "Change access level state",
+            "/addCruiseGroup": "Add cruise group",
+            "/listCruiseGroup": "List cruise groups",
 
             'accept.action': 'Do you want to do this action?',
 
@@ -548,7 +553,8 @@ const resources = {
             "countryPlaceHolder":"Poland",
             "addPicture":"Add picture",
             "removePicture": "Remove Picture",
-            "addCruise": "Add group"
+            "addCruise": "Add group",
+            "listCruiseGroup": "List cruises groups"
         }
     }
 }
