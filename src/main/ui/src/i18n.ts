@@ -258,6 +258,11 @@ const resources = {
             'token.missing': 'Brak tokenu',
             'redirect in': 'Przekierowanie na główną stronę przez',
             'data.load.success': 'Dane zostały załadowane',
+
+            // cruises
+            'description': 'Opis',
+            'cruise-name': 'Nazwa',
+            'price': 'Cena'
         }
     },
     EN: {
@@ -513,6 +518,11 @@ const resources = {
             'token.missing': 'Token is missing',
             'redirect in': 'Redirect to the main page in',
             'data.load.success': 'Data has been downloaded',
+
+            // cruises
+            'description': 'Description',
+            'cruise-name': 'Name',
+            'price': 'Price'
         }
     }
 }
