@@ -22,6 +22,7 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <jta-data-source>java:app/jdbc/ssbd03glassfishDS</jta-data-source>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.TokenWrapper</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.CodeWrapper</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address</class>
@@ -47,6 +48,7 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <jta-data-source>java:app/jdbc/ssbd03mokDS</jta-data-source>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.TokenWrapper</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.CodeWrapper</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address</class>
