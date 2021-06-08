@@ -79,15 +79,15 @@ public class CruiseGroup extends BaseEntity {
     private Double price;
 
     @Getter
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.REMOVE})
     @JoinTable(name = "cruises_group_pictures",
             joinColumns = @JoinColumn(name = "cruise_picture_id"),
             inverseJoinColumns = @JoinColumn(name = "cruises_group_id")
     )
     @Valid
-    @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
+  //  @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
     @ToString.Exclude
-    private final List<CruisePicture> cruisePictures = new ArrayList<>();
+    private  List<CruisePicture> cruisePictures = new ArrayList<>();
 
     @Getter
     @Setter
@@ -102,13 +102,16 @@ public class CruiseGroup extends BaseEntity {
     private boolean active;
 
     public CruiseGroup(Company company, CruiseAddress address, String name, long numberOfSeats,
-                       Double price, Double averageRating) {
+                       Double price,  List<CruisePicture> cruisePictures,String description) {
         this.company = company;
         this.address = address;
         this.name = name;
         this.numberOfSeats = numberOfSeats;
         this.price = price;
-        this.averageRating = averageRating;
+        this.averageRating = 0.0;
+        this.cruisePictures = cruisePictures;
+        this.description = description;
+        this.uuid= uuid.randomUUID();
     }
 
     public CruiseGroup() {

@@ -132,6 +132,10 @@ export const selectAddress =
                 city: "",
                 country: ""
             })
+export const selectCompany =
+    createSelector(selectSelf,
+        state => state.user.accessLevels.find(accessLevel => accessLevel.accessLevelType === "BUSINESS_WORKER")?.companyName ||
+         "")
 
 export const selectActiveAccessLevel = createSelector(selectSelf, state => state.user.activeAccessLevel)
 

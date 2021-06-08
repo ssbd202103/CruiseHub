@@ -25,7 +25,7 @@ public interface CruiseGroupManagerLocal {
      * @param pictures        lista zdjęć powiązanych z grupą wycieczek
      * @throws BaseAppException Bazowy wyjątek aplikacji
      */
-    void addCruiseGroup(String companyName, String name, long number_of_seats, Double price, CruiseAddress start_address, List<CruisePicture> pictures) throws BaseAppException;
+    void addCruiseGroup(String companyName, String name, long number_of_seats, Double price, CruiseAddress start_address, List<CruisePicture> pictures,String description) throws BaseAppException;
 
     /**
      * Edytuje daną grupę wycieczek
