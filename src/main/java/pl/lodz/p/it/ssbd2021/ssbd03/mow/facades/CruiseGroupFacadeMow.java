@@ -16,6 +16,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
+import java.util.UUID;
 
 @Stateless
 @Interceptors(TrackingInterceptor.class)
@@ -61,4 +62,15 @@ public class CruiseGroupFacadeMow extends AbstractFacade<CruiseGroup> {
             throw FacadeException.noSuchElement();
         }
     }
+    @PermitAll
+    public CruiseGroup findByUUID(UUID uuid) throws BaseAppException {
+        TypedQuery<CruiseGroup> tq = em.createNamedQuery("CruiseGroup.findByUUID", CruiseGroup.class);
+        tq.setParameter("uuid", uuid);
+        try {
+            return tq.getSingleResult();
+        } catch (NoResultException e) {
+            throw FacadeException.noSuchElement();
+        }
+    }
+
 }

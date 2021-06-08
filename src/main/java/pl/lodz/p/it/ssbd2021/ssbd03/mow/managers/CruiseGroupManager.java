@@ -67,6 +67,20 @@ public class CruiseGroupManager implements CruiseGroupManagerLocal {
             e.setCreatedBy(creator);
         }
     }
+
+    private void setUpdatedMetadata(BaseEntity... entities) throws BaseAppException {
+        AlterTypeWrapper update = accountFacadeMow.getAlterTypeWrapperByAlterType(AlterType.UPDATE);
+        for (BaseEntity e : entities) {
+            e.setAlterType(update);
+            e.setAlteredBy(getCurrentUser());
+        }
+    }
+
+    @RolesAllowed("authenticatedUser")
+    public Account getCurrentUser() throws BaseAppException {
+        return accountFacadeMow.findByLogin(context.getUserPrincipal().getName());
+    }
+
     @RolesAllowed("changeCruiseGroup")
     @Override
     public CruiseGroup changeCruiseGroup(String name, long number_of_seats, Double price, CruiseAddress start_address, long version) {
@@ -82,19 +96,14 @@ public class CruiseGroupManager implements CruiseGroupManagerLocal {
 
     @RolesAllowed("deactivateCruiseGroup")
     @Override
-    public CruiseGroup deactivateCruiseGroup(String name, Long version) throws BaseAppException {
-        CruiseGroup cruiseGroup = this.cruiseGroupFacadeMow.findByName(name);
+    public CruiseGroup deactivateCruiseGroup(UUID uuid, Long version) throws BaseAppException {
+        CruiseGroup cruiseGroup = this.cruiseGroupFacadeMow.findByUUID(uuid);
         if (!(cruiseGroup.getVersion() == version)) {
             throw FacadeException.optimisticLock();
         }
         cruiseGroup.setActive(false);
-        //TODO SetAlerted by and alertyed type or something
-
-        /*        setAlterTypeAndAlterAccount(cruiseGroup, cruiseGroupFacadeMow.getAlterTypeWrapperByAlterType(AlterType.UPDATE),
-                // this is for now, will be changed in the upcoming feature
-                cruiseGroup);
+        setUpdatedMetadata(cruiseGroup);
         cruiseGroupFacadeMow.edit(cruiseGroup);
-        return cruiseGroup;*/
         return cruiseGroup;
     }
 }

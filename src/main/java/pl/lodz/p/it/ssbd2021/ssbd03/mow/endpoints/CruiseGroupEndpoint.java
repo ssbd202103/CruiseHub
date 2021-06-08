@@ -20,6 +20,7 @@ import javax.inject.Inject;
 import javax.interceptor.Interceptors;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Klasa która zajmuje się gromadzeniem zmapowanych obiektów klas Dto na obiekty klas modelu związanych z grupami wycieczek oraz wywołuje metody logiki przekazując zmapowane obiekty.
@@ -63,7 +64,7 @@ public class CruiseGroupEndpoint extends BaseEndpoint implements CruiseGroupEndp
 
     @RolesAllowed("deactivateCruiseGroup")
     @Override
-    public void deactivateCruiseGroup(String name, Long version) throws BaseAppException {
-        this.cruiseGroupManager.deactivateCruiseGroup(name, version);
+    public void deactivateCruiseGroup(UUID uuid, Long version) throws BaseAppException {
+        this.cruiseGroupManager.deactivateCruiseGroup(uuid, version);
     }
 }
