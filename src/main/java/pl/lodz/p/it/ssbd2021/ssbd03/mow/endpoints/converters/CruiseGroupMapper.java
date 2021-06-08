@@ -7,6 +7,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.changeCruiseGroup.changeCruiseGroupDto;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,7 +37,16 @@ public class CruiseGroupMapper {
      * @return lista obiektów klasy CruisePicture
      */
     public static List<CruisePicture> extractCruiseGroupPicturesFromAddingCruiseGroup(AddCruiseGroupDto addCruiseGroup) {
-        List<CruisePicture> pictures = new ArrayList<>();//todo implement this
+        List<CruisePicture> pictures = new ArrayList<>();
+        if(addCruiseGroup.getCruisePictures().size()>0){
+
+            for (CruisePictureDto dto :addCruiseGroup.getCruisePictures()
+                 ) {
+                String encodedImg = dto.getDataURL().split(",")[1];
+                byte[] decoded = Base64.getDecoder().decode(encodedImg);
+                pictures.add(new CruisePicture(decoded,"test"));
+            }
+        }
         return pictures;
     }
 
@@ -58,7 +68,7 @@ public class CruiseGroupMapper {
      */
     public static CruiseAddressDto toCruiseAddressDto(CruiseAddress cruiseAddress) {
         return new CruiseAddressDto(cruiseAddress.getStreet(), cruiseAddress.getStreetNumber(), cruiseAddress.getHarborName(),
-                cruiseAddress.getCityName(), cruiseAddress.getCountryName(), cruiseAddress.getVersion()
+                cruiseAddress.getCityName(), cruiseAddress.getCountryName()
         );
     }
 
@@ -69,7 +79,7 @@ public class CruiseGroupMapper {
      * @return obiekt klasy dto
      */
     public static CruisePictureDto toCruisePictureDto(CruisePicture cruisePicture) {
-        return new CruisePictureDto(cruisePicture.getImgName(), cruisePicture.getImg(), cruisePicture.getVersion());
+        return new CruisePictureDto(  Base64.getEncoder().encodeToString(cruisePicture.getImg()),cruisePicture.getImgName(), cruisePicture.getVersion());
     }
 
     /**

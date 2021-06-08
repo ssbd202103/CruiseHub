@@ -37,7 +37,7 @@ public class CruiseGroupEndpoint extends BaseEndpoint implements CruiseGroupEndp
         CruiseAddress cruiseAddress = CruiseGroupMapper.extractAddressForAddingCruiseGroup(addCruiseGroupDto);
         List<CruisePicture> cruisePicture = CruiseGroupMapper.extractCruiseGroupPicturesFromAddingCruiseGroup(addCruiseGroupDto);
         this.cruiseGroupManager.addCruiseGroup(addCruiseGroupDto.getCompanyName(), addCruiseGroupDto.getName(), addCruiseGroupDto.getNumberOfSeats(),
-                addCruiseGroupDto.getPrice(), cruiseAddress, cruisePicture);
+                addCruiseGroupDto.getPrice(), cruiseAddress, cruisePicture,addCruiseGroupDto.getDescription());
     }
 
     @Override

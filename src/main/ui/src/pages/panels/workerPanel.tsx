@@ -1,6 +1,7 @@
 import {useTranslation} from 'react-i18next'
 import SettingsIcon from '@material-ui/icons/SettingsRounded'
 import CruiseIcon from '@material-ui/icons/CardTravelRounded'
+import CreateIcon from '@material-ui/icons/Create';
 import {useSelector} from "react-redux";
 import {selectDarkMode} from "../../redux/slices/userSlice";
 import ChangeBusinessWorkerData from "../../components/changeData/ChangeBusinessWorkerData";
@@ -13,6 +14,7 @@ import {refreshToken} from "../../Services/userService";
 import useHandleError from "../../errorHandler";
 import AccountsListIcon from "@material-ui/icons/PeopleAltRounded";
 import ListCompany from "./moderator/ListCompany";
+import AddCruiseGroup from "./worker/AddCruiseGroup";
 
 export default function WorkerPanel() {
     const {t} = useTranslation()
@@ -92,6 +94,12 @@ export default function WorkerPanel() {
                     Icon: AccountsListIcon,
                     text: t('list companies'),
                     Component: ListCompany
+                },{
+                    link: '/addCruiseGroup',
+                    text: t('createCruiseGroup'),
+                    Icon: CreateIcon,
+                    Component: AddCruiseGroup
+
                 },
                 {
                     link: '/settings',

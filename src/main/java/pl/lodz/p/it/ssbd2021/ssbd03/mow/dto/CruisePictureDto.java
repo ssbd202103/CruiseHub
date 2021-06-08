@@ -11,9 +11,9 @@ import javax.validation.constraints.Positive;
 @Setter
 public class CruisePictureDto {
 
-    private String imgName;
+    private String dataURL;
 
-    private Byte[] img;
+    private String file;
     @Positive
     private long version;
 
