@@ -76,7 +76,21 @@ create sequence used_tokens_id_seq
     START WITH 1
     INCREMENT BY 1;
 
+create table used_codes
+(
+    id                 bigint    not null,
+    code              varchar   not null,
+    creation_date_time timestamp not null,
+    used               bool      not null,
+    account_id         bigint    not null,
 
+    CONSTRAINT used_codes_code_unique_constraint UNIQUE (code),
+    CONSTRAINT used_codes_account_id_fk_constraint FOREIGN KEY (account_id) REFERENCES accounts (id)
+
+);
+create sequence used_codes_id_seq
+    START WITH 1
+    INCREMENT BY 1;
 
 create table access_levels
 (
@@ -433,7 +447,8 @@ WHERE accounts.confirmed
 -- Table owner --
 ALTER TABLE used_tokens
     OWNER TO ssbd03admin;
-
+ALTER TABLE used_codes
+    OWNER TO ssbd03admin;
 ALTER TABLE accounts
     OWNER TO ssbd03admin;
 ALTER TABLE access_levels
@@ -503,6 +518,10 @@ ALTER TABLE used_tokens
     ALTER COLUMN id
         SET DEFAULT nextval('used_tokens_id_seq');
 
+ALTER TABLE used_codes
+    ALTER COLUMN id
+        SET DEFAULT nextval('used_codes_id_seq');
+
 ALTER TABLE accounts
     ALTER COLUMN id
         SET DEFAULT nextval('account_id_seq');
@@ -550,6 +569,9 @@ ALTER TABLE cruises
 -- Table permissions --
 GRANT SELECT, INSERT, UPDATE, DELETE
     ON used_tokens TO ssbd03mok;
+
+GRANT SELECT, INSERT, UPDATE, DELETE
+    ON used_codes TO ssbd03mok;
 
 GRANT SELECT, INSERT, UPDATE, DELETE
     ON access_levels TO ssbd03mok;
@@ -638,6 +660,9 @@ GRANT SELECT, INSERT, UPDATE, DELETE
 
 GRANT SELECT, UPDATE
     ON used_tokens_id_seq TO ssbd03mok;
+
+GRANT SELECT, UPDATE
+    ON used_codes_id_seq TO ssbd03mok;
 
 GRANT SELECT, UPDATE
     ON SEQUENCE cruise_addresses_id_seq TO ssbd03mow;

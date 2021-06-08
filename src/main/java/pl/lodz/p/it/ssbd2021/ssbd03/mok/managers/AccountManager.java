@@ -7,6 +7,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.CodeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.TokenWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Administrator;
@@ -16,6 +17,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.LanguageTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacadeMok;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.CodeWrapperFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.CompanyFacadeMok;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.TokenWrapperFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.JWTHandler;
@@ -60,6 +62,9 @@ public class AccountManager implements AccountManagerLocal {
 
     @Inject
     private TokenWrapperFacade tokenWrapperFacade;
+
+    @Inject
+    private CodeWrapperFacade codeWrapperFacade;
 
     @Context
     private SecurityContext context;
@@ -820,10 +825,10 @@ public class AccountManager implements AccountManagerLocal {
         Locale locale = new Locale(account.getLanguageType().getName().name());
         String subject = i18n.getMessage(AUTH_CODE_EMAIL_SUBJECT, locale);
         String body = i18n.getMessage(AUTH_CODE_EMAIL_BODY, locale);
-        String kod = randomAlphanumeric(9);
-        TokenWrapper tokenWrapper = TokenWrapper.builder().token(kod).account(account).used(false).build();
-        this.tokenWrapperFacade.create(tokenWrapper);
-        String contentHtml = "<p>" + body + "<br>" + kod + "</p>";
+        String code = randomAlphanumeric(9);
+        CodeWrapper codeWrapper = CodeWrapper.builder().code(code).account(account).used(false).build();
+        this.codeWrapperFacade.create(codeWrapper);
+        String contentHtml = "<p>" + body + "<br>" + code + "</p>";
         EmailService.sendEmailWithContent(account.getEmail().trim(), subject, contentHtml);
     }
 
@@ -831,9 +836,9 @@ public class AccountManager implements AccountManagerLocal {
     @Override
     public String authWCodeUpdateCorrectAuthenticateInfo(String login, String code, String IpAddr, LocalDateTime time) throws BaseAppException {
         Account account = this.accountFacade.findByLogin(login);
-        TokenWrapper verificationCode;
+        CodeWrapper verificationCode;
         try {
-            verificationCode = this.tokenWrapperFacade.findByToken(code);
+            verificationCode = this.codeWrapperFacade.findByCode(code);
         } catch (BaseAppException e) {
             if (e.getMessage().equals(NO_SUCH_ELEMENT_ERROR)) {
                 throw new AccountManagerException(CODE_IS_INCORRECT_ERROR);
@@ -854,7 +859,7 @@ public class AccountManager implements AccountManagerLocal {
             throw new AccountManagerException(CODE_IS_INCORRECT_ERROR);
         }
         verificationCode.setUsed(true);
-        this.tokenWrapperFacade.edit(verificationCode);
+        this.codeWrapperFacade.edit(verificationCode);
         return updateCorrectAuthenticateInfo(login, IpAddr, time);
     }
 
