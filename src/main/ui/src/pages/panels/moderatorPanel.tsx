@@ -16,6 +16,7 @@ import {getSelfAddressMetadataDetails, getSelfMetadataDetails} from "../../Servi
 import {refreshToken} from "../../Services/userService";
 import useHandleError from "../../errorHandler";
 import ListCompany from "./moderator/ListCompany";
+import ListCruiseGroup from "../../components/ListCruiseGroup";
 
 export default function ModeratorPanel() {
     const {t} = useTranslation()
@@ -101,6 +102,12 @@ export default function ModeratorPanel() {
                     text: t('list accounts'),
                     Icon: AccountsListIcon,
                     Component: ListClient
+                },
+                {
+                    link: '/listCruiseGroup',
+                    Icon: AccountsListIcon,
+                    text: t('listCruiseGroup'),
+                    Component: ListCruiseGroup
                 },
                 {
                     link: '/companies',

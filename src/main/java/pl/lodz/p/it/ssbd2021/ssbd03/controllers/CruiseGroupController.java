@@ -1,8 +1,11 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.AddCruiseGroupDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CompanyLightDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseGroupDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseGroupWithDetailsDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.CompanyEndpointLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.CruiseGroupEndpoint;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.CruiseGroupEndpointLocal;
@@ -36,5 +39,17 @@ public class CruiseGroupController {
     @Path("/add-cuise-group")
     public void addCruiseGroup(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid AddCruiseGroupDto addCruiseGroupDto) throws BaseAppException {
          tryAndRepeat(() -> cruiseGroupEndpoint.addCruiseGroup(addCruiseGroupDto));
+    }
+
+    /**
+     * Pobierz informacje o wszystkich grupach wycieczek
+     *
+     * @return Lista kont
+     */
+    @GET
+    @Path("/cruise-groups")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<CruiseGroupWithDetailsDto> getAllCruiseGroups() throws BaseAppException {
+        return tryAndRepeat(() -> cruiseGroupEndpoint.getCruiseGroupsInfo());
     }
 }
