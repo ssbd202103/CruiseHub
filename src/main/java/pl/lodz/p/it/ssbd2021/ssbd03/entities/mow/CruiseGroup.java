@@ -20,6 +20,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 @Entity(name = "cruises_groups")
 @NamedQueries({
         @NamedQuery(name = "CruiseGroup.findByName", query = "SELECT crg FROM cruises_groups crg WHERE crg.name = :name"),
+        @NamedQuery(name= "CruiseGroup.findCruises", query = "SELECT cr FROM cruises  cr WHERE cr.cruisesGroup =:name")
         @NamedQuery(name = "CruiseGroup.findByUUID", query = "SELECT crg FROM cruises_groups crg WHERE crg.uuid = :uuid"),
 
 })

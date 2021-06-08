@@ -29,7 +29,7 @@ export default function (){
     const showSuccess = useSnackbarQueue('success')
 
 
-      const maxNumber = 69;
+      const maxNumber = 1;
       const [images, setImages] = React.useState([]);
       const onChange = (
           imageList: ImageListType,

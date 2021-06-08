@@ -5,10 +5,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseAddress;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruisePicture;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.AccountFacadeMow;
@@ -16,6 +13,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CompanyFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseGroupFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
 import javax.inject.Inject;
@@ -88,10 +86,15 @@ public class CruiseGroupManager implements CruiseGroupManagerLocal {
     }
 
 
-    @RolesAllowed("getAllCruiseGroupsList")
+    @RolesAllowed("getAllCruiseGroupList")
     @Override
     public List<CruiseGroup> getAllCruiseGroups() throws FacadeException {
         return cruiseGroupFacadeMow.findAll();
+    }
+    @RolesAllowed("getAllCruiseGroupList")
+    @Override
+    public List<Cruise> getCruiseBelongsToCruiseGroup(CruiseGroup cruiseGroup) throws FacadeException {
+        return cruiseGroupFacadeMow.findCruisesForCruiseGroup(cruiseGroup);
     }
 
     @RolesAllowed("deactivateCruiseGroup")

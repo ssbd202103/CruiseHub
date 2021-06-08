@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.AddCruiseGroupDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseGroupDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseGroupWithDetailsDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.changeCruiseGroup.changeCruiseGroupDto;
 
 import javax.ejb.Local;
@@ -37,7 +38,7 @@ public interface CruiseGroupEndpointLocal {
      *
      * @return lista obiektów reprezentjace informacje o grupach wycieczek
      */
-    List<CruiseGroupDto> getCruiseGroupsInfo() throws BaseAppException;
+    List<CruiseGroupWithDetailsDto> getCruiseGroupsInfo() throws BaseAppException;
 
 
     /**

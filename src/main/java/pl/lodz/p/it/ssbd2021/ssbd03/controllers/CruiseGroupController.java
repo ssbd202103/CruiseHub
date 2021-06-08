@@ -3,9 +3,12 @@ package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.ControllerException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.BlockAccountDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.AddCruiseGroupDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CompanyLightDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.DeactivateCruiseGroupDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseGroupDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseGroupWithDetailsDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.CompanyEndpointLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.CruiseGroupEndpoint;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.CruiseGroupEndpointLocal;
@@ -17,7 +20,10 @@ import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
@@ -40,6 +46,18 @@ public class CruiseGroupController {
     @Path("/add-cuise-group")
     public void addCruiseGroup(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid AddCruiseGroupDto addCruiseGroupDto) throws BaseAppException {
          tryAndRepeat(() -> cruiseGroupEndpoint.addCruiseGroup(addCruiseGroupDto));
+    }
+
+    /**
+     * Pobierz informacje o wszystkich grupach wycieczek
+     *
+     * @return Lista kont
+     */
+    @GET
+    @Path("/cruise-groups")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<CruiseGroupWithDetailsDto> getAllCruiseGroups() throws BaseAppException {
+        return tryAndRepeat(() -> cruiseGroupEndpoint.getCruiseGroupsInfo());
     }
 
     /**
