@@ -267,7 +267,7 @@ public class AccountEndpoint extends BaseEndpoint implements AccountEndpointLoca
     @RolesAllowed("getAccessLevelByLogin")
     @Override
     public BusinessWorkerDto getBusinessWorkerByLogin(String login) throws BaseAppException {
-        return AccountMapper.toBusinessWorkerDto(accountManager.getAccountByLogin(login));
+        return AccountMapper.toBusinessWorkerDto((BusinessWorker) accountManager.getAccountAccessLevel(login, AccessLevelType.BUSINESS_WORKER));
     }
 
     @RolesAllowed("getAccessLevelByLogin")

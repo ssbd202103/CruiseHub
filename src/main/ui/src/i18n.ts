@@ -147,6 +147,7 @@ const resources = {
             "changeLanguage": "Zmień język",
             //errors
             "error.facade.noSuchElement": "Nie znaleziono elementu w bazie danych",
+            "error.security.notAuthorized": "Brak uprawnień do wykonania operacji",
             "error.account.accessLevels.alreadyAssigned": "Poziom dostępu jest już przydzielony do konta",
             "error.account.accessLevels.notAssigned": "Poziom dostępu nie jest przydzielony do konta",
             "error.account.accessLevels.notAssignable": "Nie można przydzielić podanego poziomu dostępu",
@@ -426,6 +427,7 @@ const resources = {
             "changeLanguage": "Change language",
             //errors
             "error.facade.noSuchElement": "No such element found in the database",
+            "error.security.notAuthorized": "Operation not authorized",
             "error.account.accessLevels.alreadyAssigned": "Access level already assigned to the account",
             "error.account.accessLevels.notAssigned": "Access level not assigned to the account",
             "error.account.accessLevels.notAssignable": "Cannot assign this access level",

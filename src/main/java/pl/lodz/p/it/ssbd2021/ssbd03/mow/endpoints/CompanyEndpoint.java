@@ -4,6 +4,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints.BaseEndpoint;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.BusinessWorkerDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters.AccountMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.AddCompanyDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CompanyLightDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.changeCruiseGroup.CompanyDto;
@@ -39,12 +40,11 @@ public class CompanyEndpoint extends BaseEndpoint implements CompanyEndpointLoca
     }
 
     @RolesAllowed("getBusinessWorkersForCompany")
-    // when implementing remember that BusinessWorker should only see workers from his company
     @Override
     public List<BusinessWorkerDto> getBusinessWorkersForCompany(String companyName) throws BaseAppException {
-        throw new UnsupportedOperationException();
+        return companyManager.getBusinessWorkersForCompany(companyName).stream()
+                .map(AccountMapper::toBusinessWorkerDto).collect(Collectors.toList());
     }
-
 
     @RolesAllowed("getAllCompanies")
     @Override
