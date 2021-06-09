@@ -598,6 +598,12 @@ GRANT SELECT
     ON accounts TO ssbd03mow;
 
 GRANT SELECT
+    ON clients TO ssbd03mow;
+
+
+
+
+GRANT SELECT
     ON alter_types TO ssbd03mow;
 
 GRANT SELECT, INSERT, UPDATE, DELETE

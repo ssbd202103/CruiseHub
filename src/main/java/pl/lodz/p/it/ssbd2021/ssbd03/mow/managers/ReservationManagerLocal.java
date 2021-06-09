@@ -38,7 +38,7 @@ public interface ReservationManagerLocal {
      * @param clientLogin Login klienta
      * @throws BaseAppException Bazowy wyjatek aplikacji
      */
-    void removeClientReservation(long reservationVersion, UUID reservationUuid, String clientLogin) throws BaseAppException;
+    void removeClientReservation(long reservationVersion, String reservationUuidStr, String clientLogin) throws BaseAppException;
 
     /**
      * Rezerwuje wycieczke dla klienta

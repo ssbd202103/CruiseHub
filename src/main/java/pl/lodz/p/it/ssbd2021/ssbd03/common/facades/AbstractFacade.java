@@ -50,6 +50,7 @@ public abstract class AbstractFacade<T> {
     protected void remove(T entity) throws FacadeException {
         try {
             getEntityManager().remove(getEntityManager().merge(entity));
+            getEntityManager().flush();
         } catch (PersistenceException exp) {
             throw FacadeException.databaseOperation();
         } catch (IllegalArgumentException exp) {

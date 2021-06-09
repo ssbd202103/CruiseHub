@@ -1,10 +1,13 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.managers;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Reservation;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.AccountFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.ReservationFacadeMow;
@@ -42,6 +45,7 @@ public class ReservationManager implements ReservationManagerLocal {
     @Context
     private SecurityContext context;
 
+
     @Override
     @RolesAllowed("viewCruiseReservations")
     public List<Reservation> getCruiseReservations(UUID cruise_uuid) throws BaseAppException {
@@ -61,10 +65,16 @@ public class ReservationManager implements ReservationManagerLocal {
 
     @RolesAllowed("removeClientReservation")
     @Override
-    public void removeClientReservation(long reservationVersion, UUID reservationUuid, String clientLogin) throws BaseAppException {
-        // todo finish implementation
-        Reservation reservation = reservationFacadeMow.findReservationByUuidAndLogin(UUID.randomUUID(), clientLogin);
+    public void removeClientReservation(long reservationVersion, String reservationUuidStr, String clientLogin) throws BaseAppException {
+        Reservation reservation = reservationFacadeMow.findReservationByUuidAndLogin(reservationUuidStr, clientLogin);
+        if (reservationVersion != reservation.getVersion()) {
+            throw FacadeException.optimisticLock();
+        }
+        reservation.setAlteredBy(getCurrentUser());
+        reservation.setAlterType(accountFacadeMow.getAlterTypeWrapperByAlterType(AlterType.DELETE));
+        reservationFacadeMow.remove(reservation);
     }
+
 
     @RolesAllowed("createReservation")
     @Override

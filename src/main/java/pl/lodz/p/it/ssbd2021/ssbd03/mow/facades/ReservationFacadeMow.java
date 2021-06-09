@@ -78,9 +78,9 @@ public class ReservationFacadeMow extends AbstractFacade<Reservation> {
     }
 
     @RolesAllowed("removeClientReservation")
-    public Reservation findReservationByUuidAndLogin(UUID uuid, String login) throws BaseAppException {
+    public Reservation findReservationByUuidAndLogin(String uuidStr, String login) throws BaseAppException {
         TypedQuery<Reservation> tq = em.createNamedQuery("Reservation.findByUUIDAndLogin", Reservation.class);
-        tq.setParameter("uuid", uuid.toString());
+        tq.setParameter("uuid", UUID.fromString(uuidStr));
         tq.setParameter("login", login);
         try {
             return tq.getSingleResult();
@@ -98,5 +98,11 @@ public class ReservationFacadeMow extends AbstractFacade<Reservation> {
         } catch (NoResultException e) {
             throw FacadeException.noSuchElement();
         }
+    }
+
+    @RolesAllowed("removeClientReservation")
+    @Override
+    public void remove(Reservation entity) throws FacadeException {
+        super.remove(entity);
     }
 }
