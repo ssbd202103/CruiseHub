@@ -125,11 +125,7 @@ public class AuthController {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response doubleAuth(@Valid @NotNull(message = CONSTRAINT_NOT_NULL) AuthenticateCodeDto auth) throws BaseAppException {
-        String token;
-        token = authEndpoint.authWCodeUpdateCorrectAuthenticateInfo(auth.getLogin(), auth.getCode(),  httpServletRequest.getRemoteAddr(), LocalDateTime.now());
-        return Response.ok()
-                .entity(token)
-                .build();
+    public String doubleAuth(@Valid @NotNull(message = CONSTRAINT_NOT_NULL) AuthenticateCodeDto auth) throws BaseAppException {
+        return authEndpoint.authWCodeUpdateCorrectAuthenticateInfo(auth.getLogin(), auth.getCode(),  httpServletRequest.getRemoteAddr(), LocalDateTime.now());
     }
 }

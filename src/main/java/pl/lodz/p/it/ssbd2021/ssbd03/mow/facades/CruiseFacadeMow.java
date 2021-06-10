@@ -16,6 +16,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.util.List;
 import java.util.UUID;
 
 @Stateless
@@ -50,6 +51,12 @@ public class CruiseFacadeMow extends AbstractFacade<Cruise> {
         } catch (NoResultException e) {
             throw FacadeException.noSuchElement();
         }
+    }
+
+    @PermitAll
+    public List<Cruise> getPublishedCruises() {
+        TypedQuery<Cruise> tq = em.createNamedQuery("Cruise.findAllPublished", Cruise.class);
+        return tq.getResultList();
     }
 
     @RolesAllowed("addCruise")

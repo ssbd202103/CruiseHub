@@ -155,7 +155,7 @@
     </security-role>
 
     <security-role>
-        <role-name>getAllCruiseGroupsList</role-name>
+        <role-name>getAllCruiseGroupList</role-name>
     </security-role>
     <security-role>
         <role-name>viewCruiseReservations</role-name>

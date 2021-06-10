@@ -21,6 +21,7 @@ import javax.inject.Inject;
 import javax.interceptor.Interceptors;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Klasa który zajmuje się obsługą obiektów dto z zakresu wycieczek (rejsów)
@@ -70,7 +71,7 @@ public class CruiseEndpoint extends BaseEndpoint implements CruiseEndpointLocal 
 
     @PermitAll
     @Override
-    public List<Cruise> getPublishedCruises() throws BaseAppException {
-        return cruiseManagerLocal.getPublishedCruises();
+    public List<CruiseDto> getPublishedCruises() {
+        return cruiseManagerLocal.getPublishedCruises().stream().map(CruiseMapper::mapCruiseToCruiseDto).collect(Collectors.toList());
     }
 }

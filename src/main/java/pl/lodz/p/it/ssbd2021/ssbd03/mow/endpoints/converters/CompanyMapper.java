@@ -5,6 +5,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AddressDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.AddCompanyDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CompanyLightDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.changeCruiseGroup.CompanyDto;
 
 public class CompanyMapper {
     private CompanyMapper() {
@@ -14,8 +15,15 @@ public class CompanyMapper {
         return new CompanyLightDto(company.getName(), company.getNIP());
     }
 
+    public static CompanyDto mapCompanyToCompanyDto(Company company) {
+        return new CompanyDto(company.getName(), company.getPhoneNumber(), company.getNIP(), company.getAddress().getHouseNumber(),
+                company.getAddress().getStreet(), company.getAddress().getPostalCode(), company.getAddress().getCity(), company.getAddress().getCountry());
+    }
+
+
     /**
      * Mapuje obiekt klasy AddCompanyDto na obietk klasy Company
+     *
      * @param company obiekt klasy AddCompanyDto
      * @return obiekt klasy Company
      */
@@ -29,6 +37,7 @@ public class CompanyMapper {
 
     /**
      * Mapuje obiekt klasy AddressDto na obiekt klasy Address
+     *
      * @param address obiekt klasy AddressDto
      * @return obiekt klasy Address
      */

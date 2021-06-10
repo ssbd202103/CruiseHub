@@ -77,7 +77,6 @@ export default function ChangeClientData({open, onOpen, onConfirm, onCancel}: Ch
     }
 
     const changeData = () => {
-        //TODO
         setButtonPopup(true)
         setButtonPopupAcceptAction(false)
     }

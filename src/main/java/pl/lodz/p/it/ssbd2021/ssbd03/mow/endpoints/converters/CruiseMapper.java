@@ -21,7 +21,7 @@ public class CruiseMapper {
      * @return zmapowany obiekt
      */
     public static Cruise mapNewCruiseDtoToCruise(NewCruiseDto newCruiseDto) {
-        return new Cruise(newCruiseDto.getStartDate(), newCruiseDto.getEndDate(), newCruiseDto.isActive(), newCruiseDto.getDescription(),
+        return new Cruise(newCruiseDto.getStartDate(), newCruiseDto.getEndDate(), newCruiseDto.isActive(),
                 newCruiseDto.getAvailable(), null);
     }
 
@@ -31,6 +31,6 @@ public class CruiseMapper {
 
         return new CruiseDto(cruise.getUuid(), cruise.getVersion(),
                 cruise.getStartDate(), cruise.getEndDate(),
-                cruise.isActive(), cruise.getDescription(), cruise.isAvailable(), cruiseGroupDto);
+                cruise.isActive(), cruise.isAvailable(), cruiseGroupDto);
     }
 }

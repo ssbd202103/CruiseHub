@@ -48,8 +48,8 @@ public class CompanyEndpoint extends BaseEndpoint implements CompanyEndpointLoca
 
     @RolesAllowed("getAllCompanies")
     @Override
-    public List<CompanyDto> getAllCompanies(String userLogin) throws BaseAppException {
-        return null; // todo finish implementations
+    public List<CompanyDto> getAllCompanies() throws BaseAppException {
+        return companyManager.getAllCompanies().stream().map(CompanyMapper::mapCompanyToCompanyDto).collect(Collectors.toList());
     }
 
     @RolesAllowed("addCompany")

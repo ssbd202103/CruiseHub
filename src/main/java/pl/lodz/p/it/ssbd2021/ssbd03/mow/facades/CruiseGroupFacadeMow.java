@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.facades;
 
 
 import pl.lodz.p.it.ssbd2021.ssbd03.common.facades.AbstractFacade;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
@@ -33,7 +34,7 @@ public class CruiseGroupFacadeMow extends AbstractFacade<CruiseGroup> {
         return em;
     }
 
-    @RolesAllowed("getAllCruiseGroupsList")
+   @PermitAll
     @Override
     public List<CruiseGroup> findAll() throws FacadeException { //TODO throws FacadeException {
         return super.findAll();
@@ -60,5 +61,16 @@ public class CruiseGroupFacadeMow extends AbstractFacade<CruiseGroup> {
         } catch (NoResultException e) {
             throw FacadeException.noSuchElement();
         }
+    }
+   @RolesAllowed("getAllCruiseGroupList")
+    public List<Cruise> findCruisesForCruiseGroup(CruiseGroup cruiseGroup) throws FacadeException {
+        TypedQuery<Cruise> tq = em.createNamedQuery("CruiseGroup.findCruises", Cruise.class);
+        tq.setParameter("name", cruiseGroup);
+        try {
+            return tq.getResultList();
+        } catch (NoResultException e) {
+            throw FacadeException.noSuchElement();
+        }
+
     }
 }

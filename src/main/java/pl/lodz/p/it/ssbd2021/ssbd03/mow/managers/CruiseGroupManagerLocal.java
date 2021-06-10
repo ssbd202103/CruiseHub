@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.managers;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseAddress;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruisePicture;
@@ -25,7 +26,7 @@ public interface CruiseGroupManagerLocal {
      * @param pictures        lista zdjęć powiązanych z grupą wycieczek
      * @throws BaseAppException Bazowy wyjątek aplikacji
      */
-    void addCruiseGroup(String companyName, String name, long number_of_seats, Double price, CruiseAddress start_address, List<CruisePicture> pictures) throws BaseAppException;
+    void addCruiseGroup(String companyName, String name, long number_of_seats, Double price, CruiseAddress start_address, List<CruisePicture> pictures,String description) throws BaseAppException;
 
     /**
      * Edytuje daną grupę wycieczek
@@ -57,4 +58,6 @@ public interface CruiseGroupManagerLocal {
      * @throws BaseAppException Bazowy wyjątek aplikacji
      */
     CruiseGroup deactivateCruiseGroup(String name, Long version) throws BaseAppException;
+
+    List<Cruise> getCruiseBelongsToCruiseGroup(CruiseGroup cruiseGroup) throws FacadeException;
 }

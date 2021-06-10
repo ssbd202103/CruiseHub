@@ -37,7 +37,7 @@ public class EmailService {
      * @throws EmailServiceException wyjątek jest rzucany gdy email jest niepoprawny albo gdy wystąpił problem podłączenia się do serwisu smtp
      */
     public static void sendEmailWithContent(String recipientEmail, String subject, String contentHtml) throws EmailServiceException {
-       //todo uncomment it when needed
+      //todo uncomment it when needed
         Properties properties = System.getProperties();
 
         String host = "smtp.gmail.com";
@@ -63,9 +63,9 @@ public class EmailService {
             transport.connect(host, EMAIL_USER, PASSWD);
             transport.sendMessage(message, message.getAllRecipients());
             transport.close();
-        } catch (AddressException ae) { // todo
+        } catch (AddressException ae) {
             throw new EmailServiceException(EMAIL_SERVICE_INCORRECT_EMAIL);
-        } catch (MessagingException me) { // todo
+        } catch (MessagingException me) {
             throw new EmailServiceException(EMAIL_SERVICE_INACCESSIBLE);
         }
     }

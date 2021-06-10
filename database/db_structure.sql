@@ -76,7 +76,21 @@ create sequence used_tokens_id_seq
     START WITH 1
     INCREMENT BY 1;
 
+create table used_codes
+(
+    id                 bigint    not null,
+    code              varchar   not null,
+    creation_date_time timestamp not null,
+    used               bool      not null,
+    account_id         bigint    not null,
 
+    CONSTRAINT used_codes_code_unique_constraint UNIQUE (code),
+    CONSTRAINT used_codes_account_id_fk_constraint FOREIGN KEY (account_id) REFERENCES accounts (id)
+
+);
+create sequence used_codes_id_seq
+    START WITH 1
+    INCREMENT BY 1;
 
 create table access_levels
 (
@@ -264,9 +278,12 @@ create table cruises_groups
     altered_by_id        bigint                                                              not null, -- FOREIGN KEY
     alter_type_id        bigint                                                              not null, -- FOREIGN KEY
     version              bigint check (version >= 0)                                         not null,
+    description          varchar                             not null,
+    uuid                 varchar                             not null,
+
 
     CONSTRAINT cruises_groups_id_pk_constraint PRIMARY KEY (id),
-    CONSTRAINT unique_name_constraint UNIQUE (name),
+    CONSTRAINT cruises_groups_uuid_unique_constraint UNIQUE (uuid),
     CONSTRAINT cruises_groups_companies_fk FOREIGN KEY (company_id) REFERENCES companies (id),
     CONSTRAINT cruises_groups_start_address_id_fk_constraint FOREIGN KEY (start_address_id) REFERENCES cruise_addresses (id),
     CONSTRAINT cruises_groups_alter_type_id_fk_constraint FOREIGN KEY (alter_type_id) REFERENCES alter_types (id),
@@ -285,7 +302,6 @@ create table cruises
     start_date           timestamp                           not null,
     end_date             timestamp,
     active               boolean   default false             not null,
-    description          varchar                             not null,
     cruises_group_id     bigint                              not null, -- FOREIGN KEY
     available            boolean   default false             not null,
 
@@ -393,31 +409,7 @@ create sequence ratings_id_seq
     START WITH 1
     INCREMENT BY 1;
 
-create table comments
-(
-    id                   bigint                              not null,
-    account_id           bigint                              not null, -- FOREIGN KEY
-    cruise_id            bigint                              not null, -- FOREIGN KEY
-    comment              varchar(2500)                       not null,
 
-    creation_date_time   timestamp default CURRENT_TIMESTAMP not null,
-    last_alter_date_time timestamp                           not null,
-    created_by_id        bigint                              not null, -- FOREIGN KEY
-    altered_by_id        bigint                              not null, -- FOREIGN KEY
-    alter_type_id        bigint                              not null, -- FOREIGN KEY
-    version              bigint check (version >= 0)         not null,
-
-    CONSTRAINT comments_primary_key_constraint PRIMARY KEY (id),
-    CONSTRAINT comments_account_id_fk_constraint FOREIGN KEY (account_id) REFERENCES accounts (id),
-    CONSTRAINT comments_cruise_id_fk_constraint FOREIGN KEY (cruise_id) REFERENCES cruises (id),
-    CONSTRAINT comments_alter_type_id_fk_constraint FOREIGN KEY (alter_type_id) REFERENCES alter_types (id),
-    CONSTRAINT comments_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
-    CONSTRAINT comments_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id)
-);
-
-create sequence comments_id_seq
-    START WITH 1
-    INCREMENT BY 1;
 
 create table cruises_group_pictures
 (
@@ -455,7 +447,8 @@ WHERE accounts.confirmed
 -- Table owner --
 ALTER TABLE used_tokens
     OWNER TO ssbd03admin;
-
+ALTER TABLE used_codes
+    OWNER TO ssbd03admin;
 ALTER TABLE accounts
     OWNER TO ssbd03admin;
 ALTER TABLE access_levels
@@ -475,8 +468,6 @@ AlTER TABLE reservations
 AlTER TABLE attractions
     OWNER TO ssbd03admin;
 ALTER TABLE ratings
-    OWNER to ssbd03admin;
-ALTER TABLE comments
     OWNER to ssbd03admin;
 ALTER TABLE cruise_addresses
     OWNER to ssbd03admin;
@@ -518,8 +509,6 @@ ALTER TABLE reservations_id_seq
     OWNER to ssbd03admin;
 ALTER TABLE ratings_id_seq
     OWNER to ssbd03admin;
-ALTER TABLE comments_id_seq
-    OWNER to ssbd03admin;
 
 ALTER
     VIEW glassfish_auth_view OWNER TO ssbd03admin;
@@ -528,6 +517,10 @@ ALTER
 ALTER TABLE used_tokens
     ALTER COLUMN id
         SET DEFAULT nextval('used_tokens_id_seq');
+
+ALTER TABLE used_codes
+    ALTER COLUMN id
+        SET DEFAULT nextval('used_codes_id_seq');
 
 ALTER TABLE accounts
     ALTER COLUMN id
@@ -553,10 +546,6 @@ ALTER TABLE ratings
     ALTER COLUMN id
         SET DEFAULT nextval('ratings_id_seq');
 
-ALTER TABLE comments
-    ALTER COLUMN id
-        SET DEFAULT nextval('comments_id_seq');
-
 ALTER TABLE cruise_addresses
     ALTER COLUMN id
         SET DEFAULT nextval('cruise_addresses_id_seq');
@@ -580,6 +569,9 @@ ALTER TABLE cruises
 -- Table permissions --
 GRANT SELECT, INSERT, UPDATE, DELETE
     ON used_tokens TO ssbd03mok;
+
+GRANT SELECT, INSERT, UPDATE, DELETE
+    ON used_codes TO ssbd03mok;
 
 GRANT SELECT, INSERT, UPDATE, DELETE
     ON access_levels TO ssbd03mok;
@@ -634,9 +626,6 @@ GRANT SELECT, INSERT, UPDATE, DELETE
     ON attractions TO ssbd03mow;
 
 GRANT SELECT, INSERT, UPDATE, DELETE
-    ON comments TO ssbd03mow;
-
-GRANT SELECT, INSERT, UPDATE, DELETE
     ON companies TO ssbd03mow;
 
 GRANT SELECT, INSERT, DELETE
@@ -673,6 +662,9 @@ GRANT SELECT, UPDATE
     ON used_tokens_id_seq TO ssbd03mok;
 
 GRANT SELECT, UPDATE
+    ON used_codes_id_seq TO ssbd03mok;
+
+GRANT SELECT, UPDATE
     ON SEQUENCE cruise_addresses_id_seq TO ssbd03mow;
 
 GRANT SELECT, UPDATE
@@ -695,10 +687,6 @@ GRANT SELECT, UPDATE
 
 GRANT SELECT, UPDATE
     ON SEQUENCE ratings_id_seq TO ssbd03mow;
-
-GRANT SELECT, UPDATE
-    ON SEQUENCE comments_id_seq TO ssbd03mow;
-
 
 GRANT SELECT ON glassfish_auth_view TO ssbd03glassfish;
 
@@ -867,22 +855,6 @@ CREATE INDEX ratings_altered_by_id_index
         (altered_by_id ASC NULLS LAST);
 CREATE INDEX ratings_alter_type_id_index
     ON ratings USING btree
-        (alter_type_id ASC NULLS LAST);
-
-CREATE INDEX comments_account_id_index
-    ON comments USING btree
-        (account_id ASC NULLS LAST);
-CREATE INDEX comments_cruise_id_index
-    ON comments USING btree
-        (cruise_id ASC NULLS LAST);
-CREATE INDEX comments_created_by_id_index
-    ON comments USING btree
-        (created_by_id ASC NULLS LAST);
-CREATE INDEX comments_altered_by_id_index
-    ON comments USING btree
-        (altered_by_id ASC NULLS LAST);
-CREATE INDEX comments_alter_type_id_index
-    ON comments USING btree
         (alter_type_id ASC NULLS LAST);
 
 CREATE INDEX cruises_group_pictures_cruises_group_id_index

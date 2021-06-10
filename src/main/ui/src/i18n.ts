@@ -94,6 +94,7 @@ const resources = {
             "workerPanel": "Panel pracownika",
             //adminPanel
             "search account": "Wyszukać konto",
+            "search company": "Wyszukać firme",
             "adminPanel": "Panel administracyjny",
             "login": "Login",
             "first name": "Imię",
@@ -102,6 +103,7 @@ const resources = {
             "access level": "Poziom dostępu",
             "moderatorPanel": "Panel moderatora",
             "list accounts": "Lista kont",
+            "list companies": "Lista firm",
             "edit": "Edytuj dane",
             "change password": "Zmień hasło",
             "reset password": "Resetuj hasło",
@@ -139,7 +141,7 @@ const resources = {
             "version": "Wersja:",
             //cruisecard
             "cruiseExample": "Rejs po Morzu Śródziemnym",
-
+            "createCruiseGroup": "Stworz nową grupę wycieczek",
 
             //change language
             "changeLanguage": "Zmień język",
@@ -237,6 +239,7 @@ const resources = {
             "/profile/cruises": "Wycieczki",
             "/profile/settings": "Ustawienia",
             "/accounts": "Konta",
+            "/companies": "Firmy",
             "/accounts/change_account_data": "Zmiana danych konta",
             "/accounts/grant_access_level": "Przydzielenie dostępu kontowi",
             "/reset/passwordReset": "Resetowanie hasła",
@@ -245,6 +248,8 @@ const resources = {
             "/verify/accountVerification": "Weryfikacja",
             "/accounts/change_access_level_state": "Zmień stan poziomu dostępu",
             'accept.action': 'Czy chcesz wykonać tę akcję',
+            "/addCruiseGroup": "Dodaj grupę wycieczek",
+            "/listCruiseGroup": "Wyświetl grupę wycieczek",
 
             'yes': 'Tak',
             'no': 'Nie',
@@ -255,6 +260,26 @@ const resources = {
             'token.missing': 'Brak tokenu',
             'redirect in': 'Przekierowanie na główną stronę przez',
             'data.load.success': 'Dane zostały załadowane',
+            "cruiseName": "Nazwa grupy wycieczek",
+            "cruisneNamePlaceHolder": "Najlepsza przygoda",
+            "description": "Opis",
+            "descriptionPlaceHolder": "Tygodniowy rejs",
+            "numberOfSeats": "Liczba miejsc",
+            "seatsPlaceHolder":"30",
+            "price":"Cena",
+            "pricePlaceHolder":"100",
+            "streetPlaceHolder":"Wolności",
+            "streetNumber":"Numer ulicy",
+            "numberPlaceHolder":"55",
+            "harborName": "Nazwa portu",
+            "harborPlaceHolder":"port Srilanka",
+            "cityPlaceHolder":" Aleksandrów",
+            "countryPlaceHolder":"Polska",
+            "addPicture":"Dodaj zdjęcie",
+            "removePicture": "Usuń zdjęcie",
+            "addCruise": "Dodaj grupę",
+            "listCruiseGroup": "Wyświetl grupę wycieczek"
+
         }
     },
     EN: {
@@ -350,6 +375,7 @@ const resources = {
             //adminPanel
             "adminPanel": "Administrator panel",
             "search account": "Search account",
+            "search company": "Search company",
             "login": "Login",
             "bad_login": "Bad Login",
             "first name": "First name",
@@ -357,6 +383,7 @@ const resources = {
             "active": "Active",
             "access level": "Access level",
             "list accounts": "Accounts list",
+            "list companies": "Firms list",
             "moderator panel": "Moderator Panel",
             "edit": "Edit data",
             "change password": "Change password",
@@ -443,7 +470,7 @@ const resources = {
             "error.account.notActive": "Account is blocked",
             "error.database.operation": "Database operation error",
             "error.business.worker.confirmed": "Worker is already confirmed",
-
+            "createCruiseGroup": "Create new cruise group",
             //auth errors
             "auth.incorrect.login": "Login error",
             "auth.incorrect.password": "Login error",
@@ -489,6 +516,7 @@ const resources = {
             "/profile/cruises": "Cruises",
             "/profile/settings": "Settings",
             "/accounts": "Accounts",
+            "/companies": "Companies",
             "/accounts/change_account_data": "Change account data",
             "/accounts/grant_access_level": "Grant access level",
             "/reset/passwordReset": "Password request",
@@ -496,6 +524,8 @@ const resources = {
             "/reset/resetSomebodyPassword": "Reset user password",
             "/verify/accountVerification": "Account verification",
             "/accounts/change_access_level_state": "Change access level state",
+            "/addCruiseGroup": "Add cruise group",
+            "/listCruiseGroup": "List cruise groups",
 
             'accept.action': 'Do you want to do this action?',
 
@@ -507,6 +537,25 @@ const resources = {
             'token.missing': 'Token is missing',
             'redirect in': 'Redirect to the main page in',
             'data.load.success': 'Data has been downloaded',
+            "cruiseName": "Cruise name",
+            "cruisneNamePlaceHolder": "Best adventure",
+            "description": "Description",
+            "descriptionPlaceHolder": "A week tour ",
+            "numberOfSeats": "Number of seats",
+            "seatsPlaceHolder":"30",
+            "price":"Price",
+            "pricePlaceHolder":"100",
+            "streetPlaceHolder":"Goergs streat",
+            "streetNumber":"Street number",
+            "numberPlaceHolder":"55",
+            "harborName": "Harbor name",
+            "harborPlaceHolder":" Srilanka port",
+            "cityPlaceHolder":" London",
+            "countryPlaceHolder":"Poland",
+            "addPicture":"Add picture",
+            "removePicture": "Remove Picture",
+            "addCruise": "Add group",
+            "listCruiseGroup": "List cruises groups"
         }
     }
 }

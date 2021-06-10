@@ -7,6 +7,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.CodeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.TokenWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Administrator;
@@ -14,10 +15,9 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.LanguageTypeWrapper;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AccountManagerException;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacadeMok;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.CodeWrapperFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.CompanyFacadeMok;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.TokenWrapperFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.JWTHandler;
@@ -62,6 +62,9 @@ public class AccountManager implements AccountManagerLocal {
 
     @Inject
     private TokenWrapperFacade tokenWrapperFacade;
+
+    @Inject
+    private CodeWrapperFacade codeWrapperFacade;
 
     @Context
     private SecurityContext context;
@@ -117,11 +120,16 @@ public class AccountManager implements AccountManagerLocal {
         Moderator moderator = new Moderator(true);
         setAccessLevelInitialMetadata(account, moderator, false);
         setUpdatedMetadata(account);
-        Locale locale = new Locale(account.getLanguageType().getName().name());
-        String subject = i18n.getMessage(ACCESS_LEVEL_GRANT_MODERATOR_SUBJECT, locale);
-        String body = i18n.getMessage(ACCESS_LEVEL_GRANT_MODERATOR_BODY, locale);
-        EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
+        sendMail(account, ACCESS_LEVEL_GRANT_MODERATOR_SUBJECT, ACCESS_LEVEL_GRANT_MODERATOR_BODY);
         return account;
+    }
+
+    private void sendMail(Account account, String subjectString, String bodyString) throws EmailServiceException {
+        Locale locale = new Locale(account.getLanguageType().getName().name());
+        String subject = i18n.getMessage(subjectString, locale);
+        String body = i18n.getMessage(bodyString, locale);
+        EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
+
     }
 
     @RolesAllowed("grantAccessLevel")
@@ -138,10 +146,7 @@ public class AccountManager implements AccountManagerLocal {
         Administrator administrator = new Administrator(true);
         setAccessLevelInitialMetadata(account, administrator, false);
         setUpdatedMetadata(account);
-        Locale locale = new Locale(account.getLanguageType().getName().name());
-        String subject = i18n.getMessage(ACCESS_LEVEL_GRANT_ADMINISTRATOR_SUBJECT, locale);
-        String body = i18n.getMessage(ACCESS_LEVEL_GRANT_ADMINISTRATOR_BODY, locale);
-        EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
+        sendMail(account, ACCESS_LEVEL_GRANT_ADMINISTRATOR_SUBJECT, ACCESS_LEVEL_GRANT_ADMINISTRATOR_BODY);
         return account;
     }
 
@@ -169,61 +174,40 @@ public class AccountManager implements AccountManagerLocal {
 
         accessLevel.setEnabled(enabled);
         setUpdatedMetadata(account, accessLevel);
-        Locale locale = new Locale(account.getLanguageType().getName().name());
-        if (enabled) {
-            switch (accountAccessLevel.get().getAccessLevelType()) {
-                case ADMINISTRATOR: {
-                    String subject = i18n.getMessage(ACCESS_LEVEL_REACTIVATE_ADMINISTRATOR_SUBJECT, locale);
-                    String body = i18n.getMessage(ACCESS_LEVEL_REACTIVATE_ADMINISTRATOR_BODY, locale);
-                    EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
-                    break;
+        switch (accountAccessLevel.get().getAccessLevelType()) {
+            case ADMINISTRATOR: {
+                if (enabled) {
+                    sendMail(account, ACCESS_LEVEL_REACTIVATE_ADMINISTRATOR_SUBJECT, ACCESS_LEVEL_REACTIVATE_ADMINISTRATOR_BODY);
+                } else {
+                    sendMail(account, ACCESS_LEVEL_DEACTIVATE_ADMINISTRATOR_SUBJECT, ACCESS_LEVEL_DEACTIVATE_ADMINISTRATOR_BODY);
                 }
-                case MODERATOR: {
-                    String subject = i18n.getMessage(ACCESS_LEVEL_REACTIVATE_MODERATOR_SUBJECT, locale);
-                    String body = i18n.getMessage(ACCESS_LEVEL_REACTIVATE_MODERATOR_BODY, locale);
-                    EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
-                    break;
-                }
-                case BUSINESS_WORKER: {
-                    String subject = i18n.getMessage(ACCESS_LEVEL_REACTIVATE_BUSINESS_WORKER_SUBJECT, locale);
-                    String body = i18n.getMessage(ACCESS_LEVEL_REACTIVATE_BUSINESS_WORKER_BODY, locale);
-                    EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
-                    break;
-                }
-                case CLIENT: {
-                    String subject = i18n.getMessage(ACCESS_LEVEL_REACTIVATE_CLIENT_SUBJECT, locale);
-                    String body = i18n.getMessage(ACCESS_LEVEL_REACTIVATE_CLIENT_BODY, locale);
-                    EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
-                    break;
-                }
+                break;
             }
-        } else {
-            switch (accountAccessLevel.get().getAccessLevelType()) {
-                case ADMINISTRATOR: {
-                    String subject = i18n.getMessage(ACCESS_LEVEL_DEACTIVATE_ADMINISTRATOR_SUBJECT, locale);
-                    String body = i18n.getMessage(ACCESS_LEVEL_DEACTIVATE_ADMINISTRATOR_BODY, locale);
-                    EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
-                    break;
+            case MODERATOR: {
+                if (enabled) {
+                    sendMail(account, ACCESS_LEVEL_REACTIVATE_MODERATOR_SUBJECT, ACCESS_LEVEL_REACTIVATE_MODERATOR_BODY);
+                } else {
+                    sendMail(account, ACCESS_LEVEL_DEACTIVATE_MODERATOR_SUBJECT, ACCESS_LEVEL_DEACTIVATE_MODERATOR_BODY);
                 }
-                case MODERATOR: {
-                    String subject = i18n.getMessage(ACCESS_LEVEL_DEACTIVATE_MODERATOR_SUBJECT, locale);
-                    String body = i18n.getMessage(ACCESS_LEVEL_DEACTIVATE_MODERATOR_BODY, locale);
-                    EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
-                    break;
-                }
-                case BUSINESS_WORKER: {
-                    String subject = i18n.getMessage(ACCESS_LEVEL_DEACTIVATE_BUSINESS_WORKER_SUBJECT, locale);
-                    String body = i18n.getMessage(ACCESS_LEVEL_DEACTIVATE_BUSINESS_WORKER_BODY, locale);
-                    EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
-                    break;
-                }
-                case CLIENT: {
-                    String subject = i18n.getMessage(ACCESS_LEVEL_DEACTIVATE_CLIENT_SUBJECT, locale);
-                    String body = i18n.getMessage(ACCESS_LEVEL_DEACTIVATE_CLIENT_BODY, locale);
-                    EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
-                    break;
-                }
+                break;
             }
+            case BUSINESS_WORKER: {
+                if (enabled) {
+                    sendMail(account, ACCESS_LEVEL_REACTIVATE_BUSINESS_WORKER_SUBJECT, ACCESS_LEVEL_REACTIVATE_BUSINESS_WORKER_BODY);
+                } else {
+                    sendMail(account, ACCESS_LEVEL_DEACTIVATE_BUSINESS_WORKER_SUBJECT, ACCESS_LEVEL_DEACTIVATE_BUSINESS_WORKER_BODY);
+                }
+                break;
+            }
+            case CLIENT: {
+                if (enabled) {
+                    sendMail(account, ACCESS_LEVEL_REACTIVATE_CLIENT_SUBJECT, ACCESS_LEVEL_REACTIVATE_CLIENT_BODY);
+                } else {
+                    sendMail(account, ACCESS_LEVEL_DEACTIVATE_CLIENT_SUBJECT, ACCESS_LEVEL_DEACTIVATE_CLIENT_BODY);
+                }
+                break;
+            }
+
         }
         return account;
     }
@@ -231,7 +215,6 @@ public class AccountManager implements AccountManagerLocal {
 
     private void setAccessLevelInitialMetadata(Account account, AccessLevel accessLevel, boolean newAccount) throws BaseAppException {
         setCreatedMetadata(newAccount ? account : getCurrentUser(), accessLevel);
-
         account.setAccessLevel(accessLevel);
         accessLevel.setAccount(account);
     }
@@ -257,12 +240,8 @@ public class AccountManager implements AccountManagerLocal {
 
     @RolesAllowed("getAllUnconfirmedBusinessWorkers")
     @Override
-    public List<Account> getAllUnconfirmedBusinessWorkers() throws BaseAppException {
-        List<Account> res = new ArrayList<>();
-        for (AccessLevel account : accountFacade.getUnconfirmedBusinessWorkers()) {
-            res.add(account.getAccount());
-        }
-        return res;
+    public List<Account> getAllUnconfirmedBusinessWorkers() {
+         return accountFacade.getUnconfirmedBusinessWorkers().stream().map(AccessLevel::getAccount).collect(Collectors.toList());
     }
 
     @RolesAllowed("blockUser")
@@ -340,10 +319,8 @@ public class AccountManager implements AccountManagerLocal {
         EmailService.sendEmailWithContent(account.getEmail().trim(), subject, contentHtml);
     }
 
-    @PermitAll
-    @Override
-    public void resetPassword(String login, String passwordHash, String token) throws BaseAppException {
 
+    private TokenWrapper validateToken(String token) throws AccountManagerException, JWTException {
         TokenWrapper tokenW;
         try {
             tokenW = this.tokenWrapperFacade.findByToken(token);
@@ -360,16 +337,24 @@ public class AccountManager implements AccountManagerLocal {
 
         JWTHandler.validateToken(token);
 
-        Map<String, Claim> claims = JWTHandler.getClaimsFromToken(token);
+        return tokenW;
+    }
 
+    @PermitAll
+    @Override
+    public void resetPassword(String login, String passwordHash, String token) throws BaseAppException {
+
+        validateToken(token);
+        Map<String, Claim> claims = JWTHandler.getClaimsFromToken(token);
         if (claims.get("sub").isNull() || claims.get("version").isNull()) {
             throw new AccountManagerException(PASSWORD_RESET_TOKEN_CONTENT_ERROR);
         }
+
         if (!claims.get("sub").asString().equals(login)) {
             throw new AccountManagerException(PASSWORD_RESET_IDENTITY_ERROR);
         }
-
         Account account = this.accountFacade.findByLogin(login);
+
         if (!account.isConfirmed()) {
             throw new AccountManagerException(ACCOUNT_NOT_VERIFIED_ERROR);
         }
@@ -393,21 +378,7 @@ public class AccountManager implements AccountManagerLocal {
     @Override
     public void verifyAccount(String token) throws BaseAppException {
 
-        TokenWrapper tokenW;
-        try {
-            tokenW = this.tokenWrapperFacade.findByToken(token);
-        } catch (BaseAppException e) {
-            if (e.getMessage().equals(NO_SUCH_ELEMENT_ERROR)) {
-                throw new AccountManagerException(TOKEN_INVALIDATE_ERROR);
-            } else {
-                throw new AccountManagerException(e.getMessage(), e);
-            }
-        }
-        if (tokenW.isUsed()) {
-            throw new AccountManagerException(TOKEN_ALREADY_USED_ERROR);
-        }
-
-        JWTHandler.validateToken(token);
+        TokenWrapper tokenW = validateToken(token);
         Map<String, Claim> claims = JWTHandler.getClaimsFromToken(token);
         Date expire = JWTHandler.getExpirationTimeFromToken(token);
 
@@ -430,10 +401,7 @@ public class AccountManager implements AccountManagerLocal {
         tokenW.setUsed(true);
         this.tokenWrapperFacade.edit(tokenW);
         setUpdatedMetadataWithModifier(account, account);
-        Locale locale = new Locale(account.getLanguageType().getName().name());
-        String body = i18n.getMessage(ACTIVATE_ACCOUNT_BODY, locale);
-        String subject = i18n.getMessage(ACTIVATE_ACCOUNT_SUBJECT, locale);
-        EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
+        sendMail(account, ACTIVATE_ACCOUNT_SUBJECT, ACTIVATE_ACCOUNT_BODY);
     }
 
     @RolesAllowed("requestSomeonesPasswordReset")
@@ -465,7 +433,6 @@ public class AccountManager implements AccountManagerLocal {
             throw FacadeException.optimisticLock();
         }
         account.setActive(true);
-
         setUpdatedMetadata(account);
         return account;
     }
@@ -480,14 +447,12 @@ public class AccountManager implements AccountManagerLocal {
         }
 
         targetClient.setPhoneNumber(phoneNumber);
-
         Address targetAddress = targetClient.getHomeAddress();
         targetAddress.setHouseNumber(addr.getHouseNumber());
         targetAddress.setStreet(addr.getStreet());
         targetAddress.setPostalCode(addr.getPostalCode());
         targetAddress.setCity(addr.getCity());
         targetAddress.setCountry(addr.getCountry());
-
         setUpdatedMetadata(targetClient, targetAddress);
         return targetAccount;
     }
@@ -535,20 +500,7 @@ public class AccountManager implements AccountManagerLocal {
     @RolesAllowed("changeEmail")
     @Override
     public void changeEmail(String token) throws BaseAppException {
-        TokenWrapper tokenW;
-        try {
-            tokenW = this.tokenWrapperFacade.findByToken(token);
-        } catch (BaseAppException e) {
-            if (e.getMessage().equals(NO_SUCH_ELEMENT_ERROR)) {
-                throw new AccountManagerException(TOKEN_INVALIDATE_ERROR);
-            } else {
-                throw new AccountManagerException(e.getMessage(), e);
-            }
-        }
-        if (tokenW.isUsed()) {
-            throw new AccountManagerException(TOKEN_ALREADY_USED_ERROR);
-        }
-        JWTHandler.validateToken(token);
+        validateToken(token);
 
         Map<String, Claim> claims = JWTHandler.getClaimsFromToken(token);
         Date expire = JWTHandler.getExpirationTimeFromToken(token);
@@ -657,10 +609,7 @@ public class AccountManager implements AccountManagerLocal {
         if (account.getNumberOfAuthenticationFailures() >= Long.parseLong(securityProperties.getProperty("max.incorrect.logins"))) {
             account.setActive(false);
             accountFacade.edit(account);
-            Locale locale = new Locale(account.getLanguageType().getName().name());
-            String body = i18n.getMessage(BLOCKED_ACCOUNT_BODY, locale);
-            String subject = i18n.getMessage(BLOCKED_ACCOUNT_SUBJECT, locale);
-            EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
+            sendMail(account, BLOCKED_ACCOUNT_SUBJECT, BLOCKED_ACCOUNT_BODY);
         }
     }
 
@@ -674,7 +623,6 @@ public class AccountManager implements AccountManagerLocal {
         }
 
         setAccountChanges(targetAccount, fromAccount);
-
         Moderator targetModerator = (Moderator) getAccessLevel(targetAccount, AccessLevelType.MODERATOR);
         setUpdatedMetadata(targetModerator, targetAccount);
     }
@@ -713,11 +661,7 @@ public class AccountManager implements AccountManagerLocal {
                 .map(accessLevel -> accessLevel.getAccessLevelType().name()).collect(Collectors.toList()));
 
         if (account.getAccessLevels().stream().anyMatch(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.ADMINISTRATOR && accessLevel.isEnabled())) {
-            Locale locale = new Locale(account.getLanguageType().getName().name());
-            String body = i18n.getMessage(LOG_IN_BODY, locale);
-            body = String.format("%s %s", body, ipAddr);
-            String subject = i18n.getMessage(LOG_IN_SUBJECT, locale);
-            EmailService.sendEmailWithContent(account.getEmail().trim(), subject, body);
+            sendMail(account, LOG_IN_SUBJECT, LOG_IN_BODY);
         }
         return JWTHandler.createToken(map, account.getLogin());
     }
@@ -881,10 +825,10 @@ public class AccountManager implements AccountManagerLocal {
         Locale locale = new Locale(account.getLanguageType().getName().name());
         String subject = i18n.getMessage(AUTH_CODE_EMAIL_SUBJECT, locale);
         String body = i18n.getMessage(AUTH_CODE_EMAIL_BODY, locale);
-        String kod = randomAlphanumeric(9);
-        TokenWrapper tokenWrapper = TokenWrapper.builder().token(kod).account(account).used(false).build();
-        this.tokenWrapperFacade.create(tokenWrapper);
-        String contentHtml = "<p>" + body + "<br>" + kod + "</p>";
+        String code = randomAlphanumeric(9);
+        CodeWrapper codeWrapper = CodeWrapper.builder().code(code).account(account).used(false).build();
+        this.codeWrapperFacade.create(codeWrapper);
+        String contentHtml = "<p>" + body + "<br>" + code + "</p>";
         EmailService.sendEmailWithContent(account.getEmail().trim(), subject, contentHtml);
     }
 
@@ -892,9 +836,9 @@ public class AccountManager implements AccountManagerLocal {
     @Override
     public String authWCodeUpdateCorrectAuthenticateInfo(String login, String code, String IpAddr, LocalDateTime time) throws BaseAppException {
         Account account = this.accountFacade.findByLogin(login);
-        TokenWrapper verificationCode;
+        CodeWrapper verificationCode;
         try {
-            verificationCode = this.tokenWrapperFacade.findByToken(code);
+            verificationCode = this.codeWrapperFacade.findByCode(code);
         } catch (BaseAppException e) {
             if (e.getMessage().equals(NO_SUCH_ELEMENT_ERROR)) {
                 throw new AccountManagerException(CODE_IS_INCORRECT_ERROR);
@@ -915,7 +859,7 @@ public class AccountManager implements AccountManagerLocal {
             throw new AccountManagerException(CODE_IS_INCORRECT_ERROR);
         }
         verificationCode.setUsed(true);
-        this.tokenWrapperFacade.edit(verificationCode);
+        this.codeWrapperFacade.edit(verificationCode);
         return updateCorrectAuthenticateInfo(login, IpAddr, time);
     }
 
