@@ -141,7 +141,7 @@ const resources = {
             "version": "Wersja:",
             //cruisecard
             "cruiseExample": "Rejs po Morzu Śródziemnym",
-            "createCruiseGroup": "Stworz nową grupę wycieczek",
+
 
             //change language
             "changeLanguage": "Zmień język",
@@ -248,6 +248,7 @@ const resources = {
             "/verify/accountVerification": "Weryfikacja",
             "/accounts/change_access_level_state": "Zmień stan poziomu dostępu",
             'accept.action': 'Czy chcesz wykonać tę akcję',
+            '/accounts/resetSomebodyPassword': 'Resetowanie hasła',
             "/addCruiseGroup": "Dodaj grupę wycieczek",
             "/listCruiseGroup": "Wyświetl grupę wycieczek",
 
@@ -260,6 +261,26 @@ const resources = {
             'token.missing': 'Brak tokenu',
             'redirect in': 'Przekierowanie na główną stronę przez',
             'data.load.success': 'Dane zostały załadowane',
+            // alter type
+            'UPDATE': 'Edycja',
+            'INSERT': 'Wstawienie',
+            'DELETE': 'Wycofanie',
+
+            // mięsiące
+            'JANUARY': 'Styczeń',
+            'FEBRUARY': 'Luty',
+            'MARCH': 'Marzec',
+            'APRIL': 'Kwiecień',
+            'MAJ': 'Maj',
+            'JUNE': 'Czerwiec',
+            'JULY': 'Lipiec',
+            'AUGUST': 'Sierpień',
+            'SEPTEMBER': 'Wrzesień',
+            'OCTOBER': 'Październik',
+            'NOVEMBER': 'Listopad',
+            'DECEMBER': 'Grudzień',
+
+            //cruises
             "cruiseName": "Nazwa grupy wycieczek",
             "cruisneNamePlaceHolder": "Najlepsza przygoda",
             "description": "Opis",
@@ -375,7 +396,6 @@ const resources = {
             //adminPanel
             "adminPanel": "Administrator panel",
             "search account": "Search account",
-            "search company": "Search company",
             "login": "Login",
             "bad_login": "Bad Login",
             "first name": "First name",
@@ -383,7 +403,6 @@ const resources = {
             "active": "Active",
             "access level": "Access level",
             "list accounts": "Accounts list",
-            "list companies": "Firms list",
             "moderator panel": "Moderator Panel",
             "edit": "Edit data",
             "change password": "Change password",
@@ -470,7 +489,7 @@ const resources = {
             "error.account.notActive": "Account is blocked",
             "error.database.operation": "Database operation error",
             "error.business.worker.confirmed": "Worker is already confirmed",
-            "createCruiseGroup": "Create new cruise group",
+
             //auth errors
             "auth.incorrect.login": "Login error",
             "auth.incorrect.password": "Login error",
@@ -516,7 +535,6 @@ const resources = {
             "/profile/cruises": "Cruises",
             "/profile/settings": "Settings",
             "/accounts": "Accounts",
-            "/companies": "Companies",
             "/accounts/change_account_data": "Change account data",
             "/accounts/grant_access_level": "Grant access level",
             "/reset/passwordReset": "Password request",
@@ -524,6 +542,7 @@ const resources = {
             "/reset/resetSomebodyPassword": "Reset user password",
             "/verify/accountVerification": "Account verification",
             "/accounts/change_access_level_state": "Change access level state",
+            "/accounts/resetSomebodyPassword": "Password reseting",
             "/addCruiseGroup": "Add cruise group",
             "/listCruiseGroup": "List cruise groups",
 
@@ -537,6 +556,27 @@ const resources = {
             'token.missing': 'Token is missing',
             'redirect in': 'Redirect to the main page in',
             'data.load.success': 'Data has been downloaded',
+
+            // alter type
+            'UPDATE': 'Update',
+            'INSERT': 'Insert',
+            'DELETE': 'Delete',
+
+            // mięsiące
+            'JANUARY': 'January',
+            'FEBRUARY': 'February',
+            'MARCH': 'March',
+            'APRIL': 'April',
+            'MAJ': 'Maj',
+            'JUNE': 'June',
+            'JULY': 'July',
+            'AUGUST': 'August',
+            'SEPTEMBER': 'September',
+            'OCTOBER': 'October',
+            'NOVEMBER': 'November',
+            'DECEMBER': 'December',
+
+            // cruises
             "cruiseName": "Cruise name",
             "cruisneNamePlaceHolder": "Best adventure",
             "description": "Description",

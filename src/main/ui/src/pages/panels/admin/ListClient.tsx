@@ -196,7 +196,7 @@ function Row(props: RowProps) {
                 <TableCell style={style}>{row.secondName}</TableCell>
                 <TableCell style={style}>{row.email}</TableCell>
                 <TableCell style={style}>{row.active.toString()}</TableCell>
-                <TableCell style={style}>{row.accessLevels.toString()}</TableCell>
+                <TableCell style={style}>{row.accessLevels.map(item => t(item)).join(', ')}</TableCell>
 
             </TableRow>
             <TableRow>

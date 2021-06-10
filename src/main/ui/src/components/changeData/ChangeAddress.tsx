@@ -103,9 +103,9 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
         setAlteredByAdr(currentSelfAddressMTD.alteredBy);
         setCreatedByAdr(currentSelfAddressMTD.createdBy);
         if(currentSelfAddressMTD.creationDateTime !=null)
-            setCreationDateTimeAdr(currentSelfAddressMTD.creationDateTime.dayOfMonth +"/"+ currentSelfAddressMTD.creationDateTime.month +" / "+ currentSelfAddressMTD.creationDateTime.year +"    "+ currentSelfAddressMTD.creationDateTime.hour +":"+ currentSelfAddressMTD.creationDateTime.minute )
+            setCreationDateTimeAdr(currentSelfAddressMTD.creationDateTime.dayOfMonth +"/"+ t(currentSelfAddressMTD.creationDateTime.month) +" / "+ currentSelfAddressMTD.creationDateTime.year +"    "+ currentSelfAddressMTD.creationDateTime.hour +":"+ currentSelfAddressMTD.creationDateTime.minute )
         if(currentSelfAddressMTD.lastAlterDateTime !=null)
-            setLastAlterDateTimeAdr(currentSelfAddressMTD.lastAlterDateTime.dayOfMonth +"/"+ currentSelfAddressMTD.lastAlterDateTime.month +" / "+ currentSelfAddressMTD.lastAlterDateTime.year +"    "+ currentSelfAddressMTD.lastAlterDateTime.hour +":"+ currentSelfAddressMTD.lastAlterDateTime.minute);
+            setLastAlterDateTimeAdr(currentSelfAddressMTD.lastAlterDateTime.dayOfMonth +"/"+ t(currentSelfAddressMTD.lastAlterDateTime.month) +" / "+ currentSelfAddressMTD.lastAlterDateTime.year +"    "+ currentSelfAddressMTD.lastAlterDateTime.hour +":"+ currentSelfAddressMTD.lastAlterDateTime.minute);
         setVersionAdr(currentSelfAddressMTD.version);
     }, [address])
 
@@ -206,7 +206,7 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
                     <td><h4>{t("creationDateTime")}</h4></td> <td><h4>{t("lastAlterDateTime")}</h4></td><td><h4>{t("version")}</h4></td>
                 </tr>
                 <tr>
-                    <td><h4>{alterTypeAdr}</h4></td><td><h4>{alteredByAdr}</h4></td><td><h4>{createdByAdr}</h4></td>
+                    <td><h4>{t(alterTypeAdr)}</h4></td><td><h4>{alteredByAdr}</h4></td><td><h4>{createdByAdr}</h4></td>
                     <td><h4>{creationDateTimeAdr}</h4></td><td><h4>{lastAlterDateTimeAdr}</h4></td><td><h4>{versionAdr}</h4></td>
                 </tr>
             </Grid>
