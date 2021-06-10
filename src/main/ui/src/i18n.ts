@@ -141,7 +141,7 @@ const resources = {
             "version": "Wersja:",
             //cruisecard
             "cruiseExample": "Rejs po Morzu Śródziemnym",
-
+            "createCruiseGroup": "Stworz nową grupę wycieczek",
 
             //change language
             "changeLanguage": "Zmień język",
