@@ -16,11 +16,9 @@ export default function Cruise() {
         })
     }, [])
 
-    console.log(id)
-
     return (
         <Box>
-            ID: {id}
+            ID:
         </Box>
     )
 }

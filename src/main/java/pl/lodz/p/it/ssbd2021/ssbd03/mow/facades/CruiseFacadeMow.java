@@ -46,7 +46,7 @@ public class CruiseFacadeMow extends AbstractFacade<Cruise> {
 //    @RolesAllowed({"deactivateCruise", "editCruise", "viewCruiseReservations", "getWorkerCruiseReservations", "createReservation", "cancelReservation"})
     public Cruise findByUUID(UUID uuid) throws BaseAppException {
         TypedQuery<Cruise> tq = em.createNamedQuery("Cruise.findByUUID", Cruise.class);
-        tq.setParameter("uuid", uuid.toString());
+        tq.setParameter("uuid", uuid);
         try {
             return tq.getSingleResult();
         } catch (NoResultException e) {
