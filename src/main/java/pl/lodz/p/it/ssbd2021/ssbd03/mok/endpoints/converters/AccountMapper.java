@@ -324,8 +324,9 @@ public class AccountMapper {
                 account.getVersion());
     }
 
-    public static BusinessWorkerDto toBusinessWorkerDto(Account account) throws BaseAppException {
-        BusinessWorker businessWorker = (BusinessWorker) getAccessLevel(account, AccessLevelType.BUSINESS_WORKER);
+    public static BusinessWorkerDto toBusinessWorkerDto(BusinessWorker businessWorker) {
+
+        Account account = businessWorker.getAccount();
         return new BusinessWorkerDto(
                 account.getLogin(),
                 account.getFirstName(),

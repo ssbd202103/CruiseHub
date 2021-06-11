@@ -12,7 +12,8 @@ import ChangePassword from "../../components/changeData/ChangePassword";
 import ChangeModeratorData from "../../components/changeData/ChangeModeratorData";
 import ManageWorkers from "./moderator/ManageBusinessWorkers";
 import PanelLayout from "../../layouts/PanelLayout";
-import {getSelfAddressMetadataDetails, getSelfMetadataDetails} from "../../Services/accountsService";
+import ListWorkersForCompany from "./moderator/ListWorkersForCompany"
+import {getSelfMetadataDetails} from "../../Services/accountsService";
 import {refreshToken} from "../../Services/userService";
 import useHandleError from "../../errorHandler";
 import ListCompany from "./moderator/ListCompany";
@@ -93,8 +94,8 @@ export default function ModeratorPanel() {
     return (
         <PanelLayout
             color={{
-                    light: 'pink-dark',
-                    dark: 'white'
+                light: 'pink-dark',
+                dark: 'white'
             }}
             menu={[
                 {
@@ -130,25 +131,42 @@ export default function ModeratorPanel() {
                             <ChangeModeratorData
                                 open={isDataEdit}
                                 onOpen={handleIsDataEdit}
-                                onConfirm={() => {setIsDataEdit(false)}}
-                                onCancel={() => {setIsDataEdit(false)}}
+                                onConfirm={() => {
+                                    setIsDataEdit(false)
+                                }}
+                                onCancel={() => {
+                                    setIsDataEdit(false)
+                                }}
                             />
                             <ChangeEmail
                                 open={isEmailEdit}
                                 onOpen={handleIsEmailEdit}
-                                onConfirm={() => {setIsEmailEdit(false)}}
-                                onCancel={() => {setIsEmailEdit(false)}}
+                                onConfirm={() => {
+                                    setIsEmailEdit(false)
+                                }}
+                                onCancel={() => {
+                                    setIsEmailEdit(false)
+                                }}
                             />
                             <ChangePassword
                                 open={isPasswordEdit}
                                 onOpen={handleIsPasswordEdit}
-                                onConfirm={() => {setIsPasswordEdit(false)}}
-                                onCancel={() => {setIsPasswordEdit(false)}}
+                                onConfirm={() => {
+                                    setIsPasswordEdit(false)
+                                }}
+                                onCancel={() => {
+                                    setIsPasswordEdit(false)
+                                }}
                             />
                         </>
                     )
                 }
             ]}
+            otherRoutes={[
+                {
+                    to: '/company/business-workers',
+                    Component: ListWorkersForCompany
+                }]}
         />
     )
 }

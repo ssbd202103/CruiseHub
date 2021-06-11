@@ -79,7 +79,7 @@ create sequence used_tokens_id_seq
 create table used_codes
 (
     id                 bigint    not null,
-    code              varchar   not null,
+    code               varchar   not null,
     creation_date_time timestamp not null,
     used               bool      not null,
     account_id         bigint    not null,
@@ -278,8 +278,8 @@ create table cruises_groups
     altered_by_id        bigint                                                              not null, -- FOREIGN KEY
     alter_type_id        bigint                                                              not null, -- FOREIGN KEY
     version              bigint check (version >= 0)                                         not null,
-    description          varchar                             not null,
-    uuid                 varchar                             not null,
+    description          varchar                                                             not null,
+    uuid                 varchar                                                             not null,
 
 
     CONSTRAINT cruises_groups_id_pk_constraint PRIMARY KEY (id),
@@ -614,10 +614,24 @@ GRANT SELECT, UPDATE
 
 -- Table permissions for MOW --
 GRANT SELECT
+    ON accounts TO ssbd03mow;
+
+GRANT SELECT
     ON access_levels TO ssbd03mow;
 
 GRANT SELECT
-    ON accounts TO ssbd03mow;
+    ON administrators TO ssbd03mow;
+
+GRANT SELECT
+    ON moderators TO ssbd03mow;
+
+GRANT SELECT
+    ON business_workers TO ssbd03mow;
+
+GRANT SELECT
+    ON clients TO ssbd03mow;
+
+
 
 GRANT SELECT
     ON alter_types TO ssbd03mow;

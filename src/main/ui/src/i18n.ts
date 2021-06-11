@@ -118,10 +118,12 @@ const resources = {
             //panels.clientPanel
             "clientPanel": "Panel klienta",
             //panels.ModeratorPanel
+            "business workers": "Pracownicy firmy",
             "search business workers": "Szukaj niezatwierdzonych pracowników",
             "company name": "Nazwa firmy",
             "company phone number": " Numer telefonu firmy",
-            "Manage business workers": "Zarządzaj pracownikami frim",
+            "Manage business workers": "Zarządzaj pracownikami firm",
+            "show business workers": "Pokaż pracowników",
             //verify
             "verifyAccount": "Zweryfikuj konto",
             //color
@@ -148,6 +150,7 @@ const resources = {
             "changeLanguage": "Zmień język",
             //errors
             "error.facade.noSuchElement": "Nie znaleziono elementu w bazie danych",
+            "error.security.notAuthorized": "Brak uprawnień do wykonania operacji",
             "error.account.accessLevels.alreadyAssigned": "Poziom dostępu jest już przydzielony do konta",
             "error.account.accessLevels.notAssigned": "Poziom dostępu nie jest przydzielony do konta",
             "error.account.accessLevels.notAssignable": "Nie można przydzielić podanego poziomu dostępu",
@@ -249,6 +252,7 @@ const resources = {
             "/verify/accountVerification": "Weryfikacja",
             "/accounts/change_access_level_state": "Zmień stan poziomu dostępu",
             'accept.action': 'Czy chcesz wykonać tę akcję',
+            '/accounts/resetSomebodyPassword': 'Resetowanie hasła',
             "/addCruiseGroup": "Dodaj grupę wycieczek",
             "/listCruiseGroup": "Wyświetl grupę wycieczek",
 
@@ -261,6 +265,26 @@ const resources = {
             'token.missing': 'Brak tokenu',
             'redirect in': 'Przekierowanie na główną stronę przez',
             'data.load.success': 'Dane zostały załadowane',
+            // alter type
+            'UPDATE': 'Edycja',
+            'INSERT': 'Wstawienie',
+            'DELETE': 'Wycofanie',
+
+            // mięsiące
+            'JANUARY': 'Styczeń',
+            'FEBRUARY': 'Luty',
+            'MARCH': 'Marzec',
+            'APRIL': 'Kwiecień',
+            'MAJ': 'Maj',
+            'JUNE': 'Czerwiec',
+            'JULY': 'Lipiec',
+            'AUGUST': 'Sierpień',
+            'SEPTEMBER': 'Wrzesień',
+            'OCTOBER': 'Październik',
+            'NOVEMBER': 'Listopad',
+            'DECEMBER': 'Grudzień',
+
+            //cruises
             "cruiseName": "Nazwa grupy wycieczek",
             "cruisneNamePlaceHolder": "Najlepsza przygoda",
             "description": "Opis",
@@ -377,7 +401,6 @@ const resources = {
             //adminPanel
             "adminPanel": "Administrator panel",
             "search account": "Search account",
-            "search company": "Search company",
             "login": "Login",
             "bad_login": "Bad Login",
             "first name": "First name",
@@ -385,7 +408,6 @@ const resources = {
             "active": "Active",
             "access level": "Access level",
             "list accounts": "Accounts list",
-            "list companies": "Firms list",
             "moderator panel": "Moderator Panel",
             "edit": "Edit data",
             "change password": "Change password",
@@ -400,10 +422,12 @@ const resources = {
             //panels.clientPanel
             "clientPanel": "Client panel",
             //panels.ModeratorPanel
+            "business workers": "Business workers",
             "search business workers": "Search business workers",
             "company name": "Company name",
             "company phone number": "Company phone number",
             "Manage business workers": "Manage business workers",
+            "show business workers": "Show business workers",
             //verify
             "verifyAccount": "Verify account",
             //color
@@ -428,6 +452,7 @@ const resources = {
             "changeLanguage": "Change language",
             //errors
             "error.facade.noSuchElement": "No such element found in the database",
+            "error.security.notAuthorized": "Operation not authorized",
             "error.account.accessLevels.alreadyAssigned": "Access level already assigned to the account",
             "error.account.accessLevels.notAssigned": "Access level not assigned to the account",
             "error.account.accessLevels.notAssignable": "Cannot assign this access level",
@@ -472,7 +497,7 @@ const resources = {
             "error.account.notActive": "Account is blocked",
             "error.database.operation": "Database operation error",
             "error.business.worker.confirmed": "Worker is already confirmed",
-            "createCruiseGroup": "Create new cruise group",
+
             //auth errors
             "auth.incorrect.login": "Login error",
             "auth.incorrect.password": "Login error",
@@ -518,7 +543,6 @@ const resources = {
             "/profile/cruises": "Cruises",
             "/profile/settings": "Settings",
             "/accounts": "Accounts",
-            "/companies": "Companies",
             "/accounts/change_account_data": "Change account data",
             "/accounts/grant_access_level": "Grant access level",
             "/reset/passwordReset": "Password request",
@@ -526,6 +550,7 @@ const resources = {
             "/reset/resetSomebodyPassword": "Reset user password",
             "/verify/accountVerification": "Account verification",
             "/accounts/change_access_level_state": "Change access level state",
+            "/accounts/resetSomebodyPassword": "Password reseting",
             "/addCruiseGroup": "Add cruise group",
             "/listCruiseGroup": "List cruise groups",
 
@@ -539,6 +564,27 @@ const resources = {
             'token.missing': 'Token is missing',
             'redirect in': 'Redirect to the main page in',
             'data.load.success': 'Data has been downloaded',
+
+            // alter type
+            'UPDATE': 'Update',
+            'INSERT': 'Insert',
+            'DELETE': 'Delete',
+
+            // mięsiące
+            'JANUARY': 'January',
+            'FEBRUARY': 'February',
+            'MARCH': 'March',
+            'APRIL': 'April',
+            'MAJ': 'Maj',
+            'JUNE': 'June',
+            'JULY': 'July',
+            'AUGUST': 'August',
+            'SEPTEMBER': 'September',
+            'OCTOBER': 'October',
+            'NOVEMBER': 'November',
+            'DECEMBER': 'December',
+
+            // cruises
             "cruiseName": "Cruise name",
             "cruisneNamePlaceHolder": "Best adventure",
             "description": "Description",

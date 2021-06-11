@@ -13,7 +13,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CompanyFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseGroupFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
-import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
 import javax.inject.Inject;
@@ -21,7 +20,6 @@ import javax.interceptor.Interceptors;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
 import java.util.List;
-import java.util.UUID;
 
 
 /**
@@ -47,7 +45,7 @@ public class CruiseGroupManager implements CruiseGroupManagerLocal {
     @RolesAllowed("addCruiseGroup")
     @Override
     public void addCruiseGroup(String companyName, String name, long number_of_seats, Double price, CruiseAddress start_address, List<CruisePicture> pictures,String description) throws BaseAppException {
-        Company company = companyFacadeMow.getCompanyByName(companyName);
+        Company company = companyFacadeMow.findByName(companyName);
         CruiseGroup cruisegroup = new CruiseGroup(company,start_address,name,number_of_seats,price, pictures,description);
         setCreatedMetadata(accountFacadeMow.findByLogin(context.getUserPrincipal().getName()),cruisegroup);
         setCreatedMetadata(accountFacadeMow.findByLogin(context.getUserPrincipal().getName()),start_address);

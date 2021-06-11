@@ -57,7 +57,7 @@ public class CompanyFacadeMow extends AbstractFacade<Company> {
     }
 
     @PermitAll
-    public Company getCompanyByName(String companyName) throws BaseAppException {
+    public Company findByName(String companyName) throws BaseAppException {
         TypedQuery<Company> tq = em.createNamedQuery("Company.findByName", Company.class);
         tq.setParameter("name", companyName);
         try {
@@ -67,7 +67,7 @@ public class CompanyFacadeMow extends AbstractFacade<Company> {
         }
     }
 
-    @RolesAllowed("getAllCompanies")
+    @RolesAllowed("getBusinessWorkersForCompany")
     public List<BusinessWorker> getBusinessWorkersByCompanyName(String companyName) throws BaseAppException {
         TypedQuery<BusinessWorker> tq = em.createNamedQuery("Company.findBusinessWorkersByCompanyName", BusinessWorker.class);
         tq.setParameter("companyName", companyName);
