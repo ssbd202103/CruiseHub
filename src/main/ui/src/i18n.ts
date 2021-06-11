@@ -117,10 +117,12 @@ const resources = {
             //panels.clientPanel
             "clientPanel": "Panel klienta",
             //panels.ModeratorPanel
+            "business workers": "Pracownicy firmy",
             "search business workers": "Szukaj niezatwierdzonych pracowników",
             "company name": "Nazwa firmy",
             "company phone number": " Numer telefonu firmy",
-            "Manage business workers": "Zarządzaj pracownikami frim",
+            "Manage business workers": "Zarządzaj pracownikami firm",
+            "show business workers": "Pokaż pracowników",
             //verify
             "verifyAccount": "Zweryfikuj konto",
             //color
@@ -147,6 +149,7 @@ const resources = {
             "changeLanguage": "Zmień język",
             //errors
             "error.facade.noSuchElement": "Nie znaleziono elementu w bazie danych",
+            "error.security.notAuthorized": "Brak uprawnień do wykonania operacji",
             "error.account.accessLevels.alreadyAssigned": "Poziom dostępu jest już przydzielony do konta",
             "error.account.accessLevels.notAssigned": "Poziom dostępu nie jest przydzielony do konta",
             "error.account.accessLevels.notAssignable": "Nie można przydzielić podanego poziomu dostępu",
@@ -417,10 +420,12 @@ const resources = {
             //panels.clientPanel
             "clientPanel": "Client panel",
             //panels.ModeratorPanel
+            "business workers": "Business workers",
             "search business workers": "Search business workers",
             "company name": "Company name",
             "company phone number": "Company phone number",
             "Manage business workers": "Manage business workers",
+            "show business workers": "Show business workers",
             //verify
             "verifyAccount": "Verify account",
             //color
@@ -445,6 +450,7 @@ const resources = {
             "changeLanguage": "Change language",
             //errors
             "error.facade.noSuchElement": "No such element found in the database",
+            "error.security.notAuthorized": "Operation not authorized",
             "error.account.accessLevels.alreadyAssigned": "Access level already assigned to the account",
             "error.account.accessLevels.notAssigned": "Access level not assigned to the account",
             "error.account.accessLevels.notAssignable": "Cannot assign this access level",

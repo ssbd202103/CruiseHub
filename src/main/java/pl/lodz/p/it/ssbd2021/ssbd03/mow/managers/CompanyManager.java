@@ -1,10 +1,13 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.managers;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Administrator;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacadeMok;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.CompanyMangerException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.AccountFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CompanyFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
@@ -18,8 +21,11 @@ import javax.interceptor.Interceptors;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
 import java.util.List;
+import java.util.Optional;
 
 import static javax.ejb.TransactionAttributeType.MANDATORY;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ACCESS_LEVEL_DOES_NOT_EXIST_ERROR;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.OPERATION_NOT_AUTHORIZED_ERROR;
 
 /**
  * Klasa która zarządza logiką biznesową firm
@@ -46,7 +52,26 @@ public class CompanyManager implements CompanyManagerLocal {
     @RolesAllowed("getBusinessWorkersForCompany")
     @Override
     public List<BusinessWorker> getBusinessWorkersForCompany(String companyName) throws BaseAppException {
-        throw new UnsupportedOperationException();
+        Account currentUser = getCurrentUser();
+
+        //checking if businessWorker is neither Admin nor Moderator and wants to check workers from his own company
+        if (currentUser.getAccessLevels().stream()
+                .noneMatch(accessLevel -> accessLevel instanceof Moderator || accessLevel instanceof Administrator)
+        ) {
+            Optional<AccessLevel> optionalAccessLevel = currentUser.getAccessLevels().stream()
+                    .filter(BusinessWorker.class::isInstance).findAny();
+
+            if (optionalAccessLevel.isEmpty()) {
+                throw new CompanyMangerException(ACCESS_LEVEL_DOES_NOT_EXIST_ERROR);
+            }
+
+            BusinessWorker businessWorker = (BusinessWorker) optionalAccessLevel.get();
+            if (!businessWorker.getCompany().getName().equals(companyName)) {
+                throw new CompanyMangerException(OPERATION_NOT_AUTHORIZED_ERROR);
+            }
+        }
+
+        return companyFacadeMow.getBusinessWorkersByCompanyName(companyName);
     }
 
     @RolesAllowed("addCompany")
