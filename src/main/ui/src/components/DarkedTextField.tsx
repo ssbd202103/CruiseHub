@@ -50,7 +50,7 @@ const useStyles = makeStyles(theme => ({
 
 
 export interface DarkedTextFieldProps {
-    readonly type?: "text" | "email" | "password",
+    readonly type?: "text" | "email" | "password" | "number",
     readonly className?: string,
     readonly icon?: JSX.Element,
     readonly placeholder?: string,

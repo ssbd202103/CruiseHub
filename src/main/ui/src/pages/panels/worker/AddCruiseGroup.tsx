@@ -28,20 +28,20 @@ export default function (){
     const worker_Company = useSelector(selectCompany);
     const showSuccess = useSnackbarQueue('success')
 
-
+    const [isPicture,setIsPicture] = React.useState(false)
       const maxNumber = 1;
       const [images, setImages] = React.useState([]);
       const onChange = (
           imageList: ImageListType,
 
       ) => {
-
+          setIsPicture(state => !state)
           setImages(imageList as []);
 
       };
 
     const HandleAddCruise =  () =>{
-        if( !numberOfSeats ||!price || !streetNumber)
+        if( !numberOfSeats ||!price || !streetNumber || price.includes(','))
         {
             handleError('error.fields')
             return
@@ -80,7 +80,7 @@ export default function (){
         <div>
 
             <Box style={{
-                width: '70%',
+                width: '100%',
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between"
@@ -89,7 +89,7 @@ export default function (){
                     type="text"
                     label={t("cruiseName") + ' *'}
                     style={{
-                        width: '70%',
+                        width: '100%',
                         margin: '20px 0'
                     }}
                     placeholder={t("cruisneNamePlaceHolder")}
@@ -102,7 +102,7 @@ export default function (){
                     type="text"
                     label={t("description") + ' *'}
                     style={{
-                        width: '70%',
+                        width: '100%',
                         margin: '20px 0'
                     }}
                     placeholder={t("descriptionPlaceHolder")}
@@ -112,10 +112,10 @@ export default function (){
                     }}
                 />
                 <DarkedTextField
-                    type="text"
+                    type="number"
                     label={t("numberOfSeats") + ' *'}
                     style={{
-                        width: '70%',
+                        width: '100%',
                         margin: '20px 0'
                     }}
                     placeholder={t("seatsPlaceHolder")}
@@ -125,10 +125,10 @@ export default function (){
                     }}
                 />
                 <DarkedTextField
-                    type="text"
+                    type="number"
                     label={t("price") + ' *'}
                     style={{
-                        width: '70%',
+                        width: '100%',
                         margin: '20px 0'
                     }}
                     placeholder={t("pricePlaceHolder")}
@@ -139,7 +139,7 @@ export default function (){
                 />
             </Box>
             <Box style={{
-                width: '70%',
+                width: '100%',
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between"
@@ -148,7 +148,7 @@ export default function (){
                     type="text"
                     label={t("street") + ' *'}
                     style={{
-                        width: '70%',
+                        width: '100%',
                         margin: '20px 0'
                     }}
                     placeholder={t("streetPlaceHolder")}
@@ -158,10 +158,10 @@ export default function (){
                     }}
                 />
                 <DarkedTextField
-                    type="text"
+                    type="number"
                     label={t("streetNumber") + ' *'}
                     style={{
-                        width: '70%',
+                        width: '100%',
                         margin: '20px 0'
                     }}
                     placeholder={t("numberPlaceHolder")}
@@ -174,7 +174,7 @@ export default function (){
                     type="text"
                     label={t("harborName") + ' *'}
                     style={{
-                        width: '70%',
+                        width: '100%',
                         margin: '20px 0'
                     }}
                     placeholder={t("harborPlaceHolder")}
@@ -187,7 +187,7 @@ export default function (){
                     type="text"
                     label={t("city") + ' *'}
                     style={{
-                        width: '70%',
+                        width: '100%',
                         margin: '20px 0'
                     }}
                     placeholder={t("cityPlaceHolder")}
@@ -200,7 +200,7 @@ export default function (){
                     type="text"
                     label={t("country") + ' *'}
                     style={{
-                        width: '70%',
+                        width: '100%',
                         margin: '20px 0'
                     }}
                     placeholder={t("countryPlaceHolder")}
@@ -210,7 +210,11 @@ export default function (){
                     }}
                 />
             </Box>
-            <Box>
+            <Box style ={{
+                width: '100%',
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between"}}>
                 <ImageUploading
                     multiple
                     value={images}
@@ -226,20 +230,21 @@ export default function (){
                           isDragging,
                           dragProps
                       }) => (
-                        <div className="upload__image-wrapper">
-                            <button
-                                style={isDragging ? { color: "red" } : undefined}
+                        <div className="upload__image-wrapper" >
+                            <RoundedButton
+                                color="blue-dark"
+
                                 onClick={onImageUpload}
-                                {...dragProps}
                             >
                                 {t("addPicture")}
-                            </button>
+                            </RoundedButton>
                             &nbsp;
                             {imageList.map((image, index) => (
                                 <div key={index} className="image-item">
-                                    <img src={image.dataURL} alt="" width="100" />
+                                    <img src={image.dataURL} alt="" width="60%" />
                                     <div className="image-item__btn-wrapper">
-                                        <button onClick={() => onImageRemove(index)}>{t("removePicture")}</button>
+                                        <RoundedButton color="blue-dark"
+                                                       onClick={() => onImageRemove(index)}>{t("removePicture")}</RoundedButton>
                                     </div>
                                 </div>
                             ))}

@@ -603,7 +603,8 @@ const resources = {
             "addPicture":"Add picture",
             "removePicture": "Remove Picture",
             "addCruise": "Add group",
-            "listCruiseGroup": "List cruises groups"
+            "listCruiseGroup": "List cruises groups",
+            "createCruiseGroup": "Create new cruiseGroup",
         }
     }
 }
