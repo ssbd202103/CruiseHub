@@ -1,6 +1,8 @@
-package pl.lodz.p.it.ssbd2021.ssbd03.mow.dto;
+package pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups;
 
 import lombok.*;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.CruiseAddressDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.CruisePictureDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.CompanyName;
 
 import javax.validation.Valid;
@@ -8,7 +10,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.util.List;
-import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor

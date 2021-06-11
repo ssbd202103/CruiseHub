@@ -1,4 +1,4 @@
-package pl.lodz.p.it.ssbd2021.ssbd03.mow.dto;
+package pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;

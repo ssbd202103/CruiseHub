@@ -1,7 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.*;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.*;
 
 import javax.ejb.Local;
 import java.util.List;

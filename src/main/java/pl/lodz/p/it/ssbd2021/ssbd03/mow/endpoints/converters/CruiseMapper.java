@@ -1,9 +1,9 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.converters;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseGroupDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.NewCruiseDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.CruiseDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.CruiseGroupDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.NewCruiseDto;
 
 
 /**

@@ -1,12 +1,14 @@
-package pl.lodz.p.it.ssbd2021.ssbd03.mow.dto;
+package pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups;
 
 import lombok.*;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.CruiseAddressDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.CruiseForCruiseGroupDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.CruisePictureDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.companies.CompanyLightDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.CompanyName;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Name;
 
 import javax.validation.constraints.Positive;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @NoArgsConstructor
