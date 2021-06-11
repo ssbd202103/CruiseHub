@@ -4,6 +4,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseAddress;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruisePicture;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.changeCruiseGroup.changeCruiseGroupDto;
 
@@ -109,7 +110,7 @@ public class CruiseGroupMapper {
                 cruiseGroup.getVersion(), cruiseGroup.isActive());
     }
 
-    public static CruiseGroupWithDetailsDto toCruiseGroupWithDetailsDto(CruiseGroup cruiseGroup,List<Cruise> cruies) {
+    public static CruiseGroupWithDetailsDto toCruiseGroupWithDetailsDto(CruiseGroup cruiseGroup,List<Cruise> cruies) throws BaseAppException {
         CompanyLightDto company = CompanyMapper.mapCompanyToCompanyLightDto(cruiseGroup.getCompany());
         CruiseAddressDto address = CruiseGroupMapper.toCruiseAddressDto(cruiseGroup.getAddress());
         List<CruiseForCruiseGroupDto> cruises = CruiseGroupMapper.toCruisesDto(cruies);

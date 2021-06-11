@@ -2,6 +2,8 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.CompanyName;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Name;
@@ -55,7 +57,12 @@ public class CruiseGroupWithDetailsDto implements SignableEntity {
         @Override
         public String getSignablePayload() { return uuid + "." + version; }
 
-        public CruiseGroupWithDetailsDto(CompanyLightDto company, String name, long numberOfSeats, Double price, CruiseAddressDto cruiseAddress, List<CruisePictureDto> cruisePictures, long version, String description, boolean active, List<CruiseForCruiseGroupDto> cruises, String start_time, String end_time, UUID uuid, String etag) {
+        public CruiseGroupWithDetailsDto(UUID uuid, CompanyLightDto company, String name, long numberOfSeats,
+                                         Double price, CruiseAddressDto cruiseAddress, List<CruisePictureDto> cruisePictures,
+                                         long version, String description, boolean active,
+                                         List<CruiseForCruiseGroupDto> cruises, String start_time,
+                                         String end_time, String etag) {
+                this.uuid = uuid;
                 this.company = company;
                 this.name = name;
                 this.numberOfSeats = numberOfSeats;
@@ -68,8 +75,28 @@ public class CruiseGroupWithDetailsDto implements SignableEntity {
                 this.cruises = cruises;
                 this.start_time = start_time;
                 this.end_time = end_time;
-                this.uuid = uuid;
                 this.etag = etag;
+        }
+
+        public CruiseGroupWithDetailsDto(UUID uuid, CompanyLightDto company, String name, long numberOfSeats,
+                                         Double price, CruiseAddressDto cruiseAddress, List<CruisePictureDto> cruisePictures,
+                                         long version, String description, boolean active,
+                                         List<CruiseForCruiseGroupDto> cruises, String start_time,
+                                         String end_time) throws BaseAppException {
+                this.uuid = uuid;
+                this.company = company;
+                this.name = name;
+                this.numberOfSeats = numberOfSeats;
+                this.price = price;
+                this.cruiseAddress = cruiseAddress;
+                this.cruisePictures = cruisePictures;
+                this.version = version;
+                this.description = description;
+                this.active = active;
+                this.cruises = cruises;
+                this.start_time = start_time;
+                this.end_time = end_time;
+                this.etag = EntityIdentitySignerVerifier.calculateEntitySignature(this);
         }
 }
 

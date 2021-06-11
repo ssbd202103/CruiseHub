@@ -32,11 +32,11 @@ export interface  CruiseDataD{
 }
 const deactivateCruiseGroup = ({uuid, etag, version, token}: DeactivateCruiseData) => {
     const json = JSON.stringify({
-            login: uuid,
+            uuid: uuid,
             version: version,
         }
     );
-    return axios.put('listCruiseGroup/deactivate-cruise-group', json, {
+    return axios.put('cruiseGroup/deactivate-cruise-group', json, {
         headers: {
             'Content-Type': 'application/json',
             'If-Match': etag,

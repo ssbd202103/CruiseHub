@@ -57,7 +57,7 @@ public class CruiseGroupEndpoint extends BaseEndpoint implements CruiseGroupEndp
 
     @Override
     @RolesAllowed("getAllCruiseGroupList")
-    public List<CruiseGroupWithDetailsDto> getCruiseGroupsInfo() throws FacadeException {
+    public List<CruiseGroupWithDetailsDto> getCruiseGroupsInfo() throws FacadeException, BaseAppException {
         List<CruiseGroupWithDetailsDto> res = new ArrayList<>();
         for (CruiseGroup cruiseGroup : cruiseGroupManager.getAllCruiseGroups()) {
             List<Cruise> cruise = cruiseGroupManager.getCruiseBelongsToCruiseGroup(cruiseGroup);

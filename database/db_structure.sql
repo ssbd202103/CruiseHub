@@ -79,7 +79,7 @@ create sequence used_tokens_id_seq
 create table used_codes
 (
     id                 bigint    not null,
-    code               varchar   not null,
+    code              varchar   not null,
     creation_date_time timestamp not null,
     used               bool      not null,
     account_id         bigint    not null,
@@ -278,8 +278,8 @@ create table cruises_groups
     altered_by_id        bigint                                                              not null, -- FOREIGN KEY
     alter_type_id        bigint                                                              not null, -- FOREIGN KEY
     version              bigint check (version >= 0)                                         not null,
-    description          varchar                                                             not null,
-    uuid                 varchar                                                             not null,
+    description          varchar                             not null,
+    uuid                 uuid                             not null,
 
 
     CONSTRAINT cruises_groups_id_pk_constraint PRIMARY KEY (id),
@@ -298,7 +298,7 @@ create sequence cruises_groups_id_seq
 create table cruises
 (
     id                   bigint                              not null,
-    uuid                 varchar                             not null,
+    uuid                 uuid                             not null,
     start_date           timestamp                           not null,
     end_date             timestamp,
     active               boolean   default false             not null,
@@ -357,7 +357,7 @@ create sequence attractions_id_seq
 create table reservations
 (
     id                   bigint                              not null,
-    uuid                 varchar                             not null,
+    uuid                 uuid                             not null,
     client_id            bigint                              not null, --FOREIGN KEY
     number_of_seats      bigint check (number_of_seats >= 0) not null,
     cruise_id            bigint                              not null, --FOREIGN KEY
@@ -509,6 +509,10 @@ ALTER TABLE reservations_id_seq
     OWNER to ssbd03admin;
 ALTER TABLE ratings_id_seq
     OWNER to ssbd03admin;
+ALTER SEQUENCE used_tokens_id_seq
+    OWNER TO ssbd03admin;
+ALTER SEQUENCE used_codes_id_seq
+    OWNER TO ssbd03admin;
 
 ALTER
     VIEW glassfish_auth_view OWNER TO ssbd03admin;
