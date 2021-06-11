@@ -9,6 +9,7 @@ import {getAllCompanies} from "../Services/companiesService";
 import {refreshToken} from "../Services/userService";
 import {getAllCruiseGroup} from "../Services/cruiseGroupService";
 import {ImageListType} from "react-images-uploading";
+import { v4 as UUID } from 'uuid';
 
 export function createCruiseGroup(
     price: any,
@@ -16,7 +17,10 @@ export function createCruiseGroup(
     end_time: any,
     numberOfSeats: any,
     name: any,
-    cruisePictures:ImageListType
+    cruisePictures:ImageListType,
+    etag: string,
+    version: bigint,
+    uuid: string,
 ){
     return {
         price:price,
@@ -24,9 +28,27 @@ export function createCruiseGroup(
         end_time: end_time,
         numberOfSeats: numberOfSeats,
         name: name,
-        cruisePictures:cruisePictures
+        cruisePictures:cruisePictures,
+        etag: etag,
+        version: version,
+        uuid: uuid,
     };
 }
+export function dCruiseGroup(
+    name: any,
+    etag: string,
+    version: bigint,
+    uuid: string,
+){
+    return {
+        name: name,
+        etag: etag,
+        version: version,
+        uuid: uuid,
+    };
+}
+
+
 export default function ListCruiseGroup(){
     const [cruiseGroup, setCruiseGroup] = useState([]);
     const [searchInput, setSearchInput] = useState("");
@@ -49,7 +71,7 @@ export default function ListCruiseGroup(){
     return(
         <div className={styles['cruises-grid']}>
             {cruiseGroup.map((cruise, item) =>
-                <CruiseGroupCard key={item} group={cruise}/>)}
+                <CruiseGroupCard key={item} group={cruise} onChange={getAllCruiseGroup}/>)}
         </div>
     )
 }
