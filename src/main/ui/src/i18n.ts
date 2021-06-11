@@ -117,10 +117,12 @@ const resources = {
             //panels.clientPanel
             "clientPanel": "Panel klienta",
             //panels.ModeratorPanel
+            "business workers": "Pracownicy firmy",
             "search business workers": "Szukaj niezatwierdzonych pracowników",
             "company name": "Nazwa firmy",
             "company phone number": " Numer telefonu firmy",
-            "Manage business workers": "Zarządzaj pracownikami frim",
+            "Manage business workers": "Zarządzaj pracownikami firm",
+            "show business workers": "Pokaż pracowników",
             //verify
             "verifyAccount": "Zweryfikuj konto",
             //color
@@ -399,10 +401,12 @@ const resources = {
             //panels.clientPanel
             "clientPanel": "Client panel",
             //panels.ModeratorPanel
+            "business workers": "Business workers",
             "search business workers": "Search business workers",
             "company name": "Company name",
             "company phone number": "Company phone number",
             "Manage business workers": "Manage business workers",
+            "show business workers": "Show business workers",
             //verify
             "verifyAccount": "Verify account",
             //color

@@ -58,6 +58,7 @@ public class CompanyController {
      */
     @GET
     @Path("/{companyName}/business-workers")
+    @Produces(MediaType.APPLICATION_JSON)
     public List<BusinessWorkerDto> getBusinessWorkersForCompany(@PathParam("companyName") String companyName) throws BaseAppException {
         return tryAndRepeat(() -> companyEndpoint.getBusinessWorkersForCompany(companyName));
     }
