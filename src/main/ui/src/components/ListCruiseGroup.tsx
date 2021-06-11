@@ -20,7 +20,7 @@ export function createCruiseGroup(
     cruisePictures:ImageListType,
     etag: string,
     version: bigint,
-    uuid: string,
+    uuid: any,
 ){
     return {
         price:price,
@@ -29,9 +29,9 @@ export function createCruiseGroup(
         numberOfSeats: numberOfSeats,
         name: name,
         cruisePictures:cruisePictures,
+        uuid: uuid,
         etag: etag,
         version: version,
-        uuid: uuid,
     };
 }
 export function dCruiseGroup(

@@ -22,6 +22,8 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_EMPTY;
 @Setter
 public class CruiseGroupWithDetailsDto implements SignableEntity {
 
+        private UUID uuid;
+
         @CompanyName
         private CompanyLightDto company;
         @Name
@@ -45,7 +47,6 @@ public class CruiseGroupWithDetailsDto implements SignableEntity {
         private List<CruiseForCruiseGroupDto> cruises;
         private String start_time;
         private String end_time;
-        private UUID uuid;
 
         @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
         private String etag;
