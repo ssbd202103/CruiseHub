@@ -16,7 +16,8 @@ export function createCruiseGroup(
     end_time: any,
     numberOfSeats: any,
     name: any,
-    cruisePictures:ImageListType
+    cruisePictures:ImageListType,
+    uuid: any,
 ){
     return {
         price:price,
@@ -24,7 +25,8 @@ export function createCruiseGroup(
         end_time: end_time,
         numberOfSeats: numberOfSeats,
         name: name,
-        cruisePictures:cruisePictures
+        cruisePictures:cruisePictures,
+        uuid: uuid,
     };
 }
 export default function ListCruiseGroup(){
