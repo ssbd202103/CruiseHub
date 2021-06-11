@@ -20,12 +20,12 @@ public class CruiseMapper {
      * @param newCruiseDto obiekt dto reprezentujący wycieczke
      * @return zmapowany obiekt
      */
-    public static Cruise mapNewCruiseDtoToCruise(NewCruiseDto newCruiseDto) {
+    public static Cruise newCruiseDtoToCruise(NewCruiseDto newCruiseDto) {
         return new Cruise(newCruiseDto.getStartDate(), newCruiseDto.getEndDate(), newCruiseDto.isActive(),
                 newCruiseDto.getAvailable(), null);
     }
 
-    public static CruiseDto mapCruiseToCruiseDto(Cruise cruise) {
+    public static CruiseDto cruiseToCruiseDto(Cruise cruise) {
 
         CruiseGroupDto cruiseGroupDto = CruiseGroupMapper.toCruiseGroupDto(cruise.getCruisesGroup());
 

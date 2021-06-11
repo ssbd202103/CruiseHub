@@ -115,4 +115,10 @@ public class CruiseManager implements CruiseManagerLocal {
         return cruiseFacadeMow.getPublishedCruises();
     }
 
+    @PermitAll
+    @Override
+    public List<Cruise> getCruisesForCruiseGroup(String cruiseGroupName) {
+        return cruiseFacadeMow.getCruisesForCruiseGroup(cruiseGroupName);
+    }
+
 }

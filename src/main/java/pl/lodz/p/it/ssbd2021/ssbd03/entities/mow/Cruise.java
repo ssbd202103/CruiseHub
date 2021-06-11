@@ -16,14 +16,15 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise.UUID_CONSTRAINT;
 
 @Entity(name = "cruises")
 @NamedQueries({
-    @NamedQuery(name = "Cruise.findByUUID", query = "SELECT c FROM cruises c WHERE c.uuid = :uuid"),
-    @NamedQuery(name = "Cruise.findAllPublished", query = "SELECT c FROM cruises c WHERE c.published = true")
+        @NamedQuery(name = "Cruise.findByUUID", query = "SELECT c FROM cruises c WHERE c.uuid = :uuid"),
+        @NamedQuery(name = "Cruise.findAllPublished", query = "SELECT c FROM cruises c WHERE c.published = true"),
+        @NamedQuery(name = "Cruise.findByCruiseGroup", query = "SELECT c FROM cruises c WHERE c.cruisesGroup.name = :cruiseGroupName")
 })
 @Table(
-    uniqueConstraints = {
-        @UniqueConstraint(columnNames = "uuid", name = UUID_CONSTRAINT),
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "uuid", name = UUID_CONSTRAINT),
 
-    }
+        }
 )
 @ToString
 public class Cruise extends BaseEntity {

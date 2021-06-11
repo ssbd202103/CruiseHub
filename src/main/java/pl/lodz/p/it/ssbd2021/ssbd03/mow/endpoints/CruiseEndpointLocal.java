@@ -1,12 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.DeactivateCruiseDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.EditCruiseDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.NewCruiseDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.PublishCruiseDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.*;
 
 import javax.ejb.Local;
 import java.util.List;
@@ -64,7 +59,16 @@ public interface CruiseEndpointLocal {
 
     /**
      * Zwraca wszystkie opublikowane wycieczki
+     *
      * @return Lista wycieczek
      */
     List<CruiseDto> getPublishedCruises();
+
+    /**
+     * Pobiera informacje o wycieczkach dla danej grupy wycieczek
+     *
+     * @param cruiseGroupName Nazwa grupy wycieczek
+     * @return Lista wycieczek w reprezentacji DTO
+     */
+    List<CruiseForCruiseGroupDto> getCruisesForCruiseGroup(String cruiseGroupName);
 }

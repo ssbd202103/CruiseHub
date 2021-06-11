@@ -3,11 +3,8 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints.BaseEndpoint;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.DeactivateCruiseDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.EditCruiseDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.NewCruiseDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.PublishCruiseDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.*;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.converters.CruiseGroupMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.converters.CruiseMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.managers.CruiseManagerLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
@@ -32,28 +29,28 @@ import java.util.stream.Collectors;
 public class CruiseEndpoint extends BaseEndpoint implements CruiseEndpointLocal {
 
     @Inject
-    private CruiseManagerLocal cruiseManagerLocal;
+    private CruiseManagerLocal cruiseManager;
 
 
     @RolesAllowed("addCruise")
     @Override
     public void addCruise(NewCruiseDto newCruiseDto) throws BaseAppException {
-        cruiseManagerLocal.addCruise(CruiseMapper.mapNewCruiseDtoToCruise(newCruiseDto), newCruiseDto.getCruiseName());
+        cruiseManager.addCruise(CruiseMapper.newCruiseDtoToCruise(newCruiseDto), newCruiseDto.getCruiseName());
     }
 
     @RolesAllowed("deactivateCruise")
     @Override
     public void deactivateCruise(DeactivateCruiseDto deactivateCruiseDto) throws BaseAppException {
-        cruiseManagerLocal.deactivateCruise(deactivateCruiseDto.getUuid(), deactivateCruiseDto.getVersion());
+        cruiseManager.deactivateCruise(deactivateCruiseDto.getUuid(), deactivateCruiseDto.getVersion());
 
     }
 
     @PermitAll
     @Override
     public CruiseDto getCruise(UUID uuid) throws BaseAppException {
-        Cruise cruise = cruiseManagerLocal.getCruise(uuid);
+        Cruise cruise = cruiseManager.getCruise(uuid);
 
-        return CruiseMapper.mapCruiseToCruiseDto(cruise);
+        return CruiseMapper.cruiseToCruiseDto(cruise);
     }
 
     @RolesAllowed("publishCruise")
@@ -65,13 +62,21 @@ public class CruiseEndpoint extends BaseEndpoint implements CruiseEndpointLocal 
     @RolesAllowed("editCruise")
     @Override
     public void editCruise(EditCruiseDto editCruiseDto) throws BaseAppException {
-        cruiseManagerLocal.editCruise(editCruiseDto.getDescription(), editCruiseDto.getStartDate(), editCruiseDto.getEndDate(),
+        cruiseManager.editCruise(editCruiseDto.getDescription(), editCruiseDto.getStartDate(), editCruiseDto.getEndDate(),
                 editCruiseDto.getUuid(), editCruiseDto.getVersion());
     }
 
     @PermitAll
     @Override
     public List<CruiseDto> getPublishedCruises() {
-        return cruiseManagerLocal.getPublishedCruises().stream().map(CruiseMapper::mapCruiseToCruiseDto).collect(Collectors.toList());
+        return cruiseManager.getPublishedCruises().stream()
+                .map(CruiseMapper::cruiseToCruiseDto).collect(Collectors.toList());
     }
+
+    @PermitAll
+    @Override
+    public List<CruiseForCruiseGroupDto> getCruisesForCruiseGroup(String cruiseGroupName) {
+        return CruiseGroupMapper.toCruiseForCruiseGroupDtos(cruiseManager.getCruisesForCruiseGroup(cruiseGroupName));
+    }
+
 }
