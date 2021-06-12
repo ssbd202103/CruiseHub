@@ -308,7 +308,6 @@ const resources = {
             "addCruise": "Dodaj grupę",
             "listCruiseGroup": "Wyświetl grupę wycieczek",
             "cruiseReserved": "Zarezersowano wycieczkę",
-            "listCruiseGroup": "Wyświetl grupę wycieczek",
 
             'no description': 'Nie ma żadnego opisu',
             'attractions': 'Atrakcje',
@@ -619,7 +618,6 @@ const resources = {
             "listCruiseGroup": "List cruises groups",
             "createCruiseGroup": "Create new cruiseGroup",
             "cruiseReserved": "Cruise booked",
-            "listCruiseGroup": "List cruises groups",
             'no description': 'There are no description',
             'attractions': 'Attractions',
             'no attractions': 'There are no attractions',
