@@ -60,6 +60,19 @@ public class CruiseFacadeMow extends AbstractFacade<Cruise> {
         return tq.getResultList();
     }
 
+    // TODO Roles!!!
+    @PermitAll
+    public List<Cruise> findByCruiseGroupUUID(UUID uuid) throws BaseAppException {
+        TypedQuery<Cruise> tq = em.createNamedQuery("Cruise.findByCruiseGroupUUID", Cruise.class);
+        tq.setParameter("uuid", uuid);
+
+        try {
+            return tq.getResultList();
+        } catch (NoResultException e) {
+            throw FacadeException.noSuchElement();
+        }
+    }
+
     @RolesAllowed("addCruise")
     @Override
     public void create(Cruise entity) throws FacadeException {

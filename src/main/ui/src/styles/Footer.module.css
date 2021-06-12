@@ -1,7 +1,9 @@
 .wrapper.wrapper {
     display: flex;
     justify-content: space-between;
-    padding: 60px;
+    align-items: center;
+    height: var(--header-height);
+    padding: 0 60px;
 }
 
 .wrapper-light {

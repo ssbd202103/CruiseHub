@@ -3,11 +3,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints.BaseEndpoint;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.DeactivateCruiseDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.EditCruiseDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.NewCruiseDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.PublishCruiseDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.converters.CruiseMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.managers.CruiseManagerLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
@@ -54,6 +50,14 @@ public class CruiseEndpoint extends BaseEndpoint implements CruiseEndpointLocal 
         Cruise cruise = cruiseManagerLocal.getCruise(uuid);
 
         return CruiseMapper.mapCruiseToCruiseDto(cruise);
+    }
+
+    @PermitAll
+    @Override
+    public List<RelatedCruiseDto> getCruisesByCruiseGroup(UUID uuid) throws BaseAppException {
+        List<Cruise> cruises = cruiseManagerLocal.getCruisesByCruiseGroup(uuid);
+
+        return cruises.stream().filter(Cruise::isActive).map(CruiseMapper::toRelatedCruiseDto).collect(Collectors.toList());
     }
 
     @RolesAllowed("publishCruise")

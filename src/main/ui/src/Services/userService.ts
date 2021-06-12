@@ -31,7 +31,7 @@ export function loadUserWithSavedToken() {
     }
 
     return new Promise((res, rej) => {
-        if (!['/', '/signin', '/signup/client', '/signup/worker'].includes(document.location.pathname)) {
+        if (!['/', '/signin', '/signup/client', '/signup/worker'].includes(document.location.pathname) && !document.location.pathname.includes('cruise')) {
             rej({response: {data: 'token.missing'}})
         }
         res(null)

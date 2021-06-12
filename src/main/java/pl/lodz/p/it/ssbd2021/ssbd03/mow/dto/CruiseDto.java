@@ -24,18 +24,14 @@ public class CruiseDto extends DeactivateCruiseDto {
 
     private boolean active;
 
-    @NotNull(message = CONSTRAINT_NOT_NULL)
-    @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
-    private String description;
-
     private boolean available;
 
     @NotNull(message = CONSTRAINT_NOT_NULL)
-    private CruiseGroupDto cruiseGroupDto;
+    private CruiseGroupWithUUIDDto cruiseGroupDto;
 
     public CruiseDto(UUID uuid, Long version,
                      LocalDateTime startDate, LocalDateTime endDate,
-                     boolean active, boolean available, CruiseGroupDto cruiseGroupDto) {
+                     boolean active, boolean available, CruiseGroupWithUUIDDto cruiseGroupDto) {
         super(uuid, version);
 
         this.startDate = startDate;

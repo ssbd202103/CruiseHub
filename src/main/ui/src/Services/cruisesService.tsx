@@ -7,3 +7,7 @@ export function getPublishedCruises() {
 export function getCruiseByUUID(uuid: string) {
     return axios.get(`cruise/${uuid}`)
 }
+
+export function getRelatedCruises(uuid: string) {
+    return axios.get(`cruise/cruise_group/${uuid}`)
+}

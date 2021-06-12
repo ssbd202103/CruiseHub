@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.RelatedCruiseDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.CruiseEndpointLocal;
 
 import javax.enterprise.context.RequestScoped;
@@ -34,6 +35,19 @@ public class CruiseController {
     public CruiseDto getCruiseByUUID(@PathParam("uuid") String uuid) throws BaseAppException {
 //        return Response.ok().entity("That's alright, that's ok").build();
         return tryAndRepeat(() -> cruiseEndpoint.getCruise(UUID.fromString(uuid)));
+    }
+
+    /**
+     * Pobiera wycieczki należące do grupy wycieczek o podanym uuid
+     * @param uuid uuid grupy wycieczek
+     * @return listę wycieczek należących do grupy wycieczek o podanym uuid
+     * @throws BaseAppException wyjątek rzucany w razie nie znależenia encji
+     */
+    @GET
+    @Path("/cruise_group/{uuid}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<RelatedCruiseDto> getCruisesByCruiseGroupUUID(@PathParam("uuid") String uuid) throws BaseAppException {
+        return tryAndRepeat(() -> cruiseEndpoint.getCruisesByCruiseGroup(UUID.fromString(uuid)));
     }
 
     /**

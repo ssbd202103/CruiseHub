@@ -34,6 +34,9 @@ const resources = {
             "my cruises": "Moje wycieczki",
             "phone": "Telefon",
             "cancel": "Anuluj",
+            'reserve': "Zarezerwuj",
+            'choose another date': 'Wybierz inną datę',
+            'no dates': 'Nie ma innych dat',
             //signin
             "signin": "Zaloguj się",
             "signin.welcome": "Witamy ponownie",
@@ -299,7 +302,9 @@ const resources = {
             "addPicture":"Dodaj zdjęcie",
             "removePicture": "Usuń zdjęcie",
             "addCruise": "Dodaj grupę",
-            "listCruiseGroup": "Wyświetl grupę wycieczek"
+            "listCruiseGroup": "Wyświetl grupę wycieczek",
+
+            'no description': 'Nie ma żadnego opisu',
 
         }
     },
@@ -335,6 +340,9 @@ const resources = {
             "my cruises": "My cruises",
             "phone": "Phone",
             "cancel": "Cancel",
+            'reserve': "Reserve",
+            'choose another date': 'Choose another date',
+            'no dates': 'There are no another dates',
             //signin
             "signin": "Sign in",
             "signin.welcome": "Welcome back",
@@ -595,7 +603,8 @@ const resources = {
             "addPicture":"Add picture",
             "removePicture": "Remove Picture",
             "addCruise": "Add group",
-            "listCruiseGroup": "List cruises groups"
+            "listCruiseGroup": "List cruises groups",
+            'no description': 'There are no description',
         }
     }
 }
