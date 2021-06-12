@@ -113,7 +113,7 @@ public class CruiseGroupMapper {
         CompanyLightDto company = CompanyMapper.mapCompanyToCompanyLightDto(cruiseGroup.getCompany());
         CruiseAddressDto address = CruiseGroupMapper.toCruiseAddressDto(cruiseGroup.getAddress());
 
-        return new CruiseGroupWithUUIDDto(cruiseGroup.getUuid(), cruiseGroup.getDescription(), company, cruiseGroup.getName(), cruiseGroup.getNumberOfSeats(), cruiseGroup.getPrice(), address,
+        return new CruiseGroupWithUUIDDto(cruiseGroup.getUuid(), cruiseGroup.getDescription(), cruiseGroup.getAverageRating(), company, cruiseGroup.getName(), cruiseGroup.getNumberOfSeats(), cruiseGroup.getPrice(), address,
                 cruiseGroup.getCruisePictures().stream().map(CruiseGroupMapper::toCruisePictureDto).collect(Collectors.toList()),
                 cruiseGroup.getVersion(), cruiseGroup.isActive());
     }

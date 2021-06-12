@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useHistory, useParams} from "react-router-dom";
-import {Box, Grid, Menu, MenuItem} from "@material-ui/core";
+import {Box, Card, CardActions, CardContent, Grid, Menu, MenuItem} from "@material-ui/core";
 import {getCruiseByUUID, getRelatedCruises} from "../Services/cruisesService";
 import styles from '../styles/Cruise.module.css';
 import HeaderFooterLayout from "../layouts/HeaderFooterLayout";
@@ -9,6 +9,8 @@ import PersonIcon from '@material-ui/icons/Person';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import DirectionsBoatIcon from '@material-ui/icons/DirectionsBoat';
 import RoundedButton from "../components/RoundedButton";
+import {getAttractionsByCruiseUUID} from "../Services/attractionService";
+import useBreakpoints from "./breakpoints";
 
 export default function Cruise() {
     const { id } = useParams<{id: string}>();
@@ -19,6 +21,7 @@ export default function Cruise() {
 
     const [cruise, setCruise] = useState<any>()
     const [relatedCruises, setRelatedCruises] = useState<any[]>([])
+    const [attractions, setAttractions] = useState<any[]>([])
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -38,11 +41,13 @@ export default function Cruise() {
     useEffect(() => {
         getCruiseByUUID(id).then(res => {
             setCruise(res.data)
-            console.log(res.data)
 
             getRelatedCruises(res.data.cruiseGroupDto.uuid).then(related => {
                 setRelatedCruises(related.data.filter((item: any) => item.uuid !== res.data.uuid))
-                console.log(related.data.filter((item: any) => item.uuid !== res.data.uuid))
+            })
+
+            getAttractionsByCruiseUUID(id).then(r => {
+                setAttractions(r.data)
             })
         })
     }, [])
@@ -63,9 +68,8 @@ export default function Cruise() {
 
     return (
         <HeaderFooterLayout>
-
             <Grid container className={styles.wrapper}>
-                <Grid item xs={12} md={7} lg={6} className={styles.infowrap}>
+                <Grid item xs className={styles.infowrap}>
                     <div>
                         <h3>{cruise?.cruiseGroupDto?.company.name}</h3>
                         <h1>{cruise?.cruiseGroupDto?.name}</h1>
@@ -116,6 +120,39 @@ export default function Cruise() {
                             </Menu>
                         </div>
                     </div>
+                </Grid>
+
+                <Grid item xs={1} />
+
+                <Grid item xs className={styles.attractions}>
+                    <h3 style={{ marginRight: 24 }}>{t('attractions')}</h3>
+                    <div style={{ padding: '0 24px', width: '100%', overflow: 'auto', height: '100%' }}>
+                        {
+                            attractions.length ?
+                               attractions.map(({name, description, price}, index) => (
+                                    <Card key={index} style={{ marginBottom: 16 }}>
+                                        <CardContent>
+                                            <h4>{name}</h4>
+                                            <p>{description}</p>
+                                            <div style={{display: 'flex', alignItems: 'center'}}>
+                                                <AttachMoneyIcon style={{fill: 'var(--dark-dark)', marginRight: 8}} />
+                                                {price}
+                                            </div>
+                                        </CardContent>
+                                        <CardActions>
+                                            <RoundedButton color="yellow">{t('take')}</RoundedButton>
+                                        </CardActions>
+                                    </Card>
+                                ))
+                                : <h4>{t('no attractions')}</h4>
+                        }
+                    </div>
+                </Grid>
+
+                <Grid item xs={1} />
+
+                <Grid item xs className={styles.opinions}>
+                    <h3 style={{ marginRight: 24 }}>{t('opinions')}</h3>
                 </Grid>
             </Grid>
 

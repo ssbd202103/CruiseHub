@@ -17,9 +17,11 @@ import java.util.UUID;
 public class CruiseGroupWithUUIDDto extends CruiseGroupDto {
     private UUID uuid;
     private String description;
+    private Double avgRating;
 
     public CruiseGroupWithUUIDDto(UUID uuid,
                                   String description,
+                                  Double avgRating,
                                   CompanyLightDto company,
                                   String name,
                                   long numberOfSeats,
@@ -32,5 +34,6 @@ public class CruiseGroupWithUUIDDto extends CruiseGroupDto {
 
         this.uuid = uuid;
         this.description = description;
+        this.avgRating = avgRating;
     }
 }

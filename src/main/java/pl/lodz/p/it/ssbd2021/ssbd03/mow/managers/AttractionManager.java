@@ -11,6 +11,7 @@ import javax.ejb.Stateful;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Klasa która zarządza logiką biznesową atrakcji
@@ -48,5 +49,10 @@ public class AttractionManager implements AttractionManagerLocal {
         throw new UnsupportedOperationException();
     }
 
-
+    // TODO
+    @PermitAll
+    @Override
+    public List<Attraction> findByCruiseUUID(UUID uuid) throws BaseAppException {
+        return attractionFacadeMow.findByCruiseUUID(uuid);
+    }
 }

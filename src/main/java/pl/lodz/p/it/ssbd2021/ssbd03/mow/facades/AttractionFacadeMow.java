@@ -15,6 +15,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
+import java.util.UUID;
 
 @Stateless
 @Interceptors(TrackingInterceptor.class)
@@ -57,6 +58,18 @@ public class AttractionFacadeMow extends AbstractFacade<Attraction> {
         tq.setParameter("name", name);
         try {
             return tq.getSingleResult();
+        } catch (NoResultException e) {
+            throw FacadeException.noSuchElement();
+        }
+    }
+
+    // TODO
+    @PermitAll
+    public List<Attraction> findByCruiseUUID(UUID uuid) throws BaseAppException {
+        TypedQuery<Attraction> tq = em.createNamedQuery("Attraction.findByCruiseUUID", Attraction.class);
+        tq.setParameter("uuid", uuid);
+        try {
+            return tq.getResultList();
         } catch (NoResultException e) {
             throw FacadeException.noSuchElement();
         }

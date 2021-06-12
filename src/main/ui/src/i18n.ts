@@ -305,7 +305,10 @@ const resources = {
             "listCruiseGroup": "Wyświetl grupę wycieczek",
 
             'no description': 'Nie ma żadnego opisu',
-
+            'attractions': 'Atrakcje',
+            'no attractions': 'Nie ma żadnych atrakcji',
+            'take': 'Weżmij',
+            'opinions': 'Opinie',
         }
     },
     EN: {
@@ -605,6 +608,10 @@ const resources = {
             "addCruise": "Add group",
             "listCruiseGroup": "List cruises groups",
             'no description': 'There are no description',
+            'attractions': 'Attractions',
+            'no attractions': 'There are no attractions',
+            'take': 'Take',
+            'opinions': 'Opinions',
         }
     }
 }

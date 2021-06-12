@@ -8,10 +8,7 @@
     font-family: "Montserrat", sans-serif;
 }
 
-.infowrap {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+.infowrap, .attractions, .opinions {
     height: 100%;
     background: rgba( 255, 255, 255, 0.50 );
     box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
@@ -19,7 +16,13 @@
     -webkit-backdrop-filter: blur( 5.5px );
     border-radius: 10px;
     border: 1px solid rgba( 255, 255, 255, 0.18 );
+}
+
+.infowrap {
     padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .infowrap h1 {
@@ -31,21 +34,29 @@
     margin: 8px 0 16px;
 }
 
-
-
 .description {
     color: var(--dark-dark);
     font-size: 1.4em;
     margin-bottom: 16px;
 }
 
-.company {
-    background: rgba( 255, 255, 255, 0.50 );
-    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
-    backdrop-filter: blur( 5.5px );
-    -webkit-backdrop-filter: blur( 5.5px );
-    border-radius: 10px;
-    border: 1px solid rgba( 255, 255, 255, 0.18 );
-    padding: 24px;
+.attractions {
+    display: flex;
+    flex-direction: column;
+}
 
+.attractions h3,
+.opinions h3 {
+    padding: 24px 0;
+    text-align: right;
+    font-size: 1.4em;
+    margin-bottom: 16px;
+}
+
+.attraction {
+    margin: 16px;
+    padding: 12px;
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 8px 32px 0 rgba( 0, 0, 0, 0.37 );
 }
