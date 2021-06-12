@@ -278,7 +278,8 @@ const resources = {
             "addPicture":"Dodaj zdjęcie",
             "removePicture": "Usuń zdjęcie",
             "addCruise": "Dodaj grupę",
-            "listCruiseGroup": "Wyświetl grupę wycieczek"
+            "listCruiseGroup": "Wyświetl grupę wycieczek",
+            "cruiseReserved": "Zarezersowano wycieczkę"
 
         }
     },
@@ -555,7 +556,8 @@ const resources = {
             "addPicture":"Add picture",
             "removePicture": "Remove Picture",
             "addCruise": "Add group",
-            "listCruiseGroup": "List cruises groups"
+            "listCruiseGroup": "List cruises groups",
+            "cruiseReserved": "Cruise booked"
         }
     }
 }
