@@ -1,6 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CancelReservationDTO;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CreateReservationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.CruiseEndpointLocal;
@@ -50,5 +51,18 @@ public class CruiseController {
     @Consumes(MediaType.APPLICATION_JSON)
     public void createReservation(CreateReservationDto reservationDto) throws BaseAppException {
         tryAndRepeat(() -> reservationEndpoint.createReservation(reservationDto));
+    }
+
+
+    /**
+     * Metoda anulująca rezerwację klienta
+     * @param reservationDTO Informacja o anulowanej rezerwacji
+     * @throws BaseAppException Bazowy wyjatek aplikacji
+     */
+    @DELETE
+    @Path("/cancelReservation")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void cancelReservation(CancelReservationDTO reservationDTO) throws BaseAppException {
+        tryAndRepeat(() -> reservationEndpoint.cancelReservation(reservationDTO));
     }
 }

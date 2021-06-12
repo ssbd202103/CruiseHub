@@ -11,6 +11,5 @@ import java.util.UUID;
 @AllArgsConstructor
 public class CancelReservationDTO {
     private long reservationVersion;
-    private UUID cruiseUuid;
-    private String clientLogin;
+    private UUID reservationUuid;
 }

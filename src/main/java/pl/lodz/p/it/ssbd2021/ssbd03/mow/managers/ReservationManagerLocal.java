@@ -52,11 +52,10 @@ public interface ReservationManagerLocal {
     /**
      * Anuluje wycieczke uzytkownika
      * @param reservationVersion Wersja rezerwacji
-     * @param cruiseUUID UUID wycieczki
-     * @param login Login uzytkownika
+     * @param reservationUUID UUID wycieczki
      * @throws BaseAppException Bazowy wyjatek aplikacji
      */
-    void cancelReservation(long reservationVersion, UUID cruiseUUID, String login) throws BaseAppException;
+    void cancelReservation(long reservationVersion, UUID reservationUUID) throws BaseAppException;
 
     /**
      * Zwraca listę rezerwacji obecnie zalogowanego klienta

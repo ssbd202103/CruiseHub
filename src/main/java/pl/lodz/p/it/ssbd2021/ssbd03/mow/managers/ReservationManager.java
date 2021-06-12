@@ -94,9 +94,12 @@ public class ReservationManager implements ReservationManagerLocal {
 
     @RolesAllowed("cancelReservation")
     @Override
-    public void cancelReservation(long reservationVersion, UUID cruiseUUID, String login) throws BaseAppException {
-        Cruise cruise = cruiseFacadeMow.findByUUID(cruiseUUID);
-        // TODO implement
+    public void cancelReservation(long reservationVersion, UUID reservationUUID) throws BaseAppException {
+        Reservation reservation = reservationFacadeMow.findReservationByUuidAndLogin(reservationUUID, context.getUserPrincipal().getName());
+        if (reservation.getVersion() != reservationVersion) {
+            throw FacadeException.optimisticLock();
+        }
+        reservationFacadeMow.remove(reservation);
     }
 
     private long getAvailableSeats(UUID cruiseUUID) throws BaseAppException {
