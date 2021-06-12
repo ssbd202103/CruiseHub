@@ -45,10 +45,9 @@ public interface ReservationManagerLocal {
      * @param version Wersja wycieczki
      * @param cruiseUUID UUID wycieczki
      * @param numberOfSeats Liczba rezerwowanych miejsc
-     * @param login Login użytkownika
      * @throws BaseAppException Bazowy wyjatek aplikacji
      */
-    void createReservation(long version, UUID cruiseUUID, long numberOfSeats, String login) throws BaseAppException;
+    void createReservation(long version, UUID cruiseUUID, long numberOfSeats) throws BaseAppException;
 
     /**
      * Anuluje wycieczke uzytkownika

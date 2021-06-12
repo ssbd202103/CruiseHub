@@ -303,7 +303,8 @@ const resources = {
             "addPicture":"Dodaj zdjęcie",
             "removePicture": "Usuń zdjęcie",
             "addCruise": "Dodaj grupę",
-            "listCruiseGroup": "Wyświetl grupę wycieczek"
+            "listCruiseGroup": "Wyświetl grupę wycieczek",
+            "cruiseReserved": "Zarezersowano wycieczkę"
 
         }
     },
@@ -605,6 +606,7 @@ const resources = {
             "addCruise": "Add group",
             "listCruiseGroup": "List cruises groups",
             "createCruiseGroup": "Create new cruiseGroup",
+            "cruiseReserved": "Cruise booked"
         }
     }
 }
