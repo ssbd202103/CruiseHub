@@ -110,7 +110,16 @@ public class CruiseGroupMapper {
                 cruiseGroup.getVersion(), cruiseGroup.isActive());
     }
 
-    public static CruiseGroupWithDetailsDto toCruiseGroupWithDetailsDto(CruiseGroup cruiseGroup,List<Cruise> cruies) throws BaseAppException {
+    public static CruiseGroupWithUUIDDto toCruiseGroupWithUUIDDto(CruiseGroup cruiseGroup) {
+        CompanyLightDto company = CompanyMapper.mapCompanyToCompanyLightDto(cruiseGroup.getCompany());
+        CruiseAddressDto address = CruiseGroupMapper.toCruiseAddressDto(cruiseGroup.getAddress());
+
+        return new CruiseGroupWithUUIDDto(cruiseGroup.getUuid(), cruiseGroup.getDescription(), cruiseGroup.getAverageRating(), company, cruiseGroup.getName(), cruiseGroup.getNumberOfSeats(), cruiseGroup.getPrice(), address,
+                cruiseGroup.getCruisePictures().stream().map(CruiseGroupMapper::toCruisePictureDto).collect(Collectors.toList()),
+                cruiseGroup.getVersion(), cruiseGroup.isActive());
+    }
+
+    public static CruiseGroupWithDetailsDto toCruiseGroupWithDetailsDto(CruiseGroup cruiseGroup,List<Cruise> cruies) {
         CompanyLightDto company = CompanyMapper.mapCompanyToCompanyLightDto(cruiseGroup.getCompany());
         CruiseAddressDto address = CruiseGroupMapper.toCruiseAddressDto(cruiseGroup.getAddress());
         List<CruiseForCruiseGroupDto> cruises = CruiseGroupMapper.toCruisesDto(cruies);

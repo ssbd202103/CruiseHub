@@ -514,6 +514,7 @@ ALTER SEQUENCE used_tokens_id_seq
 ALTER SEQUENCE used_codes_id_seq
     OWNER TO ssbd03admin;
 
+
 ALTER
     VIEW glassfish_auth_view OWNER TO ssbd03admin;
 

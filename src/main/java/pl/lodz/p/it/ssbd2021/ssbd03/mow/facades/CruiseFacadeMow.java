@@ -42,10 +42,11 @@ public class CruiseFacadeMow extends AbstractFacade<Cruise> {
         return em;
     }
 
-    @RolesAllowed({"deactivateCruise", "editCruise", "viewCruiseReservations", "getWorkerCruiseReservations", "createReservation", "cancelReservation"})
+    @PermitAll
+//    @RolesAllowed({"deactivateCruise", "editCruise", "viewCruiseReservations", "getWorkerCruiseReservations", "createReservation", "cancelReservation"})
     public Cruise findByUUID(UUID uuid) throws BaseAppException {
         TypedQuery<Cruise> tq = em.createNamedQuery("Cruise.findByUUID", Cruise.class);
-        tq.setParameter("uuid", uuid.toString());
+        tq.setParameter("uuid", uuid);
         try {
             return tq.getSingleResult();
         } catch (NoResultException e) {
@@ -57,6 +58,19 @@ public class CruiseFacadeMow extends AbstractFacade<Cruise> {
     public List<Cruise> getPublishedCruises() {
         TypedQuery<Cruise> tq = em.createNamedQuery("Cruise.findAllPublished", Cruise.class);
         return tq.getResultList();
+    }
+
+    // TODO Roles!!!
+    @PermitAll
+    public List<Cruise> findByCruiseGroupUUID(UUID uuid) throws BaseAppException {
+        TypedQuery<Cruise> tq = em.createNamedQuery("Cruise.findByCruiseGroupUUID", Cruise.class);
+        tq.setParameter("uuid", uuid);
+
+        try {
+            return tq.getResultList();
+        } catch (NoResultException e) {
+            throw FacadeException.noSuchElement();
+        }
     }
 
     @RolesAllowed("addCruise")
