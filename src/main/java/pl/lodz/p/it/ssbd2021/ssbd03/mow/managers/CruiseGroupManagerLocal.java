@@ -70,4 +70,6 @@ public interface CruiseGroupManagerLocal {
 
 
     List<Cruise> getCruiseBelongsToCruiseGroup(CruiseGroup cruiseGroup) throws FacadeException;
+
+    List<CruiseGroup> getCruiseGroupForBusinessWorker(String companyName) throws BaseAppException;
 }

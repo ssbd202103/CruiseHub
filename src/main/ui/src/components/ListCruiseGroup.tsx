@@ -4,10 +4,10 @@ import CruiseGroupCard from "./CruiseGroupCard";
 import {useEffect, useState} from "react";
 import useHandleError from "../errorHandler";
 import {useSelector} from "react-redux";
-import {selectDarkMode} from "../redux/slices/userSlice";
+import {selectCompany, selectDarkMode} from "../redux/slices/userSlice";
 import {getAllCompanies} from "../Services/companiesService";
 import {refreshToken} from "../Services/userService";
-import {getAllCruiseGroup} from "../Services/cruiseGroupService";
+import {getAllCruiseGroup, getCruiseGroupForBusinessWorker} from "../Services/cruiseGroupService";
 import {ImageListType} from "react-images-uploading";
 
 
@@ -56,9 +56,10 @@ export default function ListCruiseGroup(){
     const handleError = useHandleError()
 
     const darkMode = useSelector(selectDarkMode)
-
+    const worker_Company = useSelector(selectCompany);
     useEffect(() => {
-        getAllCruiseGroup().then(res => {
+
+        getCruiseGroupForBusinessWorker(worker_Company).then(res => {
             setCruiseGroup(res.data)
         }).catch(error => {
             const message = error.response.data

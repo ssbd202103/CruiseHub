@@ -2,10 +2,12 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.facades;
 
 
 import pl.lodz.p.it.ssbd2021.ssbd03.common.facades.AbstractFacade;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.CruiseEndpoint;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
 import javax.annotation.security.PermitAll;
@@ -83,6 +85,17 @@ public class CruiseGroupFacadeMow extends AbstractFacade<CruiseGroup> {
         } catch (NoResultException e) {
             throw FacadeException.noSuchElement();
         }
+    }
+    @RolesAllowed("getCruiseGroupForBusinessWorker")
+    public List<CruiseGroup> getCruiseGroupForBusinessWorker(Company company) throws FacadeException {
+        TypedQuery<CruiseGroup> tq = em.createNamedQuery("CruiseGroup.findForBusinessWorker", CruiseGroup.class);
+        tq.setParameter("name", company);
+        try {
+            return tq.getResultList();
+        } catch (NoResultException e) {
+            throw FacadeException.noSuchElement();
+        }
+
     }
 
 }

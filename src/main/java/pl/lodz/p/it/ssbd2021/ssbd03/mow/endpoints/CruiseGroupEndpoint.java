@@ -2,10 +2,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
 
 import pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints.BaseEndpoint;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseAddress;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruisePicture;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.AddCruiseGroupDto;
@@ -70,5 +67,15 @@ public class CruiseGroupEndpoint extends BaseEndpoint implements CruiseGroupEndp
     @Override
     public void deactivateCruiseGroup(UUID uuid, Long version) throws BaseAppException {
         this.cruiseGroupManager.deactivateCruiseGroup(uuid, version);
+    }
+    @RolesAllowed("getCruiseGroupForBusinessWorker")
+    @Override
+    public List<CruiseGroupWithDetailsDto> getCruiseGroupForBusinessWorker(String companyName) throws BaseAppException {
+        List<CruiseGroupWithDetailsDto> res = new ArrayList<>();
+        for (CruiseGroup cruiseGroup : cruiseGroupManager.getCruiseGroupForBusinessWorker(companyName)) {
+            List<Cruise> cruise = cruiseGroupManager.getCruiseBelongsToCruiseGroup(cruiseGroup);
+            res.add(CruiseGroupMapper.toCruiseGroupWithDetailsDto(cruiseGroup,cruise));
+        }
+      return res;
     }
 }

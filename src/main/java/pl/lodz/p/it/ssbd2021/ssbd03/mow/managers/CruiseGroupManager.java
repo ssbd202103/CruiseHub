@@ -108,5 +108,11 @@ public class CruiseGroupManager implements CruiseGroupManagerLocal {
         cruiseGroupFacadeMow.edit(cruiseGroup);
         return cruiseGroup;
     }
+    @RolesAllowed("getCruiseGroupForBusinessWorker")
+    @Override
+    public List<CruiseGroup> getCruiseGroupForBusinessWorker(String companyName) throws BaseAppException {
+       Company company= companyFacadeMow.findByName(companyName);
+       return cruiseGroupFacadeMow.getCruiseGroupForBusinessWorker(company);
+    }
 }
 

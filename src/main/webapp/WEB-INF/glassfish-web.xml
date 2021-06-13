@@ -306,4 +306,9 @@
         <group-name>ADMINISTRATOR</group-name>
     </security-role-mapping>
 
+    <security-role-mapping>
+        <role-name>getCruiseGroupForBusinessWorker</role-name>
+        <group-name>BUSINESS_WORKER</group-name>
+    </security-role-mapping>
+
 </glassfish-web-app>

@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.AddCruiseGroupDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseGroupDto;
@@ -49,4 +50,6 @@ public interface CruiseGroupEndpointLocal {
      * @throws BaseAppException
      */
     void deactivateCruiseGroup(UUID uuid, Long version) throws BaseAppException;
+
+    List<CruiseGroupWithDetailsDto> getCruiseGroupForBusinessWorker(String companyName) throws BaseAppException;
 }
