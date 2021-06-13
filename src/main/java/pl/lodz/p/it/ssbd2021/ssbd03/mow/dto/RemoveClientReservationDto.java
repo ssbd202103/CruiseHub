@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.dto;
 
 import com.fasterxml.jackson.databind.JavaType;
 import lombok.*;
+import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
 
 import java.util.UUID;
 
@@ -9,8 +10,13 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 @Setter
-public class RemoveClientReservationDto {
+public class RemoveClientReservationDto implements SignableEntity {
     private long reservationVersion;
     private String reservationUuid;
     private String clientLogin;
+
+    @Override
+    public String getSignablePayload() {
+        return clientLogin + "." + reservationVersion;
+    }
 }
