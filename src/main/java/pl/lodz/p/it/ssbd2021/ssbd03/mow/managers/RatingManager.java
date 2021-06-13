@@ -17,6 +17,8 @@ import javax.interceptor.Interceptors;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
 
+import java.util.UUID;
+
 import static javax.ejb.TransactionAttributeType.MANDATORY;
 
 @Stateful
@@ -38,9 +40,9 @@ public class RatingManager implements RatingManagerLocal {
 
     @RolesAllowed("createRating")
     @Override
-    public void createRating(String login, String cruiseName, Integer rating) throws BaseAppException {
+    public void createRating(String login, UUID cruiseGroupUUID, Integer rating) throws BaseAppException {
         Account account = accountFacadeMow.findByLogin(login);
-        CruiseGroup cruiseGroup = cruiseGroupFacadeMow.findByName(cruiseName);
+        CruiseGroup cruiseGroup = cruiseGroupFacadeMow.findByUUID(cruiseGroupUUID);
         Rating r = new Rating(account, cruiseGroup, rating);
 
         ratingFacade.create(r);
@@ -48,8 +50,8 @@ public class RatingManager implements RatingManagerLocal {
 
     @RolesAllowed("removeRating")
     @Override
-    public void removeRating(String login, String cruiseName) throws BaseAppException {
-        Rating r = ratingFacade.findByCruiseNameAndAccountLogin(cruiseName, login);
+    public void removeRating(String login, UUID cruiseGroupUUId) throws BaseAppException {
+        Rating r = ratingFacade.findByCruiseGroupUUIDAndAccountLogin(cruiseGroupUUId, login);
 
         ratingFacade.remove(r);
     }

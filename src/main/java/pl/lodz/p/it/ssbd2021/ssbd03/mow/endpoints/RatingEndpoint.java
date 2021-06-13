@@ -25,13 +25,13 @@ public class RatingEndpoint extends BaseEndpoint implements RatingEndpointLocal 
     @RolesAllowed("createRating")
     @Override
     public void createRating(RatingDto ratingDto) throws BaseAppException {
-        ratingManager.createRating(ratingDto.getLogin(), ratingDto.getCruiseGroupName(), ratingDto.getRating());
+        ratingManager.createRating(ratingDto.getLogin(), ratingDto.getCruiseGroupUUID(), ratingDto.getRating());
     }
 
     @RolesAllowed("removeRating")
     @Override
     public void removeRating(RemoveRankingDto removeRankingDto) throws BaseAppException {
-        ratingManager.removeRating(removeRankingDto.getLogin(), removeRankingDto.getCruiseGroupName());
+        ratingManager.removeRating(removeRankingDto.getLogin(), removeRankingDto.getCruiseGroupUUID());
     }
 
     @RolesAllowed("ownFindRating")

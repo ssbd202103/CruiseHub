@@ -19,7 +19,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.RATING_CONSTRAINT_ERROR;
 @Entity(name = "ratings")
 @NamedQueries({
         @NamedQuery(name = "Rating.findByCruiseGroupName", query = "SELECT r FROM ratings r WHERE r.cruiseGroup.name =:name"),
-        @NamedQuery(name = "Rating.findByCruiseGroupNameAndAccountLogin", query = "SELECT r FROM ratings r WHERE r.cruiseGroup.name=:name AND r.account.login=:login")
+        @NamedQuery(name = "Rating.findByCruiseGroupUUIDAndAccountLogin", query = "SELECT r FROM ratings r WHERE r.cruiseGroup.uuid=:uuid AND r.account.login=:login")
 })
 @ToString
 public class Rating extends BaseEntity {
@@ -40,7 +40,7 @@ public class Rating extends BaseEntity {
     private Account account;
 
     @Getter
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "cruise_group_id")
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid
