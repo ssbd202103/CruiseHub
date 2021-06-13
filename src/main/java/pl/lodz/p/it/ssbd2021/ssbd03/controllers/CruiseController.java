@@ -1,21 +1,26 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CancelReservationDTO;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CreateReservationDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.RelatedCruiseDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.ControllerException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.CruiseEndpointLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.ReservationEndpointLocal;
+import pl.lodz.p.it.ssbd2021.ssbd03.security.ETagFilterBinding;
+import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.UUID;
 
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_EMPTY;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
 import static pl.lodz.p.it.ssbd2021.ssbd03.utils.TransactionRepeater.tryAndRepeat;
 
 /**
@@ -92,5 +97,17 @@ public class CruiseController {
     @Consumes(MediaType.APPLICATION_JSON)
     public void cancelReservation(CancelReservationDTO reservationDTO) throws BaseAppException {
         tryAndRepeat(() -> reservationEndpoint.cancelReservation(reservationDTO));
+    }
+
+    @ETagFilterBinding
+    @PUT
+    @Path("/publish")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void publishCruise(PublishCruiseDto publishCruiseDto,
+                              @HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) @Valid String etag) throws BaseAppException {
+        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, publishCruiseDto)) {
+            throw ControllerException.etagIdentityIntegrity();
+        }
+        tryAndRepeat(()-> cruiseEndpoint.publishCruise(publishCruiseDto));
     }
 }

@@ -32,8 +32,8 @@ public class CruiseFacadeMow extends AbstractFacade<Cruise> {
     }
 
     @Override
-    @RolesAllowed("editCruise")
-    protected void edit(Cruise entity) throws FacadeException {
+    @RolesAllowed({"editCruise","publishCruise"})
+    public void edit(Cruise entity) throws FacadeException {
         super.edit(entity);
     }
 

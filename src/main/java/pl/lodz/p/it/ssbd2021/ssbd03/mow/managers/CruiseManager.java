@@ -112,7 +112,12 @@ public class CruiseManager implements CruiseManagerLocal {
     @RolesAllowed("publishCruise")
     @Override
     public void publishCruise(long cruiseVersion, UUID cruiseUuid) throws BaseAppException {
-        // todo finish implementation
+        Cruise cruise = cruiseFacadeMow.findByUUID(UUID.randomUUID());
+        if(cruise.getVersion() != cruiseVersion){
+            throw FacadeException.optimisticLock();
+        }
+        cruise.setPublished(true);
+        cruiseFacadeMow.edit(cruise);
     }
 
     @PermitAll
