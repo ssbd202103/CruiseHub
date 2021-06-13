@@ -303,7 +303,6 @@ create table cruises
     end_date             timestamp,
     active               boolean   default false             not null,
     cruises_group_id     bigint                              not null, -- FOREIGN KEY
-    available            boolean   default false             not null,
 
     creation_date_time   timestamp default CURRENT_TIMESTAMP not null,
     last_alter_date_time timestamp                           not null,

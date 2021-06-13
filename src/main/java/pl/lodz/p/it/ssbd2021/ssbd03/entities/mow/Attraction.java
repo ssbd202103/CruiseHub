@@ -61,7 +61,7 @@ public class Attraction extends BaseEntity {
 
     @Getter
     @Setter
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "cruise_id")
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid

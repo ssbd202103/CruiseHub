@@ -31,13 +31,12 @@ public class CruiseDto extends DeactivateCruiseDto {
 
     public CruiseDto(UUID uuid, Long version,
                      LocalDateTime startDate, LocalDateTime endDate,
-                     boolean active, boolean available, CruiseGroupWithUUIDDto cruiseGroupDto) {
+                     boolean active, CruiseGroupWithUUIDDto cruiseGroupDto) {
         super(uuid, version);
 
         this.startDate = startDate;
         this.endDate = endDate;
         this.active = active;
-        this.available = available;
         this.cruiseGroupDto = cruiseGroupDto;
     }
 }

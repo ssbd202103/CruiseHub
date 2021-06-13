@@ -15,5 +15,4 @@ public class RelatedCruiseDto {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private boolean active;
-    private Boolean available;
 }

@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.UUID;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
@@ -63,12 +64,6 @@ public class Cruise extends BaseEntity {
 
     @Getter
     @Setter
-    @NotNull(message = CONSTRAINT_NOT_NULL)
-    @Column(name = "available")
-    private boolean available;
-
-    @Getter
-    @Setter
     @OneToOne
     @JoinColumn(name = "cruises_group_id")
     @Valid
@@ -81,11 +76,10 @@ public class Cruise extends BaseEntity {
     private boolean published;
 
     public Cruise(LocalDateTime startDate, LocalDateTime endDate, boolean active,
-                  boolean available, CruiseGroup cruisesGroup) {
+                   CruiseGroup cruisesGroup) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.active = active;
-        this.available = available;
         this.cruisesGroup = cruisesGroup;
         this.uuid = UUID.randomUUID();
     }
@@ -97,5 +91,6 @@ public class Cruise extends BaseEntity {
     public Long getIdentifier() {
         return id;
     }
+
 }
 
