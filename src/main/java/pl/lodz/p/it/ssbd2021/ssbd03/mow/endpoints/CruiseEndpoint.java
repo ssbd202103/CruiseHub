@@ -38,7 +38,7 @@ public class CruiseEndpoint extends BaseEndpoint implements CruiseEndpointLocal 
     @RolesAllowed("addCruise")
     @Override
     public void addCruise(NewCruiseDto newCruiseDto) throws BaseAppException {
-        cruiseManagerLocal.addCruise(CruiseMapper.mapNewCruiseDtoToCruise(newCruiseDto), newCruiseDto.getCruiseName());
+        cruiseManagerLocal.addCruise(CruiseMapper.mapNewCruiseDtoToCruise(newCruiseDto), newCruiseDto.getCruiseGroupUUID());
     }
 
     @RolesAllowed("deactivateCruise")

@@ -60,11 +60,7 @@ public class Cruise extends BaseEntity {
     @Column(name = "active")
     private boolean active;
 
-    @Getter
-    @Setter
-    @NotNull(message = CONSTRAINT_NOT_NULL)
-    @Column(name = "available")
-    private boolean available;
+
 
     @Getter
     @Setter
@@ -79,12 +75,21 @@ public class Cruise extends BaseEntity {
     @Column(name = "published")
     private boolean published;
 
+    public Cruise(LocalDateTime startDate, LocalDateTime endDate,
+                   CruiseGroup cruisesGroup) {
+        this.uuid = UUID.randomUUID();
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.active = true;
+        this.cruisesGroup = cruisesGroup;
+        this.published = false;
+    }
+
     public Cruise(LocalDateTime startDate, LocalDateTime endDate, boolean active,
-                  boolean available, CruiseGroup cruisesGroup) {
+                 CruiseGroup cruisesGroup) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.active = active;
-        this.available = available;
         this.cruisesGroup = cruisesGroup;
         this.uuid = UUID.randomUUID();
     }

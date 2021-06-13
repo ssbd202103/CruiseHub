@@ -142,7 +142,7 @@ const resources = {
             //cruisecard
             "cruiseExample": "Rejs po Morzu Śródziemnym",
             "createCruiseGroup": "Stworz nową grupę wycieczek",
-
+            "createCruise": "Stworz nową wycieczkę",
             //change language
             "changeLanguage": "Zmień język",
             //errors
@@ -250,6 +250,7 @@ const resources = {
             'accept.action': 'Czy chcesz wykonać tę akcję',
             '/accounts/resetSomebodyPassword': 'Resetowanie hasła',
             "/addCruiseGroup": "Dodaj grupę wycieczek",
+            "/addCruise": "Dodaj wycieczkę",
             "/listCruiseGroup": "Wyświetl grupę wycieczek",
 
             'yes': 'Tak',
@@ -298,8 +299,15 @@ const resources = {
             "countryPlaceHolder":"Polska",
             "addPicture":"Dodaj zdjęcie",
             "removePicture": "Usuń zdjęcie",
-            "addCruise": "Dodaj grupę",
-            "listCruiseGroup": "Wyświetl grupę wycieczek"
+            "addCruise": "Dodaj cruise",
+            "listCruiseGroup": "Wyświetl grupę wycieczek",
+            "startDate":"Data rozpoczęcia rejsu",
+            "endDate":"Data zakończenia rejsu",
+            "startTime":"Czas rozpoczęcia rejsu",
+            "endTime":"Czas zakończenia rejsu",
+            "cruiseGroup":"Grupa wycieczek",
+            "error.field.end.date.before.start.date":"Data zakończenia jest przed datą rozpoczęcia",
+            "error.field.start.date":"Data rozpoczęcia nie może być wcześniejsza niż dzisiejsza data"
 
         }
     },
@@ -544,6 +552,7 @@ const resources = {
             "/accounts/change_access_level_state": "Change access level state",
             "/accounts/resetSomebodyPassword": "Password reseting",
             "/addCruiseGroup": "Add cruise group",
+            "/addCruise": "Add cruise",
             "/listCruiseGroup": "List cruise groups",
 
             'accept.action': 'Do you want to do this action?',
@@ -594,8 +603,16 @@ const resources = {
             "countryPlaceHolder":"Poland",
             "addPicture":"Add picture",
             "removePicture": "Remove Picture",
-            "addCruise": "Add group",
-            "listCruiseGroup": "List cruises groups"
+            "addCruise": "Add cruise",
+            "listCruiseGroup": "List cruises groups",
+            "createCruise": "Create new cruise",
+            "startDate":"Cruise start date",
+            "endDate":"Cruise end date",
+            "startTime":"Cruise start time",
+            "endTime":"Cruise end time",
+            "cruiseGroup":"Cruise group",
+            "error.field.end.date.before.start.date":"End date is before start date",
+            "error.field.start.date":"The start date cannot be earlier than today's date"
         }
     }
 }

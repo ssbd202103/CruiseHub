@@ -24,6 +24,7 @@ import javax.interceptor.Interceptors;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -50,8 +51,15 @@ public class CruiseManager implements CruiseManagerLocal {
 
     @RolesAllowed("addCruise")
     @Override
-    public void addCruise(Cruise cruise, String cruiseGroupName) throws BaseAppException {
-        CruiseGroup cruiseGroup = cruiseGroupFacadeMow.findByName(cruiseGroupName);
+    public void addCruise(Cruise cruise, UUID cruiseGroupUUID) throws BaseAppException {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        if(cruise.getStartDate().isBefore(localDateTime)){
+
+        }
+        if(cruise.getStartDate().isAfter(cruise.getEndDate())){
+
+        }
+        CruiseGroup cruiseGroup = cruiseGroupFacadeMow.findByUUID(cruiseGroupUUID);
         cruise.setCruisesGroup(cruiseGroup);
         cruiseFacadeMow.create(cruise);
         Account account = accountFacade.findByLogin(securityContext.getUserPrincipal().getName());

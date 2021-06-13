@@ -8,6 +8,7 @@ import javax.validation.constraints.Positive;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,6 +16,8 @@ import java.util.List;
 @Getter
 @Setter
 public class CruiseGroupWithDetailsDto {
+
+        private UUID uuid;
 
         @CompanyName
         private CompanyLightDto company;

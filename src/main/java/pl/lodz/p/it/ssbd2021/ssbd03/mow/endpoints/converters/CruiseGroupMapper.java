@@ -114,12 +114,12 @@ public class CruiseGroupMapper {
         CruiseAddressDto address = CruiseGroupMapper.toCruiseAddressDto(cruiseGroup.getAddress());
         List<CruiseForCruiseGroupDto> cruises = CruiseGroupMapper.toCruisesDto(cruies);
         if(cruies.size()>0) {
-            return new CruiseGroupWithDetailsDto(company, cruiseGroup.getName(), cruiseGroup.getNumberOfSeats(), cruiseGroup.getPrice(), address,
+            return new CruiseGroupWithDetailsDto(cruiseGroup.getUuid(), company, cruiseGroup.getName(), cruiseGroup.getNumberOfSeats(), cruiseGroup.getPrice(), address,
                     cruiseGroup.getCruisePictures().stream().map(CruiseGroupMapper::toCruisePictureDto).collect(Collectors.toList()),
                     cruiseGroup.getVersion(), cruiseGroup.getDescription(), cruiseGroup.isActive(), cruises, cruies.get(0).getStartDate().format(DateTimeFormatter.ISO_LOCAL_DATE), cruies.get(0).getEndDate().format(DateTimeFormatter.ISO_LOCAL_DATE));
         }
         else
-            return  new CruiseGroupWithDetailsDto(company, cruiseGroup.getName(), cruiseGroup.getNumberOfSeats(), cruiseGroup.getPrice(), address,
+            return  new CruiseGroupWithDetailsDto(cruiseGroup.getUuid(),company, cruiseGroup.getName(), cruiseGroup.getNumberOfSeats(), cruiseGroup.getPrice(), address,
                 cruiseGroup.getCruisePictures().stream().map(CruiseGroupMapper::toCruisePictureDto).collect(Collectors.toList()),
                 cruiseGroup.getVersion(), cruiseGroup.getDescription(), cruiseGroup.isActive(), cruises, "", "");
     }
