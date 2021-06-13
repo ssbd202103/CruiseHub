@@ -94,10 +94,12 @@ export default function CruiseGroupCard(props: CruiseData) {
             height: xlMatches ? 400 : lgMatches ? 300 : 200,
             backgroundImage:`url(${pictureUrl})`
         }}>
-            <div className={styles.cost}>{group.price}</div>
-            <div >{group.numberOfSeats}</div>
-            <div >{group.start_time}</div>
-            <div >{group.end_time}</div>
+            <div className={styles.cost}>{group.price+ " pln"}</div>
+            <div className={styles.data}>
+                <div>{t("seats")+" "+group.numberOfSeats}</div>
+                <div>{t("start_date")+" "+group.start_time}</div>
+                <div>{t("end_date")+" "+group.end_time}</div>
+            </div>
             <div className={styles.description}>
                 <span className={styles.title}>{group.name}</span>
                 <div>

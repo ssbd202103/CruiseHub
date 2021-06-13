@@ -17,7 +17,7 @@ import {getSelfMetadataDetails} from "../../Services/accountsService";
 import {refreshToken} from "../../Services/userService";
 import useHandleError from "../../errorHandler";
 import ListCompany from "./moderator/ListCompany";
-import ListCruiseGroup from "../../components/ListCruiseGroup";
+import ListCruiseGroup from "../panels/moderator/ListCruiseGroups";
 
 export default function ModeratorPanel() {
     const {t} = useTranslation()

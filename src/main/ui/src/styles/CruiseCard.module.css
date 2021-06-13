@@ -35,6 +35,17 @@
     color: var(--white);
 
 }
+.data {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 5px;
+    font-family: 'Montserrat', sans-serif;
+    color: var(--white);
+}
 
 .title {
     font-size: 1.2rem;

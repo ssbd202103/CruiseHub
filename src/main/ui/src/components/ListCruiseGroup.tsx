@@ -9,7 +9,7 @@ import {getAllCompanies} from "../Services/companiesService";
 import {refreshToken} from "../Services/userService";
 import {getAllCruiseGroup} from "../Services/cruiseGroupService";
 import {ImageListType} from "react-images-uploading";
-import { v4 as UUID } from 'uuid';
+
 
 export function createCruiseGroup(
     price: any,

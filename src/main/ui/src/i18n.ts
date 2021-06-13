@@ -314,6 +314,10 @@ const resources = {
             'no attractions': 'Nie ma żadnych atrakcji',
             'take': 'Weżmij',
             'opinions': 'Opinie',
+            "search cruiseGroup": "Wyszukaj grupę",
+            "seats": "Liczba miejsc",
+            "start_date": "Data początkowa",
+            "end_date": "Data końcowa"
         }
     },
     EN: {
@@ -623,6 +627,10 @@ const resources = {
             'no attractions': 'There are no attractions',
             'take': 'Take',
             'opinions': 'Opinions',
+            "search cruiseGroup": "Search group",
+            "seats": "Number of seats",
+            "start_date": "Start date",
+            "end_date": "End date"
         }
     }
 }
