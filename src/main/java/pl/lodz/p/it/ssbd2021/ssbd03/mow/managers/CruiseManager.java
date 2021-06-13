@@ -59,7 +59,11 @@ public class CruiseManager implements CruiseManagerLocal {
         if(cruise.getStartDate().isAfter(cruise.getEndDate())){
 
         }
+
         CruiseGroup cruiseGroup = cruiseGroupFacadeMow.findByUUID(cruiseGroupUUID);
+        if(!cruiseGroup.isActive()){
+
+        }
         cruise.setCruisesGroup(cruiseGroup);
         cruiseFacadeMow.create(cruise);
         Account account = accountFacade.findByLogin(securityContext.getUserPrincipal().getName());

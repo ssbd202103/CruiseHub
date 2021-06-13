@@ -89,7 +89,7 @@ public class CruiseGroupMapper {
         List<CruiseForCruiseGroupDto> res = new ArrayList<>();
         for (Cruise cruise1: cruise
              ) {
-            res.add(new CruiseForCruiseGroupDto(cruise1.getStartDate(),cruise1.getEndDate(),cruise1.isActive(),cruise1.isAvailable()));
+            res.add(new CruiseForCruiseGroupDto(cruise1.getStartDate(),cruise1.getEndDate(),cruise1.isActive()));
         }
         return res;
     }

@@ -5,6 +5,9 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseGroupDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.NewCruiseDto;
 
+import java.time.Instant;
+import java.time.ZoneId;
+
 
 /**
  * Klasa która zajmuje się mapowaniem obiektów klas dto na obiekty klas modelu
@@ -21,7 +24,14 @@ public class CruiseMapper {
      * @return zmapowany obiekt
      */
     public static Cruise mapNewCruiseDtoToCruise(NewCruiseDto newCruiseDto) {
-        return new Cruise(newCruiseDto.getStartDate(), newCruiseDto.getEndDate(), null);
+//        return new Cruise(Instant.ofEpochMilli(newCruiseDto.getStartDate().getTime())
+//                .atZone(ZoneId.systemDefault())
+//                .toLocalDateTime(), Instant.ofEpochMilli(newCruiseDto.getEndDate().getTime())
+//                .atZone(ZoneId.systemDefault())
+//                .toLocalDateTime(), null);
+                return new Cruise((newCruiseDto.getStartDate()), (newCruiseDto.getEndDate())
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime(), null);
     }
 
     public static CruiseDto mapCruiseToCruiseDto(Cruise cruise) {
@@ -30,6 +40,6 @@ public class CruiseMapper {
 
         return new CruiseDto(cruise.getUuid(), cruise.getVersion(),
                 cruise.getStartDate(), cruise.getEndDate(),
-                cruise.isActive(), cruise.isAvailable(), cruiseGroupDto);
+                cruise.isActive(), cruiseGroupDto);
     }
 }

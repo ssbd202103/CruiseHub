@@ -307,8 +307,8 @@ const resources = {
             "endTime":"Czas zakończenia rejsu",
             "cruiseGroup":"Grupa wycieczek",
             "error.field.end.date.before.start.date":"Data zakończenia jest przed datą rozpoczęcia",
-            "error.field.start.date":"Data rozpoczęcia nie może być wcześniejsza niż dzisiejsza data"
-
+            "error.field.start.date":"Data rozpoczęcia nie może być wcześniejsza niż dzisiejsza data",
+            "language":"pl"
         }
     },
     EN: {
@@ -612,7 +612,8 @@ const resources = {
             "endTime":"Cruise end time",
             "cruiseGroup":"Cruise group",
             "error.field.end.date.before.start.date":"End date is before start date",
-            "error.field.start.date":"The start date cannot be earlier than today's date"
+            "error.field.start.date":"The start date cannot be earlier than today's date",
+            "language":"en"
         }
     }
 }

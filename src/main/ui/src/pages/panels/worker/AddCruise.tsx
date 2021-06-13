@@ -1,4 +1,4 @@
-import {Box, Grid, TextField} from "@material-ui/core";
+import {Box, createMuiTheme, Grid, TextField} from "@material-ui/core";
 import PasswordIcon from "@material-ui/icons/VpnKeyRounded";
 import DarkedTextField from "../../../components/DarkedTextField";
 import React, {useEffect, useReducer, useState} from "react";
@@ -18,21 +18,31 @@ import styles from "../../../styles/auth.global.module.css";
 import DarkedSelect from "../../../components/DarkedSelect";
 import {getAllCruiseGroup} from "../../../Services/cruiseGroupService";
 import {refreshToken} from "../../../Services/userService";
-// import LocalizationProvider from '@material-ui/lab/LocalizationProvider';
-// import AdapterDateFns from '@material-ui/lab/AdapterDateFns';
+
+
 import {
     MuiPickersUtilsProvider,
     KeyboardDatePicker, KeyboardTimePicker
 } from '@material-ui/pickers';
 import DateFnsUtils from "@date-io/date-fns";
+import plLocale from 'date-fns/locale/pl';
+import enLocale from 'date-fns/locale/en-US';
+import {white} from "material-ui/styles/colors";
+import {colors} from "material-ui/styles";
+import {makeStyles} from "@material-ui/styles";
 
 
 
+export default function AddCruise() {
 
-export default function AddCruise(){
+
+
     const [, forceUpdate] = useReducer(x => x + 1, 0);
     const {t} = useTranslation();
-    console.log(t.name)
+
+    const language = (t('language') == ("pl"))? pl : eng;
+    const isPMAM = (t('language') == ("pl"))? false : true;
+
     const [cruiseName, setCruiseName] = useState('')
     const [startDate, setStartDate] = React.useState<Date | null>(
         new Date(),
@@ -69,7 +79,7 @@ export default function AddCruise(){
     useEffect(() => {
 
         getAllCruiseGroup().then(res => {
-            setCruiseGroupList(res.data.map((cruiseGroup: {uuid: string }) => cruiseGroup.uuid.toString()))
+            setCruiseGroupList(res.data.filter(({active}: { active: boolean }) => active).map((cruiseGroup: { uuid: string }) => cruiseGroup.uuid.toString()))
         }).catch(error => {
             const message = error.response.data
             handleError(message, error.response.status)
@@ -79,43 +89,40 @@ export default function AddCruise(){
     }, []);
 
 
+    const HandleAddCruise = () => {
 
-    const HandleAddCruise =  () =>{
 
-
-        if(!cruiseGroup ||!startDate || !endDate || !startTime || !endTime)
-        {
+        if (!cruiseGroup || !startDate || !endDate || !startTime || !endTime) {
             handleError('error.fields')
             return
         }
 
         startDate.setHours(0, 0, 0, 0)
         var newStartDateWithoutTime = new Date(startTime.getTime())
-        newStartDateWithoutTime.setHours(0,0,0,0)
+        newStartDateWithoutTime.setHours(0, 0, 0, 0)
         var newStartDate = new Date(startDate.getTime() + startTime?.getTime() - newStartDateWithoutTime.getTime())
 
 
         endDate.setHours(0, 0, 0, 0)
         var newEndDateWithoutTime = new Date(endTime.getTime())
-        newEndDateWithoutTime.setHours(0,0,0,0)
+        newEndDateWithoutTime.setHours(0, 0, 0, 0)
         var newEndDate = new Date(endDate.getTime() + endTime.getTime() - newEndDateWithoutTime.getTime())
 
         var date = new Date()
 
-        if(newStartDate.getTime() > newEndDate.getTime())
-        {
+        if (newStartDate.getTime() > newEndDate.getTime()) {
             handleError('error.field.end.date.before.start.date')
             return
         }
-        if(newStartDate.getTime() <  date.getTime())
-        {
+        if (newStartDate.getTime() < date.getTime()) {
             handleError('error.field.start.date')
             return;
         }
 
         newStartDate.setSeconds(0)
         newEndDate.setSeconds(0)
-
+        console.log(newStartDate.getDate())
+        console.log(moment(newStartDate).format("yyyy-MM-dd'T'HH:mm:ss.SSSXXX"))
         const {token} = store.getState();
         const json = JSON.stringify({
             cruiseGroup: cruiseGroup,
@@ -123,63 +130,53 @@ export default function AddCruise(){
             endDate: endDate
         })
 
-        // axios.post('cruiseGroup/add-cuise-group',json,{
-        //     headers: {
-        //         "Content-Type": "application/json",
-        //         "Accept": "application/json",
-        //         "Authorization": `Bearer ${token}`
-        //     }}).then(res => {
-        //     showSuccess(t('successful action'))
-        //     forceUpdate()
-        // }).catch(error => {
-        //     const message = error.response.data
-        //     handleError(message, error.response.status)
-        // })
+        axios.post('cruise/new-cruise',json,{
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "Authorization": `Bearer ${token}`
+            }}).then(res => {
+            showSuccess(t('successful action'))
+            forceUpdate()
+        }).catch(error => {
+            const message = error.response.data
+            handleError(message, error.response.status)
+        })
     }
 
     return (
         <div>
             <Box>
-                {/*//<MuiPickersUtilsProvider locale={eng} utils={DateFnsUtils}>*/}
-                {/*<LocalizationProvider dateAdapter={AdapterDateFns} locale={localeMap[locale]}>*/}
-                {/*    <KeyboardDatePicker*/}
-                {/*        disableToolbar*/}
-                {/*        variant="inline"*/}
-                {/*        format="MM/dd/yyyy"*/}
-                {/*        margin="normal"*/}
-                {/*        id="date-picker-inline"*/}
-                {/*        label={t("startDate") + ' *'}*/}
-                {/*        value={startDate}*/}
-                {/*        onChange={handleStartDateChange}*/}
-                {/*        KeyboardButtonProps={{*/}
-                {/*            'aria-label': 'change date',*/}
-                {/*        }}*/}
-                {/*    />*/}
-                {/*    <KeyboardTimePicker*/}
-                {/*        margin="normal"*/}
-                {/*        id="time-picker"*/}
-                {/*        label={t("startTime") + ' *'}*/}
-                {/*        value={startTime}*/}
-                {/*        onChange={handleStartTimeChange}*/}
-                {/*        KeyboardButtonProps={{*/}
-                {/*            'aria-label': 'change time',*/}
-                {/*        }}*/}
-                {/*    />*/}
-                {/*</LocalizationProvider>*/}
-                {/*</MuiPickersUtilsProvider>*/}
-            </Box>
-            <Box>
-                <MuiPickersUtilsProvider locale={pl} utils={DateFnsUtils}>
+                <MuiPickersUtilsProvider locale={language} utils={DateFnsUtils} >
+
+                    <KeyboardDatePicker
+                        disableToolbar
+                        variant="inline"
+                        format="MM/dd/yyyy"
+                        margin="normal"
+                        id="date-picker-inline"
+                        label={t("startDate") + ' *'}
+                        value={startDate}
+                        onChange={handleStartDateChange}
+                        KeyboardButtonProps={{
+                            'aria-label': 'change date',
+                        }}
+                    />
                     <KeyboardTimePicker
                         margin="normal"
                         id="time-picker"
-                        label={t("endTime") + ' *'}
-                        value={endTime}
-                        onChange={handleEndTimeChange}
+                        ampm={isPMAM}
+                        label={t("startTime") + ' *'}
+                        value={startTime}
+                        onChange={handleStartTimeChange}
                         KeyboardButtonProps={{
                             'aria-label': 'change time',
                         }}
                     />
+                </MuiPickersUtilsProvider>
+            </Box>
+            <Box>
+                <MuiPickersUtilsProvider locale={language} utils={DateFnsUtils} >
                     <KeyboardDatePicker
                         disableToolbar
                         variant="inline"
@@ -193,10 +190,27 @@ export default function AddCruise(){
                             'aria-label': 'change date',
                         }}
                     />
+                    <KeyboardTimePicker
+
+                        margin="normal"
+                        id="time-picker"
+                        label={t("endTime") + ' *'}
+                        value={endTime}
+                        ampm={isPMAM}
+                        onChange={handleEndTimeChange}
+                        KeyboardButtonProps={{
+                            'aria-label': 'change time'
+                        }}
+                    />
 
                 </MuiPickersUtilsProvider>
             </Box>
-            <Box>
+            <Box style={{
+                width: '70%',
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between"
+            }}>
                 <DarkedSelect
                     label={t("cruiseGroup") + ' *'}
                     options={cruiseGroupList}
