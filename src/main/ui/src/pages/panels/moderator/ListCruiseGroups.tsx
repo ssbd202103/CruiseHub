@@ -85,10 +85,8 @@ function Row(props: CruiseData) {
     const {style} = props;
     const {t} = useTranslation();
     const [open, setOpen] = useState(false);
-    const [currentCruiseGroup, setCurrentCruiseGroup] = useState('');
     const classes = useRowStyles();
     const handleError = useHandleError();
-    const showSuccess = useSnackbarQueue('success')
     const [cruises, setCruises] = useState([]);
     const darkMode = useSelector(selectDarkMode)
     const buttonClass = useButtonStyles();

@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {getAllCompanies} from "../../../Services/companiesService";
 import {makeStyles} from "@material-ui/core/styles";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
@@ -10,14 +9,18 @@ import {refreshToken} from "../../../Services/userService";
 import {useTranslation} from "react-i18next";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import {Button, TextField} from "@material-ui/core";
-import {Link} from "react-router-dom";
 import TableContainer from "@material-ui/core/TableContainer";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableBody from "@material-ui/core/TableBody";
 import {ImageListType} from "react-images-uploading";
-import {getAllCruiseGroup, getCruiseGroupForBusinessWorker} from "../../../Services/cruiseGroupService";
+import {getCruiseGroupForBusinessWorker, getCruisesForCruiseGroup} from "../../../Services/cruiseGroupService";
+import IconButton from "@material-ui/core/IconButton";
+import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
+import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
+import Collapse from "@material-ui/core/Collapse";
+import Box from "@material-ui/core/Box";
 
 const useRowStyles = makeStyles({
     root: {
@@ -33,21 +36,21 @@ export function createCruiseGroup(
     end_time: any,
     numberOfSeats: any,
     name: any,
-    cruisePictures:ImageListType,
+    cruisePictures: ImageListType,
     etag: string,
     version: bigint,
     uuid: any,
     description: any,
     active: boolean,
     company: any,
-){
+) {
     return {
-        price:price,
+        price: price,
         start_time: start_time,
         end_time: end_time,
         numberOfSeats: numberOfSeats,
         name: name,
-        cruisePictures:cruisePictures,
+        cruisePictures: cruisePictures,
         uuid: uuid,
         etag: etag,
         version: version,
@@ -57,7 +60,20 @@ export function createCruiseGroup(
     };
 }
 
-export interface  CruiseData{
+const useButtonStyles = makeStyles({
+    root: {
+        fontFamily: '"Montserrat", sans-serif',
+        color: 'var(--white)',
+        backgroundColor: "var(--blue)",
+        padding: '8px 16px',
+        margin: '0 16px',
+        '&:hover': {
+            backgroundColor: "var(--blue-dark)",
+        }
+    }
+})
+
+export interface CruiseData {
     group: ReturnType<typeof createCruiseGroup>,
     style: React.CSSProperties
 }
@@ -67,16 +83,118 @@ function Row(props: CruiseData) {
     const {style} = props;
     const {t} = useTranslation();
     const classes = useRowStyles();
+    const [open, setOpen] = useState(false);
+    const [cruises, setCruises] = useState([]);
+    const handleError = useHandleError();
+    const darkMode = useSelector(selectDarkMode)
+    const buttonClass = useButtonStyles();
+
+
+    const handleSetOpen = async () => {
+        console.log("Someone clicked me")
+        setOpen(state => !state);
+        await getCruisesForCruiseGroup(group.name)
+            .then(res => {
+                setCruises(res.data)
+                console.log(cruises)
+                console.log(res.data)
+                refreshToken();
+            })
+            .catch(error => {
+                const message = error.response.data
+                const status = error.response.status
+                handleError(message, status)
+            })
+    }
+
+    const getParsedDate = (date: any) => {
+        return `${date.dayOfMonth}-${date.monthValue.toString().padStart(2, '0')}-${date.year}`
+    }
 
     return (
-        <TableRow className={classes.root}>
-            <TableCell component="th" scope="row" style={style}>{group.name}</TableCell>
-            <TableCell style={style}>{group.company.name}</TableCell>
-            <TableCell style={style}>{group.numberOfSeats}</TableCell>
-            <TableCell style={style}>{group.price +" pln"}</TableCell>
-            <TableCell style={style}>{group.description}</TableCell>
-            <TableCell style={style}>{group.active.toString()}</TableCell>
-        </TableRow>
+        <React.Fragment>
+            <TableRow className={classes.root}>
+                <TableCell>
+                    <IconButton aria-label="expand row" size="small" onClick={handleSetOpen}>
+                        {open ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
+                    </IconButton>
+                </TableCell>
+                <TableCell component="th" scope="row" style={style}>{group.name}</TableCell>
+                <TableCell style={style}>{group.company.name}</TableCell>
+                <TableCell style={style}>{group.numberOfSeats}</TableCell>
+                <TableCell style={style}>{group.price + " pln"}</TableCell>
+                <TableCell style={style}>{group.description}</TableCell>
+                <TableCell style={style}>{group.active.toString()}</TableCell>
+            </TableRow>
+            <TableRow>
+                <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>
+                    <Collapse in={open} timeout="auto" unmountOnExit>
+                        <Box margin={1}>
+                            <Table size="small" aria-label="clients">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell align="center" style={{
+                                            backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                            color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                                        }}>{t("start_date")}</TableCell>
+                                        <TableCell align="center" style={{
+                                            backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                            color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                                        }}>{t("end_date")}</TableCell>
+                                        <TableCell align="center" style={{
+                                            backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                            color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                                        }}>{t("active")}</TableCell>
+                                        <TableCell align="center" style={{
+                                            backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                            color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                                        }}>{t("reservations")}</TableCell>
+                                        <TableCell align="center" style={{
+                                            backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                            color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                                        }}>{t("attractions")}</TableCell>
+                                        <TableCell align="center" style={{
+                                            backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                            color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                                        }}>{t("edit")}</TableCell>
+                                        <TableCell align="center" style={{
+                                            backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                            color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                                        }}>{t("publish")}</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {cruises.map((cruise: any, index) => (
+                                        <TableRow>
+                                            <TableCell align="center"
+                                                       style={style}>{getParsedDate(cruise.startDate)}</TableCell>
+                                            <TableCell align="center"
+                                                       style={style}>{getParsedDate(cruise.endDate)}</TableCell>
+                                            <TableCell align="center"
+                                                       style={style}>{cruise.active.toString()}</TableCell>
+                                            <TableCell align="center">
+                                                <Button className={buttonClass.root}>{t("reservations")}</Button>
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                <Button className={buttonClass.root}>{t("attractions")}</Button>
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                <Button className={buttonClass.root}>{t("edit")}</Button>
+                                            </TableCell>
+                                            {cruise.published ? "" :
+                                                <TableCell align="center">
+                                                    <Button className={buttonClass.root}>{t("publish")}</Button>
+                                                </TableCell>
+                                            }
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </Box>
+                    </Collapse>
+                </TableCell>
+            </TableRow>
+        </React.Fragment>
     );
 }
 
@@ -138,10 +256,13 @@ const ListCruiseGroups = () => {
                                onChange={(e) => setSearchInput(e.target.value)}/>
                 )}
             />
-            <TableContainer component={Paper}>
+            <TableContainer component={Paper} style={{
+                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`
+            }}>
                 <Table aria-label="CruiseGroups">
                     <TableHead>
                         <TableRow>
+                            <TableCell>{t('expand cruises')}</TableCell>
                             <TableCell style={{
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`
