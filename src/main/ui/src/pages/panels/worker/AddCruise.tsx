@@ -7,11 +7,10 @@ import RoundedButton from "../../../components/RoundedButton";
 import ImageUploading, { ImageListType } from "react-images-uploading";
 import store from "../../../redux/store";
 import {useSelector} from "react-redux";
-import {selectCompany} from "../../../redux/slices/userSlice";
+import {selectCompany, selectDarkMode, selectLanguage} from "../../../redux/slices/userSlice";
 import axios from "../../../Services/URL";
 import useHandleError from "../../../errorHandler";
 import {useSnackbarQueue} from "../../snackbar";
-import moment from 'moment';
 import pl from "date-fns/locale/pl"
 import eng from "date-fns/locale/en-GB"
 import styles from "../../../styles/auth.global.module.css";
@@ -25,13 +24,34 @@ import {
     KeyboardDatePicker, KeyboardTimePicker
 } from '@material-ui/pickers';
 import DateFnsUtils from "@date-io/date-fns";
-import plLocale from 'date-fns/locale/pl';
-import enLocale from 'date-fns/locale/en-US';
-import {white} from "material-ui/styles/colors";
-import {colors} from "material-ui/styles";
 import {makeStyles} from "@material-ui/styles";
 
 
+
+const useStyles = makeStyles(theme => ({
+    light: {
+        '& .MuiFormLabel-root, & .MuiInputBase-input': {
+            color: 'var(--dark)',
+        },
+        '& .MuiSvgIcon-root': {
+            fill: 'var(--dark)',
+        },
+        '& .MuiInput-underline::before, & .MuiInput-underline::after, & .MuiInput-underline:hover:not(.Mui-disabled):before' : {
+            borderColor: 'var(--dark)',
+        },
+    },
+    dark: {
+        '& .MuiFormLabel-root, & .MuiInputBase-input': {
+            color: 'var(--white)',
+        },
+        '& .MuiSvgIcon-root': {
+            fill: 'var(--white)',
+        },
+        '& .MuiInput-underline::before, & .MuiInput-underline::after, & .MuiInput-underline:hover:not(.Mui-disabled):before' : {
+            borderColor: 'var(--white)',
+        },
+    },
+}));
 
 export default function AddCruise() {
 
@@ -40,8 +60,12 @@ export default function AddCruise() {
     const [, forceUpdate] = useReducer(x => x + 1, 0);
     const {t} = useTranslation();
 
-    const language = (t('language') == ("pl"))? pl : eng;
-    const isPMAM = (t('language') == ("pl"))? false : true;
+    const darkMode = useSelector(selectDarkMode);
+
+    const languageType = useSelector(selectLanguage);
+
+    const language = languageType === 'PL' ? pl : eng;
+    const isPMAM = language === eng;
 
     const [cruiseName, setCruiseName] = useState('')
     const [startDate, setStartDate] = React.useState<Date | null>(
@@ -168,12 +192,16 @@ export default function AddCruise() {
 
     }
 
+    const classes = useStyles()
+
     return (
         <div>
             <Box>
                 <MuiPickersUtilsProvider locale={language} utils={DateFnsUtils} >
 
                     <KeyboardDatePicker
+                        style={{marginRight: 30}}
+                        className={darkMode ? classes.dark: classes.light}
                         autoOk={true}
                         disableToolbar
                         maxDateMessage={t("max.date.message")}
@@ -187,7 +215,6 @@ export default function AddCruise() {
                         variant="inline"
                         format="MM/dd/yyyy"
                         margin="normal"
-                        id="date-picker-inline"
                         label={t("startDate") + ' *'}
                         value={startDate}
                         onChange={handleStartDateChange}
@@ -196,6 +223,7 @@ export default function AddCruise() {
                         }}
                     />
                     <KeyboardTimePicker
+                        className={darkMode ? classes.dark: classes.light}
                         autoOk={true}
                         maxDateMessage={t("max.date.message")}
                         minDateMessage={t("min.date.message")}
@@ -206,7 +234,6 @@ export default function AddCruise() {
                         okLabel={t("ok.label")}
                         todayLabel={t("today.label")}
                         margin="normal"
-                        id="time-picker"
                         ampm={isPMAM}
                         label={t("startTime") + ' *'}
                         value={startTime}
@@ -220,7 +247,8 @@ export default function AddCruise() {
             <Box>
                 <MuiPickersUtilsProvider locale={language} utils={DateFnsUtils} >
                     <KeyboardDatePicker
-
+                        style={{marginRight: 30}}
+                        className={darkMode ? classes.dark: classes.light}
                         disableToolbar
                         variant="inline"
                         maxDateMessage={t("max.date.message")}
@@ -233,7 +261,6 @@ export default function AddCruise() {
                         todayLabel={t("today.label")}
                         format="MM/dd/yyyy"
                         margin="normal"
-                        id="date-picker-inline"
                         label={t("endDate") + ' *'}
                         value={endDate}
                         onChange={handleEndDateChange}
@@ -242,6 +269,7 @@ export default function AddCruise() {
                         }}
                     />
                     <KeyboardTimePicker
+                        className={darkMode ? classes.dark: classes.light}
                         maxDateMessage={t("max.date.message")}
                         minDateMessage={t("min.date.message")}
                         invalidDateMessage={t("invalid.date.message")}
@@ -251,7 +279,6 @@ export default function AddCruise() {
                         okLabel={t("ok.label")}
                         todayLabel={t("today.label")}
                         margin="normal"
-                        id="time-picker"
                         label={t("endTime") + ' *'}
                         value={endTime}
                         ampm={isPMAM}
@@ -277,7 +304,6 @@ export default function AddCruise() {
                         marginRight: 20
                     }}
                     onSelectedChange={setCruiseGroup}
-                    colorIgnored
                 />
             </Box>
 
