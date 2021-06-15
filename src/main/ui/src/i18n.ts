@@ -131,6 +131,8 @@ const resources = {
             "company phone number": " Numer telefonu firmy",
             "Manage business workers": "Zarządzaj pracownikami firm",
             "show business workers": "Pokaż pracowników",
+            "add company": "Dodaj firmę",
+            "company name example": "FirmaJez",
             //verify
             "verifyAccount": "Zweryfikuj konto",
             //color
@@ -203,6 +205,8 @@ const resources = {
             "error.account.notActive": "Konto jest zablokowane",
             "error.database.operation": "Błąd po stronie bazy danych",
             "error.business.worker.confirmed": "Pracownik jest już zatwierdzony",
+            "companies_nip_unique_constraint": "Firma o podanym numerze NIP znajduje się już w bazie danych",
+            "companies_name_unique_constraint": "Firma o podanej nazwie znajduje się już w bazie danych",
 
             //auth errors
             "auth.incorrect.login": "Błąd logowania",
@@ -263,6 +267,7 @@ const resources = {
             "/addCruiseGroup": "Dodaj grupę wycieczek",
             "/addCruise": "Dodaj wycieczkę",
             "/listCruiseGroup": "Wyświetl grupę wycieczek",
+            "/add-company": "Dodaj firmę",
 
             'yes': 'Tak',
             'no': 'Nie',
@@ -484,6 +489,8 @@ const resources = {
             "company phone number": "Company phone number",
             "Manage business workers": "Manage business workers",
             "show business workers": "Show business workers",
+            "add company": "Add a company",
+            "company name example": "Hedgehog Company",
             //verify
             "verifyAccount": "Verify account",
             //color
@@ -553,6 +560,8 @@ const resources = {
             "error.account.notActive": "Account is blocked",
             "error.database.operation": "Database operation error",
             "error.business.worker.confirmed": "Worker is already confirmed",
+            "companies_nip_unique_constraint": "Company with said NIP already exists in the database",
+            "companies_name_unique_constraint": "Company with said name already exists in the database",
 
             //auth errors
             "auth.incorrect.login": "Login error",
@@ -610,6 +619,7 @@ const resources = {
             "/addCruiseGroup": "Add cruise group",
             "/addCruise": "Add cruise",
             "/listCruiseGroup": "List cruise groups",
+            "/add-company": "Add a company",
 
             'accept.action': 'Do you want to do this action?',
 
