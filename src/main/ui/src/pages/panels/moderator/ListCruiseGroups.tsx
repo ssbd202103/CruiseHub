@@ -108,37 +108,11 @@ function Row(props: CruiseData) {
                 const status = error.response.status
                 handleError(message, status)
             })
-        // getAccountDetailsAbout(row.login).then(res => {
-        //     sessionStorage.setItem("changeAccountData", JSON.stringify(res.data));
-        // }).then(res => {
-        //     getAccountMetadataDetailsAbout(row.login).then(respo => {
-        //         sessionStorage.setItem("changeAccountDataMta", JSON.stringify(respo.data));
-        //         setOpen(state => !state);
-        //         refreshToken();
-        //     }).then(res => {
-        //         if (row.accessLevels.includes("BUSINESS_WORKER")) {
-        //             getAccountAccessLevelMetadata('BUSINESS_WORKER', row.login).then(respo => {
-        //                 sessionStorage.setItem("changeAccountAclDataMta", JSON.stringify(respo.data));
-        //                 refreshToken();
-        //             });
-        //         }
-        //         if (row.accessLevels.includes("CLIENT")) {
-        //             getClientAddressMetadata(row.login).then(respo => {
-        //                 sessionStorage.setItem("changeAccountAddressDataMta", JSON.stringify(respo.data));
-        //                 refreshToken();
-        //             }, error => {
-        //                 const message = error.response.data
-        //                 handleError(message, error.response.status)
-        //             });
-        //         }
-        //     });
-        // });
     }
 
-    const getDate = async (date: string) => {
-        // x = new Date(date)
+    const getParsedDate = (date: any) => {
+        return `${date.dayOfMonth}-${date.monthValue.toString().padStart(2, '0')}-${date.year}`
     }
-
 
     return (
         <React.Fragment>
@@ -192,9 +166,9 @@ function Row(props: CruiseData) {
                                     {cruises.map((cruise: any, index) => (
                                         <TableRow>
                                             <TableCell align="center"
-                                                       style={style}>{new Date(cruise.startDate).toLocaleDateString().replaceAll('.', '-')}</TableCell>
+                                                       style={style}>{getParsedDate(cruise.startDate)}</TableCell>
                                             <TableCell align="center"
-                                                       style={style}>{new Date(cruise.endDate).toLocaleDateString().replaceAll('.', '-')}</TableCell>
+                                                       style={style}>{getParsedDate(cruise.endDate)}</TableCell>
                                             <TableCell align="center"
                                                        style={style}>{cruise.active.toString()}</TableCell>
                                             <TableCell align="center">
