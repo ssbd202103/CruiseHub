@@ -279,7 +279,7 @@ create table cruises_groups
     alter_type_id        bigint                                                              not null, -- FOREIGN KEY
     version              bigint check (version >= 0)                                         not null,
     description          varchar                             not null,
-    uuid                 varchar                             not null,
+    uuid                 uuid                             not null,
 
 
     CONSTRAINT cruises_groups_id_pk_constraint PRIMARY KEY (id),
@@ -298,12 +298,11 @@ create sequence cruises_groups_id_seq
 create table cruises
 (
     id                   bigint                              not null,
-    uuid                 varchar                             not null,
+    uuid                 uuid                             not null,
     start_date           timestamp                           not null,
     end_date             timestamp,
     active               boolean   default false             not null,
     cruises_group_id     bigint                              not null, -- FOREIGN KEY
-    available            boolean   default false             not null,
 
     creation_date_time   timestamp default CURRENT_TIMESTAMP not null,
     last_alter_date_time timestamp                           not null,
@@ -357,7 +356,7 @@ create sequence attractions_id_seq
 create table reservations
 (
     id                   bigint                              not null,
-    uuid                 varchar                             not null,
+    uuid                 uuid                             not null,
     client_id            bigint                              not null, --FOREIGN KEY
     number_of_seats      bigint check (number_of_seats >= 0) not null,
     cruise_id            bigint                              not null, --FOREIGN KEY
@@ -509,6 +508,11 @@ ALTER TABLE reservations_id_seq
     OWNER to ssbd03admin;
 ALTER TABLE ratings_id_seq
     OWNER to ssbd03admin;
+ALTER SEQUENCE used_tokens_id_seq
+    OWNER TO ssbd03admin;
+ALTER SEQUENCE used_codes_id_seq
+    OWNER TO ssbd03admin;
+
 
 ALTER
     VIEW glassfish_auth_view OWNER TO ssbd03admin;
@@ -614,10 +618,24 @@ GRANT SELECT, UPDATE
 
 -- Table permissions for MOW --
 GRANT SELECT
+    ON accounts TO ssbd03mow;
+
+GRANT SELECT
     ON access_levels TO ssbd03mow;
 
 GRANT SELECT
-    ON accounts TO ssbd03mow;
+    ON administrators TO ssbd03mow;
+
+GRANT SELECT
+    ON moderators TO ssbd03mow;
+
+GRANT SELECT
+    ON business_workers TO ssbd03mow;
+
+GRANT SELECT
+    ON clients TO ssbd03mow;
+
+
 
 GRANT SELECT
     ON alter_types TO ssbd03mow;

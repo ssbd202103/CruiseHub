@@ -90,58 +90,82 @@ export default function AddCruise() {
 
 
     const HandleAddCruise = () => {
-
-
         if (!cruiseGroup || !startDate || !endDate || !startTime || !endTime) {
-            handleError('error.fields')
+            handleError('not.all.fields.filled')
             return
         }
 
         startDate.setHours(0, 0, 0, 0)
-        var newStartDateWithoutTime = new Date(startTime.getTime())
-        newStartDateWithoutTime.setHours(0, 0, 0, 0)
-        var newStartDate = new Date(startDate.getTime() + startTime?.getTime() - newStartDateWithoutTime.getTime())
-
-
         endDate.setHours(0, 0, 0, 0)
-        var newEndDateWithoutTime = new Date(endTime.getTime())
-        newEndDateWithoutTime.setHours(0, 0, 0, 0)
-        var newEndDate = new Date(endDate.getTime() + endTime.getTime() - newEndDateWithoutTime.getTime())
 
-        var date = new Date()
-
-        if (newStartDate.getTime() > newEndDate.getTime()) {
-            handleError('error.field.end.date.before.start.date')
+        if(startDate.getTime() < new Date("1900-01-01").getTime()) {
+            handleError('min.date.message')
             return
         }
-        if (newStartDate.getTime() < date.getTime()) {
-            handleError('error.field.start.date')
-            return;
+        if(startDate.getTime() > new Date("2100-01-01").getTime()) {
+            handleError('max.date.message')
+            return
+        }
+        if(endDate.getTime() < new Date("1900-01-01").getTime()) {
+            handleError('min.date.message')
+            return
+        }
+        if(endDate.getTime() > new Date("2100-01-01").getTime()) {
+            handleError('max.date.message')
+            return
         }
 
-        newStartDate.setSeconds(0)
-        newEndDate.setSeconds(0)
-        console.log(newStartDate.getDate())
-        console.log(moment(newStartDate).format("yyyy-MM-dd'T'HH:mm:ss.SSSXXX"))
-        const {token} = store.getState();
-        const json = JSON.stringify({
-            cruiseGroup: cruiseGroup,
-            startDate: startDate,
-            endDate: endDate
-        })
 
-        axios.post('cruise/new-cruise',json,{
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json",
-                "Authorization": `Bearer ${token}`
-            }}).then(res => {
-            showSuccess(t('successful action'))
-            forceUpdate()
-        }).catch(error => {
-            const message = error.response.data
-            handleError(message, error.response.status)
-        })
+        try{
+            var newStartDateWithoutTime = new Date(startTime.getTime())
+            newStartDateWithoutTime.setHours(0, 0, 0, 0)
+            var newStartDate = new Date(startDate.getTime() + startTime?.getTime() - newStartDateWithoutTime.getTime())
+
+
+            var newEndDateWithoutTime = new Date(endTime.getTime())
+            newEndDateWithoutTime.setHours(0, 0, 0, 0)
+            var newEndDate = new Date(endDate.getTime() + endTime.getTime() - newEndDateWithoutTime.getTime())
+
+            var date = new Date()
+
+            if (newStartDate.getTime() > newEndDate.getTime()) {
+                handleError('error.field.end.date.before.start.date')
+                return
+            }
+            if (newStartDate.getTime() < date.getTime()) {
+                handleError('error.field.start.date')
+                return;
+            }
+
+            newStartDate.setSeconds(0)
+            newEndDate.setSeconds(0)
+            newStartDate.setMilliseconds(0)
+            newEndDate.setMilliseconds(0)
+            const {token} = store.getState();
+            const json = JSON.stringify({
+                startDate: newStartDate.toISOString(),
+                endDate: newEndDate.toISOString(),
+                cruiseGroupUUID: cruiseGroup.toString()
+            })
+            axios.post('cruise/new-cruise',json,{
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }}).then(res => {
+                showSuccess(t('successful action'))
+                forceUpdate()
+            }).catch(error => {
+                const message = error.response.data
+                handleError(message, error.response.status)
+                return
+            })
+        } catch (e) {
+            handleError('error.fields')
+            return
+        }
+
+
     }
 
     return (
@@ -150,7 +174,16 @@ export default function AddCruise() {
                 <MuiPickersUtilsProvider locale={language} utils={DateFnsUtils} >
 
                     <KeyboardDatePicker
+                        autoOk={true}
                         disableToolbar
+                        maxDateMessage={t("max.date.message")}
+                        minDateMessage={t("min.date.message")}
+                        invalidDateMessage={t("invalid.date.message")}
+                        invalidLabel={t("invalid.label")}
+                        cancelLabel={t("cancel.label")}
+                        clearLabel={t("clear.label")}
+                        okLabel={t("ok.label")}
+                        todayLabel={t("today.label")}
                         variant="inline"
                         format="MM/dd/yyyy"
                         margin="normal"
@@ -163,6 +196,15 @@ export default function AddCruise() {
                         }}
                     />
                     <KeyboardTimePicker
+                        autoOk={true}
+                        maxDateMessage={t("max.date.message")}
+                        minDateMessage={t("min.date.message")}
+                        invalidDateMessage={t("invalid.date.message")}
+                        invalidLabel={t("invalid.label")}
+                        cancelLabel={t("cancel.label")}
+                        clearLabel={t("clear.label")}
+                        okLabel={t("ok.label")}
+                        todayLabel={t("today.label")}
                         margin="normal"
                         id="time-picker"
                         ampm={isPMAM}
@@ -178,8 +220,17 @@ export default function AddCruise() {
             <Box>
                 <MuiPickersUtilsProvider locale={language} utils={DateFnsUtils} >
                     <KeyboardDatePicker
+
                         disableToolbar
                         variant="inline"
+                        maxDateMessage={t("max.date.message")}
+                        minDateMessage={t("min.date.message")}
+                        invalidDateMessage={t("invalid.date.message")}
+                        invalidLabel={t("invalid.label")}
+                        cancelLabel={t("cancel.label")}
+                        clearLabel={t("clear.label")}
+                        okLabel={t("ok.label")}
+                        todayLabel={t("today.label")}
                         format="MM/dd/yyyy"
                         margin="normal"
                         id="date-picker-inline"
@@ -191,7 +242,14 @@ export default function AddCruise() {
                         }}
                     />
                     <KeyboardTimePicker
-
+                        maxDateMessage={t("max.date.message")}
+                        minDateMessage={t("min.date.message")}
+                        invalidDateMessage={t("invalid.date.message")}
+                        invalidLabel={t("invalid.label")}
+                        cancelLabel={t("cancel.label")}
+                        clearLabel={t("clear.label")}
+                        okLabel={t("ok.label")}
+                        todayLabel={t("today.label")}
                         margin="normal"
                         id="time-picker"
                         label={t("endTime") + ' *'}

@@ -67,7 +67,7 @@ public class CruiseGroupFacadeMow extends AbstractFacade<CruiseGroup> {
     @PermitAll
     public CruiseGroup findByUUID(UUID uuid) throws BaseAppException {
         TypedQuery<CruiseGroup> tq = em.createNamedQuery("CruiseGroup.findByUUID", CruiseGroup.class);
-        tq.setParameter("uuid", uuid.toString());
+        tq.setParameter("uuid", uuid);
         try {
             return tq.getSingleResult();
         } catch (NoResultException e) {

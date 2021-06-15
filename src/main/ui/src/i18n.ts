@@ -308,7 +308,24 @@ const resources = {
             "cruiseGroup":"Grupa wycieczek",
             "error.field.end.date.before.start.date":"Data zakończenia jest przed datą rozpoczęcia",
             "error.field.start.date":"Data rozpoczęcia nie może być wcześniejsza niż dzisiejsza data",
-            "language":"pl"
+            "language":"pl",
+            "error.cruiseGroup.no.active":"Grupa wycieczek nie jest aktywna",
+            "error.startDate.before.currentDate":"Data rozpoczęcia nie może być przed obecną datą",
+            "error.startDate.after.endDate":"Data rozpoczęcia nie może być po dacie zakończenia",
+
+            "error.cruise.mapper.data.parse":"Nieprawidłowy format daty",
+            "error.cruise.mapper.uuid.parse":"Nieprawidłowy format uuid",
+
+            "max.date.message":"Data nie powinna być póżniejsza niż maksymalna data",
+            "min.date.message":"Data nie powinna być wcześniejsza niż minimalna data",
+
+            "invalid.date.message":"Nieprawidłowy format daty",
+            "invalid.label":"nieznana",
+            "cancel.label":"Anuluj",
+            "clear.label":"Wyczyść",
+            "ok.label":"Akceptuj",
+            "today.label":"Dzisiaj",
+            "not.all.fields.filled":"Nie wszystkie pola zostały wypełnione"
         }
     },
     EN: {
@@ -613,7 +630,23 @@ const resources = {
             "cruiseGroup":"Cruise group",
             "error.field.end.date.before.start.date":"End date is before start date",
             "error.field.start.date":"The start date cannot be earlier than today's date",
-            "language":"en"
+            "language":"en",
+            "error.cruiseGroup.no.active":"Cruise group is not active",
+            "error.startDate.before.currentDate":"The start date cannot be before current date",
+            "error.startDate.after.endDate":"The start date cannot be after end date",
+            "error.cruise.mapper.data.parse":"Invalid date format",
+            "error.cruise.mapper.uuid.parse":"Invalid uuid format",
+
+            "max.date.message":"Date should not be after maximal date",
+            "min.date.message":"Date should not be before minimal date",
+
+            "invalid.date.message":"Invalid Date Form",
+            "invalid.label":"unknown",
+            "cancel.label":"Cancel",
+            "clear.label":"Clear",
+            "ok.label":"OK",
+            "today.label":"Today",
+            "not.all.fields.filled":"Not all fields have been completed"
         }
     }
 }

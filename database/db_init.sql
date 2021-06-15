@@ -201,23 +201,23 @@ values (-3, -2, 'Beautiful Sandy Shores', 31, 502, -4, 5, true, now(), now(), -2
 --
 --
 --cruises start
-insert into cruises(id, uuid, start_date, end_date, active, cruises_group_id, available,
+insert into cruises(id, uuid, start_date, end_date, active, cruises_group_id,
                     creation_date_time,
                     last_alter_date_time, alter_type_id, created_by_id,
                     altered_by_id, version, published)
-values (-1, '581d626f-d421-47dd-89ef-b41bc30aa36c', now(), now(), true, -1, true, now(), now(), -2,
+values (-1, '581d626f-d421-47dd-89ef-b41bc30aa36c', now(), now(), true, -1, now(), now(), -2,
         -1, -1, 0, true);
-insert into cruises(id, uuid, start_date, end_date, active, cruises_group_id, available,
+insert into cruises(id, uuid, start_date, end_date, active, cruises_group_id,
                     creation_date_time,
                     last_alter_date_time, alter_type_id, created_by_id,
                     altered_by_id, version, published)
-values (-2, '181d626f-d421-47dd-89ef-b41bc30aa36c', now(), now(), false, -2, true, now(),
+values (-2, '181d626f-d421-47dd-89ef-b41bc30aa36c', now(), now(), false, -2, now(),
         now(), -2, -1, -1, 0, true);
-insert into cruises(id, uuid, start_date, end_date, active, cruises_group_id, available,
+insert into cruises(id, uuid, start_date, end_date, active, cruises_group_id,
                     creation_date_time,
                     last_alter_date_time, alter_type_id, created_by_id,
                     altered_by_id, version, published)
-values (-3, '481d626f-d421-47dd-89ef-b41bc30aa36c', now(), now(), true, -3, false, now(),
+values (-3, '481d626f-d421-47dd-89ef-b41bc30aa36c', now(), now(), true, -3, now(),
         now(), -2, -1, -1, 0, true);
 --cruises end
 --
