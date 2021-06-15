@@ -16,6 +16,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
+import java.util.UUID;
 
 import static javax.ejb.TransactionAttributeType.MANDATORY;
 
@@ -47,6 +48,18 @@ public class RatingFacadeMow extends AbstractFacade<Rating> {
         TypedQuery<Rating> tq = em.createNamedQuery("Rating.findByCruiseGroupNameAndAccountLogin", Rating.class);
         tq.setParameter("name", name);
         tq.setParameter("login", login);
+
+        try {
+            return tq.getSingleResult();
+        } catch (NoResultException e) {
+            throw FacadeException.noSuchElement();
+        }
+    }
+
+    public Rating findByCruiseUuidAndAccountLogin(String login, UUID uuid) throws BaseAppException {
+        TypedQuery<Rating> tq = em.createNamedQuery("Rating.findByUuidAndAccountLogin", Rating.class);
+        tq.setParameter("login", login);
+        tq.setParameter("uuid", uuid.toString());
 
         try {
             return tq.getSingleResult();

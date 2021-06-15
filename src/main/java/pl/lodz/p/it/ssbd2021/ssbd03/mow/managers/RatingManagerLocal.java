@@ -4,6 +4,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Rating;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 
 import javax.ejb.Local;
+import java.util.UUID;
 
 @Local
 public interface RatingManagerLocal {
@@ -31,11 +32,10 @@ public interface RatingManagerLocal {
     /**
      * Pobiera ocene klienta dla podanej wycieczki
      *
-     * @param login           login klienta
-     * @param cruiseGroupName login
+     * @param cruiseGroupUuid uuid grupy wycieczek
      * @throws BaseAppException bazowy wyjątek aplikacji, zwracany w przypadku nieznależenia oceny
      */
-    Rating getRating(String login, String cruiseGroupName) throws BaseAppException;
+    Rating getOwnRating(UUID cruiseGroupUuid) throws BaseAppException;
 
     /**
      * Usuwa ocenę klienta zgloszoną przez moderatora
