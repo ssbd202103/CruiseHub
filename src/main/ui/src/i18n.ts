@@ -95,7 +95,8 @@ const resources = {
             "confrim email change": "Potwierdź zmianę maila",
             //workerPanel
             "workerPanel": "Panel pracownika",
-            "deactivateCruiseGroup": "Deaktywuj grupę wycieczek",
+            "deactivateCruiseGroup": "Dezaktywuj grupę wycieczek",
+            "deactivate": "Dezaktywuj",
             //adminPanel
             "search account": "Wyszukać konto",
             "search company": "Wyszukać firme",
@@ -414,6 +415,7 @@ const resources = {
             //workerPanel
             "workerPanel": "Worker panel",
             "deactivateCruiseGroup": "Deactivate Cruise Group",
+            "deactivate": "Deactivate",
             //adminPanel
             "adminPanel": "Administrator panel",
             "search account": "Search account",

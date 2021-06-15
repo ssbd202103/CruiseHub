@@ -4,15 +4,12 @@ import {makeStyles} from "@material-ui/core/styles";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import useHandleError from "../../../errorHandler";
-import RoundedButton from "../../../components/RoundedButton";
 import {useSelector} from "react-redux";
-import {selectCompany, selectDarkMode} from "../../../redux/slices/userSlice";
+import {selectDarkMode} from "../../../redux/slices/userSlice";
 import {refreshToken} from "../../../Services/userService";
 import {useTranslation} from "react-i18next";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import {Button, TextField} from "@material-ui/core";
-import {useSnackbarQueue} from "../../../pages/snackbar";
-import {selectToken} from "../../../redux/slices/tokenSlice";
 import {Link} from "react-router-dom";
 import TableContainer from "@material-ui/core/TableContainer";
 import Paper from "@material-ui/core/Paper";
@@ -21,7 +18,9 @@ import TableHead from "@material-ui/core/TableHead";
 import TableBody from "@material-ui/core/TableBody";
 import {ImageListType} from "react-images-uploading";
 import {getAllCruiseGroup, getCruiseGroupForBusinessWorker} from "../../../Services/cruiseGroupService";
-import {dCruiseGroup} from "../../../components/ListCruiseGroup";
+import RoundedButton from "../../../components/RoundedButton";
+import {useSnackbarQueue} from "../../snackbar";
+import {selectToken} from "../../../redux/slices/tokenSlice";
 import axios from "../../../Services/URL";
 
 const useRowStyles = makeStyles({
@@ -41,7 +40,7 @@ export function createCruiseGroup(
     cruisePictures:ImageListType,
     etag: string,
     version: bigint,
-    uuid: string,
+    uuid: any,
     description: any,
     active: boolean,
     company: any,
@@ -62,7 +61,6 @@ export function createCruiseGroup(
     };
 }
 
-
 interface DeactivateCruiseData {
     uuid: string;
     etag: string;
@@ -70,8 +68,11 @@ interface DeactivateCruiseData {
     token: string
 }
 
-
 const deactivateCruiseGroup = async ({uuid, etag, version, token}: DeactivateCruiseData) => {
+    console.log(uuid);
+    console.log(etag);
+    console.log(version);
+    console.log(token);
     const json = JSON.stringify({
             uuid: uuid,
             version: version,
@@ -85,7 +86,6 @@ const deactivateCruiseGroup = async ({uuid, etag, version, token}: DeactivateCru
         }
     })
 }
-
 
 export interface  CruiseData{
     group: ReturnType<typeof createCruiseGroup>,
@@ -112,32 +112,32 @@ function Row(props: CruiseData) {
             <TableCell style={style}>{group.description}</TableCell>
             <TableCell style={style}>{group.active.toString()}</TableCell>
             <TableCell style={style}>
-                    <RoundedButton
-                        color="pink" onClick={() => {
-                        deactivateCruiseGroup({
-                            uuid: group.uuid,
-                            etag: group.etag,
-                            version: group.version,
-                            token: token
-                        }).then(res => {
-                            onChange().then(() => {
-                                showSuccess(t('data.load.success'))
-                            })
-                        }).catch(error => {
-                            const message = error.response.data
-                            handleError(t(message), error.response.status)
+                <RoundedButton
+                    color="pink" onClick={() => {
+                    deactivateCruiseGroup({
+                        uuid: group.uuid,
+                        etag: group.etag,
+                        version: group.version,
+                        token: token
+                    }).then(res => {
+                        onChange().then(() => {
+                            showSuccess(t('data.load.success'))
                         })
-                    }}
+                    }).catch(error => {
+                        const message = error.response.data
+                        handleError(t(message), error.response.status)
+                    })
+                }}
                     disabled={!group.active}
-                    >
-                        {t("deactivate")}
-                    </RoundedButton>
-                </TableCell>
+                >
+                    {t("deactivate")}
+                </RoundedButton>
+            </TableCell>
         </TableRow>
     );
 }
 
-const ListCruiseGroups = () => {
+const ListCruiseGroupsForAdmin = () => {
     const [cruiseGroupL, setCruiseGroupL] = useState([]);
     const [searchInput, setSearchInput] = useState("");
 
@@ -145,10 +145,8 @@ const ListCruiseGroups = () => {
 
     const darkMode = useSelector(selectDarkMode)
 
-    const worker_Company = useSelector(selectCompany);
-
-    const getCruiseGroupFromWorker = () => {
-        return   getCruiseGroupForBusinessWorker(worker_Company).then(res => {
+    const getCruiseGroupForAdmin = () => {
+        return  getAllCruiseGroup().then(res => {
             setCruiseGroupL(res.data)
         }).catch(error => {
             const message = error.response.data
@@ -157,8 +155,9 @@ const ListCruiseGroups = () => {
             refreshToken()
         })
     }
+
     useEffect(() => {
-        getCruiseGroupFromWorker()
+        getCruiseGroupForAdmin()
     }, []);
 
 
@@ -230,14 +229,14 @@ const ListCruiseGroups = () => {
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`
                             }}>{t("deactivate")}</TableCell>
-                    </TableRow>
+                        </TableRow>
                     </TableHead>
                     <TableBody>
                         {search(cruiseGroupL.map((cruiseGroups, index) => (
                             <Row key={index} group={cruiseGroups} style={{
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`
-                            }} onChange={getCruiseGroupFromWorker}/>
+                            }} onChange={getCruiseGroupForAdmin}/>
                         )))}
                     </TableBody>
                 </Table>
@@ -246,4 +245,4 @@ const ListCruiseGroups = () => {
     );
 };
 
-export default ListCruiseGroups;
+export default ListCruiseGroupsForAdmin;

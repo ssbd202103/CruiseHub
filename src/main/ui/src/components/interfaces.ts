@@ -1,3 +1,5 @@
+import {grey} from "@material-ui/core/colors";
+
 export interface ChangeDataComponentProps {
     open: boolean,
     onOpen(): void,
@@ -11,4 +13,5 @@ export type Color =
     "green" | "green-dark" | "green-light" |
     "yellow" | "yellow-dark" | "yellow-light" |
     "dark" | "dark-dark" | "dark-light" |
-    "white" | "white-dark" | "white-light";
+    "white" | "white-dark" | "white-light"|
+    "gray" | "gray-dark" | "gray-light";
