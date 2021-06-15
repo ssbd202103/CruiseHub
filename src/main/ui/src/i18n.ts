@@ -323,6 +323,7 @@ const resources = {
             "seats": "Liczba miejsc",
             "start_date": "Data początkowa",
             "end_date": "Data końcowa",
+
             "newCruise": "Dodaj wycieczkę",
             "startDate":"Data rozpoczęcia rejsu",
             "endDate":"Data zakończenia rejsu",
@@ -347,7 +348,12 @@ const resources = {
             "clear.label":"Wyczyść",
             "ok.label":"Akceptuj",
             "today.label":"Dzisiaj",
-            "not.all.fields.filled":"Nie wszystkie pola zostały wypełnione"
+            "not.all.fields.filled":"Nie wszystkie pola zostały wypełnione",
+            "Client name": "Nazwa Klienta",
+            "numberOfSeatsReserved": "Liczba zarezerwowanych miejsc",
+            "CruiseName": "Nazwa wycieczki",
+            "/reservations" :"Rezerwacje wycieczki",
+            "search reservation": "Wyszukaj rezerwacje",
         }
     },
     EN: {
@@ -690,7 +696,12 @@ const resources = {
             "clear.label":"Clear",
             "ok.label":"OK",
             "today.label":"Today",
-            "not.all.fields.filled":"Not all fields have been completed"
+            "not.all.fields.filled":"Not all fields have been completed",
+            "Client name": "Client name",
+            "numberOfSeatsReserved": "Number of seats reserved",
+            "CruiseName": "Name of the cruise",
+            "/reservations" :"Cruise reservations",
+            "search reservation": "Search reservations",
         }
     }
 }
