@@ -6,13 +6,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class CruiseForCruiseGroupDto {
 
+    private UUID uuid;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private boolean active;
+    private boolean published;
 }
