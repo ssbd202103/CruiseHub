@@ -33,7 +33,6 @@ public class CompanyEndpoint extends BaseEndpoint implements CompanyEndpointLoca
     @Inject
     private CompanyManagerLocal companyManager;
 
-    @PermitAll
     @Override
     public List<CompanyLightDto> getCompaniesInfo() throws BaseAppException {
         return companyManager.getAllCompanies().stream().map(CompanyMapper::mapCompanyToCompanyLightDto).collect(Collectors.toList());
