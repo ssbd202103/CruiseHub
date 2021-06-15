@@ -3,11 +3,11 @@ package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.CruiseDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.CruiseForCruiseGroupDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.NewCruiseDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.RelatedCruiseDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations.CancelReservationDTO;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations.CreateReservationDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.NewCruiseDto;
+
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.CruiseEndpointLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.ReservationEndpointLocal;
 
@@ -41,7 +41,7 @@ public class CruiseController {
      * Pobiera informację o wycieczce o podanym uuid
      */
     @GET
-    @Path("/{uuid}")
+    @Path("/get-cruise/{uuid}")
     @Produces(MediaType.APPLICATION_JSON)
     public CruiseDto getCruiseByUUID(@PathParam("uuid") String uuid) throws BaseAppException {
 //        return Response.ok().entity("That's alright, that's ok").build();

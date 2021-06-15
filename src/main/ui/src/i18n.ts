@@ -321,9 +321,8 @@ const resources = {
             "search cruiseGroup": "Wyszukaj grupę",
             "seats": "Liczba miejsc",
             "start_date": "Data początkowa",
-            "end_date": "Data końcowa"
-            "addCruise": "Dodaj wycieczkę",
-            "listCruiseGroup": "Wyświetl grupę wycieczek",
+            "end_date": "Data końcowa",
+            "newCruise": "Dodaj wycieczkę",
             "startDate":"Data rozpoczęcia rejsu",
             "endDate":"Data zakończenia rejsu",
             "startTime":"Czas rozpoczęcia rejsu",
@@ -664,9 +663,8 @@ const resources = {
             "search cruiseGroup": "Search group",
             "seats": "Number of seats",
             "start_date": "Start date",
-            "end_date": "End date"
-            "addCruise": "Add cruise",
-            "listCruiseGroup": "List cruises groups",
+            "end_date": "End date",
+            "newCruise": "Add cruise",
             "createCruise": "Create new cruise",
             "startDate":"Cruise start date",
             "endDate":"Cruise end date",

@@ -15,7 +15,6 @@ import useHandleError from "../../errorHandler";
 import AccountsListIcon from "@material-ui/icons/PeopleAltRounded";
 import ListCompany from "./moderator/ListCompany";
 import AddCruiseGroup from "./worker/AddCruiseGroup";
-import ListCruiseGroup from "../panels/worker/ListCruiseGroupForWorker";
 import ListCruiseGroup from "../../components/ListCruiseGroup";
 import AddCruise from "./worker/AddCruise";
 

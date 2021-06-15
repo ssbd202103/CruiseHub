@@ -311,7 +311,7 @@ export default function AddCruise() {
                 onClick={HandleAddCruise}
                 style={{width: '50%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
                 color="pink"
-            >{t("addCruise")} </RoundedButton>
+            >{t("newCruise")} </RoundedButton>
         </div>
     )
 }

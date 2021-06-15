@@ -88,16 +88,6 @@ public class CruiseGroupFacadeMow extends AbstractFacade<CruiseGroup> {
         }
 
     }
-    @PermitAll
-    public CruiseGroup findByUUID(UUID uuid) throws BaseAppException {
-        TypedQuery<CruiseGroup> tq = em.createNamedQuery("CruiseGroup.findByUUID", CruiseGroup.class);
-        tq.setParameter("uuid", uuid);
-        try {
-            return tq.getSingleResult();
-        } catch (NoResultException e) {
-            throw FacadeException.noSuchElement();
-        }
-    }
     @RolesAllowed("getCruiseGroupForBusinessWorker")
     public List<CruiseGroup> getCruiseGroupForBusinessWorker(Company company) throws FacadeException {
         TypedQuery<CruiseGroup> tq = em.createNamedQuery("CruiseGroup.findForBusinessWorker", CruiseGroup.class);
