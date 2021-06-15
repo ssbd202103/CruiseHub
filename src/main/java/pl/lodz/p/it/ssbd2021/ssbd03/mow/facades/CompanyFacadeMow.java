@@ -21,6 +21,7 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 import static javax.ejb.TransactionAttributeType.MANDATORY;
+import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company.COMPANY_NAME_UNIQUE_CONSTRAINT;
 import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company.NIP_UNIQUE_CONSTRAINT;
 
 @Stateless
@@ -53,6 +54,9 @@ public class CompanyFacadeMow extends AbstractFacade<Company> {
         try {
             super.create(entity);
         } catch (ConstraintViolationException e) {
+            if (e.getConstraintName().equals(COMPANY_NAME_UNIQUE_CONSTRAINT)) {
+                throw CompanyFacadeException.companyNameReserved(e);
+            }
             if (e.getConstraintName().equals(NIP_UNIQUE_CONSTRAINT)) {
                 throw CompanyFacadeException.nipNameReserved(e);
             }
@@ -65,6 +69,9 @@ public class CompanyFacadeMow extends AbstractFacade<Company> {
         try {
             super.edit(entity);
         } catch (ConstraintViolationException e) {
+            if (e.getConstraintName().equals(COMPANY_NAME_UNIQUE_CONSTRAINT)) {
+                throw CompanyFacadeException.companyNameReserved(e);
+            }
             if (e.getConstraintName().equals(NIP_UNIQUE_CONSTRAINT)) {
                 throw CompanyFacadeException.nipNameReserved(e);
             }

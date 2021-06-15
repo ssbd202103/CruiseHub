@@ -190,8 +190,8 @@ create table companies
     CONSTRAINT companies_alter_type_id_fk_constraint FOREIGN KEY (alter_type_id) REFERENCES alter_types (id),
     CONSTRAINT companies_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
     CONSTRAINT companies_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id),
-    CONSTRAINT companies_nip_unique_constraint UNIQUE (nip)
-
+    CONSTRAINT companies_nip_unique_constraint UNIQUE (nip),
+    CONSTRAINT companies_name_unique_constraint UNIQUE (name)
 );
 
 create sequence companies_id_seq

@@ -201,7 +201,8 @@ const resources = {
             "error.account.notActive": "Konto jest zablokowane",
             "error.database.operation": "Błąd po stronie bazy danych",
             "error.business.worker.confirmed": "Pracownik jest już zatwierdzony",
-            "companies_nip_unique_constraint": "Firma o podanym numerze NIP jest już w bazie danych",
+            "companies_nip_unique_constraint": "Firma o podanym numerze NIP znajduje się już w bazie danych",
+            "companies_name_unique_constraint": "Firma o podanej nazwie znajduje się już w bazie danych",
 
             //auth errors
             "auth.incorrect.login": "Błąd logowania",
@@ -516,6 +517,7 @@ const resources = {
             "error.database.operation": "Database operation error",
             "error.business.worker.confirmed": "Worker is already confirmed",
             "companies_nip_unique_constraint": "Company with said NIP already exists in the database",
+            "companies_name_unique_constraint": "Company with said name already exists in the database",
 
             //auth errors
             "auth.incorrect.login": "Login error",

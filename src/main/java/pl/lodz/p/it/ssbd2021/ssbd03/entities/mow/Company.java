@@ -16,6 +16,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
+import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company.COMPANY_NAME_UNIQUE_CONSTRAINT;
 import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company.NIP_UNIQUE_CONSTRAINT;
 
 @Entity(name = "companies")
@@ -23,11 +24,13 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company.NIP_UNIQUE_CONST
         @NamedQuery(name = "Company.findByName", query = "SELECT company FROM companies company WHERE company.name = :name")
 })
 @Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"nip"}, name = NIP_UNIQUE_CONSTRAINT)
+        @UniqueConstraint(columnNames = {"nip"}, name = NIP_UNIQUE_CONSTRAINT),
+        @UniqueConstraint(columnNames = {"name"}, name = COMPANY_NAME_UNIQUE_CONSTRAINT)
 })
 @ToString
 public class Company extends BaseEntity {
     public static final String NIP_UNIQUE_CONSTRAINT = "companies_nip_unique_constraint";
+    public static final String COMPANY_NAME_UNIQUE_CONSTRAINT = "companies_name_unique_constraint";
 
     @Getter
     @Id
@@ -47,7 +50,7 @@ public class Company extends BaseEntity {
     @Getter
     @Setter
     @CompanyName
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
     @Getter

@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.exceptions;
 
+import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company.COMPANY_NAME_UNIQUE_CONSTRAINT;
 import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company.NIP_UNIQUE_CONSTRAINT;
 
 /**
@@ -19,4 +20,7 @@ public class CompanyFacadeException extends FacadeException {
         throw new CompanyFacadeException(NIP_UNIQUE_CONSTRAINT, cause);
     }
 
+    public static CompanyFacadeException companyNameReserved(Throwable cause) throws CompanyFacadeException {
+        throw new CompanyFacadeException(COMPANY_NAME_UNIQUE_CONSTRAINT, cause);
+    }
 }
