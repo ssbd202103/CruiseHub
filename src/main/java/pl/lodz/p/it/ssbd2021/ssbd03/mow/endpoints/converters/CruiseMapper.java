@@ -1,11 +1,11 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.converters;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.CruiseDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.CruiseGroupDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.NewCruiseDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.*;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.CruiseGroupWithUUIDDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.RelatedCruiseDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.CruiseDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.NewCruiseDto;
 
 /**
  * Klasa która zajmuje się mapowaniem obiektów klas dto na obiekty klas modelu

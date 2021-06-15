@@ -3,9 +3,9 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints.BaseEndpoint;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.RelatedCruiseDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.converters.CruiseGroupMapper;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.converters.CruiseMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.managers.CruiseManagerLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
@@ -36,7 +36,7 @@ public class CruiseEndpoint extends BaseEndpoint implements CruiseEndpointLocal 
     @RolesAllowed("addCruise")
     @Override
     public void addCruise(NewCruiseDto newCruiseDto) throws BaseAppException {
-        cruiseManager.addCruise(CruiseMapper.newCruiseDtoToCruise(newCruiseDto), newCruiseDto.getCruiseName());
+        cruiseManager.addCruise(CruiseMapper.mapNewCruiseDtoToCruise(newCruiseDto), newCruiseDto.getCruiseName());
     }
 
     @RolesAllowed("deactivateCruise")
@@ -51,13 +51,13 @@ public class CruiseEndpoint extends BaseEndpoint implements CruiseEndpointLocal 
     public CruiseDto getCruise(UUID uuid) throws BaseAppException {
         Cruise cruise = cruiseManager.getCruise(uuid);
 
-        return CruiseMapper.cruiseToCruiseDto(cruise);
+        return CruiseMapper.mapCruiseToCruiseDto(cruise);
     }
 
     @PermitAll
     @Override
     public List<RelatedCruiseDto> getCruisesByCruiseGroup(UUID uuid) throws BaseAppException {
-        List<Cruise> cruises = cruiseManagerLocal.getCruisesByCruiseGroup(uuid);
+        List<Cruise> cruises = cruiseManager.getCruisesByCruiseGroup(uuid);
 
         return cruises.stream().filter(Cruise::isActive).map(CruiseMapper::toRelatedCruiseDto).collect(Collectors.toList());
     }
@@ -79,7 +79,7 @@ public class CruiseEndpoint extends BaseEndpoint implements CruiseEndpointLocal 
     @Override
     public List<CruiseDto> getPublishedCruises() {
         return cruiseManager.getPublishedCruises().stream()
-                .map(CruiseMapper::cruiseToCruiseDto).collect(Collectors.toList());
+                .map(CruiseMapper::mapCruiseToCruiseDto).collect(Collectors.toList());
     }
 
     @PermitAll

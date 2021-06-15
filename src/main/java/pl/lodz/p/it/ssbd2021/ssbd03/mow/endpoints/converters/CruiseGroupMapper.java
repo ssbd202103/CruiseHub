@@ -4,18 +4,16 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseAddress;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruisePicture;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.changeCruiseGroupDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.CruiseGroupWithUUIDDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.companies.CompanyLightDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.AddCruiseGroupDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.CruiseGroupDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.CruiseGroupWithDetailsDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.changeCruiseGroupDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.CruiseAddressDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.CruiseForCruiseGroupDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.CruisePictureDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseGroupWithUUIDDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.*;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.changeCruiseGroup.changeCruiseGroupDto;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -96,7 +94,7 @@ public class CruiseGroupMapper {
 
     public static List<CruiseForCruiseGroupDto> toCruiseForCruiseGroupDtos(List<Cruise> cruises) {
         return cruises.stream().map(cruise -> new CruiseForCruiseGroupDto(
-                cruise.getStartDate(), cruise.getEndDate(), cruise.isActive(), cruise.isActive())
+                cruise.getStartDate(), cruise.getEndDate(), cruise.isActive())
         ).collect(Collectors.toList());
     }
 
@@ -124,17 +122,16 @@ public class CruiseGroupMapper {
                 cruiseGroup.getVersion(), cruiseGroup.isActive());
     }
 
-    public static CruiseGroupWithDetailsDto toCruiseGroupWithDetailsDto(CruiseGroup cruiseGroup,List<Cruise> cruies) throws BaseAppException {
+    public static CruiseGroupWithDetailsDto toCruiseGroupWithDetailsDto(CruiseGroup cruiseGroup, List<Cruise> cruies) throws BaseAppException {
         CompanyLightDto company = CompanyMapper.mapCompanyToCompanyLightDto(cruiseGroup.getCompany());
         CruiseAddressDto address = CruiseGroupMapper.toCruiseAddressDto(cruiseGroup.getAddress());
-        List<CruiseForCruiseGroupDto> cruises = CruiseGroupMapper.toCruisesDto(cruies);
-        if(cruies.size()>0) {
+        List<CruiseForCruiseGroupDto> cruises = CruiseGroupMapper.toCruiseForCruiseGroupDtos(cruies);
+        if (cruies.size() > 0) {
             return new CruiseGroupWithDetailsDto(cruiseGroup.getUuid(), company, cruiseGroup.getName(), cruiseGroup.getNumberOfSeats(), cruiseGroup.getPrice(), address,
                     cruiseGroup.getCruisePictures().stream().map(CruiseGroupMapper::toCruisePictureDto).collect(Collectors.toList()),
                     cruiseGroup.getVersion(), cruiseGroup.getDescription(), cruiseGroup.isActive(), cruises, cruies.get(0).getStartDate().format(DateTimeFormatter.ISO_LOCAL_DATE), cruies.get(0).getEndDate().format(DateTimeFormatter.ISO_LOCAL_DATE));
-        }
-        else
-            return  new CruiseGroupWithDetailsDto(cruiseGroup.getUuid(),company, cruiseGroup.getName(), cruiseGroup.getNumberOfSeats(), cruiseGroup.getPrice(), address,
+        } else
+            return new CruiseGroupWithDetailsDto(cruiseGroup.getUuid(), company, cruiseGroup.getName(), cruiseGroup.getNumberOfSeats(), cruiseGroup.getPrice(), address,
                     cruiseGroup.getCruisePictures().stream().map(CruiseGroupMapper::toCruisePictureDto).collect(Collectors.toList()),
                     cruiseGroup.getVersion(), cruiseGroup.getDescription(), cruiseGroup.isActive(), cruises, "", "");
     }

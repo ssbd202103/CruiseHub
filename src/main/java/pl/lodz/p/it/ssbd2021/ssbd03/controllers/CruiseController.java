@@ -1,24 +1,18 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CancelReservationDTO;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CreateReservationDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.RelatedCruiseDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.RelatedCruiseDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.CruiseDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.CruiseForCruiseGroupDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations.CancelReservationDTO;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations.CreateReservationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.CruiseEndpointLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.ReservationEndpointLocal;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,7 +32,6 @@ public class CruiseController {
 
     /**
      * Pobiera informację o wycieczce o podanym uuid
-     *
      */
     @GET
     @Path("/{uuid}")
@@ -50,6 +43,7 @@ public class CruiseController {
 
     /**
      * Pobiera wycieczki należące do grupy wycieczek o podanym uuid
+     *
      * @param uuid uuid grupy wycieczek
      * @return listę wycieczek należących do grupy wycieczek o podanym uuid
      * @throws BaseAppException wyjątek rzucany w razie nie znależenia encji
@@ -104,6 +98,7 @@ public class CruiseController {
 
     /**
      * Metoda anulująca rezerwację klienta
+     *
      * @param reservationDTO Informacja o anulowanej rezerwacji
      * @throws BaseAppException Bazowy wyjatek aplikacji
      */
