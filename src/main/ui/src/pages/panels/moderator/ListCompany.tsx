@@ -37,7 +37,7 @@ function createData(
 ) {
     return {
         name: name,
-        nip: nip,
+        NIP: nip,
         phoneNumber: phoneNumber,
         country: country,
         city: city,
@@ -61,7 +61,7 @@ function Row(props: RowProps) {
     return (
         <TableRow className={classes.root}>
             <TableCell component="th" scope="row" style={style}>{row.name}</TableCell>
-            <TableCell style={style}>{row.nip.toString()}</TableCell>
+            <TableCell style={style}>{row.NIP}</TableCell>
             <TableCell style={style}>{row.phoneNumber}</TableCell>
             <TableCell style={style}>{row.country}</TableCell>
             <TableCell style={style}>{row.city}</TableCell>
