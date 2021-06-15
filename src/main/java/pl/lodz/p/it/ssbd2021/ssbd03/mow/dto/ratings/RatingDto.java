@@ -1,8 +1,9 @@
-package pl.lodz.p.it.ssbd2021.ssbd03.mow.dto;
+package pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.RemoveRankingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 
 import javax.validation.constraints.Max;

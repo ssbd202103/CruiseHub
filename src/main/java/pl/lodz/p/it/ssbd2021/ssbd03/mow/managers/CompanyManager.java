@@ -43,7 +43,6 @@ public class CompanyManager implements CompanyManagerLocal {
     @Context
     private SecurityContext context;
 
-    @PermitAll
     @Override
     public List<Company> getAllCompanies() throws BaseAppException {
         return companyFacadeMow.findAll();

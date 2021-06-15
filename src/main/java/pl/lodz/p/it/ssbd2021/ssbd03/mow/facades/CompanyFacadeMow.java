@@ -37,9 +37,8 @@ public class CompanyFacadeMow extends AbstractFacade<Company> {
         return em;
     }
 
-    @PermitAll
     @Override
-    @RolesAllowed("getAllCompanies")
+    @PermitAll
     public List<Company> findAll() throws FacadeException {
         return super.findAll();
     }

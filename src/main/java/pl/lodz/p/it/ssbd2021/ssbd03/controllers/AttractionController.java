@@ -1,7 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.AttractionDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.attractions.AttractionDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.AttractionEndpointLocal;
 
 import javax.enterprise.context.RequestScoped;

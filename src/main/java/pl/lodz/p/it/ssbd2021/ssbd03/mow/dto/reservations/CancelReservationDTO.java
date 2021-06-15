@@ -1,4 +1,4 @@
-package pl.lodz.p.it.ssbd2021.ssbd03.mow.dto;
+package pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,8 +9,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RemoveClientReservationDto {
+public class CancelReservationDTO {
     private long reservationVersion;
     private UUID reservationUuid;
-    private String clientLogin;
 }

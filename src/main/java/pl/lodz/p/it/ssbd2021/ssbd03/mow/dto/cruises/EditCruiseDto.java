@@ -1,21 +1,19 @@
-package pl.lodz.p.it.ssbd2021.ssbd03.mow.dto;
-
+package pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class NewCruiseDto {
-
+public class EditCruiseDto {
+    private UUID uuid;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private boolean active;
     private String description;
-    private Boolean available;
-    private String cruiseName;
+    private Long version;
 }
