@@ -317,7 +317,8 @@ const resources = {
             "search cruiseGroup": "Wyszukaj grupę",
             "seats": "Liczba miejsc",
             "start_date": "Data początkowa",
-            "end_date": "Data końcowa"
+            "end_date": "Data końcowa",
+            "choose_number_of_seats": "Wybierz liczbę miejsc"
         }
     },
     EN: {
@@ -630,7 +631,8 @@ const resources = {
             "search cruiseGroup": "Search group",
             "seats": "Number of seats",
             "start_date": "Start date",
-            "end_date": "End date"
+            "end_date": "End date",
+            "choose_number_of_seats": "Choose number of seats"
         }
     }
 }
