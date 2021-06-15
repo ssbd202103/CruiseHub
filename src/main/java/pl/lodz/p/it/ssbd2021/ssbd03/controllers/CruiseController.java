@@ -35,7 +35,7 @@ public class CruiseController {
      *
      */
     @GET
-    @Path("/{uuid}")
+    @Path("/get-cruise/{uuid}")
     @Produces(MediaType.APPLICATION_JSON)
     public CruiseDto getCruiseByUUID(@PathParam("uuid") String uuid) throws BaseAppException {
 //        return Response.ok().entity("That's alright, that's ok").build();
