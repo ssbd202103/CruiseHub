@@ -1,14 +1,19 @@
 import React, {useEffect, useState} from 'react';
+import {getAllCompanies} from "../../../Services/companiesService";
 import {makeStyles} from "@material-ui/core/styles";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import useHandleError from "../../../errorHandler";
+import RoundedButton from "../../../components/RoundedButton";
 import {useSelector} from "react-redux";
 import {selectCompany, selectDarkMode} from "../../../redux/slices/userSlice";
 import {refreshToken} from "../../../Services/userService";
 import {useTranslation} from "react-i18next";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import {Button, TextField} from "@material-ui/core";
+import {useSnackbarQueue} from "../../../pages/snackbar";
+import {selectToken} from "../../../redux/slices/tokenSlice";
+import {Link} from "react-router-dom";
 import TableContainer from "@material-ui/core/TableContainer";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
@@ -21,6 +26,9 @@ import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import Collapse from "@material-ui/core/Collapse";
 import Box from "@material-ui/core/Box";
+import {getAllCruiseGroup, getCruiseGroupForBusinessWorker} from "../../../Services/cruiseGroupService";
+import {dCruiseGroup} from "../../../components/ListCruiseGroup";
+import axios from "../../../Services/URL";
 
 const useRowStyles = makeStyles({
     root: {
@@ -39,7 +47,7 @@ export function createCruiseGroup(
     cruisePictures: ImageListType,
     etag: string,
     version: bigint,
-    uuid: any,
+    uuid: string,
     description: any,
     active: boolean,
     company: any,
@@ -74,15 +82,46 @@ const useButtonStyles = makeStyles({
 })
 
 export interface CruiseData {
+
+interface DeactivateCruiseData {
+    uuid: string;
+    etag: string;
+    version: bigint,
+    token: string
+}
+
+
+const deactivateCruiseGroup = async ({uuid, etag, version, token}: DeactivateCruiseData) => {
+    const json = JSON.stringify({
+            uuid: uuid,
+            version: version,
+        }
+    )
+    return await axios.put('cruiseGroup/deactivate-cruise-group', json, {
+        headers: {
+            'Content-Type': 'application/json',
+            'If-Match': etag,
+            'Authorization': `Bearer ${token}`
+        }
+    })
+}
+
+
+export interface  CruiseData{
     group: ReturnType<typeof createCruiseGroup>,
-    style: React.CSSProperties
+    style: React.CSSProperties,
+    onChange: () => Promise<any>,
 }
 
 function Row(props: CruiseData) {
     const {group} = props;
     const {style} = props;
+    const {onChange} = props;
     const {t} = useTranslation();
     const classes = useRowStyles();
+    const handleError = useHandleError()
+    const showSuccess = useSnackbarQueue('success')
+    const token = useSelector(selectToken)
     const [open, setOpen] = useState(false);
     const [cruises, setCruises] = useState([]);
     const handleError = useHandleError();
@@ -112,6 +151,36 @@ function Row(props: CruiseData) {
     }
 
     return (
+        <TableRow className={classes.root}>
+            <TableCell component="th" scope="row" style={style}>{group.name}</TableCell>
+            <TableCell style={style}>{group.company.name}</TableCell>
+            <TableCell style={style}>{group.numberOfSeats}</TableCell>
+            <TableCell style={style}>{group.price +" pln"}</TableCell>
+            <TableCell style={style}>{group.description}</TableCell>
+            <TableCell style={style}>{group.active.toString()}</TableCell>
+            <TableCell style={style}>
+                    <RoundedButton
+                        color="pink" onClick={() => {
+                        deactivateCruiseGroup({
+                            uuid: group.uuid,
+                            etag: group.etag,
+                            version: group.version,
+                            token: token
+                        }).then(res => {
+                            onChange().then(() => {
+                                showSuccess(t('data.load.success'))
+                            })
+                        }).catch(error => {
+                            const message = error.response.data
+                            handleError(t(message), error.response.status)
+                        })
+                    }}
+                    disabled={!group.active}
+                    >
+                        {t("deactivate")}
+                    </RoundedButton>
+                </TableCell>
+        </TableRow>
         <React.Fragment>
             <TableRow className={classes.root}>
                 <TableCell>
@@ -207,16 +276,19 @@ const ListCruiseGroups = () => {
     const darkMode = useSelector(selectDarkMode)
 
     const worker_Company = useSelector(selectCompany);
-    useEffect(() => {
 
-        getCruiseGroupForBusinessWorker(worker_Company).then(res => {
+    const getCruiseGroupFromWorker = () => {
+        return   getCruiseGroupForBusinessWorker(worker_Company).then(res => {
             setCruiseGroupL(res.data)
         }).catch(error => {
             const message = error.response.data
             handleError(message, error.response.status)
         }).then(res => {
             refreshToken()
-        });
+        })
+    }
+    useEffect(() => {
+        getCruiseGroupFromWorker()
     }, []);
 
 
@@ -287,14 +359,18 @@ const ListCruiseGroups = () => {
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`
                             }}>{t("active")}</TableCell>
-                        </TableRow>
+                            <TableCell style={{
+                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                            }}>{t("deactivate")}</TableCell>
+                    </TableRow>
                     </TableHead>
                     <TableBody>
                         {search(cruiseGroupL.map((cruiseGroups, index) => (
                             <Row key={index} group={cruiseGroups} style={{
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`
-                            }}/>
+                            }} onChange={getCruiseGroupFromWorker}/>
                         )))}
                     </TableBody>
                 </Table>
