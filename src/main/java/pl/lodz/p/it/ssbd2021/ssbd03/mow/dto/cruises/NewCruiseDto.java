@@ -5,17 +5,26 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.ejb.Local;
+import javax.json.bind.annotation.JsonbDateFormat;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.UUID;
+
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_EMPTY;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class NewCruiseDto {
 
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
-    private boolean active;
-    private String description;
-    private Boolean available;
-    private String cruiseName;
+    @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
+    private String startDate;
+    @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
+    private String endDate;
+    @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
+    private String cruiseGroupUUID;
 }

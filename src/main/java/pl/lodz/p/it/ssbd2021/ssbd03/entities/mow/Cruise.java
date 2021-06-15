@@ -22,10 +22,10 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise.UUID_CONSTRAINT;
         @NamedQuery(name = "Cruise.findByCruiseGroup", query = "SELECT c FROM cruises c WHERE c.cruisesGroup.name = :cruiseGroupName")
 })
 @Table(
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = "uuid", name = UUID_CONSTRAINT),
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = "uuid", name = UUID_CONSTRAINT),
 
-        }
+    }
 )
 @ToString
 public class Cruise extends BaseEntity {
@@ -62,6 +62,8 @@ public class Cruise extends BaseEntity {
     @Column(name = "active")
     private boolean active;
 
+
+
     @Getter
     @Setter
     @OneToOne
@@ -74,6 +76,16 @@ public class Cruise extends BaseEntity {
     @Setter
     @Column(name = "published")
     private boolean published;
+
+    public Cruise(LocalDateTime startDate, LocalDateTime endDate,
+                  CruiseGroup cruisesGroup) {
+        this.uuid = UUID.randomUUID();
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.active = true;
+        this.cruisesGroup = cruisesGroup;
+        this.published = false;
+    }
 
     public Cruise(LocalDateTime startDate, LocalDateTime endDate, boolean active,
                   CruiseGroup cruisesGroup) {

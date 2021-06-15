@@ -112,6 +112,12 @@ public class I18n {
     public static final String ACCESS_LEVEL_DEACTIVATE_CLIENT_BODY = "account.accessLevels.deactivateClient.body";
     public static final String ACCESS_LEVEL_REACTIVATE_CLIENT_SUBJECT = "account.accessLevels.reactivateClient.subject";
     public static final String ACCESS_LEVEL_REACTIVATE_CLIENT_BODY = "account.accessLevels.reactivateClient.body";
+    public static final String CRUISE_GROUP_NO_ACTIVE = "error.cruiseGroup.no.active";
+    public static final String START_DATE_BEFORE_CURRENT_DATE = "error.startDate.before.currentDate";
+    public static final String START_DATE_AFTER_END_DATE = "error.startDate.after.endDate";
+
+    public static final String CRUISE_MAPPER_DATE_PARSE = "error.cruise.mapper.data.parse";
+    public static final String CRUISE_MAPPER_UUID_PARSE = "error.cruise.mapper.uuid.parse";
     public static final String NO_SEATS_AVAILABLE = "reservation.noSeats";
 
     private ResourceBundle bundle;

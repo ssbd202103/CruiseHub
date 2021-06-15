@@ -6,16 +6,23 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.CruiseForCruiseGroupDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.RelatedCruiseDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations.CancelReservationDTO;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations.CreateReservationDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.NewCruiseDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.CruiseEndpointLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.ReservationEndpointLocal;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.ws.rs.*;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 import java.util.UUID;
 
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
 import static pl.lodz.p.it.ssbd2021.ssbd03.utils.TransactionRepeater.tryAndRepeat;
 
 /**
@@ -107,5 +114,12 @@ public class CruiseController {
     @Consumes(MediaType.APPLICATION_JSON)
     public void cancelReservation(CancelReservationDTO reservationDTO) throws BaseAppException {
         tryAndRepeat(() -> reservationEndpoint.cancelReservation(reservationDTO));
+    }
+
+    @POST
+    @Path("/new-cruise")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void createCruise(@Valid @NotNull(message = CONSTRAINT_NOT_NULL) NewCruiseDto newCruiseDto) throws BaseAppException {
+        tryAndRepeat(() -> cruiseEndpoint.addCruise(newCruiseDto));
     }
 }

@@ -17,11 +17,11 @@ public interface CruiseManagerLocal {
     /**
      * Zajmuje się tworzeniem nowego wycieczki
      *
-     * @param cruise          obiekt reprezentujący wycieczke
-     * @param cruiseGroupName nazwa grupy wycieczek
+     * @param cruise obiekt reprezentujący wycieczke
+     * @param cruiseGroupUUID uuid grupy wycieczek
      * @throws BaseAppException wyjątek rzucany w razie nie znalezienia użytkownika tworzącego wycieczke, bądź grupy wycieczek
      */
-    void addCruise(Cruise cruise, String cruiseGroupName) throws BaseAppException;
+    void addCruise(Cruise cruise, UUID cruiseGroupUUID) throws BaseAppException;
 
 
     /**
