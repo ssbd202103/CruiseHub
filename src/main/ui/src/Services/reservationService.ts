@@ -9,7 +9,7 @@ export function createReservation() {
         cruiseUuid: "581d626f-d421-47dd-89ef-b41bc30aa36c",
         numberOfSeats: 1,
     }
-    return axios.put('cruise/reserve', json, {
+    return axios.post('cruise/reserve', json, {
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`
