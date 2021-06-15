@@ -261,6 +261,7 @@ const resources = {
             '/accounts/resetSomebodyPassword': 'Resetowanie hasła',
             "/addCruiseGroup": "Dodaj grupę wycieczek",
             "/listCruiseGroup": "Wyświetl grupę wycieczek",
+            "/add-company": "Dodaj firmę",
 
             'yes': 'Tak',
             'no': 'Nie',
@@ -571,6 +572,7 @@ const resources = {
             "/accounts/resetSomebodyPassword": "Password reseting",
             "/addCruiseGroup": "Add cruise group",
             "/listCruiseGroup": "List cruise groups",
+            "/add-company": "Add a company",
 
             'accept.action': 'Do you want to do this action?',
 
