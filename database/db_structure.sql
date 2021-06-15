@@ -190,7 +190,7 @@ create table companies
     CONSTRAINT companies_alter_type_id_fk_constraint FOREIGN KEY (alter_type_id) REFERENCES alter_types (id),
     CONSTRAINT companies_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
     CONSTRAINT companies_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id),
-    CONSTRAINT companies_name_unique_constraint UNIQUE (name, nip)
+    CONSTRAINT companies_nip_unique_constraint UNIQUE (nip)
 
 );
 
@@ -587,7 +587,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE
 GRANT SELECT, INSERT, UPDATE, DELETE
     ON addresses TO ssbd03mok;
 
-GRANT SELECT
+GRANT SELECT, INSERT
     ON addresses TO ssbd03mow;
 
 GRANT SELECT, INSERT, UPDATE, DELETE
@@ -616,6 +616,9 @@ GRANT SELECT, UPDATE
 
 GRANT SELECT, UPDATE
     ON SEQUENCE address_id_seq TO ssbd03mok;
+
+GRANT SELECT, UPDATE
+    ON SEQUENCE address_id_seq TO ssbd03mow;
 
 -- Table permissions for MOW --
 GRANT SELECT

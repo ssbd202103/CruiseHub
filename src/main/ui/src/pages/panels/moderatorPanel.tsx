@@ -4,6 +4,7 @@ import ListClient from "./moderator/ListClient";
 
 import SettingsIcon from '@material-ui/icons/SettingsRounded'
 import AccountsListIcon from '@material-ui/icons/PeopleAltRounded'
+import BusinessIcon from '@material-ui/icons/Business'
 
 import {useSelector} from "react-redux";
 import {selectDarkMode} from "../../redux/slices/userSlice";
@@ -17,6 +18,7 @@ import {getSelfMetadataDetails} from "../../Services/accountsService";
 import {refreshToken} from "../../Services/userService";
 import useHandleError from "../../errorHandler";
 import ListCompany from "./moderator/ListCompany";
+import AddCompany from "./moderator/AddCompany";
 import ListCruiseGroup from "../../components/ListCruiseGroup";
 
 export default function ModeratorPanel() {
@@ -115,6 +117,12 @@ export default function ModeratorPanel() {
                     Icon: AccountsListIcon,
                     text: t('list companies'),
                     Component: ListCompany
+                },
+                {
+                    link: '/add-company',
+                    Icon: BusinessIcon,
+                    text: t('add company'),
+                    Component: AddCompany
                 },
                 {
                     link: '/ManageWorkers',

@@ -1,9 +1,11 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.facades;
 
+import org.hibernate.exception.ConstraintViolationException;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.facades.AbstractFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.CompanyFacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
@@ -19,6 +21,7 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 import static javax.ejb.TransactionAttributeType.MANDATORY;
+import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company.NIP_UNIQUE_CONSTRAINT;
 
 @Stateless
 @TransactionAttribute(MANDATORY)
@@ -45,15 +48,27 @@ public class CompanyFacadeMow extends AbstractFacade<Company> {
     }
 
     @Override
-    @RolesAllowed("editCompany")
-    public void edit(Company entity) throws FacadeException {
-        super.edit(entity);
+    @RolesAllowed("addCompany")
+    public void create(Company entity) throws FacadeException {
+        try {
+            super.create(entity);
+        } catch (ConstraintViolationException e) {
+            if (e.getConstraintName().equals(NIP_UNIQUE_CONSTRAINT)) {
+                throw CompanyFacadeException.nipNameReserved(e);
+            }
+        }
     }
 
     @Override
-    @RolesAllowed("addCompany")
-    public void create(Company entity) throws FacadeException {
-        super.create(entity);
+    @RolesAllowed("editCompany")
+    public void edit(Company entity) throws FacadeException {
+        try {
+            super.edit(entity);
+        } catch (ConstraintViolationException e) {
+            if (e.getConstraintName().equals(NIP_UNIQUE_CONSTRAINT)) {
+                throw CompanyFacadeException.nipNameReserved(e);
+            }
+        }
     }
 
     @PermitAll
