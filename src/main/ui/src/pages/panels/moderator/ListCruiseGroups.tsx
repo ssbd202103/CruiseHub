@@ -22,6 +22,7 @@ import IconButton from "@material-ui/core/IconButton";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import {useSnackbarQueue} from "../../snackbar";
+import {Link} from "react-router-dom";
 
 
 const useRowStyles = makeStyles({
@@ -113,6 +114,10 @@ function Row(props: CruiseData) {
     const getParsedDate = (date: any) => {
         return `${date.dayOfMonth}-${date.monthValue.toString().padStart(2, '0')}-${date.year}`
     }
+    const handleReservations =(props: any) =>{
+        const uuid = props
+        sessionStorage.setItem("cruiseUUID",uuid)
+    }
 
     return (
         <React.Fragment>
@@ -172,7 +177,10 @@ function Row(props: CruiseData) {
                                             <TableCell align="center"
                                                        style={style}>{cruise.active.toString()}</TableCell>
                                             <TableCell align="center">
-                                                <Button className={buttonClass.root}>{t("reservations")}</Button>
+                                                <Link to="/reservations">
+                                                    <Button  className={buttonClass.root} onClick={() => {handleReservations(cruise.uuid)}}
+                                                    >{t("reservations")}</Button>
+                                                </Link>
                                             </TableCell>
                                             <TableCell align="center">
                                                 <Button className={buttonClass.root}>{t("attractions")}</Button>

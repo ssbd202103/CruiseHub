@@ -320,7 +320,12 @@ const resources = {
             "search cruiseGroup": "Wyszukaj grupę",
             "seats": "Liczba miejsc",
             "start_date": "Data początkowa",
-            "end_date": "Data końcowa"
+            "end_date": "Data końcowa",
+            "Client name": "Nazwa Klienta",
+            "numberOfSeatsReserved": "Liczba zarezerwowanych miejsc",
+            "CruiseName": "Nazwa wycieczki",
+            "/reservations" :"Rezerwacje wycieczki",
+            "search reservation": "Wyszukaj rezerwacje",
         }
     },
     EN: {
@@ -636,7 +641,12 @@ const resources = {
             "search cruiseGroup": "Search group",
             "seats": "Number of seats",
             "start_date": "Start date",
-            "end_date": "End date"
+            "end_date": "End date",
+            "Client name": "Client name",
+            "numberOfSeatsReserved": "Number of seats reserved",
+            "CruiseName": "Name of the cruise",
+            "/reservations" :"Cruise reservations",
+            "search reservation": "Search reservations",
         }
     }
 }

@@ -17,7 +17,7 @@ public class ReservationMapper {
      * @return obiekt dto klasy CruiseReservationDto
      */
     public static CruiseReservationDto toReservationDto(Reservation reservation) {
-        return new CruiseReservationDto(reservation.getClient().getAccount().getLogin(), reservation.getNumberOfSeats(), reservation.getPrice(),
+        return new CruiseReservationDto(reservation.getUuid(),reservation.getClient().getAccount().getLogin(), reservation.getNumberOfSeats(), reservation.getPrice(),
                 reservation.getCruise().getCruisesGroup().getName());
     }
 }
