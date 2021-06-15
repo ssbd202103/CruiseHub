@@ -2,10 +2,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
 
 import pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints.BaseEndpoint;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseAddress;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruisePicture;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.AddCruiseGroupDto;
@@ -21,6 +18,7 @@ import javax.inject.Inject;
 import javax.interceptor.Interceptors;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Klasa która zajmuje się gromadzeniem zmapowanych obiektów klas Dto na obiekty klas modelu związanych z grupami wycieczek oraz wywołuje metody logiki przekazując zmapowane obiekty.
@@ -54,7 +52,7 @@ public class CruiseGroupEndpoint extends BaseEndpoint implements CruiseGroupEndp
 
     @Override
     @RolesAllowed("getAllCruiseGroupList")
-    public List<CruiseGroupWithDetailsDto> getCruiseGroupsInfo() throws FacadeException {
+    public List<CruiseGroupWithDetailsDto> getCruiseGroupsInfo() throws FacadeException, BaseAppException {
         List<CruiseGroupWithDetailsDto> res = new ArrayList<>();
         for (CruiseGroup cruiseGroup : cruiseGroupManager.getAllCruiseGroups()) {
             List<Cruise> cruise = cruiseGroupManager.getCruiseBelongsToCruiseGroup(cruiseGroup);
@@ -65,7 +63,17 @@ public class CruiseGroupEndpoint extends BaseEndpoint implements CruiseGroupEndp
 
     @RolesAllowed("deactivateCruiseGroup")
     @Override
-    public void deactivateCruiseGroup(String name, Long version) throws BaseAppException {
-        this.cruiseGroupManager.deactivateCruiseGroup(name, version);
+    public void deactivateCruiseGroup(UUID uuid, Long version) throws BaseAppException {
+        this.cruiseGroupManager.deactivateCruiseGroup(uuid, version);
+    }
+    @RolesAllowed("getCruiseGroupForBusinessWorker")
+    @Override
+    public List<CruiseGroupWithDetailsDto> getCruiseGroupForBusinessWorker(String companyName) throws BaseAppException {
+        List<CruiseGroupWithDetailsDto> res = new ArrayList<>();
+        for (CruiseGroup cruiseGroup : cruiseGroupManager.getCruiseGroupForBusinessWorker(companyName)) {
+            List<Cruise> cruise = cruiseGroupManager.getCruiseBelongsToCruiseGroup(cruiseGroup);
+            res.add(CruiseGroupMapper.toCruiseGroupWithDetailsDto(cruiseGroup,cruise));
+        }
+      return res;
     }
 }

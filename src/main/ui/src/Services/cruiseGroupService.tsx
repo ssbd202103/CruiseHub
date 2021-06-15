@@ -10,3 +10,12 @@ export function getAllCruiseGroup() {
         }
     })
 }
+export function getCruiseGroupForBusinessWorker(props: string) {
+    const {token} = store.getState()
+    const companyName = props
+    return axios.get(`cruiseGroup/CruiseGroupForBusinessWorker/${companyName}`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+}

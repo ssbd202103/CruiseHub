@@ -19,7 +19,7 @@ import PanelLayout from "../../layouts/PanelLayout";
 import {getSelfAddressMetadataDetails, getSelfMetadataDetails} from "../../Services/accountsService";
 import {refreshToken} from "../../Services/userService";
 import useHandleError from "../../errorHandler";
-import ListCruiseGroup from "../../components/ListCruiseGroup";
+import ListCruiseGroup from "../panels/moderator/ListCruiseGroups";
 export default function AdminPanel() {
     const {t} = useTranslation()
     const handleError = useHandleError()

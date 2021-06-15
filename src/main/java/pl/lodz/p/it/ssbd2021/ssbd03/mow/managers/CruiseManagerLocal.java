@@ -38,10 +38,17 @@ public interface CruiseManagerLocal {
      *
      * @param uuid uuid wycieczki
      * @return obiekt encji reprezentujący wycieczkę
-     * @throws BaseAppException wyjątek rzucany w raze nie znalezienia wycieczki
+     * @throws BaseAppException wyjątek rzucany w razie nie znalezienia wycieczki
      */
     Cruise getCruise(UUID uuid) throws BaseAppException;
 
+    /**
+     * Zwraca wycieczki należących do grupy wycieczek o podanym uuid
+     * @param uuid uuid grupy wycieczek
+     * @return listę encji wycieczek nalężacych do grupy wycieczek o podanym uuid
+     * @throws BaseAppException wyjątek rzucany w razie nie znalezienia wycieczki
+     */
+    List<Cruise> getCruisesByCruiseGroup(UUID uuid) throws BaseAppException;
 
     /**
      * Publikuje wycieczke

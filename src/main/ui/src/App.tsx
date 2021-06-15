@@ -20,6 +20,7 @@ import SignUpClient from './pages/signup/client'
 import SignUpWorker from './pages/signup/worker'
 import AdminPanel from './pages/panels/adminPanel'
 import ModeratorPanel from "./pages/panels/moderatorPanel";
+import Cruise from './pages/cruise';
 import ClientPanel from './pages/panels/clientPanel'
 import WorkerPanel from './pages/panels/workerPanel'
 import PasswordReset from "./pages/reset/passwordReset";
@@ -106,6 +107,8 @@ function App() {
                         <Route path="/codeSignIn">
                             <CodeSignIn/>
                         </Route>
+
+                        <Route path="/cruise/:id" component={Cruise} />
 
                         <Route path="*">
                             <div style={{

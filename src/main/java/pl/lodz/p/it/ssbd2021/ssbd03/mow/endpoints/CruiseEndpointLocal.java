@@ -1,6 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.*;
 
 import javax.ejb.Local;
@@ -39,6 +40,14 @@ public interface CruiseEndpointLocal {
      * @throws BaseAppException wyjątek rzucany w razie nie znalezienia wycieczki bądź konta deaktywującego
      */
     CruiseDto getCruise(UUID uuid) throws BaseAppException;
+
+    /**
+     * Zwraca wycieczki należących do grupy wycieczek o podanym uuid
+     * @param uuid uuid grupy wycieczek
+     * @return listę encji wycieczek nalężacych do grupy wycieczek o podanym uuid
+     * @throws BaseAppException wyjątek rzucany w razie nie znalezienia wycieczki
+     */
+    List<RelatedCruiseDto> getCruisesByCruiseGroup(UUID uuid) throws BaseAppException;
 
     /**
      * Publikuje wycieczke

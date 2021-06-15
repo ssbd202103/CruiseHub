@@ -8,7 +8,8 @@ export interface RoundedButtonProps {
     readonly color: Color,
     readonly children?: any,
     readonly style?: React.CSSProperties,
-    readonly onClick?: React.MouseEventHandler<any>
+    readonly onClick?: React.MouseEventHandler<any>,
+    readonly disabled?: boolean
 }
 
 export default function RoundedButton(props: RoundedButtonProps) {
@@ -18,11 +19,16 @@ export default function RoundedButton(props: RoundedButtonProps) {
         children,
         color,
         style,
-        onClick
+        onClick,
+        disabled = false,
     } = props
 
     const classes = makeStyles(theme => ({
         root: {
+            '&.Mui-disabled .MuiButton-label': {
+                color: 'var(--white)',
+                opacity: .5
+            },
             padding: '8px 16px',
             fontFamily: "'Montserrat', sans-serif",
             backgroundColor: 'var(--' + color + ')',
@@ -36,6 +42,7 @@ export default function RoundedButton(props: RoundedButtonProps) {
 
     return (
         <Button
+            disabled={disabled}
             className={(styles || '') + ' ' + classes.root}
             style={style || undefined}
             onClick={onClick || undefined}

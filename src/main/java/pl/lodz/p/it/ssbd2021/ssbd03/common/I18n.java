@@ -112,6 +112,7 @@ public class I18n {
     public static final String ACCESS_LEVEL_DEACTIVATE_CLIENT_BODY = "account.accessLevels.deactivateClient.body";
     public static final String ACCESS_LEVEL_REACTIVATE_CLIENT_SUBJECT = "account.accessLevels.reactivateClient.subject";
     public static final String ACCESS_LEVEL_REACTIVATE_CLIENT_BODY = "account.accessLevels.reactivateClient.body";
+    public static final String NO_SEATS_AVAILABLE = "reservation.noSeats";
 
     private ResourceBundle bundle;
 

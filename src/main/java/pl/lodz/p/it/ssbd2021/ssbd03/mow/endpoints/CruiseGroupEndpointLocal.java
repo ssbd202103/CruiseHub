@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.AddCruiseGroupDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.CruiseGroupWithDetailsDto;
@@ -7,6 +8,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.changeCruiseGroupDto;
 
 import javax.ejb.Local;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Interfejs który zajmuje się gromadzeniem zmapowanych obiektów klas Dto na obiekty klas modelu związanych z grupami wycieczek oraz wywołuje metody logiki przekazując zmapowane obiekty.
@@ -42,9 +44,11 @@ public interface CruiseGroupEndpointLocal {
     /**
      * Metoda odpowiedzialna za wywołanie metody odpowiedzialnej za deaktywacje grupy wycieczek
      *
-     * @param name    nazwa dezaktywowanej grupy wycieczek
-     * @param version wersja grupy wycieczek do weryfikacji
-     * @throws BaseAppException Wyjątek aplikacji rzucany w przypadku błędu pobrania danych grupy wycieczek
+     * @param uuid
+     * @param version
+     * @throws BaseAppException
      */
-    void deactivateCruiseGroup(String name, Long version) throws BaseAppException;
+    void deactivateCruiseGroup(UUID uuid, Long version) throws BaseAppException;
+
+    List<CruiseGroupWithDetailsDto> getCruiseGroupForBusinessWorker(String companyName) throws BaseAppException;
 }

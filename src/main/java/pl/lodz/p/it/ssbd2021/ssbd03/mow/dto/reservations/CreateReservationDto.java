@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
 
 import java.util.UUID;
 
@@ -13,5 +14,4 @@ public class CreateReservationDto {
     private long cruiseVersion;
     private UUID cruiseUuid;
     private long numberOfSeats;
-    private String clientLogin;
 }

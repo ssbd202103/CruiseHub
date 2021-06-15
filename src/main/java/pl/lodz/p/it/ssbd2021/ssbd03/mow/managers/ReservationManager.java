@@ -1,10 +1,14 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.managers;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Reservation;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.NoSeatsAvailableException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.AccountFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.ReservationFacadeMow;
@@ -20,6 +24,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Klasa która zarządza logiką biznesową rezerwacji
@@ -68,23 +73,33 @@ public class ReservationManager implements ReservationManagerLocal {
 
     @RolesAllowed("createReservation")
     @Override
-    public void createReservation(long version, UUID cruiseUUID, long numberOfSeats, String login) throws BaseAppException {
+    public void createReservation(long version, UUID cruiseUUID, long numberOfSeats) throws BaseAppException {
         Cruise cruise = cruiseFacadeMow.findByUUID(cruiseUUID);
-        Account acc = accountFacadeMow.findByLogin(login);
-        if (numberOfSeats > getAvailableSeats(cruiseUUID)) {
-            // todo throw an exception
-        }
-//        Reservation reservation = new Reservation(numberOfSeats, cruise, acc);
-//        reservation.setPrice(cruise.getCruisesGroup().getPrice() * numberOfSeats);
+        Account acc = accountFacadeMow.findByLogin(context.getUserPrincipal().getName());
+        Client client = (Client) acc.getAccessLevels().stream().filter(accessLevel ->
+            accessLevel.getAccessLevelType().equals(AccessLevelType.CLIENT)).collect(Collectors.toList()).get(0);
 
-//        reservationFacadeMow.create(reservation);
+        if (cruise.getUuid() != cruiseUUID) {
+            throw FacadeException.optimisticLock();
+        }
+        if (numberOfSeats > getAvailableSeats(cruiseUUID)) {
+            throw new NoSeatsAvailableException(I18n.NO_SEATS_AVAILABLE);
+        }
+
+        Reservation reservation = new Reservation(numberOfSeats, cruise, client);
+        reservation.setPrice(cruise.getCruisesGroup().getPrice() * numberOfSeats);
+
+        reservationFacadeMow.create(reservation);
     }
 
     @RolesAllowed("cancelReservation")
     @Override
-    public void cancelReservation(long reservationVersion, UUID cruiseUUID, String login) throws BaseAppException {
-        Cruise cruise = cruiseFacadeMow.findByUUID(cruiseUUID);
-        // TODO implement
+    public void cancelReservation(long reservationVersion, UUID reservationUUID) throws BaseAppException {
+        Reservation reservation = reservationFacadeMow.findReservationByUuidAndLogin(reservationUUID, context.getUserPrincipal().getName());
+        if (reservation.getVersion() != reservationVersion) {
+            throw FacadeException.optimisticLock();
+        }
+        reservationFacadeMow.remove(reservation);
     }
 
     private long getAvailableSeats(UUID cruiseUUID) throws BaseAppException {

@@ -99,4 +99,10 @@ public class ReservationFacadeMow extends AbstractFacade<Reservation> {
             throw FacadeException.noSuchElement();
         }
     }
+
+    @RolesAllowed("cancelReservation")
+    @Override
+    public void remove(Reservation entity) throws FacadeException {
+        super.remove(entity);
+    }
 }

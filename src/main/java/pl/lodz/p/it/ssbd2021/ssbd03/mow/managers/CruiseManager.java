@@ -103,6 +103,12 @@ public class CruiseManager implements CruiseManagerLocal {
         return cruiseFacadeMow.findByUUID(uuid);
     }
 
+    @PermitAll
+    @Override
+    public List<Cruise> getCruisesByCruiseGroup(UUID uuid) throws BaseAppException {
+        return cruiseFacadeMow.findByCruiseGroupUUID(uuid);
+    }
+
     @RolesAllowed("publishCruise")
     @Override
     public void publishCruise(long cruiseVersion, UUID cruiseUuid) throws BaseAppException {

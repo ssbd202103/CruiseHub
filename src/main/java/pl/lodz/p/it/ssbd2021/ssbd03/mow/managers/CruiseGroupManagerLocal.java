@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.managers;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseAddress;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
@@ -9,6 +10,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 
 import javax.ejb.Local;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Klasa która zarządza logiką biznesową grup wycieczek
@@ -49,15 +51,25 @@ public interface CruiseGroupManagerLocal {
      */
     List<CruiseGroup> getAllCruiseGroups() throws FacadeException;
 
-
     /**
-     * Deaktywuje daną grupę wycieczek
-     *
-     * @param name    nazwa grupy wycieczek
-     * @param version wersja grupy wycieczek
-     * @throws BaseAppException Bazowy wyjątek aplikacji
+     * Metoda zwracajaca aktywnego uzytkownika dla mow
+     * @return Konto aktywnego uzytkownika
+     * @throws BaseAppException Bazowy wyjatek aplikacji
      */
-    CruiseGroup deactivateCruiseGroup(String name, Long version) throws BaseAppException;
+   Account getCurrentUser() throws BaseAppException;
+
+        /**
+         * Deaktywuje daną grupę wycieczek
+         *
+         * @param uuid
+         * @param version
+         * @return
+         * @throws BaseAppException
+         */
+    CruiseGroup deactivateCruiseGroup(UUID uuid, Long version) throws BaseAppException;
+
 
     List<Cruise> getCruiseBelongsToCruiseGroup(CruiseGroup cruiseGroup) throws FacadeException;
+
+    List<CruiseGroup> getCruiseGroupForBusinessWorker(String companyName) throws BaseAppException;
 }

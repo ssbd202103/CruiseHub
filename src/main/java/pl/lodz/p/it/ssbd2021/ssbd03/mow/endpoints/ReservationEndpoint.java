@@ -64,13 +64,13 @@ public class ReservationEndpoint extends BaseEndpoint implements ReservationEndp
     @RolesAllowed("createReservation")
     @Override
     public void createReservation(CreateReservationDto crDto) throws BaseAppException {
-        this.reservationManager.createReservation(crDto.getCruiseVersion(), crDto.getCruiseUuid(), crDto.getNumberOfSeats(), crDto.getClientLogin());
+        this.reservationManager.createReservation(crDto.getCruiseVersion(), crDto.getCruiseUuid(), crDto.getNumberOfSeats());
     }
 
     @RolesAllowed("cancelReservation")
     @Override
     public void cancelReservation(CancelReservationDTO crDto) throws BaseAppException {
-        this.reservationManager.cancelReservation(crDto.getReservationVersion(), crDto.getCruiseUuid(), crDto.getClientLogin());
+        this.reservationManager.cancelReservation(crDto.getReservationVersion(), crDto.getReservationUuid());
     }
 
     @RolesAllowed("viewSelfReservations")

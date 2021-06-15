@@ -4,6 +4,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.CruiseDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.CruiseGroupDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.NewCruiseDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.*;
 
 
 /**
@@ -20,17 +21,20 @@ public class CruiseMapper {
      * @param newCruiseDto obiekt dto reprezentujący wycieczke
      * @return zmapowany obiekt
      */
-    public static Cruise newCruiseDtoToCruise(NewCruiseDto newCruiseDto) {
-        return new Cruise(newCruiseDto.getStartDate(), newCruiseDto.getEndDate(), newCruiseDto.isActive(),
-                newCruiseDto.getAvailable(), null);
+    public static Cruise mapNewCruiseDtoToCruise(NewCruiseDto newCruiseDto) {
+        return new Cruise(newCruiseDto.getStartDate(), newCruiseDto.getEndDate(), newCruiseDto.isActive(), null);
     }
 
-    public static CruiseDto cruiseToCruiseDto(Cruise cruise) {
+    public static CruiseDto mapCruiseToCruiseDto(Cruise cruise) {
 
-        CruiseGroupDto cruiseGroupDto = CruiseGroupMapper.toCruiseGroupDto(cruise.getCruisesGroup());
+        CruiseGroupWithUUIDDto cruiseGroupDto = CruiseGroupMapper.toCruiseGroupWithUUIDDto(cruise.getCruisesGroup());
 
         return new CruiseDto(cruise.getUuid(), cruise.getVersion(),
                 cruise.getStartDate(), cruise.getEndDate(),
-                cruise.isActive(), cruise.isAvailable(), cruiseGroupDto);
+                cruise.isActive(), cruiseGroupDto);
+    }
+
+    public static RelatedCruiseDto toRelatedCruiseDto(Cruise cruise) {
+        return new RelatedCruiseDto(cruise.getUuid(), cruise.getStartDate(), cruise.getEndDate(), cruise.isActive());
     }
 }
