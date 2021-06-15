@@ -148,7 +148,10 @@ function Row(props: CruiseData) {
     const getParsedDate = (date: any) => {
         return `${date.dayOfMonth}-${date.monthValue.toString().padStart(2, '0')}-${date.year}`
     }
-
+    const handleReservations =(props: any) =>{
+        const uuid = props
+        sessionStorage.setItem("cruiseUUID",uuid)
+    }
     return (
         <React.Fragment>
             <TableRow className={classes.root}>
@@ -229,7 +232,10 @@ function Row(props: CruiseData) {
                                             <TableCell align="center"
                                                        style={style}>{cruise.active.toString()}</TableCell>
                                             <TableCell align="center">
-                                                <Button className={buttonClass.root}>{t("reservations")}</Button>
+                                                <Link to="/reservations">
+                                                    <Button  className={buttonClass.root} onClick={() => {handleReservations(cruise.uuid)}}
+                                                    >{t("reservations")}</Button>
+                                                </Link>
                                             </TableCell>
                                             <TableCell align="center">
                                                 <Button className={buttonClass.root}>{t("attractions")}</Button>

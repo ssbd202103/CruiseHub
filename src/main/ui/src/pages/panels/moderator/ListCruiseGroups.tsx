@@ -112,10 +112,6 @@ function Row(props: CruiseData) {
     const getParsedDate = (date: any) => {
         return `${date.dayOfMonth}-${date.monthValue.toString().padStart(2, '0')}-${date.year}`
     }
-    const handleReservations =(props: any) =>{
-        const uuid = props
-        sessionStorage.setItem("cruiseUUID",uuid)
-    }
 
     return (
         <React.Fragment>
@@ -154,10 +150,6 @@ function Row(props: CruiseData) {
                                         <TableCell align="center" style={{
                                             backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                             color: `var(--${!darkMode ? 'dark' : 'white-light'}`
-                                        }}>{t("reservations")}</TableCell>
-                                        <TableCell align="center" style={{
-                                            backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
-                                            color: `var(--${!darkMode ? 'dark' : 'white-light'}`
                                         }}>{t("attractions")}</TableCell>
                                         <TableCell align="center" style={{
                                             backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
@@ -174,12 +166,6 @@ function Row(props: CruiseData) {
                                                        style={style}>{getParsedDate(cruise.endDate)}</TableCell>
                                             <TableCell align="center"
                                                        style={style}>{cruise.active.toString()}</TableCell>
-                                            <TableCell align="center">
-                                                <Link to="/reservations">
-                                                    <Button  className={buttonClass.root} onClick={() => {handleReservations(cruise.uuid)}}
-                                                    >{t("reservations")}</Button>
-                                                </Link>
-                                            </TableCell>
                                             <TableCell align="center">
                                                 <Button className={buttonClass.root}>{t("attractions")}</Button>
                                             </TableCell>
