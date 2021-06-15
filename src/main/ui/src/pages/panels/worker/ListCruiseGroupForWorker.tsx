@@ -26,7 +26,6 @@ import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import Collapse from "@material-ui/core/Collapse";
 import Box from "@material-ui/core/Box";
-import {getAllCruiseGroup, getCruiseGroupForBusinessWorker} from "../../../Services/cruiseGroupService";
 import {dCruiseGroup} from "../../../components/ListCruiseGroup";
 import axios from "../../../Services/URL";
 
@@ -81,7 +80,6 @@ const useButtonStyles = makeStyles({
     }
 })
 
-export interface CruiseData {
 
 interface DeactivateCruiseData {
     uuid: string;
@@ -124,7 +122,6 @@ function Row(props: CruiseData) {
     const token = useSelector(selectToken)
     const [open, setOpen] = useState(false);
     const [cruises, setCruises] = useState([]);
-    const handleError = useHandleError();
     const darkMode = useSelector(selectDarkMode)
     const buttonClass = useButtonStyles();
 
@@ -151,14 +148,20 @@ function Row(props: CruiseData) {
     }
 
     return (
-        <TableRow className={classes.root}>
-            <TableCell component="th" scope="row" style={style}>{group.name}</TableCell>
-            <TableCell style={style}>{group.company.name}</TableCell>
-            <TableCell style={style}>{group.numberOfSeats}</TableCell>
-            <TableCell style={style}>{group.price +" pln"}</TableCell>
-            <TableCell style={style}>{group.description}</TableCell>
-            <TableCell style={style}>{group.active.toString()}</TableCell>
-            <TableCell style={style}>
+        <React.Fragment>
+            <TableRow className={classes.root}>
+                <TableCell>
+                    <IconButton aria-label="expand row" size="small" onClick={handleSetOpen}>
+                        {open ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
+                    </IconButton>
+                </TableCell>
+                <TableCell component="th" scope="row" style={style}>{group.name}</TableCell>
+                <TableCell style={style}>{group.company.name}</TableCell>
+                <TableCell style={style}>{group.numberOfSeats}</TableCell>
+                <TableCell style={style}>{group.price + " pln"}</TableCell>
+                <TableCell style={style}>{group.description}</TableCell>
+                <TableCell style={style}>{group.active.toString()}</TableCell>
+                <TableCell style={style}>
                     <RoundedButton
                         color="pink" onClick={() => {
                         deactivateCruiseGroup({
@@ -175,25 +178,11 @@ function Row(props: CruiseData) {
                             handleError(t(message), error.response.status)
                         })
                     }}
-                    disabled={!group.active}
+                        disabled={!group.active}
                     >
                         {t("deactivate")}
                     </RoundedButton>
                 </TableCell>
-        </TableRow>
-        <React.Fragment>
-            <TableRow className={classes.root}>
-                <TableCell>
-                    <IconButton aria-label="expand row" size="small" onClick={handleSetOpen}>
-                        {open ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
-                    </IconButton>
-                </TableCell>
-                <TableCell component="th" scope="row" style={style}>{group.name}</TableCell>
-                <TableCell style={style}>{group.company.name}</TableCell>
-                <TableCell style={style}>{group.numberOfSeats}</TableCell>
-                <TableCell style={style}>{group.price + " pln"}</TableCell>
-                <TableCell style={style}>{group.description}</TableCell>
-                <TableCell style={style}>{group.active.toString()}</TableCell>
             </TableRow>
             <TableRow>
                 <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>

@@ -17,11 +17,21 @@ import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableBody from "@material-ui/core/TableBody";
 import {ImageListType} from "react-images-uploading";
-import {getAllCruiseGroup, getCruiseGroupForBusinessWorker} from "../../../Services/cruiseGroupService";
+import {
+    getAllCruiseGroup,
+    getCruiseGroupForBusinessWorker,
+    getCruisesForCruiseGroup
+} from "../../../Services/cruiseGroupService";
 import RoundedButton from "../../../components/RoundedButton";
 import {useSnackbarQueue} from "../../snackbar";
 import {selectToken} from "../../../redux/slices/tokenSlice";
 import axios from "../../../Services/URL";
+import IconButton from "@material-ui/core/IconButton";
+import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
+import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
+import Collapse from "@material-ui/core/Collapse";
+import Box from "@material-ui/core/Box";
+
 
 const useRowStyles = makeStyles({
     root: {
@@ -30,6 +40,20 @@ const useRowStyles = makeStyles({
         },
     },
 });
+
+const useButtonStyles = makeStyles({
+    root: {
+        fontFamily: '"Montserrat", sans-serif',
+        color: 'var(--white)',
+        backgroundColor: "var(--blue)",
+        padding: '8px 16px',
+        margin: '0 16px',
+        '&:hover': {
+            backgroundColor: "var(--blue-dark)",
+        }
+    }
+})
+
 
 export function createCruiseGroup(
     price: any,
@@ -69,10 +93,7 @@ interface DeactivateCruiseData {
 }
 
 const deactivateCruiseGroup = async ({uuid, etag, version, token}: DeactivateCruiseData) => {
-    console.log(uuid);
-    console.log(etag);
-    console.log(version);
-    console.log(token);
+
     const json = JSON.stringify({
             uuid: uuid,
             version: version,
@@ -102,9 +123,40 @@ function Row(props: CruiseData) {
     const handleError = useHandleError()
     const showSuccess = useSnackbarQueue('success')
     const token = useSelector(selectToken)
+    const [open, setOpen] = useState(false);
+    const [cruises, setCruises] = useState([]);
+    const darkMode = useSelector(selectDarkMode)
+    const buttonClass = useButtonStyles();
+
+    const handleSetOpen = async () => {
+        console.log("Someone clicked me")
+        setOpen(state => !state);
+        await getCruisesForCruiseGroup(group.name)
+            .then(res => {
+                setCruises(res.data)
+                console.log(cruises)
+                console.log(res.data)
+                refreshToken();
+            })
+            .catch(error => {
+                const message = error.response.data
+                const status = error.response.status
+                handleError(message, status)
+            })
+    }
+
+    const getParsedDate = (date: any) => {
+        return `${date.dayOfMonth}-${date.monthValue.toString().padStart(2, '0')}-${date.year}`
+    }
 
     return (
-        <TableRow className={classes.root}>
+        <React.Fragment>
+            <TableRow className={classes.root}>
+                <TableCell>
+                    <IconButton aria-label="expand row" size="small" onClick={handleSetOpen}>
+                        {open ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
+                    </IconButton>
+                </TableCell>
             <TableCell component="th" scope="row" style={style}>{group.name}</TableCell>
             <TableCell style={style}>{group.company.name}</TableCell>
             <TableCell style={style}>{group.numberOfSeats}</TableCell>
@@ -133,7 +185,69 @@ function Row(props: CruiseData) {
                     {t("deactivate")}
                 </RoundedButton>
             </TableCell>
-        </TableRow>
+            </TableRow>
+            <TableRow>
+                <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>
+                    <Collapse in={open} timeout="auto" unmountOnExit>
+                        <Box margin={1}>
+                            <Table size="small" aria-label="clients">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell align="center" style={{
+                                            backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                            color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                                        }}>{t("start_date")}</TableCell>
+                                        <TableCell align="center" style={{
+                                            backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                            color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                                        }}>{t("end_date")}</TableCell>
+                                        <TableCell align="center" style={{
+                                            backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                            color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                                        }}>{t("active")}</TableCell>
+                                        <TableCell align="center" style={{
+                                            backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                            color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                                        }}>{t("reservations")}</TableCell>
+                                        <TableCell align="center" style={{
+                                            backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                            color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                                        }}>{t("attractions")}</TableCell>
+                                        <TableCell align="center" style={{
+                                            backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                            color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                                        }}>{t("publish")}</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {cruises.map((cruise: any, index) => (
+                                        <TableRow>
+                                            <TableCell align="center"
+                                                       style={style}>{getParsedDate(cruise.startDate)}</TableCell>
+                                            <TableCell align="center"
+                                                       style={style}>{getParsedDate(cruise.endDate)}</TableCell>
+                                            <TableCell align="center"
+                                                       style={style}>{cruise.active.toString()}</TableCell>
+                                            <TableCell align="center">
+                                                <Button className={buttonClass.root}>{t("reservations")}</Button>
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                <Button className={buttonClass.root}>{t("attractions")}</Button>
+                                            </TableCell>
+                                            {cruise.published ? "" :
+                                                <TableCell align="center">
+                                                    <Button className={buttonClass.root}>{t("publish")}</Button>
+                                                </TableCell>
+                                            }
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </Box>
+                    </Collapse>
+                </TableCell>
+            </TableRow>
+        </React.Fragment>
     );
 }
 
