@@ -57,7 +57,7 @@ public class ReservationFacadeMow extends AbstractFacade<Reservation> {
 
     public List<Reservation> findCruiseReservations(Cruise cruise) throws BaseAppException {
         TypedQuery<Reservation> tq = em.createNamedQuery("Reservation.findCruiseReservations", Reservation.class);
-        tq.setParameter("id", cruise);
+        tq.setParameter("id", cruise.getId());
         try {
             return tq.getResultList();
         } catch (NoResultException e) {
