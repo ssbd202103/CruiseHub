@@ -1,15 +1,14 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.attractions.AddAttractionDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.attractions.AttractionDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.AttractionEndpointLocal;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.validation.Valid;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 import java.util.UUID;
@@ -28,5 +27,12 @@ public class AttractionController {
     @Produces(MediaType.APPLICATION_JSON)
     public List<AttractionDto> getAttractionsByCruiseUUID(@PathParam("uuid") String uuid) throws BaseAppException {
         return tryAndRepeat(() -> attractionEndpoint.getAttractionsByCruiseUUID(UUID.fromString(uuid)));
+    }
+
+    @POST
+    @Path("/add-attraction")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void addAttraction(@Valid AddAttractionDto addAttractionDto) throws BaseAppException {
+        tryAndRepeat(() -> attractionEndpoint.addAttraction(addAttractionDto));
     }
 }
