@@ -61,9 +61,14 @@ public class ReservationManager implements ReservationManagerLocal {
     @RolesAllowed("getWorkerCruiseReservations")
     @Override
     public List<Reservation> getWorkerCruiseReservations(UUID cruise_uuid) throws BaseAppException {
+        Cruise cruise  = cruiseFacadeMow.findByUUID(cruise_uuid);
+        List<Reservation> res = reservationFacadeMow.findCruiseReservations(cruise);
+        return res;
+/*
+
         long id = cruiseFacadeMow.findByUUID(cruise_uuid).getId();
         List<Reservation> res = reservationFacadeMow.findWorkerCruiseReservations(id);
-        return res;
+        return res;*/
     }
 
     @RolesAllowed("removeClientReservation")
