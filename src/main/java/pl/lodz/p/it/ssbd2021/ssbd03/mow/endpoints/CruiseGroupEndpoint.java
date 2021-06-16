@@ -55,6 +55,8 @@ public class CruiseGroupEndpoint extends BaseEndpoint implements CruiseGroupEndp
                 }else
                 {
                     CruisePicture picture = new CruisePicture();
+                    byte[] array = new byte[0];
+                    picture.setImg(array);
                     cruiseGroupManager.changeCruiseGroup(changeCruiseGroupDto.getName(), changeCruiseGroupDto.getNumberOfSeats()
                             , changeCruiseGroupDto.getPrice(), start_address, changeCruiseGroupDto.getVersion(),changeCruiseGroupDto.getDescription(), picture,changeCruiseGroupDto.getUuid());
                 }

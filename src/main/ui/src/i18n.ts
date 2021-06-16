@@ -359,7 +359,9 @@ const resources = {
             "CruiseName": "Nazwa wycieczki",
             "/reservations" :"Rezerwacje wycieczki",
             "search reservation": "Wyszukaj rezerwacje",
-            "choose_number_of_seats": "Wybierz liczbę miejsc"
+            "choose_number_of_seats": "Wybierz liczbę miejsc",
+            "changeData": "Edytuj grupę wycieczek",
+            "cruise.group.active.and.cannot.be.modified": "Grupa wycieczek posiada już aktywne wycieczki i nie może być modifykowana"
         }
     },
     EN: {
@@ -713,7 +715,9 @@ const resources = {
             "CruiseName": "Name of the cruise",
             "/reservations" :"Cruise reservations",
             "search reservation": "Search reservations",
-            "choose_number_of_seats": "Choose number of seats"
+            "choose_number_of_seats": "Choose number of seats",
+            "changeData": "Edit cruise group",
+            "cruise.group.active.and.cannot.be.modified": "This cruise group already has active cruises and cannot be modifiable"
         }
     }
 }

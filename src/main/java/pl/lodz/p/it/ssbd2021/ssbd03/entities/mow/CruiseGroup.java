@@ -116,6 +116,7 @@ public class CruiseGroup extends BaseEntity {
         this.cruisePictures = cruisePictures;
         this.description = description;
         this.uuid= uuid.randomUUID();
+        this.active=true;
     }
 
     public CruiseGroup() {

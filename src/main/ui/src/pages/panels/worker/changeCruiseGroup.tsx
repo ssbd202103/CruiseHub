@@ -12,8 +12,8 @@ import {getCruiseGroupForBusinessWorker} from "../../../Services/cruiseGroupServ
 import {refreshToken} from "../../../Services/userService";
 import {useSelector} from "react-redux";
 import {selectCompany} from "../../../redux/slices/userSlice";
-import {createCruiseGroup} from "./ListCruiseGroup";
 import ship3 from "../../../images/ship3.jpg";
+import {Link} from "react-router-dom";
 
 export default function ChangeCruiseGroupData(){
     const {t} = useTranslation()
@@ -53,7 +53,7 @@ useEffect(() =>{
 
 }, [])
 
-    const HandleChangeCruiseGroup =  () =>{
+    const HandleChangeCruiseGroup =  async() =>{
         if( !numberOfSeats ||!price || !streetNumber)
         {
             handleError('error.fields')
@@ -72,12 +72,12 @@ useEffect(() =>{
                 cityName: city,
                 countryName: country
             },
-            cruisePictures: images,
+            picture: images[0],
             description: description,
             version: crusieGropData.version
         })
 
-        axios.put('cruiseGroup/change-cruise-group',json,{
+       await axios.put('cruiseGroup/change-cruise-group',json,{
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json",
@@ -90,6 +90,7 @@ useEffect(() =>{
             const message = error.response.data
             handleError(message, error.response.status)
         })
+
     }
     let pictureUrl: string | undefined
     if(crusieGropData.cruisePictures.length>0){
@@ -277,11 +278,13 @@ useEffect(() =>{
                 </ImageUploading>
 
             </Box>
+            <Link to="/listCruiseGroup">
             <RoundedButton
                 onClick={HandleChangeCruiseGroup}
                 style={{width: '50%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
                 color="pink"
             >{t("changeData")} </RoundedButton>
+            </Link>
         </div>
     )
 }
