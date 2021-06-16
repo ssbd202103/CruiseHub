@@ -542,6 +542,7 @@ class AccountControllerIT {
     @Test
     public void getToken() {
         String token = JWTHandler.createToken(Map.of("accessLevels", List.of("ADMINISTRATOR", "BUSINESS_WORKER", "MODERATOR")), "rbranson");
+        System.out.println(token);
     }
 
 }

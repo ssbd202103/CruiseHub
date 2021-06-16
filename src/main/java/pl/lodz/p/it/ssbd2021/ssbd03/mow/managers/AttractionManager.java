@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.managers;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.managers.BaseManagerMok;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Attraction;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.AttractionFacadeMow;
@@ -18,11 +19,10 @@ import java.util.UUID;
  */
 @Stateful
 @Interceptors(TrackingInterceptor.class)
-public class AttractionManager implements AttractionManagerLocal {
+public class AttractionManager extends BaseManagerMow implements AttractionManagerLocal {
 
     @Inject
     private AttractionFacadeMow attractionFacadeMow;
-
 
     @RolesAllowed("deleteAttraction")
     @Override
@@ -36,11 +36,11 @@ public class AttractionManager implements AttractionManagerLocal {
         }
     }
 
-
     @RolesAllowed("addAttraction")
     @Override
     public void addAttraction(Attraction attraction) throws BaseAppException {
-        throw new UnsupportedOperationException();
+        setCreatedMetadata(getCurrentUser(), attraction);
+        attractionFacadeMow.create(attraction);
     }
 
     @RolesAllowed("editAttraction")

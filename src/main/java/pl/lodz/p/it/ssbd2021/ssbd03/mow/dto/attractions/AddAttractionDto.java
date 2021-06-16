@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Positive;
 
+import java.util.UUID;
+
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_EMPTY;
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_POSITIVE_ERROR;
 
@@ -15,7 +17,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_POSITIVE_ERROR
 @AllArgsConstructor
 public class AddAttractionDto {
     @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
-    private String cruiseGroupName;
+    private String cruiseUUID;
 
     @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
     private String name;
@@ -25,4 +27,7 @@ public class AddAttractionDto {
 
     @Positive(message = CONSTRAINT_POSITIVE_ERROR)
     private double price;
+
+    @Positive(message = CONSTRAINT_POSITIVE_ERROR)
+    private int numberOfSeats;
 }
