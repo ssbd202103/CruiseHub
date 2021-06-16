@@ -9,7 +9,6 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.UUID;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
@@ -17,9 +16,10 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise.UUID_CONSTRAINT;
 
 @Entity(name = "cruises")
 @NamedQueries({
-    @NamedQuery(name = "Cruise.findByUUID", query = "SELECT c FROM cruises c WHERE c.uuid = :uuid"),
-    @NamedQuery(name = "Cruise.findAllPublished", query = "SELECT c FROM cruises c WHERE c.published = true"),
-    @NamedQuery(name = "Cruise.findByCruiseGroupUUID", query = "SELECT c FROM cruises c WHERE c.cruisesGroup.uuid = :uuid")
+        @NamedQuery(name = "Cruise.findByUUID", query = "SELECT c FROM cruises c WHERE c.uuid = :uuid"),
+        @NamedQuery(name = "Cruise.findAllPublished", query = "SELECT c FROM cruises c WHERE c.published = true"),
+        @NamedQuery(name = "Cruise.findByCruiseGroupUUID", query = "SELECT c FROM cruises c WHERE c.cruisesGroup.uuid = :uuid"),
+        @NamedQuery(name = "Cruise.findByCruiseGroup", query = "SELECT c FROM cruises c WHERE c.cruisesGroup.name = :cruiseGroupName")
 })
 @Table(
     uniqueConstraints = {
@@ -62,6 +62,8 @@ public class Cruise extends BaseEntity {
     @Column(name = "active")
     private boolean active;
 
+
+
     @Getter
     @Setter
     @OneToOne
@@ -75,8 +77,18 @@ public class Cruise extends BaseEntity {
     @Column(name = "published")
     private boolean published;
 
+    public Cruise(LocalDateTime startDate, LocalDateTime endDate,
+                  CruiseGroup cruisesGroup) {
+        this.uuid = UUID.randomUUID();
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.active = true;
+        this.cruisesGroup = cruisesGroup;
+        this.published = false;
+    }
+
     public Cruise(LocalDateTime startDate, LocalDateTime endDate, boolean active,
-                   CruiseGroup cruisesGroup) {
+                  CruiseGroup cruisesGroup) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.active = active;

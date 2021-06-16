@@ -15,7 +15,8 @@ import useHandleError from "../../errorHandler";
 import AccountsListIcon from "@material-ui/icons/PeopleAltRounded";
 import ListCompany from "./moderator/ListCompany";
 import AddCruiseGroup from "./worker/AddCruiseGroup";
-import ListCruiseGroup from "../../components/ListCruiseGroup";
+import ListCruiseGroup from "../panels/worker/ListCruiseGroupForWorker";
+import AddCruise from "./worker/AddCruise";
 
 export default function WorkerPanel() {
     const {t} = useTranslation()
@@ -106,6 +107,13 @@ export default function WorkerPanel() {
                     text: t('createCruiseGroup'),
                     Icon: CreateIcon,
                     Component: AddCruiseGroup
+
+                },
+                {
+                    link: '/addCruise',
+                    text: t('createCruise'),
+                    Icon: CreateIcon,
+                    Component: AddCruise
 
                 },
                 {

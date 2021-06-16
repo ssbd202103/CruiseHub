@@ -18,8 +18,6 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company.NIP_NAME_CONSTRAINT;
-
 @Stateless
 @TransactionAttribute(TransactionAttributeType.MANDATORY)
 @Interceptors(TrackingInterceptor.class)
@@ -45,30 +43,6 @@ public class CompanyFacadeMok extends AbstractFacade<Company> {
             return tq.getSingleResult();
         } catch (NoResultException e) {
             throw FacadeException.noSuchElement();
-        }
-    }
-
-    @Override
-    @PermitAll
-    public void create(Company entity) throws FacadeException {
-        try {
-            super.create(entity);
-        } catch (ConstraintViolationException e) {
-            if (e.getConstraintName().equals(NIP_NAME_CONSTRAINT)) {
-                throw CompanyFacadeException.nipNameReserved(e);
-            }
-        }
-    }
-
-    @Override
-    @PermitAll
-    public void edit(Company entity) throws FacadeException {
-        try {
-            super.edit(entity);
-        } catch (ConstraintViolationException e) {
-            if (e.getConstraintName().equals(NIP_NAME_CONSTRAINT)) {
-                throw CompanyFacadeException.nipNameReserved(e);
-            }
         }
     }
 }

@@ -16,3 +16,13 @@ export function createReservation() {
         }
     })
 }
+export function getReservationsForCruise(uuid: any){
+    const {token} = store.getState()
+    const cruiseUUID = uuid
+    return axios.get(`reservation/reservations-for-cruise/${cruiseUUID}`, {
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        }
+    })
+}

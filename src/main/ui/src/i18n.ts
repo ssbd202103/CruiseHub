@@ -31,10 +31,13 @@ const resources = {
             "logout": "Wyloguj",
             "settings": "Ustawienia",
             "cruises": "Wycieczki",
+            "expand cruises": "Rozwiń wycieczki",
             "my cruises": "Moje wycieczki",
             "phone": "Telefon",
             "cancel": "Anuluj",
             'reserve': "Zarezerwuj",
+            "reservations": "Rezerwacje",
+            "publish": "Opublikuj",
             'choose another date': 'Wybierz inną datę',
             'no dates': 'Nie ma innych dat',
             //signin
@@ -95,7 +98,8 @@ const resources = {
             "confrim email change": "Potwierdź zmianę maila",
             //workerPanel
             "workerPanel": "Panel pracownika",
-            "deactivateCruiseGroup": "Deaktywuj grupę wycieczek",
+            "deactivateCruiseGroup": "Dezaktywuj grupę wycieczek",
+            "deactivate": "Dezaktywuj",
             //adminPanel
             "search account": "Wyszukać konto",
             "search company": "Wyszukać firme",
@@ -127,6 +131,8 @@ const resources = {
             "company phone number": " Numer telefonu firmy",
             "Manage business workers": "Zarządzaj pracownikami firm",
             "show business workers": "Pokaż pracowników",
+            "add company": "Dodaj firmę",
+            "company name example": "FirmaJez",
             //verify
             "verifyAccount": "Zweryfikuj konto",
             //color
@@ -148,7 +154,7 @@ const resources = {
             //cruisecard
             "cruiseExample": "Rejs po Morzu Śródziemnym",
             "createCruiseGroup": "Stworz nową grupę wycieczek",
-
+            "createCruise": "Stworz nową wycieczkę",
             //change language
             "changeLanguage": "Zmień język",
             //errors
@@ -199,6 +205,8 @@ const resources = {
             "error.account.notActive": "Konto jest zablokowane",
             "error.database.operation": "Błąd po stronie bazy danych",
             "error.business.worker.confirmed": "Pracownik jest już zatwierdzony",
+            "companies_nip_unique_constraint": "Firma o podanym numerze NIP znajduje się już w bazie danych",
+            "companies_name_unique_constraint": "Firma o podanej nazwie znajduje się już w bazie danych",
 
             //auth errors
             "auth.incorrect.login": "Błąd logowania",
@@ -257,7 +265,9 @@ const resources = {
             'accept.action': 'Czy chcesz wykonać tę akcję',
             '/accounts/resetSomebodyPassword': 'Resetowanie hasła',
             "/addCruiseGroup": "Dodaj grupę wycieczek",
+            "/addCruise": "Dodaj wycieczkę",
             "/listCruiseGroup": "Wyświetl grupę wycieczek",
+            "/add-company": "Dodaj firmę",
 
             'yes': 'Tak',
             'no': 'Nie',
@@ -317,7 +327,38 @@ const resources = {
             "search cruiseGroup": "Wyszukaj grupę",
             "seats": "Liczba miejsc",
             "start_date": "Data początkowa",
-            "end_date": "Data końcowa"
+            "end_date": "Data końcowa",
+
+            "newCruise": "Dodaj wycieczkę",
+            "startDate":"Data rozpoczęcia rejsu",
+            "endDate":"Data zakończenia rejsu",
+            "startTime":"Czas rozpoczęcia rejsu",
+            "endTime":"Czas zakończenia rejsu",
+            "cruiseGroup":"Grupa wycieczek",
+            "error.field.end.date.before.start.date":"Data zakończenia jest przed datą rozpoczęcia",
+            "error.field.start.date":"Data rozpoczęcia nie może być wcześniejsza niż dzisiejsza data",
+            "error.cruiseGroup.no.active":"Grupa wycieczek nie jest aktywna",
+            "error.startDate.before.currentDate":"Data rozpoczęcia nie może być przed obecną datą",
+            "error.startDate.after.endDate":"Data rozpoczęcia nie może być po dacie zakończenia",
+
+            "error.cruise.mapper.data.parse":"Nieprawidłowy format daty",
+            "error.cruise.mapper.uuid.parse":"Nieprawidłowy format uuid",
+
+            "max.date.message":"Data nie powinna być póżniejsza niż maksymalna data",
+            "min.date.message":"Data nie powinna być wcześniejsza niż minimalna data",
+
+            "invalid.date.message":"Nieprawidłowy format daty",
+            "invalid.label":"nieznana",
+            "cancel.label":"Anuluj",
+            "clear.label":"Wyczyść",
+            "ok.label":"Akceptuj",
+            "today.label":"Dzisiaj",
+            "not.all.fields.filled":"Nie wszystkie pola zostały wypełnione",
+            "Client name": "Nazwa Klienta",
+            "numberOfSeatsReserved": "Liczba zarezerwowanych miejsc",
+            "CruiseName": "Nazwa wycieczki",
+            "/reservations" :"Rezerwacje wycieczki",
+            "search reservation": "Wyszukaj rezerwacje",
         }
     },
     EN: {
@@ -349,10 +390,13 @@ const resources = {
             "logout": "Logout",
             "settings": "Settings",
             "cruises": "Cruises",
+            "expand cruises": "Expand cruises",
             "my cruises": "My cruises",
             "phone": "Phone",
             "cancel": "Cancel",
             'reserve': "Reserve",
+            "reservations": "Reservations",
+            "publish": "Publish",
             'choose another date': 'Choose another date',
             'no dates': 'There are no another dates',
             //signin
@@ -414,6 +458,7 @@ const resources = {
             //workerPanel
             "workerPanel": "Worker panel",
             "deactivateCruiseGroup": "Deactivate Cruise Group",
+            "deactivate": "Deactivate",
             //adminPanel
             "adminPanel": "Administrator panel",
             "search account": "Search account",
@@ -444,6 +489,8 @@ const resources = {
             "company phone number": "Company phone number",
             "Manage business workers": "Manage business workers",
             "show business workers": "Show business workers",
+            "add company": "Add a company",
+            "company name example": "Hedgehog Company",
             //verify
             "verifyAccount": "Verify account",
             //color
@@ -513,6 +560,8 @@ const resources = {
             "error.account.notActive": "Account is blocked",
             "error.database.operation": "Database operation error",
             "error.business.worker.confirmed": "Worker is already confirmed",
+            "companies_nip_unique_constraint": "Company with said NIP already exists in the database",
+            "companies_name_unique_constraint": "Company with said name already exists in the database",
 
             //auth errors
             "auth.incorrect.login": "Login error",
@@ -568,7 +617,9 @@ const resources = {
             "/accounts/change_access_level_state": "Change access level state",
             "/accounts/resetSomebodyPassword": "Password reseting",
             "/addCruiseGroup": "Add cruise group",
+            "/addCruise": "Add cruise",
             "/listCruiseGroup": "List cruise groups",
+            "/add-company": "Add a company",
 
             'accept.action': 'Do you want to do this action?',
 
@@ -630,7 +681,37 @@ const resources = {
             "search cruiseGroup": "Search group",
             "seats": "Number of seats",
             "start_date": "Start date",
-            "end_date": "End date"
+            "end_date": "End date",
+            "newCruise": "Add cruise",
+            "createCruise": "Create new cruise",
+            "startDate":"Cruise start date",
+            "endDate":"Cruise end date",
+            "startTime":"Cruise start time",
+            "endTime":"Cruise end time",
+            "cruiseGroup":"Cruise group",
+            "error.field.end.date.before.start.date":"End date is before start date",
+            "error.field.start.date":"The start date cannot be earlier than today's date",
+            "error.cruiseGroup.no.active":"Cruise group is not active",
+            "error.startDate.before.currentDate":"The start date cannot be before current date",
+            "error.startDate.after.endDate":"The start date cannot be after end date",
+            "error.cruise.mapper.data.parse":"Invalid date format",
+            "error.cruise.mapper.uuid.parse":"Invalid uuid format",
+
+            "max.date.message":"Date should not be after maximal date",
+            "min.date.message":"Date should not be before minimal date",
+
+            "invalid.date.message":"Invalid Date Form",
+            "invalid.label":"unknown",
+            "cancel.label":"Cancel",
+            "clear.label":"Clear",
+            "ok.label":"OK",
+            "today.label":"Today",
+            "not.all.fields.filled":"Not all fields have been completed",
+            "Client name": "Client name",
+            "numberOfSeatsReserved": "Number of seats reserved",
+            "CruiseName": "Name of the cruise",
+            "/reservations" :"Cruise reservations",
+            "search reservation": "Search reservations",
         }
     }
 }

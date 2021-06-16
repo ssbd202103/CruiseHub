@@ -44,5 +44,5 @@ public interface AttractionManagerLocal {
      * @param uuid uuid wycieczki
      * @throws BaseAppException wyjątek wyrzucany w razie nie znależenia atrakcji
      */
-    public List<Attraction> findByCruiseUUID(UUID uuid) throws BaseAppException;
+     List<Attraction> findByCruiseUUID(UUID uuid) throws BaseAppException;
 }
