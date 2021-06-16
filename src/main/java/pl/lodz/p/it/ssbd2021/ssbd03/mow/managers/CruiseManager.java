@@ -78,10 +78,10 @@ public class CruiseManager implements CruiseManagerLocal {
     @Override
     public void deactivateCruise(UUID uuid, Long version) throws BaseAppException {
         Account account = accountFacade.findByLogin(securityContext.getUserPrincipal().getName());
-        if (!(account.getVersion() == version)) {
+        Cruise cruise = cruiseFacadeMow.findByUUID(uuid);
+        if (!(cruise.getVersion() == version)) {
             throw FacadeException.optimisticLock();
         }
-        Cruise cruise = cruiseFacadeMow.findByUUID(uuid);
         cruise.setActive(false);
 
         setAlterTypeAndAlterCruise(cruise, accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE), account);

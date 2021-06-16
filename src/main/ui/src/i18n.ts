@@ -360,7 +360,10 @@ const resources = {
             "/reservations" :"Rezerwacje wycieczki",
             "search reservation": "Wyszukaj rezerwacje",
 
-            "choose_number_of_seats": "Wybierz liczbę miejsc"
+            "choose_number_of_seats": "Wybierz liczbę miejsc",
+
+
+
         }
     },
     EN: {
@@ -715,7 +718,8 @@ const resources = {
             "/reservations" :"Cruise reservations",
             "search reservation": "Search reservations",
 
-            "choose_number_of_seats": "Choose number of seats"
+            "choose_number_of_seats": "Choose number of seats",
+
         }
     }
 }

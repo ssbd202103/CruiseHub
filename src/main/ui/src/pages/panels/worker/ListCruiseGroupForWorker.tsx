@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useReducer, useState} from 'react';
 import {getAllCompanies} from "../../../Services/companiesService";
 import {makeStyles} from "@material-ui/core/styles";
 import TableRow from "@material-ui/core/TableRow";
@@ -28,6 +28,8 @@ import Collapse from "@material-ui/core/Collapse";
 import Box from "@material-ui/core/Box";
 import {dCruiseGroup} from "../../../components/ListCruiseGroup";
 import axios from "../../../Services/URL";
+import store from "../../../redux/store";
+import PopupAcceptAction from "../../../PopupAcceptAction";
 
 const useRowStyles = makeStyles({
     root: {
@@ -88,6 +90,11 @@ interface DeactivateCruiseData {
     token: string
 }
 
+interface DeactivateCruise {
+    uuid: string,
+    etag: string,
+    version:bigint
+}
 
 const deactivateCruiseGroup = async ({uuid, etag, version, token}: DeactivateCruiseData) => {
     const json = JSON.stringify({
@@ -125,6 +132,45 @@ function Row(props: CruiseData) {
     const darkMode = useSelector(selectDarkMode)
     const buttonClass = useButtonStyles();
 
+    const [deactivateCruise, setDeactivateCruise] = useState<DeactivateCruise>({
+        uuid : "",
+        etag : "",
+        version: BigInt(0) });
+    const [, forceUpdate] = useReducer(x => x + 1, 0);
+
+    const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
+
+
+
+    const handleConfirm = async ({uuid, etag, version}: DeactivateCruise) => {
+        const {token} = store.getState();
+        const json = JSON.stringify({
+            uuid: uuid,
+            version: version
+        })
+
+
+
+
+        await axios.put("cruise/deactivate-cruise", json, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    'Authorization': `Bearer ${token}`,
+                    "If-Match": etag
+                }
+            }
+        ).then(() => {
+            setButtonPopupAcceptAction(false)
+            showSuccess(t('successful action'))
+            forceUpdate()
+            refreshToken()
+        }).catch(error => {
+            setButtonPopupAcceptAction(false)
+            const message = error.response.data
+            handleError(message, error.response.status)
+        });
+    }
 
     const handleSetOpen = async () => {
         console.log("Someone clicked me")
@@ -222,6 +268,10 @@ function Row(props: CruiseData) {
                                             backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                             color: `var(--${!darkMode ? 'dark' : 'white-light'}`
                                         }}>{t("publish")}</TableCell>
+                                        <TableCell align="center" style={{
+                                            backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                            color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                                        }}>{t("deactivate")}</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -250,9 +300,30 @@ function Row(props: CruiseData) {
                                                     <Button className={buttonClass.root}>{t("publish")}</Button>
                                                 </TableCell>
                                             }
+                                            {cruise.published && cruise.active ?
+                                                <React.Fragment>
+                                                    <TableCell align="center"/>
+                                                    <TableCell align="center">
+                                                        <Button className={buttonClass.root} onClick={() => {
+                                                            setDeactivateCruise({
+                                                                uuid : cruise.uuid,
+                                                                etag : cruise.etag,
+                                                                version : cruise.version
+                                                            })
+                                                            setButtonPopupAcceptAction(true)
+                                                        }
+                                                        }>{t("deactivate")}</Button>
+                                                    </TableCell>
+                                                </React.Fragment>: ""
+                                            }
                                         </TableRow>
                                     ))}
                                 </TableBody>
+                                <PopupAcceptAction
+                                    open={buttonPopupAcceptAction}
+                                    onConfirm={()=>{handleConfirm(deactivateCruise)}}
+                                    onCancel={() => {setButtonPopupAcceptAction(false)
+                                    }}/>
                             </Table>
                         </Box>
                     </Collapse>
