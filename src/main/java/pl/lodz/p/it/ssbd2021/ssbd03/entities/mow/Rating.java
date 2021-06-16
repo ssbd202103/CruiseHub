@@ -18,7 +18,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.RATING_CONSTRAINT_ERROR;
 
 @Entity(name = "ratings")
 @NamedQueries({
-        @NamedQuery(name = "Rating.findByCruiseGroupName", query = "SELECT r FROM ratings r WHERE r.cruiseGroup.name =:name"),
+        @NamedQuery(name = "Rating.findByCruiseGroupUUID", query = "SELECT r FROM ratings r WHERE r.cruiseGroup.name =:uuid"),
         @NamedQuery(name = "Rating.findByCruiseGroupUUIDAndAccountLogin", query = "SELECT r FROM ratings r WHERE r.cruiseGroup.uuid=:uuid AND r.account.login=:login")
 })
 @ToString
@@ -52,11 +52,11 @@ public class Rating extends BaseEntity {
     @Min(value = 1, message = RATING_CONSTRAINT_ERROR)
     @Max(value = 5, message = RATING_CONSTRAINT_ERROR)
     @Column(name = "rating")
-    private Integer rating;
+    private Double rating;
 
     public Rating(@NotNull(message = CONSTRAINT_NOT_NULL) Account account,
                   @NotNull(message = CONSTRAINT_NOT_NULL) CruiseGroup cruiseGroup,
-                  @NotNull(message = CONSTRAINT_NOT_NULL) Integer rating) {
+                  @NotNull(message = CONSTRAINT_NOT_NULL) Double rating) {
         this.account = account;
         this.cruiseGroup = cruiseGroup;
         this.rating = rating;

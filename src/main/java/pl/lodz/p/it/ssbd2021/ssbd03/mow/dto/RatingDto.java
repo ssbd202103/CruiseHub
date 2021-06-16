@@ -21,7 +21,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.RATING_CONSTRAINT_ERROR;
 public class RatingDto extends RemoveRankingDto {
     @Max(value = 5, message = RATING_CONSTRAINT_ERROR)
     @Min(value = 1, message = RATING_CONSTRAINT_ERROR)
-    private Integer rating;
+    private Double rating;
 
     @Name
     private String accountFirstName;
@@ -32,7 +32,7 @@ public class RatingDto extends RemoveRankingDto {
     public RatingDto(@Login String login,
                      @NotEmpty(message = CONSTRAINT_NOT_EMPTY) UUID cruiseGroupUUID,
                      @Max(value = 5, message = RATING_CONSTRAINT_ERROR)
-                     @Min(value = 1, message = RATING_CONSTRAINT_ERROR) Integer rating,
+                     @Min(value = 1, message = RATING_CONSTRAINT_ERROR) Double rating,
                      @Name String accountFirstName, @Name String accountSecondName) {
 
         super(login, cruiseGroupUUID);

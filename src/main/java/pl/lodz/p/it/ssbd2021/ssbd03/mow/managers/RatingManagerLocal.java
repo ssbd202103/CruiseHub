@@ -17,13 +17,13 @@ public interface RatingManagerLocal {
      * @param rating     wartość oceny
      * @throws BaseAppException bazowy wyjątek aplikacji, zwracany w przypadku nieznależenia użytkownika lub grupy wycieczek
      */
-    void createRating(String login, UUID cruiseGroupUUID, Integer rating) throws BaseAppException;
+    void createRating(String login, UUID cruiseGroupUUID, Double rating) throws BaseAppException;
 
     /**
      * Usuwa ocenę o podanym użytkowniku oraz wycieczce
      *
      * @param login      login użytkownika, którego opinia zostanie usunięta
-     * @param cruiseName nazwa grupy wycieczek, dla której opinia zostanie usunięta
+     * @param cruiseGroupUUID uuid grupy wycieczek, dla której opinia zostanie usunięta
      * @throws BaseAppException bazowy wyjątek aplikacji, zwracany w przypadku nieznależenia wycieczki, użytkownika lub oceny
      */
     void removeRating(String login, UUID cruiseGroupUUID) throws BaseAppException;

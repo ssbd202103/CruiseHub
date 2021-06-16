@@ -65,11 +65,11 @@ export default function Authentication() {
             {
                 isEmpty ? (
                     <>
-                        <Link to="signin">
+                        <Link to="/signin">
                             <a style={{marginRight: 20}} className={styles.link}>{t("signin")}</a>
                         </Link>
 
-                        <Link to="signup/client">
+                        <Link to="/signup/client">
                             <RoundedButton
                                 color="pink"
                                 style={{

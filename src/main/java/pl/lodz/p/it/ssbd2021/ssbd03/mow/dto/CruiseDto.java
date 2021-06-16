@@ -29,7 +29,7 @@ public class CruiseDto extends DeactivateCruiseDto {
     @NotNull(message = CONSTRAINT_NOT_NULL)
     private CruiseGroupWithUUIDDto cruiseGroupDto;
 
-    public CruiseDto(UUID uuid, Long version,
+    public CruiseDto(String uuid, Long version,
                      LocalDateTime startDate, LocalDateTime endDate,
                      boolean active, boolean available, CruiseGroupWithUUIDDto cruiseGroupDto) {
         super(uuid, version);

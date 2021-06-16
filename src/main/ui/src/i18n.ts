@@ -272,6 +272,7 @@ const resources = {
             'UPDATE': 'Edycja',
             'INSERT': 'Wstawienie',
             'DELETE': 'Wycofanie',
+            'delete': 'wycofuj',
 
             // mięsiące
             'JANUARY': 'Styczeń',
@@ -313,7 +314,9 @@ const resources = {
             'attractions': 'Atrakcje',
             'no attractions': 'Nie ma żadnych atrakcji',
             'take': 'Weżmij',
-            'opinions': 'Opinie',
+            'ratings': 'Oceny',
+            'no ratings': 'Nie ma żadnych ocen',
+            'unknown error': 'Nieznany błąd',
         }
     },
     EN: {
@@ -581,6 +584,7 @@ const resources = {
             'UPDATE': 'Update',
             'INSERT': 'Insert',
             'DELETE': 'Delete',
+            'delete': 'Delete',
 
             // mięsiące
             'JANUARY': 'January',
@@ -622,7 +626,9 @@ const resources = {
             'attractions': 'Attractions',
             'no attractions': 'There are no attractions',
             'take': 'Take',
-            'opinions': 'Opinions',
+            'ratings': 'Ratings',
+            'no ratings': 'There are no ratings',
+            'unknown error': 'Unknown error',
         }
     }
 }

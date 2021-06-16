@@ -15,7 +15,7 @@ import java.util.UUID;
 @Data
 public class DeactivateCruiseDto implements SignableEntity {
 
-    private UUID uuid;
+    private String uuid;
     @PositiveOrZero
     private Long version;
 

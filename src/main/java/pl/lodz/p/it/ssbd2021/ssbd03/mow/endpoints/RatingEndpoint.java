@@ -2,19 +2,23 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints.BaseEndpoint;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CreateRatingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.RatingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.RemoveClientRatingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.RemoveRankingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.managers.RatingManagerLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
+import javax.ejb.Stateful;
 import javax.ejb.TransactionAttribute;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
 
 import static javax.ejb.TransactionAttributeType.REQUIRES_NEW;
 
+@Stateful
 @TransactionAttribute(REQUIRES_NEW)
 @Interceptors(TrackingInterceptor.class)
 public class RatingEndpoint extends BaseEndpoint implements RatingEndpointLocal {
@@ -22,9 +26,10 @@ public class RatingEndpoint extends BaseEndpoint implements RatingEndpointLocal 
     @Inject
     RatingManagerLocal ratingManager;
 
+//    @PermitAll
     @RolesAllowed("createRating")
     @Override
-    public void createRating(RatingDto ratingDto) throws BaseAppException {
+    public void createRating(CreateRatingDto ratingDto) throws BaseAppException {
         ratingManager.createRating(ratingDto.getLogin(), ratingDto.getCruiseGroupUUID(), ratingDto.getRating());
     }
 

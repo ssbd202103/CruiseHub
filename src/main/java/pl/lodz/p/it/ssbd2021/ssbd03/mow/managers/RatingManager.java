@@ -40,10 +40,13 @@ public class RatingManager implements RatingManagerLocal {
 
     @RolesAllowed("createRating")
     @Override
-    public void createRating(String login, UUID cruiseGroupUUID, Integer rating) throws BaseAppException {
+    public void createRating(String login, UUID cruiseGroupUUID, Double rating) throws BaseAppException {
         Account account = accountFacadeMow.findByLogin(login);
         CruiseGroup cruiseGroup = cruiseGroupFacadeMow.findByUUID(cruiseGroupUUID);
         Rating r = new Rating(account, cruiseGroup, rating);
+        r.setAlteredBy(account);
+        r.setCreatedBy(account);
+        r.setAlterType(account.getAlterType());
 
         ratingFacade.create(r);
     }
