@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
 import java.util.IllegalFormatException;
+import java.util.UUID;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CRUISE_MAPPER_DATE_PARSE;
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CRUISE_MAPPER_UUID_PARSE;
@@ -46,12 +47,12 @@ public class CruiseMapper {
     }
 
     public static CruiseDto mapCruiseToCruiseDto(Cruise cruise) {
-
         CruiseGroupWithUUIDDto cruiseGroupDto = CruiseGroupMapper.toCruiseGroupWithUUIDDto(cruise.getCruisesGroup());
-
-        return new CruiseDto(cruise.getUuid(), cruise.getVersion(),
+        return new CruiseDto(cruise.getUuid().toString(), cruise.getVersion(),
                 cruise.getStartDate(), cruise.getEndDate(),
                 cruise.isActive(), cruiseGroupDto);
+
+
     }
 
     public static RelatedCruiseDto toRelatedCruiseDto(Cruise cruise) {
