@@ -59,7 +59,7 @@ public class RatingFacadeMow extends AbstractFacade<Rating> {
     public Rating findByCruiseUuidAndAccountLogin(String login, UUID uuid) throws BaseAppException {
         TypedQuery<Rating> tq = em.createNamedQuery("Rating.findByUuidAndAccountLogin", Rating.class);
         tq.setParameter("login", login);
-        tq.setParameter("uuid", uuid.toString());
+        tq.setParameter("uuid", uuid);
 
         try {
             return tq.getSingleResult();
