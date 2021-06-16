@@ -68,6 +68,16 @@ public class RatingFacadeMow extends AbstractFacade<Rating> {
         }
     }
 
+    public List<Rating> findOwnRatings(String login) throws BaseAppException {
+        TypedQuery<Rating> tq = em.createNamedQuery("Rating.findOwnRatings", Rating.class);
+        tq.setParameter("login", login);
+        try {
+            return tq.getResultList();
+        } catch (NoResultException e) {
+            throw FacadeException.noSuchElement();
+        }
+    }
+
     @RolesAllowed("removeRating")
     @Override
     public void remove(Rating entity) throws FacadeException {

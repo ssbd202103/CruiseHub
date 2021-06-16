@@ -16,7 +16,8 @@ import javax.ejb.TransactionAttribute;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
 
-import java.util.UUID;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static javax.ejb.TransactionAttributeType.REQUIRES_NEW;
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.RATING_MAPPER_UUID_PARSE;
@@ -43,9 +44,9 @@ public class RatingEndpoint extends BaseEndpoint implements RatingEndpointLocal 
 
     @RolesAllowed("ownFindRating")
     @Override
-    public RatingDto getRating(String uuidStr) throws BaseAppException {
+    public List<RatingDto> getOwnRatings() throws BaseAppException {
         try {
-            return RatingMapper.mapRatingToRatingDto(ratingManager.getOwnRating(UUID.fromString(uuidStr)));
+            return ratingManager.getOwnRatings().stream().map(RatingMapper::mapRatingToRatingDto).collect(Collectors.toList());
         } catch (IllegalArgumentException e) {
             throw new MapperException(RATING_MAPPER_UUID_PARSE);
         }

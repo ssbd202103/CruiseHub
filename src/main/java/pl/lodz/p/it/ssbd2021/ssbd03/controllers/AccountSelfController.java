@@ -21,9 +21,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
-import static javax.ws.rs.core.Response.Status.NOT_ACCEPTABLE;
+import java.util.List;
+
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 import static pl.lodz.p.it.ssbd2021.ssbd03.utils.TransactionRepeater.tryAndRepeat;
 
@@ -227,9 +227,9 @@ public class AccountSelfController {
     }
 
     @GET
-    @Path("/rating/{uuid}")
+    @Path("/ratings")
     @Produces(MediaType.APPLICATION_JSON)
-    public RatingDto getOwnRating(@PathParam("uuid") String uuid) throws BaseAppException {
-        return ratingEndpoint.getRating(uuid);
+    public List<RatingDto> getOwnRatings() throws BaseAppException {
+        return ratingEndpoint.getOwnRatings();
     }
 }
