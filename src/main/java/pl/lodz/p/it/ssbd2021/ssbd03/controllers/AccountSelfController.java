@@ -10,6 +10,8 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountMetadataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountVerificationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.AccountEndpointLocal;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.RatingDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.RatingEndpointLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.ETagFilterBinding;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
 
@@ -19,9 +21,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
-import static javax.ws.rs.core.Response.Status.NOT_ACCEPTABLE;
+import java.util.List;
+
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 import static pl.lodz.p.it.ssbd2021.ssbd03.utils.TransactionRepeater.tryAndRepeat;
 
@@ -31,6 +33,9 @@ public class AccountSelfController {
 
     @Inject
     private AccountEndpointLocal accountEndpoint;
+
+    @Inject
+    private RatingEndpointLocal ratingEndpoint;
 
     private final ObjectMapper mapper = new ObjectMapper();
 
@@ -221,4 +226,10 @@ public class AccountSelfController {
         return tryAndRepeat(() -> accountEndpoint.getSelfAddressMetadata());
     }
 
+    @GET
+    @Path("/ratings")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<RatingDto> getOwnRatings() throws BaseAppException {
+        return ratingEndpoint.getOwnRatings();
+    }
 }

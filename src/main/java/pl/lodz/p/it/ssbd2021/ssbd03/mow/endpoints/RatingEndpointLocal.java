@@ -5,6 +5,10 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.RatingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.RemoveClientRatingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.RemoveRankingDto;
 
+import javax.ejb.Local;
+import java.util.List;
+
+@Local
 public interface RatingEndpointLocal {
 
     /**
@@ -26,11 +30,9 @@ public interface RatingEndpointLocal {
     /**
      * Pobiera ocene klienta dla podanej wycieczki
      *
-     * @param login           login klienta
-     * @param cruiseGroupName login
      * @throws BaseAppException bazowy wyjątek aplikacji, zwracany w przypadku nieznależenia oceny
      */
-    RatingDto getRating(String login, String cruiseGroupName) throws BaseAppException;
+    List<RatingDto> getOwnRatings() throws BaseAppException;
 
     /**
      * Metoda służąca do usunięcia oceny klienta przez moderatora

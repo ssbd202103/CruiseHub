@@ -17,6 +17,9 @@ import javax.interceptor.Interceptors;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
 
+import java.util.List;
+import java.util.UUID;
+
 import static javax.ejb.TransactionAttributeType.MANDATORY;
 
 @Stateful
@@ -56,13 +59,17 @@ public class RatingManager implements RatingManagerLocal {
 
     @RolesAllowed("ownFindRating")
     @Override
-    public Rating getRating(String login, String cruiseGroupName) throws BaseAppException {
-        return null; // todo finish implementation
+    public List<Rating> getOwnRatings() throws BaseAppException {
+        return ratingFacade.findOwnRatings(getCurrentUser().getLogin());
     }
 
     @RolesAllowed("removeClientRating")
     @Override
     public void removeClientRating(String login, String cruiseGroupName) throws BaseAppException {
         // todo finish implementantion
+    }
+
+    private Account getCurrentUser() throws BaseAppException {
+        return accountFacadeMow.findByLogin(securityContext.getUserPrincipal().getName());
     }
 }

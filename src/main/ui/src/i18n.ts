@@ -124,6 +124,11 @@ const resources = {
             "change access level state": "Zmień stan poziomu dostępu",
             //panels.clientPanel
             "clientPanel": "Panel klienta",
+            "ratings":"Oceny",
+            "search cruise": "Wyszukaj wycieczke",
+            "cruiseGroupName": "Nazwa wycieczki",
+            "rating": "Ocena",
+            "remove button": "Przycisk usun",
             //panels.ModeratorPanel
             "business workers": "Pracownicy firmy",
             "search business workers": "Szukaj niezatwierdzonych pracowników",
@@ -484,6 +489,11 @@ const resources = {
             "grand access level": "Grand access level",
             //panels.clientPanel
             "clientPanel": "Client panel",
+            "ratings": "Ratings",
+            "search cruise": "Search cruise",
+            "cruiseGroupName": "Cruise name",
+            "rating": "Rating",
+            "remove button": "Remove button",
             //panels.ModeratorPanel
             "business workers": "Business workers",
             "search business workers": "Search business workers",
