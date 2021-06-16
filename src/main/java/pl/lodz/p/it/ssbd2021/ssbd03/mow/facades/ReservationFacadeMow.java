@@ -16,6 +16,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -61,6 +62,17 @@ public class ReservationFacadeMow extends AbstractFacade<Reservation> {
             return tq.getResultList();
         } catch (NoResultException e) {
             throw FacadeException.noSuchElement();
+        }
+    }
+
+    @RolesAllowed("createReservation")
+    public List<Reservation> findCruiseReservationsOrReturnEmptyList(long id) {
+        TypedQuery<Reservation> tq = em.createNamedQuery("Reservation.findCruiseReservations", Reservation.class);
+        tq.setParameter("id", id);
+        try {
+            return tq.getResultList();
+        } catch (Exception e) {
+            return new ArrayList<>();
         }
     }
 

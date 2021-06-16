@@ -359,6 +359,8 @@ const resources = {
             "CruiseName": "Nazwa wycieczki",
             "/reservations" :"Rezerwacje wycieczki",
             "search reservation": "Wyszukaj rezerwacje",
+
+            "choose_number_of_seats": "Wybierz liczbę miejsc"
         }
     },
     EN: {
@@ -712,6 +714,8 @@ const resources = {
             "CruiseName": "Name of the cruise",
             "/reservations" :"Cruise reservations",
             "search reservation": "Search reservations",
+
+            "choose_number_of_seats": "Choose number of seats"
         }
     }
 }

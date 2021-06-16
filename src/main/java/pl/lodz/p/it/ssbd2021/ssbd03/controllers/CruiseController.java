@@ -95,7 +95,7 @@ public class CruiseController {
      * @param reservationDto Informacja o tworzonej rezerwacji
      * @throws BaseAppException Bazowy wyjatek aplikacji
      */
-    @PUT
+    @POST
     @Path("/reserve")
     @Consumes(MediaType.APPLICATION_JSON)
     public void createReservation(CreateReservationDto reservationDto) throws BaseAppException {

@@ -1,18 +1,18 @@
 import axios from "./URL";
 import store from "../redux/store";
 
-export function createReservation() {
-    console.log("12345")
+export function createReservation(cruiseVersion: number, uuid: string, numberOfSeats: number) {
+
     const {token} = store.getState()
     const json = {
-        cruiseVersion: 0,
-        cruiseUuid: "581d626f-d421-47dd-89ef-b41bc30aa36c",
-        numberOfSeats: 1,
+        cruiseVersion: cruiseVersion,
+        cruiseUuid: uuid,
+        numberOfSeats: numberOfSeats,
     }
-    return axios.put('cruise/reserve', json, {
+    return axios.post('cruise/reserve', json, {
         headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
         }
     })
 }
