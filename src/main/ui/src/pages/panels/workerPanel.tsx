@@ -23,6 +23,7 @@ import ChangeAccessLevelState from "./admin/ChangeAccessLevelState";
 import RequestSomeonePasswordReset from "../reset/requestSomeonesPasswordReset";
 import ListReservationsForCruise from "./admin/ListReservationsForCruise";
 import ListReservationsForWorker from "./worker/ListReservationsForWokrersCruise";
+import ChangeCruiseGroup from "./worker/changeCruiseGroup"
 
 export default function WorkerPanel() {
     const {t} = useTranslation()
@@ -154,6 +155,10 @@ export default function WorkerPanel() {
                 {
                     to: '/reservations',
                     Component: ListReservationsForWorker
+                },
+                {
+                    to: '/changeCruiseGroupData',
+                    Component: ChangeCruiseGroup
                 }
             ]}
         />

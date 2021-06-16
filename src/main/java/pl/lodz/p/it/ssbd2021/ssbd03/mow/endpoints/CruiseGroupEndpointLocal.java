@@ -1,9 +1,8 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseGroupWithDetailsDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.AddCruiseGroupDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.CruiseGroupWithDetailsDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.changeCruiseGroupDto;
 
 import javax.ejb.Local;
@@ -30,7 +29,7 @@ public interface CruiseGroupEndpointLocal {
      * @return zmieniona grupa wycieczek
      * @throws BaseAppException Bazowy wyjątek aplikacji
      */
-    changeCruiseGroupDto changeCruiseGroup(changeCruiseGroupDto changeCruiseGroup) throws BaseAppException;
+    void changeCruiseGroup(changeCruiseGroupDto changeCruiseGroup) throws BaseAppException;
 
 
     /**

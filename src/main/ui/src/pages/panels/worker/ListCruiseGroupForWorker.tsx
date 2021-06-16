@@ -50,6 +50,7 @@ export function createCruiseGroup(
     description: any,
     active: boolean,
     company: any,
+    cruises: any,
 ) {
     return {
         price: price,
@@ -64,6 +65,7 @@ export function createCruiseGroup(
         description: description,
         active: active,
         company: company,
+        cruises:cruises
     };
 }
 
@@ -150,6 +152,9 @@ function Row(props: CruiseData) {
         const uuid = props
         sessionStorage.setItem("cruiseUUID",uuid)
     }
+    const  HandleChangeData=(props: any)=>{
+        sessionStorage.setItem("ChangeCruiseGroupData",JSON.stringify(props))
+    }
     return (
         <React.Fragment>
             <TableRow className={classes.root}>
@@ -185,6 +190,26 @@ function Row(props: CruiseData) {
                     >
                         {t("deactivate")}
                     </RoundedButton>
+                </TableCell>
+                <TableCell style={style}>
+                    {group.cruises.length>0 ?
+                        <RoundedButton
+                            color="pink"
+                            disabled={group.cruises.length}
+                        >
+                            {t("changeData")}
+                        </RoundedButton> :
+                        <Link to="/changeCruiseGroupData">
+                            <RoundedButton
+                                color="pink" onClick={() => {
+                                HandleChangeData(group)
+                            }}
+                                disabled={group.cruises.length}
+                            >
+                                {t("changeData")}
+                            </RoundedButton>
+                        </Link>
+                    }
                 </TableCell>
             </TableRow>
             <TableRow>
@@ -358,6 +383,10 @@ const ListCruiseGroups = () => {
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`
                             }}>{t("deactivate")}</TableCell>
+                            <TableCell style={{
+                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                            }}>{t("changeData")}</TableCell>
                     </TableRow>
                     </TableHead>
                     <TableBody>
