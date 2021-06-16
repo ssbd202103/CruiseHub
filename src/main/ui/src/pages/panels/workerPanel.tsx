@@ -15,8 +15,14 @@ import useHandleError from "../../errorHandler";
 import AccountsListIcon from "@material-ui/icons/PeopleAltRounded";
 import ListCompany from "./moderator/ListCompany";
 import AddCruiseGroup from "./worker/AddCruiseGroup";
-import ListCruiseGroup from "../panels/worker/ListCruiseGroupForWorker";
-import AddCruise from "./worker/AddCruise";
+import ListCruiseGroup from "./worker/ListCruiseGroupForWorker"
+import AddCruise from "./worker/AddCruise"
+import ChangeAccountData from "./admin/ChangeAccountData";
+import GrantAccessLevel from "./admin/GrantAccessLevel";
+import ChangeAccessLevelState from "./admin/ChangeAccessLevelState";
+import RequestSomeonePasswordReset from "../reset/requestSomeonesPasswordReset";
+import ListReservationsForCruise from "./admin/ListReservationsForCruise";
+import ListReservationsForWorker from "./worker/ListReservationsForWokrersCruise";
 
 export default function WorkerPanel() {
     const {t} = useTranslation()
@@ -142,6 +148,12 @@ export default function WorkerPanel() {
                             />
                         </>
                     )
+                }
+            ]}
+            otherRoutes={[
+                {
+                    to: '/reservations',
+                    Component: ListReservationsForWorker
                 }
             ]}
         />

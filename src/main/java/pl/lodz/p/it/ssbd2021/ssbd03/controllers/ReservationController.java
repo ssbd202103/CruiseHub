@@ -33,4 +33,17 @@ public class ReservationController {
     public List<CruiseReservationDto> getCruisesForReservations(@PathParam("cruiseUUID") UUID cruiseUUID) throws BaseAppException {
         return tryAndRepeat(() -> reservationEndpoint.viewCruiseReservations(cruiseUUID));
     }
+
+    /**
+     * Pobiera informacje o rezerwacjach dla danej wycieczki
+     *
+     * @return Lista rezerwacji
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
+    @GET
+    @Path("/reservations-for-worker-cruise/{cruiseUUID}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<CruiseReservationDto> getWorkerCruisesForReservations(@PathParam("cruiseUUID") UUID cruiseUUID) throws BaseAppException {
+        return tryAndRepeat(() -> reservationEndpoint.viewWorkerCruiseReservations(cruiseUUID));
+    }
 }

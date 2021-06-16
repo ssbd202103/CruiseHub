@@ -26,3 +26,14 @@ export function getReservationsForCruise(uuid: any){
         }
     })
 }
+
+export function getReservationsForWorkerCruise(uuid: any){
+    const {token} = store.getState()
+    const cruiseUUID = uuid
+    return axios.get(`reservation/reservations-for-worker-cruise/${cruiseUUID}`, {
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        }
+    })
+}

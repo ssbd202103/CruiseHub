@@ -48,7 +48,7 @@ public class ReservationEndpoint extends BaseEndpoint implements ReservationEndp
     @Override
     public List<CruiseReservationDto> viewWorkerCruiseReservations(UUID cruise_uuid) throws BaseAppException {
         List<CruiseReservationDto> res = new ArrayList<>();
-        for (Reservation reservation : reservationManager.getCruiseReservations(cruise_uuid)) {
+        for (Reservation reservation : reservationManager.getWorkerCruiseReservations(cruise_uuid)) {
             res.add(ReservationMapper.toReservationDto(reservation));
         }
         return res;
