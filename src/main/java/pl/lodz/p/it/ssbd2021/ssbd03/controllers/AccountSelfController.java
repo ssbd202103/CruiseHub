@@ -10,7 +10,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountMetadataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountVerificationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.AccountEndpointLocal;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.RatingDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.RatingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.RatingEndpointLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.ETagFilterBinding;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
