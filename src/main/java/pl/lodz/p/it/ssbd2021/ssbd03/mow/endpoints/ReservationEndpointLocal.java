@@ -27,9 +27,9 @@ public interface ReservationEndpointLocal {
     /**
      * Pobiera wszytskie rezerwacje dla danej wycieczki która nalezy do biznes_worker'a
      *
-     * @param cruise_uuid
-     * @return
-     * @throws BaseAppException
+     * @param cruise_uuid identyfikator wycieczki
+     * @return lista rezerwacji
+     * @throws BaseAppException Bazowy wyjątek aplikacji
      */
     List<CruiseReservationDto> viewWorkerCruiseReservations(UUID cruise_uuid) throws BaseAppException;
 
