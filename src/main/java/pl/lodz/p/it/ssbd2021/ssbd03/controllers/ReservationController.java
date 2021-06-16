@@ -35,7 +35,7 @@ public class ReservationController {
     }
 
     /**
-     * Pobiera informacje o rezerwacjach dla danej wycieczki
+     * Pobiera informacje o rezerwacjach dla danej wycieczki zalogowanego buisnse-workera
      *
      * @return Lista rezerwacji
      * @throws BaseAppException Bazowy wyjątek aplikacji
