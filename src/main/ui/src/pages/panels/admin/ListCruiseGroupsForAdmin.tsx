@@ -317,10 +317,13 @@ const ListCruiseGroupsForAdmin = () => {
                                onChange={(e) => setSearchInput(e.target.value)}/>
                 )}
             />
-            <TableContainer component={Paper}>
+            <TableContainer component={Paper} style={{
+                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`
+            }}>
                 <Table aria-label="CruiseGroups">
                     <TableHead>
                         <TableRow>
+                            <TableCell>{t('expand cruises')}</TableCell>
                             <TableCell style={{
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`
