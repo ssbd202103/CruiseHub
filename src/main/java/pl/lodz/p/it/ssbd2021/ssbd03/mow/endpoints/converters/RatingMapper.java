@@ -7,7 +7,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.RatingDto;
 @NoArgsConstructor
 public class RatingMapper {
     public static RatingDto mapRatingToRatingDto(Rating rating) {
-        //TODO
-        return null;
+        return new RatingDto(rating.getAccount().getLogin(), rating.getCruiseGroup().getName(), rating.getRating(), rating.getCruiseGroup().getUuid());
     }
 }
