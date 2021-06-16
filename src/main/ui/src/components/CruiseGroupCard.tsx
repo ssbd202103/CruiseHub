@@ -85,11 +85,6 @@ export default function CruiseGroupCard(props: CruiseData) {
     }
 
     return (
-        <div style={{
-            height: xlMatches ? 400 : lgMatches ? 350 : 300,
-            backgroundColor:`Pink`,
-            padding: 10
-        }}>
         <div className={styles.wrapper} style={{
             height: xlMatches ? 400 : lgMatches ? 300 : 200,
             backgroundImage:`url(${pictureUrl})`
@@ -114,24 +109,6 @@ export default function CruiseGroupCard(props: CruiseData) {
                     <EyeIcon style={{fill: '#FFFFFF', transform: 'scale(2)'}} />
                 </div>
             </div>
-        </div>
-            <Button className={buttonClass.root} style={{margin: 5}} onClick={() => {
-                deactivateCruiseGroup({
-                    uuid: group.uuid,
-                    etag: group.etag,
-                    version: group.version,
-                    token: token
-                    }).then(res => {
-                        onChange().then(() => {
-                            showSuccess(t('data.load.success'))
-                        })
-                    }).catch(error => {
-                        const message = error.response.data
-                        handleError(t(message),error.response.status)
-                    })
-                }}>
-                {t("deactivateCruiseGroup")}
-            </Button>
         </div>
     )
 }

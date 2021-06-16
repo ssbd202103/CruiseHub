@@ -1,6 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.facades;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.common.facades.AbstractFacade;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Reservation;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
@@ -15,6 +16,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -53,13 +55,24 @@ public class ReservationFacadeMow extends AbstractFacade<Reservation> {
         }
     }
 
-    public List<Reservation> findCruiseReservations(long id) throws BaseAppException {
+    public List<Reservation> findCruiseReservations(Cruise cruise) throws BaseAppException {
         TypedQuery<Reservation> tq = em.createNamedQuery("Reservation.findCruiseReservations", Reservation.class);
-        tq.setParameter("id", id);
+        tq.setParameter("id", cruise.getId());
         try {
             return tq.getResultList();
         } catch (NoResultException e) {
             throw FacadeException.noSuchElement();
+        }
+    }
+
+    @RolesAllowed("createReservation")
+    public List<Reservation> findCruiseReservationsOrReturnEmptyList(long id) {
+        TypedQuery<Reservation> tq = em.createNamedQuery("Reservation.findCruiseReservations", Reservation.class);
+        tq.setParameter("id", id);
+        try {
+            return tq.getResultList();
+        } catch (Exception e) {
+            return new ArrayList<>();
         }
     }
 

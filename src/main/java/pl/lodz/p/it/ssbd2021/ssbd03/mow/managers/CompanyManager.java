@@ -1,5 +1,8 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.managers;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Administrator;
@@ -43,7 +46,6 @@ public class CompanyManager implements CompanyManagerLocal {
     @Context
     private SecurityContext context;
 
-    @PermitAll
     @Override
     public List<Company> getAllCompanies() throws BaseAppException {
         return companyFacadeMow.findAll();
@@ -78,11 +80,22 @@ public class CompanyManager implements CompanyManagerLocal {
     @Override
     public void addCompany(Company company) throws BaseAppException {
         Account moderator = getCurrentUser();
-        // todo finish implementation
+        setCreatedMetadata(moderator, company, company.getAddress());
+
+        companyFacadeMow.create(company);
     }
 
     @RolesAllowed("authenticatedUser")
     private Account getCurrentUser() throws BaseAppException {
         return accountFacadeMow.findByLogin(context.getUserPrincipal().getName());
+    }
+
+    private void setCreatedMetadata(Account creator, BaseEntity... entities) throws BaseAppException {
+        AlterTypeWrapper insert = accountFacadeMow.getAlterTypeWrapperByAlterType(AlterType.INSERT);
+        for (BaseEntity e : entities) {
+            e.setAlterType(insert);
+            e.setAlteredBy(creator);
+            e.setCreatedBy(creator);
+        }
     }
 }

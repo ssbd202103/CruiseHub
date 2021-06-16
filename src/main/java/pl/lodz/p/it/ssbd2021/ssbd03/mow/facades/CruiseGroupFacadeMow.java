@@ -65,6 +65,18 @@ public class CruiseGroupFacadeMow extends AbstractFacade<CruiseGroup> {
             throw FacadeException.noSuchElement();
         }
     }
+
+    @PermitAll
+    public CruiseGroup findByUUID(UUID uuid) throws BaseAppException {
+        TypedQuery<CruiseGroup> tq = em.createNamedQuery("CruiseGroup.findByUUID", CruiseGroup.class);
+        tq.setParameter("uuid", uuid);
+        try {
+            return tq.getSingleResult();
+        } catch (NoResultException e) {
+            throw FacadeException.noSuchElement();
+        }
+    }
+
    @RolesAllowed("getAllCruiseGroupList")
     public List<Cruise> findCruisesForCruiseGroup(CruiseGroup cruiseGroup) throws FacadeException {
         TypedQuery<Cruise> tq = em.createNamedQuery("CruiseGroup.findCruises", Cruise.class);
@@ -75,16 +87,6 @@ public class CruiseGroupFacadeMow extends AbstractFacade<CruiseGroup> {
             throw FacadeException.noSuchElement();
         }
 
-    }
-    @PermitAll
-    public CruiseGroup findByUUID(UUID uuid) throws BaseAppException {
-        TypedQuery<CruiseGroup> tq = em.createNamedQuery("CruiseGroup.findByUUID", CruiseGroup.class);
-        tq.setParameter("uuid", uuid);
-        try {
-            return tq.getSingleResult();
-        } catch (NoResultException e) {
-            throw FacadeException.noSuchElement();
-        }
     }
     @RolesAllowed("getCruiseGroupForBusinessWorker")
     public List<CruiseGroup> getCruiseGroupForBusinessWorker(Company company) throws FacadeException {
