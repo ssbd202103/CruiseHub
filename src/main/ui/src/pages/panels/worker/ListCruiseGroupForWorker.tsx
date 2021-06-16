@@ -214,7 +214,6 @@ function Row(props: CruiseData) {
                 <TableCell style={style}>{group.numberOfSeats}</TableCell>
                 <TableCell style={style}>{group.price + " pln"}</TableCell>
                 <TableCell style={style}>{group.description}</TableCell>
-                <TableCell style={style}>{group.active.toString()}</TableCell>
                 <TableCell style={style}>
                     <RoundedButton
                         color="pink" onClick={() => {
@@ -446,10 +445,6 @@ const ListCruiseGroups = () => {
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`
                             }}>{t("description")}</TableCell>
-                            <TableCell style={{
-                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
-                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
-                            }}>{t("active")}</TableCell>
                             <TableCell style={{
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`

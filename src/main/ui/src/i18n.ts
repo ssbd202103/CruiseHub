@@ -365,7 +365,7 @@ const resources = {
             "/reservations" :"Rezerwacje wycieczki",
             "search reservation": "Wyszukaj rezerwacje",
             "choose_number_of_seats": "Wybierz liczbę miejsc",
-            "changeData": "Edytuj grupę wycieczek",
+            "changeData": "Edytuj",
             "cruise.group.active.and.cannot.be.modified": "Grupa wycieczek posiada już aktywne wycieczki i nie może być modifykowana",
             "/changeCruiseGroupData": "Zmień dane grupy wycieczek"
         }
@@ -727,7 +727,7 @@ const resources = {
             "/reservations" :"Cruise reservations",
             "search reservation": "Search reservations",
             "choose_number_of_seats": "Choose number of seats",
-            "changeData": "Edit cruise group",
+            "changeData": "Edit",
             "cruise.group.active.and.cannot.be.modified": "This cruise group already has active cruises and cannot be modifiable",
             "/changeCruiseGroupData": "Change cruise group data"
         }
