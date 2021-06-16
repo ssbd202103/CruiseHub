@@ -92,7 +92,7 @@ public class CruiseEndpoint extends BaseEndpoint implements CruiseEndpointLocal 
 
     @PermitAll
     @Override
-    public List<CruiseForCruiseGroupDto> getCruisesForCruiseGroup(String cruiseGroupName) {
+    public List<CruiseForCruiseGroupDto> getCruisesForCruiseGroup(String cruiseGroupName) throws BaseAppException {
         return CruiseGroupMapper.toCruiseForCruiseGroupDtos(cruiseManager.getCruisesForCruiseGroup(cruiseGroupName));
     }
 

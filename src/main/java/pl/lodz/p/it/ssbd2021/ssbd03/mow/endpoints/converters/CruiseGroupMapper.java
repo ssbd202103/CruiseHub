@@ -88,10 +88,14 @@ public class CruiseGroupMapper {
         return new CruisePictureDto(Base64.getEncoder().encodeToString(cruisePicture.getImg()), cruisePicture.getImgName(), cruisePicture.getVersion());
     }
 
-    public static List<CruiseForCruiseGroupDto> toCruiseForCruiseGroupDtos(List<Cruise> cruises) {
-        return cruises.stream().map(cruise ->
-                new CruiseForCruiseGroupDto(cruise.getUuid(), cruise.getStartDate(), cruise.getEndDate(), cruise.isActive(), cruise.isPublished())
-        ).collect(Collectors.toList());
+    public static List<CruiseForCruiseGroupDto> toCruiseForCruiseGroupDtos(List<Cruise> cruises) throws BaseAppException {
+        List<CruiseForCruiseGroupDto> cruisesForCruiseGroup = new ArrayList<>();
+
+        for (Cruise cruise : cruises) {
+            cruisesForCruiseGroup.add(new CruiseForCruiseGroupDto(cruise.getUuid(), cruise.getStartDate(), cruise.getEndDate(), cruise.isActive(), cruise.isPublished(), cruise.getVersion()));
+        }
+
+        return cruisesForCruiseGroup;
     }
 
     /**
