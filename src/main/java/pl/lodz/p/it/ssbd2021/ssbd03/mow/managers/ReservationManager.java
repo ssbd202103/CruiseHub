@@ -2,19 +2,22 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.managers;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Reservation;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.NoSeatsAvailableException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.*;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.BusinessWorkerWithCompanyDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters.AccountMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.AccountFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.ReservationFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
 import javax.ejb.TransactionAttribute;
@@ -25,8 +28,11 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 
 /**
  * Klasa która zarządza logiką biznesową rezerwacji
@@ -62,13 +68,13 @@ public class ReservationManager implements ReservationManagerLocal {
     @Override
     public List<Reservation> getWorkerCruiseReservations(UUID cruise_uuid) throws BaseAppException {
         Cruise cruise  = cruiseFacadeMow.findByUUID(cruise_uuid);
-        List<Reservation> res = reservationFacadeMow.findCruiseReservations(cruise);
-        return res;
-/*
-
-        long id = cruiseFacadeMow.findByUUID(cruise_uuid).getId();
-        List<Reservation> res = reservationFacadeMow.findWorkerCruiseReservations(id);
-        return res;*/
+        Account account = getCurrentUser();
+        BusinessWorkerWithCompanyDto businessWorkerDto = getBusinessWorkerByLogin(account.getLogin());
+        List<Reservation> reservations = reservationFacadeMow.findCruiseReservations(cruise);
+        if(!businessWorkerDto.getCompanyName().equals(cruise.getCruisesGroup().getCompany().getName())) {
+            throw new ReservationManagerException(NOT_YOURS_CRUISE);
+        }
+        return reservations;
     }
 
     @RolesAllowed("removeClientReservation")
@@ -137,4 +143,22 @@ public class ReservationManager implements ReservationManagerLocal {
     private Account getCurrentUser() throws BaseAppException {
         return accountFacadeMow.findByLogin(context.getUserPrincipal().getName());
     }
+
+    private static AccessLevel getAccessLevel(Account from, AccessLevelType target) throws BaseAppException {
+        Optional<AccessLevel> optionalAccessLevel = from.getAccessLevels().stream()
+                .filter(accessLevel -> accessLevel.getAccessLevelType().equals(target)).findAny();
+
+        return optionalAccessLevel.orElseThrow(() -> new AccountManagerException(ACCESS_LEVEL_DOES_NOT_EXIST_ERROR));
+    }
+
+    private AccessLevel getAccountAccessLevel(String login, AccessLevelType accessLevelType) throws BaseAppException {
+        Account account = accountFacadeMow.findByLogin(login);
+        return getAccessLevel(account, accessLevelType);
+    }
+
+   @RolesAllowed("getWorkerCruiseReservations")
+    private BusinessWorkerWithCompanyDto getBusinessWorkerByLogin(String login) throws BaseAppException {
+        return AccountMapper.toBusinessWorkerWithCompanyDto((BusinessWorker) getAccountAccessLevel(login, AccessLevelType.BUSINESS_WORKER));
+    }
+
 }
