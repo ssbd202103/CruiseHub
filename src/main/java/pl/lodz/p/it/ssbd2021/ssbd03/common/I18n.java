@@ -113,7 +113,7 @@ public class I18n {
     public static final String ACCESS_LEVEL_REACTIVATE_CLIENT_SUBJECT = "account.accessLevels.reactivateClient.subject";
     public static final String ACCESS_LEVEL_REACTIVATE_CLIENT_BODY = "account.accessLevels.reactivateClient.body";
     public static final String NO_SEATS_AVAILABLE = "reservation.noSeats";
-
+    public static final String RATING_MAPPER_UUID_PARSE = "rating.mapper.uuid.parse";
     private ResourceBundle bundle;
 
     public String getMessage(String message, Locale locale) {

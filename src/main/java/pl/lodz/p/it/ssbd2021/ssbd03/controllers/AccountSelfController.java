@@ -10,6 +10,8 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountMetadataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountVerificationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.AccountEndpointLocal;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.RatingDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.RatingEndpointLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.ETagFilterBinding;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
 
@@ -31,6 +33,9 @@ public class AccountSelfController {
 
     @Inject
     private AccountEndpointLocal accountEndpoint;
+
+    @Inject
+    private RatingEndpointLocal ratingEndpoint;
 
     private final ObjectMapper mapper = new ObjectMapper();
 
@@ -221,4 +226,10 @@ public class AccountSelfController {
         return tryAndRepeat(() -> accountEndpoint.getSelfAddressMetadata());
     }
 
+    @GET
+    @Path("/rating/{uuid}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public RatingDto getOwnRating(@PathParam("uuid") String uuid) throws BaseAppException {
+        return ratingEndpoint.getRating(uuid);
+    }
 }
