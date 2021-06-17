@@ -8,6 +8,8 @@ import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 
 import javax.validation.constraints.NotEmpty;
 
+import java.util.UUID;
+
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_EMPTY;
 
 @Getter
@@ -19,5 +21,5 @@ public class RemoveRankingDto {
     private String login;
 
     @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
-    private String cruiseGroupName;
+    private UUID cruiseGroupUUID;
 }

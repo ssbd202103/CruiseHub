@@ -3,10 +3,16 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.RatingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.RemoveClientRatingDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CreateRatingDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.RatingDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.RemoveClientRatingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.RemoveRankingDto;
 
 import javax.ejb.Local;
 import java.util.List;
+
+@Local
+import javax.ejb.Local;
 
 @Local
 public interface RatingEndpointLocal {

@@ -290,6 +290,7 @@ const resources = {
             'UPDATE': 'Edycja',
             'INSERT': 'Wstawienie',
             'DELETE': 'Wycofanie',
+            'delete': 'wycofuj',
 
             // mięsiące
             'JANUARY': 'Styczeń',
@@ -375,7 +376,9 @@ const resources = {
             "attraction created": "Atrakcja utworzona poprawnie",
             '/attractions': 'Atrakcje',
             "error.attraction.non.removable": "Nie możesz usunąć atrakcji, wycieczka została już opublikowana",
-            "error.attraction.cruisePublished": "Nie można utworzyć atrakcji do opublikowanej wycieczki"
+            "error.attraction.cruisePublished": "Nie można utworzyć atrakcji do opublikowanej wycieczki",
+            'no ratings': 'Nie ma żadnych ocen',
+            'unknown error': 'Nieznany błąd',
         }
     },
     EN: {
@@ -660,6 +663,7 @@ const resources = {
             'UPDATE': 'Update',
             'INSERT': 'Insert',
             'DELETE': 'Delete',
+            'delete': 'Delete',
 
             // mięsiące
             'JANUARY': 'January',
@@ -744,7 +748,9 @@ const resources = {
             "attraction created": "Attraction created successfully",
             '/attractions': 'Attractions',
             "error.attraction.non.removable": "You cannot delete this attraction, thr cruise has already been published",
-            "error.attraction.cruisePublished": "Cannot create attraction for published cruise"
+            "error.attraction.cruisePublished": "Cannot create attraction for published cruise",
+            'no ratings': 'There are no ratings',
+            'unknown error': 'Unknown error',
         }
     }
 }

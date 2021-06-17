@@ -41,18 +41,27 @@ public class RatingManager implements RatingManagerLocal {
 
     @RolesAllowed("createRating")
     @Override
-    public void createRating(String login, String cruiseName, Integer rating) throws BaseAppException {
+    public void createRating(String login, UUID cruiseGroupUUID, Double rating) throws BaseAppException {
         Account account = accountFacadeMow.findByLogin(login);
-        CruiseGroup cruiseGroup = cruiseGroupFacadeMow.findByName(cruiseName);
+        CruiseGroup cruiseGroup = cruiseGroupFacadeMow.findByUUID(cruiseGroupUUID);
         Rating r = new Rating(account, cruiseGroup, rating);
+        r.setAlteredBy(account);
+        r.setCreatedBy(account);
+        r.setAlterType(account.getAlterType());
 
         ratingFacade.create(r);
+
+        List<Rating> ratings = ratingFacade.findByCruiseGroupUUID(cruiseGroupUUID);
+        Double avgRating = ratings.stream().mapToDouble(Rating::getRating).sum() / ratings.size();
+
+        cruiseGroup.setAverageRating(avgRating);
+        cruiseGroupFacadeMow.edit(cruiseGroup);
     }
 
     @RolesAllowed("removeRating")
     @Override
-    public void removeRating(String login, String cruiseName) throws BaseAppException {
-        Rating r = ratingFacade.findByCruiseNameAndAccountLogin(cruiseName, login);
+    public void removeRating(String login, UUID cruiseGroupUUId) throws BaseAppException {
+        Rating r = ratingFacade.findByCruiseGroupUUIDAndAccountLogin(cruiseGroupUUId, login);
 
         ratingFacade.remove(r);
     }

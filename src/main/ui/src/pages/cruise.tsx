@@ -8,13 +8,23 @@ import {useTranslation} from "react-i18next";
 import PersonIcon from '@material-ui/icons/Person';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import DirectionsBoatIcon from '@material-ui/icons/DirectionsBoat';
+import StarIcon from '@material-ui/icons/StarRounded';
+import StarHalfIcon from '@material-ui/icons/StarHalfRounded';
+import DeleteIcon from '@material-ui/icons/DeleteRounded';
 import RoundedButton from "../components/RoundedButton";
 import {getAttractionsByCruiseUUID} from "../Services/attractionService";
 import {createReservation} from "../Services/reservationService";
 import {useSnackbarQueue} from "./snackbar";
+import {useSelector} from "react-redux";
+import {selectActiveAccessLevel, selectLogin} from "../redux/slices/userSlice";
+import StarSpinner from "../components/StarSpinner";
+import {createRating} from "../Services/ratingService";
 
 export default function Cruise() {
     const {id} = useParams<{ id: string }>();
+
+    const login = useSelector(selectLogin);
+    const activeAccessLevel = useSelector(selectActiveAccessLevel);
 
     const {t} = useTranslation();
     const showSuccess = useSnackbarQueue('success')
@@ -65,7 +75,7 @@ export default function Cruise() {
         });
     }
 
-    useEffect(() => {
+    const getCruise = () => {
         getCruiseByUUID(id).then(res => {
             setCruise(res.data)
 
@@ -77,6 +87,10 @@ export default function Cruise() {
                 setAttractions(r.data)
             })
         })
+    }
+
+    useEffect(() => {
+       getCruise()
     }, [])
 
     const getDate = (date: any) => {
@@ -93,6 +107,13 @@ export default function Cruise() {
         return dayOfMonth + '.' + monthValue + '.' + year;
     }
 
+    const handleCreateRating = (rating: number) => {
+        createRating(rating, cruise?.cruiseGroupDto?.uuid).then(res => {
+            showSuccess(t('successful action'))
+            getCruise()
+        })
+    }
+
     return (
         <HeaderFooterLayout>
             <Grid container className={styles.wrapper}>
@@ -100,20 +121,34 @@ export default function Cruise() {
                     <div>
                         <h3>{cruise?.cruiseGroupDto?.company.name}</h3>
                         <h1>{cruise?.cruiseGroupDto?.name}</h1>
+                        <div>
+                            {
+                                new Array(Math.floor(cruise?.cruiseGroupDto?.avgRating || 0)).fill(1).map((item, index) => (
+                                    <StarIcon key={index} fontSize="large" style={{ fill: 'var(--yellow-dark)' }} />
+                                ))
+                            }
+                            {
+                                cruise?.cruiseGroupDto?.avgRating % 1 >= 0.4 && cruise?.cruiseGroupDto?.avgRating % 1 <= 0.7 ? (
+                                    <StarHalfIcon fontSize="large" style={{ fill: 'var(--yellow-dark)' }} />
+                                ) : cruise?.cruiseGroupDto?.avgRating % 1 > 0.7 ? (
+                                    <StarIcon fontSize="large" style={{ fill: 'var(--yellow-dark)' }} />
+                                ) : null
+                            }
+                        </div>
                         <h4>{getDate(cruise?.startDate)} - {getDate(cruise?.endDate)}</h4>
                         <p className={styles.description}>
                             {cruise?.cruiseGroupDto?.description || t('no description')}
                         </p>
                         <div style={{display: 'flex', alignItems: 'center'}}>
-                            <PersonIcon fontSize="large" style={{fill: 'var(--dark-dark)', marginRight: 8}}/>
+                            <PersonIcon fontSize="large" style={{fill: 'var(--dark-dark)', marginRight: 8}} />
                             {cruise?.cruiseGroupDto?.numberOfSeats}
                         </div>
                         <div style={{display: 'flex', alignItems: 'center'}}>
-                            <AttachMoneyIcon fontSize="large" style={{fill: 'var(--dark-dark)', marginRight: 8}}/>
+                            <AttachMoneyIcon fontSize="large" style={{fill: 'var(--dark-dark)', marginRight: 8}} />
                             {cruise?.cruiseGroupDto?.price}
                         </div>
                         <div style={{display: 'flex', alignItems: 'center'}}>
-                            <DirectionsBoatIcon fontSize="large" style={{fill: 'var(--dark-dark)', marginRight: 8}}/>
+                            <DirectionsBoatIcon fontSize="large" style={{fill: 'var(--dark-dark)', marginRight: 8}} />
                             <div>
                                 <div>{`${cruise?.cruiseGroupDto?.cruiseAddress.street}, ${cruise?.cruiseGroupDto?.cruiseAddress.streetNumber} (${cruise?.cruiseGroupDto?.cruiseAddress.harborName})`}</div>
                                 <div>{`${cruise?.cruiseGroupDto?.cruiseAddress.cityName}, ${cruise?.cruiseGroupDto?.cruiseAddress.countryName}`}</div>
@@ -141,6 +176,7 @@ export default function Cruise() {
                         <RoundedButton color="blue" style={{fontSize: 16}} disabled={numberOfSeatsString === ""}>
                             {t('reserve')}
                         </RoundedButton>
+
                         <div>
                             <RoundedButton disabled={!relatedCruises.length} color="dark"
                                            onClick={relatedCruises.length ? handleMenuOpen : undefined}>
@@ -166,20 +202,20 @@ export default function Cruise() {
                     </div>
                 </Grid>
 
-                <Grid item xs={1}/>
+                <Grid item xs={1} />
 
                 <Grid item xs className={styles.attractions}>
-                    <h3 style={{marginRight: 24}}>{t('attractions')}</h3>
-                    <div style={{padding: '0 24px', width: '100%', overflow: 'auto', height: '100%'}}>
+                    <h3 style={{ marginRight: 24 }}>{t('attractions')}</h3>
+                    <div style={{ padding: '0 24px', width: '100%', overflow: 'auto', height: '100%' }}>
                         {
                             attractions.length ?
-                                attractions.map(({name, description, price}, index) => (
-                                    <Card key={index} style={{marginBottom: 16}}>
+                               attractions.map(({name, description, price}, index) => (
+                                    <Card key={index} style={{ marginBottom: 16 }}>
                                         <CardContent>
                                             <h4>{name}</h4>
                                             <p>{description}</p>
                                             <div style={{display: 'flex', alignItems: 'center'}}>
-                                                <AttachMoneyIcon style={{fill: 'var(--dark-dark)', marginRight: 8}}/>
+                                                <AttachMoneyIcon style={{fill: 'var(--dark-dark)', marginRight: 8}} />
                                                 {price}
                                             </div>
                                         </CardContent>
@@ -193,10 +229,55 @@ export default function Cruise() {
                     </div>
                 </Grid>
 
-                <Grid item xs={1}/>
+                <Grid item xs={1} />
 
                 <Grid item xs className={styles.opinions}>
                     <h3 style={{marginRight: 24}}>{t('opinions')}</h3>
+                <Grid item xs className={styles.ratings}>
+                    <h3 style={{ marginRight: 24 }}>{t('ratings')}</h3>
+                    <div style={{ padding: '0 24px', width: '100%', overflow: 'auto', height: '100%' }}>
+                        {
+                            cruise?.cruiseGroupDto?.ratings.length ?
+                               cruise?.cruiseGroupDto?.ratings.map(({login: rLogin,accountFirstName, accountSecondName, rating}: any, index: number) => (
+                                    <Card key={index} style={{ marginBottom: 16 }}>
+                                        <CardContent style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                        }}>
+                                            <div style={{flex: 1}}>
+                                                <h4 style={{marginLeft: 6}}>{rLogin} ({accountFirstName} {accountSecondName})</h4>
+                                                <div>
+                                                    {
+                                                        new Array(Math.floor(rating || 0)).fill(1).map((item, index) => (
+                                                            <StarIcon key={index} fontSize="large" style={{ fill: 'var(--yellow-dark)' }} />
+                                                        ))
+                                                    }
+                                                    {
+                                                        rating % 1 == 0.5 ? (
+                                                            <StarHalfIcon fontSize="large" style={{ fill: 'var(--yellow-dark)' }} />
+                                                        ) : null
+                                                    }
+                                                </div>
+                                            </div>
+                                            {
+                                                rLogin === login ? <DeleteIcon fontSize="large" className={styles.delete} /> : null
+                                            }
+
+                                        </CardContent>
+                                    </Card>
+                                ))
+                                : <h4>{t('no attractions')}</h4>
+                        }
+                    </div>
+                    {
+                        !cruise?.cruiseGroupDto?.ratings.find((item: any) => item.login === login) && activeAccessLevel !== '' ? (
+                            <div style={{height: 200}}>
+                                <StarSpinner onSubmit={handleCreateRating} />
+                            </div>
+                        ) : null
+                    }
+
+                    </Grid>
                 </Grid>
             </Grid>
 

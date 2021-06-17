@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -99,11 +100,18 @@ public class CruiseGroup extends BaseEntity {
     @Column(name = "average_rating")
     private Double averageRating;
 
+
+
     @Getter
     @Setter
     @NotNull
     @Column(name = "active")
     private boolean active;
+
+    @Getter
+    @Setter
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "cruiseGroup")
+    private List<Rating> ratings;
 
     public CruiseGroup(Company company, CruiseAddress address, String name, long numberOfSeats,
                        Double price,  List<CruisePicture> cruisePictures,String description) {
@@ -126,6 +134,8 @@ public class CruiseGroup extends BaseEntity {
     public Long getIdentifier() {
         return id;
     }
+
+
 }
 
 
