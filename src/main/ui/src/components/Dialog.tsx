@@ -30,7 +30,7 @@ export default function Dialog(
 
     return (
         <MuiDialog open={open} onClose={onCancel}>
-            <DialogTitle style={{color: `var(--${darkMode ? 'white-light' : 'dark-dark'}`, backgroundColor: `var(--${darkMode ? 'dark' : '--white-light'})`}}>{title}</DialogTitle>
+            <DialogTitle style={{fontFamily: "'Montserrat', sans-serif", color: `var(--${darkMode ? 'white-light' : 'dark-dark'}`, backgroundColor: `var(--${darkMode ? 'dark' : '--white-light'})`}}>{title}</DialogTitle>
             <DialogContent style={{backgroundColor: `var(--${darkMode ? 'dark' : '--white-light'})`}}>
                 {children}
             </DialogContent>

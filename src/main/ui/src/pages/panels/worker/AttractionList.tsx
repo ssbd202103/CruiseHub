@@ -199,6 +199,7 @@ export default function AttractionList() {
                             fontFamily: "'Montserrat Alternates', sans-serif",
                             fontSize: '1.2rem',
                             marginBottom: 16,
+                            padding: '14px 18px',
                         }}
                         placeholder={t('description')}
                         value={descriptionCreate}

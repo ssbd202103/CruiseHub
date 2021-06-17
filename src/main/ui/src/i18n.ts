@@ -114,6 +114,8 @@ const resources = {
             "list accounts": "Lista kont",
             "list companies": "Lista firm",
             "edit": "Edytuj dane",
+            'create': 'Utwórz',
+
             "change password": "Zmień hasło",
             "reset password": "Resetuj hasło",
             "block": "Zablokuj konto",
@@ -484,6 +486,7 @@ const resources = {
             "list accounts": "Accounts list",
             "moderator panel": "Moderator Panel",
             "edit": "Edit data",
+            'create': 'Create',
             "change password": "Change password",
             "reset password": "Reset password",
             "block": "Block account",
