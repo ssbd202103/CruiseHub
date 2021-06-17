@@ -29,11 +29,17 @@ public class AttractionController {
         return tryAndRepeat(() -> attractionEndpoint.getAttractionsByCruiseUUID(UUID.fromString(uuid)));
     }
 
+    /**
+     * Metoda pozwalająca dodać atrakcję do wycieczki
+     * @param addAttractionDto Reprezentacja Dto atrakcji
+     * @return UUID utworzonej atrakcji
+     * @throws BaseAppException Bazowy wyjątek aplikacji mogący wystąpić w przypadku naruszenia zasad biznesowych.
+     */
     @POST
     @Path("/add-attraction")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void addAttraction(@Valid AddAttractionDto addAttractionDto) throws BaseAppException {
-        tryAndRepeat(() -> attractionEndpoint.addAttraction(addAttractionDto));
+    public UUID addAttraction(@Valid AddAttractionDto addAttractionDto) throws BaseAppException {
+        return tryAndRepeat(() -> attractionEndpoint.addAttraction(addAttractionDto));
     }
 
     @DELETE

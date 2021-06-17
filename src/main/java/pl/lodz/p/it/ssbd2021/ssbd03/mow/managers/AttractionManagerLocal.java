@@ -28,8 +28,9 @@ public interface AttractionManagerLocal {
      *
      * @param attraction Obiekt reprezentujący atrakcję
      * @throws BaseAppException Wyjątek występujący w przypadku naruszenia zasad biznesowych.
+     * @return UUID nowo utworzonej atrakcji
      */
-    void addAttraction(Attraction attraction) throws BaseAppException;
+    UUID addAttraction(Attraction attraction) throws BaseAppException;
 
     /**
      * Metoda odpowiedzialna za edycję istniejącej atrakcji.

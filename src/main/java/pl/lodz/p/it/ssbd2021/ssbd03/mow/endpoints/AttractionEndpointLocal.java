@@ -28,8 +28,9 @@ public interface AttractionEndpointLocal {
      *
      * @param addAttractionDto Obiekt przesyłowy DTO reprezentujący atrakcję
      * @throws BaseAppException Wyjątek występujący w przypadku naruszenia zasad biznesowych.
+     * @return UUID nowo utworzonej atrakcji.
      */
-    void addAttraction(AddAttractionDto addAttractionDto) throws BaseAppException;
+    UUID addAttraction(AddAttractionDto addAttractionDto) throws BaseAppException;
 
     /**
      * Metoda odpowiedzialna za edycję istniejącej atrakcji

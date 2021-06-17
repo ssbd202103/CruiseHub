@@ -45,9 +45,10 @@ public class AttractionManager extends BaseManagerMow implements AttractionManag
 
     @RolesAllowed("addAttraction")
     @Override
-    public void addAttraction(Attraction attraction) throws BaseAppException {
+    public UUID addAttraction(Attraction attraction) throws BaseAppException {
         setCreatedMetadata(getCurrentUser(), attraction);
         attractionFacadeMow.create(attraction);
+        return attraction.getUuid();
     }
 
     @RolesAllowed("editAttraction")

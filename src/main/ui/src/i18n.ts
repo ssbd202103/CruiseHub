@@ -374,6 +374,7 @@ const resources = {
             "Attractions name": "Nazwy atrakcji",
             '/attractions': 'Atrakcje',
             "error.attraction.non.removable": "Nie możesz usunąć atrakcji, wycieczka została już opublikowana",
+            "error.attraction.cruisePublished": "Nie można utworzyć atrakcji do opublikowanej wycieczki"
         }
     },
     EN: {
@@ -740,7 +741,8 @@ const resources = {
             "/changeCruiseGroupData": "Change cruise group data",
             "Attractions name": "Attractions name",
             '/attractions': 'Attractions',
-            "error.attraction.non.removable": "Tou cannot delete this attraction, thr cruise has already been published",
+            "error.attraction.non.removable": "You cannot delete this attraction, thr cruise has already been published",
+            "error.attraction.cruisePublished": "Cannot create attraction for published cruise"
         }
     }
 }
