@@ -107,6 +107,7 @@ const ListReservationsForWorker = () => {
 
     return (
         <div>
+            <h3>{t("/reservations")}</h3>
             <Autocomplete
                 options={reservationss}
                 inputValue={searchInput}
