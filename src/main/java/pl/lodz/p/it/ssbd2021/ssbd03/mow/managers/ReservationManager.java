@@ -1,5 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.managers;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
@@ -9,6 +11,8 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Reservation;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.BusinessWorkerWithCompanyDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters.AccountMapper;
@@ -55,10 +59,11 @@ public class ReservationManager implements ReservationManagerLocal {
     @Context
     private SecurityContext context;
 
+
     @Override
     @RolesAllowed("viewCruiseReservations")
     public List<Reservation> getCruiseReservations(UUID cruise_uuid) throws BaseAppException {
-        Cruise cruise  = cruiseFacadeMow.findByUUID(cruise_uuid);
+        Cruise cruise = cruiseFacadeMow.findByUUID(cruise_uuid);
         List<Reservation> res = reservationFacadeMow.findCruiseReservations(cruise);
         return res;
 
@@ -67,11 +72,11 @@ public class ReservationManager implements ReservationManagerLocal {
     @RolesAllowed("getWorkerCruiseReservations")
     @Override
     public List<Reservation> getWorkerCruiseReservations(UUID cruise_uuid) throws BaseAppException {
-        Cruise cruise  = cruiseFacadeMow.findByUUID(cruise_uuid);
+        Cruise cruise = cruiseFacadeMow.findByUUID(cruise_uuid);
         Account account = getCurrentUser();
         BusinessWorkerWithCompanyDto businessWorkerDto = getBusinessWorkerByLogin(account.getLogin());
         List<Reservation> reservations = reservationFacadeMow.findCruiseReservations(cruise);
-        if(!businessWorkerDto.getCompanyName().equals(cruise.getCruisesGroup().getCompany().getName())) {
+        if (!businessWorkerDto.getCompanyName().equals(cruise.getCruisesGroup().getCompany().getName())) {
             throw new ReservationManagerException(NOT_YOURS_CRUISE);
         }
         return reservations;
@@ -79,10 +84,13 @@ public class ReservationManager implements ReservationManagerLocal {
 
     @RolesAllowed("removeClientReservation")
     @Override
-    public void removeClientReservation(long reservationVersion, UUID reservationUuid, String clientLogin) throws BaseAppException {
-        // todo finish implementation
-        Reservation reservation = reservationFacadeMow.findReservationByUuidAndLogin(UUID.randomUUID(), clientLogin);
+    public void removeClientReservation(UUID reservationUuid, String clientLogin) throws BaseAppException {
+        Reservation reservation = reservationFacadeMow.findReservationByUuidAndLogin(reservationUuid, clientLogin);
+        reservation.setAlteredBy(getCurrentUser());
+        reservation.setAlterType(accountFacadeMow.getAlterTypeWrapperByAlterType(AlterType.DELETE));
+        reservationFacadeMow.remove(reservation);
     }
+
 
     @RolesAllowed("createReservation")
     @Override
@@ -90,7 +98,7 @@ public class ReservationManager implements ReservationManagerLocal {
         Cruise cruise = cruiseFacadeMow.findByUUID(cruiseUUID);
         Account acc = accountFacadeMow.findByLogin(context.getUserPrincipal().getName());
         Client client = (Client) acc.getAccessLevels().stream().filter(accessLevel ->
-            accessLevel.getAccessLevelType().equals(AccessLevelType.CLIENT)).collect(Collectors.toList()).get(0);
+                accessLevel.getAccessLevelType().equals(AccessLevelType.CLIENT)).collect(Collectors.toList()).get(0);
 
         if (cruise.getVersion() != version) {
             throw FacadeException.optimisticLock();
@@ -156,7 +164,7 @@ public class ReservationManager implements ReservationManagerLocal {
         return getAccessLevel(account, accessLevelType);
     }
 
-   @RolesAllowed("getWorkerCruiseReservations")
+    @RolesAllowed("getWorkerCruiseReservations")
     private BusinessWorkerWithCompanyDto getBusinessWorkerByLogin(String login) throws BaseAppException {
         return AccountMapper.toBusinessWorkerWithCompanyDto((BusinessWorker) getAccountAccessLevel(login, AccessLevelType.BUSINESS_WORKER));
     }

@@ -79,7 +79,7 @@ public class ReservationFacadeMow extends AbstractFacade<Reservation> {
     @RolesAllowed("removeClientReservation")
     public Reservation findReservationByUuidAndLogin(UUID uuid, String login) throws BaseAppException {
         TypedQuery<Reservation> tq = em.createNamedQuery("Reservation.findByUUIDAndLogin", Reservation.class);
-        tq.setParameter("uuid", uuid.toString());
+        tq.setParameter("uuid", uuid);
         tq.setParameter("login", login);
         try {
             return tq.getSingleResult();
@@ -99,7 +99,7 @@ public class ReservationFacadeMow extends AbstractFacade<Reservation> {
         }
     }
 
-    @RolesAllowed("cancelReservation")
+    @RolesAllowed({"removeClientReservation", "cancelReservation"})
     @Override
     public void remove(Reservation entity) throws FacadeException {
         super.remove(entity);
