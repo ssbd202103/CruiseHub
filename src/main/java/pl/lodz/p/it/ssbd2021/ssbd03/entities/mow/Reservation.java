@@ -40,7 +40,7 @@ public class Reservation extends BaseEntity {
     private long id;
 
     @Basic
-    @Convert(converter = pl.lodz.p.it.ssbd2021.ssbd03.entities.converters.UuidConverter.class)
+//    @Convert(converter = pl.lodz.p.it.ssbd2021.ssbd03.entities.converters.UuidConverter.class) todo
     @Getter
     @Setter
     @NotNull(message = CONSTRAINT_NOT_NULL)

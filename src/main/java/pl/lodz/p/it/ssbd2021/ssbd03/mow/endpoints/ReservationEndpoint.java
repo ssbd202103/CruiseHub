@@ -57,7 +57,8 @@ public class ReservationEndpoint extends BaseEndpoint implements ReservationEndp
     @RolesAllowed("removeClientReservation")
     @Override
     public void removeClientReservation(RemoveClientReservationDto removeClientReservationDto) throws BaseAppException {
-        this.reservationManager.removeClientReservation(removeClientReservationDto.getReservationVersion(), removeClientReservationDto.getReservationUuid(), removeClientReservationDto.getClientLogin());
+        this.reservationManager.removeClientReservation(UUID.fromString(removeClientReservationDto.getReservationUuid()), removeClientReservationDto.getClientLogin());
+        // todo catch exceptions
     }
 
     @RolesAllowed("createReservation")

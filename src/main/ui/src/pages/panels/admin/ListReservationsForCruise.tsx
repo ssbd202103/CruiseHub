@@ -10,13 +10,14 @@ import {refreshToken} from "../../../Services/userService";
 import {useTranslation} from "react-i18next";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import {Button, TextField} from "@material-ui/core";
-import {Link} from "react-router-dom";
+import {Link, useHistory, useLocation} from "react-router-dom";
 import TableContainer from "@material-ui/core/TableContainer";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableBody from "@material-ui/core/TableBody";
-import {getReservationsForCruise} from "../../../Services/reservationService";
+import {getReservationsForCruise, removeClientReservation} from "../../../Services/reservationService";
+import {useSnackbarQueue} from "../../snackbar";
 
 const useRowStyles = makeStyles({
     root: {
@@ -32,26 +33,44 @@ function createData(
     price: number,
     cruiseName: string,
     attractions: [],
+    uuid: string,
 ) {
     return {
         clientName: clientName,
         numberOfSeats: numberOfSeats,
         price: price,
         cruiseName: cruiseName,
-        attractions: attractions
+        attractions: attractions,
+        uuid: uuid,
     };
 }
 
 export interface RowProps {
     row: ReturnType<typeof createData>,
     style: React.CSSProperties
+    onReload: () => void
 }
 
-function Row(props: RowProps) {
-    const {row} = props;
-    const {style} = props;
+function Row({row, style, onReload}: RowProps) {
     const {t} = useTranslation();
     const classes = useRowStyles();
+    const buttonClass = useButtonStyles();
+    const handleError = useHandleError()
+    const showSuccess = useSnackbarQueue('success')
+    const history = useHistory();
+
+    const removeCurrentReservation = () => {
+        removeClientReservation(row.uuid, row.clientName).then(res => {
+            showSuccess(t('data.delete.success'))
+            onReload()
+        }).catch(error => {
+            const message = error.response.data
+            handleError(message, error.response.status)
+            onReload()
+        }).then(res => {
+            refreshToken()
+        });
+    }
 
     return (
         <TableRow className={classes.root}>
@@ -60,9 +79,26 @@ function Row(props: RowProps) {
             <TableCell style={style}>{row.price}</TableCell>
             <TableCell style={style}>{row.cruiseName}</TableCell>
             <TableCell style={style}>{row.attractions.map(item => t(item)).join(', ')}</TableCell>
+            <TableCell style={style}>
+                <Button onClick={removeCurrentReservation}
+                        className={buttonClass.root}>{t("Remove reservation btn")}</Button>
+            </TableCell>
         </TableRow>
     );
 }
+
+const useButtonStyles = makeStyles({
+    root: {
+        fontFamily: '"Montserrat", sans-serif',
+        color: 'var(--white)',
+        backgroundColor: "var(--blue)",
+        padding: '8px 16px',
+        margin: '0 16px',
+        '&:hover': {
+            backgroundColor: "var(--blue-dark)",
+        }
+    }
+})
 
 const ListReservations = () => {
     const [reservations, setReservations] = useState([]);
@@ -71,9 +107,13 @@ const ListReservations = () => {
     const handleError = useHandleError()
 
     const darkMode = useSelector(selectDarkMode)
-    const uuid =sessionStorage.getItem("cruiseUUID")
-    useEffect(() => {
+    const uuid = sessionStorage.getItem("cruiseUUID")
 
+    useEffect(() => {
+        onReload()
+    }, []);
+
+    function onReload() {
         getReservationsForCruise(uuid).then(res => {
             setReservations(res.data)
         }).catch(error => {
@@ -82,8 +122,7 @@ const ListReservations = () => {
         }).then(res => {
             refreshToken()
         });
-    }, []);
-
+    }
 
     function search(rows: any[]) {
         if (Array.isArray(rows) && rows.length) {
@@ -104,6 +143,7 @@ const ListReservations = () => {
     const reservationss: String[] = [];
 
     const {t} = useTranslation()
+
 
     return (
         <div>
@@ -135,7 +175,7 @@ const ListReservations = () => {
                             <TableCell style={{
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`
-                            }}>{t("price")+"pln"}</TableCell>
+                            }}>{t("price") + "pln"}</TableCell>
                             <TableCell style={{
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`
@@ -144,14 +184,18 @@ const ListReservations = () => {
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`
                             }}>{t("Attractions name")}</TableCell>
+                            <TableCell style={{
+                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                            }}>{t("Remove reservation btn")}</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {search(reservations.map((reservation, index) => (
                             <Row key={index} row={reservation} style={{
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
-                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
-                            }}/>
+                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`,
+                            }} onReload={onReload}/>
                         )))}
                     </TableBody>
                 </Table>

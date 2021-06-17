@@ -63,7 +63,7 @@ public class ReservationManager implements ReservationManagerLocal {
     @Override
     @RolesAllowed("viewCruiseReservations")
     public List<Reservation> getCruiseReservations(UUID cruise_uuid) throws BaseAppException {
-        Cruise cruise  = cruiseFacadeMow.findByUUID(cruise_uuid);
+        Cruise cruise = cruiseFacadeMow.findByUUID(cruise_uuid);
         List<Reservation> res = reservationFacadeMow.findCruiseReservations(cruise);
         return res;
 
@@ -72,11 +72,11 @@ public class ReservationManager implements ReservationManagerLocal {
     @RolesAllowed("getWorkerCruiseReservations")
     @Override
     public List<Reservation> getWorkerCruiseReservations(UUID cruise_uuid) throws BaseAppException {
-        Cruise cruise  = cruiseFacadeMow.findByUUID(cruise_uuid);
+        Cruise cruise = cruiseFacadeMow.findByUUID(cruise_uuid);
         Account account = getCurrentUser();
         BusinessWorkerWithCompanyDto businessWorkerDto = getBusinessWorkerByLogin(account.getLogin());
         List<Reservation> reservations = reservationFacadeMow.findCruiseReservations(cruise);
-        if(!businessWorkerDto.getCompanyName().equals(cruise.getCruisesGroup().getCompany().getName())) {
+        if (!businessWorkerDto.getCompanyName().equals(cruise.getCruisesGroup().getCompany().getName())) {
             throw new ReservationManagerException(NOT_YOURS_CRUISE);
         }
         return reservations;
@@ -84,11 +84,9 @@ public class ReservationManager implements ReservationManagerLocal {
 
     @RolesAllowed("removeClientReservation")
     @Override
-    public void removeClientReservation(long reservationVersion, String reservationUuidStr, String clientLogin) throws BaseAppException {
-        Reservation reservation = reservationFacadeMow.findReservationByUuidAndLogin(reservationUuidStr, clientLogin);
-        if (reservationVersion != reservation.getVersion()) {
-            throw FacadeException.optimisticLock();
-        }
+    public void removeClientReservation(UUID reservationUuid, String clientLogin) throws BaseAppException {
+        Reservation reservation = reservationFacadeMow.findReservationByUuidAndLogin(reservationUuid, clientLogin);
+
         reservation.setAlteredBy(getCurrentUser());
         reservation.setAlterType(accountFacadeMow.getAlterTypeWrapperByAlterType(AlterType.DELETE));
         reservationFacadeMow.remove(reservation);
@@ -101,7 +99,7 @@ public class ReservationManager implements ReservationManagerLocal {
         Cruise cruise = cruiseFacadeMow.findByUUID(cruiseUUID);
         Account acc = accountFacadeMow.findByLogin(context.getUserPrincipal().getName());
         Client client = (Client) acc.getAccessLevels().stream().filter(accessLevel ->
-            accessLevel.getAccessLevelType().equals(AccessLevelType.CLIENT)).collect(Collectors.toList()).get(0);
+                accessLevel.getAccessLevelType().equals(AccessLevelType.CLIENT)).collect(Collectors.toList()).get(0);
 
         if (cruise.getVersion() != version) {
             throw FacadeException.optimisticLock();
@@ -167,7 +165,7 @@ public class ReservationManager implements ReservationManagerLocal {
         return getAccessLevel(account, accessLevelType);
     }
 
-   @RolesAllowed("getWorkerCruiseReservations")
+    @RolesAllowed("getWorkerCruiseReservations")
     private BusinessWorkerWithCompanyDto getBusinessWorkerByLogin(String login) throws BaseAppException {
         return AccountMapper.toBusinessWorkerWithCompanyDto((BusinessWorker) getAccountAccessLevel(login, AccessLevelType.BUSINESS_WORKER));
     }

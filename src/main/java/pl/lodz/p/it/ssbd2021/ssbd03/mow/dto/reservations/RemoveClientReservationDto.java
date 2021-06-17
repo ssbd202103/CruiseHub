@@ -10,13 +10,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 @Setter
-public class RemoveClientReservationDto implements SignableEntity {
-    private long reservationVersion;
+public class RemoveClientReservationDto {
     private String reservationUuid;
     private String clientLogin;
-
-    @Override
-    public String getSignablePayload() {
-        return clientLogin + "." + reservationVersion;
-    }
 }

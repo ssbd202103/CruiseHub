@@ -16,6 +16,17 @@ export function createReservation(cruiseVersion: number, uuid: string, numberOfS
         }
     })
 }
+export function removeClientReservation(uuid: string, login: string){
+    const {token} = store.getState();
+
+    return axios.delete(`reservation/${login}/${uuid}`, {
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        }
+    })
+}
+
 export function getReservationsForCruise(uuid: any){
     const {token} = store.getState()
     const cruiseUUID = uuid
