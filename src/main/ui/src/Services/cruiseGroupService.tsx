@@ -21,10 +21,10 @@ export function getCruiseGroupForBusinessWorker(props: string) {
     })
 }
 
-export function getCruisesForCruiseGroup(cruiseGroupName: string) {
+export function getCruisesForCruiseGroup(uuid: string) {
     const {token} = store.getState()
 
-    return axios.get(`cruise/cruises-for-group/${cruiseGroupName}`, {
+    return axios.get(`cruise/cruises-for-group/${uuid}`, {
         headers: {
             'Authorization': `Bearer ${token}`
         }

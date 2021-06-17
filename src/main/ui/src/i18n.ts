@@ -4,6 +4,7 @@ import {initReactI18next} from 'react-i18next'
 const resources = {
     PL: {
         translation: {
+            'attractionName': 'Nazwa atrakcji',
             "mainPage.headers": ["Parostatkiem w piękny rejs", "Titanici, tylko bezpieczniejsze",
                 "Ahoj przygodo!",
                 "Gdzie dzisiaj płyniemy?",
@@ -113,6 +114,8 @@ const resources = {
             "list accounts": "Lista kont",
             "list companies": "Lista firm",
             "edit": "Edytuj dane",
+            'create': 'Utwórz',
+
             "change password": "Zmień hasło",
             "reset password": "Resetuj hasło",
             "block": "Zablokuj konto",
@@ -369,11 +372,13 @@ const resources = {
             "cruise.group.active.and.cannot.be.modified": "Grupa wycieczek posiada już aktywne wycieczki i nie może być modifykowana",
             "/changeCruiseGroupData": "Zmień dane grupy wycieczek",
             "Attractions name": "Nazwy atrakcji",
+            '/attractions': 'Atrakcje',
             "error.attraction.non.removable": "Nie możesz usunąć atrakcji, wycieczka została już opublikowana",
         }
     },
     EN: {
         translation: {
+            'attractionName': 'Attraction name',
             "mainPage.headers": ["Titinics, but safer",
                 "Keep floating!",
                 "Boats are waiting!",
@@ -482,6 +487,7 @@ const resources = {
             "list accounts": "Accounts list",
             "moderator panel": "Moderator Panel",
             "edit": "Edit data",
+            'create': 'Create',
             "change password": "Change password",
             "reset password": "Reset password",
             "block": "Block account",
@@ -733,6 +739,7 @@ const resources = {
             "cruise.group.active.and.cannot.be.modified": "This cruise group already has active cruises and cannot be modifiable",
             "/changeCruiseGroupData": "Change cruise group data",
             "Attractions name": "Attractions name",
+            '/attractions': 'Attractions',
             "error.attraction.non.removable": "Tou cannot delete this attraction, thr cruise has already been published",
         }
     }

@@ -24,6 +24,7 @@ import RequestSomeonePasswordReset from "../reset/requestSomeonesPasswordReset";
 import ListReservationsForCruise from "./admin/ListReservationsForCruise";
 import ListReservationsForWorker from "./worker/ListReservationsForWokrersCruise";
 import ChangeCruiseGroup from "./worker/changeCruiseGroup"
+import AttractionList from "./worker/AttractionList";
 
 export default function WorkerPanel() {
     const {t} = useTranslation()
@@ -159,6 +160,10 @@ export default function WorkerPanel() {
                 {
                     to: '/changeCruiseGroupData',
                     Component: ChangeCruiseGroup
+                },
+                {
+                    to: '/attractions/:uuid',
+                    Component: AttractionList
                 }
             ]}
         />

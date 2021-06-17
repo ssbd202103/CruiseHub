@@ -12,10 +12,10 @@ import {Link} from 'react-router-dom';
 import {useHistory, useLocation} from "react-router-dom";
 import {useEffect} from "react";
 import {useTranslation} from "react-i18next";
+import i18n from '../i18n';
 
 
 export default function Breadcrumb() {
-
     const darkMode = useSelector(selectDarkMode)
 
     const location = useLocation()
@@ -35,7 +35,7 @@ export default function Breadcrumb() {
                     .map(item => '/' + item)
                     .map((item, index, self) => self.slice(0, index + 1).reduce((acc, curr) => acc + curr))
                     .map(item => item.replace('//', '/'))
-                    .filter((item, index, self) => self.indexOf(item) === index)
+                    .filter((item, index, self) => self.indexOf(item) === index && i18n.exists(item))
                     .map((item, index, self) =>
                         <React.Fragment key={index + item}>
                             <Link style={{display: 'block', cursor: 'pointer'}} to={item}>

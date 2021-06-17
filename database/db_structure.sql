@@ -341,7 +341,9 @@ create table attractions
     altered_by_id        bigint                              not null, -- FOREIGN KEY
     alter_type_id        bigint                              not null, -- FOREIGN KEY
     version              bigint check (version >= 0)         not null,
+    uuid                 uuid                                not null,
 
+    CONSTRAINT attractions_uuid_unique_constraint UNIQUE (uuid),
     CONSTRAINT attractions_id_pk_constraint PRIMARY KEY (id),
     CONSTRAINT attractions_cruise_id_fk_constraint FOREIGN KEY (cruise_id) REFERENCES cruises (id),
     CONSTRAINT attractions_alter_type_id_fk_constraint FOREIGN KEY (alter_type_id) REFERENCES alter_types (id),
