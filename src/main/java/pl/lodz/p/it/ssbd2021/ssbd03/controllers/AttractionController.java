@@ -35,4 +35,12 @@ public class AttractionController {
     public void addAttraction(@Valid AddAttractionDto addAttractionDto) throws BaseAppException {
         tryAndRepeat(() -> attractionEndpoint.addAttraction(addAttractionDto));
     }
+
+    @DELETE
+    @Path("/delete-attraction/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void deleteAttraction(@PathParam("id") long id) throws BaseAppException {
+        tryAndRepeat(() -> attractionEndpoint.deleteAttraction(id));
+    }
+
 }

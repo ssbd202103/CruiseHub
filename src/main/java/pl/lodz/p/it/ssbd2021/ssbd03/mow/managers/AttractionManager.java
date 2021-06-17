@@ -1,9 +1,14 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.managers;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Reservation;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AttractionManagerException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.managers.BaseManagerMok;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Attraction;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.AttractionFacadeMow;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseFacadeMow;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.ReservationFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
 import javax.annotation.security.PermitAll;
@@ -13,6 +18,8 @@ import javax.inject.Inject;
 import javax.interceptor.Interceptors;
 import java.util.List;
 import java.util.UUID;
+
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.NON_REMOVABLE_ATTRACTION_CRUISE_ALREADY_PUBLISH;
 
 /**
  * Klasa która zarządza logiką biznesową atrakcji
@@ -24,16 +31,16 @@ public class AttractionManager extends BaseManagerMow implements AttractionManag
     @Inject
     private AttractionFacadeMow attractionFacadeMow;
 
+
     @RolesAllowed("deleteAttraction")
     @Override
-    public void deleteAttraction(String name) throws BaseAppException {
-        Attraction attraction = this.attractionFacadeMow.findByName(name);
-        //TODO sprawdzenie czy atrakcja nie jest zarezerwowana
-        if (attraction != null) {   //if na te chwile do zmiany
-
-        } else {
-            this.attractionFacadeMow.deleteAttraction(name);
+    public void deleteAttraction(long id) throws BaseAppException {
+        Attraction attraction = attractionFacadeMow.findById(id);
+        Cruise cruise = attraction.getCruise();
+        if(cruise.isPublished()){
+            throw new AttractionManagerException(NON_REMOVABLE_ATTRACTION_CRUISE_ALREADY_PUBLISH);
         }
+            attractionFacadeMow.remove(attraction);
     }
 
     @RolesAllowed("addAttraction")

@@ -368,7 +368,8 @@ const resources = {
             "changeData": "Edytuj",
             "cruise.group.active.and.cannot.be.modified": "Grupa wycieczek posiada już aktywne wycieczki i nie może być modifykowana",
             "/changeCruiseGroupData": "Zmień dane grupy wycieczek",
-            "Attractions name": "Nazwy atrakcji"
+            "Attractions name": "Nazwy atrakcji",
+            "error.attraction.non.removable": "Nie możesz usunąć atrakcji, wycieczka została już opublikowana",
         }
     },
     EN: {
@@ -731,7 +732,8 @@ const resources = {
             "changeData": "Edit",
             "cruise.group.active.and.cannot.be.modified": "This cruise group already has active cruises and cannot be modifiable",
             "/changeCruiseGroupData": "Change cruise group data",
-            "Attractions name": "Attractions name"
+            "Attractions name": "Attractions name",
+            "error.attraction.non.removable": "Tou cannot delete this attraction, thr cruise has already been published",
         }
     }
 }

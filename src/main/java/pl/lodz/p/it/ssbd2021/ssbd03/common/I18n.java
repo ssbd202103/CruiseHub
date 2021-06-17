@@ -121,6 +121,8 @@ public class I18n {
     public static final String RATING_MAPPER_UUID_PARSE = "rating.mapper.uuid.parse";
     public static final String NOT_YOURS_CRUISE = "error.cruise.not.yours";
     public static final String CRUISE_GROUP_ALREADY_ACTIVE = "cruise.group.active.and.cannot.be.modified";
+    public static final String NON_REMOVABLE_ATTRACTION_CRUISE_ALREADY_PUBLISH = "error.attraction.non.removable";
+
 
     private ResourceBundle bundle;
 

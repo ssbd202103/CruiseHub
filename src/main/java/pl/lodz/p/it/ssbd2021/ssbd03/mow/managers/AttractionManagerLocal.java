@@ -17,10 +17,10 @@ public interface AttractionManagerLocal {
     /**
      * Metoda odpowiedzialna za usuwanie atrkacji
      *
-     * @param name Nazwa atrakcji
+     * @param id UUID atrakcji
      * @throws BaseAppException Bazowy wyjatek aplikacji
      */
-    void deleteAttraction(String name) throws BaseAppException;
+    void deleteAttraction(long id) throws BaseAppException;
 
 
     /**
