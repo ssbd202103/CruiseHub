@@ -96,7 +96,6 @@ export default function Cruise() {
                     <div>
                         <h3>{cruise?.cruiseGroupDto?.company.name}</h3>
                         <h1>{cruise?.cruiseGroupDto?.name}</h1>
-                        <h3>{cruise?.cruiseGroupDto?.avgRating}</h3>
                         <div>
                             {
                                 new Array(Math.floor(cruise?.cruiseGroupDto?.avgRating || 0)).fill(1).map((item, index) => (

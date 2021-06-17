@@ -40,7 +40,7 @@ public class CruiseEndpoint extends BaseEndpoint implements CruiseEndpointLocal 
     @RolesAllowed("deactivateCruise")
     @Override
     public void deactivateCruise(DeactivateCruiseDto deactivateCruiseDto) throws BaseAppException {
-        cruiseManagerLocal.deactivateCruise(deactivateCruiseDto.getUuid(), deactivateCruiseDto.getVersion());
+        cruiseManagerLocal.deactivateCruise(UUID.fromString(deactivateCruiseDto.getUuid()), deactivateCruiseDto.getVersion());
 
     }
 

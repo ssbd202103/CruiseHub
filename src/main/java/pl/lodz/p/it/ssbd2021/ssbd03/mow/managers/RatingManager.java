@@ -17,6 +17,7 @@ import javax.interceptor.Interceptors;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
 
+import java.util.List;
 import java.util.UUID;
 
 import static javax.ejb.TransactionAttributeType.MANDATORY;
@@ -49,6 +50,12 @@ public class RatingManager implements RatingManagerLocal {
         r.setAlterType(account.getAlterType());
 
         ratingFacade.create(r);
+
+        List<Rating> ratings = ratingFacade.findByCruiseGroupUUID(cruiseGroupUUID);
+        Double avgRating = ratings.stream().mapToDouble(Rating::getRating).sum() / ratings.size();
+
+        cruiseGroup.setAverageRating(avgRating);
+        cruiseGroupFacadeMow.edit(cruiseGroup);
     }
 
     @RolesAllowed("removeRating")

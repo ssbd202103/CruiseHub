@@ -32,6 +32,17 @@ public class RatingFacadeMow extends AbstractFacade<Rating> {
         super(Rating.class);
     }
 
+    public List<Rating> findByCruiseGroupUUID(UUID uuid) throws BaseAppException {
+        TypedQuery<Rating> tq = em.createNamedQuery("Rating.findByCruiseGroupUUID", Rating.class);
+        tq.setParameter("uuid", uuid);
+
+        try {
+            return tq.getResultList();
+        } catch (NoResultException e) {
+            throw FacadeException.noSuchElement();
+        }
+    }
+
     public Rating findByCruiseGroupUUIDAndAccountLogin(UUID uuid, String login) throws BaseAppException {
         TypedQuery<Rating> tq = em.createNamedQuery("Rating.findByCruiseGroupUUIDAndAccountLogin", Rating.class);
         tq.setParameter("uuid", uuid);

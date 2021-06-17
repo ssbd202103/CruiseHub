@@ -27,7 +27,7 @@ public class CruiseMapper {
 
         CruiseGroupWithUUIDDto cruiseGroupDto = CruiseGroupMapper.toCruiseGroupWithUUIDDto(cruise.getCruisesGroup());
 
-        return new CruiseDto(cruise.getUuid(), cruise.getVersion(),
+        return new CruiseDto(cruise.getUuid().toString(), cruise.getVersion(),
                 cruise.getStartDate(), cruise.getEndDate(),
                 cruise.isActive(), cruise.isAvailable(), cruiseGroupDto);
     }
