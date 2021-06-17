@@ -12,6 +12,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 
+import java.util.UUID;
+
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 
 @Entity(name = "attractions")
@@ -29,6 +31,11 @@ public class Attraction extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ATTRACTION_SEQ_GEN")
     @ToString.Exclude
     private long id;
+
+    @Getter
+    @NotNull(message = CONSTRAINT_NOT_NULL)
+    @Column(name = "uuid", nullable = false, unique = true, updatable = false)
+    private UUID uuid;
 
     @Getter
     @Setter
@@ -70,6 +77,7 @@ public class Attraction extends BaseEntity {
 
     public Attraction(String name, String description,
                       double price, long numberOfSeats, boolean hasFreeSpots, Cruise cruise) {
+        this.uuid = UUID.randomUUID();
         this.name = name;
         this.description = description;
         this.price = price;
@@ -79,6 +87,7 @@ public class Attraction extends BaseEntity {
     }
 
     public Attraction(String name, String description, double price, long numberOfSeats, Cruise cruise) {
+        this.uuid = UUID.randomUUID();
         this.name = name;
         this.description = description;
         this.price = price;

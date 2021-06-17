@@ -4,6 +4,7 @@ import {initReactI18next} from 'react-i18next'
 const resources = {
     PL: {
         translation: {
+            'attractionName': 'Nazwa atrakcji',
             "mainPage.headers": ["Parostatkiem w piękny rejs", "Titanici, tylko bezpieczniejsze",
                 "Ahoj przygodo!",
                 "Gdzie dzisiaj płyniemy?",
@@ -368,11 +369,13 @@ const resources = {
             "changeData": "Edytuj",
             "cruise.group.active.and.cannot.be.modified": "Grupa wycieczek posiada już aktywne wycieczki i nie może być modifykowana",
             "/changeCruiseGroupData": "Zmień dane grupy wycieczek",
-            "Attractions name": "Nazwy atrakcji"
+            "Attractions name": "Nazwy atrakcji",
+            '/attractions': 'Atrakcje',
         }
     },
     EN: {
         translation: {
+            'attractionName': 'Attraction name',
             "mainPage.headers": ["Titinics, but safer",
                 "Keep floating!",
                 "Boats are waiting!",
@@ -731,7 +734,8 @@ const resources = {
             "changeData": "Edit",
             "cruise.group.active.and.cannot.be.modified": "This cruise group already has active cruises and cannot be modifiable",
             "/changeCruiseGroupData": "Change cruise group data",
-            "Attractions name": "Attractions name"
+            "Attractions name": "Attractions name",
+            '/attractions': 'Attractions',
         }
     }
 }

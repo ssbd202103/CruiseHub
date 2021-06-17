@@ -226,17 +226,17 @@ values (-3, '481d626f-d421-47dd-89ef-b41bc30aa36c', now(), now(), true, -3, now(
 --attractions start
 insert into attractions(id, name, description, price, number_of_seats, has_free_spots, cruise_id, creation_date_time,
                         last_alter_date_time, alter_type_id, created_by_id,
-                        altered_by_id, version)
-values (-115, 'Bungee2', 'Bungee jump22', 23, 20, true, -1, now(), now(), -2, -1, -1, 0);
+                        altered_by_id, version, uuid)
+values (-1, 'Bungee2', 'Bungee jump22', 23, 20, true, -1, now(), now(), -2, -1, -1, 0, 'e42ea0ca-bbac-11eb-8529-0242ac130003');
 insert into attractions(id, name, description, price, number_of_seats, has_free_spots, cruise_id, creation_date_time,
                         last_alter_date_time, alter_type_id, created_by_id,
-                        altered_by_id, version)
-values (-114, 'Scuba Diving2', 'Scuba diving in the sea2', 223, 20, true, -2, now(), now(), -2, -1, -1, 0);
+                        altered_by_id, version, uuid)
+values (-2, 'Scuba Diving2', 'Scuba diving in the sea2', 223, 20, true, -2, now(), now(), -2, -1, -1, 0, 'e42e9fd0-bbac-11eb-8529-0242ac130003');
 insert into attractions(id, name, description, price, number_of_seats, has_free_spots, cruise_id, creation_date_time,
                         last_alter_date_time, alter_type_id, created_by_id,
-                        altered_by_id, version)
-values (-116, 'Romantic dinner2', '2Romantic dinner on the most beautiful Sandy Shores', 1203, 20, true, -3, now(), now(),
-        -2, -1, -1, 0);
+                        altered_by_id, version, uuid)
+values (-3, 'Romantic dinner2', '2Romantic dinner on the most beautiful Sandy Shores', 1203, 20, true, -3, now(), now(),
+        -2, -1, -1, 0, 'e42e9d82-bbac-11eb-8529-0242ac130003');
 --attractions end
 --
 --

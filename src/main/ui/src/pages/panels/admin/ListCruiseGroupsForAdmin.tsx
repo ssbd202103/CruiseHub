@@ -170,10 +170,9 @@ function Row(props: CruiseData) {
         });
     }
 
-    const handleSetOpen = async () => {
-        console.log("Someone clicked me")
+    const handleSetOpen = () => {
         setOpen(state => !state);
-        await getCruisesForCruiseGroup(group.name)
+        getCruisesForCruiseGroup(group.name)
             .then(res => {
                 setCruises(res.data)
                 console.log(cruises)
@@ -283,7 +282,7 @@ function Row(props: CruiseData) {
                                                 </Link>
                                             </TableCell>
                                             <TableCell align="center">
-                                                <Button className={buttonClass.root}>{t("attractions")}</Button>
+                                                <Link to={`attractions/${cruise.uuid}`}><Button className={buttonClass.root}>{t("attractions")}</Button></Link>
                                             </TableCell>
                                             {cruise.published ? "":
                                                 <TableCell align="center">
@@ -294,15 +293,21 @@ function Row(props: CruiseData) {
                                                 <React.Fragment>
                                                     <TableCell align="center"/>
                                                     <TableCell align="center">
-                                                    <Button className={buttonClass.root} onClick={() => {
-                                                        setDeactivateCruise({
-                                                            uuid : cruise.uuid,
-                                                            etag : cruise.etag,
-                                                            version : cruise.version
-                                                        })
-                                                        setButtonPopupAcceptAction(true)
-                                                    }
-                                                    }>{t("deactivate")}</Button>
+                                                    <RoundedButton
+                                                        color="pink"
+                                                        className={buttonClass.root}
+                                                        onClick={() => {
+                                                            setDeactivateCruise({
+                                                                uuid : cruise.uuid,
+                                                                etag : cruise.etag,
+                                                                version : cruise.version
+                                                            })
+                                                            setButtonPopupAcceptAction(true)
+                                                            }
+                                                        }
+                                                    >
+                                                        {t("deactivate")}
+                                                    </RoundedButton>
                                                 </TableCell>
                                               </React.Fragment>: ""
                                             }
@@ -413,7 +418,7 @@ const ListCruiseGroupsForAdmin = () => {
                             <TableCell style={{
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`
-                            }}>{t("deactivate")}</TableCell>
+                            }}></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
