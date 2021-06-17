@@ -43,7 +43,7 @@ public class AttractionEndpoint extends BaseEndpoint implements AttractionEndpoi
 
     @RolesAllowed("deleteAttraction")
     @Override
-    public void deleteAttraction(long uuid) throws BaseAppException {
+    public void deleteAttraction(UUID uuid) throws BaseAppException {
         this.attractionManager.deleteAttraction(uuid);
     }
 

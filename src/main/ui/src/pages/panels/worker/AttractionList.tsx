@@ -1,41 +1,51 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useReducer, useState} from "react";
 import {Attraction} from '../../../interfaces/Attraction';
 import {deleteAttraction, getAttractionsByCruiseUUID} from "../../../Services/attractionService";
 import {useSnackbarQueue} from "../../snackbar";
 import {useTranslation} from "react-i18next";
-import { useParams } from 'react-router-dom';
-import { DataGrid, GridColDef, GridCellParams, GridRowSelectedParams } from '@material-ui/data-grid';
+import {useParams} from 'react-router-dom';
+import {DataGrid, GridCellParams, GridColDef, GridRowSelectedParams} from '@material-ui/data-grid';
 import DeleteIcon from '@material-ui/icons/DeleteRounded';
 import EditIcon from '@material-ui/icons/EditRounded';
 import styles from '../../../styles/AttractionList.module.css';
 import Dialog from '../../../components/Dialog';
+import axios from "../../../Services/URL";
 import DarkedTextField from "../../../components/DarkedTextField";
 import {TextareaAutosize} from "@material-ui/core";
 import RoundedButton from "../../../components/RoundedButton";
+import store from "../../../redux/store";
+import useHandleError from "../../../errorHandler";
+import {refreshToken} from "../../../Services/userService";
 
 export default function AttractionList() {
-
-    const { uuid } = useParams<{ uuid: string }>();
-
+    const {uuid, published} = useParams<{ uuid: string, published: string }>();
+    const {token} = store.getState()
     const {t} = useTranslation();
 
     const showSuccess = useSnackbarQueue('success');
-    const showError = useSnackbarQueue('error');
+    const handleError = useHandleError();
 
     const [attractions, setAttractions] = useState<Attraction[]>([]);
 
-    useEffect(() => {
+    const getAttractions = () =>{
         getAttractionsByCruiseUUID(uuid).then(res => {
             setAttractions(res.data)
-            showSuccess('successful action')
+            showSuccess(t('data.load.success'))
         }).catch(error => {
-            showError(t(error))
+            const message = error.response.data
+            handleError(message, error.response.status)
         })
+    }
+
+    useEffect(() => {
+        getAttractions()
     }, [])
+
 
 
     // Data grid events
     const [selectedRow, setSelectedRow] = useState('')
+
 
     const handleSelectedRow = (row: GridRowSelectedParams) => {
         setSelectedRow(row.data.id as string)
@@ -88,7 +98,13 @@ export default function AttractionList() {
 
     // Requests handler
     const handleDeleteAttraction = (uuid: string) => ()  =>{
-        deleteAttraction(uuid)
+        deleteAttraction(uuid).then(res => {
+            showSuccess(t('successful action'))
+            getAttractions()
+            }).catch(error => {
+            const message = error.response.data
+            handleError(t(message),error.response.data)
+        })
     }
 
 

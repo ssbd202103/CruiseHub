@@ -56,9 +56,9 @@ public class AttractionFacadeMow extends AbstractFacade<Attraction> {
     }
 
     @PermitAll
-    public Attraction findByUUID(long id) throws BaseAppException {
+    public Attraction findByUUID(UUID uuid) throws BaseAppException {
         TypedQuery<Attraction> tq = em.createNamedQuery("Attraction.findByUUID", Attraction.class);
-        tq.setParameter("id", id);
+        tq.setParameter("uuid", uuid);
         try {
             return tq.getSingleResult();
         } catch (NoResultException e) {

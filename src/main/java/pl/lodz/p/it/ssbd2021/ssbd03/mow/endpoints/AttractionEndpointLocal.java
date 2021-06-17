@@ -21,7 +21,7 @@ public interface AttractionEndpointLocal {
      * @param uuid UUID usuwanej atrakcji
      * @throws BaseAppException
      */
-    void deleteAttraction(long uuid) throws BaseAppException;
+    void deleteAttraction(UUID uuid) throws BaseAppException;
 
     /**
      * Metoda odpowiedzialna za stworzenie atrakcji i dodanie jej do grupy wycieczek.

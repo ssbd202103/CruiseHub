@@ -142,17 +142,12 @@ function Row(props: CruiseData) {
 
     const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
 
-
-
     const handleConfirm = async ({uuid, etag, version}: DeactivateCruise) => {
         const {token} = store.getState();
         const json = JSON.stringify({
             uuid: uuid,
             version: version
         })
-
-
-
 
         await axios.put("cruise/deactivate-cruise", json, {
                 headers: {

@@ -39,8 +39,8 @@ public class AttractionController {
     @DELETE
     @Path("/delete-attraction/{uuid}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void deleteAttraction(@PathParam("uuid") long uuid) throws BaseAppException {
-        tryAndRepeat(() -> attractionEndpoint.deleteAttraction(uuid)); //(UUID.fromString(uuid)));
+    public void deleteAttraction(@PathParam("uuid") String uuid) throws BaseAppException {
+        tryAndRepeat(() -> attractionEndpoint.deleteAttraction(UUID.fromString(uuid)));
     }
 
 }

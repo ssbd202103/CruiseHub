@@ -20,7 +20,7 @@ public interface AttractionManagerLocal {
      * @param uuid UUID atrakcji
      * @throws BaseAppException Bazowy wyjatek aplikacji
      */
-    void deleteAttraction(long uuid) throws BaseAppException;
+    void deleteAttraction(UUID uuid) throws BaseAppException;
 
 
     /**
