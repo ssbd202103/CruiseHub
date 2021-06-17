@@ -162,7 +162,7 @@ export default function WorkerPanel() {
                     Component: ChangeCruiseGroup
                 },
                 {
-                    to: '/attractions/:uuid',
+                    to: '/attractions/:uuid/:published',
                     Component: AttractionList
                 }
             ]}

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useReducer, useState} from "react";
 import {Attraction} from '../../../interfaces/Attraction';
 import {getAttractionsByCruiseUUID} from "../../../Services/attractionService";
 import {useSnackbarQueue} from "../../snackbar";
@@ -9,18 +9,21 @@ import DeleteIcon from '@material-ui/icons/DeleteRounded';
 import EditIcon from '@material-ui/icons/EditRounded';
 import styles from '../../../styles/AttractionList.module.css';
 import Dialog from '../../../components/Dialog';
+import axios from "../../../Services/URL";
 import DarkedTextField from "../../../components/DarkedTextField";
 import {TextareaAutosize} from "@material-ui/core";
 import RoundedButton from "../../../components/RoundedButton";
+import store from "../../../redux/store";
+import useHandleError from "../../../errorHandler";
+import {refreshToken} from "../../../Services/userService";
 
 export default function AttractionList() {
-
     const {uuid, published} = useParams<{ uuid: string, published: string }>();
-
+    const {token} = store.getState()
     const {t} = useTranslation();
 
     const showSuccess = useSnackbarQueue('success');
-    const showError = useSnackbarQueue('error');
+    const handleError = useHandleError();
 
     const [attractions, setAttractions] = useState<Attraction[]>([]);
 
@@ -29,7 +32,8 @@ export default function AttractionList() {
             setAttractions(res.data)
             showSuccess('successful action')
         }).catch(error => {
-            showError(t(error))
+            const message = error.response.data
+            handleError(message, error.response.status)
         })
     }, [])
 
@@ -98,9 +102,27 @@ export default function AttractionList() {
         alert("ATTRACTION MUST BE EDITED!")
     }
 
-    const handleCreateAttraction = () => {
-        // TODO creating implementation
-        alert("ATTRACTION MUST BE CREATED!")
+    const handleCreateAttraction = async () => {
+        const json = {
+            "cruiseUUID": uuid,
+            "name": nameCreate,
+            "description": descriptionCreate,
+            "price": priceCreate,
+            "numberOfSeats": numberOfSeatsCreate
+        }
+
+        await axios.post('attractions/add-attraction', json, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }).then(res => {
+            showSuccess(t('attraction created'))
+            refreshToken()
+            setCreateAttractionDialogOpen(false)
+        }).catch(err => {
+            const message = err.response.data
+            handleError(message, err.response.status)
+        })
     }
 
     // Dialogs data

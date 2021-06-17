@@ -372,6 +372,7 @@ const resources = {
             "cruise.group.active.and.cannot.be.modified": "Grupa wycieczek posiada już aktywne wycieczki i nie może być modifykowana",
             "/changeCruiseGroupData": "Zmień dane grupy wycieczek",
             "Attractions name": "Nazwy atrakcji",
+            "attraction created": "Atrakcja utworzona poprawnie",
             '/attractions': 'Atrakcje',
             "error.attraction.non.removable": "Nie możesz usunąć atrakcji, wycieczka została już opublikowana",
             "error.attraction.cruisePublished": "Nie można utworzyć atrakcji do opublikowanej wycieczki"
@@ -740,6 +741,7 @@ const resources = {
             "cruise.group.active.and.cannot.be.modified": "This cruise group already has active cruises and cannot be modifiable",
             "/changeCruiseGroupData": "Change cruise group data",
             "Attractions name": "Attractions name",
+            "attraction created": "Attraction created successfully",
             '/attractions': 'Attractions',
             "error.attraction.non.removable": "You cannot delete this attraction, thr cruise has already been published",
             "error.attraction.cruisePublished": "Cannot create attraction for published cruise"
