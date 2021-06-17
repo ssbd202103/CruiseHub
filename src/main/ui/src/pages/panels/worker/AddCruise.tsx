@@ -250,6 +250,7 @@ export default function AddCruise() {
                         style={{marginRight: 30}}
                         className={darkMode ? classes.dark: classes.light}
                         disableToolbar
+                        autoOk={true}
                         variant="inline"
                         maxDateMessage={t("max.date.message")}
                         minDateMessage={t("min.date.message")}
@@ -270,6 +271,7 @@ export default function AddCruise() {
                     />
                     <KeyboardTimePicker
                         className={darkMode ? classes.dark: classes.light}
+                        autoOk={true}
                         maxDateMessage={t("max.date.message")}
                         minDateMessage={t("min.date.message")}
                         invalidDateMessage={t("invalid.date.message")}

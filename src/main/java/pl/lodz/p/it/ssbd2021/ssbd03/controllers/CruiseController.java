@@ -150,11 +150,24 @@ public class CruiseController {
     @PUT
     @Path("/deactivate-cruise")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void deactivate(@Valid @NotNull(message = CONSTRAINT_NOT_NULL) DeactivateCruiseDto deactivateCruiseDto, @HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) @Valid String etag) throws BaseAppException {
+    public void deactivateCruise(@Valid @NotNull(message = CONSTRAINT_NOT_NULL) DeactivateCruiseDto deactivateCruiseDto, @HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) @Valid String etag) throws BaseAppException {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, deactivateCruiseDto)) {
             throw ControllerException.etagIdentityIntegrity();
         }
         tryAndRepeat(() -> cruiseEndpoint.deactivateCruise(deactivateCruiseDto));
     }
+
+
+    @ETagFilterBinding
+    @PUT
+    @Path("/edit-cruise")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void editCruise(@Valid @NotNull(message = CONSTRAINT_NOT_NULL) EditCruiseDto editCruiseDto, @HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) @Valid String etag) throws BaseAppException {
+        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, editCruiseDto)) {
+            throw ControllerException.etagIdentityIntegrity();
+        }
+        tryAndRepeat(() -> cruiseEndpoint.editCruise(editCruiseDto));
+    }
+
 
 }

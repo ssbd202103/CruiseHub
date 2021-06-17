@@ -17,6 +17,10 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -82,8 +86,13 @@ public class CruiseEndpoint extends BaseEndpoint implements CruiseEndpointLocal 
     @RolesAllowed("editCruise")
     @Override
     public void editCruise(EditCruiseDto editCruiseDto) throws BaseAppException {
-        cruiseManager.editCruise(editCruiseDto.getDescription(), editCruiseDto.getStartDate(), editCruiseDto.getEndDate(),
-                editCruiseDto.getUuid(), editCruiseDto.getVersion());
+        try {
+            cruiseManager.editCruise(LocalDateTime.ofInstant(Instant.parse(editCruiseDto.getStartDate()), ZoneId.systemDefault()),
+                    LocalDateTime.ofInstant(Instant.parse(editCruiseDto.getEndDate()), ZoneId.systemDefault()),
+                    editCruiseDto.getUuid(), editCruiseDto.getVersion());
+        } catch (DateTimeParseException e) {
+            throw new MapperException(CRUISE_MAPPER_DATE_PARSE);
+        }
     }
 
     @PermitAll

@@ -98,4 +98,6 @@ public class CompanyFacadeMow extends AbstractFacade<Company> {
             throw FacadeException.noSuchElement();
         }
     }
+
+
 }
