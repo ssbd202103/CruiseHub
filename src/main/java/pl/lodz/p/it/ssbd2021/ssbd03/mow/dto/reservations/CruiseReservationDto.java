@@ -1,8 +1,10 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations;
 
 import lombok.*;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.attractions.AttractionDto;
 
 import javax.validation.constraints.Positive;
+import java.util.List;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -20,5 +22,6 @@ public class CruiseReservationDto {
     private Double price;
 
     private String CruiseName;
+    private List<String> attractions;
 
 }
