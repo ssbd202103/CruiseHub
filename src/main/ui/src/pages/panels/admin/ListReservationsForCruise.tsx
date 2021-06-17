@@ -31,12 +31,14 @@ function createData(
     numberOfSeats: number,
     price: number,
     cruiseName: string,
+    attractions: [],
 ) {
     return {
         clientName: clientName,
         numberOfSeats: numberOfSeats,
         price: price,
         cruiseName: cruiseName,
+        attractions: attractions
     };
 }
 
@@ -57,6 +59,7 @@ function Row(props: RowProps) {
             <TableCell style={style}>{row.numberOfSeats}</TableCell>
             <TableCell style={style}>{row.price}</TableCell>
             <TableCell style={style}>{row.cruiseName}</TableCell>
+            <TableCell style={style}>{row.attractions.map(item => t(item)).join(', ')}</TableCell>
         </TableRow>
     );
 }
@@ -132,11 +135,15 @@ const ListReservations = () => {
                             <TableCell style={{
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`
-                            }}>{t("price")}</TableCell>
+                            }}>{t("price")+"pln"}</TableCell>
                             <TableCell style={{
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`
                             }}>{t("CruiseName")}</TableCell>
+                            <TableCell style={{
+                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                            }}>{t("Attractions name")}</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>

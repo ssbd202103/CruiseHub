@@ -359,7 +359,7 @@ const resources = {
             "ok.label":"Akceptuj",
             "today.label":"Dzisiaj",
             "not.all.fields.filled":"Nie wszystkie pola zostały wypełnione",
-            "Client name": "Nazwa Klienta",
+            "Client name": "Nazwa klienta",
             "numberOfSeatsReserved": "Liczba zarezerwowanych miejsc",
             "CruiseName": "Nazwa wycieczki",
             "/reservations" :"Rezerwacje wycieczki",
@@ -367,7 +367,8 @@ const resources = {
             "choose_number_of_seats": "Wybierz liczbę miejsc",
             "changeData": "Edytuj",
             "cruise.group.active.and.cannot.be.modified": "Grupa wycieczek posiada już aktywne wycieczki i nie może być modifykowana",
-            "/changeCruiseGroupData": "Zmień dane grupy wycieczek"
+            "/changeCruiseGroupData": "Zmień dane grupy wycieczek",
+            "Attractions name": "Nazwy atrakcji"
         }
     },
     EN: {
@@ -729,7 +730,8 @@ const resources = {
             "choose_number_of_seats": "Choose number of seats",
             "changeData": "Edit",
             "cruise.group.active.and.cannot.be.modified": "This cruise group already has active cruises and cannot be modifiable",
-            "/changeCruiseGroupData": "Change cruise group data"
+            "/changeCruiseGroupData": "Change cruise group data",
+            "Attractions name": "Attractions name"
         }
     }
 }
