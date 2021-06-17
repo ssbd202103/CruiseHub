@@ -314,7 +314,7 @@ function Row(props: CruiseData) {
                                                 </Link>
                                             </TableCell>
                                             <TableCell align="center">
-                                                <Button className={buttonClass.root}>{t("attractions")}</Button>
+                                                <Link to={`attractions/${cruise.uuid}`}><Button className={buttonClass.root}>{t("attractions")}</Button></Link>
                                             </TableCell>
                                             <TableCell align="center">
                                                 <Button className={buttonClass.root}>{t("edit")}</Button>
