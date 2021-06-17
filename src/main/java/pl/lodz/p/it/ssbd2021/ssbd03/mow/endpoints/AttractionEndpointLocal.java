@@ -18,10 +18,10 @@ public interface AttractionEndpointLocal {
     /**
      * Metoda odpowiedzialna za wywołanie metody odpowiedzialnej za usunięcie atrkacji.
      *
-     * @param id UUID usuwanej atrakcji
+     * @param uuid UUID usuwanej atrakcji
      * @throws BaseAppException
      */
-    void deleteAttraction(long id) throws BaseAppException;
+    void deleteAttraction(UUID uuid) throws BaseAppException;
 
     /**
      * Metoda odpowiedzialna za stworzenie atrakcji i dodanie jej do grupy wycieczek.

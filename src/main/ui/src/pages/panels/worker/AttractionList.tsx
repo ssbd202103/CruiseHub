@@ -1,6 +1,6 @@
 import React, {useEffect, useReducer, useState} from "react";
 import {Attraction} from '../../../interfaces/Attraction';
-import {getAttractionsByCruiseUUID} from "../../../Services/attractionService";
+import {deleteAttraction, getAttractionsByCruiseUUID} from "../../../Services/attractionService";
 import {useSnackbarQueue} from "../../snackbar";
 import {useTranslation} from "react-i18next";
 import {useParams} from 'react-router-dom';
@@ -27,23 +27,31 @@ export default function AttractionList() {
 
     const [attractions, setAttractions] = useState<Attraction[]>([]);
 
-    useEffect(() => {
+    const getAttractions = () =>{
         getAttractionsByCruiseUUID(uuid).then(res => {
             setAttractions(res.data)
-            showSuccess('successful action')
+            showSuccess(t('data.load.success'))
         }).catch(error => {
             const message = error.response.data
             handleError(message, error.response.status)
         })
+    }
+
+    useEffect(() => {
+        getAttractions()
     }, [])
+
 
 
     // Data grid events
     const [selectedRow, setSelectedRow] = useState('')
 
+
     const handleSelectedRow = (row: GridRowSelectedParams) => {
         setSelectedRow(row.data.id as string)
     }
+
+
 
     const cols: GridColDef[] = [
         {field: 'name', headerName: t('attractionName'), flex: 1},
@@ -81,7 +89,7 @@ export default function AttractionList() {
                                 />
                                 <DeleteIcon
                                     className={styles.delete}
-                                    onClick={handleDeleteAttraction}
+                                    onClick={handleDeleteAttraction(params.row.id)}
                                 />
                             </div>
                         )}
@@ -91,11 +99,16 @@ export default function AttractionList() {
     ];
 
     // Requests handler
-
-    const handleDeleteAttraction = () => {
-        // TODO removing implementation
-        alert("ATTRACTION MUST BE DELETED!")
+    const handleDeleteAttraction = (uuid: string) => ()  =>{
+        deleteAttraction(uuid).then(res => {
+            showSuccess(t('successful action'))
+            getAttractions()
+            }).catch(error => {
+            const message = error.response.data
+            handleError(t(message),error.response.data)
+        })
     }
+
 
     const handleEditAttraction = () => {
         // TODO editing implementation

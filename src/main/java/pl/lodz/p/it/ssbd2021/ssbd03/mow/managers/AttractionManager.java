@@ -34,8 +34,8 @@ public class AttractionManager extends BaseManagerMow implements AttractionManag
 
     @RolesAllowed("deleteAttraction")
     @Override
-    public void deleteAttraction(long id) throws BaseAppException {
-        Attraction attraction = attractionFacadeMow.findById(id);
+    public void deleteAttraction(UUID uuid) throws BaseAppException {
+        Attraction attraction = attractionFacadeMow.findByUUID(uuid);
         Cruise cruise = attraction.getCruise();
         if(cruise.isPublished()){
             throw new AttractionManagerException(NON_REMOVABLE_ATTRACTION_CRUISE_ALREADY_PUBLISH);
