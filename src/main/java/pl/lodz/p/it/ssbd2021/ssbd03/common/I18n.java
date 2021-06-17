@@ -121,6 +121,12 @@ public class I18n {
     public static final String RATING_MAPPER_UUID_PARSE = "rating.mapper.uuid.parse";
     public static final String NOT_YOURS_CRUISE = "error.cruise.not.yours";
     public static final String CRUISE_GROUP_ALREADY_ACTIVE = "cruise.group.active.and.cannot.be.modified";
+    public static final String BUSINESS_WORKER_ADD_CRUISE_TO_BAD_COMPANY = "businessWorker.add.cruise.to.bad.company";
+    public static final String CANNOT_FIND_ACCESS_LEVEL = "cannot.find.access.level";
+    public static final String CRUISE_ALREADY_BLOCKED = "cruise.already.blocked";
+    public static final String CANNOT_EDIT_THIS_CRUISE = "cruise.cannot.edit";
+    public static final String CANNOT_BLOCK_THIS_CRUISE = "cruise.cannot.block";
+
 
     private ResourceBundle bundle;
 

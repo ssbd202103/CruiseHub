@@ -368,7 +368,15 @@ const resources = {
             "changeData": "Edytuj",
             "cruise.group.active.and.cannot.be.modified": "Grupa wycieczek posiada już aktywne wycieczki i nie może być modifykowana",
             "/changeCruiseGroupData": "Zmień dane grupy wycieczek",
-            "Attractions name": "Nazwy atrakcji"
+            "Attractions name": "Nazwy atrakcji",
+            "/editCruise": "Edytuj wycieczkę",
+
+
+            "businessWorker.add.cruise.to.bad.company":"To konto nie należy do właściwej firmy",
+            "cannot.find.access.level":"Nie znaleziono prawidłowego poziomu dostępu",
+            "cruise.already.blocked":"Wycieczka jest już zdeaktywowana",
+            "cruise.cannot.edit":"Tej wycieczki nie można edytować",
+            "cruise.cannot.block":"Tej wycieczki nie można deaktywować"
         }
     },
     EN: {
@@ -731,8 +739,17 @@ const resources = {
             "changeData": "Edit",
             "cruise.group.active.and.cannot.be.modified": "This cruise group already has active cruises and cannot be modifiable",
             "/changeCruiseGroupData": "Change cruise group data",
-            "Attractions name": "Attractions name"
+            "Attractions name": "Attractions name",
+            "/editCruise": "Edit cruise",
+
+            "businessWorker.add.cruise.to.bad.company":"This account does not belong to the correct company",
+            "cannot.find.access.level":"No valid access level found",
+            "cruise.already.blocked":"Cruise is already deactivated",
+            "cruise.cannot.edit":"This cruise cannot be edited",
+            "cruise.cannot.block":"This cruise cannot be deactivated",
         }
+
+
     }
 }
 

@@ -25,6 +25,7 @@ import ListReservationsForCruise from "./admin/ListReservationsForCruise";
 import ListReservationsForWorker from "./worker/ListReservationsForWokrersCruise";
 import ChangeCruiseGroup from "./worker/changeCruiseGroup"
 
+
 export default function WorkerPanel() {
     const {t} = useTranslation()
     const handleError = useHandleError()
@@ -159,7 +160,7 @@ export default function WorkerPanel() {
                 {
                     to: '/changeCruiseGroupData',
                     Component: ChangeCruiseGroup
-                }
+                },
             ]}
         />
     )
