@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Attraction} from '../../../interfaces/Attraction';
-import {getAttractionsByCruiseUUID} from "../../../Services/attractionService";
+import {deleteAttraction, getAttractionsByCruiseUUID} from "../../../Services/attractionService";
 import {useSnackbarQueue} from "../../snackbar";
 import {useTranslation} from "react-i18next";
 import { useParams } from 'react-router-dom';
@@ -41,6 +41,8 @@ export default function AttractionList() {
         setSelectedRow(row.data.id as string)
     }
 
+
+
     const cols: GridColDef[] = [
         { field: 'name', headerName: t('attractionName'), flex: 1 },
         { field: 'description', headerName: t('description'), flex: 1 },
@@ -75,7 +77,7 @@ export default function AttractionList() {
                                 />
                                 <DeleteIcon
                                     className={styles.delete}
-                                    onClick={handleDeleteAttraction}
+                                    onClick={handleDeleteAttraction(params.row.id)}
                                 />
                             </div>
                         )}
@@ -85,11 +87,10 @@ export default function AttractionList() {
     ];
 
     // Requests handler
-
-    const handleDeleteAttraction = () => {
-        // TODO removing implementation
-        alert("ATTRACTION MUST BE DELETED!")
+    const handleDeleteAttraction = (uuid: string) => ()  =>{
+        deleteAttraction(uuid)
     }
+
 
     const handleEditAttraction = () => {
         // TODO editing implementation
