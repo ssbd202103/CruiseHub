@@ -132,6 +132,7 @@ export default function AttractionList() {
             showSuccess(t('attraction created'))
             refreshToken()
             setCreateAttractionDialogOpen(false)
+            getAttractions()
         }).catch(err => {
             const message = err.response.data
             handleError(message, err.response.status)
