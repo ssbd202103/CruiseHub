@@ -86,7 +86,6 @@ public class ReservationManager implements ReservationManagerLocal {
     @Override
     public void removeClientReservation(UUID reservationUuid, String clientLogin) throws BaseAppException {
         Reservation reservation = reservationFacadeMow.findReservationByUuidAndLogin(reservationUuid, clientLogin);
-
         reservation.setAlteredBy(getCurrentUser());
         reservation.setAlterType(accountFacadeMow.getAlterTypeWrapperByAlterType(AlterType.DELETE));
         reservationFacadeMow.remove(reservation);

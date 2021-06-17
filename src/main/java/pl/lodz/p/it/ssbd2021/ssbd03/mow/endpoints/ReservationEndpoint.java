@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints.BaseEndpoint;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Reservation;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.MapperException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations.CancelReservationDTO;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations.CreateReservationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations.CruiseReservationDto;
@@ -20,6 +21,9 @@ import javax.interceptor.Interceptors;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CRUISE_MAPPER_UUID_PARSE;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.RESERVATION_MAPPER_UUID_PARSE;
 
 /**
  * Klasa która zajmuje się growadzeniem zmapowanych obiektów klas Dto na obiekty klas modelu związanych z rezerwacją wycieczek, oraz wywołuje metody logiki przekazując zmapowane obiekty.
@@ -57,8 +61,11 @@ public class ReservationEndpoint extends BaseEndpoint implements ReservationEndp
     @RolesAllowed("removeClientReservation")
     @Override
     public void removeClientReservation(RemoveClientReservationDto removeClientReservationDto) throws BaseAppException {
-        this.reservationManager.removeClientReservation(UUID.fromString(removeClientReservationDto.getReservationUuid()), removeClientReservationDto.getClientLogin());
-        // todo catch exceptions
+        try {
+            this.reservationManager.removeClientReservation(UUID.fromString(removeClientReservationDto.getReservationUuid()), removeClientReservationDto.getClientLogin());
+        } catch (IllegalArgumentException e) {
+            throw new MapperException(RESERVATION_MAPPER_UUID_PARSE);
+        }
     }
 
     @RolesAllowed("createReservation")

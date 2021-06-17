@@ -54,19 +54,11 @@ public class ReservationController {
     }
 
     @DELETE
-//    @ETagFilterBinding
     @Consumes({MediaType.APPLICATION_JSON})
-//    @Path("/{reservationVersion}/{clientLogin}/{reservationUuid}")
     @Path("/{clientLogin}/{reservationUuid}")
-//    public void removeReservation(@PathParam("reservationVersion") long reservationVersion,
     public void removeReservation(@PathParam("clientLogin") String clientLogin,
                                   @PathParam("reservationUuid") UUID reservationUuid
-//                                  @HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) @Valid String etag) throws BaseAppException {
                                   ) throws BaseAppException {
-        RemoveClientReservationDto reservationDto = new RemoveClientReservationDto(reservationUuid.toString(), clientLogin);
-//        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, reservationDto)) {
-//            throw ControllerException.etagIdentityIntegrity();
-//        }
-        reservationEndpoint.removeClientReservation(reservationDto);
+        reservationEndpoint.removeClientReservation(new RemoveClientReservationDto(reservationUuid.toString(), clientLogin));
     }
 }
