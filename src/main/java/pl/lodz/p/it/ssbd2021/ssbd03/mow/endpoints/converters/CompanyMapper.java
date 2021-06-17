@@ -3,9 +3,9 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.converters;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AddressDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.AddCompanyDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CompanyLightDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.changeCruiseGroup.CompanyDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.companies.AddCompanyDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.companies.CompanyLightDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.companies.CompanyDto;
 
 public class CompanyMapper {
     private CompanyMapper() {

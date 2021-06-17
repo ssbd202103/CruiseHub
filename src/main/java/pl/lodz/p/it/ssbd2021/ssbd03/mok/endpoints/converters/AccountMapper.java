@@ -10,6 +10,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.LanguageTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AccountManagerException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.ETagException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.AccessLevelDetailsViewDto;
@@ -324,8 +325,9 @@ public class AccountMapper {
                 account.getVersion());
     }
 
-    public static BusinessWorkerDto toBusinessWorkerDto(Account account) throws BaseAppException {
-        BusinessWorker businessWorker = (BusinessWorker) getAccessLevel(account, AccessLevelType.BUSINESS_WORKER);
+    public static BusinessWorkerDto toBusinessWorkerDto(BusinessWorker businessWorker) {
+
+        Account account = businessWorker.getAccount();
         return new BusinessWorkerDto(
                 account.getLogin(),
                 account.getFirstName(),
@@ -334,6 +336,23 @@ public class AccountMapper {
                 account.getLanguageType().getName(),
                 businessWorker.getPhoneNumber(),
                 account.getVersion()
+        );
+    }
+
+    public static BusinessWorkerWithCompanyDto toBusinessWorkerWithCompanyDto(BusinessWorker businessWorker) throws ETagException {
+
+        Account account = businessWorker.getAccount();
+        return new BusinessWorkerWithCompanyDto(
+                account.getLogin(),
+                account.getFirstName(),
+                account.getSecondName(),
+                account.getEmail(),
+                account.getLanguageType().getName(),
+                businessWorker.getPhoneNumber(),
+                account.getVersion(),
+                businessWorker.getCompany().getName(),
+                businessWorker.getCompany().getPhoneNumber()
+
         );
     }
 

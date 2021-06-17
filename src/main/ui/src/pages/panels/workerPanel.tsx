@@ -1,6 +1,7 @@
 import {useTranslation} from 'react-i18next'
 import SettingsIcon from '@material-ui/icons/SettingsRounded'
 import CruiseIcon from '@material-ui/icons/CardTravelRounded'
+import CreateIcon from '@material-ui/icons/Create';
 import {useSelector} from "react-redux";
 import {selectDarkMode} from "../../redux/slices/userSlice";
 import ChangeBusinessWorkerData from "../../components/changeData/ChangeBusinessWorkerData";
@@ -13,6 +14,16 @@ import {refreshToken} from "../../Services/userService";
 import useHandleError from "../../errorHandler";
 import AccountsListIcon from "@material-ui/icons/PeopleAltRounded";
 import ListCompany from "./moderator/ListCompany";
+import AddCruiseGroup from "./worker/AddCruiseGroup";
+import ListCruiseGroup from "./worker/ListCruiseGroupForWorker"
+import AddCruise from "./worker/AddCruise"
+import ChangeAccountData from "./admin/ChangeAccountData";
+import GrantAccessLevel from "./admin/GrantAccessLevel";
+import ChangeAccessLevelState from "./admin/ChangeAccessLevelState";
+import RequestSomeonePasswordReset from "../reset/requestSomeonesPasswordReset";
+import ListReservationsForCruise from "./admin/ListReservationsForCruise";
+import ListReservationsForWorker from "./worker/ListReservationsForWokrersCruise";
+import ChangeCruiseGroup from "./worker/changeCruiseGroup"
 
 export default function WorkerPanel() {
     const {t} = useTranslation()
@@ -88,10 +99,29 @@ export default function WorkerPanel() {
                     Component: () => <></>
                 },
                 {
+                    link: '/listCruiseGroup',
+                    Icon: AccountsListIcon,
+                    text: t('listCruiseGroup'),
+                    Component: ListCruiseGroup
+                },
+                {
                     link: '/companies',
                     Icon: AccountsListIcon,
                     text: t('list companies'),
                     Component: ListCompany
+                },{
+                    link: '/addCruiseGroup',
+                    text: t('createCruiseGroup'),
+                    Icon: CreateIcon,
+                    Component: AddCruiseGroup
+
+                },
+                {
+                    link: '/addCruise',
+                    text: t('createCruise'),
+                    Icon: CreateIcon,
+                    Component: AddCruise
+
                 },
                 {
                     link: '/settings',
@@ -119,6 +149,16 @@ export default function WorkerPanel() {
                             />
                         </>
                     )
+                }
+            ]}
+            otherRoutes={[
+                {
+                    to: '/reservations',
+                    Component: ListReservationsForWorker
+                },
+                {
+                    to: '/changeCruiseGroupData',
+                    Component: ChangeCruiseGroup
                 }
             ]}
         />

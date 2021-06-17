@@ -10,11 +10,9 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.interceptor.Interceptors;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.util.List;
+import java.util.UUID;
 
 @Stateless
 @Interceptors(TrackingInterceptor.class)
@@ -52,9 +50,15 @@ public class AttractionFacadeMow extends AbstractFacade<Attraction> {
     }
 
     @PermitAll
-    public Attraction findByName(String name) throws BaseAppException {
-        TypedQuery<Attraction> tq = em.createNamedQuery("Attraction.findByName", Attraction.class);
-        tq.setParameter("name", name);
+    @Override
+    public void remove(Attraction entity) throws FacadeException {
+        super.remove(entity);
+    }
+
+    @PermitAll
+    public Attraction findById(long id) throws BaseAppException {
+        TypedQuery<Attraction> tq = em.createNamedQuery("Attraction.findById", Attraction.class);
+        tq.setParameter("id", id);
         try {
             return tq.getSingleResult();
         } catch (NoResultException e) {
@@ -62,15 +66,17 @@ public class AttractionFacadeMow extends AbstractFacade<Attraction> {
         }
     }
 
-    @RolesAllowed("deleteAttraction")
-    public Attraction deleteAttraction(String name) throws BaseAppException {
-        //TODO change query
-        TypedQuery<Attraction> tq = em.createNamedQuery("Attraction.findByIdIfReserved", Attraction.class);
-        tq.setParameter("name", name);
+
+    // TODO
+    @PermitAll
+    public List<Attraction> findByCruiseUUID(UUID uuid) throws BaseAppException {
+        TypedQuery<Attraction> tq = em.createNamedQuery("Attraction.findByCruiseUUID", Attraction.class);
+        tq.setParameter("uuid", uuid);
         try {
-            return tq.getSingleResult();
+            return tq.getResultList();
         } catch (NoResultException e) {
             throw FacadeException.noSuchElement();
         }
     }
+
 }

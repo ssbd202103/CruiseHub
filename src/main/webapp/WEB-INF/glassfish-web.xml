@@ -213,18 +213,16 @@
 
     <security-role-mapping>
         <role-name>changeCruiseGroup</role-name>
-        <group-name>MODERATOR</group-name>
         <group-name>BUSINESS_WORKER</group-name>
     </security-role-mapping>
 
     <security-role-mapping>
         <role-name>viewCruiseReservations</role-name>
-        <group-name>MODERATOR</group-name>
         <group-name>ADMINISTRATOR</group-name>
     </security-role-mapping>
 
     <security-role-mapping>
-        <role-name>getAllCruiseGroupsList</role-name>
+        <role-name>getAllCruiseGroupList</role-name>
         <group-name>BUSINESS_WORKER</group-name>
         <group-name>MODERATOR</group-name>
         <group-name>ADMINISTRATOR</group-name>
@@ -303,6 +301,11 @@
     <security-role-mapping>
         <role-name>getMetadata</role-name>
         <group-name>ADMINISTRATOR</group-name>
+    </security-role-mapping>
+
+    <security-role-mapping>
+        <role-name>getCruiseGroupForBusinessWorker</role-name>
+        <group-name>BUSINESS_WORKER</group-name>
     </security-role-mapping>
 
 </glassfish-web-app>

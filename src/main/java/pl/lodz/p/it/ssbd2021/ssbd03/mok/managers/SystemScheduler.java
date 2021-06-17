@@ -1,10 +1,12 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.managers;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.CodeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.TokenWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacadeMok;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.CodeWrapperFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.TokenWrapperFacade;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.JWTHandler;
 import pl.lodz.p.it.ssbd2021.ssbd03.services.EmailService;
@@ -39,6 +41,8 @@ public class SystemScheduler {
     private AccountFacadeMok accountFacade;
     @Inject
     private TokenWrapperFacade tokenWrapperFacade;
+    @Inject
+    private CodeWrapperFacade codeWrapperFacade;
     @Inject
     private I18n ii18n;
     private static final Properties securityProperties = PropertiesReader.getSecurityProperties();
@@ -81,6 +85,26 @@ public class SystemScheduler {
     }
 
     @Schedule(hour = "*/12", persistent = false)
+    private void removeUsedCodes() throws BaseAppException {
+        List<CodeWrapper> codes = codeWrapperFacade.getUsedCode();
+        for (CodeWrapper cw : codes
+        ) {
+            codeWrapperFacade.remove(cw);
+        }
+    }
+
+    @Schedule(hour = "*/12", persistent = false)
+    private void removeUnusedCodes() throws BaseAppException {
+        List<CodeWrapper> codes = codeWrapperFacade.getUnusedCode();
+        for (CodeWrapper cw : codes
+        ) {
+            if(cw.getCreationDateTime().plus(2,ChronoUnit.MINUTES).isBefore(LocalDateTime.now())){
+                codeWrapperFacade.remove(cw);
+            }
+        }
+    }
+
+    @Schedule(hour = "*/12", persistent = false)
     private void sendActivationEmailWithToken() throws BaseAppException { // todo handle this exception
         List<Account> unconfirmed = accountFacade.getUnconfirmedAccounts();
         for (Account acc : unconfirmed
@@ -98,6 +122,5 @@ public class SystemScheduler {
             }
         }
     }
-
 
 }

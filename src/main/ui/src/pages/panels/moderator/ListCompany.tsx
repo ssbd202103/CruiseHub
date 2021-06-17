@@ -9,7 +9,8 @@ import {selectDarkMode} from "../../../redux/slices/userSlice";
 import {refreshToken} from "../../../Services/userService";
 import {useTranslation} from "react-i18next";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import {TextField} from "@material-ui/core";
+import {Button, TextField} from "@material-ui/core";
+import {Link} from "react-router-dom";
 import TableContainer from "@material-ui/core/TableContainer";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
@@ -36,7 +37,7 @@ function createData(
 ) {
     return {
         name: name,
-        nip: nip,
+        NIP: nip,
         phoneNumber: phoneNumber,
         country: country,
         city: city,
@@ -54,18 +55,25 @@ export interface RowProps {
 function Row(props: RowProps) {
     const {row} = props;
     const {style} = props;
+    const {t} = useTranslation();
     const classes = useRowStyles();
 
     return (
         <TableRow className={classes.root}>
             <TableCell component="th" scope="row" style={style}>{row.name}</TableCell>
-            <TableCell style={style}>{row.nip.toString()}</TableCell>
+            <TableCell style={style}>{row.NIP}</TableCell>
             <TableCell style={style}>{row.phoneNumber}</TableCell>
             <TableCell style={style}>{row.country}</TableCell>
             <TableCell style={style}>{row.city}</TableCell>
             <TableCell style={style}>{row.street}</TableCell>
             <TableCell style={style}>{row.houseNumber}</TableCell>
             <TableCell style={style}>{row.postalCode}</TableCell>
+            <Link to="/company/business-workers">
+                <TableCell style={style}>
+                    <Button
+                        onClick={() => sessionStorage.setItem("currentCompanyName", row.name)}>{t("show business workers")}</Button>
+                </TableCell>
+            </Link>
         </TableRow>
     );
 }
@@ -136,7 +144,7 @@ const ListCompany = () => {
                             <TableCell style={{
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`
-                            }}>{t("NIP")}</TableCell>
+                            }}>{"NIP"}</TableCell>
                             <TableCell style={{
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`
@@ -161,6 +169,10 @@ const ListCompany = () => {
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`
                             }}>{t("postalCode")}</TableCell>
+                            <TableCell style={{
+                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                            }}>{t("show business workers")}</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>

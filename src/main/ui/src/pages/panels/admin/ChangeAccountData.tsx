@@ -410,7 +410,7 @@ export default function ChangeAccountData() {
                             <td><h4>{t("numberOfAuthenticationFailures")}</h4></td> <td><h4>{t("version")}</h4></td>
                         </tr>
                         <tr>
-                            <td><h4>{alterType}</h4></td><td><h4>{alteredBy}</h4></td><td><h4>{createdBy}</h4></td>
+                            <td><h4>{t(alterType)}</h4></td><td><h4>{alteredBy}</h4></td><td><h4>{createdBy}</h4></td>
                             <td><h4>{creationDateTime}</h4></td><td><h4>{lastAlterDateTime}</h4></td><td><h4>{lastCorrectAuthenticationDateTime}</h4></td>
                             <td><h4>{lastCorrectAuthenticationLogicalAddress}</h4></td><td><h4>{lastIncorrectAuthenticationDateTime}</h4></td><td><h4>{lastIncorrectAuthenticationLogicalAddress}</h4></td>
                            <td><h4>{numberOfAuthenticationFailures}</h4></td><td><h4>{version}</h4></td>
@@ -517,7 +517,7 @@ export default function ChangeAccountData() {
                         <td><h4>{t("creationDateTime")}</h4></td> <td><h4>{t("lastAlterDateTime")}</h4></td><td><h4>{t("version")}</h4></td>
                     </tr>
                     <tr>
-                        <td><h4>{alterTypeAdr}</h4></td><td><h4>{alteredByAdr}</h4></td><td><h4>{createdByAdr}</h4></td>
+                        <td><h4>{t(alterTypeAdr)}</h4></td><td><h4>{alteredByAdr}</h4></td><td><h4>{createdByAdr}</h4></td>
                         <td><h4>{creationDateTimeAdr}</h4></td><td><h4>{lastAlterDateTimeAdr}</h4></td><td><h4>{versionAdr}</h4></td>
                     </tr>
                 </Grid>
@@ -561,7 +561,7 @@ export default function ChangeAccountData() {
                         <td><h4>{t("creationDateTime")}</h4></td> <td><h4>{t("lastAlterDateTime")}</h4></td><td><h4>{t("version")}</h4></td>
                     </tr>
                     <tr>
-                        <td><h4>{alterTypeAcl}</h4></td><td><h4>{alteredByAcl}</h4></td><td><h4>{createdByAcl}</h4></td>
+                        <td><h4>{t(alterTypeAcl)}</h4></td><td><h4>{alteredByAcl}</h4></td><td><h4>{createdByAcl}</h4></td>
                         <td><h4>{creationDateTimeAcl}</h4></td><td><h4>{lastAlterDateTimeAcl}</h4></td><td><h4>{versionAcl}</h4></td>
                     </tr>
                 </Grid>

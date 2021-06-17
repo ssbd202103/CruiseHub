@@ -26,7 +26,7 @@ public class CruisePicture extends BaseEntity {
     @Setter
     @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
     @Column(name = "img")
-    private Byte[] img;
+    private byte[] img;
 
     @Getter
     @Setter
@@ -34,7 +34,7 @@ public class CruisePicture extends BaseEntity {
     @Column(name = "img_name")
     private String imgName;
 
-    public CruisePicture(@NotNull(message = CONSTRAINT_NOT_NULL) Byte[] img, @NotNull(message = CONSTRAINT_NOT_NULL) String imgName) {
+    public CruisePicture(@NotNull(message = CONSTRAINT_NOT_NULL) byte[] img, @NotNull(message = CONSTRAINT_NOT_NULL) String imgName) {
         this.img = img;
         this.imgName = imgName;
     }

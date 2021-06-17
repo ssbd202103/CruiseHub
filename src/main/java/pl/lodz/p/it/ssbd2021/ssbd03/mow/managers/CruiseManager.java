@@ -7,6 +7,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.CruiseManagerException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.AccountFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseFacadeMow;
@@ -24,8 +25,11 @@ import javax.interceptor.Interceptors;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 
 /**
  * Klasa która zarządza logiką biznesową wycieczek (rejsów)
@@ -50,12 +54,23 @@ public class CruiseManager implements CruiseManagerLocal {
 
     @RolesAllowed("addCruise")
     @Override
-    public void addCruise(Cruise cruise, String cruiseGroupName) throws BaseAppException {
-        CruiseGroup cruiseGroup = cruiseGroupFacadeMow.findByName(cruiseGroupName);
+    public void addCruise(Cruise cruise, UUID cruiseGroupUUID) throws BaseAppException {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        if(cruise.getStartDate().isBefore(localDateTime)){
+            throw new CruiseManagerException(START_DATE_BEFORE_CURRENT_DATE);
+        }
+        if(cruise.getStartDate().isAfter(cruise.getEndDate())){
+            throw new CruiseManagerException(START_DATE_AFTER_END_DATE);
+        }
+
+        CruiseGroup cruiseGroup = cruiseGroupFacadeMow.findByUUID(cruiseGroupUUID);
+        if(!cruiseGroup.isActive()){
+            throw new CruiseManagerException(CRUISE_GROUP_NO_ACTIVE);
+        }
         cruise.setCruisesGroup(cruiseGroup);
+        setAlterTypeAlterCruiseAndCreatedBy(cruise, accountFacade.getAlterTypeWrapperByAlterType(AlterType.INSERT),
+                accountFacade.findByLogin(securityContext.getUserPrincipal().getName()));
         cruiseFacadeMow.create(cruise);
-        Account account = accountFacade.findByLogin(securityContext.getUserPrincipal().getName());
-        setAlterTypeAndAlterAccount(account, accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE), account);
 
     }
 
@@ -63,11 +78,12 @@ public class CruiseManager implements CruiseManagerLocal {
     @Override
     public void deactivateCruise(UUID uuid, Long version) throws BaseAppException {
         Account account = accountFacade.findByLogin(securityContext.getUserPrincipal().getName());
-        if (!(account.getVersion() == version)) {
+        Cruise cruise = cruiseFacadeMow.findByUUID(uuid);
+        if (!(cruise.getVersion() == version)) {
             throw FacadeException.optimisticLock();
         }
-        Cruise cruise = cruiseFacadeMow.findByUUID(uuid);
         cruise.setActive(false);
+
         setAlterTypeAndAlterCruise(cruise, accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE), account);
     }
 
@@ -85,13 +101,14 @@ public class CruiseManager implements CruiseManagerLocal {
                 accountFacade.findByLogin(securityContext.getUserPrincipal().getName()));
     }
 
-    private void setAlterTypeAndAlterAccount(Account account, AlterTypeWrapper alterTypeWrapper, Account alteredBy) {
-        account.setAlteredBy(alteredBy);
-        account.setAlterType(alterTypeWrapper);
-        account.setLastAlterDateTime(LocalDateTime.now());
-    }
 
     private void setAlterTypeAndAlterCruise(Cruise cruise, AlterTypeWrapper alterTypeWrapper, Account alteredBy) {
+        cruise.setAlteredBy(alteredBy);
+        cruise.setAlterType(alterTypeWrapper);
+        cruise.setLastAlterDateTime(LocalDateTime.now());
+    }
+    private void setAlterTypeAlterCruiseAndCreatedBy(Cruise cruise, AlterTypeWrapper alterTypeWrapper, Account alteredBy) {
+        cruise.setCreatedBy(alteredBy);
         cruise.setAlteredBy(alteredBy);
         cruise.setAlterType(alterTypeWrapper);
         cruise.setLastAlterDateTime(LocalDateTime.now());
@@ -103,17 +120,28 @@ public class CruiseManager implements CruiseManagerLocal {
         return cruiseFacadeMow.findByUUID(uuid);
     }
 
+    @PermitAll
+    @Override
+    public List<Cruise> getCruisesByCruiseGroup(UUID uuid) throws BaseAppException {
+        return cruiseFacadeMow.findByCruiseGroupUUID(uuid);
+    }
+
     @RolesAllowed("publishCruise")
     @Override
     public void publishCruise(long cruiseVersion, UUID cruiseUuid) throws BaseAppException {
         // todo finish implementation
     }
 
-    @Override
     @PermitAll
+    @Override
     public List<Cruise> getPublishedCruises() {
-        // TODO
-        return null;
+        return cruiseFacadeMow.getPublishedCruises();
+    }
+
+    @PermitAll
+    @Override
+    public List<Cruise> getCruisesForCruiseGroup(String cruiseGroupName) {
+        return cruiseFacadeMow.getCruisesForCruiseGroup(cruiseGroupName);
     }
 
 }

@@ -15,6 +15,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -53,9 +54,9 @@ public class ReservationFacadeMow extends AbstractFacade<Reservation> {
         }
     }
 
-    public List<Reservation> findCruiseReservations(long id) throws BaseAppException {
+    public List<Reservation> findCruiseReservations(Cruise cruise) throws BaseAppException {
         TypedQuery<Reservation> tq = em.createNamedQuery("Reservation.findCruiseReservations", Reservation.class);
-        tq.setParameter("id", id);
+        tq.setParameter("id", cruise.getId());
         try {
             return tq.getResultList();
         } catch (NoResultException e) {
@@ -63,17 +64,14 @@ public class ReservationFacadeMow extends AbstractFacade<Reservation> {
         }
     }
 
-    @RolesAllowed("getWorkerCruiseReservations")
-    public List<Reservation> findWorkerCruiseReservations(long id) throws BaseAppException {
-        //TODO Metoda znajdujaca id uzytkownika który jest aktualnie uzytkujacy jako bisnez worker / zmienić query
-        //
-        //
+    @RolesAllowed("createReservation")
+    public List<Reservation> findCruiseReservationsOrReturnEmptyList(long id) {
         TypedQuery<Reservation> tq = em.createNamedQuery("Reservation.findCruiseReservations", Reservation.class);
         tq.setParameter("id", id);
         try {
             return tq.getResultList();
-        } catch (NoResultException e) {
-            throw FacadeException.noSuchElement();
+        } catch (Exception e) {
+            return new ArrayList<>();
         }
     }
 
@@ -100,7 +98,7 @@ public class ReservationFacadeMow extends AbstractFacade<Reservation> {
         }
     }
 
-    @RolesAllowed("removeClientReservation")
+    @RolesAllowed({"removeClientReservation","cancelReservation"})
     @Override
     public void remove(Reservation entity) throws FacadeException {
         super.remove(entity);

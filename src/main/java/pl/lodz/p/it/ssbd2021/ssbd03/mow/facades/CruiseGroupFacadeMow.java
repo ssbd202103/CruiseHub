@@ -2,9 +2,12 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.facades;
 
 
 import pl.lodz.p.it.ssbd2021.ssbd03.common.facades.AbstractFacade;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.CruiseEndpoint;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
 import javax.annotation.security.PermitAll;
@@ -16,6 +19,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
+import java.util.UUID;
 
 @Stateless
 @Interceptors(TrackingInterceptor.class)
@@ -33,7 +37,7 @@ public class CruiseGroupFacadeMow extends AbstractFacade<CruiseGroup> {
         return em;
     }
 
-    @RolesAllowed("getAllCruiseGroupsList")
+   @PermitAll
     @Override
     public List<CruiseGroup> findAll() throws FacadeException { //TODO throws FacadeException {
         return super.findAll();
@@ -61,4 +65,39 @@ public class CruiseGroupFacadeMow extends AbstractFacade<CruiseGroup> {
             throw FacadeException.noSuchElement();
         }
     }
+
+    @PermitAll
+    public CruiseGroup findByUUID(UUID uuid) throws BaseAppException {
+        TypedQuery<CruiseGroup> tq = em.createNamedQuery("CruiseGroup.findByUUID", CruiseGroup.class);
+        tq.setParameter("uuid", uuid);
+        try {
+            return tq.getSingleResult();
+        } catch (NoResultException e) {
+            throw FacadeException.noSuchElement();
+        }
+    }
+
+   @RolesAllowed("getAllCruiseGroupList")
+    public List<Cruise> findCruisesForCruiseGroup(CruiseGroup cruiseGroup) throws FacadeException {
+        TypedQuery<Cruise> tq = em.createNamedQuery("CruiseGroup.findCruises", Cruise.class);
+        tq.setParameter("name", cruiseGroup);
+        try {
+            return tq.getResultList();
+        } catch (NoResultException e) {
+            throw FacadeException.noSuchElement();
+        }
+
+    }
+    @RolesAllowed("getCruiseGroupForBusinessWorker")
+    public List<CruiseGroup> getCruiseGroupForBusinessWorker(Company company) throws FacadeException {
+        TypedQuery<CruiseGroup> tq = em.createNamedQuery("CruiseGroup.findForBusinessWorker", CruiseGroup.class);
+        tq.setParameter("name", company);
+        try {
+            return tq.getResultList();
+        } catch (NoResultException e) {
+            throw FacadeException.noSuchElement();
+        }
+
+    }
+
 }

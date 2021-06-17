@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 public class I18n {
     public static final String ETAG_IDENTITY_INTEGRITY_ERROR = "error.security.etag.integrity";
     public static final String OPTIMISTIC_LOCK_EXCEPTION = "error.integration.optimistic";
+    public static final String OPERATION_NOT_AUTHORIZED_ERROR = "error.security.notAuthorized";
     public static final String NO_SUCH_ELEMENT_ERROR = "error.facade.noSuchElement";
     public static final String ACCESS_LEVEL_ALREADY_ASSIGNED_ERROR = "error.account.accessLevels.alreadyAssigned";
     public static final String ACCESS_LEVEL_NOT_ASSIGNED_ERROR = "error.account.accessLevels.notAssigned";
@@ -111,6 +112,17 @@ public class I18n {
     public static final String ACCESS_LEVEL_DEACTIVATE_CLIENT_BODY = "account.accessLevels.deactivateClient.body";
     public static final String ACCESS_LEVEL_REACTIVATE_CLIENT_SUBJECT = "account.accessLevels.reactivateClient.subject";
     public static final String ACCESS_LEVEL_REACTIVATE_CLIENT_BODY = "account.accessLevels.reactivateClient.body";
+    public static final String CRUISE_GROUP_NO_ACTIVE = "error.cruiseGroup.no.active";
+    public static final String START_DATE_BEFORE_CURRENT_DATE = "error.startDate.before.currentDate";
+    public static final String START_DATE_AFTER_END_DATE = "error.startDate.after.endDate";
+    public static final String CRUISE_MAPPER_DATE_PARSE = "error.cruise.mapper.data.parse";
+    public static final String CRUISE_MAPPER_UUID_PARSE = "error.cruise.mapper.uuid.parse";
+    public static final String NO_SEATS_AVAILABLE = "reservation.noSeats";
+    public static final String RATING_MAPPER_UUID_PARSE = "rating.mapper.uuid.parse";
+    public static final String NOT_YOURS_CRUISE = "error.cruise.not.yours";
+    public static final String CRUISE_GROUP_ALREADY_ACTIVE = "cruise.group.active.and.cannot.be.modified";
+    public static final String NON_REMOVABLE_ATTRACTION_CRUISE_ALREADY_PUBLISH = "error.attraction.non.removable";
+
 
     private ResourceBundle bundle;
 

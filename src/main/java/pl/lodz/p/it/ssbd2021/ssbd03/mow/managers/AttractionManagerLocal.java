@@ -5,6 +5,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 
 import javax.ejb.Local;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Klasa która zarządza logiką biznesową atrkacji
@@ -16,10 +17,10 @@ public interface AttractionManagerLocal {
     /**
      * Metoda odpowiedzialna za usuwanie atrkacji
      *
-     * @param name Nazwa atrakcji
+     * @param id UUID atrakcji
      * @throws BaseAppException Bazowy wyjatek aplikacji
      */
-    void deleteAttraction(String name) throws BaseAppException;
+    void deleteAttraction(long id) throws BaseAppException;
 
 
     /**
@@ -37,4 +38,11 @@ public interface AttractionManagerLocal {
      * @throws BaseAppException Wyjątek występujący w przypadku nieznalezienia atrakcji lub naruszenia zasad biznesowych.
      */
     void editAttraction(Attraction attraction) throws BaseAppException;
+
+    /**
+     * Pobiera atrakcje wycieczki o danym uuid
+     * @param uuid uuid wycieczki
+     * @throws BaseAppException wyjątek wyrzucany w razie nie znależenia atrakcji
+     */
+     List<Attraction> findByCruiseUUID(UUID uuid) throws BaseAppException;
 }

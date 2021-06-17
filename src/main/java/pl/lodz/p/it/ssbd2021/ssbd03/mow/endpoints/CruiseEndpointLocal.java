@@ -1,12 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.DeactivateCruiseDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.EditCruiseDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.NewCruiseDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.PublishCruiseDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.*;
 
 import javax.ejb.Local;
 import java.util.List;
@@ -46,6 +41,14 @@ public interface CruiseEndpointLocal {
     CruiseDto getCruise(UUID uuid) throws BaseAppException;
 
     /**
+     * Zwraca wycieczki należących do grupy wycieczek o podanym uuid
+     * @param uuid uuid grupy wycieczek
+     * @return listę encji wycieczek nalężacych do grupy wycieczek o podanym uuid
+     * @throws BaseAppException wyjątek rzucany w razie nie znalezienia wycieczki
+     */
+    List<RelatedCruiseDto> getCruisesByCruiseGroup(UUID uuid) throws BaseAppException;
+
+    /**
      * Publikuje wycieczke
      *
      * @param publishCruiseDto dto niezbędne do publikacji wycieczki
@@ -64,8 +67,16 @@ public interface CruiseEndpointLocal {
 
     /**
      * Zwraca wszystkie opublikowane wycieczki
+     *
      * @return Lista wycieczek
-     * @throws BaseAppException Bazowy wyjatek aplikacji
      */
-    List<Cruise> getPublishedCruises() throws BaseAppException;
+    List<CruiseDto> getPublishedCruises();
+
+    /**
+     * Pobiera informacje o wycieczkach dla danej grupy wycieczek
+     *
+     * @param cruiseGroupName Nazwa grupy wycieczek
+     * @return Lista wycieczek w reprezentacji DTO
+     */
+    List<CruiseForCruiseGroupDto> getCruisesForCruiseGroup(String cruiseGroupName) throws BaseAppException;
 }

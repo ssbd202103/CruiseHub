@@ -9,6 +9,8 @@ import styles from '../styles/Home.module.css'
 import {useTranslation} from 'react-i18next'
 import {useSelector} from "react-redux";
 import {selectDarkMode} from "../redux/slices/userSlice";
+import {useEffect} from "react";
+import {getPublishedCruises} from "../Services/cruisesService";
 
 
 export default function Home() {
@@ -16,6 +18,12 @@ export default function Home() {
 
     const darkMode = useSelector(selectDarkMode)
     const headersArray = t("mainPage.headers", {returnObjects: true})
+
+    useEffect(() => {
+        getPublishedCruises().then(res => {
+            console.log(res.data)
+        })
+    }, []);
 
     return (
         <HeaderFooterLayout>

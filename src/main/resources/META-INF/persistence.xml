@@ -22,6 +22,7 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <jta-data-source>java:app/jdbc/ssbd03glassfishDS</jta-data-source>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.TokenWrapper</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.CodeWrapper</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address</class>
@@ -47,6 +48,7 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <jta-data-source>java:app/jdbc/ssbd03mokDS</jta-data-source>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.TokenWrapper</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.CodeWrapper</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address</class>
@@ -71,6 +73,12 @@
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Attraction</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Administrator</class>
+        <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseAddress</class>
@@ -78,7 +86,6 @@
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruisePicture</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Rating</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Reservation</class>
-        <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address</class>
         <class>pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.LanguageTypeWrapper</class>
 
