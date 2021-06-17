@@ -78,12 +78,4 @@ public interface CruiseManagerLocal {
      * @return Lista wycieczek
      */
     List<Cruise> getPublishedCruises();
-
-    /**
-     * Pobiera informacje o wycieczkach dla danej grupy wycieczek
-     *
-     * @param cruiseGroupName Nazwa grupy wycieczek
-     * @return Lista wycieczek
-     */
-    List<Cruise> getCruisesForCruiseGroup(String cruiseGroupName);
 }

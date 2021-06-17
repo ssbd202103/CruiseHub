@@ -2,29 +2,26 @@ package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.ControllerException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.MapperException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations.CancelReservationDTO;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations.CreateReservationDto;
-
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.CruiseEndpointLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.ReservationEndpointLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.ETagFilterBinding;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.validation.constraints.NotEmpty;
-import javax.ws.rs.*;
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 import java.util.UUID;
 
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_EMPTY;
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 import static pl.lodz.p.it.ssbd2021.ssbd03.utils.TransactionRepeater.tryAndRepeat;
 
 /**
@@ -61,7 +58,12 @@ public class CruiseController {
     @Path("/cruise_group/{uuid}")
     @Produces(MediaType.APPLICATION_JSON)
     public List<RelatedCruiseDto> getCruisesByCruiseGroupUUID(@PathParam("uuid") String uuid) throws BaseAppException {
-        return tryAndRepeat(() -> cruiseEndpoint.getCruisesByCruiseGroup(UUID.fromString(uuid)));
+        try {
+            UUID convertedUUID = UUID.fromString(uuid);
+            return tryAndRepeat(() -> cruiseEndpoint.getCruisesByCruiseGroup(convertedUUID));
+        } catch (IllegalArgumentException e) {
+            throw new MapperException(MAPPER_UUID_PARSE);
+        }
     }
 
     /**
@@ -80,15 +82,20 @@ public class CruiseController {
     /**
      * Pobiera informacje o wycieczkach dla danej grupy wycieczek
      *
-     * @param cruiseGroupName Nazwa grupy wycieczek
+     * @param cruiseGroupUUID UUID grupy wycieczek
      * @return Lista wycieczek w reprezentacji DTO
      * @throws BaseAppException Bazowy wyjątek aplikacji występujący w przypadku naruszenia reguł biznesowych
      */
     @GET
-    @Path("/cruises-for-group/{cruise-group-name}")
+    @Path("/cruises-for-group/{cruise-group-uuid}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<CruiseForCruiseGroupDto> getCruisesForCruiseGroup(@PathParam("cruise-group-name") String cruiseGroupName) throws BaseAppException {
-        return tryAndRepeat(() -> cruiseEndpoint.getCruisesForCruiseGroup(cruiseGroupName));
+    public List<CruiseForCruiseGroupDto> getCruisesForCruiseGroup(@PathParam("cruise-group-uuid") String cruiseGroupUUID) throws BaseAppException {
+        try {
+            UUID uuid = UUID.fromString(cruiseGroupUUID);
+            return tryAndRepeat(() -> cruiseEndpoint.getCruisesForCruiseGroup(uuid));
+        } catch (BaseAppException e) {
+            throw new MapperException(MAPPER_UUID_PARSE);
+        }
     }
 
     /**
@@ -109,7 +116,6 @@ public class CruiseController {
      * Metoda anulująca rezerwację klienta
      *
      * @param reservationDTO Informacja o anulowanej rezerwacji
-
      * @throws BaseAppException Bazowy wyjatek aplikacji
      */
     @DELETE
@@ -137,7 +143,7 @@ public class CruiseController {
      * Metoda deaktywująca wycieczkę
      *
      * @param deactivateCruiseDto Obiekt posiadający UUID oraz werjsie danej wycieczki
-     * @param etag Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
+     * @param etag                Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
      * @throws BaseAppException
      */
     @ETagFilterBinding

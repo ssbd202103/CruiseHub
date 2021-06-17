@@ -75,8 +75,8 @@ public interface CruiseEndpointLocal {
     /**
      * Pobiera informacje o wycieczkach dla danej grupy wycieczek
      *
-     * @param cruiseGroupName Nazwa grupy wycieczek
+     * @param cruiseGroupUUID UUID grupy wycieczek
      * @return Lista wycieczek w reprezentacji DTO
      */
-    List<CruiseForCruiseGroupDto> getCruisesForCruiseGroup(String cruiseGroupName) throws BaseAppException;
+    List<CruiseForCruiseGroupDto> getCruisesForCruiseGroup(UUID cruiseGroupUUID) throws BaseAppException;
 }

@@ -350,7 +350,7 @@ const resources = {
             "error.startDate.after.endDate":"Data rozpoczęcia nie może być po dacie zakończenia",
 
             "error.cruise.mapper.data.parse":"Nieprawidłowy format daty",
-            "error.cruise.mapper.uuid.parse":"Nieprawidłowy format uuid",
+            "error.mapper.uuid.parse":"Nieprawidłowy format uuid",
 
             "max.date.message":"Data nie powinna być póżniejsza niż maksymalna data",
             "min.date.message":"Data nie powinna być wcześniejsza niż minimalna data",
@@ -718,7 +718,7 @@ const resources = {
             "error.startDate.before.currentDate":"The start date cannot be before current date",
             "error.startDate.after.endDate":"The start date cannot be after end date",
             "error.cruise.mapper.data.parse":"Invalid date format",
-            "error.cruise.mapper.uuid.parse":"Invalid uuid format",
+            "error.mapper.uuid.parse":"Invalid uuid format",
 
             "max.date.message":"Date should not be after maximal date",
             "min.date.message":"Date should not be before minimal date",

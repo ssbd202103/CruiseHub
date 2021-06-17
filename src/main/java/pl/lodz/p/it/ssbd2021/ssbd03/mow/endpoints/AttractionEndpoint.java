@@ -26,7 +26,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ATTRACTION_CREATION_CRUISE_PUBLISHED_ERROR;
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CRUISE_MAPPER_UUID_PARSE;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.MAPPER_UUID_PARSE;
 
 /**
  * Klasa która zajmuje się gromadzeniem zmapowanych obiektów klas Dto na obiekty klas modelu związanych z atrakcjami oraz wywołuje metody logiki przekazując zmapowane obiekty.
@@ -60,7 +60,7 @@ public class AttractionEndpoint extends BaseEndpoint implements AttractionEndpoi
             }
             return attractionManager.addAttraction(AttractionMapper.toAttraction(addAttractionDto, cruise));
         } catch (IllegalArgumentException e) {
-            throw new MapperException(CRUISE_MAPPER_UUID_PARSE);
+            throw new MapperException(MAPPER_UUID_PARSE);
         }
     }
 

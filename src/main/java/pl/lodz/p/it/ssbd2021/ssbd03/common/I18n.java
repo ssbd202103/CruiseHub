@@ -116,7 +116,7 @@ public class I18n {
     public static final String START_DATE_BEFORE_CURRENT_DATE = "error.startDate.before.currentDate";
     public static final String START_DATE_AFTER_END_DATE = "error.startDate.after.endDate";
     public static final String CRUISE_MAPPER_DATE_PARSE = "error.cruise.mapper.data.parse";
-    public static final String CRUISE_MAPPER_UUID_PARSE = "error.cruise.mapper.uuid.parse";
+    public static final String MAPPER_UUID_PARSE = "error.mapper.uuid.parse";
     public static final String NO_SEATS_AVAILABLE = "reservation.noSeats";
     public static final String RATING_MAPPER_UUID_PARSE = "rating.mapper.uuid.parse";
     public static final String NOT_YOURS_CRUISE = "error.cruise.not.yours";

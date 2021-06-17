@@ -3,8 +3,8 @@ import {Attraction} from '../../../interfaces/Attraction';
 import {getAttractionsByCruiseUUID} from "../../../Services/attractionService";
 import {useSnackbarQueue} from "../../snackbar";
 import {useTranslation} from "react-i18next";
-import { useParams } from 'react-router-dom';
-import { DataGrid, GridColDef, GridCellParams, GridRowSelectedParams } from '@material-ui/data-grid';
+import {useParams} from 'react-router-dom';
+import {DataGrid, GridCellParams, GridColDef, GridRowSelectedParams} from '@material-ui/data-grid';
 import DeleteIcon from '@material-ui/icons/DeleteRounded';
 import EditIcon from '@material-ui/icons/EditRounded';
 import styles from '../../../styles/AttractionList.module.css';
@@ -15,7 +15,7 @@ import RoundedButton from "../../../components/RoundedButton";
 
 export default function AttractionList() {
 
-    const { uuid } = useParams<{ uuid: string }>();
+    const {uuid, published} = useParams<{ uuid: string, published: string }>();
 
     const {t} = useTranslation();
 
@@ -42,13 +42,15 @@ export default function AttractionList() {
     }
 
     const cols: GridColDef[] = [
-        { field: 'name', headerName: t('attractionName'), flex: 1 },
-        { field: 'description', headerName: t('description'), flex: 1 },
-        { field: 'price', headerName: t('price'), flex: 1 },
-        { field: 'numberOfSeats', headerName: t('numberOfSeats'), flex: 1 },
+        {field: 'name', headerName: t('attractionName'), flex: 1},
+        {field: 'description', headerName: t('description'), flex: 1},
+        {field: 'price', headerName: t('price'), flex: 1},
+        {field: 'numberOfSeats', headerName: t('numberOfSeats'), flex: 1},
         {
             field: '',
-            renderHeader: params => <RoundedButton color="blue" onClick={() => {setCreateAttractionDialogOpen(true)}}>{t('create')}</RoundedButton>,
+            renderHeader: params => published === 'false' ? <RoundedButton color="blue" onClick={() => {
+                setCreateAttractionDialogOpen(true)
+            }}>{t('create')}</RoundedButton> : "",
             headerClassName: styles['create-wrap'],
             sortable: false,
             disableColumnMenu: true,
@@ -95,7 +97,7 @@ export default function AttractionList() {
         // TODO editing implementation
         alert("ATTRACTION MUST BE EDITED!")
     }
-    
+
     const handleCreateAttraction = () => {
         // TODO creating implementation
         alert("ATTRACTION MUST BE CREATED!")
@@ -114,7 +116,7 @@ export default function AttractionList() {
     const [descriptionCreate, setDescriptionCreate] = useState('');
     const [priceCreate, setPriceCreate] = useState(0);
     const [numberOfSeatsCreate, setNumberOfSeatsCreate] = useState(0);
-    
+
     return (
         <>
             <DataGrid
@@ -122,10 +124,10 @@ export default function AttractionList() {
                 rows={attractions.map((attraction) => ({id: attraction.uuid, ...attraction}))}
                 onRowSelected={handleSelectedRow}
             />
-            <Dialog 
-                open={editAttractionDialogOpen} 
-                title={t('edit')} 
-                onConfirm={handleEditAttraction} 
+            <Dialog
+                open={editAttractionDialogOpen}
+                title={t('edit')}
+                onConfirm={handleEditAttraction}
                 onCancel={() => {
                     setEditAttractionDialogOpen(false)
                     setUuidEdit('')
@@ -135,13 +137,15 @@ export default function AttractionList() {
                     setNumberOfSeatsEdit(0)
                 }}
             >
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <div style={{display: 'flex', flexDirection: 'column'}}>
                     <DarkedTextField
                         style={{marginBottom: 16}}
                         type="text"
                         label={t("attractionName")}
                         value={nameEdit}
-                        onChange={event => {setNameEdit(event.target.value)}}
+                        onChange={event => {
+                            setNameEdit(event.target.value)
+                        }}
                     />
 
                     <TextareaAutosize
@@ -152,7 +156,9 @@ export default function AttractionList() {
                         }}
                         placeholder={t('description')}
                         value={descriptionEdit}
-                        onChange={event => {setDescriptionEdit(event.target.value)}}
+                        onChange={event => {
+                            setDescriptionEdit(event.target.value)
+                        }}
                         rowsMin={7}
                     />
 
@@ -161,7 +167,9 @@ export default function AttractionList() {
                         type="number"
                         label={t("price")}
                         value={priceEdit}
-                        onChange={event => {setPriceEdit(event.target.value as unknown as number)}}
+                        onChange={event => {
+                            setPriceEdit(event.target.value as unknown as number)
+                        }}
                     />
 
                     <DarkedTextField
@@ -169,14 +177,16 @@ export default function AttractionList() {
                         type="number"
                         label={t("numberOfSeats")}
                         value={numberOfSeatsEdit}
-                        onChange={event => {setNumberOfSeatsEdit(event.target.value as unknown as number)}}
+                        onChange={event => {
+                            setNumberOfSeatsEdit(event.target.value as unknown as number)
+                        }}
                     />
                 </div>
             </Dialog>
-            <Dialog 
-                open={createAttractionDialogOpen} 
-                title={t('create')} 
-                onConfirm={handleCreateAttraction} 
+            <Dialog
+                open={createAttractionDialogOpen}
+                title={t('create')}
+                onConfirm={handleCreateAttraction}
                 onCancel={() => {
                     setCreateAttractionDialogOpen(false)
                     setNameCreate('')
@@ -185,13 +195,15 @@ export default function AttractionList() {
                     setNumberOfSeatsCreate(0)
                 }}
             >
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <div style={{display: 'flex', flexDirection: 'column'}}>
                     <DarkedTextField
                         style={{marginBottom: 16}}
                         type="text"
                         label={t("attractionName")}
                         value={nameCreate}
-                        onChange={event => {setNameCreate(event.target.value)}}
+                        onChange={event => {
+                            setNameCreate(event.target.value)
+                        }}
                     />
 
                     <TextareaAutosize
@@ -203,7 +215,9 @@ export default function AttractionList() {
                         }}
                         placeholder={t('description')}
                         value={descriptionCreate}
-                        onChange={event => {setDescriptionCreate(event.target.value)}}
+                        onChange={event => {
+                            setDescriptionCreate(event.target.value)
+                        }}
                         rowsMin={7}
                     />
 
@@ -212,7 +226,9 @@ export default function AttractionList() {
                         type="number"
                         label={t("price")}
                         value={priceCreate}
-                        onChange={event => {setPriceCreate(event.target.value as unknown as number)}}
+                        onChange={event => {
+                            setPriceCreate(event.target.value as unknown as number)
+                        }}
                     />
 
                     <DarkedTextField
@@ -220,7 +236,9 @@ export default function AttractionList() {
                         type="number"
                         label={t("numberOfSeats")}
                         value={numberOfSeatsCreate}
-                        onChange={event => {setNumberOfSeatsCreate(event.target.value as unknown as number)}}
+                        onChange={event => {
+                            setNumberOfSeatsCreate(event.target.value as unknown as number)
+                        }}
                     />
                 </div>
             </Dialog>

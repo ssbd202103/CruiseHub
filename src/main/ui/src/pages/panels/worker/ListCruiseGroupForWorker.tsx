@@ -177,7 +177,7 @@ function Row(props: CruiseData) {
     const handleSetOpen = async () => {
         console.log("Someone clicked me")
         setOpen(state => !state);
-        await getCruisesForCruiseGroup(group.name)
+        await getCruisesForCruiseGroup(group.uuid)
             .then(res => {
                 setCruises(res.data)
                 console.log(cruises)
@@ -314,7 +314,10 @@ function Row(props: CruiseData) {
                                                 </Link>
                                             </TableCell>
                                             <TableCell align="center">
-                                                <Link to={`attractions/${cruise.uuid}`}><Button className={buttonClass.root}>{t("attractions")}</Button></Link>
+                                                <Link to={`attractions/${cruise.uuid}/${cruise}`}>
+                                                    <Button className={buttonClass.root}>
+                                                    {t("attractions")}</Button>
+                                                </Link>
                                             </TableCell>
                                             <TableCell align="center">
                                                 <Button className={buttonClass.root}>{t("edit")}</Button>

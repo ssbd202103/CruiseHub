@@ -172,7 +172,7 @@ function Row(props: CruiseData) {
 
     const handleSetOpen = () => {
         setOpen(state => !state);
-        getCruisesForCruiseGroup(group.name)
+        getCruisesForCruiseGroup(group.uuid)
             .then(res => {
                 setCruises(res.data)
                 console.log(cruises)
