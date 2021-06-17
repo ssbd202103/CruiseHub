@@ -13,7 +13,7 @@ import {refreshToken} from "../../../Services/userService";
 import {useSelector} from "react-redux";
 import {selectCompany} from "../../../redux/slices/userSlice";
 import ship3 from "../../../images/ship3.jpg";
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 
 export default function ChangeCruiseGroupData(){
     const {t} = useTranslation()
@@ -33,6 +33,7 @@ export default function ChangeCruiseGroupData(){
     const [images, setImages] = React.useState([]);
     const crusieGropData = JSON.parse(sessionStorage.getItem('ChangeCruiseGroupData') as string)
     const [visiblePicture,setVisiblePictrure] = useState(true)
+    const history = useHistory();
     const onChange = (
         imageList: ImageListType,
     ) => {
@@ -86,6 +87,7 @@ useEffect(() =>{
             }}).then(res => {
             showSuccess(t('successful action'))
             forceUpdate()
+             history.push('/listCruiseGroup')
         }).catch(error => {
             const message = error.response.data
             handleError(message, error.response.status)
@@ -101,7 +103,7 @@ useEffect(() =>{
     }
     return(
         <div>
-
+            <h3>{t("/changeCruiseGroupData")}</h3>
             <Box style={{
                 width: '100%',
                 display: "flex",
@@ -278,13 +280,11 @@ useEffect(() =>{
                 </ImageUploading>
 
             </Box>
-            <Link to="/listCruiseGroup">
             <RoundedButton
                 onClick={HandleChangeCruiseGroup}
                 style={{width: '50%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
                 color="pink"
             >{t("changeData")} </RoundedButton>
-            </Link>
         </div>
     )
 }
