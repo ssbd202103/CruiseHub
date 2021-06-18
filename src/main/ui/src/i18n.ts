@@ -4,6 +4,7 @@ import {initReactI18next} from 'react-i18next'
 const resources = {
     PL: {
         translation: {
+            'attractionName': 'Nazwa atrakcji',
             "mainPage.headers": ["Parostatkiem w piękny rejs", "Titanici, tylko bezpieczniejsze",
                 "Ahoj przygodo!",
                 "Gdzie dzisiaj płyniemy?",
@@ -31,10 +32,13 @@ const resources = {
             "logout": "Wyloguj",
             "settings": "Ustawienia",
             "cruises": "Wycieczki",
+            "expand cruises": "Rozwiń wycieczki",
             "my cruises": "Moje wycieczki",
             "phone": "Telefon",
             "cancel": "Anuluj",
             'reserve': "Zarezerwuj",
+            "reservations": "Rezerwacje",
+            "publish": "Opublikuj",
             'choose another date': 'Wybierz inną datę',
             'no dates': 'Nie ma innych dat',
             //signin
@@ -95,7 +99,8 @@ const resources = {
             "confrim email change": "Potwierdź zmianę maila",
             //workerPanel
             "workerPanel": "Panel pracownika",
-            "deactivateCruiseGroup": "Deaktywuj grupę wycieczek",
+            "deactivateCruiseGroup": "Dezaktywuj grupę wycieczek",
+            "deactivate": "Dezaktywuj",
             //adminPanel
             "search account": "Wyszukać konto",
             "search company": "Wyszukać firme",
@@ -109,6 +114,8 @@ const resources = {
             "list accounts": "Lista kont",
             "list companies": "Lista firm",
             "edit": "Edytuj dane",
+            'create': 'Utwórz',
+
             "change password": "Zmień hasło",
             "reset password": "Resetuj hasło",
             "block": "Zablokuj konto",
@@ -118,8 +125,14 @@ const resources = {
             "disable": "Dezaktywuj",
             "grant access level": "Przydziel poziom dostępu",
             "change access level state": "Zmień stan poziomu dostępu",
+            "Remove reservation btn": "Usuń rezerwacje",
             //panels.clientPanel
             "clientPanel": "Panel klienta",
+            "ratings": "Oceny",
+            "search cruise": "Wyszukaj wycieczke",
+            "cruiseGroupName": "Nazwa wycieczki",
+            "rating": "Ocena",
+            "remove button": "Przycisk usun",
             //panels.ModeratorPanel
             "business workers": "Pracownicy firmy",
             "search business workers": "Szukaj niezatwierdzonych pracowników",
@@ -127,6 +140,8 @@ const resources = {
             "company phone number": " Numer telefonu firmy",
             "Manage business workers": "Zarządzaj pracownikami firm",
             "show business workers": "Pokaż pracowników",
+            "add company": "Dodaj firmę",
+            "company name example": "FirmaJez",
             //verify
             "verifyAccount": "Zweryfikuj konto",
             //color
@@ -148,7 +163,7 @@ const resources = {
             //cruisecard
             "cruiseExample": "Rejs po Morzu Śródziemnym",
             "createCruiseGroup": "Stworz nową grupę wycieczek",
-
+            "createCruise": "Stworz nową wycieczkę",
             //change language
             "changeLanguage": "Zmień język",
             //errors
@@ -199,6 +214,8 @@ const resources = {
             "error.account.notActive": "Konto jest zablokowane",
             "error.database.operation": "Błąd po stronie bazy danych",
             "error.business.worker.confirmed": "Pracownik jest już zatwierdzony",
+            "companies_nip_unique_constraint": "Firma o podanym numerze NIP znajduje się już w bazie danych",
+            "companies_name_unique_constraint": "Firma o podanej nazwie znajduje się już w bazie danych",
 
             //auth errors
             "auth.incorrect.login": "Błąd logowania",
@@ -257,7 +274,9 @@ const resources = {
             'accept.action': 'Czy chcesz wykonać tę akcję',
             '/accounts/resetSomebodyPassword': 'Resetowanie hasła',
             "/addCruiseGroup": "Dodaj grupę wycieczek",
+            "/addCruise": "Dodaj wycieczkę",
             "/listCruiseGroup": "Wyświetl grupę wycieczek",
+            "/add-company": "Dodaj firmę",
 
             'yes': 'Tak',
             'no': 'Nie',
@@ -293,17 +312,17 @@ const resources = {
             "description": "Opis",
             "descriptionPlaceHolder": "Tygodniowy rejs",
             "numberOfSeats": "Liczba miejsc",
-            "seatsPlaceHolder":"30",
-            "price":"Cena",
-            "pricePlaceHolder":"100",
-            "streetPlaceHolder":"Wolności",
-            "streetNumber":"Numer ulicy",
-            "numberPlaceHolder":"55",
+            "seatsPlaceHolder": "30",
+            "price": "Cena",
+            "pricePlaceHolder": "100",
+            "streetPlaceHolder": "Wolności",
+            "streetNumber": "Numer ulicy",
+            "numberPlaceHolder": "55",
             "harborName": "Nazwa portu",
-            "harborPlaceHolder":"port Srilanka",
-            "cityPlaceHolder":" Aleksandrów",
-            "countryPlaceHolder":"Polska",
-            "addPicture":"Dodaj zdjęcie",
+            "harborPlaceHolder": "port Srilanka",
+            "cityPlaceHolder": " Aleksandrów",
+            "countryPlaceHolder": "Polska",
+            "addPicture": "Dodaj zdjęcie",
             "removePicture": "Usuń zdjęcie",
             "addCruise": "Dodaj grupę",
             "listCruiseGroup": "Wyświetl grupę wycieczek",
@@ -317,11 +336,60 @@ const resources = {
             "search cruiseGroup": "Wyszukaj grupę",
             "seats": "Liczba miejsc",
             "start_date": "Data początkowa",
-            "end_date": "Data końcowa"
+            "end_date": "Data końcowa",
+
+            "newCruise": "Dodaj wycieczkę",
+            "startDate": "Data rozpoczęcia rejsu",
+            "endDate": "Data zakończenia rejsu",
+            "startTime": "Czas rozpoczęcia rejsu",
+            "endTime": "Czas zakończenia rejsu",
+            "cruiseGroup": "Grupa wycieczek",
+            "error.field.end.date.before.start.date": "Data zakończenia jest przed datą rozpoczęcia",
+            "error.field.start.date": "Data rozpoczęcia nie może być wcześniejsza niż dzisiejsza data",
+            "error.cruiseGroup.no.active": "Grupa wycieczek nie jest aktywna",
+            "error.startDate.before.currentDate": "Data rozpoczęcia nie może być przed obecną datą",
+            "error.startDate.after.endDate": "Data rozpoczęcia nie może być po dacie zakończenia",
+
+            "error.cruise.mapper.data.parse": "Nieprawidłowy format daty",
+            "error.cruise.mapper.uuid.parse": "Nieprawidłowy format uuid",
+
+            "max.date.message": "Data nie powinna być póżniejsza niż maksymalna data",
+            "min.date.message": "Data nie powinna być wcześniejsza niż minimalna data",
+
+            "invalid.date.message": "Nieprawidłowy format daty",
+            "invalid.label": "nieznana",
+            "cancel.label": "Anuluj",
+            "clear.label": "Wyczyść",
+            "ok.label": "Akceptuj",
+            "today.label": "Dzisiaj",
+            "not.all.fields.filled": "Nie wszystkie pola zostały wypełnione",
+            "Client name": "Nazwa klienta",
+            "numberOfSeatsReserved": "Liczba zarezerwowanych miejsc",
+            "CruiseName": "Nazwa wycieczki",
+            "/reservations": "Rezerwacje wycieczki",
+            "search reservation": "Wyszukaj rezerwacje",
+            "choose_number_of_seats": "Wybierz liczbę miejsc",
+            "changeData": "Edytuj",
+            "cruise.group.active.and.cannot.be.modified": "Grupa wycieczek posiada już aktywne wycieczki i nie może być modifykowana",
+            "/changeCruiseGroupData": "Zmień dane grupy wycieczek",
+            "Attractions name": "Nazwy atrakcji",
+            "attraction created": "Atrakcja utworzona poprawnie",
+            '/attractions': 'Atrakcje',
+            "error.attraction.non.removable": "Nie możesz usunąć atrakcji, wycieczka została już opublikowana",
+            "error.attraction.cruisePublished": "Nie można utworzyć atrakcji do opublikowanej wycieczki",
+            "/editCruise": "Edytuj wycieczkę",
+
+
+            "businessWorker.add.cruise.to.bad.company":"To konto nie należy do właściwej firmy",
+            "cannot.find.access.level":"Nie znaleziono prawidłowego poziomu dostępu",
+            "cruise.already.blocked":"Wycieczka jest już zdeaktywowana",
+            "cruise.cannot.edit":"Tej wycieczki nie można edytować",
+            "cruise.cannot.block":"Tej wycieczki nie można deaktywować"
         }
     },
     EN: {
         translation: {
+            'attractionName': 'Attraction name',
             "mainPage.headers": ["Titinics, but safer",
                 "Keep floating!",
                 "Boats are waiting!",
@@ -349,10 +417,13 @@ const resources = {
             "logout": "Logout",
             "settings": "Settings",
             "cruises": "Cruises",
+            "expand cruises": "Expand cruises",
             "my cruises": "My cruises",
             "phone": "Phone",
             "cancel": "Cancel",
             'reserve': "Reserve",
+            "reservations": "Reservations",
+            "publish": "Publish",
             'choose another date': 'Choose another date',
             'no dates': 'There are no another dates',
             //signin
@@ -414,6 +485,7 @@ const resources = {
             //workerPanel
             "workerPanel": "Worker panel",
             "deactivateCruiseGroup": "Deactivate Cruise Group",
+            "deactivate": "Deactivate",
             //adminPanel
             "adminPanel": "Administrator panel",
             "search account": "Search account",
@@ -426,6 +498,7 @@ const resources = {
             "list accounts": "Accounts list",
             "moderator panel": "Moderator Panel",
             "edit": "Edit data",
+            'create': 'Create',
             "change password": "Change password",
             "reset password": "Reset password",
             "block": "Block account",
@@ -435,8 +508,14 @@ const resources = {
             "change access level state": "Change access level state",
             "unblock": "Unblock account",
             "grand access level": "Grand access level",
+            "Remove reservation btn": "Remove reservation",
             //panels.clientPanel
             "clientPanel": "Client panel",
+            "ratings": "Ratings",
+            "search cruise": "Search cruise",
+            "cruiseGroupName": "Cruise name",
+            "rating": "Rating",
+            "remove button": "Remove button",
             //panels.ModeratorPanel
             "business workers": "Business workers",
             "search business workers": "Search business workers",
@@ -444,6 +523,8 @@ const resources = {
             "company phone number": "Company phone number",
             "Manage business workers": "Manage business workers",
             "show business workers": "Show business workers",
+            "add company": "Add a company",
+            "company name example": "Hedgehog Company",
             //verify
             "verifyAccount": "Verify account",
             //color
@@ -513,6 +594,8 @@ const resources = {
             "error.account.notActive": "Account is blocked",
             "error.database.operation": "Database operation error",
             "error.business.worker.confirmed": "Worker is already confirmed",
+            "companies_nip_unique_constraint": "Company with said NIP already exists in the database",
+            "companies_name_unique_constraint": "Company with said name already exists in the database",
 
             //auth errors
             "auth.incorrect.login": "Login error",
@@ -568,7 +651,9 @@ const resources = {
             "/accounts/change_access_level_state": "Change access level state",
             "/accounts/resetSomebodyPassword": "Password reseting",
             "/addCruiseGroup": "Add cruise group",
+            "/addCruise": "Add cruise",
             "/listCruiseGroup": "List cruise groups",
+            "/add-company": "Add a company",
 
             'accept.action': 'Do you want to do this action?',
 
@@ -580,7 +665,7 @@ const resources = {
             'token.missing': 'Token is missing',
             'redirect in': 'Redirect to the main page in',
             'data.load.success': 'Data has been downloaded',
-
+            'data.delete.success': 'Data has been removed',
             // alter type
             'UPDATE': 'Update',
             'INSERT': 'Insert',
@@ -606,17 +691,17 @@ const resources = {
             "description": "Description",
             "descriptionPlaceHolder": "A week tour ",
             "numberOfSeats": "Number of seats",
-            "seatsPlaceHolder":"30",
-            "price":"Price",
-            "pricePlaceHolder":"100",
-            "streetPlaceHolder":"Goergs streat",
-            "streetNumber":"Street number",
-            "numberPlaceHolder":"55",
+            "seatsPlaceHolder": "30",
+            "price": "Price",
+            "pricePlaceHolder": "100",
+            "streetPlaceHolder": "Goergs streat",
+            "streetNumber": "Street number",
+            "numberPlaceHolder": "55",
             "harborName": "Harbor name",
-            "harborPlaceHolder":" Srilanka port",
-            "cityPlaceHolder":" London",
-            "countryPlaceHolder":"Poland",
-            "addPicture":"Add picture",
+            "harborPlaceHolder": " Srilanka port",
+            "cityPlaceHolder": " London",
+            "countryPlaceHolder": "Poland",
+            "addPicture": "Add picture",
             "removePicture": "Remove Picture",
             "addCruise": "Add group",
             "listCruiseGroup": "List cruises groups",
@@ -630,8 +715,56 @@ const resources = {
             "search cruiseGroup": "Search group",
             "seats": "Number of seats",
             "start_date": "Start date",
-            "end_date": "End date"
+            "end_date": "End date",
+            "newCruise": "Add cruise",
+            "createCruise": "Create new cruise",
+            "startDate": "Cruise start date",
+            "endDate": "Cruise end date",
+            "startTime": "Cruise start time",
+            "endTime": "Cruise end time",
+            "cruiseGroup": "Cruise group",
+            "error.field.end.date.before.start.date": "End date is before start date",
+            "error.field.start.date": "The start date cannot be earlier than today's date",
+            "error.cruiseGroup.no.active": "Cruise group is not active",
+            "error.startDate.before.currentDate": "The start date cannot be before current date",
+            "error.startDate.after.endDate": "The start date cannot be after end date",
+            "error.cruise.mapper.data.parse": "Invalid date format",
+            "error.cruise.mapper.uuid.parse": "Invalid uuid format",
+
+            "max.date.message": "Date should not be after maximal date",
+            "min.date.message": "Date should not be before minimal date",
+
+            "invalid.date.message": "Invalid Date Form",
+            "invalid.label": "unknown",
+            "cancel.label": "Cancel",
+            "clear.label": "Clear",
+            "ok.label": "OK",
+            "today.label": "Today",
+            "not.all.fields.filled": "Not all fields have been completed",
+            "Client name": "Client name",
+            "numberOfSeatsReserved": "Number of seats reserved",
+            "CruiseName": "Name of the cruise",
+            "/reservations": "Cruise reservations",
+            "search reservation": "Search reservations",
+            "choose_number_of_seats": "Choose number of seats",
+            "changeData": "Edit",
+            "cruise.group.active.and.cannot.be.modified": "This cruise group already has active cruises and cannot be modifiable",
+            "/changeCruiseGroupData": "Change cruise group data",
+            "Attractions name": "Attractions name",
+            "attraction created": "Attraction created successfully",
+            '/attractions': 'Attractions',
+            "error.attraction.non.removable": "You cannot delete this attraction, thr cruise has already been published",
+            "error.attraction.cruisePublished": "Cannot create attraction for published cruise",
+            "/editCruise": "Edit cruise",
+
+            "businessWorker.add.cruise.to.bad.company":"This account does not belong to the correct company",
+            "cannot.find.access.level":"No valid access level found",
+            "cruise.already.blocked":"Cruise is already deactivated",
+            "cruise.cannot.edit":"This cruise cannot be edited",
+            "cruise.cannot.block":"This cruise cannot be deactivated",
         }
+
+
     }
 }
 

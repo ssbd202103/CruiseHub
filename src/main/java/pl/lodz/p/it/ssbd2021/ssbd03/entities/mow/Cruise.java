@@ -9,7 +9,7 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
@@ -17,15 +17,16 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise.UUID_CONSTRAINT;
 
 @Entity(name = "cruises")
 @NamedQueries({
-    @NamedQuery(name = "Cruise.findByUUID", query = "SELECT c FROM cruises c WHERE c.uuid = :uuid"),
-    @NamedQuery(name = "Cruise.findAllPublished", query = "SELECT c FROM cruises c WHERE c.published = true"),
-    @NamedQuery(name = "Cruise.findByCruiseGroupUUID", query = "SELECT c FROM cruises c WHERE c.cruisesGroup.uuid = :uuid")
+        @NamedQuery(name = "Cruise.findByUUID", query = "SELECT c FROM cruises c WHERE c.uuid = :uuid"),
+        @NamedQuery(name = "Cruise.findAllPublished", query = "SELECT c FROM cruises c WHERE c.published = true"),
+        @NamedQuery(name = "Cruise.findByCruiseGroupUUID", query = "SELECT c FROM cruises c WHERE c.cruisesGroup.uuid = :uuid"),
+        @NamedQuery(name = "Cruise.findByCruiseGroup", query = "SELECT c FROM cruises c WHERE c.cruisesGroup.name = :cruiseGroupName")
 })
 @Table(
-    uniqueConstraints = {
-        @UniqueConstraint(columnNames = "uuid", name = UUID_CONSTRAINT),
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "uuid", name = UUID_CONSTRAINT),
 
-    }
+        }
 )
 @ToString
 public class Cruise extends BaseEntity {
@@ -75,8 +76,29 @@ public class Cruise extends BaseEntity {
     @Column(name = "published")
     private boolean published;
 
+    @OneToMany(mappedBy = "cruise", cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST}, orphanRemoval = true)
+    private List<Attraction> attractions;
+
+    public List<Attraction> getAttractions() {
+        return attractions;
+    }
+
+    public void setAttractions(List<Attraction> attractions) {
+        this.attractions = attractions;
+    }
+
+    public Cruise(LocalDateTime startDate, LocalDateTime endDate,
+                  CruiseGroup cruisesGroup) {
+        this.uuid = UUID.randomUUID();
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.active = true;
+        this.cruisesGroup = cruisesGroup;
+        this.published = false;
+    }
+
     public Cruise(LocalDateTime startDate, LocalDateTime endDate, boolean active,
-                   CruiseGroup cruisesGroup) {
+                  CruiseGroup cruisesGroup) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.active = active;

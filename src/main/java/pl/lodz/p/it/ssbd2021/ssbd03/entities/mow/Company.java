@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.CompanyName;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.PhoneNumber;
 
 import javax.persistence.*;
@@ -14,20 +15,23 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_EMPTY;
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
-import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company.NIP_NAME_CONSTRAINT;
+import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company.COMPANY_NAME_UNIQUE_CONSTRAINT;
+import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company.NIP_UNIQUE_CONSTRAINT;
 
 @Entity(name = "companies")
 @NamedQueries({
         @NamedQuery(name = "Company.findByName", query = "SELECT company FROM companies company WHERE company.name = :name")
 })
 @Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"nip", "name"}, name = NIP_NAME_CONSTRAINT)
+        @UniqueConstraint(columnNames = {"nip"}, name = NIP_UNIQUE_CONSTRAINT),
+        @UniqueConstraint(columnNames = {"name"}, name = COMPANY_NAME_UNIQUE_CONSTRAINT)
 })
 @ToString
 public class Company extends BaseEntity {
-    public static final String NIP_NAME_CONSTRAINT = "companies_name_unique_constraint";
+    public static final String NIP_UNIQUE_CONSTRAINT = "companies_nip_unique_constraint";
+    public static final String COMPANY_NAME_UNIQUE_CONSTRAINT = "companies_name_unique_constraint";
+
     @Getter
     @Id
     @SequenceGenerator(name = "COMPANY_SEQ_GEN", sequenceName = "companies_id_seq", allocationSize = 1)
@@ -43,24 +47,23 @@ public class Company extends BaseEntity {
     @ToString.Exclude
     private Address address;
 
-
     @Getter
     @Setter
-    @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
-    @Column(name = "name", unique = true)
+    @CompanyName
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
     @Getter
     @Setter
     @PhoneNumber
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
     @Getter
     @Setter
     @Min(value = 1000000000L)
     @Max(value = 9999999999L)
-    @Column(name = "nip")
+    @Column(name = "nip", nullable = false, unique = true)
     private long NIP;
 
     public Company(Address address, String name, String phoneNumber, long NIP) {

@@ -1,15 +1,14 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.AttractionDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.attractions.AddAttractionDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.attractions.AttractionDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.AttractionEndpointLocal;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.validation.Valid;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 import java.util.UUID;
@@ -29,4 +28,25 @@ public class AttractionController {
     public List<AttractionDto> getAttractionsByCruiseUUID(@PathParam("uuid") String uuid) throws BaseAppException {
         return tryAndRepeat(() -> attractionEndpoint.getAttractionsByCruiseUUID(UUID.fromString(uuid)));
     }
+
+    /**
+     * Metoda pozwalająca dodać atrakcję do wycieczki
+     * @param addAttractionDto Reprezentacja Dto atrakcji
+     * @return UUID utworzonej atrakcji
+     * @throws BaseAppException Bazowy wyjątek aplikacji mogący wystąpić w przypadku naruszenia zasad biznesowych.
+     */
+    @POST
+    @Path("/add-attraction")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public UUID addAttraction(@Valid AddAttractionDto addAttractionDto) throws BaseAppException {
+        return tryAndRepeat(() -> attractionEndpoint.addAttraction(addAttractionDto));
+    }
+
+    @DELETE
+    @Path("/delete-attraction/{uuid}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void deleteAttraction(@PathParam("uuid") String uuid) throws BaseAppException {
+        tryAndRepeat(() -> attractionEndpoint.deleteAttraction(UUID.fromString(uuid)));
+    }
+
 }

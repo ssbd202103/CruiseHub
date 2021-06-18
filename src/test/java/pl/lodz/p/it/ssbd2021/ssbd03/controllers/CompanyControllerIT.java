@@ -1,13 +1,9 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
 import com.google.gson.Gson;
-import io.restassured.http.ContentType;
 import io.restassured.http.Header;
-import io.restassured.response.Response;
-import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Test;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AuthenticateDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CompanyLightDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.companies.CompanyLightDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.JWTHandler;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
 

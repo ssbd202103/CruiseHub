@@ -11,7 +11,7 @@ import {selectCompany} from "../../../redux/slices/userSlice";
 import axios from "../../../Services/URL";
 import useHandleError from "../../../errorHandler";
 import {useSnackbarQueue} from "../../snackbar";
-
+import {Link, useHistory} from "react-router-dom";
 export default function (){
     const [, forceUpdate] = useReducer(x => x + 1, 0);
     const {t} = useTranslation();
@@ -27,7 +27,7 @@ export default function (){
     const handleError = useHandleError()
     const worker_Company = useSelector(selectCompany);
     const showSuccess = useSnackbarQueue('success')
-
+    const history = useHistory();
     const [isPicture,setIsPicture] = React.useState(false)
       const maxNumber = 1;
       const [images, setImages] = React.useState([]);
@@ -40,7 +40,7 @@ export default function (){
 
       };
 
-    const HandleAddCruise =  () =>{
+    const HandleAddCruise = async () =>{
         if( !numberOfSeats ||!price || !streetNumber || price.includes(','))
         {
             handleError('error.fields')
@@ -62,7 +62,7 @@ export default function (){
         cruisePictures: images,
         description: description,
     })
-     axios.post('cruiseGroup/add-cuise-group',json,{
+    await axios.post('cruiseGroup/add-cuise-group',json,{
          headers: {
              "Content-Type": "application/json",
              "Accept": "application/json",
@@ -70,6 +70,7 @@ export default function (){
          }}).then(res => {
          showSuccess(t('successful action'))
          forceUpdate()
+         history.push('/listCruiseGroup')
      }).catch(error => {
          const message = error.response.data
          handleError(message, error.response.status)
@@ -232,7 +233,7 @@ export default function (){
                       }) => (
                         <div className="upload__image-wrapper" >
                             <RoundedButton
-                                color="blue-dark"
+                                color="blue"
 
                                 onClick={onImageUpload}
                             >
@@ -243,7 +244,7 @@ export default function (){
                                 <div key={index} className="image-item">
                                     <img src={image.dataURL} alt="" width="60%" />
                                     <div className="image-item__btn-wrapper">
-                                        <RoundedButton color="blue-dark"
+                                        <RoundedButton color="blue"
                                                        onClick={() => onImageRemove(index)}>{t("removePicture")}</RoundedButton>
                                     </div>
                                 </div>

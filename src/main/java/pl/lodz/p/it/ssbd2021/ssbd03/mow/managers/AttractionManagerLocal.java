@@ -17,10 +17,10 @@ public interface AttractionManagerLocal {
     /**
      * Metoda odpowiedzialna za usuwanie atrkacji
      *
-     * @param name Nazwa atrakcji
+     * @param uuid UUID atrakcji
      * @throws BaseAppException Bazowy wyjatek aplikacji
      */
-    void deleteAttraction(String name) throws BaseAppException;
+    void deleteAttraction(UUID uuid) throws BaseAppException;
 
 
     /**
@@ -28,8 +28,9 @@ public interface AttractionManagerLocal {
      *
      * @param attraction Obiekt reprezentujący atrakcję
      * @throws BaseAppException Wyjątek występujący w przypadku naruszenia zasad biznesowych.
+     * @return UUID nowo utworzonej atrakcji
      */
-    void addAttraction(Attraction attraction) throws BaseAppException;
+    UUID addAttraction(Attraction attraction) throws BaseAppException;
 
     /**
      * Metoda odpowiedzialna za edycję istniejącej atrakcji.
@@ -44,5 +45,5 @@ public interface AttractionManagerLocal {
      * @param uuid uuid wycieczki
      * @throws BaseAppException wyjątek wyrzucany w razie nie znależenia atrakcji
      */
-    public List<Attraction> findByCruiseUUID(UUID uuid) throws BaseAppException;
+     List<Attraction> findByCruiseUUID(UUID uuid) throws BaseAppException;
 }

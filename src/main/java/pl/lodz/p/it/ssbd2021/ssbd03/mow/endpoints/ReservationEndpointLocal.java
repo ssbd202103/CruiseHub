@@ -1,7 +1,10 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.*;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations.CancelReservationDTO;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations.CreateReservationDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations.CruiseReservationDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations.RemoveClientReservationDto;
 
 import javax.ejb.Local;
 import java.util.List;
@@ -24,9 +27,9 @@ public interface ReservationEndpointLocal {
     /**
      * Pobiera wszytskie rezerwacje dla danej wycieczki która nalezy do biznes_worker'a
      *
-     * @param cruise_uuid
-     * @return
-     * @throws BaseAppException
+     * @param cruise_uuid identyfikator wycieczki
+     * @return lista rezerwacji
+     * @throws BaseAppException Bazowy wyjątek aplikacji
      */
     List<CruiseReservationDto> viewWorkerCruiseReservations(UUID cruise_uuid) throws BaseAppException;
 

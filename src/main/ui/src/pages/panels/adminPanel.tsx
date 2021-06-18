@@ -19,7 +19,9 @@ import PanelLayout from "../../layouts/PanelLayout";
 import {getSelfAddressMetadataDetails, getSelfMetadataDetails} from "../../Services/accountsService";
 import {refreshToken} from "../../Services/userService";
 import useHandleError from "../../errorHandler";
-import ListCruiseGroup from "../panels/moderator/ListCruiseGroups";
+import ListCruiseGroup from "./admin/ListCruiseGroupsForAdmin";
+import ListReservationsForCruise from "./admin/ListReservationsForCruise";
+import AttractionList from "./admin/AttractionList";
 export default function AdminPanel() {
     const {t} = useTranslation()
     const handleError = useHandleError()
@@ -151,6 +153,14 @@ export default function AdminPanel() {
                 {
                     to: '/accounts/resetSomebodyPassword',
                     Component: RequestSomeonePasswordReset
+                },
+                {
+                    to: '/reservations',
+                    Component: ListReservationsForCruise
+                },
+                {
+                    to: '/attractions/:uuid',
+                    Component: AttractionList
                 }
             ]}
         />

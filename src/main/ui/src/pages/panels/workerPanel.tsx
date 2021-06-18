@@ -15,7 +15,17 @@ import useHandleError from "../../errorHandler";
 import AccountsListIcon from "@material-ui/icons/PeopleAltRounded";
 import ListCompany from "./moderator/ListCompany";
 import AddCruiseGroup from "./worker/AddCruiseGroup";
-import ListCruiseGroup from "../../components/ListCruiseGroup";
+import ListCruiseGroup from "./worker/ListCruiseGroupForWorker"
+import AddCruise from "./worker/AddCruise"
+import ChangeAccountData from "./admin/ChangeAccountData";
+import GrantAccessLevel from "./admin/GrantAccessLevel";
+import ChangeAccessLevelState from "./admin/ChangeAccessLevelState";
+import RequestSomeonePasswordReset from "../reset/requestSomeonesPasswordReset";
+import ListReservationsForCruise from "./admin/ListReservationsForCruise";
+import ListReservationsForWorker from "./worker/ListReservationsForWokrersCruise";
+import ChangeCruiseGroup from "./worker/changeCruiseGroup"
+import AttractionList from "./worker/AttractionList";
+
 
 export default function WorkerPanel() {
     const {t} = useTranslation()
@@ -109,6 +119,13 @@ export default function WorkerPanel() {
 
                 },
                 {
+                    link: '/addCruise',
+                    text: t('createCruise'),
+                    Icon: CreateIcon,
+                    Component: AddCruise
+
+                },
+                {
                     link: '/settings',
                     text: t('settings'),
                     Icon: SettingsIcon,
@@ -134,6 +151,20 @@ export default function WorkerPanel() {
                             />
                         </>
                     )
+                }
+            ]}
+            otherRoutes={[
+                {
+                    to: '/reservations',
+                    Component: ListReservationsForWorker
+                },
+                {
+                    to: '/changeCruiseGroupData',
+                    Component: ChangeCruiseGroup
+                },
+                {
+                    to: '/attractions/:uuid/:published',
+                    Component: AttractionList
                 }
             ]}
         />

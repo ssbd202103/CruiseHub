@@ -4,9 +4,6 @@ import com.auth0.jwt.interfaces.Claim;
 import lombok.extern.java.Log;
 import org.apache.commons.codec.digest.DigestUtils;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.CodeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.TokenWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.*;
@@ -14,7 +11,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Administrator;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.LanguageTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.AccountFacadeMok;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.facades.CodeWrapperFacade;
@@ -33,8 +29,6 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
 import javax.persistence.NoResultException;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.SecurityContext;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -52,7 +46,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 @Stateful
 @TransactionAttribute(TransactionAttributeType.MANDATORY)
 @Interceptors(TrackingInterceptor.class)
-public class AccountManager implements AccountManagerLocal {
+public class AccountManager extends BaseManagerMok implements AccountManagerLocal {
 
     @Inject
     private AccountFacadeMok accountFacade;
@@ -66,12 +60,8 @@ public class AccountManager implements AccountManagerLocal {
     @Inject
     private CodeWrapperFacade codeWrapperFacade;
 
-    @Context
-    private SecurityContext context;
-
     @Inject
     I18n i18n;
-
 
     private static final Properties securityProperties = PropertiesReader.getSecurityProperties();
 
@@ -241,7 +231,7 @@ public class AccountManager implements AccountManagerLocal {
     @RolesAllowed("getAllUnconfirmedBusinessWorkers")
     @Override
     public List<Account> getAllUnconfirmedBusinessWorkers() {
-         return accountFacade.getUnconfirmedBusinessWorkers().stream().map(AccessLevel::getAccount).collect(Collectors.toList());
+        return accountFacade.getUnconfirmedBusinessWorkers().stream().map(AccessLevel::getAccount).collect(Collectors.toList());
     }
 
     @RolesAllowed("blockUser")
@@ -705,11 +695,6 @@ public class AccountManager implements AccountManagerLocal {
         setUpdatedMetadata(account);
     }
 
-    @RolesAllowed("authenticatedUser")
-    public Account getCurrentUser() throws BaseAppException {
-        return accountFacade.findByLogin(context.getUserPrincipal().getName());
-    }
-
     @RolesAllowed("ConfirmBusinessWorker")
     @Override
     public void confirmBusinessWorker(String login, long version) throws BaseAppException {
@@ -756,31 +741,6 @@ public class AccountManager implements AccountManagerLocal {
                     }
                     return accessLevel.isEnabled();
                 });
-    }
-
-    private void setUpdatedMetadataWithModifier(Account modifier, BaseEntity... entities) throws BaseAppException {
-        AlterTypeWrapper update = accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE);
-        for (BaseEntity e : entities) {
-            e.setAlterType(update);
-            e.setAlteredBy(modifier);
-        }
-    }
-
-    private void setUpdatedMetadata(BaseEntity... entities) throws BaseAppException {
-        AlterTypeWrapper update = accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE);
-        for (BaseEntity e : entities) {
-            e.setAlterType(update);
-            e.setAlteredBy(getCurrentUser());
-        }
-    }
-
-    private void setCreatedMetadata(Account creator, BaseEntity... entities) throws BaseAppException {
-        AlterTypeWrapper insert = accountFacade.getAlterTypeWrapperByAlterType(AlterType.INSERT);
-        for (BaseEntity e : entities) {
-            e.setAlterType(insert);
-            e.setAlteredBy(creator);
-            e.setCreatedBy(creator);
-        }
     }
 
     @PermitAll

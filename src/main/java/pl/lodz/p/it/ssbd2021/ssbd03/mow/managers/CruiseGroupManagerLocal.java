@@ -41,7 +41,7 @@ public interface CruiseGroupManagerLocal {
      * @return zmodyfikowany obiekt klasy CruiseGroup
      * @throws BaseAppException Bazowy wyjątek aplikacji
      */
-    CruiseGroup changeCruiseGroup(String name, long number_of_seats, Double price, CruiseAddress start_address, long version) throws BaseAppException;
+    void changeCruiseGroup(String name, long number_of_seats, Double price, CruiseAddress start_address, long version,String description, CruisePicture picture, UUID uuid) throws BaseAppException;
 
 
     /**
@@ -70,4 +70,6 @@ public interface CruiseGroupManagerLocal {
 
 
     List<Cruise> getCruiseBelongsToCruiseGroup(CruiseGroup cruiseGroup) throws FacadeException;
+
+    List<CruiseGroup> getCruiseGroupForBusinessWorker(String companyName) throws BaseAppException;
 }
