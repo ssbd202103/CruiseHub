@@ -1,14 +1,10 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.managers;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Reservation;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AttractionManagerException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.managers.BaseManagerMok;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Attraction;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AttractionManagerException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.AttractionFacadeMow;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseFacadeMow;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.ReservationFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
 import javax.annotation.security.PermitAll;
@@ -19,6 +15,7 @@ import javax.interceptor.Interceptors;
 import java.util.List;
 import java.util.UUID;
 
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ATTRACTION_EDIT_CRUISE_PUBLISHED_ERROR;
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.NON_REMOVABLE_ATTRACTION_CRUISE_ALREADY_PUBLISH;
 
 /**
@@ -37,10 +34,10 @@ public class AttractionManager extends BaseManagerMow implements AttractionManag
     public void deleteAttraction(UUID uuid) throws BaseAppException {
         Attraction attraction = attractionFacadeMow.findByUUID(uuid);
         Cruise cruise = attraction.getCruise();
-        if(cruise.isPublished()){
+        if (cruise.isPublished()) {
             throw new AttractionManagerException(NON_REMOVABLE_ATTRACTION_CRUISE_ALREADY_PUBLISH);
         }
-            attractionFacadeMow.remove(attraction);
+        attractionFacadeMow.remove(attraction);
     }
 
     @RolesAllowed("addAttraction")
@@ -53,8 +50,20 @@ public class AttractionManager extends BaseManagerMow implements AttractionManag
 
     @RolesAllowed("editAttraction")
     @Override
-    public void editAttraction(Attraction attraction) throws BaseAppException {
-        throw new UnsupportedOperationException();
+    public void editAttraction(UUID attractionUUID, String newName, String newDescription, double newPrice, int newNumberOfSeats, long version) throws BaseAppException {
+        Attraction attraction = attractionFacadeMow.findByUUID(attractionUUID);
+        if (attraction.getCruise().isPublished()) {
+            throw new AttractionManagerException(ATTRACTION_EDIT_CRUISE_PUBLISHED_ERROR);
+        }
+
+        attraction.setName(newName);
+        attraction.setDescription(newDescription);
+        attraction.setPrice(newPrice);
+        attraction.setNumberOfSeats(newNumberOfSeats);
+        setUpdatedMetadata(attraction);
+
+        attraction.setVersion(version);
+        attractionFacadeMow.edit(attraction);
     }
 
     // TODO

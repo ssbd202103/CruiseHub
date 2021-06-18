@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
 
 import pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints.BaseEndpoint;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Attraction;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AttractionEndpointException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
@@ -21,9 +22,9 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ATTRACTION_CREATION_CRUISE_PUBLISHED_ERROR;
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.MAPPER_UUID_PARSE;
@@ -67,12 +68,22 @@ public class AttractionEndpoint extends BaseEndpoint implements AttractionEndpoi
     @RolesAllowed("editAttraction")
     @Override
     public void editAttraction(EditAttractionDto editAttractionDto) throws BaseAppException {
-        throw new UnsupportedOperationException();
+        try {
+            UUID uuid = UUID.fromString(editAttractionDto.getUuid());
+            attractionManager.editAttraction(uuid, editAttractionDto.getNewName(), editAttractionDto.getNewDescription(),
+                    editAttractionDto.getNewPrice(), editAttractionDto.getNewNumberOfSeats(), editAttractionDto.getVersion());
+        } catch (IllegalArgumentException e) {
+            throw new MapperException(MAPPER_UUID_PARSE);
+        }
     }
 
     @PermitAll
     @Override
     public List<AttractionDto> getAttractionsByCruiseUUID(UUID uuid) throws BaseAppException {
-        return attractionManager.findByCruiseUUID(uuid).stream().map(AttractionMapper::toAttractionDto).collect(Collectors.toList());
+        List<AttractionDto> attractions = new ArrayList<>();
+        for (Attraction attraction : attractionManager.findByCruiseUUID(uuid)) {
+            attractions.add(AttractionMapper.toAttractionDto(attraction));
+        }
+        return attractions;
     }
 }

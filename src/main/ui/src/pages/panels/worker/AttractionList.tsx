@@ -1,4 +1,4 @@
-import React, {useEffect, useReducer, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Attraction} from '../../../interfaces/Attraction';
 import {deleteAttraction, getAttractionsByCruiseUUID} from "../../../Services/attractionService";
 import {useSnackbarQueue} from "../../snackbar";
@@ -42,16 +42,12 @@ export default function AttractionList() {
     }, [])
 
 
-
     // Data grid events
     const [selectedRow, setSelectedRow] = useState('')
-
 
     const handleSelectedRow = (row: GridRowSelectedParams) => {
         setSelectedRow(row.data.id as string)
     }
-
-
 
     const cols: GridColDef[] = [
         {field: 'name', headerName: t('attractionName'), flex: 1},
@@ -60,9 +56,9 @@ export default function AttractionList() {
         {field: 'numberOfSeats', headerName: t('numberOfSeats'), flex: 1},
         {
             field: '',
-            renderHeader: params => published === 'false' ? <RoundedButton color="blue" onClick={() => {
+            renderHeader: params => <RoundedButton color="blue" onClick={() => {
                 setCreateAttractionDialogOpen(true)
-            }}>{t('create')}</RoundedButton> : "",
+            }}>{t('create')}</RoundedButton>,
             headerClassName: styles['create-wrap'],
             sortable: false,
             disableColumnMenu: true,
@@ -78,7 +74,9 @@ export default function AttractionList() {
                                         const attraction = attractions.find(attraction => attraction.uuid === params.row.id)
 
                                         if (attraction) {
-                                            setUuidEdit(params.row.id)
+                                            setAttractionUUID(attraction.uuid)
+                                            setAttractionVersion(attraction.version)
+                                            setAttractionEtag(attraction.etag)
                                             setNameEdit(attraction.name)
                                             setDescriptionEdit(attraction.description)
                                             setPriceEdit(attraction.price)
@@ -109,10 +107,32 @@ export default function AttractionList() {
         })
     }
 
+    const handleEditAttraction = async () => {
+        const json = {
+            "uuid": attractionUUID,
+            "newName": nameEdit,
+            "newDescription": descriptionEdit,
+            "newPrice": priceEdit,
+            "newNumberOfSeats": numberOfSeatsEdit,
+            "version": attractionVersion
+        }
 
-    const handleEditAttraction = () => {
-        // TODO editing implementation
-        alert("ATTRACTION MUST BE EDITED!")
+        console.log('attractionEdit:');
+        console.log(json)
+        await axios.put('attractions/edit-attraction', json, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'If-Match': attractionEtag
+            }
+        }).then(res => {
+            showSuccess(t('attraction edited'))
+            refreshToken()
+            setEditAttractionDialogOpen(false)
+            getAttractions()
+        }).catch(err => {
+            const message = err.response.data
+            handleError(message, err.response.status)
+        })
     }
 
     const handleCreateAttraction = async () => {
@@ -139,9 +159,11 @@ export default function AttractionList() {
         })
     }
 
-    // Dialogs data
+// Dialogs data
     const [editAttractionDialogOpen, setEditAttractionDialogOpen] = useState(false);
-    const [uuidEdit, setUuidEdit] = useState('');
+    const [attractionUUID, setAttractionUUID] = useState('');
+    const [attractionVersion, setAttractionVersion] = useState(0);
+    const [attractionEtag, setAttractionEtag] = useState('')
     const [nameEdit, setNameEdit] = useState('');
     const [descriptionEdit, setDescriptionEdit] = useState('');
     const [priceEdit, setPriceEdit] = useState(0);
@@ -155,8 +177,9 @@ export default function AttractionList() {
 
     return (
         <>
+            {published === 'false' ? '' : <><h3>{t("attractions read only")}</h3><br/></>}
             <DataGrid
-                columns={cols}
+                columns={published === 'true' ? cols.slice(0, -1) : cols}
                 rows={attractions.map((attraction) => ({id: attraction.uuid, ...attraction}))}
                 onRowSelected={handleSelectedRow}
             />
@@ -166,7 +189,8 @@ export default function AttractionList() {
                 onConfirm={handleEditAttraction}
                 onCancel={() => {
                     setEditAttractionDialogOpen(false)
-                    setUuidEdit('')
+                    setAttractionUUID('')
+                    setAttractionVersion(0)
                     setNameEdit('')
                     setDescriptionEdit('')
                     setPriceEdit(0)
@@ -189,6 +213,7 @@ export default function AttractionList() {
                             fontFamily: "'Montserrat Alternates', sans-serif",
                             fontSize: '1.2rem',
                             marginBottom: 16,
+                            padding: '14px 18px',
                         }}
                         placeholder={t('description')}
                         value={descriptionEdit}

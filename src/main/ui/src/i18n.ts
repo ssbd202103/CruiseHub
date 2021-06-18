@@ -75,7 +75,7 @@ const resources = {
             "itsPassword": "",
             //ManageAccount
             "manage account": "Zarządzaj kontem",
-            "personal data": "Dane presonalne",
+            "personal data": "Dane personalne",
             "phone number": "Numer telefonu",
             "personal data change btn": "Edytuj dane personalne",
             "personal data change": "Edycja danych personalnych",
@@ -162,8 +162,8 @@ const resources = {
             "version": "Wersja:",
             //cruisecard
             "cruiseExample": "Rejs po Morzu Śródziemnym",
-            "createCruiseGroup": "Stworz nową grupę wycieczek",
-            "createCruise": "Stworz nową wycieczkę",
+            "createCruiseGroup": "Stwórz nową grupę wycieczek",
+            "createCruise": "Stwórz nową wycieczkę",
             //change language
             "changeLanguage": "Zmień język",
             //errors
@@ -374,9 +374,12 @@ const resources = {
             "/changeCruiseGroupData": "Zmień dane grupy wycieczek",
             "Attractions name": "Nazwy atrakcji",
             "attraction created": "Atrakcja utworzona poprawnie",
+            "attraction edited": "Atrakcja została edytowana",
             '/attractions': 'Atrakcje',
             "error.attraction.non.removable": "Nie możesz usunąć atrakcji, wycieczka została już opublikowana",
-            "error.attraction.cruisePublished": "Nie można utworzyć atrakcji do opublikowanej wycieczki",
+            "error.attraction.create.cruisePublished": "Nie można utworzyć atrakcji do opublikowanej wycieczki",
+            "error.attraction.edit.cruisePublished": "Nie można edytować atrakcji do opublikowanej wycieczki",
+            "attractions read only": "Atrakcje wyświetlane w trybie odczytu - wycieczka jest już opublikowana",
             "/editCruise": "Edytuj wycieczkę",
 
 
@@ -385,6 +388,7 @@ const resources = {
             "cruise.already.blocked":"Wycieczka jest już zdeaktywowana",
             "cruise.cannot.edit":"Tej wycieczki nie można edytować",
             "cruise.cannot.block":"Tej wycieczki nie można deaktywować"
+
         }
     },
     EN: {
@@ -752,9 +756,11 @@ const resources = {
             "/changeCruiseGroupData": "Change cruise group data",
             "Attractions name": "Attractions name",
             "attraction created": "Attraction created successfully",
+            "attraction edited": "Attraction edited successfully",
+
             '/attractions': 'Attractions',
             "error.attraction.non.removable": "You cannot delete this attraction, thr cruise has already been published",
-            "error.attraction.cruisePublished": "Cannot create attraction for published cruise",
+            "error.attraction.create.cruisePublished": "Cannot create attraction for published cruise",
             "/editCruise": "Edit cruise",
 
             "businessWorker.add.cruise.to.bad.company":"This account does not belong to the correct company",
@@ -762,9 +768,9 @@ const resources = {
             "cruise.already.blocked":"Cruise is already deactivated",
             "cruise.cannot.edit":"This cruise cannot be edited",
             "cruise.cannot.block":"This cruise cannot be deactivated",
+            "error.attraction.edit.cruisePublished": "Cannot edit attraction for published cruise",
+            "attractions read only": "Showing attractions in read only mode - cruise is already published"
         }
-
-
     }
 }
 
