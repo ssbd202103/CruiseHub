@@ -6,6 +6,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.MapperException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.attractions.AddAttractionDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.attractions.AttractionDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.attractions.EditAttractionDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.RelatedCruiseDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.AttractionEndpointLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
 
@@ -68,7 +69,11 @@ public class AttractionController {
     @Path("/delete-attraction/{uuid}")
     @Consumes(MediaType.APPLICATION_JSON)
     public void deleteAttraction(@PathParam("uuid") String uuid) throws BaseAppException {
-        tryAndRepeat(() -> attractionEndpoint.deleteAttraction(UUID.fromString(uuid)));
+     try{
+         UUID convertedUUID = UUID.fromString(uuid);
+         tryAndRepeat(() -> attractionEndpoint.deleteAttraction(convertedUUID));
+     }catch (IllegalArgumentException e) {
+         throw new MapperException(MAPPER_UUID_PARSE);
+     }
     }
-
 }
