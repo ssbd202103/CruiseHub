@@ -148,7 +148,7 @@ public class CruiseController {
      *
      * @param deactivateCruiseDto Obiekt posiadający UUID oraz werjsie danej wycieczki
      * @param etag                Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
-     * @throws BaseAppException
+     * @throws BaseAppException   Bazowy wyjątek aplikacji
      */
     @ETagFilterBinding
     @PUT
@@ -162,6 +162,11 @@ public class CruiseController {
     }
 
 
+    /**
+     * @param editCruiseDto     Obiekt reprezentujący wycieczkę
+     * @param etag              Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
     @ETagFilterBinding
     @PUT
     @Path("/edit-cruise")
