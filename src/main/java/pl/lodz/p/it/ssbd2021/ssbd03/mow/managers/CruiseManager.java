@@ -190,7 +190,7 @@ public class CruiseManager implements CruiseManagerLocal {
     @RolesAllowed("publishCruise")
     @Override
     public void publishCruise(long cruiseVersion, UUID cruiseUuid) throws BaseAppException {
-        Cruise cruise = cruiseFacadeMow.findByUUID(UUID.randomUUID());
+        Cruise cruise = cruiseFacadeMow.findByUUID(cruiseUuid);
         if(cruise.getVersion() != cruiseVersion){
             throw FacadeException.optimisticLock();
         }

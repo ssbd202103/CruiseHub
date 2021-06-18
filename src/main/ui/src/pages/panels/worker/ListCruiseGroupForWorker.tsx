@@ -20,7 +20,11 @@ import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableBody from "@material-ui/core/TableBody";
 import {ImageListType} from "react-images-uploading";
-import {getCruiseGroupForBusinessWorker, getCruisesForCruiseGroup} from "../../../Services/cruiseGroupService";
+import {
+    getCruiseGroupForBusinessWorker,
+    getCruisesForCruiseGroup,
+    publishCruise
+} from "../../../Services/cruiseGroupService";
 import IconButton from "@material-ui/core/IconButton";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
@@ -47,10 +51,6 @@ const useRowStyles = makeStyles({
 });
 
 
-
-
-
-
 const useStyles = makeStyles(theme => ({
     light: {
         '& .MuiFormLabel-root, & .MuiInputBase-input': {
@@ -59,7 +59,7 @@ const useStyles = makeStyles(theme => ({
         '& .MuiSvgIcon-root': {
             fill: 'var(--dark)',
         },
-        '& .MuiInput-underline::before, & .MuiInput-underline::after, & .MuiInput-underline:hover:not(.Mui-disabled):before' : {
+        '& .MuiInput-underline::before, & .MuiInput-underline::after, & .MuiInput-underline:hover:not(.Mui-disabled):before': {
             borderColor: 'var(--dark)',
         },
     },
@@ -70,12 +70,11 @@ const useStyles = makeStyles(theme => ({
         '& .MuiSvgIcon-root': {
             fill: 'var(--white)',
         },
-        '& .MuiInput-underline::before, & .MuiInput-underline::after, & .MuiInput-underline:hover:not(.Mui-disabled):before' : {
+        '& .MuiInput-underline::before, & .MuiInput-underline::after, & .MuiInput-underline:hover:not(.Mui-disabled):before': {
             borderColor: 'var(--white)',
         },
     },
 }));
-
 
 
 export function createCruiseGroup(
@@ -92,6 +91,7 @@ export function createCruiseGroup(
     active: boolean,
     company: any,
     cruises: any,
+    published: boolean
 ) {
     return {
         price: price,
@@ -106,7 +106,8 @@ export function createCruiseGroup(
         description: description,
         active: active,
         company: company,
-        cruises:cruises
+        cruises: cruises,
+        published: published
     };
 }
 
@@ -134,7 +135,7 @@ interface DeactivateCruiseData {
 interface DeactivateCruise {
     uuid: string,
     etag: string,
-    version:bigint
+    version: bigint
 }
 
 const deactivateCruiseGroup = async ({uuid, etag, version, token}: DeactivateCruiseData) => {
@@ -153,7 +154,7 @@ const deactivateCruiseGroup = async ({uuid, etag, version, token}: DeactivateCru
 }
 
 
-export interface  CruiseData{
+export interface CruiseData {
     group: ReturnType<typeof createCruiseGroup>,
     style: React.CSSProperties,
     onChange: () => Promise<any>,
@@ -177,7 +178,6 @@ function Row(props: CruiseData) {
     const darkMode = useSelector(selectDarkMode);
     const language = languageType === 'PL' ? pl : eng;
     const isPMAM = language === eng;
-
 
 
     const [startDate, setStartDate] = React.useState<Date | null>(
@@ -221,25 +221,25 @@ function Row(props: CruiseData) {
         startDate.setHours(0, 0, 0, 0)
         endDate.setHours(0, 0, 0, 0)
 
-        if(startDate.getTime() < new Date("1900-01-01").getTime()) {
+        if (startDate.getTime() < new Date("1900-01-01").getTime()) {
             handleError('min.date.message')
             return
         }
-        if(startDate.getTime() > new Date("2100-01-01").getTime()) {
+        if (startDate.getTime() > new Date("2100-01-01").getTime()) {
             handleError('max.date.message')
             return
         }
-        if(endDate.getTime() < new Date("1900-01-01").getTime()) {
+        if (endDate.getTime() < new Date("1900-01-01").getTime()) {
             handleError('min.date.message')
             return
         }
-        if(endDate.getTime() > new Date("2100-01-01").getTime()) {
+        if (endDate.getTime() > new Date("2100-01-01").getTime()) {
             handleError('max.date.message')
             return
         }
 
 
-        try{
+        try {
             var newStartDateWithoutTime = new Date(startTime.getTime())
             newStartDateWithoutTime.setHours(0, 0, 0, 0)
             var newStartDate = new Date(startDate.getTime() + startTime?.getTime() - newStartDateWithoutTime.getTime())
@@ -271,13 +271,14 @@ function Row(props: CruiseData) {
                 endDate: newEndDate.toISOString(),
                 version: version
             })
-            axios.put('cruise/edit-cruise',json,{
+            axios.put('cruise/edit-cruise', json, {
                 headers: {
                     "Content-Type": "application/json",
                     "Accept": "application/json",
                     "Authorization": `Bearer ${token}`,
                     "If-Match": etag
-                }}).then(res => {
+                }
+            }).then(res => {
                 showSuccess(t('successful action'))
                 forceUpdate()
             }).catch(error => {
@@ -293,9 +294,10 @@ function Row(props: CruiseData) {
 
 
     const [deactivateCruise, setDeactivateCruise] = useState<DeactivateCruise>({
-        uuid : "",
-        etag : "",
-        version: BigInt(0) });
+        uuid: "",
+        etag: "",
+        version: BigInt(0)
+    });
     const [, forceUpdate] = useReducer(x => x + 1, 0);
 
     const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
@@ -344,18 +346,32 @@ function Row(props: CruiseData) {
             })
     }
 
+
     const getParsedDate = (date: any) => {
         return `${date.dayOfMonth}-${date.monthValue.toString().padStart(2, '0')}-${date.year}`
     }
-    const handleReservations =(props: any) =>{
+    const handleReservations = (props: any) => {
         const uuid = props
-        sessionStorage.setItem("cruiseUUID",uuid)
+        sessionStorage.setItem("cruiseUUID", uuid)
     }
-    const  HandleChangeData=(props: any)=>{
-        sessionStorage.setItem("ChangeCruiseGroupData",JSON.stringify(props))
+    const HandleChangeData = (props: any) => {
+        sessionStorage.setItem("ChangeCruiseGroupData", JSON.stringify(props))
     }
 
     const classesDialog = useStyles()
+
+    function publishCruiseHandler(cruise: any) {
+        publishCruise(cruise.uuid, cruise.version, cruise.etag).then(res => {
+            handleSetOpen();
+            refreshToken();
+            showSuccess(t('successful action'));
+        })
+            .catch(error => {
+                const message = error.response.data
+                const status = error.response.status
+                handleError(message, status)
+            })
+    }
 
     return (
         <React.Fragment>
@@ -393,7 +409,7 @@ function Row(props: CruiseData) {
                     </RoundedButton>
                 </TableCell>
                 <TableCell style={style}>
-                    {group.cruises.length>0 ?
+                    {group.cruises.length > 0 ?
                         <RoundedButton
                             color="pink"
                             disabled={group.cruises.length}
@@ -465,32 +481,50 @@ function Row(props: CruiseData) {
                                                        style={style}>{cruise.active.toString()}</TableCell>
                                             <TableCell align="center">
                                                 <Link to="/reservations">
-                                                    <Button  className={buttonClass.root} onClick={() => {handleReservations(cruise.uuid)}}
+                                                    <Button className={buttonClass.root} onClick={() => {
+                                                        handleReservations(cruise.uuid)
+                                                    }}
                                                     >{t("reservations")}</Button>
                                                 </Link>
                                             </TableCell>
                                             <TableCell align="center">
                                                 <Link to={`attractions/${cruise.uuid}/${cruise.published}`}>
                                                     <Button className={buttonClass.root}>
-                                                    {t("attractions")}</Button>
+                                                        {t("attractions")}</Button>
                                                 </Link>
                                             </TableCell>
+
                                             <TableCell align="center">
-                                                <RoundedButton color={"pink"} disabled={(cruise.published)} className={buttonClass.root} onClick={() => {
+                                                <RoundedButton color={"pink"}
+                                                               className={buttonClass.root}
+                                                               disabled={(cruise.published)}
+                                                               onClick={() => publishCruiseHandler(cruise)}
+                                                >
+                                                    {(cruise.published) ? t("published") : t("publish")}
+                                                </RoundedButton>
+
+                                            </TableCell>
+
+                                            <TableCell align="center">
+                                                <RoundedButton color={"pink"} disabled={(cruise.published)}
+                                                               className={buttonClass.root} onClick={() => {
                                                     setVersion(cruise.version)
                                                     setUUID(cruise.uuid)
                                                     setEtag(cruise.etag)
-                                                    setOpenDialog(true)}}>{t("changeData")
+                                                    setOpenDialog(true)
+                                                }}>{t("changeData")
                                                 }</RoundedButton>
                                             </TableCell>
 
 
                                             <TableCell align="center">
-                                                <RoundedButton color={"pink"} disabled={!(cruise.published && cruise.active)} className={buttonClass.root} onClick={() => {
+                                                <RoundedButton color={"pink"}
+                                                               disabled={!(cruise.published && cruise.active)}
+                                                               className={buttonClass.root} onClick={() => {
                                                     setDeactivateCruise({
-                                                        uuid : cruise.uuid,
-                                                        etag : cruise.etag,
-                                                        version : cruise.version,
+                                                        uuid: cruise.uuid,
+                                                        etag: cruise.etag,
+                                                        version: cruise.version,
 
                                                     })
                                                     setButtonPopupAcceptAction(true)
@@ -503,8 +537,11 @@ function Row(props: CruiseData) {
                                 </TableBody>
                                 <PopupAcceptAction
                                     open={buttonPopupAcceptAction}
-                                    onConfirm={()=>{handleConfirm(deactivateCruise)}}
-                                    onCancel={() => {setButtonPopupAcceptAction(false)
+                                    onConfirm={() => {
+                                        handleConfirm(deactivateCruise)
+                                    }}
+                                    onCancel={() => {
+                                        setButtonPopupAcceptAction(false)
                                     }}/>
                             </Table>
                         </Box>
@@ -516,14 +553,14 @@ function Row(props: CruiseData) {
                 title={t('edit')}
                 onConfirm={HandleEditCruise}
                 onCancel={() => {
-                setOpenDialog(false)
-            }}>
+                    setOpenDialog(false)
+                }}>
                 <div>
                     <Box>
-                        <MuiPickersUtilsProvider locale={language} utils={DateFnsUtils} >
+                        <MuiPickersUtilsProvider locale={language} utils={DateFnsUtils}>
                             <KeyboardDatePicker
                                 style={{marginRight: 30}}
-                                className={darkMode ? classesDialog.dark: classesDialog.light}
+                                className={darkMode ? classesDialog.dark : classesDialog.light}
                                 autoOk={true}
                                 disableToolbar
                                 maxDateMessage={t("max.date.message")}
@@ -545,7 +582,7 @@ function Row(props: CruiseData) {
                                 }}
                             />
                             <KeyboardTimePicker
-                                className={darkMode ? classesDialog.dark: classesDialog.light}
+                                className={darkMode ? classesDialog.dark : classesDialog.light}
                                 autoOk={true}
                                 maxDateMessage={t("max.date.message")}
                                 minDateMessage={t("min.date.message")}
@@ -567,11 +604,11 @@ function Row(props: CruiseData) {
                         </MuiPickersUtilsProvider>
                     </Box>
                     <Box>
-                        <MuiPickersUtilsProvider locale={language} utils={DateFnsUtils} >
+                        <MuiPickersUtilsProvider locale={language} utils={DateFnsUtils}>
                             <KeyboardDatePicker
                                 autoOk={true}
                                 style={{marginRight: 30}}
-                                className={darkMode ? classesDialog.dark: classesDialog.light}
+                                className={darkMode ? classesDialog.dark : classesDialog.light}
                                 disableToolbar
                                 variant="inline"
                                 maxDateMessage={t("max.date.message")}
@@ -593,7 +630,7 @@ function Row(props: CruiseData) {
                             />
                             <KeyboardTimePicker
                                 autoOk={true}
-                                className={darkMode ? classesDialog.dark: classesDialog.light}
+                                className={darkMode ? classesDialog.dark : classesDialog.light}
                                 maxDateMessage={t("max.date.message")}
                                 minDateMessage={t("min.date.message")}
                                 invalidDateMessage={t("invalid.date.message")}
@@ -632,7 +669,7 @@ const ListCruiseGroups = () => {
     const worker_Company = useSelector(selectCompany);
 
     const getCruiseGroupFromWorker = () => {
-        return   getCruiseGroupForBusinessWorker(worker_Company).then(res => {
+        return getCruiseGroupForBusinessWorker(worker_Company).then(res => {
             setCruiseGroupL(res.data)
         }).catch(error => {
             const message = error.response.data
@@ -717,7 +754,7 @@ const ListCruiseGroups = () => {
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`
                             }}>{t("changeData")}</TableCell>
-                    </TableRow>
+                        </TableRow>
                     </TableHead>
                     <TableBody>
                         {search(cruiseGroupL.map((cruiseGroups, index) => (

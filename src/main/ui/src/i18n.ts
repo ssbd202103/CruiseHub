@@ -101,6 +101,7 @@ const resources = {
             "workerPanel": "Panel pracownika",
             "deactivateCruiseGroup": "Dezaktywuj grupę wycieczek",
             "deactivate": "Dezaktywuj",
+            "published": "Opublikowano",
             //adminPanel
             "search account": "Wyszukać konto",
             "search company": "Wyszukać firme",
@@ -380,11 +381,11 @@ const resources = {
             "/editCruise": "Edytuj wycieczkę",
 
 
-            "businessWorker.add.cruise.to.bad.company":"To konto nie należy do właściwej firmy",
-            "cannot.find.access.level":"Nie znaleziono prawidłowego poziomu dostępu",
-            "cruise.already.blocked":"Wycieczka jest już zdeaktywowana",
-            "cruise.cannot.edit":"Tej wycieczki nie można edytować",
-            "cruise.cannot.block":"Tej wycieczki nie można deaktywować"
+            "businessWorker.add.cruise.to.bad.company": "To konto nie należy do właściwej firmy",
+            "cannot.find.access.level": "Nie znaleziono prawidłowego poziomu dostępu",
+            "cruise.already.blocked": "Wycieczka jest już zdeaktywowana",
+            "cruise.cannot.edit": "Tej wycieczki nie można edytować",
+            "cruise.cannot.block": "Tej wycieczki nie można deaktywować"
         }
     },
     EN: {
@@ -486,6 +487,7 @@ const resources = {
             "workerPanel": "Worker panel",
             "deactivateCruiseGroup": "Deactivate Cruise Group",
             "deactivate": "Deactivate",
+            "published": "Published",
             //adminPanel
             "adminPanel": "Administrator panel",
             "search account": "Search account",
@@ -757,11 +759,11 @@ const resources = {
             "error.attraction.cruisePublished": "Cannot create attraction for published cruise",
             "/editCruise": "Edit cruise",
 
-            "businessWorker.add.cruise.to.bad.company":"This account does not belong to the correct company",
-            "cannot.find.access.level":"No valid access level found",
-            "cruise.already.blocked":"Cruise is already deactivated",
-            "cruise.cannot.edit":"This cruise cannot be edited",
-            "cruise.cannot.block":"This cruise cannot be deactivated",
+            "businessWorker.add.cruise.to.bad.company": "This account does not belong to the correct company",
+            "cannot.find.access.level": "No valid access level found",
+            "cruise.already.blocked": "Cruise is already deactivated",
+            "cruise.cannot.edit": "This cruise cannot be edited",
+            "cruise.cannot.block": "This cruise cannot be deactivated",
         }
 
 

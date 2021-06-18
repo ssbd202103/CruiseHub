@@ -12,7 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class PublishCruiseDto implements SignableEntity {
     private long cruiseVersion;
-    private UUID cruiseUuid;
+    private String cruiseUuid;
 
     @Override
     public String getSignablePayload() {

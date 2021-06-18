@@ -180,7 +180,8 @@ public class CruiseController {
     @Path("/publish")
     @Consumes(MediaType.APPLICATION_JSON)
     public void publishCruise(PublishCruiseDto publishCruiseDto,
-                              @HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) @Valid String etag) throws BaseAppException {
+                              @HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL)
+                              @NotEmpty(message = CONSTRAINT_NOT_EMPTY) @Valid String etag) throws BaseAppException {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, publishCruiseDto)) {
             throw ControllerException.etagIdentityIntegrity();
         }
