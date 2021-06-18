@@ -10,7 +10,10 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.interceptor.Interceptors;
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.UUID;
 
@@ -55,17 +58,7 @@ public class AttractionFacadeMow extends AbstractFacade<Attraction> {
         super.remove(entity);
     }
 
-    @RolesAllowed("editAttraction")
-    public Attraction findByUUID(UUID uuid) throws BaseAppException {
-        TypedQuery<Attraction> tq = em.createNamedQuery("Attraction.findByUUID", Attraction.class);
-        tq.setParameter("uuid", uuid);
-        try {
-            return tq.getSingleResult();
-        } catch (NoResultException e) {
-            throw FacadeException.noSuchElement();
-        }
-    }
-
+    //todo double check rolesAllowed for this method
     @PermitAll
     public Attraction findByUUID(UUID uuid) throws BaseAppException {
         TypedQuery<Attraction> tq = em.createNamedQuery("Attraction.findByUUID", Attraction.class);
