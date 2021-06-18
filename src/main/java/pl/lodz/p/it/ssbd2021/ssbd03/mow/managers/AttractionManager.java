@@ -53,8 +53,16 @@ public class AttractionManager extends BaseManagerMow implements AttractionManag
 
     @RolesAllowed("editAttraction")
     @Override
-    public void editAttraction(Attraction attraction) throws BaseAppException {
-        throw new UnsupportedOperationException();
+    public void editAttraction(UUID attractionUUID, String newName, String newDescription, double newPrice, int newNumberOfSeats, long version) throws BaseAppException {
+        Attraction attraction = attractionFacadeMow.findByUUID(attractionUUID);
+        attraction.setName(newName);
+        attraction.setDescription(newDescription);
+        attraction.setPrice(newPrice);
+        attraction.setNumberOfSeats(newNumberOfSeats);
+        setUpdatedMetadata(attraction);
+
+        attraction.setVersion(version);
+        attractionFacadeMow.edit(attraction);
     }
 
     // TODO

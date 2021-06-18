@@ -67,7 +67,13 @@ public class AttractionEndpoint extends BaseEndpoint implements AttractionEndpoi
     @RolesAllowed("editAttraction")
     @Override
     public void editAttraction(EditAttractionDto editAttractionDto) throws BaseAppException {
-        throw new UnsupportedOperationException();
+        try {
+            UUID uuid = UUID.fromString(editAttractionDto.getUuid());
+            attractionManager.editAttraction(uuid, editAttractionDto.getNewName(), editAttractionDto.getNewDescription(),
+                    editAttractionDto.getNewPrice(), editAttractionDto.getNewNumberOfSeats(), editAttractionDto.getVersion());
+        } catch (IllegalArgumentException e) {
+            throw new MapperException(MAPPER_UUID_PARSE);
+        }
     }
 
     @PermitAll

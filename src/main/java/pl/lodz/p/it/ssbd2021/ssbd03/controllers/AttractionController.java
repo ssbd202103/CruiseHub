@@ -1,9 +1,12 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.ControllerException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.attractions.AddAttractionDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.attractions.AttractionDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.attractions.EditAttractionDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.AttractionEndpointLocal;
+import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -31,6 +34,7 @@ public class AttractionController {
 
     /**
      * Metoda pozwalająca dodać atrakcję do wycieczki
+     *
      * @param addAttractionDto Reprezentacja Dto atrakcji
      * @return UUID utworzonej atrakcji
      * @throws BaseAppException Bazowy wyjątek aplikacji mogący wystąpić w przypadku naruszenia zasad biznesowych.
@@ -40,6 +44,17 @@ public class AttractionController {
     @Consumes(MediaType.APPLICATION_JSON)
     public UUID addAttraction(@Valid AddAttractionDto addAttractionDto) throws BaseAppException {
         return tryAndRepeat(() -> attractionEndpoint.addAttraction(addAttractionDto));
+    }
+
+    @PUT
+    @Path("/edit-attraction")
+    public void editAttraction(@Valid EditAttractionDto editAttractionDto,
+                               @HeaderParam("If-Match") String etag) throws BaseAppException {
+        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, editAttractionDto)) {
+            throw ControllerException.etagIdentityIntegrity();
+        }
+
+        tryAndRepeat(() -> attractionEndpoint.editAttraction(editAttractionDto));
     }
 
     @DELETE

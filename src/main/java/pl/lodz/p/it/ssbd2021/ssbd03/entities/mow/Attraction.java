@@ -22,6 +22,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
         @NamedQuery(name = "Attraction.findByIdIfReserved", query = "SELECT att FROM attractions att WHERE att.name = :name"),
         @NamedQuery(name = "Attraction.findByCruiseUUID", query = "SELECT att FROM attractions att WHERE att.cruise.uuid = :uuid"),
         @NamedQuery(name = "Attraction.findById", query = "SELECT att FROM attractions att WHERE att.id = :id"),
+        @NamedQuery(name = "Attraction.findByUUID", query = "SELECT att FROM attractions att WHERE att.uuid = :uuid")
 })
 @ToString
 public class Attraction extends BaseEntity {

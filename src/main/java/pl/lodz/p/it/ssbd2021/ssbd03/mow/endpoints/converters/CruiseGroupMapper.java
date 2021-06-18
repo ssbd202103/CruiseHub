@@ -5,7 +5,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseAddress;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruisePicture;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseGroupWithDetailsDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.CruiseGroupWithDetailsDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.companies.CompanyLightDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.CruiseAddressDto;
