@@ -122,7 +122,8 @@ public class I18n {
     public static final String NOT_YOURS_CRUISE = "error.cruise.not.yours";
     public static final String CRUISE_GROUP_ALREADY_ACTIVE = "cruise.group.active.and.cannot.be.modified";
     public static final String NON_REMOVABLE_ATTRACTION_CRUISE_ALREADY_PUBLISH = "error.attraction.non.removable";
-    public static final String ATTRACTION_CREATION_CRUISE_PUBLISHED_ERROR = "error.attraction.cruisePublished";
+    public static final String ATTRACTION_CREATION_CRUISE_PUBLISHED_ERROR = "error.attraction.create.cruisePublished";
+    public static final String ATTRACTION_EDIT_CRUISE_PUBLISHED_ERROR = "error.attraction.edit.cruisePublished";
 
 
     private ResourceBundle bundle;
