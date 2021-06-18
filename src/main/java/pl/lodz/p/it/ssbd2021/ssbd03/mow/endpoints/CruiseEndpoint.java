@@ -80,7 +80,7 @@ public class CruiseEndpoint extends BaseEndpoint implements CruiseEndpointLocal 
     @RolesAllowed("publishCruise")
     @Override
     public void publishCruise(PublishCruiseDto publishCruiseDto) throws BaseAppException {
-        cruiseManagerLocal.publishCruise(publishCruiseDto.getCruiseVersion(),publishCruiseDto.getCruiseUuid());
+        cruiseManager.publishCruise(publishCruiseDto.getCruiseVersion(),publishCruiseDto.getCruiseUuid());
     }
 
     @RolesAllowed("editCruise")
