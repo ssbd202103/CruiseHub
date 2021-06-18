@@ -376,7 +376,7 @@ const resources = {
             "attraction created": "Atrakcja utworzona poprawnie",
             '/attractions': 'Atrakcje',
             "error.attraction.non.removable": "Nie możesz usunąć atrakcji, wycieczka została już opublikowana",
-            "error.attraction.cruisePublished": "Nie można utworzyć atrakcji do opublikowanej wycieczki"
+            "error.attraction.cruisePublished": "Nie można utworzyć atrakcji do opublikowanej wycieczki",
             "/editCruise": "Edytuj wycieczkę",
 
 
@@ -754,7 +754,7 @@ const resources = {
             "attraction created": "Attraction created successfully",
             '/attractions': 'Attractions',
             "error.attraction.non.removable": "You cannot delete this attraction, thr cruise has already been published",
-            "error.attraction.cruisePublished": "Cannot create attraction for published cruise"
+            "error.attraction.cruisePublished": "Cannot create attraction for published cruise",
             "/editCruise": "Edit cruise",
 
             "businessWorker.add.cruise.to.bad.company":"This account does not belong to the correct company",

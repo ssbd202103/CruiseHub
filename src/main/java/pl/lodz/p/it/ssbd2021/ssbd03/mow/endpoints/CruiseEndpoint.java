@@ -91,7 +91,7 @@ public class CruiseEndpoint extends BaseEndpoint implements CruiseEndpointLocal 
                     LocalDateTime.ofInstant(Instant.parse(editCruiseDto.getEndDate()), ZoneId.systemDefault()),
                     editCruiseDto.getUuid(), editCruiseDto.getVersion());
         } catch (DateTimeParseException e) {
-            throw new MapperException(CRUISE_MAPPER_DATE_PARSE);
+            throw new MapperException(MAPPER_UUID_PARSE);
         }
     }
 
