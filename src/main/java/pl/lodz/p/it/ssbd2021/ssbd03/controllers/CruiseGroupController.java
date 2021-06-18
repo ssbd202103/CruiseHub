@@ -63,7 +63,7 @@ public class CruiseGroupController {
     @PUT
     @Path("/deactivate-cruise-group")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void DeactivateCruiseGroup(@Valid DeactivateCruiseGroupDto deactivateCruiseGroupDto, @HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) @Valid String etag) throws BaseAppException {
+    public void deactivateCruiseGroup(@Valid DeactivateCruiseGroupDto deactivateCruiseGroupDto, @HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) @Valid String etag) throws BaseAppException {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, deactivateCruiseGroupDto)) {
             throw ControllerException.etagIdentityIntegrity();
         }
