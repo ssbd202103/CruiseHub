@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.ControllerException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.MapperException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.attractions.AddAttractionDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.attractions.AttractionDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.attractions.EditAttractionDto;
@@ -16,6 +17,7 @@ import javax.ws.rs.core.MediaType;
 import java.util.List;
 import java.util.UUID;
 
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.MAPPER_UUID_PARSE;
 import static pl.lodz.p.it.ssbd2021.ssbd03.utils.TransactionRepeater.tryAndRepeat;
 
 @Path("/attractions")
@@ -28,8 +30,13 @@ public class AttractionController {
     @GET
     @Path("/cruise/{uuid}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<AttractionDto> getAttractionsByCruiseUUID(@PathParam("uuid") String uuid) throws BaseAppException {
-        return tryAndRepeat(() -> attractionEndpoint.getAttractionsByCruiseUUID(UUID.fromString(uuid)));
+    public List<AttractionDto> getAttractionsByCruiseUUID(@PathParam("uuid") String attractionUUID) throws BaseAppException {
+        try {
+            UUID uuid = UUID.fromString(attractionUUID);
+            return tryAndRepeat(() -> attractionEndpoint.getAttractionsByCruiseUUID(uuid));
+        } catch (IllegalArgumentException e) {
+            throw new MapperException(MAPPER_UUID_PARSE);
+        }
     }
 
     /**
