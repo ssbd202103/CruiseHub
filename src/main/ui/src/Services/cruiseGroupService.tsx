@@ -30,3 +30,17 @@ export function getCruisesForCruiseGroup(uuid: string) {
         }
     })
 }
+
+export function publishCruise(uuid: string, version: number, etag: string,) {
+    const {token} = store.getState()
+    console.log(uuid)
+    return axios.put(`cruise/publish`, {
+        "cruiseVersion": version,
+        "cruiseUuid": uuid
+    }, {
+        headers: {
+            "If-Match": etag,
+            'Authorization': `Bearer ${token}`
+        }
+    })
+}

@@ -101,6 +101,7 @@ const resources = {
             "workerPanel": "Panel pracownika",
             "deactivateCruiseGroup": "Dezaktywuj grupę wycieczek",
             "deactivate": "Dezaktywuj",
+            "published": "Opublikowano",
             //adminPanel
             "search account": "Wyszukać konto",
             "search company": "Wyszukać firme",
@@ -387,8 +388,7 @@ const resources = {
             "cannot.find.access.level":"Nie znaleziono prawidłowego poziomu dostępu",
             "cruise.already.blocked":"Wycieczka jest już zdeaktywowana",
             "cruise.cannot.edit":"Tej wycieczki nie można edytować",
-            "cruise.cannot.block":"Tej wycieczki nie można deaktywować"
-
+            "cruise.cannot.block":"Tej wycieczki nie można deaktywować",
         }
     },
     EN: {
@@ -490,6 +490,7 @@ const resources = {
             "workerPanel": "Worker panel",
             "deactivateCruiseGroup": "Deactivate Cruise Group",
             "deactivate": "Deactivate",
+            "published": "Published",
             //adminPanel
             "adminPanel": "Administrator panel",
             "search account": "Search account",
@@ -769,7 +770,7 @@ const resources = {
             "cruise.cannot.edit":"This cruise cannot be edited",
             "cruise.cannot.block":"This cruise cannot be deactivated",
             "error.attraction.edit.cruisePublished": "Cannot edit attraction for published cruise",
-            "attractions read only": "Showing attractions in read only mode - cruise is already published"
+            "attractions read only": "Showing attractions in read only mode - cruise is already published",
         }
     }
 }
