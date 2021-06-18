@@ -4,10 +4,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints.BaseEndpoint;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Reservation;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.MapperException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations.CancelReservationDTO;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations.CreateReservationDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations.CruiseReservationDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations.RemoveClientReservationDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.converters.ReservationMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.managers.ReservationManagerLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
@@ -82,9 +79,11 @@ public class ReservationEndpoint extends BaseEndpoint implements ReservationEndp
 
     @RolesAllowed("viewSelfReservations")
     @Override
-    public List<CruiseReservationDto> viewSelfCruiseReservations() throws BaseAppException {
-        List<CruiseReservationDto> res = new ArrayList<>();
-        // todo finish implementation
+    public List<SelfReservationDto> viewSelfCruiseReservations() throws BaseAppException {
+        List<SelfReservationDto> res = new ArrayList<>();
+        for (Reservation reservation : reservationManager.getClientReservations()) {
+            res.add(ReservationMapper.toSelfReservationDto(reservation));
+        }
         return res;
     }
 }

@@ -17,6 +17,7 @@ import {getSelfMetadataDetails, getSelfAddressMetadataDetails} from "../../Servi
 import {refreshToken} from "../../Services/userService";
 import useHandleError from "../../errorHandler";
 import ListOwnRatings from "./client/ListOwnRatings";
+import ListSelfReservations from "./client/ListSelfReservations";
 
 export default function ClientPanel() {
     const {t} = useTranslation()
@@ -104,10 +105,10 @@ export default function ClientPanel() {
             }}
             menu={[
                 {
-                    link: '/profile/cruises',
-                    text: t('cruises'),
+                    link: '/profile/reservations',
+                    text: t('reservations'),
                     Icon: CruiseIcon,
-                    Component: () => <></>
+                    Component: ListSelfReservations
                 },
 
                 {
