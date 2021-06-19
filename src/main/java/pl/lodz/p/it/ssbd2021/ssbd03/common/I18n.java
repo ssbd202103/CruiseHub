@@ -125,8 +125,14 @@ public class I18n {
     public static final String CRUISE_GROUP_ALREADY_ACTIVE = "cruise.group.active.and.cannot.be.modified";
     public static final String NON_REMOVABLE_ATTRACTION_CRUISE_ALREADY_PUBLISH = "error.attraction.non.removable";
     public static final String ATTRACTION_CREATION_CRUISE_PUBLISHED_ERROR = "error.attraction.create.cruisePublished";
+    public static final String ATTRACTION_CREATION_CRUISE_DISABLED_ERROR = "error.attraction.create.cruiseDisabled";
+    public static final String ATTRACTION_CREATION_CRUISE_ALREADY_STARTED_ERROR = "error.attraction.create.cruiseStartDate";
     public static final String ATTRACTION_EDIT_CRUISE_PUBLISHED_ERROR = "error.attraction.edit.cruisePublished";
-
+    public static final String ATTRACTION_EDIT_CRUISE_DISABLED_ERROR = "error.attraction.edit.cruiseDisabled";
+    public static final String ATTRACTION_EDIT_CRUISE_ALREADY_STARTED_ERROR = "error.attraction.edit.cruiseStartDate";
+    public static final String ATTRACTION_DELETE_CRUISE_PUBLISHED_ERROR = "error.attraction.delete.cruisePublished";
+    public static final String ATTRACTION_DELETE_CRUISE_DISABLED_ERROR = "error.attraction.delete.cruiseDisabled";
+    public static final String ATTRACTION_DELETE_CRUISE_ALREADY_STARTED_ERROR = "error.attraction.delete.cruiseStartDate";
     public static final String BUSINESS_WORKER_ADD_CRUISE_TO_BAD_COMPANY = "businessWorker.add.cruise.to.bad.company";
     public static final String CANNOT_FIND_ACCESS_LEVEL = "cannot.find.access.level";
     public static final String CRUISE_ALREADY_BLOCKED = "cruise.already.blocked";

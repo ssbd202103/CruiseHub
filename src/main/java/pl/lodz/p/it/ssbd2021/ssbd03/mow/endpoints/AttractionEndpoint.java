@@ -3,8 +3,6 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints.BaseEndpoint;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Attraction;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.AttractionEndpointException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.MapperException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.attractions.AddAttractionDto;
@@ -12,7 +10,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.attractions.AttractionDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.attractions.EditAttractionDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.converters.AttractionMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.managers.AttractionManagerLocal;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.managers.CruiseManagerLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
 import javax.annotation.security.PermitAll;
@@ -26,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.ATTRACTION_CREATION_CRUISE_PUBLISHED_ERROR;
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.MAPPER_UUID_PARSE;
 
 /**
@@ -41,9 +37,6 @@ public class AttractionEndpoint extends BaseEndpoint implements AttractionEndpoi
     @Inject
     private AttractionManagerLocal attractionManager;
 
-    @Inject
-    private CruiseManagerLocal cruiseManager;
-
     @RolesAllowed("deleteAttraction")
     @Override
     public void deleteAttraction(UUID uuid) throws BaseAppException {
@@ -55,11 +48,8 @@ public class AttractionEndpoint extends BaseEndpoint implements AttractionEndpoi
     @Override
     public UUID addAttraction(AddAttractionDto addAttractionDto) throws BaseAppException {
         try {
-            Cruise cruise = cruiseManager.getCruise(UUID.fromString(addAttractionDto.getCruiseUUID()));
-            if (cruise.isPublished()) {
-                throw new AttractionEndpointException(ATTRACTION_CREATION_CRUISE_PUBLISHED_ERROR);
-            }
-            return attractionManager.addAttraction(AttractionMapper.toAttraction(addAttractionDto, cruise));
+            UUID cruiseUUID = UUID.fromString(addAttractionDto.getCruiseUUID());
+            return attractionManager.addAttraction(AttractionMapper.toAttraction(addAttractionDto), cruiseUUID);
         } catch (IllegalArgumentException e) {
             throw new MapperException(MAPPER_UUID_PARSE);
         }
@@ -69,8 +59,8 @@ public class AttractionEndpoint extends BaseEndpoint implements AttractionEndpoi
     @Override
     public void editAttraction(EditAttractionDto editAttractionDto) throws BaseAppException {
         try {
-            UUID uuid = UUID.fromString(editAttractionDto.getUuid());
-            attractionManager.editAttraction(uuid, editAttractionDto.getNewName(), editAttractionDto.getNewDescription(),
+            UUID cruiseUUID = UUID.fromString(editAttractionDto.getUuid());
+            attractionManager.editAttraction(cruiseUUID, editAttractionDto.getNewName(), editAttractionDto.getNewDescription(),
                     editAttractionDto.getNewPrice(), editAttractionDto.getNewNumberOfSeats(), editAttractionDto.getVersion());
         } catch (IllegalArgumentException e) {
             throw new MapperException(MAPPER_UUID_PARSE);
