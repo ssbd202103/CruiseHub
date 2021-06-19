@@ -65,6 +65,12 @@ public class AttractionController {
         tryAndRepeat(() -> attractionEndpoint.editAttraction(editAttractionDto));
     }
 
+    /**
+     * Metoda pozwalająca na usunięcie danej atrakcji z wycieczki która nie została jeszcze opublikowana
+     *
+     * @param uuid UUID atrakcji wybranej do usunięcia
+     * @throws BaseAppException Bazowy wyjątek aplikacji mogący wystąpić w przypadku naruszenia zasad biznesowych.
+     */
     @DELETE
     @Path("/delete-attraction/{uuid}")
     @Consumes(MediaType.APPLICATION_JSON)

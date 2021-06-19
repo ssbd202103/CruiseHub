@@ -136,7 +136,7 @@ const ListReservationsForWorker = () => {
                             <TableCell style={{
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`
-                            }}>{t("price")+"pln"}</TableCell>
+                            }}>{t("price")+" pln"}</TableCell>
                             <TableCell style={{
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`

@@ -59,6 +59,11 @@ public class ReservationManager implements ReservationManagerLocal {
     @Context
     private SecurityContext context;
 
+    @Inject
+    private AccountFacadeMow accountFacade;
+
+    @Context
+    private SecurityContext securityContext;
 
     @Override
     @RolesAllowed("viewCruiseReservations")
@@ -73,12 +78,20 @@ public class ReservationManager implements ReservationManagerLocal {
     @Override
     public List<Reservation> getWorkerCruiseReservations(UUID cruise_uuid) throws BaseAppException {
         Cruise cruise = cruiseFacadeMow.findByUUID(cruise_uuid);
-        Account account = getCurrentUser();
-        BusinessWorkerWithCompanyDto businessWorkerDto = getBusinessWorkerByLogin(account.getLogin());
-        List<Reservation> reservations = reservationFacadeMow.findCruiseReservations(cruise);
-        if (!businessWorkerDto.getCompanyName().equals(cruise.getCruisesGroup().getCompany().getName())) {
-            throw new ReservationManagerException(NOT_YOURS_CRUISE);
+        Account account = accountFacade.findByLogin(securityContext.getUserPrincipal().getName());
+        try {
+            Optional<AccessLevel> accessLevelBusinessWorker = account.getAccessLevels().stream().filter(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.BUSINESS_WORKER).findFirst();
+            if(accessLevelBusinessWorker.isEmpty()) {
+                throw new CruiseManagerException(CANNOT_FIND_ACCESS_LEVEL);
+            }
+            BusinessWorker businessWorker = (BusinessWorker) accessLevelBusinessWorker.get();
+            if(cruise.getCruisesGroup().getCompany().getNIP() != businessWorker.getCompany().getNIP()) {
+                throw new CruiseManagerException(NOT_YOURS_CRUISE);
+            }
+        } catch (ClassCastException e)  {
+            throw new CruiseManagerException(CANNOT_FIND_ACCESS_LEVEL);
         }
+        List<Reservation> reservations = reservationFacadeMow.findCruiseReservations(cruise);
         return reservations;
     }
 
@@ -154,22 +167,4 @@ public class ReservationManager implements ReservationManagerLocal {
     private Account getCurrentUser() throws BaseAppException {
         return accountFacadeMow.findByLogin(context.getUserPrincipal().getName());
     }
-
-    private AccessLevel getAccessLevel(Account from, AccessLevelType target) throws BaseAppException {
-        Optional<AccessLevel> optionalAccessLevel = from.getAccessLevels().stream()
-                .filter(accessLevel -> accessLevel.getAccessLevelType().equals(target)).findAny();
-
-        return optionalAccessLevel.orElseThrow(() -> new AccountManagerException(ACCESS_LEVEL_DOES_NOT_EXIST_ERROR));
-    }
-
-    private AccessLevel getAccountAccessLevel(String login, AccessLevelType accessLevelType) throws BaseAppException {
-        Account account = accountFacadeMow.findByLogin(login);
-        return getAccessLevel(account, accessLevelType);
-    }
-
-    @RolesAllowed("getWorkerCruiseReservations")
-    private BusinessWorkerWithCompanyDto getBusinessWorkerByLogin(String login) throws BaseAppException {
-        return AccountMapper.toBusinessWorkerWithCompanyDto((BusinessWorker) getAccountAccessLevel(login, AccessLevelType.BUSINESS_WORKER));
-    }
-
 }
