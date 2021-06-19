@@ -27,21 +27,22 @@ public interface AttractionManagerLocal {
      * Metoda odpowiedzialna za stworzenie atrakcji i dodanie jej do grupy wycieczek.
      *
      * @param attraction Obiekt reprezentujący atrakcję
+     * @param cruiseUUID UUID wycieczki, dla której ma być utworzona atrakcja
      * @return UUID nowo utworzonej atrakcji
      * @throws BaseAppException Wyjątek występujący w przypadku naruszenia zasad biznesowych.
      */
-    UUID addAttraction(Attraction attraction) throws BaseAppException;
+    UUID addAttraction(Attraction attraction, UUID cruiseUUID) throws BaseAppException;
 
 
     /**
      * Metoda odpowiedzialna za edycję istniejącej atrakcji.
      *
-     * @param attractionUUID UUID atrakcji
-     * @param newName Nowa nazwa atrakcji
-     * @param newDescription Nowy opis atrakcji
-     * @param newPrice Nowa cena atrakcji
+     * @param attractionUUID   UUID atrakcji
+     * @param newName          Nowa nazwa atrakcji
+     * @param newDescription   Nowy opis atrakcji
+     * @param newPrice         Nowa cena atrakcji
      * @param newNumberOfSeats Nowa liczba miejsc atrakcji
-     * @param version Wersja przekazywanej atrakcji
+     * @param version          Wersja przekazywanej atrakcji
      * @throws BaseAppException Wyjątek występujący w przypadku nieznalezienia atrakcji lub naruszenia zasad biznesowych.
      */
     void editAttraction(UUID attractionUUID, String newName, String newDescription, double newPrice, int newNumberOfSeats, long version) throws BaseAppException;

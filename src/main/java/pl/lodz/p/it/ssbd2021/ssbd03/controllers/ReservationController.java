@@ -5,6 +5,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.ControllerException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.companies.CompanyLightDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations.CruiseReservationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations.RemoveClientReservationDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations.SelfReservationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.ReservationEndpointLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.ETagFilterBinding;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
@@ -60,5 +61,17 @@ public class ReservationController {
                                   @PathParam("reservationUuid") UUID reservationUuid
                                   ) throws BaseAppException {
         reservationEndpoint.removeClientReservation(new RemoveClientReservationDto(reservationUuid.toString(), clientLogin));
+    }
+
+    /**
+     * Metoda odpowiedzialna za zwrócenie listy rezerwacji obecnie zalogowanego klienta
+     * @return Lista rezerwacji
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
+    @GET
+    @Path("/self-reservations")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<SelfReservationDto> getSelfReservations() throws BaseAppException {
+        return tryAndRepeat(() -> reservationEndpoint.viewSelfCruiseReservations());
     }
 }

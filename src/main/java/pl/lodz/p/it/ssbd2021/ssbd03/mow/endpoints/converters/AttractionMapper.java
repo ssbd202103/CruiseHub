@@ -18,7 +18,7 @@ public class AttractionMapper {
         return new AttractionDto(attraction.getUuid().toString(), attraction.getName(), attraction.getDescription(), attraction.getPrice(), attraction.getNumberOfSeats(), attraction.getVersion());
     }
 
-    public static Attraction toAttraction(AddAttractionDto attractionDto, Cruise cruise) {
-        return new Attraction(attractionDto.getName(), attractionDto.getDescription(), attractionDto.getPrice(), attractionDto.getNumberOfSeats(), cruise);
+    public static Attraction toAttraction(AddAttractionDto attractionDto) {
+        return new Attraction(attractionDto.getName(), attractionDto.getDescription(), attractionDto.getPrice(), attractionDto.getNumberOfSeats(), null);
     }
 }

@@ -1,6 +1,8 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.ClientRatingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.RatingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.RemoveClientRatingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.RemoveRankingDto;
@@ -33,6 +35,14 @@ public interface RatingEndpointLocal {
      * @throws BaseAppException bazowy wyjątek aplikacji, zwracany w przypadku nieznależenia oceny
      */
     List<RatingDto> getOwnRatings() throws BaseAppException;
+
+    /**
+     * Pobiera wszystkie oceny klienta
+     * @param login login klienta
+     * @return listę ocen
+     * @throws BaseAppException bazowy wyjątek aplikacji
+     */
+    List<ClientRatingDto> getClientRatings(String login) throws BaseAppException;
 
     /**
      * Metoda służąca do usunięcia oceny klienta przez moderatora

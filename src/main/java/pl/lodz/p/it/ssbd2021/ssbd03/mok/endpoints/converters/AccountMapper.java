@@ -304,7 +304,7 @@ public class AccountMapper {
     }
 
 
-    private static AccessLevel getAccessLevel(Account from, AccessLevelType target) throws BaseAppException {
+    public static AccessLevel getAccessLevel(Account from, AccessLevelType target) throws BaseAppException {
         Optional<AccessLevel> optionalAccessLevel = from.getAccessLevels().stream()
                 .filter(accessLevel -> accessLevel.getAccessLevelType().equals(target)).findAny();
 

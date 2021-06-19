@@ -3,10 +3,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.ControllerException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.MapperException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.*;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.ControllerException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.*;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations.CancelReservationDTO;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations.CreateReservationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.CruiseEndpointLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.ReservationEndpointLocal;
@@ -24,8 +21,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_EMPTY;
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
 import static pl.lodz.p.it.ssbd2021.ssbd03.utils.TransactionRepeater.tryAndRepeat;
 
 /**
@@ -119,14 +114,14 @@ public class CruiseController {
     /**
      * Metoda anulująca rezerwację klienta
      *
-     * @param reservationDTO Informacja o anulowanej rezerwacji
+     * @param reservationUUID UUID anulowanej rezerwacji
      * @throws BaseAppException Bazowy wyjatek aplikacji
      */
     @DELETE
-    @Path("/cancelReservation")
+    @Path("/cancelReservation/{reservationUUID}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void cancelReservation(CancelReservationDTO reservationDTO) throws BaseAppException {
-        tryAndRepeat(() -> reservationEndpoint.cancelReservation(reservationDTO));
+    public void cancelReservation(@PathParam("reservationUUID") UUID reservationUUID) throws BaseAppException {
+        tryAndRepeat(() -> reservationEndpoint.cancelReservation(reservationUUID));
     }
 
     /**
@@ -148,7 +143,7 @@ public class CruiseController {
      *
      * @param deactivateCruiseDto Obiekt posiadający UUID oraz werjsie danej wycieczki
      * @param etag                Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
-     * @throws BaseAppException
+     * @throws BaseAppException Bazowy wyjątek aplikacji
      */
     @ETagFilterBinding
     @PUT
@@ -162,6 +157,11 @@ public class CruiseController {
     }
 
 
+    /**
+     * @param editCruiseDto Obiekt reprezentujący wycieczkę
+     * @param etag          Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
     @ETagFilterBinding
     @PUT
     @Path("/edit-cruise")
@@ -174,7 +174,6 @@ public class CruiseController {
     }
 
 
-
     @ETagFilterBinding
     @PUT
     @Path("/publish")
@@ -185,6 +184,6 @@ public class CruiseController {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, publishCruiseDto)) {
             throw ControllerException.etagIdentityIntegrity();
         }
-        tryAndRepeat(()-> cruiseEndpoint.publishCruise(publishCruiseDto));
+        tryAndRepeat(() -> cruiseEndpoint.publishCruise(publishCruiseDto));
     }
 }

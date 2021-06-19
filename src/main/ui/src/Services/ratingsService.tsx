@@ -10,3 +10,13 @@ export function getOwnRatings() {
         }
     })
 }
+
+export function getClientRatings(login: string) {
+    const {token} = store.getState()
+
+    return axios.get(`ratings/${login}`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+}

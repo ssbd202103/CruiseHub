@@ -1,17 +1,14 @@
 import React, {Component, useEffect, useState} from 'react';
-import {getOwnRatings} from "../../../Services/ratingsService";
+import {getClientRatings} from "../../../Services/ratingsService";
 import {makeStyles} from "@material-ui/core/styles";
 import {useTranslation} from "react-i18next";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
-import {Link} from "react-router-dom";
 import {Button, TextField} from "@material-ui/core";
-import RoundedButton from "../../../components/RoundedButton";
 import styles from "../../../styles/Header.module.css";
 import useHandleError from "../../../errorHandler";
 import {useSelector} from "react-redux";
 import {selectDarkMode} from "../../../redux/slices/userSlice";
-import {getAllCompanies} from "../../../Services/companiesService";
 import {refreshToken} from "../../../Services/userService";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import TableContainer from "@material-ui/core/TableContainer";
@@ -29,19 +26,16 @@ const useRowStyles = makeStyles({
 });
 
 function createData(
-    cruiseGroupName: string,
     login: string,
+    cruiseGroupName: string,
     rating: number,
-    uuid: string
 ) {
     return {
-        cruiseGroupName: cruiseGroupName,
         login: login,
-        rating: rating,
-        uuid: uuid
+        cruiseGroupName: cruiseGroupName,
+        rating: rating
     };
 }
-
 
 export interface RowProps {
     row: ReturnType<typeof createData>,
@@ -51,15 +45,12 @@ export interface RowProps {
 function Row(props: RowProps) {
     const {row} = props;
     const {style} = props;
-    const {t} = useTranslation();
     const classes = useRowStyles();
 
     return (
         <TableRow className={classes.root}>
             <TableCell component="th" scope="row" style={style}>{row.cruiseGroupName}</TableCell>
-            <TableCell style={style}>{row.login}</TableCell>
             <TableCell style={style}>{row.rating}</TableCell>
-            <TableCell style={style}>{row.uuid}</TableCell>
             <TableCell style={style}>
                 <Button
                     className={styles.link}
@@ -74,16 +65,16 @@ function Row(props: RowProps) {
     );
 }
 
-const ListOwnRatings = () => {
+const ListClientRatings = () => {
     const [ratings, setRatings] = useState([]);
     const [searchInput, setSearchInput] = useState("");
-
-    const handleError = useHandleError()
+    const login = sessionStorage.getItem("login")!;
+    const handleError = useHandleError();
 
     const darkMode = useSelector(selectDarkMode)
 
     useEffect(() => {
-        getOwnRatings().then(res => {
+        getClientRatings(login).then(res => {
             setRatings(res.data)
         }).catch(error => {
             const message = error.response.data
@@ -96,13 +87,13 @@ const ListOwnRatings = () => {
     function search(rows: any[]) {
         if (Array.isArray(rows) && rows.length) {
 
-            const filteredCompanies = rows.filter(
+            const filteredRatings = rows.filter(
                 row => row.props.row.cruiseGroupName.toLowerCase().indexOf(searchInput.toLowerCase()) > -1
             );
 
-            filteredCompanies.forEach(rating => (searchRatingList.includes(rating.props.row.cruiseGroupName) ?
+            filteredRatings.forEach(rating => (searchRatingList.includes(rating.props.row.cruiseGroupName) ?
                 "" : searchRatingList.push(rating.props.row.cruiseGroupName)));
-            return filteredCompanies
+            return filteredRatings
 
         } else {
             return rows;
@@ -117,6 +108,10 @@ const ListOwnRatings = () => {
     return (
         <>
             <div>
+                <h3>{login}</h3>
+                {
+
+                }
                 <Autocomplete
                     options={searchRatingList}
                     inputValue={searchInput}
@@ -142,15 +137,7 @@ const ListOwnRatings = () => {
                                 <TableCell style={{
                                     backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                     color: `var(--${!darkMode ? 'dark' : 'white-light'}`
-                                }}>{t("login")}</TableCell>
-                                <TableCell style={{
-                                    backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
-                                    color: `var(--${!darkMode ? 'dark' : 'white-light'}`
                                 }}>{t("rating")}</TableCell>
-                                <TableCell style={{
-                                    backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
-                                    color: `var(--${!darkMode ? 'dark' : 'white-light'}`
-                                }}>{"UUID"}</TableCell>
                                 <TableCell style={{
                                     backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                     color: `var(--${!darkMode ? 'dark' : 'white-light'}`
@@ -172,4 +159,4 @@ const ListOwnRatings = () => {
     );
 };
 
-export default ListOwnRatings;
+export default ListClientRatings;

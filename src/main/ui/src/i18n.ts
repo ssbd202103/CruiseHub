@@ -126,14 +126,15 @@ const resources = {
             "disable": "Dezaktywuj",
             "grant access level": "Przydziel poziom dostępu",
             "change access level state": "Zmień stan poziomu dostępu",
-            "Remove reservation btn": "Usuń rezerwacje",
+            "Remove reservation btn": "Usuń rezerwację",
             //panels.clientPanel
             "clientPanel": "Panel klienta",
             "ratings": "Oceny",
-            "search cruise": "Wyszukaj wycieczke",
+            "search cruise": "Wyszukaj wycieczkę",
             "cruiseGroupName": "Nazwa wycieczki",
             "rating": "Ocena",
-            "remove button": "Przycisk usun",
+            "remove button": "Przycisk usuń",
+            "cancel reservation btn": "Anuluj rezerwację",
             //panels.ModeratorPanel
             "business workers": "Pracownicy firmy",
             "search business workers": "Szukaj niezatwierdzonych pracowników",
@@ -261,7 +262,7 @@ const resources = {
             "/profile": "Profil",
             "/cruises": "Wycieczki",
             "/settings": "Ustawienia",
-            "/profile/cruises": "Wycieczki",
+            "/profile/reservations": "Rezerwacje",
             "/profile/settings": "Ustawienia",
             "/accounts": "Konta",
             "/companies": "Firmy",
@@ -278,6 +279,7 @@ const resources = {
             "/addCruise": "Dodaj wycieczkę",
             "/listCruiseGroup": "Wyświetl grupę wycieczek",
             "/add-company": "Dodaj firmę",
+            "/accounts/ratings": "Oceny",
 
             'yes': 'Tak',
             'no': 'Nie',
@@ -368,7 +370,7 @@ const resources = {
             "numberOfSeatsReserved": "Liczba zarezerwowanych miejsc",
             "CruiseName": "Nazwa wycieczki",
             "/reservations": "Rezerwacje wycieczki",
-            "search reservation": "Wyszukaj rezerwacje",
+            "search reservation": "Wyszukaj rezerwację",
             "choose_number_of_seats": "Wybierz liczbę miejsc",
             "changeData": "Edytuj",
             "cruise.group.active.and.cannot.be.modified": "Grupa wycieczek posiada już aktywne wycieczki i nie może być modifykowana",
@@ -389,6 +391,7 @@ const resources = {
             "cruise.already.blocked":"Wycieczka jest już zdeaktywowana",
             "cruise.cannot.edit":"Tej wycieczki nie można edytować",
             "cruise.cannot.block":"Tej wycieczki nie można deaktywować",
+            "reservationCancelled": "Anulowano pomyślnie"
         }
     },
     EN: {
@@ -521,6 +524,7 @@ const resources = {
             "cruiseGroupName": "Cruise name",
             "rating": "Rating",
             "remove button": "Remove button",
+            "cancel reservation btn": "Cancel reservation",
             //panels.ModeratorPanel
             "business workers": "Business workers",
             "search business workers": "Search business workers",
@@ -644,7 +648,7 @@ const resources = {
             "/profile": "Profile",
             "/cruises": "Cruises",
             "/settings": "Settings",
-            "/profile/cruises": "Cruises",
+            "/profile/reservations": "Reservations",
             "/profile/settings": "Settings",
             "/accounts": "Accounts",
             "/accounts/change_account_data": "Change account data",
@@ -659,6 +663,7 @@ const resources = {
             "/addCruise": "Add cruise",
             "/listCruiseGroup": "List cruise groups",
             "/add-company": "Add a company",
+            "/accounts/ratings": "Ratings",
 
             'accept.action': 'Do you want to do this action?',
 
@@ -771,6 +776,7 @@ const resources = {
             "cruise.cannot.block":"This cruise cannot be deactivated",
             "error.attraction.edit.cruisePublished": "Cannot edit attraction for published cruise",
             "attractions read only": "Showing attractions in read only mode - cruise is already published",
+            "reservationCancelled": "Cancelled successfully"
         }
     }
 }

@@ -76,7 +76,7 @@ public class ReservationFacadeMow extends AbstractFacade<Reservation> {
         }
     }
 
-    @RolesAllowed("removeClientReservation")
+    @RolesAllowed({"removeClientReservation", "cancelReservation"})
     public Reservation findReservationByUuidAndLogin(UUID uuid, String login) throws BaseAppException {
         TypedQuery<Reservation> tq = em.createNamedQuery("Reservation.findByUUIDAndLogin", Reservation.class);
         tq.setParameter("uuid", uuid);
