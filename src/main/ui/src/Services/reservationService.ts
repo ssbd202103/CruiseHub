@@ -58,3 +58,14 @@ export function getSelfReservations() {
         }
     })
 }
+
+export function removeReservation(reservationUUID: string) {
+    const {token} = store.getState();
+
+    return axios.delete(`cruise/cancelReservation/${reservationUUID}`, {
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        }
+    })
+}

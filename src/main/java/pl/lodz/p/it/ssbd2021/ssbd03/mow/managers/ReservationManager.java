@@ -119,11 +119,14 @@ public class ReservationManager implements ReservationManagerLocal {
 
     @RolesAllowed("cancelReservation")
     @Override
-    public void cancelReservation(long reservationVersion, UUID reservationUUID) throws BaseAppException {
-        Reservation reservation = reservationFacadeMow.findReservationByUuidAndLogin(reservationUUID, context.getUserPrincipal().getName());
-        if (reservation.getVersion() != reservationVersion) {
-            throw FacadeException.optimisticLock();
+    public void cancelReservation(UUID reservationUUID) throws BaseAppException {
+        String login = context.getUserPrincipal().getName();
+        Reservation reservation = reservationFacadeMow.findReservationByUuidAndLogin(reservationUUID, login);
+        if (reservation.getCruise().getStartDate().isBefore(LocalDateTime.now())) {
+            throw new FacadeException(CANNOT_CANCEL_STARTED_CRUISE);
         }
+        reservation.setAlteredBy(getCurrentUser());
+        reservation.setAlterType(accountFacadeMow.getAlterTypeWrapperByAlterType(AlterType.DELETE));
         reservationFacadeMow.remove(reservation);
     }
 
@@ -152,7 +155,7 @@ public class ReservationManager implements ReservationManagerLocal {
         return accountFacadeMow.findByLogin(context.getUserPrincipal().getName());
     }
 
-    private static AccessLevel getAccessLevel(Account from, AccessLevelType target) throws BaseAppException {
+    private AccessLevel getAccessLevel(Account from, AccessLevelType target) throws BaseAppException {
         Optional<AccessLevel> optionalAccessLevel = from.getAccessLevels().stream()
                 .filter(accessLevel -> accessLevel.getAccessLevelType().equals(target)).findAny();
 

@@ -391,6 +391,7 @@ const resources = {
             "cruise.already.blocked":"Wycieczka jest już zdeaktywowana",
             "cruise.cannot.edit":"Tej wycieczki nie można edytować",
             "cruise.cannot.block":"Tej wycieczki nie można deaktywować",
+            "reservationCancelled": "Anulowano pomyślnie"
         }
     },
     EN: {
@@ -775,6 +776,7 @@ const resources = {
             "cruise.cannot.block":"This cruise cannot be deactivated",
             "error.attraction.edit.cruisePublished": "Cannot edit attraction for published cruise",
             "attractions read only": "Showing attractions in read only mode - cruise is already published",
+            "reservationCancelled": "Cancelled successfully"
         }
     }
 }
