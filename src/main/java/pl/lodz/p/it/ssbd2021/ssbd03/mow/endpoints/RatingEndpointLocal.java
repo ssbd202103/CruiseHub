@@ -1,17 +1,14 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.ClientRatingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CreateRatingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.RatingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.RemoveClientRatingDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.RatingDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.RemoveClientRatingDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.RemoveRankingDto;
 
 import javax.ejb.Local;
 import java.util.List;
+import java.util.UUID;
 
 @Local
 public interface RatingEndpointLocal {
@@ -27,10 +24,10 @@ public interface RatingEndpointLocal {
     /**
      * Usuwa ocenę o podanym użytkowniku oraz grupie wycieczek
      *
-     * @param removeRankingDto obiekt dto przechowujący informację do usuwania oceny
+     * @param cruiseGroupUUID uuid grupy wycieczek
      * @throws BaseAppException bazowy wyjątek aplikacji, zwracany w przypadku nieznależenia użytkownika lub grupy wycieczek
      */
-    void removeRating(RemoveRankingDto removeRankingDto) throws BaseAppException;
+    void removeRating(UUID cruiseGroupUUID) throws BaseAppException;
 
     List<ClientRatingDto> getClientRatings(String login) throws BaseAppException;
 

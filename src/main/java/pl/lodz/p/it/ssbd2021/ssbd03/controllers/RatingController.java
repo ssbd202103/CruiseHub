@@ -17,6 +17,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import java.util.List;
+import java.util.UUID;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.utils.TransactionRepeater.tryAndRepeat;
 
@@ -31,9 +32,14 @@ public class RatingController {
     @Path("/create")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createRating(CreateRatingDto ratingDto) throws BaseAppException {
+    public void createRating(CreateRatingDto ratingDto) throws BaseAppException {
         tryAndRepeat(() -> ratingEndpoint.createRating(ratingDto));
-        return Response.ok().build();
+    }
+
+    @DELETE
+    @Path("/{uuid}")
+    public void removeRating(@PathParam("uuid") String uuid) throws  BaseAppException {
+        tryAndRepeat(() -> ratingEndpoint.removeRating(UUID.fromString(uuid)));
     }
 
     @GET

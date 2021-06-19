@@ -18,7 +18,8 @@ import {useSnackbarQueue} from "./snackbar";
 import {useSelector} from "react-redux";
 import {selectActiveAccessLevel, selectLogin} from "../redux/slices/userSlice";
 import StarSpinner from "../components/StarSpinner";
-import {createRating} from "../Services/ratingService";
+import {createRating, removeRating} from "../Services/ratingService";
+import useHandleError from "../errorHandler";
 
 export default function Cruise() {
     const {id} = useParams<{ id: string }>();
@@ -28,6 +29,7 @@ export default function Cruise() {
 
     const {t} = useTranslation();
     const showSuccess = useSnackbarQueue('success')
+    const handleError = useHandleError();
     const numberOfSeatsList = [1, 2, 3, 4, 5]
     const [selectedNumberOfSeats, setSelectedNumberOfSeats] = useState(0)
     const [numberOfSeatsString, setNumberOfSeatsString] = useState("")
@@ -111,6 +113,16 @@ export default function Cruise() {
         createRating(rating, cruise?.cruiseGroupDto?.uuid).then(res => {
             showSuccess(t('successful action'))
             getCruise()
+        })
+    }
+
+    const handleRemoveRating = () => {
+        console.log(cruise?.cruiseGroupDto?.uuid)
+        removeRating(cruise?.cruiseGroupDto?.uuid).then(res => {
+            showSuccess(t('successfulaction'))
+            getCruise()
+        }).catch(error => {
+            handleError(error)
         })
     }
 
@@ -258,7 +270,7 @@ export default function Cruise() {
                                                 </div>
                                             </div>
                                             {
-                                                rLogin === login ? <DeleteIcon fontSize="large" className={styles.delete} /> : null
+                                                rLogin === login ? <DeleteIcon fontSize="large" className={styles.delete} onClick={handleRemoveRating} /> : null
                                             }
 
                                         </CardContent>

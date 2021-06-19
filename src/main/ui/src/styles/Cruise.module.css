@@ -63,6 +63,7 @@
 }
 
 .delete {
+    cursor: pointer;
     fill: var(--pink-dark);
     opacity: .7;
     transition: opacity .3s ease-out;

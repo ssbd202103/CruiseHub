@@ -5,7 +5,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Rating;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.MapperException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CreateRatingDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.RemoveRankingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.ClientRatingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.RatingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.RemoveClientRatingDto;
@@ -21,6 +20,7 @@ import javax.interceptor.Interceptors;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static javax.ejb.TransactionAttributeType.REQUIRES_NEW;
@@ -37,13 +37,13 @@ public class RatingEndpoint extends BaseEndpoint implements RatingEndpointLocal 
     @RolesAllowed("createRating")
     @Override
     public void createRating(CreateRatingDto ratingDto) throws BaseAppException {
-        ratingManager.createRating(ratingDto.getLogin(), ratingDto.getCruiseGroupUUID(), ratingDto.getRating());
+        ratingManager.createRating(UUID.fromString(ratingDto.getCruiseGroupUUID()), ratingDto.getRating());
     }
 
     @RolesAllowed("removeRating")
     @Override
-    public void removeRating(RemoveRankingDto removeRankingDto) throws BaseAppException {
-        ratingManager.removeRating(removeRankingDto.getLogin(), removeRankingDto.getCruiseGroupUUID());
+    public void removeRating(UUID cruiseGroupUUID) throws BaseAppException {
+        ratingManager.removeRating(cruiseGroupUUID);
     }
 
     @RolesAllowed("ownFindRating")

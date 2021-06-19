@@ -15,20 +15,12 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.RATING_CONSTRAINT_ERROR;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class CreateRatingDto {
-    @Login
-    private String login;
-
     @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
-    private UUID cruiseGroupUUID;
+    private String cruiseGroupUUID;
 
     @Max(value = 5, message = RATING_CONSTRAINT_ERROR)
     @Min(value = 1, message = RATING_CONSTRAINT_ERROR)
     private Double rating;
-
-    public CreateRatingDto(String login, String cruiseGroupUUID, Double rating) {
-        this.login = login;
-        this.cruiseGroupUUID = UUID.fromString(cruiseGroupUUID);
-        this.rating = rating;
-    }
 }
