@@ -32,17 +32,11 @@ export default function Home() {
                 <ArrowIcon className={styles.arrow}/>
             </header>
 
-            <section className={styles.ad}>
-                <div>{t("ad")}</div>
-            </section>
-
             <section className={styles['top-cruises']}>
                 <h2 className={styles.h2}
-                    style={{color: `var(--${darkMode ? 'dark' : 'white'}`}}>{t("the best cruises")}</h2>
+                    style={{color: `var(--${darkMode ? 'white' : 'dark'}`}}>{t("cruises")}</h2>
 
                 <div className={styles['cruises-grid']}>
-                    {[0, 1, 2, 3, 4, 5, 6, 7, 8].map(item =>
-                        <CruiseCard key={item}/>)}
                 </div>
             </section>
         </HeaderFooterLayout>
