@@ -12,6 +12,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.CruiseManagerException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.CruiseGroupWithCruisesDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.AccountFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CompanyFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseFacadeMow;
@@ -29,10 +30,7 @@ import javax.interceptor.Interceptors;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
@@ -200,7 +198,7 @@ public class CruiseManager implements CruiseManagerLocal {
 
     @PermitAll
     @Override
-    public List<Cruise> getPublishedCruises() {
+    public List<Cruise> getPublishedCruises() throws BaseAppException {
         return cruiseFacadeMow.getPublishedCruises();
     }
 
