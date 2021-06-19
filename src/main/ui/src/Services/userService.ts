@@ -4,6 +4,7 @@ import {clearToken, setToken} from "../redux/slices/tokenSlice";
 import {AccessLevelType, emptyUser, IUserSliceState, setActiveAccessLevel, setUser} from "../redux/slices/userSlice";
 import jwt_decode from "jwt-decode";
 import i18n from "i18next";
+import useHandleError from "../errorHandler";
 
 export function getUser(token: string) {
     return axios.get('self/account-details', {
@@ -15,6 +16,10 @@ export function getUser(token: string) {
         store.dispatch(setUser(res.data))
         i18n.changeLanguage(res.data.languageType)
         saveToken(token)
+    }).catch((error: any) => {
+        const handleError = useHandleError()
+        const message = error.response?.data
+        handleError(message, error.response?.status)
     })
 }
 
