@@ -245,7 +245,7 @@
     </security-role-mapping>
 
     <security-role-mapping>
-        <role-name>removeClientRating</role-name>
+        <role-name>getRemoveClientRating</role-name>
         <group-name>MODERATOR</group-name>
     </security-role-mapping>
 

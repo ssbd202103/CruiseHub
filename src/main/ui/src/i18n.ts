@@ -133,7 +133,7 @@ const resources = {
             "search cruise": "Wyszukaj wycieczkę",
             "cruiseGroupName": "Nazwa wycieczki",
             "rating": "Ocena",
-            "remove button": "Przycisk usun",
+            "remove button": "Przycisk usuń",
             "cancel reservation btn": "Anuluj rezerwację",
             //panels.ModeratorPanel
             "business workers": "Pracownicy firmy",
@@ -279,6 +279,7 @@ const resources = {
             "/addCruise": "Dodaj wycieczkę",
             "/listCruiseGroup": "Wyświetl grupę wycieczek",
             "/add-company": "Dodaj firmę",
+            "/accounts/ratings": "Oceny",
 
             'yes': 'Tak',
             'no': 'Nie',
@@ -661,6 +662,7 @@ const resources = {
             "/addCruise": "Add cruise",
             "/listCruiseGroup": "List cruise groups",
             "/add-company": "Add a company",
+            "/accounts/ratings": "Ratings",
 
             'accept.action': 'Do you want to do this action?',
 
