@@ -24,5 +24,5 @@ public class ClientRatingDto {
 
     @Max(value = 5, message = RATING_CONSTRAINT_ERROR)
     @Min(value = 1, message = RATING_CONSTRAINT_ERROR)
-    private Integer rating;
+    private Double rating;
 }

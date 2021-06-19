@@ -2,18 +2,14 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints.BaseEndpoint;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Rating;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Reservation;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.MapperException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CreateRatingDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.RemoveRankingDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.RemoveRankingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.ClientRatingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.RatingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.RemoveClientRatingDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.RemoveRankingDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations.SelfReservationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.converters.RatingMapper;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.converters.ReservationMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.managers.RatingManagerLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 

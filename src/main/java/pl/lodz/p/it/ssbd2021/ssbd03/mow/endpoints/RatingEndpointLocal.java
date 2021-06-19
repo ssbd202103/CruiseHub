@@ -32,6 +32,8 @@ public interface RatingEndpointLocal {
      */
     void removeRating(RemoveRankingDto removeRankingDto) throws BaseAppException;
 
+    List<ClientRatingDto> getClientRatings(String login) throws BaseAppException;
+
     /**
      * Pobiera ocene klienta dla podanej wycieczki
      *
