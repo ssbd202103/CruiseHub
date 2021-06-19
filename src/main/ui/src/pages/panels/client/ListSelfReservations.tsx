@@ -15,8 +15,9 @@ import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableBody from "@material-ui/core/TableBody";
 import {
-    getSelfReservations,
+    getSelfReservations, removeReservation,
 } from "../../../Services/reservationService";
+import {useSnackbarQueue} from "../../snackbar";
 
 const useRowStyles = makeStyles({
     root: {
@@ -54,13 +55,24 @@ export interface RowProps {
     onReload: () => void
 }
 
-function Row({row, style}: RowProps) {
+function Row({row, style, onReload}: RowProps) {
     const {t} = useTranslation();
     const classes = useRowStyles();
     const buttonClass = useButtonStyles();
+    const handleError = useHandleError()
+    const showSuccess = useSnackbarQueue('success')
 
     const cancelReservation = () => {
-        // dla Szymona xd
+        removeReservation(row.uuid).then(res => {
+            showSuccess(t('reservationCancelled'))
+            onReload()
+        }).catch(error => {
+            const message = error.response.data
+            handleError(message, error.response.status)
+            onReload()
+        }).then(res => {
+            refreshToken()
+        })
     }
 
     return (

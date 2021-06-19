@@ -132,6 +132,7 @@ public class I18n {
     public static final String CRUISE_ALREADY_BLOCKED = "cruise.already.blocked";
     public static final String CANNOT_EDIT_THIS_CRUISE = "cruise.cannot.edit";
     public static final String CANNOT_BLOCK_THIS_CRUISE = "cruise.cannot.block";
+    public static final String CANNOT_CANCEL_STARTED_CRUISE = "cruise.cannot.cancel.started";
 
 
     private ResourceBundle bundle;

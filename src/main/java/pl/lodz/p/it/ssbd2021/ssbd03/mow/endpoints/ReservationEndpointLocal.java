@@ -48,10 +48,10 @@ public interface ReservationEndpointLocal {
 
     /**
      * Metoda sluzaca do anulowania zarezerwowanej wycieczki
-     * @param cancelReservationDTO Informacja o kliencie oraz wycieczce
+     * @param reservationUUID UUID anulowanej rezerwacji
      * @throws BaseAppException Bazowy wyjatek aplikacji
      */
-    void cancelReservation(CancelReservationDTO cancelReservationDTO) throws BaseAppException;
+    void cancelReservation(UUID reservationUUID) throws BaseAppException;
 
 
     /**
