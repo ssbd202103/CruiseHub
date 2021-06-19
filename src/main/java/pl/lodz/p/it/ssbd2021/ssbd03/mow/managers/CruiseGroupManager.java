@@ -4,11 +4,13 @@ import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.*;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.CruiseGroupManagerException;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.*;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters.AccountMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.AccountFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CompanyFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseGroupFacadeMow;
@@ -21,9 +23,10 @@ import javax.interceptor.Interceptors;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CRUISE_GROUP_ALREADY_ACTIVE;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 
 
 /**
@@ -131,14 +134,38 @@ public class CruiseGroupManager implements CruiseGroupManagerLocal {
     @Override
     public CruiseGroup deactivateCruiseGroup(UUID uuid, Long version) throws BaseAppException {
         CruiseGroup cruiseGroup = this.cruiseGroupFacadeMow.findByUUID(uuid);
+        Account account = getCurrentUser();
         if (!(cruiseGroup.getVersion() == version)) {
             throw FacadeException.optimisticLock();
+        }
+        if (!cruiseGroup.isActive()) {
+            throw new AccountManagerException(CRUISE_GROUP_ALREADY_DEACTIVATED);
+        }
+        try {
+            Optional<AccessLevel> accessLevelAdministrator = account.getAccessLevels().stream().filter(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.ADMINISTRATOR).findFirst();
+            if(accessLevelAdministrator.isEmpty()) {
+                try {
+                    Optional<AccessLevel> accessLevelBusinessWorker = account.getAccessLevels().stream().filter(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.BUSINESS_WORKER).findFirst();
+                    if (accessLevelBusinessWorker.isEmpty()) {
+                        throw new CruiseManagerException(NOT_CORRECT_ACCESS_LEVEL);
+                    }
+                    BusinessWorker businessWorker = (BusinessWorker) accessLevelBusinessWorker.get();
+                    if(cruiseGroup.getCompany().getNIP() != businessWorker.getCompany().getNIP()) {
+                        throw new CruiseManagerException(BUSINESS_WORKER_DONT_OWN_CRUISE_GROUP);
+                    }
+                } catch (ClassCastException e) {
+                    throw new CruiseManagerException(CANNOT_FIND_ACCESS_LEVEL);
+                }
+            }
+            } catch (ClassCastException e)  {
+            throw new CruiseManagerException(CANNOT_FIND_ACCESS_LEVEL);
         }
         cruiseGroup.setActive(false);
         setUpdatedMetadata(cruiseGroup);
         cruiseGroupFacadeMow.edit(cruiseGroup);
         return cruiseGroup;
     }
+
     @RolesAllowed("getCruiseGroupForBusinessWorker")
     @Override
     public List<CruiseGroup> getCruiseGroupForBusinessWorker(String companyName) throws BaseAppException {

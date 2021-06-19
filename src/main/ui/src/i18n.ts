@@ -375,6 +375,7 @@ const resources = {
             "choose_number_of_seats": "Wybierz liczbę miejsc",
             "changeData": "Edytuj",
             "cruise.group.active.and.cannot.be.modified": "Grupa wycieczek posiada już aktywne wycieczki i nie może być modifykowana",
+            "cruise.group.deactivated.and.cannot.be.deactivated": "Grupa wycieczek została już dezaktywowana",
             "/changeCruiseGroupData": "Zmień dane grupy wycieczek",
             "Attractions name": "Nazwy atrakcji",
             "attraction created": "Atrakcja utworzona poprawnie",
@@ -388,7 +389,9 @@ const resources = {
 
 
             "businessWorker.add.cruise.to.bad.company":"To konto nie należy do właściwej firmy",
+            "businessWorker.dont.own.cruise.group": "Ta grupa wycieczekl nie należy do twojej firmy",
             "cannot.find.access.level":"Nie znaleziono prawidłowego poziomu dostępu",
+            "not.correct.access.level":"Nie posiadasz wystarczającego poziomu dostępu",
             "cruise.already.blocked":"Wycieczka jest już zdeaktywowana",
             "cruise.cannot.edit":"Tej wycieczki nie można edytować",
             "cruise.cannot.block":"Tej wycieczki nie można deaktywować",
@@ -764,6 +767,7 @@ const resources = {
             "choose_number_of_seats": "Choose number of seats",
             "changeData": "Edit",
             "cruise.group.active.and.cannot.be.modified": "This cruise group already has active cruises and cannot be modifiable",
+            "cruise.group.deactivated.and.cannot.be.deactivated": "This cruise group already has been deactivated",
             "/changeCruiseGroupData": "Change cruise group data",
             "Attractions name": "Attractions name",
             "attraction created": "Attraction created successfully",
@@ -775,7 +779,9 @@ const resources = {
             "/editCruise": "Edit cruise",
 
             "businessWorker.add.cruise.to.bad.company":"This account does not belong to the correct company",
+            "businessWorker.dont.own.cruise.group": "This cruise group does not belong to your company",
             "cannot.find.access.level":"No valid access level found",
+            "not.correct.access.level":"You do not have a sufficient level of access",
             "cruise.already.blocked":"Cruise is already deactivated",
             "cruise.cannot.edit":"This cruise cannot be edited",
             "cruise.cannot.block":"This cruise cannot be deactivated",
