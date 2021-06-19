@@ -6,7 +6,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
-import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -53,6 +52,14 @@ public class RatingFacadeMow extends AbstractFacade<Rating> {
         } catch (NoResultException e) {
             throw FacadeException.noSuchElement();
         }
+    }
+
+    public Long countByLogin(String login, UUID uuid) throws BaseAppException {
+        TypedQuery<Long> tq = em.createNamedQuery("Rating.countByCruiseGroupUUIDAndAccountLogin", Long.class);
+        tq.setParameter("login", login);
+        tq.setParameter("uuid", uuid);
+
+        return tq.getSingleResult();
     }
 
     public Rating findByCruiseUuidAndAccountLogin(String login, UUID uuid) throws BaseAppException {

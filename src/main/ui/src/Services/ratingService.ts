@@ -4,17 +4,31 @@ import axios from './URL';
 export function createRating(rating: number, cruiseGroupUUID: string) {
     const {
         user: {
-            login,
             etag
         },
         token
     } = store.getState()
 
     return axios.post('/ratings/create', {
-        login: login,
-        cruiseGroupUUID: cruiseGroupUUID,
-        rating: rating
+        cruiseGroupUUID,
+        rating,
     }, {
+        headers: {
+            "If-Match": etag,
+            "Authorization": `Bearer ${token}`
+        }
+    })
+}
+
+export function removeRating(uuid: string) {
+    const {
+        user: {
+            etag,
+        },
+        token,
+    } = store.getState()
+
+    return axios.delete(`/ratings/${uuid}`, {
         headers: {
             "If-Match": etag,
             "Authorization": `Bearer ${token}`
