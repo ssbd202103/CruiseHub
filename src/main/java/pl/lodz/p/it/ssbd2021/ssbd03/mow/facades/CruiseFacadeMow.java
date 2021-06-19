@@ -78,11 +78,4 @@ public class CruiseFacadeMow extends AbstractFacade<Cruise> {
     public void create(Cruise entity) throws FacadeException {
         super.create(entity);
     }
-
-    @PermitAll
-    public List<Cruise> getCruisesForCruiseGroup(String cruiseGroupName) {
-        TypedQuery<Cruise> tq = em.createNamedQuery("Cruise.findByCruiseGroup", Cruise.class);
-        tq.setParameter("cruiseGroupName", cruiseGroupName);
-        return tq.getResultList();
-    }
 }

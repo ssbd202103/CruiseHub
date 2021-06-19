@@ -5,10 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.companies.CompanyLightDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.CruiseGroupDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.RatingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.CruiseAddressDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.CruisePictureDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.validators.CompanyName;
 
 import java.util.List;
 import java.util.UUID;

@@ -20,7 +20,6 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise.UUID_CONSTRAINT;
         @NamedQuery(name = "Cruise.findByUUID", query = "SELECT c FROM cruises c WHERE c.uuid = :uuid"),
         @NamedQuery(name = "Cruise.findAllPublished", query = "SELECT c FROM cruises c WHERE c.published = true"),
         @NamedQuery(name = "Cruise.findByCruiseGroupUUID", query = "SELECT c FROM cruises c WHERE c.cruisesGroup.uuid = :uuid"),
-        @NamedQuery(name = "Cruise.findByCruiseGroup", query = "SELECT c FROM cruises c WHERE c.cruisesGroup.name = :cruiseGroupName")
 })
 @Table(
         uniqueConstraints = {
@@ -76,6 +75,7 @@ public class Cruise extends BaseEntity {
     @Column(name = "published")
     private boolean published;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "cruise", cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST}, orphanRemoval = true)
     private List<Attraction> attractions;
 

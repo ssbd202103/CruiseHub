@@ -11,6 +11,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.CruiseAddressDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.CruiseForCruiseGroupDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.CruisePictureDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.RatingDto;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;

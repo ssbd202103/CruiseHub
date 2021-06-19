@@ -4,16 +4,13 @@ import pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints.BaseEndpoint;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.MapperException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CreateRatingDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.RatingDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.RemoveClientRatingDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.RemoveRankingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.RatingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.RemoveClientRatingDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.RemoveRankingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.converters.RatingMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.managers.RatingManagerLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
-import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
 import javax.ejb.TransactionAttribute;
@@ -36,21 +33,21 @@ public class RatingEndpoint extends BaseEndpoint implements RatingEndpointLocal 
 
     @RolesAllowed("createRating")
     @Override
-    public void createRating(RatingDto ratingDto) throws BaseAppException {
-        ratingManager.createRating(ratingDto.getLogin(), ratingDto.getCruiseGroupName(), ratingDto.getRating());
+    public void createRating(CreateRatingDto ratingDto) throws BaseAppException {
+        ratingManager.createRating(ratingDto.getLogin(), ratingDto.getCruiseGroupUUID(), ratingDto.getRating());
     }
 
     @RolesAllowed("removeRating")
     @Override
     public void removeRating(RemoveRankingDto removeRankingDto) throws BaseAppException {
-        ratingManager.removeRating(removeRankingDto.getLogin(), removeRankingDto.getCruiseGroupName());
+        ratingManager.removeRating(removeRankingDto.getLogin(), removeRankingDto.getCruiseGroupUUID());
     }
 
     @RolesAllowed("ownFindRating")
     @Override
     public List<RatingDto> getOwnRatings() throws BaseAppException {
         try {
-            return ratingManager.getOwnRatings().stream().map(RatingMapper::mapRatingToRatingDto).collect(Collectors.toList());
+            return ratingManager.getOwnRatings().stream().map(RatingMapper::toRatingDto).collect(Collectors.toList());
         } catch (IllegalArgumentException e) {
             throw new MapperException(RATING_MAPPER_UUID_PARSE);
         }

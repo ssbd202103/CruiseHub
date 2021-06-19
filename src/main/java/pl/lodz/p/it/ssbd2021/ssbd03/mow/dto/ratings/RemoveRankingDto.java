@@ -1,4 +1,4 @@
-package pl.lodz.p.it.ssbd2021.ssbd03.mow.dto;
+package pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

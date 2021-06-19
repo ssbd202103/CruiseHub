@@ -3,7 +3,6 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.RemoveRankingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Name;
 
@@ -30,7 +29,7 @@ public class RatingDto extends RemoveRankingDto {
     @Name
     private String accountSecondName;
 
-    private UUID uuid;
+    private UUID cruiseGroupUUID;
 
     public RatingDto(@Login String login,
                      @NotEmpty(message = CONSTRAINT_NOT_EMPTY) UUID cruiseGroupUUID,
@@ -41,7 +40,7 @@ public class RatingDto extends RemoveRankingDto {
         super(login, cruiseGroupUUID);
 
         this.rating = rating;
-        this.uuid = uuid;
+        this.cruiseGroupUUID = cruiseGroupUUID;
         this.accountFirstName = accountFirstName;
         this.accountSecondName = accountSecondName;
     }

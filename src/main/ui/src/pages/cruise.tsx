@@ -231,8 +231,6 @@ export default function Cruise() {
 
                 <Grid item xs={1} />
 
-                <Grid item xs className={styles.opinions}>
-                    <h3 style={{marginRight: 24}}>{t('opinions')}</h3>
                 <Grid item xs className={styles.ratings}>
                     <h3 style={{ marginRight: 24 }}>{t('ratings')}</h3>
                     <div style={{ padding: '0 24px', width: '100%', overflow: 'auto', height: '100%' }}>
@@ -266,7 +264,7 @@ export default function Cruise() {
                                         </CardContent>
                                     </Card>
                                 ))
-                                : <h4>{t('no attractions')}</h4>
+                                : <h4>{t('no ratings')}</h4>
                         }
                     </div>
                     {
@@ -277,7 +275,6 @@ export default function Cruise() {
                         ) : null
                     }
 
-                    </Grid>
                 </Grid>
             </Grid>
 
