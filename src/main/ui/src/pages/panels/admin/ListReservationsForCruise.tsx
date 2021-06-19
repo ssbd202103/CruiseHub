@@ -27,6 +27,23 @@ const useRowStyles = makeStyles({
     },
 });
 
+const useAutocompleteStyles = (darkMode: boolean) => makeStyles(theme => ({
+    root: {
+        '& .MuiFormLabel-root, & input': {
+            color: `var(--${darkMode ? 'white' : 'dark'})`,
+        },
+        '& svg': {
+            fill: `var(--${darkMode ? 'white' : 'dark'})`,
+        },
+        '& .MuiOutlinedInput-notchedOutline, & .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline, & .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+            borderColor: `var(--${darkMode ? 'white' : 'dark'})`,
+        },
+        '': {
+
+        }
+    }
+}))()
+
 function createData(
     clientName: string,
     numberOfSeats: number,
@@ -144,13 +161,15 @@ const ListReservations = () => {
 
     const {t} = useTranslation()
 
+    const autocomplete = useAutocompleteStyles(darkMode)
 
     return (
         <div>
             <Autocomplete
+                className={autocomplete.root}
                 options={reservationss}
                 inputValue={searchInput}
-                style={{width: 300}}
+                style={{width: 300, marginBottom: 16}}
                 noOptionsText={t('no options')}
                 onChange={(event, value) => {
                     setSearchInput(value as string ?? '')

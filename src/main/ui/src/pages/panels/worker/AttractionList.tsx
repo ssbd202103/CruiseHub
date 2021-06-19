@@ -16,8 +16,18 @@ import RoundedButton from "../../../components/RoundedButton";
 import store from "../../../redux/store";
 import useHandleError from "../../../errorHandler";
 import {refreshToken} from "../../../Services/userService";
+import {useSelector} from "react-redux";
+import {selectDarkMode} from "../../../redux/slices/userSlice";
+import {makeStyles} from "@material-ui/styles";
 
 export default function AttractionList() {
+    const darkMode = useSelector(selectDarkMode);
+    const classes = makeStyles(theme => ({
+        root: {
+            color: `var(--${darkMode ? 'white' : 'dark'})`,
+        }
+    }))()
+
     const {uuid, published} = useParams<{ uuid: string, published: string }>();
     const {token} = store.getState()
     const {t} = useTranslation();
@@ -182,6 +192,7 @@ export default function AttractionList() {
                 columns={published === 'true' ? cols.slice(0, -1) : cols}
                 rows={attractions.map((attraction) => ({id: attraction.uuid, ...attraction}))}
                 onRowSelected={handleSelectedRow}
+                className={classes.root}
             />
             <Dialog
                 open={editAttractionDialogOpen}

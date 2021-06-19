@@ -328,6 +328,23 @@ function Row(props: CruiseData) {
     );
 }
 
+const useAutocompleteStyles = (darkMode: boolean) => makeStyles(theme => ({
+    root: {
+        '& .MuiFormLabel-root, & input': {
+            color: `var(--${darkMode ? 'white' : 'dark'})`,
+        },
+        '& svg': {
+            fill: `var(--${darkMode ? 'white' : 'dark'})`,
+        },
+        '& .MuiOutlinedInput-notchedOutline, & .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline, & .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+            borderColor: `var(--${darkMode ? 'white' : 'dark'})`,
+        },
+        '': {
+
+        }
+    }
+}))()
+
 const ListCruiseGroupsForAdmin = () => {
     const [cruiseGroupL, setCruiseGroupL] = useState([]);
     const [searchInput, setSearchInput] = useState("");
@@ -373,12 +390,15 @@ const ListCruiseGroupsForAdmin = () => {
 
     const {t} = useTranslation()
 
+    const autocomplete = useAutocompleteStyles(darkMode)
+
     return (
         <div>
             <Autocomplete
+                className={autocomplete.root}
                 options={CruiseGroups}
                 inputValue={searchInput}
-                style={{width: 300}}
+                style={{width: 300, marginBottom: 16}}
                 noOptionsText={t('no options')}
                 onChange={(event, value) => {
                     setSearchInput(value as string ?? '')
@@ -394,7 +414,10 @@ const ListCruiseGroupsForAdmin = () => {
                 <Table aria-label="CruiseGroups">
                     <TableHead>
                         <TableRow>
-                            <TableCell>{t('expand cruises')}</TableCell>
+                            <TableCell style={{
+                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                            }}>{t('expand cruises')}</TableCell>
                             <TableCell style={{
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`
