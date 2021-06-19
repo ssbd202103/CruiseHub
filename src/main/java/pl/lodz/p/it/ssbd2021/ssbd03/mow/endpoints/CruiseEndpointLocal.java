@@ -69,8 +69,9 @@ public interface CruiseEndpointLocal {
      * Zwraca wszystkie opublikowane wycieczki
      *
      * @return Lista wycieczek
+     * @throws BaseAppException Bazowy wyjatek aplikacji
      */
-    List<CruiseDto> getPublishedCruises();
+    List<CruiseGroupWithCruisesDto> getPublishedCruises() throws BaseAppException;
 
     /**
      * Pobiera informacje o wycieczkach dla danej grupy wycieczek

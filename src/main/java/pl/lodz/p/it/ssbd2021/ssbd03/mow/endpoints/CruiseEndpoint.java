@@ -101,9 +101,9 @@ public class CruiseEndpoint extends BaseEndpoint implements CruiseEndpointLocal 
 
     @PermitAll
     @Override
-    public List<CruiseDto> getPublishedCruises() {
-        return cruiseManager.getPublishedCruises().stream()
-                .map(CruiseMapper::mapCruiseToCruiseDto).collect(Collectors.toList());
+    public List<CruiseGroupWithCruisesDto> getPublishedCruises() throws BaseAppException {
+        List<Cruise> cruises = cruiseManager.getPublishedCruises();
+        return CruiseMapper.toListOfCruiseGroupsWithCruisesDto(cruises);
     }
 
     @PermitAll

@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.entities.mow;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -18,7 +19,9 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise.UUID_CONSTRAINT;
 @Entity(name = "cruises")
 @NamedQueries({
         @NamedQuery(name = "Cruise.findByUUID", query = "SELECT c FROM cruises c WHERE c.uuid = :uuid"),
-        @NamedQuery(name = "Cruise.findAllPublished", query = "SELECT c FROM cruises c WHERE c.published = true"),
+        // IntelliJ shows an error, but it's caused - as far as I know - by the insufficient IDE's support for Postgres.
+        // And it works
+        @NamedQuery(name = "Cruise.findAllPublished", query = "SELECT c FROM cruises c WHERE c.published = true AND c.active = true AND c.startDate >= NOW()"),
         @NamedQuery(name = "Cruise.findByCruiseGroupUUID", query = "SELECT c FROM cruises c WHERE c.cruisesGroup.uuid = :uuid"),
         @NamedQuery(name = "Cruise.findByCruiseGroup", query = "SELECT c FROM cruises c WHERE c.cruisesGroup.name = :cruiseGroupName")
 })
@@ -76,6 +79,7 @@ public class Cruise extends BaseEntity {
     @Column(name = "published")
     private boolean published;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "cruise", cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST}, orphanRemoval = true)
     private List<Attraction> attractions;
 

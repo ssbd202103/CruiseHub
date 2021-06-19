@@ -79,7 +79,7 @@ public class CruiseController {
     @GET
     @Path("/cruises")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<CruiseDto> getAllCruises() throws BaseAppException {
+    public List<CruiseGroupWithCruisesDto> getAllCruises() throws BaseAppException {
         return tryAndRepeat(() -> cruiseEndpoint.getPublishedCruises());
     }
 

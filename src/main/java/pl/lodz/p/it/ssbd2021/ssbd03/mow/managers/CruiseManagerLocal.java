@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.managers;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.CruiseGroupWithCruisesDto;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -76,5 +77,5 @@ public interface CruiseManagerLocal {
      *
      * @return Lista wycieczek
      */
-    List<Cruise> getPublishedCruises();
+    List<Cruise> getPublishedCruises() throws BaseAppException;
 }
