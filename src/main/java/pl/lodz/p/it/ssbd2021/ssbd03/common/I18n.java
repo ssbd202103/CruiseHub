@@ -123,6 +123,7 @@ public class I18n {
     public static final String RATING_MAPPER_UUID_PARSE = "rating.mapper.uuid.parse";
     public static final String NOT_YOURS_CRUISE = "error.cruise.not.yours";
     public static final String CRUISE_GROUP_ALREADY_ACTIVE = "cruise.group.active.and.cannot.be.modified";
+    public static final String CRUISE_GROUP_ALREADY_DEACTIVATED = "cruise.group.deactivated.and.cannot.be.deactivated";
     public static final String NON_REMOVABLE_ATTRACTION_CRUISE_ALREADY_PUBLISH = "error.attraction.non.removable";
     public static final String ATTRACTION_CREATION_CRUISE_PUBLISHED_ERROR = "error.attraction.create.cruisePublished";
     public static final String ATTRACTION_CREATION_CRUISE_DISABLED_ERROR = "error.attraction.create.cruiseDisabled";
@@ -134,7 +135,9 @@ public class I18n {
     public static final String ATTRACTION_DELETE_CRUISE_DISABLED_ERROR = "error.attraction.delete.cruiseDisabled";
     public static final String ATTRACTION_DELETE_CRUISE_ALREADY_STARTED_ERROR = "error.attraction.delete.cruiseStartDate";
     public static final String BUSINESS_WORKER_ADD_CRUISE_TO_BAD_COMPANY = "businessWorker.add.cruise.to.bad.company";
+    public static final String BUSINESS_WORKER_DONT_OWN_CRUISE_GROUP = "businessWorker.dont.own.cruise.group";
     public static final String CANNOT_FIND_ACCESS_LEVEL = "cannot.find.access.level";
+    public static final String NOT_CORRECT_ACCESS_LEVEL = "not.correct.access.level";
     public static final String CRUISE_ALREADY_BLOCKED = "cruise.already.blocked";
     public static final String CANNOT_EDIT_THIS_CRUISE = "cruise.cannot.edit";
     public static final String CANNOT_BLOCK_THIS_CRUISE = "cruise.cannot.block";
