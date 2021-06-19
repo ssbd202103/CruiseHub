@@ -1,9 +1,11 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.managers;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Rating;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.RatingExistsException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.AccountFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseGroupFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.RatingFacadeMow;
@@ -25,7 +27,7 @@ import static javax.ejb.TransactionAttributeType.MANDATORY;
 @Stateful
 @TransactionAttribute(MANDATORY)
 @Interceptors(TrackingInterceptor.class)
-public class RatingManager implements RatingManagerLocal {
+public class RatingManager extends BaseManagerMow implements RatingManagerLocal {
 
     @Context
     SecurityContext securityContext;
@@ -34,16 +36,18 @@ public class RatingManager implements RatingManagerLocal {
     RatingFacadeMow ratingFacade;
 
     @Inject
-    AccountFacadeMow accountFacadeMow;
-
-    @Inject
     CruiseGroupFacadeMow cruiseGroupFacadeMow;
 
     @RolesAllowed("createRating")
     @Override
-    public void createRating(String login, UUID cruiseGroupUUID, Double rating) throws BaseAppException {
-        Account account = accountFacadeMow.findByLogin(login);
+    public void createRating(UUID cruiseGroupUUID, Double rating) throws BaseAppException {
+        Account account = getCurrentUser();
         CruiseGroup cruiseGroup = cruiseGroupFacadeMow.findByUUID(cruiseGroupUUID);
+
+        Long count = ratingFacade.countByLogin(account.getLogin(), cruiseGroupUUID);
+
+        if (count > 0) throw new RatingExistsException(I18n.RATING_EXISTS);
+
         Rating r = new Rating(account, cruiseGroup, rating);
         r.setAlteredBy(account);
         r.setCreatedBy(account);
@@ -51,19 +55,28 @@ public class RatingManager implements RatingManagerLocal {
 
         ratingFacade.create(r);
 
-        List<Rating> ratings = ratingFacade.findByCruiseGroupUUID(cruiseGroupUUID);
-        Double avgRating = ratings.stream().mapToDouble(Rating::getRating).sum() / ratings.size();
-
-        cruiseGroup.setAverageRating(avgRating);
-        cruiseGroupFacadeMow.edit(cruiseGroup);
+        calculateAverageRating(cruiseGroup);
     }
 
     @RolesAllowed("removeRating")
     @Override
-    public void removeRating(String login, UUID cruiseGroupUUId) throws BaseAppException {
-        Rating r = ratingFacade.findByCruiseGroupUUIDAndAccountLogin(cruiseGroupUUId, login);
+    public void removeRating(UUID cruiseGroupUUID) throws BaseAppException {
+        Account account = getCurrentUser();
+        Rating r = ratingFacade.findByCruiseGroupUUIDAndAccountLogin(cruiseGroupUUID, account.getLogin());
 
         ratingFacade.remove(r);
+
+        CruiseGroup cruiseGroup = cruiseGroupFacadeMow.findByUUID(cruiseGroupUUID);
+        
+        calculateAverageRating(cruiseGroup);
+    }
+
+    private void calculateAverageRating(CruiseGroup cruiseGroup) throws BaseAppException {
+        List<Rating> ratings = ratingFacade.findByCruiseGroupUUID(cruiseGroup.getUuid());
+        Double avgRating = ratings.stream().mapToDouble(Rating::getRating).sum() / ratings.size();
+
+        cruiseGroup.setAverageRating(avgRating);
+        cruiseGroupFacadeMow.edit(cruiseGroup);
     }
 
     @RolesAllowed("ownFindRating")
@@ -82,9 +95,5 @@ public class RatingManager implements RatingManagerLocal {
     @Override
     public void removeClientRating(String login, String cruiseGroupName) throws BaseAppException {
         // todo finish implementantion
-    }
-
-    private Account getCurrentUser() throws BaseAppException {
-        return accountFacadeMow.findByLogin(securityContext.getUserPrincipal().getName());
     }
 }

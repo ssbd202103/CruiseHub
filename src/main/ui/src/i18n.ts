@@ -356,6 +356,7 @@ const resources = {
 
             "error.cruise.mapper.data.parse": "Nieprawidłowy format daty",
             "error.cruise.mapper.uuid.parse": "Nieprawidłowy format uuid",
+            'rating.exists': 'Już oceniałeś te wycieczki',
 
             "max.date.message": "Data nie powinna być póżniejsza niż maksymalna data",
             "min.date.message": "Data nie powinna być wcześniejsza niż minimalna data",
@@ -748,6 +749,7 @@ const resources = {
             "error.startDate.after.endDate": "The start date cannot be after end date",
             "error.cruise.mapper.data.parse": "Invalid date format",
             "error.cruise.mapper.uuid.parse": "Invalid uuid format",
+            'rating.exists': 'You already voted these cruises',
 
             "max.date.message": "Date should not be after maximal date",
             "min.date.message": "Date should not be before minimal date",

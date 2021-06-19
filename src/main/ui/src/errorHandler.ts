@@ -9,6 +9,11 @@ function useHandleError() {
     const showWarning = useSnackbarQueue('warning')
 
     return (error: string | any, status: number = 0) => {
+        if (error === undefined) {
+            showError(t('unknown error'))
+            return
+        }
+
         if (!error) {
             showError(t('unknown error'))
             return

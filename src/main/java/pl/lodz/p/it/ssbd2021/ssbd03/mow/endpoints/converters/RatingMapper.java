@@ -8,8 +8,8 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.RatingDto;
 @NoArgsConstructor
 public class RatingMapper {
     public static RatingDto toRatingDto(Rating rating) {
-        return new RatingDto(rating.getAccount().getLogin(), rating.getCruiseGroup().getUuid(),
-                rating.getRating(), rating.getAccount().getFirstName(), rating.getAccount().getSecondName());
+        return new RatingDto(rating.getCruiseGroup().getUuid().toString(),
+                rating.getRating(), rating.getAccount().getLogin(), rating.getAccount().getFirstName(), rating.getAccount().getSecondName());
     }
 
     /**
