@@ -147,18 +147,18 @@ public class CruiseGroupManager implements CruiseGroupManagerLocal {
                 try {
                     Optional<AccessLevel> accessLevelBusinessWorker = account.getAccessLevels().stream().filter(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.BUSINESS_WORKER).findFirst();
                     if (accessLevelBusinessWorker.isEmpty()) {
-                        throw new CruiseManagerException(NOT_CORRECT_ACCESS_LEVEL);
+                        throw new CruiseGroupManagerException(NOT_CORRECT_ACCESS_LEVEL);
                     }
                     BusinessWorker businessWorker = (BusinessWorker) accessLevelBusinessWorker.get();
                     if(cruiseGroup.getCompany().getNIP() != businessWorker.getCompany().getNIP()) {
-                        throw new CruiseManagerException(BUSINESS_WORKER_DONT_OWN_CRUISE_GROUP);
+                        throw new CruiseGroupManagerException(BUSINESS_WORKER_DONT_OWN_CRUISE_GROUP);
                     }
                 } catch (ClassCastException e) {
-                    throw new CruiseManagerException(CANNOT_FIND_ACCESS_LEVEL);
+                    throw new CruiseGroupManagerException(CANNOT_FIND_ACCESS_LEVEL);
                 }
             }
             } catch (ClassCastException e)  {
-            throw new CruiseManagerException(CANNOT_FIND_ACCESS_LEVEL);
+            throw new CruiseGroupManagerException(CANNOT_FIND_ACCESS_LEVEL);
         }
         cruiseGroup.setActive(false);
         setUpdatedMetadata(cruiseGroup);
