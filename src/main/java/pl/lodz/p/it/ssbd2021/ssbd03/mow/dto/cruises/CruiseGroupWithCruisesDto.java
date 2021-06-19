@@ -17,6 +17,6 @@ public class CruiseGroupWithCruisesDto {
     private UUID uuid;
     private String name;
     private Double price;
-    private byte[] img;
+    private String img;
     List<ShortCruiseDto> relatedCruises;
 }

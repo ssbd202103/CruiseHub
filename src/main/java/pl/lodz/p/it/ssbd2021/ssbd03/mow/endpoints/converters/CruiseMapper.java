@@ -54,6 +54,11 @@ public class CruiseMapper {
         return new RelatedCruiseDto(cruise.getUuid(), cruise.getStartDate(), cruise.getEndDate(), cruise.isActive());
     }
 
+    /**
+     * Metoda mapujaca liste wycieczek na liste CruiseGroupWithCruisesDto
+     * @param cruises lista wycieczek
+     * @return Lista wycieczek w postaci CruiseGroupWithCruisesDto
+     */
     public static List<CruiseGroupWithCruisesDto> toListOfCruiseGroupsWithCruisesDto(List<Cruise> cruises) {
         List<CruiseGroup> cruiseGroups = new ArrayList<>();
         List<CruiseGroupWithCruisesDto> result = new ArrayList<>();
@@ -62,10 +67,13 @@ public class CruiseMapper {
             CruiseGroup cg = cruises.get(i).getCruisesGroup();
             if (!cruiseGroups.contains(cg)) {
                 cruiseGroups.add(cg);
-                byte[] img = null;
+                String img = null;
                 if (cg.getCruisePictures().size() > 0) {
-                    img = cg.getCruisePictures().get(0).getImg();
+                    // TODO: uncomment below when the database stores a string url
+                    // img = cg.getCruisePictures().get(0).getImg();
                 }
+                // TODO delete the line below
+                img = "https://promoklocki.pl/media/10155/maersk-line-container-ship.jpg";
                 CruiseGroupWithCruisesDto c = new CruiseGroupWithCruisesDto(cg.getUuid(), cg.getName(), cg.getPrice(), img, new ArrayList<>());
                 for (int j = i; j < cruises.size(); j++) {
                     if (cruises.get(j).getCruisesGroup().getUuid() == c.getUuid()) {

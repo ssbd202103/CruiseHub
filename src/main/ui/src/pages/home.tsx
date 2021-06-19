@@ -11,7 +11,6 @@ import {useSelector} from "react-redux";
 import {selectDarkMode} from "../redux/slices/userSlice";
 import {useEffect} from "react";
 import {getPublishedCruises} from "../Services/cruisesService";
-import CruisesList from "./CruisesList";
 
 
 export default function Home() {
@@ -36,8 +35,6 @@ export default function Home() {
             <section className={styles.ad}>
                 <div>{t("ad")}</div>
             </section>
-
-            <CruisesList/>
 
             <section className={styles['top-cruises']}>
                 <h2 className={styles.h2}
