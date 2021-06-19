@@ -4,7 +4,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.ControllerException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.MapperException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.*;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations.CancelReservationDTO;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations.CreateReservationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.CruiseEndpointLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.ReservationEndpointLocal;
@@ -115,14 +114,14 @@ public class CruiseController {
     /**
      * Metoda anulująca rezerwację klienta
      *
-     * @param reservationDTO Informacja o anulowanej rezerwacji
+     * @param reservationUUID UUID anulowanej rezerwacji
      * @throws BaseAppException Bazowy wyjatek aplikacji
      */
     @DELETE
-    @Path("/cancelReservation")
+    @Path("/cancelReservation/{reservationUUID}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void cancelReservation(CancelReservationDTO reservationDTO) throws BaseAppException {
-        tryAndRepeat(() -> reservationEndpoint.cancelReservation(reservationDTO));
+    public void cancelReservation(@PathParam("reservationUUID") UUID reservationUUID) throws BaseAppException {
+        tryAndRepeat(() -> reservationEndpoint.cancelReservation(reservationUUID));
     }
 
     /**
@@ -144,17 +143,47 @@ public class CruiseController {
      *
      * @param deactivateCruiseDto Obiekt posiadający UUID oraz werjsie danej wycieczki
      * @param etag                Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
-     * @throws BaseAppException
+     * @throws BaseAppException Bazowy wyjątek aplikacji
      */
     @ETagFilterBinding
     @PUT
     @Path("/deactivate-cruise")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void deactivate(@Valid @NotNull(message = CONSTRAINT_NOT_NULL) DeactivateCruiseDto deactivateCruiseDto, @HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) @Valid String etag) throws BaseAppException {
+    public void deactivateCruise(@Valid @NotNull(message = CONSTRAINT_NOT_NULL) DeactivateCruiseDto deactivateCruiseDto, @HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) @Valid String etag) throws BaseAppException {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, deactivateCruiseDto)) {
             throw ControllerException.etagIdentityIntegrity();
         }
         tryAndRepeat(() -> cruiseEndpoint.deactivateCruise(deactivateCruiseDto));
     }
 
+
+    /**
+     * @param editCruiseDto Obiekt reprezentujący wycieczkę
+     * @param etag          Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
+    @ETagFilterBinding
+    @PUT
+    @Path("/edit-cruise")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void editCruise(@Valid @NotNull(message = CONSTRAINT_NOT_NULL) EditCruiseDto editCruiseDto, @HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) @Valid String etag) throws BaseAppException {
+        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, editCruiseDto)) {
+            throw ControllerException.etagIdentityIntegrity();
+        }
+        tryAndRepeat(() -> cruiseEndpoint.editCruise(editCruiseDto));
+    }
+
+
+    @ETagFilterBinding
+    @PUT
+    @Path("/publish")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void publishCruise(PublishCruiseDto publishCruiseDto,
+                              @HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL)
+                              @NotEmpty(message = CONSTRAINT_NOT_EMPTY) @Valid String etag) throws BaseAppException {
+        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, publishCruiseDto)) {
+            throw ControllerException.etagIdentityIntegrity();
+        }
+        tryAndRepeat(() -> cruiseEndpoint.publishCruise(publishCruiseDto));
+    }
 }

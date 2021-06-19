@@ -26,6 +26,7 @@ import ListReservationsForWorker from "./worker/ListReservationsForWokrersCruise
 import ChangeCruiseGroup from "./worker/changeCruiseGroup"
 import AttractionList from "./worker/AttractionList";
 
+
 export default function WorkerPanel() {
     const {t} = useTranslation()
     const handleError = useHandleError()

@@ -14,9 +14,10 @@ import {getAllAccounts} from "../../../Services/accountsService";
 import DarkedTextField from "../../../components/DarkedTextField";
 import {useSnackbarQueue} from "../../snackbar";
 import {refreshToken} from "../../../Services/userService";
-import {TextField} from "@material-ui/core";
+import {Button, TextField} from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import useHandleError from "../../../errorHandler";
+import {Link} from "react-router-dom";
 
 const useRowStyles = makeStyles({
     root: {
@@ -25,6 +26,19 @@ const useRowStyles = makeStyles({
         },
     },
 });
+
+const useButtonStyles = makeStyles({
+    root: {
+        fontFamily: '"Montserrat", sans-serif',
+        color: 'var(--white)',
+        backgroundColor: "var(--blue)",
+        padding: '8px 16px',
+        margin: '0 16px',
+        '&:hover': {
+            backgroundColor: "var(--blue-dark)",
+        }
+    }
+})
 
 function createData(
     login: string,
@@ -53,6 +67,8 @@ function Row(props: RowProps) {
     const {row} = props;
     const {style} = props;
     const classes = useRowStyles();
+    const {t} = useTranslation();
+    const buttonClass = useButtonStyles();
 
     return (
         <TableRow className={classes.root}>
@@ -64,6 +80,18 @@ function Row(props: RowProps) {
             <TableCell style={style}>{row.email}</TableCell>
             <TableCell style={style}>{row.active.toString()}</TableCell>
             <TableCell style={style}>{row.accessLevels.toString()}</TableCell>
+            {
+                row.accessLevels.includes('CLIENT') ? (
+                    <Link to="/accounts/ratings">
+                        <TableCell style={style}>
+                            <Button
+                                onClick={() => sessionStorage.setItem("login", row.login)}
+                                className={buttonClass.root}>{t("ratings")}
+                            </Button>
+                        </TableCell>
+                    </Link>
+                ) : ""
+            }
         </TableRow>
     );
 }
@@ -148,6 +176,10 @@ export default function ModListClient() {
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`
                             }}>{t("access level")}</TableCell>
+                            <TableCell style={{
+                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                            }}>{t("ratings")}</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>

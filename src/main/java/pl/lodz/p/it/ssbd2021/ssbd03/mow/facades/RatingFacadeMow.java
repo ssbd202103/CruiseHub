@@ -67,8 +67,8 @@ public class RatingFacadeMow extends AbstractFacade<Rating> {
         }
     }
 
-    public List<Rating> findOwnRatings(String login) throws BaseAppException {
-        TypedQuery<Rating> tq = em.createNamedQuery("Rating.findOwnRatings", Rating.class);
+    public List<Rating> findUserRatings(String login) throws BaseAppException {
+        TypedQuery<Rating> tq = em.createNamedQuery("Rating.findUserRatings", Rating.class);
         tq.setParameter("login", login);
         try {
             return tq.getResultList();

@@ -151,7 +151,7 @@
     </security-role>
 
     <security-role>
-        <role-name>removeClientRating</role-name>
+        <role-name>getRemoveClientRating</role-name>
     </security-role>
 
     <security-role>

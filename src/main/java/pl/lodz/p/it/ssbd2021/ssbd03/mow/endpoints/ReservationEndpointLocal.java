@@ -1,10 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations.CancelReservationDTO;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations.CreateReservationDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations.CruiseReservationDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations.RemoveClientReservationDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations.*;
 
 import javax.ejb.Local;
 import java.util.List;
@@ -51,10 +48,10 @@ public interface ReservationEndpointLocal {
 
     /**
      * Metoda sluzaca do anulowania zarezerwowanej wycieczki
-     * @param cancelReservationDTO Informacja o kliencie oraz wycieczce
+     * @param reservationUUID UUID anulowanej rezerwacji
      * @throws BaseAppException Bazowy wyjatek aplikacji
      */
-    void cancelReservation(CancelReservationDTO cancelReservationDTO) throws BaseAppException;
+    void cancelReservation(UUID reservationUUID) throws BaseAppException;
 
 
     /**
@@ -62,6 +59,6 @@ public interface ReservationEndpointLocal {
      * @return lista rezerwacji klienta
      * @throws BaseAppException bazowy wyjątek aplikacji
      */
-    List<CruiseReservationDto> viewSelfCruiseReservations() throws BaseAppException;
+    List<SelfReservationDto> viewSelfCruiseReservations() throws BaseAppException;
 }
 

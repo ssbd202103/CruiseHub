@@ -89,15 +89,15 @@ export default function ChangeAccountData() {
         setAlterType(currentAccountMTD.alterType);
         setAlteredBy(currentAccountMTD.alteredBy);
         setCreatedBy(currentAccountMTD.createdBy);
-        if(currentAccountMTD.creationDateTime !=null)
-        setCreationDateTime(currentAccountMTD.creationDateTime.dayOfMonth +"/"+ currentAccountMTD.creationDateTime.month +" / "+ currentAccountMTD.creationDateTime.year +"    "+ currentAccountMTD.creationDateTime.hour +":"+ currentAccountMTD.creationDateTime.minute )
-        if(currentAccountMTD.lastAlterDateTime !=null)
-        setLastAlterDateTime(currentAccountMTD.lastAlterDateTime.dayOfMonth +"/"+ currentAccountMTD.lastAlterDateTime.month +" / "+ currentAccountMTD.lastAlterDateTime.year +"    "+ currentAccountMTD.lastAlterDateTime.hour +":"+ currentAccountMTD.lastAlterDateTime.minute);
-        if(currentAccountMTD.lastCorrectAuthenticationDateTime !=null)
-        setLastCorrectAuthenticationDateTime(currentAccountMTD.lastCorrectAuthenticationDateTime.dayOfMonth +"/"+ currentAccountMTD.lastCorrectAuthenticationDateTime.month +" / "+ currentAccountMTD.lastCorrectAuthenticationDateTime.year +"    "+ currentAccountMTD.lastCorrectAuthenticationDateTime.hour +":"+ currentAccountMTD.creationDateTime.minute);
+        if (currentAccountMTD.creationDateTime != null)
+            setCreationDateTime(currentAccountMTD.creationDateTime.dayOfMonth + "/" + currentAccountMTD.creationDateTime.month + " / " + currentAccountMTD.creationDateTime.year + "    " + currentAccountMTD.creationDateTime.hour + ":" + currentAccountMTD.creationDateTime.minute)
+        if (currentAccountMTD.lastAlterDateTime != null)
+            setLastAlterDateTime(currentAccountMTD.lastAlterDateTime.dayOfMonth + "/" + currentAccountMTD.lastAlterDateTime.month + " / " + currentAccountMTD.lastAlterDateTime.year + "    " + currentAccountMTD.lastAlterDateTime.hour + ":" + currentAccountMTD.lastAlterDateTime.minute);
+        if (currentAccountMTD.lastCorrectAuthenticationDateTime != null)
+            setLastCorrectAuthenticationDateTime(currentAccountMTD.lastCorrectAuthenticationDateTime.dayOfMonth + "/" + currentAccountMTD.lastCorrectAuthenticationDateTime.month + " / " + currentAccountMTD.lastCorrectAuthenticationDateTime.year + "    " + currentAccountMTD.lastCorrectAuthenticationDateTime.hour + ":" + currentAccountMTD.creationDateTime.minute);
         setLastCorrectAuthenticationLogicalAddress(currentAccountMTD.lastCorrectAuthenticationLogicalAddress)
-        if(currentAccountMTD.lastIncorrectAuthenticationDateTime !=null)
-        setLastIncorrectAuthenticationDateTime(currentAccountMTD.lastIncorrectAuthenticationDateTime.dayOfMonth +"/"+ currentAccountMTD.lastIncorrectAuthenticationDateTime.month +" / "+ currentAccountMTD.lastIncorrectAuthenticationDateTime.year +"    "+ currentAccountMTD.lastIncorrectAuthenticationDateTime.hour +":"+ currentAccountMTD.lastIncorrectAuthenticationDateTime.minute);
+        if (currentAccountMTD.lastIncorrectAuthenticationDateTime != null)
+            setLastIncorrectAuthenticationDateTime(currentAccountMTD.lastIncorrectAuthenticationDateTime.dayOfMonth + "/" + currentAccountMTD.lastIncorrectAuthenticationDateTime.month + " / " + currentAccountMTD.lastIncorrectAuthenticationDateTime.year + "    " + currentAccountMTD.lastIncorrectAuthenticationDateTime.hour + ":" + currentAccountMTD.lastIncorrectAuthenticationDateTime.minute);
         setLastIncorrectAuthenticationLogicalAddress(currentAccountMTD.lastIncorrectAuthenticationLogicalAddress);
         setNumberOfAuthenticationFailures(currentAccountMTD.numberOfAuthenticationFailures)
         setVersion(currentAccountMTD.version);
@@ -109,14 +109,14 @@ export default function ChangeAccountData() {
             setCountry(clientAddr.address.country);
             setCity(clientAddr.address.city);
             setPhoneNumber(clientAddr.phoneNumber);
-            
+
             setAlterTypeAdr(currentAccountAddressMTD.alterType);
             setAlteredByAdr(currentAccountAddressMTD.alteredBy);
             setCreatedByAdr(currentAccountAddressMTD.createdBy);
-            if(currentAccountAddressMTD.creationDateTime !=null)
-                setCreationDateTimeAdr(currentAccountAddressMTD.creationDateTime.dayOfMonth +"/"+ currentAccountAddressMTD.creationDateTime.month +" / "+ currentAccountAddressMTD.creationDateTime.year +"    "+ currentAccountAddressMTD.creationDateTime.hour +":"+ currentAccountAddressMTD.creationDateTime.minute )
-            if(currentAccountAddressMTD.lastAlterDateTime !=null)
-                setLastAlterDateTimeAdr(currentAccountAddressMTD.lastAlterDateTime.dayOfMonth +"/"+ currentAccountAddressMTD.lastAlterDateTime.month +" / "+ currentAccountAddressMTD.lastAlterDateTime.year +"    "+ currentAccountAddressMTD.lastAlterDateTime.hour +":"+ currentAccountAddressMTD.lastAlterDateTime.minute);
+            if (currentAccountAddressMTD.creationDateTime != null)
+                setCreationDateTimeAdr(currentAccountAddressMTD.creationDateTime.dayOfMonth + "/" + currentAccountAddressMTD.creationDateTime.month + " / " + currentAccountAddressMTD.creationDateTime.year + "    " + currentAccountAddressMTD.creationDateTime.hour + ":" + currentAccountAddressMTD.creationDateTime.minute)
+            if (currentAccountAddressMTD.lastAlterDateTime != null)
+                setLastAlterDateTimeAdr(currentAccountAddressMTD.lastAlterDateTime.dayOfMonth + "/" + currentAccountAddressMTD.lastAlterDateTime.month + " / " + currentAccountAddressMTD.lastAlterDateTime.year + "    " + currentAccountAddressMTD.lastAlterDateTime.hour + ":" + currentAccountAddressMTD.lastAlterDateTime.minute);
             setVersionAdr(currentAccountAddressMTD.version);
         }
         if (businnesPhone) {
@@ -125,10 +125,10 @@ export default function ChangeAccountData() {
             setAlterTypeAcl(currentAccountAclMTD.alterType);
             setAlteredByAcl(currentAccountAclMTD.alteredBy);
             setCreatedByAcl(currentAccountAclMTD.createdBy);
-            if(currentAccountAclMTD.creationDateTime !=null)
-                setCreationDateTimeAcl(currentAccountAclMTD.creationDateTime.dayOfMonth +"/"+ currentAccountAclMTD.creationDateTime.month +" / "+ currentAccountAclMTD.creationDateTime.year +"    "+ currentAccountAclMTD.creationDateTime.hour +":"+ currentAccountAclMTD.creationDateTime.minute )
-            if(currentAccountAclMTD.lastAlterDateTime !=null)
-                setLastAlterDateTimeAcl(currentAccountAclMTD.lastAlterDateTime.dayOfMonth +"/"+ currentAccountAclMTD.lastAlterDateTime.month +" / "+ currentAccountAclMTD.lastAlterDateTime.year +"    "+ currentAccountAclMTD.lastAlterDateTime.hour +":"+ currentAccountAclMTD.lastAlterDateTime.minute);
+            if (currentAccountAclMTD.creationDateTime != null)
+                setCreationDateTimeAcl(currentAccountAclMTD.creationDateTime.dayOfMonth + "/" + currentAccountAclMTD.creationDateTime.month + " / " + currentAccountAclMTD.creationDateTime.year + "    " + currentAccountAclMTD.creationDateTime.hour + ":" + currentAccountAclMTD.creationDateTime.minute)
+            if (currentAccountAclMTD.lastAlterDateTime != null)
+                setLastAlterDateTimeAcl(currentAccountAclMTD.lastAlterDateTime.dayOfMonth + "/" + currentAccountAclMTD.lastAlterDateTime.month + " / " + currentAccountAclMTD.lastAlterDateTime.year + "    " + currentAccountAclMTD.lastAlterDateTime.hour + ":" + currentAccountAclMTD.lastAlterDateTime.minute);
             setVersionAcl(currentAccountAclMTD.version);
         }
     }, [])
@@ -404,17 +404,31 @@ export default function ChangeAccountData() {
                     </Grid>
                     <div>
                         <tr>
-                            <td><h4>{t("alterType")}</h4></td> <td><h4>{t("alteredBy")}</h4></td> <td><h4>{t("createdBy")}</h4></td>
-                            <td><h4>{t("creationDateTime")}</h4></td> <td><h4>{t("lastAlterDateTime")}</h4></td> <td><h4>{t("lastCorrectAuthenticationDateTime")}</h4></td>
-                            <td><h4>{t("lastCorrectAuthenticationLogicalAddress")}</h4></td> <td><h4>{t("lastIncorrectAuthenticationDateTime")}</h4></td> <td><h4>{t("lastIncorrectAuthenticationLogicalAddress")}</h4></td>
-                            <td><h4>{t("numberOfAuthenticationFailures")}</h4></td> <td><h4>{t("version")}</h4></td>
+                            <td><h4>{t("alterType")}</h4></td>
+                            <td><h4>{t("alteredBy")}</h4></td>
+                            <td><h4>{t("createdBy")}</h4></td>
+                            <td><h4>{t("creationDateTime")}</h4></td>
+                            <td><h4>{t("lastAlterDateTime")}</h4></td>
+                            <td><h4>{t("lastCorrectAuthenticationDateTime")}</h4></td>
+                            <td><h4>{t("lastCorrectAuthenticationLogicalAddress")}</h4></td>
+                            <td><h4>{t("lastIncorrectAuthenticationDateTime")}</h4></td>
+                            <td><h4>{t("lastIncorrectAuthenticationLogicalAddress")}</h4></td>
+                            <td><h4>{t("numberOfAuthenticationFailures")}</h4></td>
+                            <td><h4>{t("version")}</h4></td>
                         </tr>
                         <tr>
-                            <td><h4>{t(alterType)}</h4></td><td><h4>{alteredBy}</h4></td><td><h4>{createdBy}</h4></td>
-                            <td><h4>{creationDateTime}</h4></td><td><h4>{lastAlterDateTime}</h4></td><td><h4>{lastCorrectAuthenticationDateTime}</h4></td>
-                            <td><h4>{lastCorrectAuthenticationLogicalAddress}</h4></td><td><h4>{lastIncorrectAuthenticationDateTime}</h4></td><td><h4>{lastIncorrectAuthenticationLogicalAddress}</h4></td>
-                           <td><h4>{numberOfAuthenticationFailures}</h4></td><td><h4>{version}</h4></td>
-                    </tr>
+                            <td><h4>{t(alterType)}</h4></td>
+                            <td><h4>{alteredBy}</h4></td>
+                            <td><h4>{createdBy}</h4></td>
+                            <td><h4>{creationDateTime}</h4></td>
+                            <td><h4>{lastAlterDateTime}</h4></td>
+                            <td><h4>{lastCorrectAuthenticationDateTime}</h4></td>
+                            <td><h4>{lastCorrectAuthenticationLogicalAddress}</h4></td>
+                            <td><h4>{lastIncorrectAuthenticationDateTime}</h4></td>
+                            <td><h4>{lastIncorrectAuthenticationLogicalAddress}</h4></td>
+                            <td><h4>{numberOfAuthenticationFailures}</h4></td>
+                            <td><h4>{version}</h4></td>
+                        </tr>
                     </div>
                 </Grid>
                 <Grid item style={{display: acLevel.includes('CLIENT') ? "block" : "none"}} className={styles.item}>
@@ -513,12 +527,20 @@ export default function ChangeAccountData() {
 
                     </Grid>
                     <tr>
-                        <td><h4>{t("alterType")}</h4></td> <td><h4>{t("alteredBy")}</h4></td> <td><h4>{t("createdBy")}</h4></td>
-                        <td><h4>{t("creationDateTime")}</h4></td> <td><h4>{t("lastAlterDateTime")}</h4></td><td><h4>{t("version")}</h4></td>
+                        <td><h4>{t("alterType")}</h4></td>
+                        <td><h4>{t("alteredBy")}</h4></td>
+                        <td><h4>{t("createdBy")}</h4></td>
+                        <td><h4>{t("creationDateTime")}</h4></td>
+                        <td><h4>{t("lastAlterDateTime")}</h4></td>
+                        <td><h4>{t("version")}</h4></td>
                     </tr>
                     <tr>
-                        <td><h4>{t(alterTypeAdr)}</h4></td><td><h4>{alteredByAdr}</h4></td><td><h4>{createdByAdr}</h4></td>
-                        <td><h4>{creationDateTimeAdr}</h4></td><td><h4>{lastAlterDateTimeAdr}</h4></td><td><h4>{versionAdr}</h4></td>
+                        <td><h4>{t(alterTypeAdr)}</h4></td>
+                        <td><h4>{alteredByAdr}</h4></td>
+                        <td><h4>{createdByAdr}</h4></td>
+                        <td><h4>{creationDateTimeAdr}</h4></td>
+                        <td><h4>{lastAlterDateTimeAdr}</h4></td>
+                        <td><h4>{versionAdr}</h4></td>
                     </tr>
                 </Grid>
                 <Grid item style={{display: acLevel.includes('BUSINESS_WORKER') ? "block" : "none"}}
@@ -557,12 +579,20 @@ export default function ChangeAccountData() {
                         >{t("cancel")}</RoundedButton>
                     </Grid>
                     <tr>
-                        <td><h4>{t("alterType")}</h4></td> <td><h4>{t("alteredBy")}</h4></td> <td><h4>{t("createdBy")}</h4></td>
-                        <td><h4>{t("creationDateTime")}</h4></td> <td><h4>{t("lastAlterDateTime")}</h4></td><td><h4>{t("version")}</h4></td>
+                        <td><h4>{t("alterType")}</h4></td>
+                        <td><h4>{t("alteredBy")}</h4></td>
+                        <td><h4>{t("createdBy")}</h4></td>
+                        <td><h4>{t("creationDateTime")}</h4></td>
+                        <td><h4>{t("lastAlterDateTime")}</h4></td>
+                        <td><h4>{t("version")}</h4></td>
                     </tr>
                     <tr>
-                        <td><h4>{t(alterTypeAcl)}</h4></td><td><h4>{alteredByAcl}</h4></td><td><h4>{createdByAcl}</h4></td>
-                        <td><h4>{creationDateTimeAcl}</h4></td><td><h4>{lastAlterDateTimeAcl}</h4></td><td><h4>{versionAcl}</h4></td>
+                        <td><h4>{t(alterTypeAcl)}</h4></td>
+                        <td><h4>{alteredByAcl}</h4></td>
+                        <td><h4>{createdByAcl}</h4></td>
+                        <td><h4>{creationDateTimeAcl}</h4></td>
+                        <td><h4>{lastAlterDateTimeAcl}</h4></td>
+                        <td><h4>{versionAcl}</h4></td>
                     </tr>
                 </Grid>
                 <Grid item>

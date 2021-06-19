@@ -63,14 +63,13 @@ public interface CruiseManagerLocal {
     /**
      * Zajmuje się edycją wycieczki
      *
-     * @param description opis wycieczki do zmiany
      * @param startDate   data rozpoczęcia wycieczki do zmiany
      * @param endDate     data zakończenia wycieczki do zmiany
      * @param uuid        uuid wycieczki
      * @param version     wersja obiektu wycieczki
      * @throws BaseAppException wyjątek rzucany w razie nie znalezienia wycieczki, bądź złej wersji
      */
-    void editCruise(String description, LocalDateTime startDate, LocalDateTime endDate, UUID uuid, Long version) throws BaseAppException;
+    void editCruise(LocalDateTime startDate, LocalDateTime endDate, UUID uuid, Long version) throws BaseAppException;
 
     /**
      * Zwraca wszystkie opublikowane wycieczki

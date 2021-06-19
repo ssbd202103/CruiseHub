@@ -1,8 +1,8 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.attractions.AttractionDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.attractions.AddAttractionDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.attractions.AttractionDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.attractions.EditAttractionDto;
 
 import javax.ejb.Local;
@@ -18,17 +18,17 @@ public interface AttractionEndpointLocal {
     /**
      * Metoda odpowiedzialna za wywołanie metody odpowiedzialnej za usunięcie atrkacji.
      *
-     * @param id UUID usuwanej atrakcji
+     * @param uuid UUID usuwanej atrakcji
      * @throws BaseAppException
      */
-    void deleteAttraction(long id) throws BaseAppException;
+    void deleteAttraction(UUID uuid) throws BaseAppException;
 
     /**
      * Metoda odpowiedzialna za stworzenie atrakcji i dodanie jej do grupy wycieczek.
      *
      * @param addAttractionDto Obiekt przesyłowy DTO reprezentujący atrakcję
-     * @throws BaseAppException Wyjątek występujący w przypadku naruszenia zasad biznesowych.
      * @return UUID nowo utworzonej atrakcji.
+     * @throws BaseAppException Wyjątek występujący w przypadku naruszenia zasad biznesowych.
      */
     UUID addAttraction(AddAttractionDto addAttractionDto) throws BaseAppException;
 

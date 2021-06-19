@@ -39,8 +39,10 @@ public class Reservation extends BaseEntity {
     @ToString.Exclude
     private long id;
 
-    @Setter
+    @Basic
+//    @Convert(converter = pl.lodz.p.it.ssbd2021.ssbd03.entities.converters.UuidConverter.class) todo
     @Getter
+    @Setter
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @Column(name = "uuid", nullable = false, unique = true, updatable = false)
     private UUID uuid;

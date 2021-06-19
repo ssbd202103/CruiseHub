@@ -69,10 +69,16 @@ public class RatingManager implements RatingManagerLocal {
     @RolesAllowed("ownFindRating")
     @Override
     public List<Rating> getOwnRatings() throws BaseAppException {
-        return ratingFacade.findOwnRatings(getCurrentUser().getLogin());
+        return ratingFacade.findUserRatings(getCurrentUser().getLogin());
     }
 
-    @RolesAllowed("removeClientRating")
+    @RolesAllowed("getRemoveClientRating")
+    @Override
+    public List<Rating> getClientRatings(String login) throws BaseAppException {
+        return ratingFacade.findUserRatings(login);
+    }
+
+    @RolesAllowed("getRemoveClientRating")
     @Override
     public void removeClientRating(String login, String cruiseGroupName) throws BaseAppException {
         // todo finish implementantion

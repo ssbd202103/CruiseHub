@@ -33,12 +33,11 @@ public interface ReservationManagerLocal {
     /**
      * Usuwa wycieczke klienta podanego w obiekci dto
      *
-     * @param reservationVersion Wersja rezerwacji
      * @param reservationUuid UUID rezerwacji
      * @param clientLogin Login klienta
      * @throws BaseAppException Bazowy wyjatek aplikacji
      */
-    void removeClientReservation(long reservationVersion, UUID reservationUuid, String clientLogin) throws BaseAppException;
+    void removeClientReservation(UUID reservationUuid, String clientLogin) throws BaseAppException;
 
     /**
      * Rezerwuje wycieczke dla klienta
@@ -51,11 +50,10 @@ public interface ReservationManagerLocal {
 
     /**
      * Anuluje wycieczke uzytkownika
-     * @param reservationVersion Wersja rezerwacji
      * @param reservationUUID UUID rezerwacji
      * @throws BaseAppException Bazowy wyjatek aplikacji
      */
-    void cancelReservation(long reservationVersion, UUID reservationUUID) throws BaseAppException;
+    void cancelReservation(UUID reservationUUID) throws BaseAppException;
 
     /**
      * Zwraca listę rezerwacji obecnie zalogowanego klienta

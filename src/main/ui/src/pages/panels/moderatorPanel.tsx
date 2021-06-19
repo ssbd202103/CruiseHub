@@ -20,6 +20,7 @@ import useHandleError from "../../errorHandler";
 import ListCompany from "./moderator/ListCompany";
 import ListCruiseGroup from "./moderator/ListCruiseGroups";
 import AddCompany from "./moderator/AddCompany";
+import ListClientRatings from "./moderator/ListClientRatings";
 
 export default function ModeratorPanel() {
     const {t} = useTranslation()
@@ -174,6 +175,10 @@ export default function ModeratorPanel() {
                 {
                     to: '/company/business-workers',
                     Component: ListWorkersForCompany
+                },
+                {
+                    to: '/accounts/ratings',
+                    Component: ListClientRatings
                 }]}
         />
     )

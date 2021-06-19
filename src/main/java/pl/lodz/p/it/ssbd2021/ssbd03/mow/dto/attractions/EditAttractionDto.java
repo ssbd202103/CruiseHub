@@ -18,7 +18,10 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 public class EditAttractionDto implements SignableEntity {
 
     @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
-    private String name;
+    private String uuid;
+
+    @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
+    private String newName;
 
     @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
     private String newDescription;
@@ -27,16 +30,13 @@ public class EditAttractionDto implements SignableEntity {
     private double newPrice;
 
     @Positive(message = CONSTRAINT_POSITIVE_ERROR)
-    private long newNumberOfSeats;
-
-    private boolean newHasFreeSpots;
-
+    private int newNumberOfSeats;
     @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
-    private boolean version;
+    private long version;
 
     @JsonIgnore
     @Override
     public String getSignablePayload() {
-        return name + "." + version;
+        return uuid + "." + version;
     }
 }

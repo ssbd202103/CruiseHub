@@ -16,6 +16,17 @@ export function createReservation(cruiseVersion: number, uuid: string, numberOfS
         }
     })
 }
+export function removeClientReservation(uuid: string, login: string){
+    const {token} = store.getState();
+
+    return axios.delete(`reservation/${login}/${uuid}`, {
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        }
+    })
+}
+
 export function getReservationsForCruise(uuid: any){
     const {token} = store.getState()
     const cruiseUUID = uuid
@@ -31,6 +42,27 @@ export function getReservationsForWorkerCruise(uuid: any){
     const {token} = store.getState()
     const cruiseUUID = uuid
     return axios.get(`reservation/reservations-for-worker-cruise/${cruiseUUID}`, {
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        }
+    })
+}
+
+export function getSelfReservations() {
+    const {token} = store.getState()
+    return axios.get("/reservation/self-reservations", {
+        headers: {
+            "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+        }
+    })
+}
+
+export function removeReservation(reservationUUID: string) {
+    const {token} = store.getState();
+
+    return axios.delete(`cruise/cancelReservation/${reservationUUID}`, {
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`

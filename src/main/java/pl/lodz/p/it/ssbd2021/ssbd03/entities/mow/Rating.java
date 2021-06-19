@@ -21,8 +21,8 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.RATING_CONSTRAINT_ERROR;
         @NamedQuery(name = "Rating.findByCruiseGroupUUID", query = "SELECT r FROM ratings r WHERE r.cruiseGroup.uuid =:uuid"),
         @NamedQuery(name = "Rating.findByCruiseGroupUUIDAndAccountLogin", query = "SELECT r FROM ratings r WHERE r.cruiseGroup.uuid=:uuid AND r.account.login=:login"),
         @NamedQuery(name = "Rating.findByUuidAndAccountLogin", query = "SELECT r FROM ratings r WHERE r.cruiseGroup.uuid =:uuid AND r.account.login=:login"),
-        @NamedQuery(name = "Rating.findOwnRatings", query = "SELECT r FROM ratings r WHERE r.account.login=:login")
-
+        @NamedQuery(name = "Rating.findOwnRatings", query = "SELECT r FROM ratings r WHERE r.account.login=:login"),
+        @NamedQuery(name = "Rating.findUserRatings", query = "SELECT r FROM ratings r WHERE r.account.login=:login")
 })
 @ToString
 public class Rating extends BaseEntity {

@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {getAllCompanies} from "../../../Services/companiesService";
 import {makeStyles} from "@material-ui/core/styles";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
@@ -10,13 +9,14 @@ import {refreshToken} from "../../../Services/userService";
 import {useTranslation} from "react-i18next";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import {Button, TextField} from "@material-ui/core";
-import {Link, useHistory, useLocation} from "react-router-dom";
 import TableContainer from "@material-ui/core/TableContainer";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableBody from "@material-ui/core/TableBody";
-import {getReservationsForCruise, removeClientReservation} from "../../../Services/reservationService";
+import {
+    getSelfReservations, removeReservation,
+} from "../../../Services/reservationService";
 import {useSnackbarQueue} from "../../snackbar";
 
 const useRowStyles = makeStyles({
@@ -28,20 +28,24 @@ const useRowStyles = makeStyles({
 });
 
 function createData(
-    clientName: string,
-    numberOfSeats: number,
-    price: number,
-    cruiseName: string,
-    attractions: [],
     uuid: string,
+    cruiseName: string,
+    startDate: string,
+    endDate: string,
+    numberOfSeats: number,
+    phoneNumber: string,
+    price: number,
+    attractions: [],
 ) {
     return {
-        clientName: clientName,
-        numberOfSeats: numberOfSeats,
-        price: price,
-        cruiseName: cruiseName,
-        attractions: attractions,
         uuid: uuid,
+        cruiseName: cruiseName,
+        startDate: startDate,
+        endDate: endDate,
+        numberOfSeats: numberOfSeats,
+        phoneNumber: phoneNumber,
+        price: price,
+        attractions: attractions,
     };
 }
 
@@ -57,11 +61,10 @@ function Row({row, style, onReload}: RowProps) {
     const buttonClass = useButtonStyles();
     const handleError = useHandleError()
     const showSuccess = useSnackbarQueue('success')
-    const history = useHistory();
 
-    const removeCurrentReservation = () => {
-        removeClientReservation(row.uuid, row.clientName).then(res => {
-            showSuccess(t('data.delete.success'))
+    const cancelReservation = () => {
+        removeReservation(row.uuid).then(res => {
+            showSuccess(t('reservationCancelled'))
             onReload()
         }).catch(error => {
             const message = error.response.data
@@ -69,19 +72,21 @@ function Row({row, style, onReload}: RowProps) {
             onReload()
         }).then(res => {
             refreshToken()
-        });
+        })
     }
 
     return (
         <TableRow className={classes.root}>
-            <TableCell component="th" scope="row" style={style}>{row.clientName}</TableCell>
-            <TableCell style={style}>{row.numberOfSeats}</TableCell>
-            <TableCell style={style}>{row.price}</TableCell>
             <TableCell style={style}>{row.cruiseName}</TableCell>
             <TableCell style={style}>{row.attractions.map(item => t(item)).join(', ')}</TableCell>
+            <TableCell style={style}>{row.startDate.replace('T', ' ').split('.').shift()}</TableCell>
+            <TableCell style={style}>{row.endDate.replace('T', ' ').split('.').shift()}</TableCell>
+            <TableCell style={style}>{row.phoneNumber}</TableCell>
+            <TableCell style={style}>{row.numberOfSeats}</TableCell>
+            <TableCell style={style}>{row.price}</TableCell>
             <TableCell style={style}>
-                <Button onClick={removeCurrentReservation}
-                        className={buttonClass.root}>{t("Remove reservation btn")}</Button>
+                <Button onClick={cancelReservation}
+                        className={buttonClass.root}>{t("cancel reservation btn")}</Button>
             </TableCell>
         </TableRow>
     );
@@ -100,22 +105,21 @@ const useButtonStyles = makeStyles({
     }
 })
 
-const ListReservations = () => {
+const ListSelfReservations = () => {
     const [reservations, setReservations] = useState([]);
     const [searchInput, setSearchInput] = useState("");
-
     const handleError = useHandleError()
 
     const darkMode = useSelector(selectDarkMode)
-    const uuid = sessionStorage.getItem("cruiseUUID")
 
     useEffect(() => {
         onReload()
     }, []);
 
     function onReload() {
-        getReservationsForCruise(uuid).then(res => {
+        getSelfReservations().then(res => {
             setReservations(res.data)
+            console.log(res.data)
         }).catch(error => {
             const message = error.response.data
             handleError(message, error.response.status)
@@ -128,11 +132,11 @@ const ListReservations = () => {
         if (Array.isArray(rows) && rows.length) {
 
             const filteredReservations = rows.filter(
-                row => row.props.row.clientName.toLowerCase().indexOf(searchInput.toLowerCase()) > -1
+                row => row.props.row.cruiseName.toLowerCase().indexOf(searchInput.toLowerCase()) > -1
             );
 
-            filteredReservations.forEach(reservation => (reservationss.includes(reservation.props.row.clientName) ?
-                "" : reservationss.push(reservation.props.row.clientName)));
+            filteredReservations.forEach(reservation => (listNames.includes(reservation.props.row.cruiseName) ?
+                "" : listNames.push(reservation.props.row.cruiseName)));
             return filteredReservations
 
         } else {
@@ -140,7 +144,7 @@ const ListReservations = () => {
         }
     }
 
-    const reservationss: String[] = [];
+    const listNames: String[] = [];
 
     const {t} = useTranslation()
 
@@ -148,7 +152,7 @@ const ListReservations = () => {
     return (
         <div>
             <Autocomplete
-                options={reservationss}
+                options={listNames}
                 inputValue={searchInput}
                 style={{width: 300}}
                 noOptionsText={t('no options')}
@@ -156,7 +160,7 @@ const ListReservations = () => {
                     setSearchInput(value as string ?? '')
                 }}
                 renderInput={(params) => (
-                    <TextField {...params} label={t('search reservation')} variant="outlined"
+                    <TextField {...params} label={t('search cruise')} variant="outlined"
                                onChange={(e) => setSearchInput(e.target.value)}/>
                 )}
             />
@@ -164,18 +168,6 @@ const ListReservations = () => {
                 <Table aria-label="Reservations">
                     <TableHead>
                         <TableRow>
-                            <TableCell style={{
-                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
-                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
-                            }}>{t("Client name")}</TableCell>
-                            <TableCell style={{
-                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
-                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
-                            }}>{t("numberOfSeatsReserved")}</TableCell>
-                            <TableCell style={{
-                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
-                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
-                            }}>{t("price") + "pln"}</TableCell>
                             <TableCell style={{
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`
@@ -187,7 +179,27 @@ const ListReservations = () => {
                             <TableCell style={{
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`
-                            }}>{t("Remove reservation btn")}</TableCell>
+                            }}>{t("startDate")}</TableCell>
+                            <TableCell style={{
+                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                            }}>{t("endDate")}</TableCell>
+                            <TableCell style={{
+                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                            }}>{t("company phone number")}</TableCell>
+                            <TableCell style={{
+                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                            }}>{t("numberOfSeatsReserved")}</TableCell>
+                            <TableCell style={{
+                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                            }}>{t("price") + " pln"}</TableCell>
+                            <TableCell style={{
+                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                            }}>{t("cancel reservation btn")}</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -204,4 +216,4 @@ const ListReservations = () => {
     );
 };
 
-export default ListReservations;
+export default ListSelfReservations;
