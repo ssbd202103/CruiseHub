@@ -148,7 +148,7 @@ const ListSelfReservations = () => {
                     setSearchInput(value as string ?? '')
                 }}
                 renderInput={(params) => (
-                    <TextField {...params} label={t('search reservation')} variant="outlined"
+                    <TextField {...params} label={t('search cruise')} variant="outlined"
                                onChange={(e) => setSearchInput(e.target.value)}/>
                 )}
             />

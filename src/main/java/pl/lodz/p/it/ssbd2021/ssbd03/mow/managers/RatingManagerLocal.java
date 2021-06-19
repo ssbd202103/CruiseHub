@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.managers;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Rating;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 
@@ -36,6 +37,14 @@ public interface RatingManagerLocal {
      * @throws BaseAppException bazowy wyjątek aplikacji, zwracany w przypadku nieznależenia oceny
      */
     List<Rating> getOwnRatings() throws BaseAppException;
+
+    /**
+     * Metoda pobierająca wszystkie oceny klienta
+     * @param login login klienta
+     * @return listę ocen
+     * @throws BaseAppException bazowy wyjątek aplikacji
+     */
+    List<Rating> getClientRatings(String login) throws BaseAppException;
 
     /**
      * Usuwa ocenę klienta zgloszoną przez moderatora
