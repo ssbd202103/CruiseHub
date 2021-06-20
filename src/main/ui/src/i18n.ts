@@ -137,7 +137,7 @@ const resources = {
             "cancel reservation btn": "Anuluj rezerwację",
             //panels.ModeratorPanel
             "business workers": "Pracownicy firmy",
-            "search business workers": "Szukaj niezatwierdzonych pracowników",
+            "search business workers": "Szukaj pracowników",
             "company name": "Nazwa firmy",
             "company phone number": " Numer telefonu firmy",
             "Manage business workers": "Zarządzaj pracownikami firm",
@@ -281,6 +281,8 @@ const resources = {
             "/listCruiseGroup": "Wyświetl grupę wycieczek",
             "/add-company": "Dodaj firmę",
             "/accounts/ratings": "Oceny",
+            "/company/business-workers": "Pracownicy firmy",
+            "/company": "Firma",
 
             'yes': 'Tak',
             'no': 'Nie',
@@ -675,7 +677,8 @@ const resources = {
             "/listCruiseGroup": "List cruise groups",
             "/add-company": "Add a company",
             "/accounts/ratings": "Ratings",
-
+            "/company/business-workers": "Business workers",
+            "/company": "Company",
             'accept.action': 'Do you want to do this action?',
 
             'yes': 'Yes',
