@@ -7,6 +7,7 @@ import {Link} from 'react-router-dom'
 import {useTranslation} from 'react-i18next';
 
 import styles from '../../../styles/ManageAccount.module.css'
+import tbStyles from '../../../styles/mtdTable.module.css'
 import RoundedButton from '../../../components/RoundedButton';
 import DarkedTextField from '../../../components/DarkedTextField';
 
@@ -81,57 +82,6 @@ export default function ChangeAccountData() {
     const [buttonPopupAcceptChangeData, setButtonPopupAcceptChangeData] = useState(false);
     const [buttonPopupAcceptChangeAddress, setButtonPopupAcceptChangeAddress] = useState(false);
     const [buttonPopupAcceptChangeMail, setButtonPopupAcceptChangeMail] = useState(false);
-
-
-    useEffect(() => {
-        setFirstName(currentAccount.firstName);
-        setSecondName(currentAccount.secondName);
-        setAlterType(currentAccountMTD.alterType);
-        setAlteredBy(currentAccountMTD.alteredBy);
-        setCreatedBy(currentAccountMTD.createdBy);
-        if (currentAccountMTD.creationDateTime != null)
-            setCreationDateTime(currentAccountMTD.creationDateTime.dayOfMonth + "/" + currentAccountMTD.creationDateTime.month + " / " + currentAccountMTD.creationDateTime.year + "    " + currentAccountMTD.creationDateTime.hour + ":" + currentAccountMTD.creationDateTime.minute)
-        if (currentAccountMTD.lastAlterDateTime != null)
-            setLastAlterDateTime(currentAccountMTD.lastAlterDateTime.dayOfMonth + "/" + currentAccountMTD.lastAlterDateTime.month + " / " + currentAccountMTD.lastAlterDateTime.year + "    " + currentAccountMTD.lastAlterDateTime.hour + ":" + currentAccountMTD.lastAlterDateTime.minute);
-        if (currentAccountMTD.lastCorrectAuthenticationDateTime != null)
-            setLastCorrectAuthenticationDateTime(currentAccountMTD.lastCorrectAuthenticationDateTime.dayOfMonth + "/" + currentAccountMTD.lastCorrectAuthenticationDateTime.month + " / " + currentAccountMTD.lastCorrectAuthenticationDateTime.year + "    " + currentAccountMTD.lastCorrectAuthenticationDateTime.hour + ":" + currentAccountMTD.creationDateTime.minute);
-        setLastCorrectAuthenticationLogicalAddress(currentAccountMTD.lastCorrectAuthenticationLogicalAddress)
-        if (currentAccountMTD.lastIncorrectAuthenticationDateTime != null)
-            setLastIncorrectAuthenticationDateTime(currentAccountMTD.lastIncorrectAuthenticationDateTime.dayOfMonth + "/" + currentAccountMTD.lastIncorrectAuthenticationDateTime.month + " / " + currentAccountMTD.lastIncorrectAuthenticationDateTime.year + "    " + currentAccountMTD.lastIncorrectAuthenticationDateTime.hour + ":" + currentAccountMTD.lastIncorrectAuthenticationDateTime.minute);
-        setLastIncorrectAuthenticationLogicalAddress(currentAccountMTD.lastIncorrectAuthenticationLogicalAddress);
-        setNumberOfAuthenticationFailures(currentAccountMTD.numberOfAuthenticationFailures)
-        setVersion(currentAccountMTD.version);
-
-        if (clientAddr) {
-            setStreet(clientAddr.address.street);
-            setPostalCode(clientAddr.address.postalCode);
-            setHouseNumber(clientAddr.address.houseNumber);
-            setCountry(clientAddr.address.country);
-            setCity(clientAddr.address.city);
-            setPhoneNumber(clientAddr.phoneNumber);
-
-            setAlterTypeAdr(currentAccountAddressMTD.alterType);
-            setAlteredByAdr(currentAccountAddressMTD.alteredBy);
-            setCreatedByAdr(currentAccountAddressMTD.createdBy);
-            if (currentAccountAddressMTD.creationDateTime != null)
-                setCreationDateTimeAdr(currentAccountAddressMTD.creationDateTime.dayOfMonth + "/" + currentAccountAddressMTD.creationDateTime.month + " / " + currentAccountAddressMTD.creationDateTime.year + "    " + currentAccountAddressMTD.creationDateTime.hour + ":" + currentAccountAddressMTD.creationDateTime.minute)
-            if (currentAccountAddressMTD.lastAlterDateTime != null)
-                setLastAlterDateTimeAdr(currentAccountAddressMTD.lastAlterDateTime.dayOfMonth + "/" + currentAccountAddressMTD.lastAlterDateTime.month + " / " + currentAccountAddressMTD.lastAlterDateTime.year + "    " + currentAccountAddressMTD.lastAlterDateTime.hour + ":" + currentAccountAddressMTD.lastAlterDateTime.minute);
-            setVersionAdr(currentAccountAddressMTD.version);
-        }
-        if (businnesPhone) {
-            setBusinessPhoneNumber(businnesPhone.phoneNumber);
-
-            setAlterTypeAcl(currentAccountAclMTD.alterType);
-            setAlteredByAcl(currentAccountAclMTD.alteredBy);
-            setCreatedByAcl(currentAccountAclMTD.createdBy);
-            if (currentAccountAclMTD.creationDateTime != null)
-                setCreationDateTimeAcl(currentAccountAclMTD.creationDateTime.dayOfMonth + "/" + currentAccountAclMTD.creationDateTime.month + " / " + currentAccountAclMTD.creationDateTime.year + "    " + currentAccountAclMTD.creationDateTime.hour + ":" + currentAccountAclMTD.creationDateTime.minute)
-            if (currentAccountAclMTD.lastAlterDateTime != null)
-                setLastAlterDateTimeAcl(currentAccountAclMTD.lastAlterDateTime.dayOfMonth + "/" + currentAccountAclMTD.lastAlterDateTime.month + " / " + currentAccountAclMTD.lastAlterDateTime.year + "    " + currentAccountAclMTD.lastAlterDateTime.hour + ":" + currentAccountAclMTD.lastAlterDateTime.minute);
-            setVersionAcl(currentAccountAclMTD.version);
-        }
-    }, [])
 
     const closeAll = () => {
         setPerData(false)
@@ -318,6 +268,58 @@ export default function ChangeAccountData() {
         });
 
     }
+
+    useEffect(() => {
+        setFirstName(currentAccount.firstName);
+        setSecondName(currentAccount.secondName);
+        setAlterType(currentAccountMTD.alterType);
+        setAlteredBy(currentAccountMTD.alteredBy);
+        setCreatedBy(currentAccountMTD.createdBy);
+        if (currentAccountMTD.creationDateTime != null){
+        setCreationDateTime(currentAccountMTD.creationDateTime.dayOfMonth + " " + t(currentAccountMTD.creationDateTime.month) + " " + currentAccountMTD.creationDateTime.year + " " + currentAccountMTD.creationDateTime.hour + ":" + currentAccountMTD.creationDateTime.minute)
+    }
+        if (currentAccountMTD.lastAlterDateTime != null)
+            setLastAlterDateTime(currentAccountMTD.lastAlterDateTime.dayOfMonth + " " + t(currentAccountMTD.lastAlterDateTime.month) + " " + currentAccountMTD.lastAlterDateTime.year + " " + currentAccountMTD.lastAlterDateTime.hour + ":" + currentAccountMTD.lastAlterDateTime.minute);
+        if (currentAccountMTD.lastCorrectAuthenticationDateTime != null)
+            setLastCorrectAuthenticationDateTime(currentAccountMTD.lastCorrectAuthenticationDateTime.dayOfMonth + " " + t(currentAccountMTD.lastCorrectAuthenticationDateTime.month) + " " + currentAccountMTD.lastCorrectAuthenticationDateTime.year + " " + currentAccountMTD.lastCorrectAuthenticationDateTime.hour + ":" + currentAccountMTD.creationDateTime.minute);
+        setLastCorrectAuthenticationLogicalAddress(currentAccountMTD.lastCorrectAuthenticationLogicalAddress)
+        if (currentAccountMTD.lastIncorrectAuthenticationDateTime != null)
+            setLastIncorrectAuthenticationDateTime(currentAccountMTD.lastIncorrectAuthenticationDateTime.dayOfMonth + " " + t(currentAccountMTD.lastIncorrectAuthenticationDateTime.month) + " " + currentAccountMTD.lastIncorrectAuthenticationDateTime.year + " " + currentAccountMTD.lastIncorrectAuthenticationDateTime.hour + ":" + currentAccountMTD.lastIncorrectAuthenticationDateTime.minute);
+        setLastIncorrectAuthenticationLogicalAddress(currentAccountMTD.lastIncorrectAuthenticationLogicalAddress);
+        setNumberOfAuthenticationFailures(currentAccountMTD.numberOfAuthenticationFailures)
+        setVersion(currentAccountMTD.version);
+
+        if (clientAddr) {
+            setStreet(clientAddr.address.street);
+            setPostalCode(clientAddr.address.postalCode);
+            setHouseNumber(clientAddr.address.houseNumber);
+            setCountry(clientAddr.address.country);
+            setCity(clientAddr.address.city);
+            setPhoneNumber(clientAddr.phoneNumber);
+
+            setAlterTypeAdr(currentAccountAddressMTD.alterType);
+            setAlteredByAdr(currentAccountAddressMTD.alteredBy);
+            setCreatedByAdr(currentAccountAddressMTD.createdBy);
+            if (currentAccountAddressMTD.creationDateTime != null)
+                setCreationDateTimeAdr(currentAccountAddressMTD.creationDateTime.dayOfMonth + " " + t(currentAccountAddressMTD.creationDateTime.month) + " " + currentAccountAddressMTD.creationDateTime.year + " " + currentAccountAddressMTD.creationDateTime.hour + ":" + currentAccountAddressMTD.creationDateTime.minute)
+            if (currentAccountAddressMTD.lastAlterDateTime != null)
+                setLastAlterDateTimeAdr(currentAccountAddressMTD.lastAlterDateTime.dayOfMonth + " " + t(currentAccountAddressMTD.lastAlterDateTime.month) + " " + currentAccountAddressMTD.lastAlterDateTime.year + " " + currentAccountAddressMTD.lastAlterDateTime.hour + ":" + currentAccountAddressMTD.lastAlterDateTime.minute);
+            setVersionAdr(currentAccountAddressMTD.version);
+        }
+        if (businnesPhone) {
+            setBusinessPhoneNumber(businnesPhone.phoneNumber);
+
+            setAlterTypeAcl(currentAccountAclMTD.alterType);
+            setAlteredByAcl(currentAccountAclMTD.alteredBy);
+            setCreatedByAcl(currentAccountAclMTD.createdBy);
+            if (currentAccountAclMTD.creationDateTime != null)
+                setCreationDateTimeAcl(currentAccountAclMTD.creationDateTime.dayOfMonth + " " + t(currentAccountAclMTD.creationDateTime.month) + " " + currentAccountAclMTD.creationDateTime.year + " " + currentAccountAclMTD.creationDateTime.hour + ":" + currentAccountAclMTD.creationDateTime.minute)
+            if (currentAccountAclMTD.lastAlterDateTime != null)
+                setLastAlterDateTimeAcl(currentAccountAclMTD.lastAlterDateTime.dayOfMonth + " " + t(currentAccountAclMTD.lastAlterDateTime.month) + " " + currentAccountAclMTD.lastAlterDateTime.year + " " + currentAccountAclMTD.lastAlterDateTime.hour + ":" + currentAccountAclMTD.lastAlterDateTime.minute);
+            setVersionAcl(currentAccountAclMTD.version);
+        }
+    })
+
     return (
         <>
             <Grid container className={styles.wrapper}>
@@ -363,12 +365,45 @@ export default function ChangeAccountData() {
                                 setSecondName(event.target.value)
                             }}/>
                     </div>
+                    <div>
                     <RoundedButton color="blue"
                                    onClick={() => setButtonPopupAcceptChangeData(true)}
                     >{t("confirm")}</RoundedButton>
                     <RoundedButton color="pink"
                                    onClick={handleChangePerData}
                     >{t("cancel")}</RoundedButton>
+                    </div>
+                        <tr>
+                            <td className={tbStyles.td}><h4>{t("alterType")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("alteredBy")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("createdBy")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("creationDateTime")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("lastAlterDateTime")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("version")}</h4></td>
+                        </tr>
+                        <tr>
+                            <td className={tbStyles.tdData}><h4>{t(alterType)}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{alteredBy}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{createdBy}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{creationDateTime}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{lastAlterDateTime}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{version}</h4></td>
+                        </tr>
+                        <tr>
+                            <td className={tbStyles.td}><h4>{t("lastCorrectAuthenticationDateTime")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("lastCorrectAuthenticationLogicalAddress")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("lastIncorrectAuthenticationDateTime")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("lastIncorrectAuthenticationLogicalAddress")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("numberOfAuthenticationFailures")}</h4></td>
+                        </tr>
+                        <tr>
+                            <td className={tbStyles.tdData}><h4>{lastCorrectAuthenticationDateTime}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{lastCorrectAuthenticationLogicalAddress}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{lastIncorrectAuthenticationDateTime}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{lastIncorrectAuthenticationLogicalAddress}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{numberOfAuthenticationFailures}</h4></td>
+                        </tr>
+
                 </Grid>
                 <Grid>
                     <Grid item style={{display: ChangeMail ? "none" : "block"}} className={styles.item}>
@@ -401,35 +436,37 @@ export default function ChangeAccountData() {
                                            onClick={handleChangeMail}
                             >{t("cancel")}</RoundedButton>
                         </div>
+                        <tr>
+                            <td className={tbStyles.td}><h4>{t("alterType")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("alteredBy")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("createdBy")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("creationDateTime")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("lastAlterDateTime")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("version")}</h4></td>
+                        </tr>
+                        <tr>
+                            <td className={tbStyles.tdData}><h4>{t(alterType)}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{alteredBy}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{createdBy}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{creationDateTime}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{lastAlterDateTime}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{version}</h4></td>
+                        </tr>
+                        <tr>
+                            <td className={tbStyles.td}><h4>{t("lastCorrectAuthenticationDateTime")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("lastCorrectAuthenticationLogicalAddress")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("lastIncorrectAuthenticationDateTime")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("lastIncorrectAuthenticationLogicalAddress")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("numberOfAuthenticationFailures")}</h4></td>
+                        </tr>
+                        <tr>
+                            <td className={tbStyles.tdData}><h4>{lastCorrectAuthenticationDateTime}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{lastCorrectAuthenticationLogicalAddress}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{lastIncorrectAuthenticationDateTime}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{lastIncorrectAuthenticationLogicalAddress}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{numberOfAuthenticationFailures}</h4></td>
+                        </tr>
                     </Grid>
-                    <div>
-                        <tr>
-                            <td><h4>{t("alterType")}</h4></td>
-                            <td><h4>{t("alteredBy")}</h4></td>
-                            <td><h4>{t("createdBy")}</h4></td>
-                            <td><h4>{t("creationDateTime")}</h4></td>
-                            <td><h4>{t("lastAlterDateTime")}</h4></td>
-                            <td><h4>{t("lastCorrectAuthenticationDateTime")}</h4></td>
-                            <td><h4>{t("lastCorrectAuthenticationLogicalAddress")}</h4></td>
-                            <td><h4>{t("lastIncorrectAuthenticationDateTime")}</h4></td>
-                            <td><h4>{t("lastIncorrectAuthenticationLogicalAddress")}</h4></td>
-                            <td><h4>{t("numberOfAuthenticationFailures")}</h4></td>
-                            <td><h4>{t("version")}</h4></td>
-                        </tr>
-                        <tr>
-                            <td><h4>{t(alterType)}</h4></td>
-                            <td><h4>{alteredBy}</h4></td>
-                            <td><h4>{createdBy}</h4></td>
-                            <td><h4>{creationDateTime}</h4></td>
-                            <td><h4>{lastAlterDateTime}</h4></td>
-                            <td><h4>{lastCorrectAuthenticationDateTime}</h4></td>
-                            <td><h4>{lastCorrectAuthenticationLogicalAddress}</h4></td>
-                            <td><h4>{lastIncorrectAuthenticationDateTime}</h4></td>
-                            <td><h4>{lastIncorrectAuthenticationLogicalAddress}</h4></td>
-                            <td><h4>{numberOfAuthenticationFailures}</h4></td>
-                            <td><h4>{version}</h4></td>
-                        </tr>
-                    </div>
                 </Grid>
                 <Grid item style={{display: acLevel.includes('CLIENT') ? "block" : "none"}} className={styles.item}>
                     <Grid item style={{display: ChangAddress ? "none" : "block"}} className={styles.item}>
@@ -524,24 +561,23 @@ export default function ChangeAccountData() {
                         color="pink"
                         onClick={handleChangAddress}
                     >{t("cancel")}</RoundedButton>
-
+                    <tr>
+                        <td className={tbStyles.td}><h4>{t("alterType")}</h4></td>
+                        <td className={tbStyles.td}><h4>{t("alteredBy")}</h4></td>
+                        <td className={tbStyles.td}><h4>{t("createdBy")}</h4></td>
+                        <td className={tbStyles.td}><h4>{t("creationDateTime")}</h4></td>
+                        <td className={tbStyles.td}><h4>{t("lastAlterDateTime")}</h4></td>
+                        <td className={tbStyles.td}><h4>{t("version")}</h4></td>
+                    </tr>
+                    <tr>
+                        <td className={tbStyles.tdData}><h4>{t(alterTypeAdr)}</h4></td>
+                        <td className={tbStyles.tdData}><h4>{alteredByAdr}</h4></td>
+                        <td className={tbStyles.tdData}><h4>{createdByAdr}</h4></td>
+                        <td className={tbStyles.tdData}><h4>{creationDateTimeAdr}</h4></td>
+                        <td className={tbStyles.tdData}><h4>{lastAlterDateTimeAdr}</h4></td>
+                        <td className={tbStyles.tdData}><h4>{versionAdr}</h4></td>
+                    </tr>
                     </Grid>
-                    <tr>
-                        <td><h4>{t("alterType")}</h4></td>
-                        <td><h4>{t("alteredBy")}</h4></td>
-                        <td><h4>{t("createdBy")}</h4></td>
-                        <td><h4>{t("creationDateTime")}</h4></td>
-                        <td><h4>{t("lastAlterDateTime")}</h4></td>
-                        <td><h4>{t("version")}</h4></td>
-                    </tr>
-                    <tr>
-                        <td><h4>{t(alterTypeAdr)}</h4></td>
-                        <td><h4>{alteredByAdr}</h4></td>
-                        <td><h4>{createdByAdr}</h4></td>
-                        <td><h4>{creationDateTimeAdr}</h4></td>
-                        <td><h4>{lastAlterDateTimeAdr}</h4></td>
-                        <td><h4>{versionAdr}</h4></td>
-                    </tr>
                 </Grid>
                 <Grid item style={{display: acLevel.includes('BUSINESS_WORKER') ? "block" : "none"}}
                       className={styles.item}>
@@ -577,23 +613,23 @@ export default function ChangeAccountData() {
                             color="pink"
                             onClick={handleChangePhone}
                         >{t("cancel")}</RoundedButton>
+                    <tr>
+                        <td className={tbStyles.td}><h4>{t("alterType")}</h4></td>
+                        <td className={tbStyles.td}><h4>{t("alteredBy")}</h4></td>
+                        <td className={tbStyles.td}><h4>{t("createdBy")}</h4></td>
+                        <td className={tbStyles.td}><h4>{t("creationDateTime")}</h4></td>
+                        <td className={tbStyles.td}><h4>{t("lastAlterDateTime")}</h4></td>
+                        <td className={tbStyles.td}><h4>{t("version")}</h4></td>
+                    </tr>
+                    <tr>
+                        <td className={tbStyles.tdData}><h4>{t(alterTypeAcl)}</h4></td>
+                        <td className={tbStyles.tdData}><h4>{alteredByAcl}</h4></td>
+                        <td className={tbStyles.tdData}><h4>{createdByAcl}</h4></td>
+                        <td className={tbStyles.tdData}><h4>{creationDateTimeAcl}</h4></td>
+                        <td className={tbStyles.tdData}><h4>{lastAlterDateTimeAcl}</h4></td>
+                        <td className={tbStyles.tdData}><h4>{versionAcl}</h4></td>
+                    </tr>
                     </Grid>
-                    <tr>
-                        <td><h4>{t("alterType")}</h4></td>
-                        <td><h4>{t("alteredBy")}</h4></td>
-                        <td><h4>{t("createdBy")}</h4></td>
-                        <td><h4>{t("creationDateTime")}</h4></td>
-                        <td><h4>{t("lastAlterDateTime")}</h4></td>
-                        <td><h4>{t("version")}</h4></td>
-                    </tr>
-                    <tr>
-                        <td><h4>{t(alterTypeAcl)}</h4></td>
-                        <td><h4>{alteredByAcl}</h4></td>
-                        <td><h4>{createdByAcl}</h4></td>
-                        <td><h4>{creationDateTimeAcl}</h4></td>
-                        <td><h4>{lastAlterDateTimeAcl}</h4></td>
-                        <td><h4>{versionAcl}</h4></td>
-                    </tr>
                 </Grid>
                 <Grid item>
                     <Link to="/accounts">
