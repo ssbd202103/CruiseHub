@@ -11,7 +11,6 @@ import RoundedButton from "../../components/RoundedButton";
 import {useSnackbarQueue} from "../snackbar";
 import Grid from "@material-ui/core/Grid";
 import {Link} from "@material-ui/core";
-import {getUser} from "../../Services/userService";
 import useHandleError from "../../errorHandler";
 import PopupAcceptAction from "../../PopupAcceptAction";
 
@@ -42,7 +41,7 @@ export default function ChangeEmail(props: any) {
             }
         }).then(res => {
             history.push('/')
-        },error => {
+        }).catch (error => {
             const message = error.response.data
             handleError(message, error.response.status)
         });

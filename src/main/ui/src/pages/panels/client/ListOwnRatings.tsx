@@ -96,13 +96,13 @@ const ListOwnRatings = () => {
     function search(rows: any[]) {
         if (Array.isArray(rows) && rows.length) {
 
-            const filteredCompanies = rows.filter(
+            const filteredRatings = rows.filter(
                 row => row.props.row.name.toLowerCase().indexOf(searchInput.toLowerCase()) > -1
             );
 
-            filteredCompanies.forEach(rating => (searchRatingList.includes(rating.props.row.name) ?
+            filteredRatings.forEach(rating => (searchRatingList.includes(rating.props.row.name) ?
                 "" : searchRatingList.push(rating.props.row.name)));
-            return filteredCompanies
+            return filteredRatings
 
         } else {
             return rows;

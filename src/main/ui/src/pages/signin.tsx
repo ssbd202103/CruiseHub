@@ -14,9 +14,6 @@ import axios from "../Services/URL"
 import React, {useEffect, useState} from "react"
 import {setLogin as setLoginAction} from '../redux/slices/userSlice'
 
-
-import {getUser} from "../Services/userService";
-
 import {useSnackbarQueue} from "./snackbar";
 import useHandleError from "../errorHandler";
 import store from "../redux/store";
