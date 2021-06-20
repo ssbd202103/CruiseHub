@@ -389,7 +389,7 @@ create table ratings
     id                   bigint                                                                      not null,
     account_id           bigint                                                                      not null, -- FOREIGN KEY
     cruise_group_id      bigint                                                                      not null, -- FOREIGN KEY
-    rating               numeric(2, 1) check ((rating >= (0)::numeric) AND (rating <= (5)::numeric)) not null,
+    rating               numeric(2, 1) check ((rating >= (1)::numeric) AND (rating <= (5)::numeric)) not null,
 
     creation_date_time   timestamp default CURRENT_TIMESTAMP                                         not null,
     last_alter_date_time timestamp                                                                   not null,

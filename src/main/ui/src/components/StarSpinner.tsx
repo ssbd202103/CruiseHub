@@ -16,10 +16,10 @@ export default function StarSpinner({onSubmit}: StarSpinnerProps) {
 
     const {t} = useTranslation();
 
-    const [counter, setCounter] = useState<number>(0)
+    const [counter, setCounter] = useState<number>(1)
 
     const decrement = () => {
-        if (counter !== 0) {
+        if (counter !== 1) {
             setCounter(prev => prev - 0.5)
         }
     }
