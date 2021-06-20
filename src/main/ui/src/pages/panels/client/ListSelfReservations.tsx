@@ -119,7 +119,6 @@ const ListSelfReservations = () => {
     function onReload() {
         getSelfReservations().then(res => {
             setReservations(res.data)
-            console.log(res.data)
         }).catch(error => {
             const message = error.response.data
             handleError(message, error.response.status)

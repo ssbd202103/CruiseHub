@@ -84,7 +84,7 @@ public class RatingFacadeMow extends AbstractFacade<Rating> {
         }
     }
 
-    @RolesAllowed("removeRating")
+    @RolesAllowed({"removeRating", "removeClientRating"})
     @Override
     public void remove(Rating entity) throws FacadeException {
         super.remove(entity);

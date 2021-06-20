@@ -73,7 +73,9 @@ public class RatingManager extends BaseManagerMow implements RatingManagerLocal 
 
     private void calculateAverageRating(CruiseGroup cruiseGroup) throws BaseAppException {
         List<Rating> ratings = ratingFacade.findByCruiseGroupUUID(cruiseGroup.getUuid());
-        Double avgRating = ratings.stream().mapToDouble(Rating::getRating).sum() / ratings.size();
+        Double avgRating = 0.0;
+        if (ratings.size() > 0)
+            avgRating = ratings.stream().mapToDouble(Rating::getRating).sum() / ratings.size();
 
         cruiseGroup.setAverageRating(avgRating);
         cruiseGroupFacadeMow.edit(cruiseGroup);
@@ -85,15 +87,18 @@ public class RatingManager extends BaseManagerMow implements RatingManagerLocal 
         return ratingFacade.findUserRatings(getCurrentUser().getLogin());
     }
 
-    @RolesAllowed("getRemoveClientRating")
+    @RolesAllowed("getClientRating")
     @Override
     public List<Rating> getClientRatings(String login) throws BaseAppException {
         return ratingFacade.findUserRatings(login);
     }
 
-    @RolesAllowed("getRemoveClientRating")
+    @RolesAllowed("removeClientRating")
     @Override
-    public void removeClientRating(String login, String cruiseGroupName) throws BaseAppException {
-        // todo finish implementantion
+    public void removeClientRating(String login, UUID cruiseGroupUUID) throws BaseAppException {
+        Rating rating = ratingFacade.findByCruiseGroupUUIDAndAccountLogin(cruiseGroupUUID, login);
+        ratingFacade.remove(rating);
+        CruiseGroup cruiseGroup = cruiseGroupFacadeMow.findByUUID(cruiseGroupUUID);
+        calculateAverageRating(cruiseGroup);
     }
 }

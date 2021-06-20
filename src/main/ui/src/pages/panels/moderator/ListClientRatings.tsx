@@ -1,5 +1,5 @@
 import React, {Component, useEffect, useState} from 'react';
-import {getClientRatings} from "../../../Services/ratingsService";
+import {getClientRatings, removeClientRating} from "../../../Services/ratingsService";
 import {makeStyles} from "@material-ui/core/styles";
 import {useTranslation} from "react-i18next";
 import TableRow from "@material-ui/core/TableRow";
@@ -16,6 +16,8 @@ import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableBody from "@material-ui/core/TableBody";
+import {useSnackbarQueue} from "../../snackbar";
+import RoundedButton from "../../../components/RoundedButton";
 
 const useRowStyles = makeStyles({
     root: {
@@ -28,38 +30,52 @@ const useRowStyles = makeStyles({
 function createData(
     login: string,
     cruiseGroupName: string,
+    cruiseGroupUUID: string,
     rating: number,
 ) {
     return {
         login: login,
         cruiseGroupName: cruiseGroupName,
+        cruiseGroupUUID: cruiseGroupUUID,
         rating: rating
     };
 }
 
 export interface RowProps {
     row: ReturnType<typeof createData>,
-    style: React.CSSProperties
+    style: React.CSSProperties,
+    onReload: () => void
 }
 
 function Row(props: RowProps) {
+    const {t} = useTranslation();
     const {row} = props;
     const {style} = props;
+    const handleError = useHandleError()
+    const showSuccess = useSnackbarQueue('success')
     const classes = useRowStyles();
+
+    const removeRating = () => {
+        removeClientRating(row.login, row.cruiseGroupUUID).then(res => {
+            showSuccess(t('data.delete.success'))
+            props.onReload()
+        }).catch(error => {
+            const message = error.response.data
+            handleError(message, error.response.status)
+            props.onReload()
+        }).then(res => {
+            refreshToken()
+        });
+    }
 
     return (
         <TableRow className={classes.root}>
             <TableCell component="th" scope="row" style={style}>{row.cruiseGroupName}</TableCell>
             <TableCell style={style}>{row.rating}</TableCell>
             <TableCell style={style}>
-                <Button
-                    className={styles.link}
-                    style={{
-                        marginRight: 20,
-                        color: 'var(--dark)',
-                        fontFamily: 'Montserrat, sans-serif'
-
-                    }}>TEMP REMOVE BUTTON</Button>
+                <RoundedButton color="pink" onClick={removeRating}>
+                    {t("remove rating")}
+                </RoundedButton>
             </TableCell>
         </TableRow>
     );
@@ -74,6 +90,10 @@ const ListClientRatings = () => {
     const darkMode = useSelector(selectDarkMode)
 
     useEffect(() => {
+        onReload()
+    }, []);
+
+    function onReload() {
         getClientRatings(login).then(res => {
             setRatings(res.data)
         }).catch(error => {
@@ -82,7 +102,7 @@ const ListClientRatings = () => {
         }).then(res => {
             refreshToken()
         });
-    }, []);
+    }
 
     function search(rows: any[]) {
         if (Array.isArray(rows) && rows.length) {
@@ -109,13 +129,12 @@ const ListClientRatings = () => {
         <>
             <div>
                 <h3>{login}</h3>
-                {
-
-                }
                 <Autocomplete
                     options={searchRatingList}
                     inputValue={searchInput}
-                    style={{width: 300}}
+                    style={{
+                        width: 300,
+                        marginBottom: 20}}
                     noOptionsText={t('no options')}
                     onChange={(event, value) => {
                         setSearchInput(value as string ?? '')
@@ -149,7 +168,7 @@ const ListClientRatings = () => {
                                 <Row key={index} row={rating} style={{
                                     backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                     color: `var(--${!darkMode ? 'dark' : 'white-light'}`
-                                }}/>
+                                }} onReload={onReload} />
                             )))}
                         </TableBody>
                     </Table>

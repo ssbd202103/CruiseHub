@@ -93,7 +93,6 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
     }
 
     useEffect(() => {
-        console.log(address)
         setHouseNumber(address.houseNumber)
         setPostalCode(address.postalCode)
         setStreet(address.street)

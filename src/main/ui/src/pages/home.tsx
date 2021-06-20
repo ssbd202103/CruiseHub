@@ -20,9 +20,7 @@ export default function Home() {
     const headersArray = t("mainPage.headers", {returnObjects: true})
 
     useEffect(() => {
-        getPublishedCruises().then(res => {
-            console.log(res.data)
-        })
+        getPublishedCruises().then()
     }, []);
 
     return (

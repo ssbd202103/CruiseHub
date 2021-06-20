@@ -20,7 +20,7 @@ public class RatingMapper {
      */
     public static ClientRatingDto toClientRatingDto(String login, Rating rating) {
         return new ClientRatingDto(
-            login, rating.getCruiseGroup().getName(), rating.getRating()
+            login, rating.getCruiseGroup().getName(), rating.getCruiseGroup().getUuid().toString(), rating.getRating()
         );
     }
 }

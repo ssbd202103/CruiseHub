@@ -25,7 +25,6 @@ export function getUser(token: string) {
 
 export function loadUserWithSavedToken() {
     i18n.changeLanguage(store.getState().user.languageType)
-    console.log(i18n.language)
     const savedToken = sessionStorage.getItem('cruisehub_token') as string;
 
     if (savedToken) {

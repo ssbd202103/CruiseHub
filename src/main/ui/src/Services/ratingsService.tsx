@@ -20,3 +20,13 @@ export function getClientRatings(login: string) {
         }
     })
 }
+
+export function removeClientRating(login: string, cruiseGroupUUID: string) {
+    const {token} = store.getState()
+
+    return axios.delete(`ratings/${login}/${cruiseGroupUUID}`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+}

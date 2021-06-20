@@ -103,8 +103,8 @@ const resources = {
             "deactivate": "Dezaktywuj",
             "published": "Opublikowano",
             //adminPanel
-            "search account": "Wyszukać konto",
-            "search company": "Wyszukać firme",
+            "search account": "Wyszukaj konto",
+            "search company": "Wyszukaj firmę",
             "adminPanel": "Panel administracyjny",
             "login": "Login",
             "first name": "Imię",
@@ -144,6 +144,7 @@ const resources = {
             "show business workers": "Pokaż pracowników",
             "add company": "Dodaj firmę",
             "company name example": "FirmaJez",
+            "remove rating": "Usuń ocenę",
             //verify
             "verifyAccount": "Zweryfikuj konto",
             //color
@@ -290,6 +291,7 @@ const resources = {
             'token.missing': 'Brak tokenu',
             'redirect in': 'Przekierowanie na główną stronę przez',
             'data.load.success': 'Dane zostały załadowane',
+            'data.delete.success': "Dane zostały poprawnie usunięte",
             // alter type
             'UPDATE': 'Edycja',
             'INSERT': 'Wstawienie',
@@ -542,6 +544,7 @@ const resources = {
             "show business workers": "Show business workers",
             "add company": "Add a company",
             "company name example": "Hedgehog Company",
+            "remove rating": "Remove rating",
             //verify
             "verifyAccount": "Verify account",
             //color

@@ -48,4 +48,10 @@ public class RatingController {
     public List<ClientRatingDto> getClientRatings(@PathParam("clientLogin") String clientLogin) throws BaseAppException {
         return tryAndRepeat(() -> ratingEndpoint.getClientRatings(clientLogin));
     }
+
+    @DELETE
+    @Path("/{clientLogin}/{uuid}")
+    public void removeClientRating(@PathParam("clientLogin") String clientLogin, @PathParam("uuid") String uuid) throws BaseAppException {
+        tryAndRepeat(() -> ratingEndpoint.removeClientRating(clientLogin, UUID.fromString(uuid)));
+    }
 }

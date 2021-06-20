@@ -7,7 +7,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.MapperException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CreateRatingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.ClientRatingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.RatingDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.RemoveClientRatingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.converters.RatingMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.managers.RatingManagerLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
@@ -56,7 +55,7 @@ public class RatingEndpoint extends BaseEndpoint implements RatingEndpointLocal 
         }
     }
 
-    @RolesAllowed("getRemoveClientRating")
+    @RolesAllowed("getClientRating")
     public List<ClientRatingDto> getClientRatings(String login) throws BaseAppException {
         List<ClientRatingDto> res = new ArrayList<>();
         for (Rating rating : ratingManager.getClientRatings(login)) {
@@ -65,9 +64,9 @@ public class RatingEndpoint extends BaseEndpoint implements RatingEndpointLocal 
         return res;
     }
 
-    @RolesAllowed("getRemoveClientRating")
+    @RolesAllowed("removeClientRating")
     @Override
-    public void removeClientRating(RemoveClientRatingDto removeClientRatingDto) throws BaseAppException {
-        // todo finish implementation
+    public void removeClientRating(String login, UUID cruiseGroupUUID) throws BaseAppException {
+        ratingManager.removeClientRating(login, cruiseGroupUUID);
     }
 }

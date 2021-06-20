@@ -270,7 +270,6 @@ const ListCruiseGroups = () => {
 
     useEffect(() => {
         getAllCruiseGroup().then(res => {
-            console.log(res.data)
             setCruiseGroupL(res.data)
         }).catch(error => {
             const message = error.response.data

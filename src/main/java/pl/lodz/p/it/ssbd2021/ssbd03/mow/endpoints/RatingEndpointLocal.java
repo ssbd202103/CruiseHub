@@ -4,7 +4,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.ClientRatingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CreateRatingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.RatingDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.RemoveClientRatingDto;
 
 import javax.ejb.Local;
 import java.util.List;
@@ -29,6 +28,12 @@ public interface RatingEndpointLocal {
      */
     void removeRating(UUID cruiseGroupUUID) throws BaseAppException;
 
+    /**
+     * Pobiera wszystkie oceny klienta
+     * @param login login klienta
+     * @return listę ocen
+     * @throws BaseAppException bazowy wyjątek aplikacji
+     */
     List<ClientRatingDto> getClientRatings(String login) throws BaseAppException;
 
     /**
@@ -40,8 +45,9 @@ public interface RatingEndpointLocal {
 
     /**
      * Metoda służąca do usunięcia oceny klienta przez moderatora
-     * @param removeClientRatingDto obiekt dto przechowujący informacje odnosnie oceny do usunięcia
-     * @throws BaseAppException bazowy wyjątek aplikacji
+     * @param login login klienta
+     * @param cruiseGroupUUID uuid grupy wycieczek
+     * @throws BaseAppException
      */
-    void removeClientRating(RemoveClientRatingDto removeClientRatingDto) throws BaseAppException;
+    void removeClientRating(String login, UUID cruiseGroupUUID) throws BaseAppException;
 }

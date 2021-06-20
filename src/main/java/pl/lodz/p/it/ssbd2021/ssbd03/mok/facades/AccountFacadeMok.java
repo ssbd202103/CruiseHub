@@ -86,7 +86,7 @@ public class AccountFacadeMok extends AbstractFacade<Account> {
     }
 
 
-    @PermitAll
+    @PermitAll  //TODO: usunac komentarz i sprawdzic permita
 // @RolesAllowed("SYSTEM")
     public List<Account> getUnconfirmedAccounts() {
         TypedQuery<Account> tqq = em.createNamedQuery("Account.findUnconfirmedAccounts", Account.class);
@@ -139,7 +139,7 @@ public class AccountFacadeMok extends AbstractFacade<Account> {
     }
 
 
-    @PermitAll
+    @PermitAll //TODO: usunac komentarz i sprawdzic permita
 // @RolesAllowed("SYSTEM")
     @Override
     public void remove(Account entity) throws FacadeException {
