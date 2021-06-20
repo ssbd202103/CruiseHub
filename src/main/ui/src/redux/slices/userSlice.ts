@@ -84,11 +84,14 @@ const userSlice = createSlice({
                 state.activeAccessLevel = payload
                 sessionStorage.setItem('cruisehub_active_al', payload)
             }
+        },
+        changeLanguage: (state: IUserSliceState) => {
+            state.languageType = state.languageType === "PL" ? "EN" : "PL";
         }
     }
 })
 
-export const {setUser, changeEmail, emptyUser, setActiveAccessLevel, setLogin} = userSlice.actions
+export const {setUser, changeEmail, emptyUser, setActiveAccessLevel, setLogin, changeLanguage} = userSlice.actions
 
 const selectSelf = (state: { user: IUserSliceState }) => state
 

@@ -44,9 +44,6 @@ export default function PanelMenu(props: PanelMenuProps) {
                 <ListItem button>
                     <AppColorSetter />
                 </ListItem>
-                <ListItem button>
-                    <LanguageSetter />
-                </ListItem>
             </List>
         </Box>
     )
