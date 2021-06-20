@@ -400,6 +400,7 @@ const resources = {
             "error.attraction.cruisePublished": "Nie można utworzyć atrakcji do opublikowanej wycieczki",
             'no ratings': 'Nie ma żadnych ocen',
             'unknown error': 'Nieznany błąd',
+            "/unconfirmed-business-workers": "Zarządzaj pracownikami",
         }
     },
     EN: {
@@ -793,6 +794,7 @@ const resources = {
             "error.attraction.cruisePublished": "Cannot create attraction for published cruise",
             'no ratings': 'There are no ratings',
             'unknown error': 'Unknown error',
+            "/unconfirmed-business-workers": "Manage workers",
         }
     }
 }

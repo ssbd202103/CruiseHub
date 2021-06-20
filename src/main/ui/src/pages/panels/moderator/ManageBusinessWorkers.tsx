@@ -240,7 +240,6 @@ export default function ModListClient() {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <RoundedButton color={"blue"} onClick={handleChange}>{t("Refresh")}</RoundedButton>
         </div>
 
     );
