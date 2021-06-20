@@ -33,6 +33,7 @@ import Collapse from "@material-ui/core/Collapse";
 import Box from "@material-ui/core/Box";
 import PopupAcceptAction from "../../../PopupAcceptAction";
 import store from "../../../redux/store";
+import {getSelfReservations} from "../../../Services/reservationService";
 
 
 const useRowStyles = makeStyles({
@@ -163,11 +164,27 @@ function Row(props: CruiseData) {
             showSuccess(t('successful action'))
             forceUpdate()
             refreshToken()
+            reload()
         }).catch(error => {
             setButtonPopupAcceptAction(false)
             const message = error.response.data
             handleError(message, error.response.status)
         });
+    }
+
+    const reload = () => {
+        getCruisesForCruiseGroup(group.uuid)
+            .then(res => {
+                setCruises(res.data)
+                console.log(cruises)
+                console.log(res.data)
+                refreshToken();
+            })
+            .catch(error => {
+                const message = error.response.data
+                const status = error.response.status
+                handleError(message, status)
+            })
     }
 
     const handleSetOpen = () => {
@@ -302,7 +319,7 @@ function Row(props: CruiseData) {
                                                                 etag : cruise.etag,
                                                                 version : cruise.version
                                                             })
-                                                            setButtonPopupAcceptAction(true)
+                                                            handleConfirm(deactivateCruise)
                                                             }
                                                         }
                                                     >
@@ -314,11 +331,6 @@ function Row(props: CruiseData) {
                                         </TableRow>
                                     ))}
                                 </TableBody>
-                                <PopupAcceptAction
-                                    open={buttonPopupAcceptAction}
-                                    onConfirm={()=>{handleConfirm(deactivateCruise)}}
-                                    onCancel={() => {setButtonPopupAcceptAction(false)
-                                    }}/>
                             </Table>
                         </Box>
                     </Collapse>
