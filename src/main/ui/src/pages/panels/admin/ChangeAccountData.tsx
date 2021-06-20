@@ -38,6 +38,7 @@ export default function ChangeAccountData() {
     const [ChangePerData, setPerData] = useState(false)
     const [ChangAddress, setChangChangAddress] = useState(false)
     const [ChangePhone, setChangePhone] = useState(false)
+    const [metadata, setMetadata] = useState(false)
     const [ChangeMail, setMail] = useState(false)
     const [firstName, setFirstName] = useState('')
     const [secondName, setSecondName] = useState('')
@@ -87,6 +88,7 @@ export default function ChangeAccountData() {
         setPerData(false)
         setChangChangAddress(false)
         setChangePhone(false)
+        setMetadata(false)
         setMail(false)
     }
 
@@ -95,12 +97,14 @@ export default function ChangeAccountData() {
         setChangChangAddress(false)
         setChangePhone(false)
         setMail(false)
+        setMetadata(false)
         setPerData(state => !state)
     }
     const handleChangeMail = () => {
         setPerData(false)
         setChangChangAddress(false)
         setChangePhone(false)
+        setMetadata(false)
         setMail(state => !state)
     }
     //Functions for address data change
@@ -108,13 +112,18 @@ export default function ChangeAccountData() {
         setChangePhone(false)
         setMail(false)
         setPerData(false)
+        setMetadata(false)
         setChangChangAddress(state => !state)
     }
     const handleChangePhone = () => {
         setPerData(false)
         setChangChangAddress(false)
         setMail(false)
+        setMetadata(false)
         setChangePhone(state => !state)
+    }
+    const handleMetadata = () => {
+        setMetadata(state => !state)
     }
 
     const changeMail = async () => {
@@ -369,10 +378,14 @@ export default function ChangeAccountData() {
                     <RoundedButton color="blue"
                                    onClick={() => setButtonPopupAcceptChangeData(true)}
                     >{t("confirm")}</RoundedButton>
+                    <RoundedButton color="green"
+                                   onClick={handleMetadata}
+                    >{t("metadata")}</RoundedButton>
                     <RoundedButton color="pink"
                                    onClick={handleChangePerData}
                     >{t("cancel")}</RoundedButton>
                     </div>
+                    <Grid item style={{display: metadata ? "block" : "none"}} className={styles['change-item']}>
                         <tr>
                             <td className={tbStyles.td}><h4>{t("alterType")}</h4></td>
                             <td className={tbStyles.td}><h4>{t("alteredBy")}</h4></td>
@@ -403,7 +416,8 @@ export default function ChangeAccountData() {
                             <td className={tbStyles.tdData}><h4>{lastIncorrectAuthenticationLogicalAddress}</h4></td>
                             <td className={tbStyles.tdData}><h4>{numberOfAuthenticationFailures}</h4></td>
                         </tr>
-
+                    </Grid>
+                    </Grid>
                 </Grid>
                 <Grid>
                     <Grid item style={{display: ChangeMail ? "none" : "block"}} className={styles.item}>
@@ -432,10 +446,14 @@ export default function ChangeAccountData() {
                             <RoundedButton color="blue"
                                            onClick={() => setButtonPopupAcceptChangeMail(true)}
                             >{t("confirm")}</RoundedButton>
+                            <RoundedButton color="green"
+                                           onClick={handleMetadata}
+                            >{t("metadata")}</RoundedButton>
                             <RoundedButton color="pink"
                                            onClick={handleChangeMail}
                             >{t("cancel")}</RoundedButton>
                         </div>
+                        <Grid item style={{display: metadata ? "block" : "none"}} className={styles['change-item']}>
                         <tr>
                             <td className={tbStyles.td}><h4>{t("alterType")}</h4></td>
                             <td className={tbStyles.td}><h4>{t("alteredBy")}</h4></td>
@@ -466,6 +484,7 @@ export default function ChangeAccountData() {
                             <td className={tbStyles.tdData}><h4>{lastIncorrectAuthenticationLogicalAddress}</h4></td>
                             <td className={tbStyles.tdData}><h4>{numberOfAuthenticationFailures}</h4></td>
                         </tr>
+                        </Grid>
                     </Grid>
                 </Grid>
                 <Grid item style={{display: acLevel.includes('CLIENT') ? "block" : "none"}} className={styles.item}>
@@ -557,10 +576,15 @@ export default function ChangeAccountData() {
                         <RoundedButton
                             color="blue"
                             onClick={() => setButtonPopupAcceptChangeAddress(true)}
-                        >{t("confirm")}</RoundedButton><RoundedButton
+                        >{t("confirm")}</RoundedButton>
+                        <RoundedButton color="green"
+                                       onClick={handleMetadata}
+                        >{t("metadata")}</RoundedButton>
+                        <RoundedButton
                         color="pink"
                         onClick={handleChangAddress}
                     >{t("cancel")}</RoundedButton>
+                    <Grid item style={{display: metadata ? "block" : "none"}} className={styles['change-item']}>
                     <tr>
                         <td className={tbStyles.td}><h4>{t("alterType")}</h4></td>
                         <td className={tbStyles.td}><h4>{t("alteredBy")}</h4></td>
@@ -577,6 +601,7 @@ export default function ChangeAccountData() {
                         <td className={tbStyles.tdData}><h4>{lastAlterDateTimeAdr}</h4></td>
                         <td className={tbStyles.tdData}><h4>{versionAdr}</h4></td>
                     </tr>
+                    </Grid>
                     </Grid>
                 </Grid>
                 <Grid item style={{display: acLevel.includes('BUSINESS_WORKER') ? "block" : "none"}}
@@ -609,10 +634,14 @@ export default function ChangeAccountData() {
                             color="blue"
                             onClick={() => setButtonPopupAcceptChangeNumber(true)}
                         >{t("confirm")}</RoundedButton>
+                        <RoundedButton color="green"
+                                       onClick={handleMetadata}
+                        >{t("metadata")}</RoundedButton>
                         <RoundedButton
                             color="pink"
                             onClick={handleChangePhone}
                         >{t("cancel")}</RoundedButton>
+                    <Grid item style={{display: metadata ? "block" : "none"}} className={styles['change-item']}>
                     <tr>
                         <td className={tbStyles.td}><h4>{t("alterType")}</h4></td>
                         <td className={tbStyles.td}><h4>{t("alteredBy")}</h4></td>

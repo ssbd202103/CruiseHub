@@ -8,7 +8,7 @@ import {useTranslation} from "react-i18next";
 import {useSelector} from "react-redux";
 import {selectFirstName, selectPhoneNumber, selectSecondName,} from '../../redux/slices/userSlice'
 import {ChangeDataComponentProps} from "../interfaces";
-import {ConfirmCancelButtonGroup} from "../ConfirmCancelButtonGroup";
+import {ConfirmMetadataCancelButtonGroup} from "../ConfirmMetadataCancelButtonGroup";
 import {changeClientData} from "../../Services/changeDataService";
 import Recaptcha from "react-recaptcha";
 import Popup from "../../PopupRecaptcha";
@@ -42,6 +42,7 @@ export default function ChangeClientData({open, onOpen, onConfirm, onCancel}: Ch
     const [numberOfAuthenticationFailures, setNumberOfAuthenticationFailures] = useState('')
     const [version, setVersion] = useState('')
 
+    const [metadata, setMetadata] = useState(false)
 
     const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
 
@@ -55,7 +56,12 @@ export default function ChangeClientData({open, onOpen, onConfirm, onCancel}: Ch
 
     const handleCancel = () => {
         handleErase()
+        setMetadata(false)
         onCancel()
+    }
+
+    const handleMetadata = () => {
+        setMetadata(state => !state)
     }
 
     function verifyCallback(){
@@ -166,10 +172,11 @@ export default function ChangeClientData({open, onOpen, onConfirm, onCancel}: Ch
                         }}
                     />
                 </div>
-
-                <ConfirmCancelButtonGroup
+                <ConfirmMetadataCancelButtonGroup
                     onConfirm={()=>setButtonPopupAcceptAction(true)}
+                    onPress={handleMetadata}
                     onCancel={handleCancel} />
+                <Grid item style={{display: metadata ? "block" : "none"}} className={styles['change-item']}>
                 <tr>
                     <td className={tbStyles.td}><h4>{t("alterType")}</h4></td>
                     <td className={tbStyles.td}><h4>{t("alteredBy")}</h4></td>
@@ -200,6 +207,7 @@ export default function ChangeClientData({open, onOpen, onConfirm, onCancel}: Ch
                     <td className={tbStyles.tdData}><h4>{lastIncorrectAuthenticationLogicalAddress}</h4></td>
                     <td className={tbStyles.tdData}><h4>{numberOfAuthenticationFailures}</h4></td>
                 </tr>
+                </Grid>
             </Grid>
         </>
     )

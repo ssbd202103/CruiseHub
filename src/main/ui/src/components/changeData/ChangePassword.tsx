@@ -7,7 +7,7 @@ import DarkedTextField from "../DarkedTextField";
 import React, {useEffect, useState} from "react";
 import {changeOwnPassword as changeOwnPasswordService} from "../../Services/changePasswordService";
 import {useTranslation} from "react-i18next";
-import {ConfirmCancelButtonGroup} from "../ConfirmCancelButtonGroup";
+import {ConfirmMetadataCancelButtonGroup} from "../ConfirmMetadataCancelButtonGroup";
 import Recaptcha from "react-recaptcha";
 import Popup from "../../PopupRecaptcha";
 import {useSnackbarQueue} from "../../pages/snackbar";
@@ -26,6 +26,7 @@ export default function ChangePassword({open, onOpen, onConfirm, onCancel}: Chan
     const [confirmNewPassword, setConfirmNewPassword] = useState('')
 
     const [buttonPopup, setButtonPopup] = useState(false);
+    const [metadata, setMetadata] = useState(false)
 
     const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
 
@@ -45,7 +46,12 @@ export default function ChangePassword({open, onOpen, onConfirm, onCancel}: Chan
         setOldPassword('')
         setNewPassword('')
         setConfirmNewPassword('')
+        setMetadata(false)
         onCancel()
+    }
+
+    const handleMetadata = () => {
+        setMetadata(state => !state)
     }
 
     async function verifyCallback() {
@@ -159,9 +165,11 @@ export default function ChangePassword({open, onOpen, onConfirm, onCancel}: Chan
                         setButtonPopupAcceptAction(false)
                     }}
                 />
-                <ConfirmCancelButtonGroup
+                <ConfirmMetadataCancelButtonGroup
                     onConfirm={() => setButtonPopupAcceptAction(true)}
+                    onPress={handleMetadata}
                     onCancel={handleCancel}/>
+                <Grid item style={{display: metadata ? "block" : "none"}} className={styles['change-item']}>
                 <tr>
                     <td className={tbStyles.td}><h4>{t("alterType")}</h4></td>
                     <td className={tbStyles.td}><h4>{t("alteredBy")}</h4></td>
@@ -192,6 +200,7 @@ export default function ChangePassword({open, onOpen, onConfirm, onCancel}: Chan
                     <td className={tbStyles.tdData}><h4>{lastIncorrectAuthenticationLogicalAddress}</h4></td>
                     <td className={tbStyles.tdData}><h4>{numberOfAuthenticationFailures}</h4></td>
                 </tr>
+                </Grid>
             </Grid>
         </>
     )
