@@ -111,8 +111,15 @@ public class CruiseGroupManager implements CruiseGroupManagerLocal {
         setUpdatedMetadata(start_address);
         if(!picture.getImg().isEmpty())
         {
-            cruiseGroup.getCruisePictures().get(0).setImg(picture.getImg());
-          setUpdatedMetadata(cruiseGroup.getCruisePictures().get(0));
+            if(cruiseGroup.getCruisePictures().isEmpty()){
+                setCreatedMetadata(accountFacadeMow.findByLogin(context.getUserPrincipal().getName()),picture);
+                cruiseGroup.getCruisePictures().add(picture);
+                setUpdatedMetadata(cruiseGroup.getCruisePictures().get(0));
+            }
+            else {
+                cruiseGroup.getCruisePictures().get(0).setImg(picture.getImg());
+                setUpdatedMetadata(cruiseGroup.getCruisePictures().get(0));
+            }
         }
 
 

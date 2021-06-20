@@ -84,10 +84,12 @@ public class CruiseGroup extends BaseEntity {
     private Double price;
 
     @Getter
+    @Setter
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.REMOVE})
     @JoinTable(name = "cruises_group_pictures",
-            joinColumns = @JoinColumn(name = "cruise_picture_id"),
-            inverseJoinColumns = @JoinColumn(name = "cruises_group_id")
+            joinColumns = @JoinColumn(name = "cruises_group_id"),
+            inverseJoinColumns =  @JoinColumn(name = "cruise_picture_id")
+
     )
     @Valid
   //  @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
