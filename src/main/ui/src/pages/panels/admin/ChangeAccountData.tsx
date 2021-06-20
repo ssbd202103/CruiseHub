@@ -278,15 +278,30 @@ export default function ChangeAccountData() {
 
     }
 
-    useEffect(() => {
+    useEffect( ()=>{
         setFirstName(currentAccount.firstName);
         setSecondName(currentAccount.secondName);
+
+        if (clientAddr) {
+            setStreet(clientAddr.address.street);
+            setPostalCode(clientAddr.address.postalCode);
+            setHouseNumber(clientAddr.address.houseNumber);
+            setCountry(clientAddr.address.country);
+            setCity(clientAddr.address.city);
+            setPhoneNumber(clientAddr.phoneNumber);
+        }
+        if (businnesPhone) {
+            setBusinessPhoneNumber(businnesPhone.phoneNumber);
+        }
+    }, [])
+
+    useEffect(() => {
         setAlterType(currentAccountMTD.alterType);
         setAlteredBy(currentAccountMTD.alteredBy);
         setCreatedBy(currentAccountMTD.createdBy);
         if (currentAccountMTD.creationDateTime != null){
-        setCreationDateTime(currentAccountMTD.creationDateTime.dayOfMonth + " " + t(currentAccountMTD.creationDateTime.month) + " " + currentAccountMTD.creationDateTime.year + " " + currentAccountMTD.creationDateTime.hour + ":" + currentAccountMTD.creationDateTime.minute)
-    }
+            setCreationDateTime(currentAccountMTD.creationDateTime.dayOfMonth + " " + t(currentAccountMTD.creationDateTime.month) + " " + currentAccountMTD.creationDateTime.year + " " + currentAccountMTD.creationDateTime.hour + ":" + currentAccountMTD.creationDateTime.minute)
+        }
         if (currentAccountMTD.lastAlterDateTime != null)
             setLastAlterDateTime(currentAccountMTD.lastAlterDateTime.dayOfMonth + " " + t(currentAccountMTD.lastAlterDateTime.month) + " " + currentAccountMTD.lastAlterDateTime.year + " " + currentAccountMTD.lastAlterDateTime.hour + ":" + currentAccountMTD.lastAlterDateTime.minute);
         if (currentAccountMTD.lastCorrectAuthenticationDateTime != null)
@@ -299,13 +314,6 @@ export default function ChangeAccountData() {
         setVersion(currentAccountMTD.version);
 
         if (clientAddr) {
-            setStreet(clientAddr.address.street);
-            setPostalCode(clientAddr.address.postalCode);
-            setHouseNumber(clientAddr.address.houseNumber);
-            setCountry(clientAddr.address.country);
-            setCity(clientAddr.address.city);
-            setPhoneNumber(clientAddr.phoneNumber);
-
             setAlterTypeAdr(currentAccountAddressMTD.alterType);
             setAlteredByAdr(currentAccountAddressMTD.alteredBy);
             setCreatedByAdr(currentAccountAddressMTD.createdBy);
@@ -316,8 +324,6 @@ export default function ChangeAccountData() {
             setVersionAdr(currentAccountAddressMTD.version);
         }
         if (businnesPhone) {
-            setBusinessPhoneNumber(businnesPhone.phoneNumber);
-
             setAlterTypeAcl(currentAccountAclMTD.alterType);
             setAlteredByAcl(currentAccountAclMTD.alteredBy);
             setCreatedByAcl(currentAccountAclMTD.createdBy);
