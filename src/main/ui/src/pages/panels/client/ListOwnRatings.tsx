@@ -19,6 +19,8 @@ import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableBody from "@material-ui/core/TableBody";
+import {removeRating} from "../../../Services/ratingService";
+import {useSnackbarQueue} from "../../snackbar";
 
 const useRowStyles = makeStyles({
     root: {
@@ -45,14 +47,16 @@ function createData(
 
 export interface RowProps {
     row: ReturnType<typeof createData>,
-    style: React.CSSProperties
+    style: React.CSSProperties,
+    onLoad: () => void,
 }
 
-function Row(props: RowProps) {
-    const {row} = props;
-    const {style} = props;
+function Row({row, style, onLoad}: RowProps) {
     const {t} = useTranslation();
     const classes = useRowStyles();
+
+    const showSuccess = useSnackbarQueue('success');
+    const handleError = useHandleError();
 
     return (
         <TableRow className={classes.root}>
@@ -61,14 +65,19 @@ function Row(props: RowProps) {
             <TableCell style={style}>{row.rating}</TableCell>
             <TableCell style={style}>{row.cruiseGroupUUID}</TableCell>
             <TableCell style={style}>
-                <Button
-                    className={styles.link}
-                    style={{
-                        marginRight: 20,
-                        color: 'var(--dark)',
-                        fontFamily: 'Montserrat, sans-serif'
-
-                    }}>TEMP REMOVE BUTTON</Button>
+                <RoundedButton
+                    color="pink"
+                    onClick={() => {
+                        removeRating(row.cruiseGroupUUID).then(res => {
+                            onLoad();
+                            showSuccess('successful action');
+                        }).catch(error => {
+                            handleError(error)
+                        })
+                    }}
+                >
+                    {t('delete')}
+                </RoundedButton>
             </TableCell>
         </TableRow>
     );
@@ -82,15 +91,20 @@ const ListOwnRatings = () => {
 
     const darkMode = useSelector(selectDarkMode)
 
-    useEffect(() => {
+    const getRatings = () => {
         getOwnRatings().then(res => {
             setRatings(res.data)
         }).catch(error => {
-            const message = error.response.data
-            handleError(message, error.response.status)
+            // console.log(error)
+            // const message = error.response.data
+            handleError(error)
         }).then(res => {
             refreshToken()
         });
+    }
+
+    useEffect(() => {
+        getRatings()
     }, []);
 
     function search(rows: any[]) {
@@ -161,7 +175,7 @@ const ListOwnRatings = () => {
                                 <Row key={index} row={rating} style={{
                                     backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                     color: `var(--${!darkMode ? 'dark' : 'white-light'}`
-                                }}/>
+                                }} onLoad={getRatings}/>
                             )))}
                         </TableBody>
                     </Table>
