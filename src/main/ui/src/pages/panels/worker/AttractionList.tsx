@@ -40,7 +40,6 @@ export default function AttractionList() {
     const getAttractions = () =>{
         getAttractionsByCruiseUUID(uuid).then(res => {
             setAttractions(res.data)
-            showSuccess(t('data.load.success'))
         }).catch(error => {
             const message = error.response.data
             handleError(message, error.response.status)

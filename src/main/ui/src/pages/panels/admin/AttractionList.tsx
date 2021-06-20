@@ -29,7 +29,6 @@ export default function AttractionList() {
     useEffect(() => {
         getAttractionsByCruiseUUID(uuid).then(res => {
             setAttractions(res.data)
-            showSuccess('successful action')
         }).catch(error => {
             showError(t(error))
         })
