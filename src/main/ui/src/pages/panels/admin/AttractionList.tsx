@@ -4,10 +4,10 @@ import {getAttractionsByCruiseUUID} from "../../../Services/attractionService";
 import {useSnackbarQueue} from "../../snackbar";
 import {useTranslation} from "react-i18next";
 import { useParams } from 'react-router-dom';
-import { DataGrid, GridColDef } from '@material-ui/data-grid';
+import {DataGrid, GridColDef, plPLGrid, enUS} from '@material-ui/data-grid';
 import {makeStyles} from "@material-ui/styles";
 import {useSelector} from "react-redux";
-import {selectDarkMode} from "../../../redux/slices/userSlice";
+import {selectDarkMode, selectLanguage} from "../../../redux/slices/userSlice";
 
 export default function AttractionList() {
     const darkMode = useSelector(selectDarkMode);
@@ -19,6 +19,7 @@ export default function AttractionList() {
 
     const { uuid } = useParams<{ uuid: string }>();
 
+    const language = useSelector(selectLanguage)
     const {t} = useTranslation();
 
     const showSuccess = useSnackbarQueue('success');
@@ -44,9 +45,11 @@ export default function AttractionList() {
     return (
         <>
             <DataGrid
+                autoPageSize
                 columns={cols}
                 rows={attractions.map((attraction) => ({id: attraction.uuid, ...attraction}))}
                 className={classes.root}
+                localeText={language === 'PL' ? plPLGrid : undefined}
             />
         </>
     )

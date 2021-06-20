@@ -4,7 +4,7 @@ import {deleteAttraction, getAttractionsByCruiseUUID} from "../../../Services/at
 import {useSnackbarQueue} from "../../snackbar";
 import {useTranslation} from "react-i18next";
 import {useParams} from 'react-router-dom';
-import {DataGrid, GridCellParams, GridColDef, GridRowSelectedParams} from '@material-ui/data-grid';
+import {DataGrid, GridCellParams, GridColDef, GridRowSelectedParams, plPLGrid} from '@material-ui/data-grid';
 import DeleteIcon from '@material-ui/icons/DeleteRounded';
 import EditIcon from '@material-ui/icons/EditRounded';
 import styles from '../../../styles/AttractionList.module.css';
@@ -17,7 +17,7 @@ import store from "../../../redux/store";
 import useHandleError from "../../../errorHandler";
 import {refreshToken} from "../../../Services/userService";
 import {useSelector} from "react-redux";
-import {selectDarkMode} from "../../../redux/slices/userSlice";
+import {selectDarkMode, selectLanguage} from "../../../redux/slices/userSlice";
 import {makeStyles} from "@material-ui/styles";
 
 export default function AttractionList() {
@@ -31,6 +31,7 @@ export default function AttractionList() {
     const {uuid, published} = useParams<{ uuid: string, published: string }>();
     const {token} = store.getState()
     const {t} = useTranslation();
+    const language = useSelector(selectLanguage)
 
     const showSuccess = useSnackbarQueue('success');
     const handleError = useHandleError();
@@ -192,6 +193,7 @@ export default function AttractionList() {
                 rows={attractions.map((attraction) => ({id: attraction.uuid, ...attraction}))}
                 onRowSelected={handleSelectedRow}
                 className={classes.root}
+                localeText={language === 'PL' ? plPLGrid : undefined}
             />
             <Dialog
                 open={editAttractionDialogOpen}
