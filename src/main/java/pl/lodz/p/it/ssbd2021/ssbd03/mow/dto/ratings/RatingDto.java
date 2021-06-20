@@ -30,6 +30,8 @@ public class RatingDto {
     @Login
     private String login;
 
+    private String name;
+
     @Name
     private String accountFirstName;
 

@@ -29,16 +29,16 @@ const useRowStyles = makeStyles({
 });
 
 function createData(
-    cruiseGroupName: string,
+    cruiseGroupUUID: string,
+    name: string,
     login: string,
     rating: number,
-    uuid: string
 ) {
     return {
-        cruiseGroupName: cruiseGroupName,
+        cruiseGroupUUID: cruiseGroupUUID,
+        name: name,
         login: login,
         rating: rating,
-        uuid: uuid
     };
 }
 
@@ -56,10 +56,10 @@ function Row(props: RowProps) {
 
     return (
         <TableRow className={classes.root}>
-            <TableCell component="th" scope="row" style={style}>{row.cruiseGroupName}</TableCell>
+            <TableCell component="th" scope="row" style={style}>{row.name}</TableCell>
             <TableCell style={style}>{row.login}</TableCell>
             <TableCell style={style}>{row.rating}</TableCell>
-            <TableCell style={style}>{row.uuid}</TableCell>
+            <TableCell style={style}>{row.cruiseGroupUUID}</TableCell>
             <TableCell style={style}>
                 <Button
                     className={styles.link}
@@ -97,11 +97,11 @@ const ListOwnRatings = () => {
         if (Array.isArray(rows) && rows.length) {
 
             const filteredCompanies = rows.filter(
-                row => row.props.row.cruiseGroupName.toLowerCase().indexOf(searchInput.toLowerCase()) > -1
+                row => row.props.row.name.toLowerCase().indexOf(searchInput.toLowerCase()) > -1
             );
 
-            filteredCompanies.forEach(rating => (searchRatingList.includes(rating.props.row.cruiseGroupName) ?
-                "" : searchRatingList.push(rating.props.row.cruiseGroupName)));
+            filteredCompanies.forEach(rating => (searchRatingList.includes(rating.props.row.name) ?
+                "" : searchRatingList.push(rating.props.row.name)));
             return filteredCompanies
 
         } else {
