@@ -109,7 +109,7 @@ public class CruiseGroupManager implements CruiseGroupManagerLocal {
        cruiseGroup.setDescription(description);
         setUpdatedMetadata(cruiseGroup);
         setUpdatedMetadata(start_address);
-        if(picture.getImg().length>0)
+        if(!picture.getImg().isEmpty())
         {
             cruiseGroup.getCruisePictures().get(0).setImg(picture.getImg());
           setUpdatedMetadata(cruiseGroup.getCruisePictures().get(0));

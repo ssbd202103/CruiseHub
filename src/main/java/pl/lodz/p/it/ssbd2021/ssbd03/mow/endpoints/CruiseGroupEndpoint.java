@@ -47,16 +47,13 @@ public class CruiseGroupEndpoint extends BaseEndpoint implements CruiseGroupEndp
                 changeCruiseGroupDto.getCruiseAddress().getHarborName(), changeCruiseGroupDto.getCruiseAddress().getCityName(),
                 changeCruiseGroupDto.getCruiseAddress().getCountryName());
                 if(changeCruiseGroupDto.getPicture() != null){
-                    String encodedImg = changeCruiseGroupDto.getPicture().getDataURL().split(",")[1];
-                    byte[] decoded = Base64.getDecoder().decode(encodedImg);
-                    CruisePicture picture = new CruisePicture(decoded,"test");
+                    CruisePicture picture = new CruisePicture( changeCruiseGroupDto.getPicture().getDataURL(),"");
                     cruiseGroupManager.changeCruiseGroup(changeCruiseGroupDto.getName(), changeCruiseGroupDto.getNumberOfSeats()
-                            , changeCruiseGroupDto.getPrice(), start_address, changeCruiseGroupDto.getVersion(),changeCruiseGroupDto.getDescription(), picture,changeCruiseGroupDto.getUuid());
+                            , changeCruiseGroupDto.getPrice(), start_address, changeCruiseGroupDto.getVersion(),changeCruiseGroupDto.getDescription(),
+                            picture,changeCruiseGroupDto.getUuid());
                 }else
                 {
-                    CruisePicture picture = new CruisePicture();
-                    byte[] array = new byte[0];
-                    picture.setImg(array);
+                    CruisePicture picture = new CruisePicture("","");
                     cruiseGroupManager.changeCruiseGroup(changeCruiseGroupDto.getName(), changeCruiseGroupDto.getNumberOfSeats()
                             , changeCruiseGroupDto.getPrice(), start_address, changeCruiseGroupDto.getVersion(),changeCruiseGroupDto.getDescription(), picture,changeCruiseGroupDto.getUuid());
                 }

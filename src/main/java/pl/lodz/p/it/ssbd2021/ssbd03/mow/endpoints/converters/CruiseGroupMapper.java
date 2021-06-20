@@ -50,9 +50,7 @@ public class CruiseGroupMapper {
 
             for (CruisePictureDto dto : addCruiseGroup.getCruisePictures()
             ) {
-                String encodedImg = dto.getDataURL().split(",")[1];
-                byte[] decoded = Base64.getDecoder().decode(encodedImg);
-                pictures.add(new CruisePicture(decoded, "test"));
+                pictures.add(new CruisePicture(dto.getDataURL(), "zdjecie"));
             }
         }
         return pictures;
@@ -78,7 +76,7 @@ public class CruiseGroupMapper {
      * @return obiekt klasy dto
      */
     public static CruisePictureDto toCruisePictureDto(CruisePicture cruisePicture) {
-        return new CruisePictureDto(Base64.getEncoder().encodeToString(cruisePicture.getImg()), cruisePicture.getImgName(), cruisePicture.getVersion());
+        return new CruisePictureDto(cruisePicture.getImg(), cruisePicture.getImgName(), cruisePicture.getVersion());
     }
 
     public static List<CruiseForCruiseGroupDto> toCruiseForCruiseGroupDtos(List<Cruise> cruises) throws BaseAppException {
