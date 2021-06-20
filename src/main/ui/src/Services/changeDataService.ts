@@ -11,7 +11,12 @@ import {
 import {getUser} from "./userService";
 import {useSnackbarQueue} from "../pages/snackbar";
 import {useTranslation} from "react-i18next";
-import {isUserEmpty, changeLanguage as changeLanguageAction, selectLanguage} from "../redux/slices/userSlice";
+import {
+    isUserEmpty,
+    changeLanguage as changeLanguageAction,
+    selectLanguage,
+    changeDarkMode as changeDarkModeAction,
+} from "../redux/slices/userSlice";
 import i18n from "i18next";
 
 
@@ -210,30 +215,37 @@ export function changeLanguage() {
 
 
 export function changeDarkMode() {
+    if (isUserEmpty(store.getState())) {
+        return new Promise<any>((res, rej) => {
+            store.dispatch(changeDarkModeAction())
+            res(0)
+        });
+    } else {
 
-    const {
-        user: {
+        const {
+            user: {
+                login,
+                darkMode,
+                version,
+                etag
+            },
+            token
+        } = store.getState()
+
+        const changeDto: ChangeMode = {
             login,
-            darkMode,
             version,
-            etag
-        },
-        token
-    } = store.getState()
-
-    const changeDto: ChangeMode = {
-        login,
-        version,
-        newMode: !darkMode
-    }
-
-    return axios.put('self/change-theme-mode', changeDto, {
-        headers: {
-            'If-Match': etag,
-            'Authorization': `Bearer ${token}`
+            newMode: !darkMode
         }
-    }).then(res => {
 
-        return getUser(token)
-    })
+        return axios.put('self/change-theme-mode', changeDto, {
+            headers: {
+                'If-Match': etag,
+                'Authorization': `Bearer ${token}`
+            }
+        }).then(res => {
+
+            return getUser(token)
+        })
+    }
 }

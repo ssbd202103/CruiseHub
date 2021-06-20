@@ -38,7 +38,7 @@ export default function Autocomplete(
             className={classes.root}
             options={options}
             inputValue={inputValue}
-            style={{...style, width: 300, marginBottom: 16}}
+            style={{width: 300, marginBottom: 16, ...style}}
             noOptionsText={noOptionsText}
             onChange={onChange}
             renderInput={renderInput}

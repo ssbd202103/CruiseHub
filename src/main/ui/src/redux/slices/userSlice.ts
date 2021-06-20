@@ -87,11 +87,22 @@ const userSlice = createSlice({
         },
         changeLanguage: (state: IUserSliceState) => {
             state.languageType = state.languageType === "PL" ? "EN" : "PL";
+        },
+        changeDarkMode: (state: IUserSliceState) => {
+            state.darkMode = !state.darkMode
         }
     }
 })
 
-export const {setUser, changeEmail, emptyUser, setActiveAccessLevel, setLogin, changeLanguage} = userSlice.actions
+export const {
+    setUser,
+    changeEmail,
+    emptyUser,
+    setActiveAccessLevel,
+    setLogin,
+    changeLanguage,
+    changeDarkMode,
+} = userSlice.actions
 
 const selectSelf = (state: { user: IUserSliceState }) => state
 

@@ -10,6 +10,8 @@ import {useSelector} from "react-redux";
 import {selectDarkMode} from "../redux/slices/userSlice";
 import Authentication from "./Authentication";
 import LanguageSetter from "./LanguageSetter";
+import AppColorSetter from "./AppColorSetter";
+import LineDivider from "./LineDivider";
 
 
 function Header({fixed = false}: {fixed?: boolean}) {
@@ -30,8 +32,11 @@ function Header({fixed = false}: {fixed?: boolean}) {
                 alignItems: 'center'
             }}>
                 <RoundedButton style={{marginRight: 50}} color={"dark"} onClick={() => {window.location.reload()}}>{t('update')}</RoundedButton>
+                <LineDivider style={{margin: '0 16px 0 24px'}}/>
                 <Authentication />
+                <LineDivider style={{margin: '0 24px 0 16px'}} />
                 <LanguageSetter />
+                <AppColorSetter />
             </Box>
         </Box>
     )
