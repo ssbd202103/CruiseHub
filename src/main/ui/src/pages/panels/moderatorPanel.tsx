@@ -126,7 +126,7 @@ export default function ModeratorPanel() {
                     Component: AddCompany
                 },
                 {
-                    link: '/ManageWorkers',
+                    link: '/unconfirmed-business-workers',
                     text: t('Manage business workers'),
                     Icon: AccountsListIcon,
                     Component: ManageWorkers
