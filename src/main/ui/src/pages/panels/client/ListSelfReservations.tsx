@@ -7,7 +7,7 @@ import {useSelector} from "react-redux";
 import {selectDarkMode} from "../../../redux/slices/userSlice";
 import {refreshToken} from "../../../Services/userService";
 import {useTranslation} from "react-i18next";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+import Autocomplete from "../../../components/Autocomplete";
 import {Button, TextField} from "@material-ui/core";
 import TableContainer from "@material-ui/core/TableContainer";
 import Paper from "@material-ui/core/Paper";

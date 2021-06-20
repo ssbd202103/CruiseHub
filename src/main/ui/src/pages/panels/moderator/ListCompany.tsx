@@ -8,7 +8,7 @@ import {useSelector} from "react-redux";
 import {selectDarkMode} from "../../../redux/slices/userSlice";
 import {refreshToken} from "../../../Services/userService";
 import {useTranslation} from "react-i18next";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+import Autocomplete from "../../../components/Autocomplete";
 import {Button, TextField} from "@material-ui/core";
 import {Link} from "react-router-dom";
 import TableContainer from "@material-ui/core/TableContainer";
@@ -123,7 +123,6 @@ const ListCompany = () => {
             <Autocomplete
                 options={companies}
                 inputValue={searchInput}
-                style={{width: 300}}
                 noOptionsText={t('no options')}
                 onChange={(event, value) => {
                     setSearchInput(value as string ?? '')

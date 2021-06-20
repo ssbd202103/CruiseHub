@@ -15,7 +15,7 @@ import DarkedTextField from "../../../components/DarkedTextField";
 import {useSnackbarQueue} from "../../snackbar";
 import {refreshToken} from "../../../Services/userService";
 import {Button, TextField} from "@material-ui/core";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+import Autocomplete from "../../../components/Autocomplete";
 import useHandleError from "../../../errorHandler";
 import {Link} from "react-router-dom";
 
@@ -138,7 +138,6 @@ export default function ModListClient() {
             <Autocomplete
                 options={accounts}
                 inputValue={searchInput}
-                style={{width: 300}}
                 noOptionsText={t('no options')}
                 onChange={(event, value) => {
                     setSearchInput(value as string ?? '')
