@@ -5,10 +5,11 @@ import {useTranslation} from "react-i18next";
 
 export interface OkCancelButtonGroupProps {
     onConfirm(): void,
-    onCancel(): void
+    onCancel(): void,
+    onPress(): void
 }
 
-export function ConfirmCancelButtonGroup({onConfirm, onCancel}: OkCancelButtonGroupProps) {
+export function ConfirmMetadataCancelButtonGroup({onConfirm, onCancel, onPress}: OkCancelButtonGroupProps) {
     const {t} = useTranslation()
 
     return (
@@ -19,10 +20,17 @@ export function ConfirmCancelButtonGroup({onConfirm, onCancel}: OkCancelButtonGr
         >{t("confirm")}</RoundedButton>
 
         <RoundedButton
+            color="green"
+            onClick={onPress}
+            style={{marginLeft: '20px'}}
+        >{t("metadata")}</RoundedButton>
+
+        <RoundedButton
             color="pink"
             onClick={onCancel}
             style={{marginLeft: '20px'}}
         >{t("cancel")}</RoundedButton>
+
         </>
     )
 }

@@ -8,7 +8,7 @@ import React, {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {useSelector} from "react-redux";
 import {selectAddress} from "../../redux/slices/userSlice";
-import {ConfirmCancelButtonGroup} from "../ConfirmCancelButtonGroup";
+import {ConfirmMetadataCancelButtonGroup} from "../ConfirmMetadataCancelButtonGroup";
 import {changeClientAddress} from "../../Services/changeDataService";
 import Recaptcha from "react-recaptcha";
 import Popup from "../../PopupRecaptcha";
@@ -23,7 +23,7 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
     const showSuccess = useSnackbarQueue('success')
     const currentSelfMTD = JSON.parse(sessionStorage.getItem("changeSelfAccountDataMta") as string)
     const currentSelfAddressMTD = JSON.parse(sessionStorage.getItem("changeSelfAddressDataMta") as string)
-
+    const [metadata, setMetadata] = useState(false)
     const address = useSelector(selectAddress)
 
     const [houseNumber, setHouseNumber] = useState(address.houseNumber)
@@ -54,7 +54,12 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
 
     const handleCancel = () => {
         handleErase()
+        setMetadata(false)
         onCancel()
+    }
+
+    const handleMetadata = () => {
+        setMetadata(state => !state)
     }
 
     async function verifyCallback() {
@@ -198,9 +203,11 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
                     onCancel={() => {setButtonPopupAcceptAction(false)
                     }}
                 />
-                <ConfirmCancelButtonGroup
+                <ConfirmMetadataCancelButtonGroup
                     onConfirm={()=>setButtonPopupAcceptAction(true)}
+                    onPress={handleMetadata}
                     onCancel={handleCancel} />
+                <Grid item style={{display: metadata ? "block" : "none"}} className={styles['change-item']}>
                 <tr>
                     <td className={tbStyles.td}><h4>{t("alterType")}</h4></td>
                     <td className={tbStyles.td}><h4>{t("alteredBy")}</h4></td>
@@ -217,6 +224,7 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
                     <td className={tbStyles.tdData}><h4>{lastAlterDateTimeAdr}</h4></td>
                     <td className={tbStyles.tdData}><h4>{versionAdr}</h4></td>
                 </tr>
+                </Grid>
             </Grid>
         </>
     )

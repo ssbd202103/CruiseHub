@@ -8,7 +8,7 @@ import tbStyles from "../../styles/mtdTable.module.css"
 import RoundedButton from "../RoundedButton";
 import DarkedTextField from "../DarkedTextField";
 import {ChangeDataComponentProps} from '../interfaces'
-import {ConfirmCancelButtonGroup} from "../ConfirmCancelButtonGroup";
+import {ConfirmMetadataCancelButtonGroup} from "../ConfirmMetadataCancelButtonGroup";
 import {changeAdministratorData} from "../../Services/changeDataService";
 import Recaptcha from "react-recaptcha";
 import Popup from "../../PopupRecaptcha";
@@ -29,6 +29,7 @@ export default function ChangeAdministratorData({open, onOpen, onConfirm, onCanc
     const [buttonPopup, setButtonPopup] = useState(false);
 
     const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
+    const [metadata, setMetadata] = useState(false)
 
     const [firstNameValue, setFirstNameValue] = useState(firstName)
     const [secondNameValue, setSecondNameValue] = useState(secondName)
@@ -51,7 +52,12 @@ export default function ChangeAdministratorData({open, onOpen, onConfirm, onCanc
     }
 
     const handleCancel = () => {
+        setMetadata(false)
         onCancel()
+    }
+
+    const handleMetadata = () => {
+        setMetadata(state => !state)
     }
 
     async function verifyCallback() {
@@ -155,9 +161,11 @@ export default function ChangeAdministratorData({open, onOpen, onConfirm, onCanc
                     onCancel={() => {setButtonPopupAcceptAction(false)
                     }}
                 />
-                <ConfirmCancelButtonGroup
+                <ConfirmMetadataCancelButtonGroup
                     onConfirm={()=>setButtonPopupAcceptAction(true)}
+                    onPress={handleMetadata}
                     onCancel={handleCancel} />
+                <Grid item style={{display: metadata ? "block" : "none"}} className={styles['change-item']}>
                 <tr>
                     <td className={tbStyles.td}><h4>{t("alterType")}</h4></td>
                     <td className={tbStyles.td}><h4>{t("alteredBy")}</h4></td>
@@ -188,6 +196,7 @@ export default function ChangeAdministratorData({open, onOpen, onConfirm, onCanc
                     <td className={tbStyles.tdData}><h4>{lastIncorrectAuthenticationLogicalAddress}</h4></td>
                     <td className={tbStyles.tdData}><h4>{numberOfAuthenticationFailures}</h4></td>
                 </tr>
+                </Grid>
             </Grid>
         </>
     )

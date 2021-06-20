@@ -8,7 +8,7 @@ import tbStyles from "../../styles/mtdTable.module.css"
 import RoundedButton from "../RoundedButton";
 import DarkedTextField from "../DarkedTextField";
 import {ChangeDataComponentProps} from '../interfaces'
-import {ConfirmCancelButtonGroup} from "../ConfirmCancelButtonGroup";
+import {ConfirmMetadataCancelButtonGroup} from "../ConfirmMetadataCancelButtonGroup";
 import {changeModeratorData} from "../../Services/changeDataService";
 import Recaptcha from "react-recaptcha";
 import Popup from "../../PopupRecaptcha";
@@ -29,6 +29,7 @@ export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}:
     const [secondNameValue, setSecondNameValue] = useState(secondName)
 
     const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
+    const [metadata, setMetadata] = useState(false)
 
     const [buttonPopup, setButtonPopup] = useState(false);
 
@@ -51,7 +52,11 @@ export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}:
 
     const handleCancel = () => {
         handleErase()
+        setMetadata(false)
         onCancel()
+    }
+    const handleMetadata = () => {
+        setMetadata(state => !state)
     }
 
     function verifyCallback(){
@@ -151,9 +156,11 @@ export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}:
                     onCancel={() => {setButtonPopupAcceptAction(false)
                     }}
                 />
-                <ConfirmCancelButtonGroup
+                <ConfirmMetadataCancelButtonGroup
                     onConfirm={()=>setButtonPopupAcceptAction(true)}
+                    onPress={handleMetadata}
                     onCancel={handleCancel} />
+                <Grid item style={{display: metadata ? "block" : "none"}} className={styles['change-item']}>
                 <tr>
                     <td className={tbStyles.td}><h4>{t("alterType")}</h4></td>
                     <td className={tbStyles.td}><h4>{t("alteredBy")}</h4></td>
@@ -184,6 +191,7 @@ export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}:
                     <td className={tbStyles.tdData}><h4>{lastIncorrectAuthenticationLogicalAddress}</h4></td>
                     <td className={tbStyles.tdData}><h4>{numberOfAuthenticationFailures}</h4></td>
                 </tr>
+                </Grid>
             </Grid>
         </>
 )

@@ -8,7 +8,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {changeEmail as changeEmailAction, selectEmail} from "../../redux/slices/userSlice";
 import {changeEmail as changeEmailService} from "../../Services/changeEmailService";
 import {useTranslation} from "react-i18next";
-import {ConfirmCancelButtonGroup} from "../ConfirmCancelButtonGroup";
+import {ConfirmMetadataCancelButtonGroup} from "../ConfirmMetadataCancelButtonGroup";
 import {ChangeDataComponentProps} from '../interfaces'
 import Recaptcha from "react-recaptcha";
 import Popup from "../../PopupRecaptcha";
@@ -25,6 +25,9 @@ export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeD
     const dispatch = useDispatch()
     const email = useSelector(selectEmail)
     const currentSelfMTD = JSON.parse(sessionStorage.getItem("changeSelfAccountDataMta") as string)
+    const [metadata, setMetadata] = useState(false)
+
+
     const [emailValue, setEmailValue] = useState('')
     const [confirmEmailValue, setConfirmEmailValue] = useState('')
 
@@ -43,7 +46,12 @@ export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeD
     const handleCancel = () => {
         setEmailValue('')
         setConfirmEmailValue('')
+        setMetadata(false)
         onCancel()
+    }
+
+    const handleMetadata = () => {
+        setMetadata(state => !state)
     }
 
     // internal state and behavior
@@ -151,9 +159,11 @@ export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeD
                     onCancel={() => {setButtonPopupAcceptAction(false)
                     }}
                 />
-                <ConfirmCancelButtonGroup
+                <ConfirmMetadataCancelButtonGroup
                     onConfirm={()=>setButtonPopupAcceptAction(true)}
+                    onPress={handleMetadata}
                     onCancel={handleCancel} />
+                <Grid item style={{display: metadata ? "block" : "none"}} className={styles['change-item']}>
                 <tr>
                     <td className={tbStyles.td}><h4>{t("alterType")}</h4></td>
                     <td className={tbStyles.td}><h4>{t("alteredBy")}</h4></td>
@@ -184,6 +194,7 @@ export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeD
                     <td className={tbStyles.tdData}><h4>{lastIncorrectAuthenticationLogicalAddress}</h4></td>
                     <td className={tbStyles.tdData}><h4>{numberOfAuthenticationFailures}</h4></td>
                 </tr>
+                </Grid>
             </Grid>
         </>
     )
