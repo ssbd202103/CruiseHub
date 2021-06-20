@@ -37,7 +37,7 @@ public class CruiseGroupController {
     @POST
     @Path("/add-cuise-group")
     public void addCruiseGroup(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid AddCruiseGroupDto addCruiseGroupDto) throws BaseAppException {
-        tryAndRepeat(() -> cruiseGroupEndpoint.addCruiseGroup(addCruiseGroupDto));
+        tryAndRepeat(cruiseGroupEndpoint, () -> cruiseGroupEndpoint.addCruiseGroup(addCruiseGroupDto));
     }
 
     /**
@@ -49,7 +49,7 @@ public class CruiseGroupController {
     @Path("/cruise-groups")
     @Produces(MediaType.APPLICATION_JSON)
     public List<CruiseGroupWithDetailsDto> getAllCruiseGroups() throws BaseAppException {
-        return tryAndRepeat(() -> cruiseGroupEndpoint.getCruiseGroupsInfo());
+        return tryAndRepeat(cruiseGroupEndpoint, () -> cruiseGroupEndpoint.getCruiseGroupsInfo());
     }
 
     /**
@@ -67,14 +67,14 @@ public class CruiseGroupController {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, deactivateCruiseGroupDto)) {
             throw ControllerException.etagIdentityIntegrity();
         }
-        tryAndRepeat(() -> cruiseGroupEndpoint.deactivateCruiseGroup(deactivateCruiseGroupDto.getUuid(), deactivateCruiseGroupDto.getVersion()));
+        tryAndRepeat(cruiseGroupEndpoint, () -> cruiseGroupEndpoint.deactivateCruiseGroup(deactivateCruiseGroupDto.getUuid(), deactivateCruiseGroupDto.getVersion()));
     }
 
     @GET
     @Path("/CruiseGroupForBusinessWorker/{companyName}")
     @Produces(MediaType.APPLICATION_JSON)
     public List<CruiseGroupWithDetailsDto> getCruiseGroupForBusinessWorker(@PathParam("companyName") @Valid String companyName) throws BaseAppException {
-        return tryAndRepeat(() -> cruiseGroupEndpoint.getCruiseGroupForBusinessWorker(companyName));
+        return tryAndRepeat(cruiseGroupEndpoint, () -> cruiseGroupEndpoint.getCruiseGroupForBusinessWorker(companyName));
     }
 
     /**
@@ -94,6 +94,6 @@ public class CruiseGroupController {
             throw ControllerException.etagIdentityIntegrity();
         }
 
-         tryAndRepeat(() -> cruiseGroupEndpoint.changeCruiseGroup(dto));
+         tryAndRepeat(cruiseGroupEndpoint, () -> cruiseGroupEndpoint.changeCruiseGroup(dto));
     }
 }

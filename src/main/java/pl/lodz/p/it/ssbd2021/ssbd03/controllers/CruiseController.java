@@ -42,8 +42,7 @@ public class CruiseController {
     @Path("/get-cruise/{uuid}")
     @Produces(MediaType.APPLICATION_JSON)
     public CruiseDto getCruiseByUUID(@PathParam("uuid") String uuid) throws BaseAppException {
-//        return Response.ok().entity("That's alright, that's ok").build();
-        return tryAndRepeat(() -> cruiseEndpoint.getCruise(UUID.fromString(uuid)));
+        return tryAndRepeat(cruiseEndpoint, () -> cruiseEndpoint.getCruise(UUID.fromString(uuid)));
     }
 
     /**
@@ -59,7 +58,7 @@ public class CruiseController {
     public List<RelatedCruiseDto> getCruisesByCruiseGroupUUID(@PathParam("uuid") String uuid) throws BaseAppException {
         try {
             UUID convertedUUID = UUID.fromString(uuid);
-            return tryAndRepeat(() -> cruiseEndpoint.getCruisesByCruiseGroup(convertedUUID));
+            return tryAndRepeat(cruiseEndpoint, () -> cruiseEndpoint.getCruisesByCruiseGroup(convertedUUID));
         } catch (IllegalArgumentException e) {
             throw new MapperException(MAPPER_UUID_PARSE);
         }
@@ -75,7 +74,7 @@ public class CruiseController {
     @Path("/cruises")
     @Produces(MediaType.APPLICATION_JSON)
     public List<CruiseGroupWithCruisesDto> getAllCruises() throws BaseAppException {
-        return tryAndRepeat(() -> cruiseEndpoint.getPublishedCruises());
+        return tryAndRepeat(cruiseEndpoint, () -> cruiseEndpoint.getPublishedCruises());
     }
 
     /**
@@ -91,7 +90,7 @@ public class CruiseController {
     public List<CruiseForCruiseGroupDto> getCruisesForCruiseGroup(@PathParam("cruise-group-uuid") String cruiseGroupUUID) throws BaseAppException {
         try {
             UUID uuid = UUID.fromString(cruiseGroupUUID);
-            return tryAndRepeat(() -> cruiseEndpoint.getCruisesForCruiseGroup(uuid));
+            return tryAndRepeat(cruiseEndpoint, () -> cruiseEndpoint.getCruisesForCruiseGroup(uuid));
         } catch (BaseAppException e) {
             throw new MapperException(MAPPER_UUID_PARSE);
         }
@@ -107,7 +106,7 @@ public class CruiseController {
     @Path("/reserve")
     @Consumes(MediaType.APPLICATION_JSON)
     public void createReservation(CreateReservationDto reservationDto) throws BaseAppException {
-        tryAndRepeat(() -> reservationEndpoint.createReservation(reservationDto));
+        tryAndRepeat(reservationEndpoint, () -> reservationEndpoint.createReservation(reservationDto));
     }
 
 
@@ -121,7 +120,7 @@ public class CruiseController {
     @Path("/cancelReservation/{reservationUUID}")
     @Consumes(MediaType.APPLICATION_JSON)
     public void cancelReservation(@PathParam("reservationUUID") UUID reservationUUID) throws BaseAppException {
-        tryAndRepeat(() -> reservationEndpoint.cancelReservation(reservationUUID));
+        tryAndRepeat(reservationEndpoint, () -> reservationEndpoint.cancelReservation(reservationUUID));
     }
 
     /**
@@ -134,7 +133,7 @@ public class CruiseController {
     @Path("/new-cruise")
     @Consumes(MediaType.APPLICATION_JSON)
     public void createCruise(@Valid @NotNull(message = CONSTRAINT_NOT_NULL) NewCruiseDto newCruiseDto) throws BaseAppException {
-        tryAndRepeat(() -> cruiseEndpoint.addCruise(newCruiseDto));
+        tryAndRepeat(cruiseEndpoint, () -> cruiseEndpoint.addCruise(newCruiseDto));
     }
 
 
@@ -153,7 +152,7 @@ public class CruiseController {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, deactivateCruiseDto)) {
             throw ControllerException.etagIdentityIntegrity();
         }
-        tryAndRepeat(() -> cruiseEndpoint.deactivateCruise(deactivateCruiseDto));
+        tryAndRepeat(cruiseEndpoint, () -> cruiseEndpoint.deactivateCruise(deactivateCruiseDto));
     }
 
 
@@ -170,7 +169,7 @@ public class CruiseController {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, editCruiseDto)) {
             throw ControllerException.etagIdentityIntegrity();
         }
-        tryAndRepeat(() -> cruiseEndpoint.editCruise(editCruiseDto));
+        tryAndRepeat(cruiseEndpoint, () -> cruiseEndpoint.editCruise(editCruiseDto));
     }
 
 
@@ -184,6 +183,6 @@ public class CruiseController {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, publishCruiseDto)) {
             throw ControllerException.etagIdentityIntegrity();
         }
-        tryAndRepeat(() -> cruiseEndpoint.publishCruise(publishCruiseDto));
+        tryAndRepeat(cruiseEndpoint, () -> cruiseEndpoint.publishCruise(publishCruiseDto));
     }
 }

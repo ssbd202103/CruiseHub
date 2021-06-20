@@ -34,7 +34,7 @@ public class CompanyController {
     @Path("/companies-info")
     @Produces(MediaType.APPLICATION_JSON)
     public List<CompanyLightDto> getAllCompaniesInfo() throws BaseAppException {
-        return tryAndRepeat(() -> companyEndpoint.getCompaniesInfo());
+        return tryAndRepeat(companyEndpoint, () -> companyEndpoint.getCompaniesInfo());
     }
 
     /**
@@ -47,7 +47,7 @@ public class CompanyController {
     @Path("/companies")
     @Produces(MediaType.APPLICATION_JSON)
     public List<CompanyDto> getAllCompanies() throws BaseAppException {
-        return tryAndRepeat(() -> companyEndpoint.getAllCompanies());
+        return tryAndRepeat(companyEndpoint, () -> companyEndpoint.getAllCompanies());
     }
 
     /**
@@ -61,7 +61,7 @@ public class CompanyController {
     @Path("/{companyName}/business-workers")
     @Produces(MediaType.APPLICATION_JSON)
     public List<BusinessWorkerDto> getBusinessWorkersForCompany(@PathParam("companyName") String companyName) throws BaseAppException {
-        return tryAndRepeat(() -> companyEndpoint.getBusinessWorkersForCompany(companyName));
+        return tryAndRepeat(companyEndpoint, () -> companyEndpoint.getBusinessWorkersForCompany(companyName));
     }
 
     /**
@@ -73,6 +73,6 @@ public class CompanyController {
     @Path("/add-company")
     @Consumes(MediaType.APPLICATION_JSON)
     public void addCompany(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid AddCompanyDto addCompanyDto) throws BaseAppException {
-        tryAndRepeat(() -> companyEndpoint.addCompany(addCompanyDto));
+        tryAndRepeat(companyEndpoint, () -> companyEndpoint.addCompany(addCompanyDto));
     }
 }

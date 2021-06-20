@@ -33,25 +33,25 @@ public class RatingController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public void createRating(CreateRatingDto ratingDto) throws BaseAppException {
-        tryAndRepeat(() -> ratingEndpoint.createRating(ratingDto));
+        tryAndRepeat(ratingEndpoint, () -> ratingEndpoint.createRating(ratingDto));
     }
 
     @DELETE
     @Path("/{uuid}")
     public void removeRating(@PathParam("uuid") String uuid) throws  BaseAppException {
-        tryAndRepeat(() -> ratingEndpoint.removeRating(UUID.fromString(uuid)));
+        tryAndRepeat(ratingEndpoint, () -> ratingEndpoint.removeRating(UUID.fromString(uuid)));
     }
 
     @GET
     @Path("/{clientLogin}")
     @Produces(MediaType.APPLICATION_JSON)
     public List<ClientRatingDto> getClientRatings(@PathParam("clientLogin") String clientLogin) throws BaseAppException {
-        return tryAndRepeat(() -> ratingEndpoint.getClientRatings(clientLogin));
+        return tryAndRepeat(ratingEndpoint, () -> ratingEndpoint.getClientRatings(clientLogin));
     }
 
     @DELETE
     @Path("/{clientLogin}/{uuid}")
     public void removeClientRating(@PathParam("clientLogin") String clientLogin, @PathParam("uuid") String uuid) throws BaseAppException {
-        tryAndRepeat(() -> ratingEndpoint.removeClientRating(clientLogin, UUID.fromString(uuid)));
+        tryAndRepeat(ratingEndpoint, () -> ratingEndpoint.removeClientRating(clientLogin, UUID.fromString(uuid)));
     }
 }

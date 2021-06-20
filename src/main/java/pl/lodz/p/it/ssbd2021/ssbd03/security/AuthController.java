@@ -86,7 +86,7 @@ public class AuthController {
             throw new ControllerException("Invalid authorization header");
         }
         String token = tokenString.substring("Bearer ".length());
-        return tryAndRepeat(() -> authEndpoint.refreshToken(token));
+        return tryAndRepeat(authEndpoint, () -> authEndpoint.refreshToken(token));
     }
 
 
@@ -99,7 +99,7 @@ public class AuthController {
     @Path("/client/registration")
     @Consumes(MediaType.APPLICATION_JSON)
     public void createClient(@Valid @NotNull(message = CONSTRAINT_NOT_NULL) ClientForRegistrationDto clientForRegistrationDto) throws BaseAppException {
-        tryAndRepeat(() -> accountEndpoint.createClientAccount(clientForRegistrationDto));
+        tryAndRepeat(accountEndpoint, () -> accountEndpoint.createClientAccount(clientForRegistrationDto));
     }
 
     /**
@@ -111,7 +111,7 @@ public class AuthController {
     @Path("/business-worker/registration")
     @Consumes(MediaType.APPLICATION_JSON)
     public void createBusinessWorker(@Valid @NotNull(message = CONSTRAINT_NOT_NULL) BusinessWorkerForRegistrationDto businessWorkerForRegistrationDto) throws BaseAppException {
-        tryAndRepeat(() -> accountEndpoint.createBusinessWorkerAccount(businessWorkerForRegistrationDto));
+        tryAndRepeat(accountEndpoint, () -> accountEndpoint.createBusinessWorkerAccount(businessWorkerForRegistrationDto));
     }
 
     /**
