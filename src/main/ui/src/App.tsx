@@ -49,10 +49,10 @@ function App() {
 
     useEffect(() => {
         loadUserWithSavedToken()
-    //         .catch(error => {
-    //         handleError('error.response.data',error.response.status)
-    //     })
-    //
+        .catch(error => {
+            const message = error.response?.data
+            handleError(message, error.response?.status)
+        })
         }, [])
 
 

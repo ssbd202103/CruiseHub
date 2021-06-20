@@ -41,6 +41,10 @@ export default function CodeSignIn() {
                 }
             }).then(res => {
                 getUser(res.data)
+                .catch(error => {
+                    const message = error.response?.data
+                    handleError(message, error.response?.status)
+                })
                 history.push('/')
             }).catch(error => {
                 const message = error.response.data
