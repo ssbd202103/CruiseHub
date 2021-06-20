@@ -1,6 +1,7 @@
 import {ChangeDataComponentProps} from '../interfaces'
 import Grid from "@material-ui/core/Grid";
 import styles from "../../styles/ManageAccount.module.css";
+import tbStyles from "../../styles/mtdTable.module.css"
 import RoundedButton from "../RoundedButton";
 import DarkedTextField from "../DarkedTextField";
 import React, {useEffect, useState} from "react";
@@ -102,9 +103,9 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
         setAlteredByAdr(currentSelfAddressMTD.alteredBy);
         setCreatedByAdr(currentSelfAddressMTD.createdBy);
         if(currentSelfAddressMTD.creationDateTime !=null)
-            setCreationDateTimeAdr(currentSelfAddressMTD.creationDateTime.dayOfMonth +"/"+ t(currentSelfAddressMTD.creationDateTime.month) +" / "+ currentSelfAddressMTD.creationDateTime.year +"    "+ currentSelfAddressMTD.creationDateTime.hour +":"+ currentSelfAddressMTD.creationDateTime.minute )
+            setCreationDateTimeAdr(currentSelfAddressMTD.creationDateTime.dayOfMonth +" "+ t(currentSelfAddressMTD.creationDateTime.month) +" "+ currentSelfAddressMTD.creationDateTime.year +" "+ currentSelfAddressMTD.creationDateTime.hour +":"+ currentSelfAddressMTD.creationDateTime.minute )
         if(currentSelfAddressMTD.lastAlterDateTime !=null)
-            setLastAlterDateTimeAdr(currentSelfAddressMTD.lastAlterDateTime.dayOfMonth +"/"+ t(currentSelfAddressMTD.lastAlterDateTime.month) +" / "+ currentSelfAddressMTD.lastAlterDateTime.year +"    "+ currentSelfAddressMTD.lastAlterDateTime.hour +":"+ currentSelfAddressMTD.lastAlterDateTime.minute);
+            setLastAlterDateTimeAdr(currentSelfAddressMTD.lastAlterDateTime.dayOfMonth +" "+ t(currentSelfAddressMTD.lastAlterDateTime.month) +" "+ currentSelfAddressMTD.lastAlterDateTime.year +" "+ currentSelfAddressMTD.lastAlterDateTime.hour +":"+ currentSelfAddressMTD.lastAlterDateTime.minute);
         setVersionAdr(currentSelfAddressMTD.version);
     }, [address])
 
@@ -201,12 +202,20 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
                     onConfirm={()=>setButtonPopupAcceptAction(true)}
                     onCancel={handleCancel} />
                 <tr>
-                    <td><h4>{t("alterType")}</h4></td> <td><h4>{t("alteredBy")}</h4></td> <td><h4>{t("createdBy")}</h4></td>
-                    <td><h4>{t("creationDateTime")}</h4></td> <td><h4>{t("lastAlterDateTime")}</h4></td><td><h4>{t("version")}</h4></td>
+                    <td className={tbStyles.td}><h4>{t("alterType")}</h4></td>
+                    <td className={tbStyles.td}><h4>{t("alteredBy")}</h4></td>
+                    <td className={tbStyles.td}><h4>{t("createdBy")}</h4></td>
+                    <td className={tbStyles.td}><h4>{t("creationDateTime")}</h4></td>
+                    <td className={tbStyles.td}><h4>{t("lastAlterDateTime")}</h4></td>
+                    <td className={tbStyles.td}><h4>{t("version")}</h4></td>
                 </tr>
                 <tr>
-                    <td><h4>{t(alterTypeAdr)}</h4></td><td><h4>{alteredByAdr}</h4></td><td><h4>{createdByAdr}</h4></td>
-                    <td><h4>{creationDateTimeAdr}</h4></td><td><h4>{lastAlterDateTimeAdr}</h4></td><td><h4>{versionAdr}</h4></td>
+                    <td className={tbStyles.tdData}><h4>{t(alterTypeAdr)}</h4></td>
+                    <td className={tbStyles.tdData}><h4>{alteredByAdr}</h4></td>
+                    <td className={tbStyles.tdData}><h4>{createdByAdr}</h4></td>
+                    <td className={tbStyles.tdData}><h4>{creationDateTimeAdr}</h4></td>
+                    <td className={tbStyles.tdData}><h4>{lastAlterDateTimeAdr}</h4></td>
+                    <td className={tbStyles.tdData}><h4>{versionAdr}</h4></td>
                 </tr>
             </Grid>
         </>

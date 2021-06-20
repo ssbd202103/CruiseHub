@@ -4,6 +4,7 @@ import {selectFirstName, selectSecondName} from "../../redux/slices/userSlice";
 import React, {useEffect, useState} from "react";
 import Grid from "@material-ui/core/Grid";
 import styles from "../../styles/ManageAccount.module.css";
+import tbStyles from "../../styles/mtdTable.module.css"
 import RoundedButton from "../RoundedButton";
 import DarkedTextField from "../DarkedTextField";
 import {ChangeDataComponentProps} from '../interfaces'
@@ -79,14 +80,14 @@ export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}:
         setAlteredBy(currentSelfMTD.alteredBy);
         setCreatedBy(currentSelfMTD.createdBy);
         if(currentSelfMTD.creationDateTime !=null)
-            setCreationDateTime(currentSelfMTD.creationDateTime.dayOfMonth +"/"+ t(currentSelfMTD.creationDateTime.month) +" / "+ currentSelfMTD.creationDateTime.year +"    "+ currentSelfMTD.creationDateTime.hour +":"+ currentSelfMTD.creationDateTime.minute )
+            setCreationDateTime(currentSelfMTD.creationDateTime.dayOfMonth +" "+ t(currentSelfMTD.creationDateTime.month) +" "+ currentSelfMTD.creationDateTime.year +" "+ currentSelfMTD.creationDateTime.hour +":"+ currentSelfMTD.creationDateTime.minute )
         if(currentSelfMTD.lastAlterDateTime !=null)
-            setLastAlterDateTime(currentSelfMTD.lastAlterDateTime.dayOfMonth +"/"+ t(currentSelfMTD.lastAlterDateTime.month) +" / "+ currentSelfMTD.lastAlterDateTime.year +"    "+ currentSelfMTD.lastAlterDateTime.hour +":"+ currentSelfMTD.lastAlterDateTime.minute);
+            setLastAlterDateTime(currentSelfMTD.lastAlterDateTime.dayOfMonth +" "+ t(currentSelfMTD.lastAlterDateTime.month) +" "+ currentSelfMTD.lastAlterDateTime.year +" "+ currentSelfMTD.lastAlterDateTime.hour +":"+ currentSelfMTD.lastAlterDateTime.minute);
         if(currentSelfMTD.lastCorrectAuthenticationDateTime !=null)
-            setLastCorrectAuthenticationDateTime(currentSelfMTD.lastCorrectAuthenticationDateTime.dayOfMonth +"/"+ t(currentSelfMTD.lastCorrectAuthenticationDateTime.month) +" / "+ currentSelfMTD.lastCorrectAuthenticationDateTime.year +"    "+ currentSelfMTD.lastCorrectAuthenticationDateTime.hour +":"+ currentSelfMTD.creationDateTime.minute);
+            setLastCorrectAuthenticationDateTime(currentSelfMTD.lastCorrectAuthenticationDateTime.dayOfMonth +" "+ t(currentSelfMTD.lastCorrectAuthenticationDateTime.month) +" "+ currentSelfMTD.lastCorrectAuthenticationDateTime.year +" "+ currentSelfMTD.lastCorrectAuthenticationDateTime.hour +":"+ currentSelfMTD.creationDateTime.minute);
         setLastCorrectAuthenticationLogicalAddress(currentSelfMTD.lastCorrectAuthenticationLogicalAddress)
         if(currentSelfMTD.lastIncorrectAuthenticationDateTime !=null)
-            setLastIncorrectAuthenticationDateTime(currentSelfMTD.lastIncorrectAuthenticationDateTime.dayOfMonth +"/"+ t(currentSelfMTD.lastIncorrectAuthenticationDateTime.month) +" / "+ currentSelfMTD.lastIncorrectAuthenticationDateTime.year +"    "+ currentSelfMTD.lastIncorrectAuthenticationDateTime.hour +":"+ currentSelfMTD.lastIncorrectAuthenticationDateTime.minute);
+            setLastIncorrectAuthenticationDateTime(currentSelfMTD.lastIncorrectAuthenticationDateTime.dayOfMonth +" "+ t(currentSelfMTD.lastIncorrectAuthenticationDateTime.month) +" "+ currentSelfMTD.lastIncorrectAuthenticationDateTime.year +" "+ currentSelfMTD.lastIncorrectAuthenticationDateTime.hour +":"+ currentSelfMTD.lastIncorrectAuthenticationDateTime.minute);
         setLastIncorrectAuthenticationLogicalAddress(currentSelfMTD.lastIncorrectAuthenticationLogicalAddress);
         setNumberOfAuthenticationFailures(currentSelfMTD.numberOfAuthenticationFailures)
         setVersion(currentSelfMTD.version);
@@ -154,16 +155,34 @@ export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}:
                     onConfirm={()=>setButtonPopupAcceptAction(true)}
                     onCancel={handleCancel} />
                 <tr>
-                    <td><h4>{t("alterType")}</h4></td> <td><h4>{t("alteredBy")}</h4></td> <td><h4>{t("createdBy")}</h4></td>
-                    <td><h4>{t("creationDateTime")}</h4></td> <td><h4>{t("lastAlterDateTime")}</h4></td> <td><h4>{t("lastCorrectAuthenticationDateTime")}</h4></td>
-                    <td><h4>{t("lastCorrectAuthenticationLogicalAddress")}</h4></td> <td><h4>{t("lastIncorrectAuthenticationDateTime")}</h4></td> <td><h4>{t("lastIncorrectAuthenticationLogicalAddress")}</h4></td>
-                    <td><h4>{t("numberOfAuthenticationFailures")}</h4></td> <td><h4>{t("version")}</h4></td>
+                    <td className={tbStyles.td}><h4>{t("alterType")}</h4></td>
+                    <td className={tbStyles.td}><h4>{t("alteredBy")}</h4></td>
+                    <td className={tbStyles.td}><h4>{t("createdBy")}</h4></td>
+                    <td className={tbStyles.td}><h4>{t("creationDateTime")}</h4></td>
+                    <td className={tbStyles.td}><h4>{t("lastAlterDateTime")}</h4></td>
+                    <td className={tbStyles.td}><h4>{t("version")}</h4></td>
                 </tr>
                 <tr>
-                    <td><h4>{t(alterType)}</h4></td><td><h4>{alteredBy}</h4></td><td><h4>{createdBy}</h4></td>
-                    <td><h4>{creationDateTime}</h4></td><td><h4>{lastAlterDateTime}</h4></td><td><h4>{lastCorrectAuthenticationDateTime}</h4></td>
-                    <td><h4>{lastCorrectAuthenticationLogicalAddress}</h4></td><td><h4>{lastIncorrectAuthenticationDateTime}</h4></td><td><h4>{lastIncorrectAuthenticationLogicalAddress}</h4></td>
-                    <td><h4>{numberOfAuthenticationFailures}</h4></td><td><h4>{version}</h4></td>
+                    <td className={tbStyles.tdData}><h4>{t(alterType)}</h4></td>
+                    <td className={tbStyles.tdData}><h4>{alteredBy}</h4></td>
+                    <td className={tbStyles.tdData}><h4>{createdBy}</h4></td>
+                    <td className={tbStyles.tdData}><h4>{creationDateTime}</h4></td>
+                    <td className={tbStyles.tdData}><h4>{lastAlterDateTime}</h4></td>
+                    <td className={tbStyles.tdData}><h4>{version}</h4></td>
+                </tr>
+                <tr>
+                    <td className={tbStyles.td}><h4>{t("lastCorrectAuthenticationDateTime")}</h4></td>
+                    <td className={tbStyles.td}><h4>{t("lastCorrectAuthenticationLogicalAddress")}</h4></td>
+                    <td className={tbStyles.td}><h4>{t("lastIncorrectAuthenticationDateTime")}</h4></td>
+                    <td className={tbStyles.td}><h4>{t("lastIncorrectAuthenticationLogicalAddress")}</h4></td>
+                    <td className={tbStyles.td}><h4>{t("numberOfAuthenticationFailures")}</h4></td>
+                </tr>
+                <tr>
+                    <td className={tbStyles.tdData}><h4>{lastCorrectAuthenticationDateTime}</h4></td>
+                    <td className={tbStyles.tdData}><h4>{lastCorrectAuthenticationLogicalAddress}</h4></td>
+                    <td className={tbStyles.tdData}><h4>{lastIncorrectAuthenticationDateTime}</h4></td>
+                    <td className={tbStyles.tdData}><h4>{lastIncorrectAuthenticationLogicalAddress}</h4></td>
+                    <td className={tbStyles.tdData}><h4>{numberOfAuthenticationFailures}</h4></td>
                 </tr>
             </Grid>
         </>
