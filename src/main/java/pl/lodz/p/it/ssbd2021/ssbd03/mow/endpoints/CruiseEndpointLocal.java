@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints.TransactionalEndpoint;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.*;
 
@@ -12,7 +13,7 @@ import java.util.UUID;
  * Interfejs który zajmuje się obsługą obiektów dto z zakresu wycieczek
  */
 @Local
-public interface CruiseEndpointLocal {
+public interface CruiseEndpointLocal extends TransactionalEndpoint {
 
     /**
      * Tworzenie nowego rejsu

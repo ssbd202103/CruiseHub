@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints.TransactionalEndpoint;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.ClientRatingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CreateRatingDto;
@@ -10,7 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Local
-public interface RatingEndpointLocal {
+public interface RatingEndpointLocal extends TransactionalEndpoint {
 
     /**
      * Dodaje ocenę użytkownika o podanym loginie dla wycieczki o podanym id

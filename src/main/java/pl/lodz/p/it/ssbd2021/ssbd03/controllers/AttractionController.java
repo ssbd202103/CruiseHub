@@ -34,7 +34,7 @@ public class AttractionController {
     public List<AttractionDto> getAttractionsByCruiseUUID(@PathParam("uuid") String attractionUUID) throws BaseAppException {
         try {
             UUID uuid = UUID.fromString(attractionUUID);
-            return tryAndRepeat(() -> attractionEndpoint.getAttractionsByCruiseUUID(uuid));
+            return tryAndRepeat(attractionEndpoint, () -> attractionEndpoint.getAttractionsByCruiseUUID(uuid));
         } catch (IllegalArgumentException e) {
             throw new MapperException(MAPPER_UUID_PARSE);
         }
@@ -51,7 +51,7 @@ public class AttractionController {
     @Path("/add-attraction")
     @Consumes(MediaType.APPLICATION_JSON)
     public UUID addAttraction(@Valid AddAttractionDto addAttractionDto) throws BaseAppException {
-        return tryAndRepeat(() -> attractionEndpoint.addAttraction(addAttractionDto));
+        return tryAndRepeat(attractionEndpoint, () -> attractionEndpoint.addAttraction(addAttractionDto));
     }
 
     @PUT
@@ -62,7 +62,7 @@ public class AttractionController {
             throw ControllerException.etagIdentityIntegrity();
         }
 
-        tryAndRepeat(() -> attractionEndpoint.editAttraction(editAttractionDto));
+        tryAndRepeat(attractionEndpoint, () -> attractionEndpoint.editAttraction(editAttractionDto));
     }
 
     /**
@@ -77,7 +77,7 @@ public class AttractionController {
     public void deleteAttraction(@PathParam("uuid") String uuid) throws BaseAppException {
      try{
          UUID convertedUUID = UUID.fromString(uuid);
-         tryAndRepeat(() -> attractionEndpoint.deleteAttraction(convertedUUID));
+         tryAndRepeat(attractionEndpoint, () -> attractionEndpoint.deleteAttraction(convertedUUID));
      }catch (IllegalArgumentException e) {
          throw new MapperException(MAPPER_UUID_PARSE);
      }

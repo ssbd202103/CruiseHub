@@ -38,7 +38,7 @@ public class ReservationController {
     @Path("/reservations-for-cruise/{cruiseUUID}")
     @Produces(MediaType.APPLICATION_JSON)
     public List<CruiseReservationDto> getCruisesForReservations(@PathParam("cruiseUUID") UUID cruiseUUID) throws BaseAppException {
-        return tryAndRepeat(() -> reservationEndpoint.viewCruiseReservations(cruiseUUID));
+        return tryAndRepeat(reservationEndpoint, () -> reservationEndpoint.viewCruiseReservations(cruiseUUID));
     }
 
     /**
@@ -51,7 +51,7 @@ public class ReservationController {
     @Path("/reservations-for-worker-cruise/{cruiseUUID}")
     @Produces(MediaType.APPLICATION_JSON)
     public List<CruiseReservationDto> getWorkerCruisesForReservations(@PathParam("cruiseUUID") UUID cruiseUUID) throws BaseAppException {
-        return tryAndRepeat(() -> reservationEndpoint.viewWorkerCruiseReservations(cruiseUUID));
+        return tryAndRepeat(reservationEndpoint, () -> reservationEndpoint.viewWorkerCruiseReservations(cruiseUUID));
     }
 
     @DELETE
@@ -72,6 +72,6 @@ public class ReservationController {
     @Path("/self-reservations")
     @Produces(MediaType.APPLICATION_JSON)
     public List<SelfReservationDto> getSelfReservations() throws BaseAppException {
-        return tryAndRepeat(() -> reservationEndpoint.viewSelfCruiseReservations());
+        return tryAndRepeat(reservationEndpoint, () -> reservationEndpoint.viewSelfCruiseReservations());
     }
 }
