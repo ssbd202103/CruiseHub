@@ -144,7 +144,7 @@ function Row(props: CruiseData) {
     const handleSetOpen = async () => {
         console.log("Someone clicked me")
         setOpen(state => !state);
-        await getCruisesForCruiseGroup(group.name)
+        await getCruisesForCruiseGroup(group.uuid)
             .then(res => {
                 setCruises(res.data)
                 console.log(cruises)
