@@ -16,6 +16,7 @@ import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableBody from "@material-ui/core/TableBody";
+import RoundedButton from "../../../components/RoundedButton";
 
 const useRowStyles = makeStyles({
     root: {
@@ -37,7 +38,7 @@ function createData(
 ) {
     return {
         name: name,
-        NIP: nip,
+        nip: nip,
         phoneNumber: phoneNumber,
         country: country,
         city: city,
@@ -61,19 +62,22 @@ function Row(props: RowProps) {
     return (
         <TableRow className={classes.root}>
             <TableCell component="th" scope="row" style={style}>{row.name}</TableCell>
-            <TableCell style={style}>{row.NIP}</TableCell>
+            <TableCell style={style}>{row.nip}</TableCell>
             <TableCell style={style}>{row.phoneNumber}</TableCell>
             <TableCell style={style}>{row.country}</TableCell>
             <TableCell style={style}>{row.city}</TableCell>
             <TableCell style={style}>{row.street}</TableCell>
             <TableCell style={style}>{row.houseNumber}</TableCell>
             <TableCell style={style}>{row.postalCode}</TableCell>
-            <Link to="/company/business-workers">
-                <TableCell style={style}>
-                    <Button
-                        onClick={() => sessionStorage.setItem("currentCompanyName", row.name)}>{t("show business workers")}</Button>
-                </TableCell>
-            </Link>
+            <TableCell style={style}>
+
+                <Link to="/company/business-workers">
+                    <RoundedButton color="pink" onClick={() => sessionStorage.setItem("currentCompanyName", row.name)}>
+                        {t("show business workers")}
+                    </RoundedButton>
+                </Link>
+            </TableCell>
+
         </TableRow>
     );
 }

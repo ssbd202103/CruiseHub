@@ -102,6 +102,7 @@ const resources = {
             "deactivateCruiseGroup": "Dezaktywuj grupę wycieczek",
             "deactivate": "Dezaktywuj",
             "published": "Opublikowano",
+            "list companies":"Lista firm",
             //adminPanel
             "search account": "Wyszukaj konto",
             "search company": "Wyszukaj firmę",
@@ -113,7 +114,6 @@ const resources = {
             "access level": "Poziom dostępu",
             "moderatorPanel": "Panel moderatora",
             "list accounts": "Lista kont",
-            "list companies": "Lista firm",
             "edit": "Edytuj dane",
             'create': 'Utwórz',
 
@@ -508,6 +508,7 @@ const resources = {
             "deactivateCruiseGroup": "Deactivate Cruise Group",
             "deactivate": "Deactivate",
             "published": "Published",
+            "list companies":"Companies list",
             //adminPanel
             "adminPanel": "Administrator panel",
             "search account": "Search account",
@@ -683,6 +684,7 @@ const resources = {
             "/company/business-workers": "Business workers",
             "/company": "Company",
             'accept.action': 'Do you want to do this action?',
+            "/companies": "Companies",
 
             'yes': 'Yes',
             'no': 'No',
