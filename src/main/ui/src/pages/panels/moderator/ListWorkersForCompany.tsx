@@ -116,16 +116,6 @@ export default function ModListClient() {
 
     const accounts: String[] = [];
 
-    const handleChange = () => {
-        forceUpdate()
-
-        getWorkers(companyName as string).then(res => {
-            setUsers(res.data)
-            refreshToken()
-        })
-
-    }
-
     const {t} = useTranslation()
     return (
         <div>
@@ -133,7 +123,6 @@ export default function ModListClient() {
                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`,
                 font: "Montserrat"
             }}>{companyName}: {t("business workers")}</h1>
-            {/* todo change this h1 tag*/}
             <br/>
             <div>
                 <Autocomplete
@@ -145,7 +134,7 @@ export default function ModListClient() {
                         setSearchInput(value as string ?? '')
                     }}
                     renderInput={(params) => (
-                        <TextField {...params} label={t('search business worker')} variant="outlined"
+                        <TextField {...params} label={t('search business workers')} variant="outlined"
                                    onChange={(e) => setSearchInput(e.target.value)}/>
                     )}
                 />
@@ -187,7 +176,6 @@ export default function ModListClient() {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <RoundedButton color={"blue"} onClick={handleChange}>{t("Refresh")}</RoundedButton>
         </div>
 
     );
