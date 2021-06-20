@@ -69,11 +69,9 @@ public class CruiseMapper {
                 cruiseGroups.add(cg);
                 String img = null;
                 if (cg.getCruisePictures().size() > 0) {
-                    // TODO: uncomment below when the database stores a string url
-                    // img = cg.getCruisePictures().get(0).getImg();
+
+                    img = cg.getCruisePictures().get(0).getImg();
                 }
-                // TODO delete the line below
-                img = "https://promoklocki.pl/media/10155/maersk-line-container-ship.jpg";
                 CruiseGroupWithCruisesDto c = new CruiseGroupWithCruisesDto(cg.getUuid(), cg.getName(), cg.getPrice(), img, new ArrayList<>());
                 for (int j = i; j < cruises.size(); j++) {
                     if (cruises.get(j).getCruisesGroup().getUuid() == c.getUuid()) {

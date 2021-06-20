@@ -96,7 +96,7 @@ useEffect(() =>{
     }
     let pictureUrl: string | undefined
     if(crusieGropData.cruisePictures.length>0){
-        pictureUrl ='data:image/png;base64,'+ crusieGropData.cruisePictures[0].dataURL
+        pictureUrl =crusieGropData.cruisePictures[0].dataURL
     }
     else {
         pictureUrl= ship3

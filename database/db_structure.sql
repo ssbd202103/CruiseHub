@@ -242,7 +242,7 @@ create table cruise_pictures
 (
     id                   bigint                              not null,
     img_name             varchar(64),
-    img                  bytea,                                        --nullable only for implementation time.
+    img                  varchar,
 
     creation_date_time   timestamp default CURRENT_TIMESTAMP not null,
     last_alter_date_time timestamp                           not null,
