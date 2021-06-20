@@ -87,8 +87,7 @@ public class CruiseManager implements CruiseManagerLocal {
         } catch (ClassCastException e) {
             throw new CruiseManagerException(CANNOT_FIND_ACCESS_LEVEL);
         }
-        setAlterTypeAlterCruiseAndCreatedBy(cruise, accountFacade.getAlterTypeWrapperByAlterType(AlterType.INSERT),
-            account);
+        setAlterTypeAlterCruiseAndCreatedBy(cruise);
         cruiseFacadeMow.create(cruise);
 
     }
@@ -121,7 +120,7 @@ public class CruiseManager implements CruiseManagerLocal {
                     throw new CruiseManagerException(CANNOT_FIND_ACCESS_LEVEL);
                 }
                 BusinessWorker businessWorker = (BusinessWorker) optionalAccessLevel.get();
-                if(cruise.getCruisesGroup().getCompany().getNIP() != businessWorker.getCompany().getNIP()) {
+                if (cruise.getCruisesGroup().getCompany().getNIP() != businessWorker.getCompany().getNIP()) {
                     throw new CruiseManagerException(BUSINESS_WORKER_ADD_CRUISE_TO_BAD_COMPANY);
                 }
             }
@@ -130,7 +129,7 @@ public class CruiseManager implements CruiseManagerLocal {
         }
 
         cruise.setActive(false);
-        setAlterTypeAndAlterCruise(cruise, accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE), account);
+        setAlterTypeAndAlterCruise(cruise);
     }
 
     @RolesAllowed("editCruise")
@@ -161,22 +160,24 @@ public class CruiseManager implements CruiseManagerLocal {
 
         cruiseToEdit.setEndDate(endDate);
         cruiseToEdit.setStartDate(startDate);
-        setAlterTypeAndAlterCruise(cruiseToEdit, accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE),
-            account);
+        setAlterTypeAndAlterCruise(cruiseToEdit);
     }
 
-
-    private void setAlterTypeAndAlterCruise(Cruise cruise, AlterTypeWrapper alterTypeWrapper, Account alteredBy) {
-        cruise.setAlteredBy(alteredBy);
-        cruise.setAlterType(alterTypeWrapper);
-        cruise.setLastAlterDateTime(LocalDateTime.now());
+    @RolesAllowed("authenticatedUser")
+    public Account getCurrentUser() throws BaseAppException {
+        return accountFacade.findByLogin(securityContext.getUserPrincipal().getName());
     }
 
-    private void setAlterTypeAlterCruiseAndCreatedBy(Cruise cruise, AlterTypeWrapper alterTypeWrapper, Account alteredBy) {
-        cruise.setCreatedBy(alteredBy);
-        cruise.setAlteredBy(alteredBy);
-        cruise.setAlterType(alterTypeWrapper);
-        cruise.setLastAlterDateTime(LocalDateTime.now());
+    private void setAlterTypeAndAlterCruise(Cruise cruise) throws BaseAppException {
+        cruise.setAlteredBy(getCurrentUser());
+        cruise.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
+    }
+
+    private void setAlterTypeAlterCruiseAndCreatedBy(Cruise cruise) throws BaseAppException {
+        Account a = getCurrentUser();
+        cruise.setCreatedBy(a);
+        cruise.setAlteredBy(a);
+        cruise.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.INSERT));
     }
 
     @PermitAll
@@ -199,6 +200,7 @@ public class CruiseManager implements CruiseManagerLocal {
             throw FacadeException.optimisticLock();
         }
         cruise.setPublished(true);
+        setAlterTypeAndAlterCruise(cruise);
         cruiseFacadeMow.edit(cruise);
     }
 
