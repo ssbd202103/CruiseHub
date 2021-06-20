@@ -48,7 +48,7 @@ public class AccountSelfController {
     @Path("/account-details")
     @Produces(MediaType.APPLICATION_JSON)
     public String getSelfDetails() throws BaseAppException, JsonProcessingException {
-        return mapper.writeValueAsString(tryAndRepeat(() -> accountEndpoint.getSelfDetails()));
+        return mapper.writeValueAsString(tryAndRepeat(accountEndpoint, () -> accountEndpoint.getSelfDetails()));
     }
 
     /**
@@ -65,7 +65,7 @@ public class AccountSelfController {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, accountChangeOwnPasswordDto)) {
             throw ControllerException.etagIdentityIntegrity();
         }
-        tryAndRepeat(() -> accountEndpoint.changeOwnPassword(accountChangeOwnPasswordDto));
+        tryAndRepeat(accountEndpoint, () -> accountEndpoint.changeOwnPassword(accountChangeOwnPasswordDto));
     }
 
 
@@ -82,7 +82,7 @@ public class AccountSelfController {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, clientChangeDataDto)) {
             throw ControllerException.etagIdentityIntegrity();
         }
-        tryAndRepeat(() -> accountEndpoint.changeClientData(clientChangeDataDto));
+        tryAndRepeat(accountEndpoint, () -> accountEndpoint.changeClientData(clientChangeDataDto));
     }
 
     /**
@@ -98,7 +98,7 @@ public class AccountSelfController {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, businessWorkerChangeDataDto)) {
             throw ControllerException.etagIdentityIntegrity();
         }
-        tryAndRepeat(() -> accountEndpoint.changeBusinessWorkerData(businessWorkerChangeDataDto));
+        tryAndRepeat(accountEndpoint, () -> accountEndpoint.changeBusinessWorkerData(businessWorkerChangeDataDto));
     }
 
     /**
@@ -114,7 +114,7 @@ public class AccountSelfController {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, moderatorChangeDataDto)) {
             throw ControllerException.etagIdentityIntegrity();
         }
-        tryAndRepeat(() -> accountEndpoint.changeModeratorData(moderatorChangeDataDto));
+        tryAndRepeat(accountEndpoint, () -> accountEndpoint.changeModeratorData(moderatorChangeDataDto));
     }
 
     /**
@@ -130,7 +130,7 @@ public class AccountSelfController {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, administratorChangeDataDto)) {
             throw ControllerException.etagIdentityIntegrity();
         }
-        tryAndRepeat(() -> accountEndpoint.changeAdministratorData(administratorChangeDataDto));
+        tryAndRepeat(accountEndpoint, () -> accountEndpoint.changeAdministratorData(administratorChangeDataDto));
     }
 
     /**
@@ -142,7 +142,7 @@ public class AccountSelfController {
     @Path("/change-email")
     @Consumes(MediaType.APPLICATION_JSON)
     public void changeEmail(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid AccountVerificationDto accountVerificationDto) throws BaseAppException {
-        tryAndRepeat(() -> this.accountEndpoint.changeEmail(accountVerificationDto));
+        tryAndRepeat(accountEndpoint, () -> accountEndpoint.changeEmail(accountVerificationDto));
     }
 
     /**
@@ -160,7 +160,7 @@ public class AccountSelfController {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, changeModeDto)) {
             throw ControllerException.etagIdentityIntegrity();
         }
-        tryAndRepeat(() -> accountEndpoint.changeMode(changeModeDto));
+        tryAndRepeat(accountEndpoint, () -> accountEndpoint.changeMode(changeModeDto));
     }
 
     /**
@@ -177,7 +177,7 @@ public class AccountSelfController {
         if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, changeLanguageDto)) {
             throw ControllerException.etagIdentityIntegrity();
         }
-        tryAndRepeat(() -> accountEndpoint.changeLanguage(changeLanguageDto));
+        tryAndRepeat(accountEndpoint, () -> accountEndpoint.changeLanguage(changeLanguageDto));
     }
 
     /**
@@ -190,7 +190,7 @@ public class AccountSelfController {
     @Path("/metadata")
     @Produces(MediaType.APPLICATION_JSON)
     public AccountMetadataDto getSelfAccountMetadata() throws BaseAppException {
-        return tryAndRepeat(() -> accountEndpoint.getSelfMetadata());
+        return tryAndRepeat(accountEndpoint, () -> accountEndpoint.getSelfMetadata());
     }
 
     /**
@@ -210,7 +210,7 @@ public class AccountSelfController {
         } catch (IllegalArgumentException e) {
             throw new ControllerException(ACCESS_LEVEL_PARSE_ERROR);
         }
-        return tryAndRepeat(() -> accountEndpoint.getSelfAccessLevelMetadata(accessLevelType));
+        return tryAndRepeat(accountEndpoint, () -> accountEndpoint.getSelfAccessLevelMetadata(accessLevelType));
     }
 
     /**
@@ -223,7 +223,7 @@ public class AccountSelfController {
     @Path("/metadata/address/")
     @Produces(MediaType.APPLICATION_JSON)
     public MetadataDto getSelfAddressMetadata() throws BaseAppException {
-        return tryAndRepeat(() -> accountEndpoint.getSelfAddressMetadata());
+        return tryAndRepeat(accountEndpoint, () -> accountEndpoint.getSelfAddressMetadata());
     }
 
     @GET

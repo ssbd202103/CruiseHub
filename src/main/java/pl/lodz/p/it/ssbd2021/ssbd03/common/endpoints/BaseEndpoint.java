@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints;
 
+import lombok.Getter;
 import lombok.extern.java.Log;
 
 import javax.ejb.AfterBegin;
@@ -11,14 +12,18 @@ import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 @Log
-public class BaseEndpoint {
+public abstract class BaseEndpoint implements TransactionalEndpoint {
 
     @Context
     private SecurityContext context;
 
+    @Getter
     private String lastTransactionID;
 
     private LocalDateTime transactionStartTime;
+
+    @Getter
+    private boolean transactionRolledBack;
 
     @AfterBegin
     public void afterBegin() {
@@ -33,6 +38,8 @@ public class BaseEndpoint {
 
     @AfterCompletion
     public void afterCompletion(boolean committed) {
+        transactionRolledBack = !committed;
+
         String loggedMessage = String.format("Transaction: %s " +
                         "\nfinished at time %s" +
                         "\ntotal transaction time: %d µs" +
