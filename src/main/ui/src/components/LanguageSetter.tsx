@@ -3,13 +3,15 @@ import {changeLanguage} from '../Services/changeDataService'
 import {useSnackbarQueue} from "../pages/snackbar";
 import useHandleError from "../errorHandler";
 import {useSelector} from "react-redux";
-import {selectDarkMode, selectLanguage} from "../redux/slices/userSlice";
+import {selectLanguage} from "../redux/slices/userSlice";
+//@ts-ignore
+import FlagIcon from 'react-country-flag';
 
 export default function LanguageSetter() {
     const {t} = useTranslation();
     const showSuccess = useSnackbarQueue('success')
     const handleError = useHandleError()
-    const darkMode = useSelector(selectDarkMode)
+
     const language = useSelector(selectLanguage)
 
     const handleClick = () => {
@@ -34,7 +36,13 @@ export default function LanguageSetter() {
             }}
              onClick={handleClick}
         >
-            <p>{language}</p>
+            <FlagIcon
+                className="emojiFlag"
+                countryCode={language === 'PL' ? 'PL' : 'US'}
+                style={{
+                    fontSize: '1.6em',
+                }}
+            />
         </div>
     )
 }

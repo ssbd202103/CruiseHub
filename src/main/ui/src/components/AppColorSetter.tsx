@@ -30,9 +30,6 @@ export default function AppColorSetter() {
 
     return (
         <IconButton
-            style={{
-                fontSize: '1.4rem',
-            }}
             onClick={handleClick}
         >
             {

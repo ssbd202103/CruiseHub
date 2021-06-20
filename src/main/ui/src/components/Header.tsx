@@ -12,7 +12,8 @@ import Authentication from "./Authentication";
 import LanguageSetter from "./LanguageSetter";
 import AppColorSetter from "./AppColorSetter";
 import LineDivider from "./LineDivider";
-
+import RefreshIcon from '@material-ui/icons/Refresh';
+import {IconButton} from "@material-ui/core";
 
 function Header({fixed = false}: {fixed?: boolean}) {
     const {t} = useTranslation()
@@ -31,12 +32,20 @@ function Header({fixed = false}: {fixed?: boolean}) {
                 height: '100%',
                 alignItems: 'center'
             }}>
-                <RoundedButton style={{marginRight: 50}} color={"dark"} onClick={() => {window.location.reload()}}>{t('update')}</RoundedButton>
-                <LineDivider style={{margin: '0 16px 0 24px'}}/>
                 <Authentication />
-                <LineDivider style={{margin: '0 24px 0 16px'}} />
+                <LineDivider style={{margin: '0 24px'}} />
                 <LanguageSetter />
                 <AppColorSetter />
+                <IconButton>
+                    <RefreshIcon
+                        fontSize="large"
+                        style={{
+                            fill: 'var(--white)',
+                        }}
+                        onClick={() => {window.location.reload()}}
+                    />
+                </IconButton>
+
             </Box>
         </Box>
     )
