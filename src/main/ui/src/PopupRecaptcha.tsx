@@ -1,6 +1,5 @@
 import React, {useReducer} from "react"
 import './styles/popup.css'
-import ChangeEmail from "./components/changeData/ChangeEmail";
 
 
 export default function Popup(props: any) {

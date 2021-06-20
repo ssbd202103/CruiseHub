@@ -16,10 +16,6 @@ export function getUser(token: string) {
         store.dispatch(setUser(res.data))
         i18n.changeLanguage(res.data.languageType)
         saveToken(token)
-    }).catch((error: any) => {
-        const handleError = useHandleError()
-        const message = error.response?.data
-        handleError(message, error.response?.status)
     })
 }
 
