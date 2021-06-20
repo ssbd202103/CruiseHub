@@ -41,6 +41,7 @@ import DarkedSelect from "../../../components/DarkedSelect";
 import styles from "../../../styles/auth.global.module.css";
 import pl from "date-fns/locale/pl";
 import eng from "date-fns/locale/en-GB";
+import ActiveIcon from "../../../components/ActiveIcon";
 
 const useRowStyles = makeStyles({
     root: {
@@ -477,7 +478,7 @@ function Row(props: CruiseData) {
                                             <TableCell align="center"
                                                        style={style}>{getParsedDate(cruise.endDate)}</TableCell>
                                             <TableCell align="center"
-                                                       style={style}>{cruise.active.toString()}</TableCell>
+                                                       style={style}><ActiveIcon active={cruise.active} /></TableCell>
                                             <TableCell align="center">
                                                 <Link to="/reservations">
                                                     <Button className={buttonClass.root} onClick={() => {

@@ -34,6 +34,7 @@ import Box from "@material-ui/core/Box";
 import PopupAcceptAction from "../../../PopupAcceptAction";
 import store from "../../../redux/store";
 import {getSelfReservations} from "../../../Services/reservationService";
+import ActiveIcon from "../../../components/ActiveIcon";
 
 
 const useRowStyles = makeStyles({
@@ -291,7 +292,7 @@ function Row(props: CruiseData) {
                                             <TableCell align="center"
                                                        style={style}>{getParsedDate(cruise.endDate)}</TableCell>
                                             <TableCell align="center"
-                                                       style={style}>{cruise.active.toString()}</TableCell>
+                                                       style={style}><ActiveIcon active={cruise.active} /></TableCell>
                                             <TableCell align="center">
                                                 <Link to="/reservations">
                                                     <Button  className={buttonClass.root} onClick={() => {handleReservations(cruise.uuid)}}

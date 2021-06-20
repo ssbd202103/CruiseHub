@@ -26,6 +26,7 @@ import {Link} from "react-router-dom";
 import store from "../../../redux/store";
 import axios from "../../../Services/URL";
 import PopupAcceptAction from "../../../PopupAcceptAction";
+import ActiveIcon from "../../../components/ActiveIcon";
 
 
 const useRowStyles = makeStyles({
@@ -175,7 +176,7 @@ function Row(props: CruiseData) {
                 <TableCell style={style}>{group.numberOfSeats}</TableCell>
                 <TableCell style={style}>{group.price + " pln"}</TableCell>
                 <TableCell style={style}>{group.description}</TableCell>
-                <TableCell style={style}>{group.active.toString()}</TableCell>
+                <TableCell style={style}><ActiveIcon active={group.active} /></TableCell>
             </TableRow>
             <TableRow>
                 <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>
@@ -218,7 +219,7 @@ function Row(props: CruiseData) {
                                             <TableCell align="center"
                                                        style={style}>{getParsedDate(cruise.endDate)}</TableCell>
                                             <TableCell align="center"
-                                                       style={style}>{cruise.active.toString()}</TableCell>
+                                                       style={style}><ActiveIcon active={cruise.active} /></TableCell>
                                             <TableCell align="center">
                                                 <Button className={buttonClass.root}>{t("attractions")}</Button>
                                             </TableCell>

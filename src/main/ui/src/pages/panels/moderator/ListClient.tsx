@@ -18,6 +18,7 @@ import {Button, TextField} from "@material-ui/core";
 import Autocomplete from "../../../components/Autocomplete";
 import useHandleError from "../../../errorHandler";
 import {Link} from "react-router-dom";
+import ActiveIcon from '../../../components/ActiveIcon';
 
 const useRowStyles = makeStyles({
     root: {
@@ -78,7 +79,7 @@ function Row(props: RowProps) {
             <TableCell style={style}>{row.firstName}</TableCell>
             <TableCell style={style}>{row.secondName}</TableCell>
             <TableCell style={style}>{row.email}</TableCell>
-            <TableCell style={style}>{row.active.toString()}</TableCell>
+            <TableCell style={style}><ActiveIcon active={row.active} /></TableCell>
             <TableCell style={style}>{row.accessLevels.toString()}</TableCell>
             {
                 row.accessLevels.includes('CLIENT') ? (

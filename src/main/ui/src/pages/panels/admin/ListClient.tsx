@@ -23,10 +23,10 @@ import {selectToken} from "../../../redux/slices/tokenSlice";
 import {useSnackbarQueue} from "../../snackbar";
 import store from "../../../redux/store";
 import {setChangeAccessLevelStateAccount} from "../../../redux/slices/changeAccessLevelStateSlice";
-import Autocomplete, {createFilterOptions} from '@material-ui/lab/Autocomplete';
+import Autocomplete from '../../../components/Autocomplete';
 import {refreshToken} from "../../../Services/userService";
 import useHandleError from "../../../errorHandler";
-import PopupAcceptAction from "../../../PopupAcceptAction";
+import ActiveIcon from "../../../components/ActiveIcon";
 
 interface UnblockAccountParams {
     login: string;
@@ -195,7 +195,7 @@ function Row(props: RowProps) {
                 <TableCell style={style}>{row.firstName}</TableCell>
                 <TableCell style={style}>{row.secondName}</TableCell>
                 <TableCell style={style}>{row.email}</TableCell>
-                <TableCell style={style}>{row.active.toString()}</TableCell>
+                <TableCell style={style}><ActiveIcon active={row.active} /></TableCell>
                 <TableCell style={style}>{row.accessLevels.map(item => t(item)).join(', ')}</TableCell>
 
             </TableRow>
@@ -317,7 +317,6 @@ export default function AdminListClient() {
                 <Autocomplete
                     options={accounts}
                     inputValue={searchInput}
-                    style={{width: 300}}
                     noOptionsText={t('no options')}
                     onChange={(event, value) => {
                         setSearchInput(value as string ?? '')
