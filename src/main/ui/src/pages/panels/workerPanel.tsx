@@ -95,12 +95,6 @@ export default function WorkerPanel() {
             }}
             menu={[
                 {
-                    link: '/cruises',
-                    text: t('cruises'),
-                    Icon: CruiseIcon,
-                    Component: () => <></>
-                },
-                {
                     link: '/listCruiseGroup',
                     Icon: AccountsListIcon,
                     text: t('listCruiseGroup'),
