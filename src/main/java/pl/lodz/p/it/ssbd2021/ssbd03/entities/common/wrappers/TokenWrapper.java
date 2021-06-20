@@ -18,6 +18,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.TokenWrapper
         @NamedQuery(name = "TokenWrapper.findUsed", query = "SELECT ut FROM used_tokens ut WHERE ut.used=true"),
         @NamedQuery(name = "TokenWrapper.findUnused", query = "SELECT ut FROM used_tokens ut WHERE ut.used=false"),
         @NamedQuery(name = "TokenWrapper.findByToken", query = "SELECT ut FROM used_tokens ut WHERE ut.token=:token"),
+        @NamedQuery(name = "TokenWrapper.findByAccount", query = "SELECT ut FROM used_tokens  ut WHERE ut.account=:account")
 })
 @Table(
         uniqueConstraints = {
