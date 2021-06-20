@@ -219,6 +219,7 @@ const resources = {
             "error.business.worker.confirmed": "Pracownik jest już zatwierdzony",
             "companies_nip_unique_constraint": "Firma o podanym numerze NIP znajduje się już w bazie danych",
             "companies_name_unique_constraint": "Firma o podanej nazwie znajduje się już w bazie danych",
+            "cruise.cannot.cancel.started": "Nie możesz anulować wycieczki, która się już rozpoczęła",
 
             //auth errors
             "auth.incorrect.login": "Błąd logowania",
@@ -616,6 +617,7 @@ const resources = {
             "error.business.worker.confirmed": "Worker is already confirmed",
             "companies_nip_unique_constraint": "Company with said NIP already exists in the database",
             "companies_name_unique_constraint": "Company with said name already exists in the database",
+            "cruise.cannot.cancel.started": "You cannot cancel a cruise that has started",
 
             //auth errors
             "auth.incorrect.login": "Login error",
