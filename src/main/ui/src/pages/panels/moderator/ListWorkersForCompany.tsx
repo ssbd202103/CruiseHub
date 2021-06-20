@@ -17,7 +17,7 @@ import RoundedButton from "../../../components/RoundedButton";
 import {refreshToken} from "../../../Services/userService";
 import {useSnackbarQueue} from "../../snackbar";
 import useHandleError from "../../../errorHandler";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+import Autocomplete from "../../../components/Autocomplete";
 
 const useRowStyles = makeStyles({
     root: {
@@ -128,7 +128,6 @@ export default function ModListClient() {
                 <Autocomplete
                     options={accounts}
                     inputValue={searchInput}
-                    style={{width: 300}}
                     noOptionsText={t('no options')}
                     onChange={(event, value) => {
                         setSearchInput(value as string ?? '')

@@ -13,7 +13,7 @@ import {useSelector} from "react-redux";
 import {selectDarkMode} from "../../../redux/slices/userSlice";
 import {getAllCompanies} from "../../../Services/companiesService";
 import {refreshToken} from "../../../Services/userService";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+import Autocomplete from "../../../components/Autocomplete";
 import TableContainer from "@material-ui/core/TableContainer";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
@@ -120,7 +120,6 @@ const ListOwnRatings = () => {
                 <Autocomplete
                     options={searchRatingList}
                     inputValue={searchInput}
-                    style={{width: 300}}
                     noOptionsText={t('no options')}
                     onChange={(event, value) => {
                         setSearchInput(value as string ?? '')

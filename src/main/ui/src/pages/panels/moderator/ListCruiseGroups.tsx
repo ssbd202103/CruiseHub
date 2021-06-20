@@ -10,7 +10,7 @@ import {refreshToken} from "../../../Services/userService";
 import Collapse from '@material-ui/core/Collapse';
 import {Button, TextField} from "@material-ui/core";
 import {useTranslation} from "react-i18next";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+import Autocomplete from "../../../components/Autocomplete";
 import TableContainer from "@material-ui/core/TableContainer";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
@@ -306,7 +306,6 @@ const ListCruiseGroups = () => {
             <Autocomplete
                 options={CruiseGroups}
                 inputValue={searchInput}
-                style={{width: 300}}
                 noOptionsText={t('no options')}
                 onChange={(event, value) => {
                     setSearchInput(value as string ?? '')

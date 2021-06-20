@@ -10,7 +10,7 @@ import useHandleError from "../../../errorHandler";
 import {useSelector} from "react-redux";
 import {selectDarkMode} from "../../../redux/slices/userSlice";
 import {refreshToken} from "../../../Services/userService";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+import Autocomplete from "../../../components/Autocomplete";
 import TableContainer from "@material-ui/core/TableContainer";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
@@ -132,9 +132,6 @@ const ListClientRatings = () => {
                 <Autocomplete
                     options={searchRatingList}
                     inputValue={searchInput}
-                    style={{
-                        width: 300,
-                        marginBottom: 20}}
                     noOptionsText={t('no options')}
                     onChange={(event, value) => {
                         setSearchInput(value as string ?? '')

@@ -9,7 +9,7 @@ import {useSelector} from "react-redux";
 import {selectCompany, selectDarkMode, selectLanguage} from "../../../redux/slices/userSlice";
 import {refreshToken} from "../../../Services/userService";
 import {useTranslation} from "react-i18next";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+import Autocomplete from "../../../components/Autocomplete";
 import {Button, TextField} from "@material-ui/core";
 import {useSnackbarQueue} from "../../../pages/snackbar";
 import {selectToken} from "../../../redux/slices/tokenSlice";
@@ -657,23 +657,6 @@ function Row(props: CruiseData) {
     );
 }
 
-const useAutocompleteStyles = (darkMode: boolean) => makeStyles(theme => ({
-    root: {
-        '& .MuiFormLabel-root, & input': {
-            color: `var(--${darkMode ? 'white' : 'dark'})`,
-        },
-        '& svg': {
-            fill: `var(--${darkMode ? 'white' : 'dark'})`,
-        },
-        '& .MuiOutlinedInput-notchedOutline, & .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline, & .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-            borderColor: `var(--${darkMode ? 'white' : 'dark'})`,
-        },
-        '': {
-
-        }
-    }
-}))()
-
 const ListCruiseGroups = () => {
     const [cruiseGroupL, setCruiseGroupL] = useState([]);
     const [searchInput, setSearchInput] = useState("");
@@ -720,13 +703,9 @@ const ListCruiseGroups = () => {
 
     const {t} = useTranslation()
 
-    const autocomplete = useAutocompleteStyles(darkMode)
-
-
     return (
         <div>
             <Autocomplete
-                className={autocomplete.root}
                 options={CruiseGroups}
                 inputValue={searchInput}
                 style={{width: 300, marginBottom: 16}}
