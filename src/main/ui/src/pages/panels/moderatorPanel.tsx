@@ -22,6 +22,7 @@ import ListCruiseGroup from "./moderator/ListCruiseGroups";
 import AddCompany from "./moderator/AddCompany";
 import ListClientRatings from "./moderator/ListClientRatings";
 import AttractionList from "./admin/AttractionList";
+import ModeratorHomePage from "../../components/ModeratorHomePage";
 
 export default function ModeratorPanel() {
     const {t} = useTranslation()
@@ -185,6 +186,11 @@ export default function ModeratorPanel() {
                     {
                         to: '/attractions/:uuid',
                         Component: AttractionList
+                    }
+                    ,
+                    {
+                        to: '/',
+                        Component: ModeratorHomePage
                     }
                 ]
             }
