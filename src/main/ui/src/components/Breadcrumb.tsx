@@ -38,18 +38,34 @@ export default function Breadcrumb() {
                     .filter((item, index, self) => self.indexOf(item) === index && i18n.exists(item))
                     .map((item, index, self) =>
                         <React.Fragment key={index + item}>
-                            <Link style={{display: 'block', cursor: 'pointer'}} to={item}>
-                                <Chip clickable={index !== self.length - 1}
-                                      label={t(item)}
-                                      style={{
-                                          fontFamily: "'Montserrat', sans-serif",
-                                          fontSize: '12px',
-                                          margin: '0 10px',
-                                          backgroundColor: `var(--white)`,
-                                          color: `var(--dark'})`
-                                      }}
-                                />
-                            </Link>
+                            {
+                                index !== self.length - 1 ? (
+                                    <Link style={{display: 'block', cursor: 'pointer'}} to={item}>
+                                        <Chip clickable
+                                              label={t(item)}
+                                              style={{
+                                                  fontFamily: "'Montserrat', sans-serif",
+                                                  fontSize: '12px',
+                                                  margin: '0 10px',
+                                                  backgroundColor: `var(--white)`,
+                                                  color: `var(--dark'})`
+                                              }}
+                                        />
+                                    </Link>
+                                ) : (
+                                    <Chip
+                                          label={t(item)}
+                                          style={{
+                                              fontFamily: "'Montserrat', sans-serif",
+                                              fontSize: '12px',
+                                              margin: '0 10px',
+                                              backgroundColor: `var(--white)`,
+                                              color: `var(--dark'})`
+                                          }}
+                                    />
+                                )
+                            }
+
                             {index !== self.length - 1 && <ArrowIcon fontSize="small" style={{fill: `var(--white)`}} />}
                         </React.Fragment>)
             }

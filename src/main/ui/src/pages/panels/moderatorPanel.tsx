@@ -21,6 +21,7 @@ import ListCompany from "./moderator/ListCompany";
 import ListCruiseGroup from "./moderator/ListCruiseGroups";
 import AddCompany from "./moderator/AddCompany";
 import ListClientRatings from "./moderator/ListClientRatings";
+import AttractionList from "./admin/AttractionList";
 
 export default function ModeratorPanel() {
     const {t} = useTranslation()
@@ -171,15 +172,22 @@ export default function ModeratorPanel() {
                     )
                 }
             ]}
-            otherRoutes={[
-                {
-                    to: '/company/business-workers',
-                    Component: ListWorkersForCompany
-                },
-                {
-                    to: '/accounts/ratings',
-                    Component: ListClientRatings
-                }]}
+            otherRoutes={
+                [
+                    {
+                        to: '/company/business-workers',
+                        Component: ListWorkersForCompany
+                    },
+                    {
+                        to: '/accounts/ratings',
+                        Component: ListClientRatings
+                    },
+                    {
+                        to: '/attractions/:uuid',
+                        Component: AttractionList
+                    }
+                ]
+            }
         />
     )
 }

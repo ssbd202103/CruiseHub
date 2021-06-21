@@ -223,7 +223,7 @@ function Row(props: CruiseData) {
                                             <TableCell align="center"
                                                        style={style}><ActiveIcon active={cruise.published} /></TableCell>
                                             <TableCell align="center">
-                                                <Button className={buttonClass.root}>{t("attractions")}</Button>
+                                                <Link to={`attractions/${cruise.uuid}`}><Button className={buttonClass.root}>{t("attractions")}</Button></Link>
                                             </TableCell>
                                             {cruise.published && cruise.active ?
                                                 <React.Fragment>
