@@ -52,7 +52,7 @@ public class AttractionFacadeMow extends AbstractFacade<Attraction> {
         super.create(entity);
     }
 
-    @PermitAll
+    @PermitAll //TODO zmienic permit all na roles allowed
     @Override
     public void remove(Attraction entity) throws FacadeException {
         super.remove(entity);
