@@ -33,6 +33,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.IntegrityUtils.checkForOptimisticLock;
 
 /**
  * Klasa która zarządza logiką biznesową wycieczek (rejsów)
@@ -60,7 +61,7 @@ public class CruiseManager implements CruiseManagerLocal {
 
     @RolesAllowed("addCruise")
     @Override
-    public void addCruise(Cruise cruise, UUID cruiseGroupUUID) throws BaseAppException {
+    public void addCruise(Cruise cruise, UUID cruiseGroupUUID) throws BaseAppException { //todo refactor this method
         LocalDateTime localDateTime = LocalDateTime.now();
         if (cruise.getStartDate().isBefore(localDateTime)) {
             throw new CruiseManagerException(START_DATE_BEFORE_CURRENT_DATE);
@@ -94,12 +95,11 @@ public class CruiseManager implements CruiseManagerLocal {
 
     @RolesAllowed("deactivateCruise")
     @Override
-    public void deactivateCruise(UUID uuid, Long version) throws BaseAppException {
-        Account account = accountFacade.findByLogin(securityContext.getUserPrincipal().getName());
+    public void deactivateCruise(UUID uuid, Long version) throws BaseAppException { //todo refactor this method
         Cruise cruise = cruiseFacadeMow.findByUUID(uuid);
-        if (!(cruise.getVersion() == version)) {
-            throw FacadeException.optimisticLock();
-        }
+        checkForOptimisticLock(cruise, version);
+
+        Account account = accountFacade.findByLogin(securityContext.getUserPrincipal().getName());
 
         if (!cruise.isActive()) {
             throw new CruiseManagerException(CRUISE_ALREADY_BLOCKED);
@@ -134,13 +134,13 @@ public class CruiseManager implements CruiseManagerLocal {
 
     @RolesAllowed("editCruise")
     @Override
-    public void editCruise(LocalDateTime startDate, LocalDateTime endDate, UUID uuid, Long version) throws BaseAppException {
+    public void editCruise(LocalDateTime startDate, LocalDateTime endDate, UUID uuid, Long version) throws BaseAppException { //todo refactor this method
         Cruise cruiseToEdit = cruiseFacadeMow.findByUUID(uuid);
+        checkForOptimisticLock(cruiseToEdit, version);
+
         Account account = accountFacade.findByLogin(securityContext.getUserPrincipal().getName());
 
-        if (!(version == cruiseToEdit.getVersion())) {
-            throw FacadeException.optimisticLock();
-        }
+
         if (!cruiseToEdit.isActive() || cruiseToEdit.isPublished()) {
             throw new CruiseManagerException(CANNOT_EDIT_THIS_CRUISE);
         }
@@ -196,9 +196,8 @@ public class CruiseManager implements CruiseManagerLocal {
     @Override
     public void publishCruise(long cruiseVersion, UUID cruiseUuid) throws BaseAppException {
         Cruise cruise = cruiseFacadeMow.findByUUID(cruiseUuid);
-        if (cruise.getVersion() != cruiseVersion) {
-            throw FacadeException.optimisticLock();
-        }
+        checkForOptimisticLock(cruise, cruiseVersion);
+
         cruise.setPublished(true);
         setAlterTypeAndAlterCruise(cruise);
         cruiseFacadeMow.edit(cruise);

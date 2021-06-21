@@ -97,10 +97,10 @@ export default function ClientSignUp() {
                 'Content-Type': 'application/json'
             }
 
-        }).then(res=>{
+        }).then(res => {
             setButtonPopup(false)
             history.push('/')
-            showSuccess(t('successful action'))
+            showSuccess(t('activate.your.account'))
         }).catch(error => {
             setButtonPopup(false)
             const message = error.response.data
@@ -127,6 +127,8 @@ export default function ClientSignUp() {
             !STREET_REGEX.test(street) || !POST_CODE_REGEX.test(postalCode) || !CITY_REGEX.test(city) ||
             !COUNTRY_REGEX.test(country) || !PHONE_NUMBER_REGEX.test(phoneNumber)) {
             handleError("invalid.form")
+        } else if (password != confirmPassword) {
+            handleError("passwords are not equal")
         } else {
             setButtonPopupAcceptAction(true)
         }
@@ -390,11 +392,12 @@ export default function ClientSignUp() {
                 </Popup>
                 <PopupAcceptAction
                     open={buttonPopupAcceptAction}
-                    onConfirm={()=> {
+                    onConfirm={() => {
                         setButtonPopup(true)
                         setButtonPopupAcceptAction(false)
                     }}
-                    onCancel={() => {setButtonPopupAcceptAction(false)
+                    onCancel={() => {
+                        setButtonPopupAcceptAction(false)
                     }}
                 />
 

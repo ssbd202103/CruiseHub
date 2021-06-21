@@ -4,7 +4,6 @@ export const PHONE_NUMBER_REGEX = XRegExp('^\\+?(?:[\\s\\-/\\\\]?\\d){7,15}$');
 
 export const LOGIN_REGEX = XRegExp("^\\w{3,30}$")
 export const PASSWORD_REGEX = XRegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*\\W).{8,}$")
-
 export const NAME_REGEX = XRegExp("^[\\p{L}' -]+\\.?$")
 export const COUNTRY_REGEX = XRegExp("^(?:[\\p{L}']+[- ]?)+$")
 export const CITY_REGEX = XRegExp("^(?:[\\p{L}']+[- ]?)+$")

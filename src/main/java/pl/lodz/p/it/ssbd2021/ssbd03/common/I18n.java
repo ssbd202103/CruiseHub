@@ -78,6 +78,7 @@ public class I18n {
     public static final String DATABASE_OPERATION_ERROR = "error.database.operation";
     public static final String LOGIN_RESERVED_ERROR = "error.database.loginReserved";
     public static final String EMAIL_RESERVED_ERROR = "error.database.emailReserved";
+    public static final String USER_NOT_EXISTS_ERROR = "error.database.userNotExists";
     public static final String CONSTRAINT_VIOLATION_ERROR = "error.constraintViolation";
     public static final String CONSTRAINT_POSITIVE_ERROR = "error.constraint.positive";
     public static final String CONSTRAINT_POSITIVE_OR_ZERO_ERROR = "error.constraint.positiveOrZero";

@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.IntegrityUtils;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.dto.MetadataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
@@ -30,6 +31,7 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.IntegrityUtils.checkEtagIntegrity;
 import static pl.lodz.p.it.ssbd2021.ssbd03.utils.TransactionRepeater.tryAndRepeat;
 
 /**
@@ -168,9 +170,7 @@ public class AccountController {
     @Path("/block")
     @Consumes(MediaType.APPLICATION_JSON)
     public void blockUser(@Valid BlockAccountDto blockAccountDto, @HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) @Valid String etag) throws BaseAppException {
-        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, blockAccountDto)) {
-            throw ControllerException.etagIdentityIntegrity();
-        }
+        checkEtagIntegrity(blockAccountDto, etag);
         tryAndRepeat(accountEndpoint, () -> accountEndpoint.blockUser(blockAccountDto.getLogin(), blockAccountDto.getVersion()));
     }
 
@@ -183,9 +183,7 @@ public class AccountController {
     @Path("/unblock")
     @Consumes(MediaType.APPLICATION_JSON)
     public void unblockUser(@Valid UnblockAccountDto unblockAccountDto, @HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) String etag) throws BaseAppException {
-        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, unblockAccountDto)) {
-            throw ControllerException.etagIdentityIntegrity();
-        }
+        checkEtagIntegrity(unblockAccountDto, etag);
         tryAndRepeat(accountEndpoint, () -> accountEndpoint.unblockUser(unblockAccountDto.getLogin(), unblockAccountDto.getVersion()));
     }
 
@@ -201,9 +199,7 @@ public class AccountController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public AccountDto grantAccessLevel(@Valid GrantAccessLevelDto grantAccessLevel, @HeaderParam("If-Match") String etag) throws BaseAppException {
-        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, grantAccessLevel)) {
-            throw ControllerException.etagIdentityIntegrity();
-        }
+        checkEtagIntegrity(grantAccessLevel, etag);
         return tryAndRepeat(accountEndpoint, () -> accountEndpoint.grantAccessLevel(grantAccessLevel));
     }
 
@@ -220,9 +216,7 @@ public class AccountController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public AccountDto changeAccessLevelState(@Valid ChangeAccessLevelStateDto changeAccessLevelStateDto, @HeaderParam("If-Match") String etag) throws BaseAppException {
-        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, changeAccessLevelStateDto)) {
-            throw ControllerException.etagIdentityIntegrity();
-        }
+        checkEtagIntegrity(changeAccessLevelStateDto, etag);
         return tryAndRepeat(accountEndpoint, () -> accountEndpoint.changeAccessLevelState(changeAccessLevelStateDto));
     }
 
@@ -288,10 +282,8 @@ public class AccountController {
     @ETagFilterBinding
     public OtherClientChangeDataDto changeOtherClientData(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid OtherClientChangeDataDto otherClientChangeDataDto,
                                                           @HeaderParam("If-Match") String etag) throws BaseAppException {
-        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, otherClientChangeDataDto)) {
-            throw ControllerException.etagIdentityIntegrity();
-        }
 
+        checkEtagIntegrity(otherClientChangeDataDto, etag);
         return tryAndRepeat(accountEndpoint, () -> accountEndpoint.changeOtherClientData(otherClientChangeDataDto));
     }
 
@@ -309,9 +301,7 @@ public class AccountController {
     @ETagFilterBinding
     public OtherBusinessWorkerChangeDataDto changeOtherBusinessWorkerData(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid OtherBusinessWorkerChangeDataDto otherBusinessWorkerChangeDataDto,
                                                                           @HeaderParam("If-Match") String etag) throws BaseAppException {
-        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, otherBusinessWorkerChangeDataDto)) {
-            throw ControllerException.etagIdentityIntegrity();
-        }
+        checkEtagIntegrity(otherBusinessWorkerChangeDataDto, etag);
 
         return tryAndRepeat(accountEndpoint, () -> accountEndpoint.changeOtherBusinessWorkerData(otherBusinessWorkerChangeDataDto));
     }
@@ -330,10 +320,8 @@ public class AccountController {
     @ETagFilterBinding
     public AccountDto changeOtherAccountData(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid OtherAccountChangeDataDto otherAccountChangeDataDto,
                                              @HeaderParam("If-Match") String etag) throws BaseAppException {
-        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, otherAccountChangeDataDto)) {
-            throw ControllerException.etagIdentityIntegrity();
-        }
 
+        checkEtagIntegrity(otherAccountChangeDataDto, etag);
         return tryAndRepeat(accountEndpoint, () -> accountEndpoint.changeOtherAccountData(otherAccountChangeDataDto));
     }
 
@@ -361,9 +349,7 @@ public class AccountController {
     @ETagFilterBinding
     @Consumes(MediaType.APPLICATION_JSON)
     public void confirmBusinessWorker(@Valid BlockAccountDto blockAccountDto, @HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) String etag) throws BaseAppException {
-        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, blockAccountDto)) {
-            throw ControllerException.etagIdentityIntegrity();
-        }
+        checkEtagIntegrity(blockAccountDto, etag);
         tryAndRepeat(accountEndpoint, () -> accountEndpoint.confirmBusinessWorker(blockAccountDto));
     }
 

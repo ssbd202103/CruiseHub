@@ -81,7 +81,7 @@ public class AccountFacadeMok extends AbstractFacade<Account> {
         try {
             return tq.getSingleResult();
         } catch (NoResultException e) {
-            throw FacadeException.noSuchElement();
+            throw AccountFacadeException.userNotExists(e);
         }
     }
 
@@ -93,7 +93,7 @@ public class AccountFacadeMok extends AbstractFacade<Account> {
         return tqq.getResultList();
     }
 
-    @PermitAll
+    @RolesAllowed("authenticatedUser")
     public boolean isEmailPresent(String email) {
         TypedQuery<Account> tqq = em.createNamedQuery("Account.isEmailPresent", Account.class);
         tqq.setParameter("email", email);

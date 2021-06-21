@@ -200,11 +200,11 @@ function Row(props: CruiseData) {
                                         <TableCell align="center" style={{
                                             backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                             color: `var(--${!darkMode ? 'dark' : 'white-light'}`
-                                        }}>{t("attractions")}</TableCell>
+                                        }}>{t("isPublished")}</TableCell>
                                         <TableCell align="center" style={{
                                             backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                             color: `var(--${!darkMode ? 'dark' : 'white-light'}`
-                                        }}>{t("publish")}</TableCell>
+                                        }}>{t("attractions")}</TableCell>
                                         <TableCell align="center" style={{
                                             backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                             color: `var(--${!darkMode ? 'dark' : 'white-light'}`
@@ -220,14 +220,11 @@ function Row(props: CruiseData) {
                                                        style={style}>{getParsedDate(cruise.endDate)}</TableCell>
                                             <TableCell align="center"
                                                        style={style}><ActiveIcon active={cruise.active} /></TableCell>
+                                            <TableCell align="center"
+                                                       style={style}><ActiveIcon active={cruise.published} /></TableCell>
                                             <TableCell align="center">
                                                 <Button className={buttonClass.root}>{t("attractions")}</Button>
                                             </TableCell>
-                                            {cruise.published ? "" :
-                                                <TableCell align="center">
-                                                    <Button className={buttonClass.root}>{t("publish")}</Button>
-                                                </TableCell>
-                                            }
                                             {cruise.published && cruise.active ?
                                                 <React.Fragment>
                                                     <TableCell align="center"/>

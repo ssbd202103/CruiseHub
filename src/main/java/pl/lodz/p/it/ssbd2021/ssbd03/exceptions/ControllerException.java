@@ -14,7 +14,4 @@ public class ControllerException extends BaseAppException {
         super(message);
     }
 
-    public static ControllerException etagIdentityIntegrity() throws ControllerException {
-        throw new ControllerException(I18n.ETAG_IDENTITY_INTEGRITY_ERROR);
-    }
 }

@@ -44,8 +44,7 @@ public class CruiseFacadeMow extends AbstractFacade<Cruise> {
         return em;
     }
 
-    @PermitAll  //TODO: permitall czy rolesallowed???
-    @RolesAllowed({"deactivateCruise", "editCruise", "viewCruiseReservations", "getWorkerCruiseReservations", "createReservation", "cancelReservation","publishCruise"})
+    @PermitAll
     public Cruise findByUUID(UUID uuid) throws BaseAppException {
         TypedQuery<Cruise> tq = em.createNamedQuery("Cruise.findByUUID", Cruise.class);
         tq.setParameter("uuid", uuid);

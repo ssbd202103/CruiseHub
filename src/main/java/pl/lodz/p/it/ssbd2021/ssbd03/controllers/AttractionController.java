@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.MAPPER_UUID_PARSE;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.IntegrityUtils.checkEtagIntegrity;
 import static pl.lodz.p.it.ssbd2021.ssbd03.utils.TransactionRepeater.tryAndRepeat;
 
 @Path("/attractions")
@@ -58,10 +59,8 @@ public class AttractionController {
     @Path("/edit-attraction")
     public void editAttraction(@Valid EditAttractionDto editAttractionDto,
                                @HeaderParam("If-Match") String etag) throws BaseAppException {
-        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, editAttractionDto)) {
-            throw ControllerException.etagIdentityIntegrity();
-        }
 
+        checkEtagIntegrity(editAttractionDto, etag);
         tryAndRepeat(attractionEndpoint, () -> attractionEndpoint.editAttraction(editAttractionDto));
     }
 

@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.IntegrityUtils;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.dto.MetadataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
@@ -25,6 +26,7 @@ import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.IntegrityUtils.checkEtagIntegrity;
 import static pl.lodz.p.it.ssbd2021.ssbd03.utils.TransactionRepeater.tryAndRepeat;
 
 @Path("/self")
@@ -62,9 +64,7 @@ public class AccountSelfController {
     @Path("/change-password")
     @Consumes(MediaType.APPLICATION_JSON)
     public void changeOwnPassword(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid AccountChangeOwnPasswordDto accountChangeOwnPasswordDto, @HeaderParam("If-Match") String etag) throws BaseAppException {
-        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, accountChangeOwnPasswordDto)) {
-            throw ControllerException.etagIdentityIntegrity();
-        }
+        checkEtagIntegrity(accountChangeOwnPasswordDto, etag);
         tryAndRepeat(accountEndpoint, () -> accountEndpoint.changeOwnPassword(accountChangeOwnPasswordDto));
     }
 
@@ -79,9 +79,8 @@ public class AccountSelfController {
     @Consumes(MediaType.APPLICATION_JSON)
     @ETagFilterBinding
     public void changeClientData(@Valid ClientChangeDataDto clientChangeDataDto, @HeaderParam("If-Match") String etag) throws BaseAppException {
-        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, clientChangeDataDto)) {
-            throw ControllerException.etagIdentityIntegrity();
-        }
+        checkEtagIntegrity(clientChangeDataDto, etag);
+
         tryAndRepeat(accountEndpoint, () -> accountEndpoint.changeClientData(clientChangeDataDto));
     }
 
@@ -95,9 +94,7 @@ public class AccountSelfController {
     @Consumes(MediaType.APPLICATION_JSON)
     @ETagFilterBinding
     public void changeBusinessWorkerData(@Valid BusinessWorkerChangeDataDto businessWorkerChangeDataDto, @HeaderParam("If-Match") String etag) throws BaseAppException {
-        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, businessWorkerChangeDataDto)) {
-            throw ControllerException.etagIdentityIntegrity();
-        }
+        checkEtagIntegrity(businessWorkerChangeDataDto, etag);
         tryAndRepeat(accountEndpoint, () -> accountEndpoint.changeBusinessWorkerData(businessWorkerChangeDataDto));
     }
 
@@ -111,9 +108,7 @@ public class AccountSelfController {
     @Consumes(MediaType.APPLICATION_JSON)
     @ETagFilterBinding
     public void changeModeratorData(@Valid ModeratorChangeDataDto moderatorChangeDataDto, @HeaderParam("If-Match") String etag) throws BaseAppException {
-        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, moderatorChangeDataDto)) {
-            throw ControllerException.etagIdentityIntegrity();
-        }
+        checkEtagIntegrity(moderatorChangeDataDto, etag);
         tryAndRepeat(accountEndpoint, () -> accountEndpoint.changeModeratorData(moderatorChangeDataDto));
     }
 
@@ -127,9 +122,7 @@ public class AccountSelfController {
     @Consumes(MediaType.APPLICATION_JSON)
     @ETagFilterBinding
     public void changeAdministratorData(@Valid AdministratorChangeDataDto administratorChangeDataDto, @HeaderParam("If-Match") String etag) throws BaseAppException {
-        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, administratorChangeDataDto)) {
-            throw ControllerException.etagIdentityIntegrity();
-        }
+        checkEtagIntegrity(administratorChangeDataDto, etag);
         tryAndRepeat(accountEndpoint, () -> accountEndpoint.changeAdministratorData(administratorChangeDataDto));
     }
 
@@ -157,9 +150,7 @@ public class AccountSelfController {
     @Consumes(MediaType.APPLICATION_JSON)
     @ETagFilterBinding
     public void changeMode(@Valid ChangeModeDto changeModeDto, @HeaderParam("If-Match") String etag) throws BaseAppException {
-        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, changeModeDto)) {
-            throw ControllerException.etagIdentityIntegrity();
-        }
+        checkEtagIntegrity(changeModeDto, etag);
         tryAndRepeat(accountEndpoint, () -> accountEndpoint.changeMode(changeModeDto));
     }
 
@@ -174,9 +165,7 @@ public class AccountSelfController {
     @Consumes(MediaType.APPLICATION_JSON)
     @ETagFilterBinding
     public void changeLanguage(@Valid ChangeLanguageDto changeLanguageDto, @HeaderParam("If-Match") String etag) throws BaseAppException {
-        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, changeLanguageDto)) {
-            throw ControllerException.etagIdentityIntegrity();
-        }
+        checkEtagIntegrity(changeLanguageDto, etag);
         tryAndRepeat(accountEndpoint, () -> accountEndpoint.changeLanguage(changeLanguageDto));
     }
 

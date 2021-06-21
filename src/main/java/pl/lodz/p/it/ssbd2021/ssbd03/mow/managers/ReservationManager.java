@@ -1,7 +1,5 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.managers;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
@@ -12,16 +10,14 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Reservation;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.CruiseManagerException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.*;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.BusinessWorkerWithCompanyDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters.AccountMapper;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.NoSeatsAvailableException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.AccountFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.ReservationFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
-import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
 import javax.ejb.TransactionAttribute;
@@ -37,6 +33,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.IntegrityUtils.checkForOptimisticLock;
 
 /**
  * Klasa która zarządza logiką biznesową rezerwacji
@@ -76,19 +73,19 @@ public class ReservationManager implements ReservationManagerLocal {
 
     @RolesAllowed("getWorkerCruiseReservations")
     @Override
-    public List<Reservation> getWorkerCruiseReservations(UUID cruise_uuid) throws BaseAppException {
+    public List<Reservation> getWorkerCruiseReservations(UUID cruise_uuid) throws BaseAppException { //todo refactor this method
         Cruise cruise = cruiseFacadeMow.findByUUID(cruise_uuid);
         Account account = accountFacade.findByLogin(securityContext.getUserPrincipal().getName());
         try {
             Optional<AccessLevel> accessLevelBusinessWorker = account.getAccessLevels().stream().filter(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.BUSINESS_WORKER).findFirst();
-            if(accessLevelBusinessWorker.isEmpty()) {
+            if (accessLevelBusinessWorker.isEmpty()) {
                 throw new CruiseManagerException(CANNOT_FIND_ACCESS_LEVEL);
             }
             BusinessWorker businessWorker = (BusinessWorker) accessLevelBusinessWorker.get();
-            if(cruise.getCruisesGroup().getCompany().getNIP() != businessWorker.getCompany().getNIP()) {
+            if (cruise.getCruisesGroup().getCompany().getNIP() != businessWorker.getCompany().getNIP()) {
                 throw new CruiseManagerException(NOT_YOURS_CRUISE);
             }
-        } catch (ClassCastException e)  {
+        } catch (ClassCastException e) {
             throw new CruiseManagerException(CANNOT_FIND_ACCESS_LEVEL);
         }
         List<Reservation> reservations = reservationFacadeMow.findCruiseReservations(cruise);
@@ -107,15 +104,14 @@ public class ReservationManager implements ReservationManagerLocal {
 
     @RolesAllowed("createReservation")
     @Override
-    public void createReservation(long version, UUID cruiseUUID, long numberOfSeats) throws BaseAppException {
+    public void createReservation(long version, UUID cruiseUUID, long numberOfSeats) throws BaseAppException { //todo refactor this
         Cruise cruise = cruiseFacadeMow.findByUUID(cruiseUUID);
+        checkForOptimisticLock(cruise, version);
+
         Account acc = accountFacadeMow.findByLogin(context.getUserPrincipal().getName());
         Client client = (Client) acc.getAccessLevels().stream().filter(accessLevel ->
                 accessLevel.getAccessLevelType().equals(AccessLevelType.CLIENT)).collect(Collectors.toList()).get(0);
 
-        if (cruise.getVersion() != version) {
-            throw FacadeException.optimisticLock();
-        }
         if (numberOfSeats > getAvailableSeats(cruiseUUID)) {
             throw new NoSeatsAvailableException(I18n.NO_SEATS_AVAILABLE);
         }

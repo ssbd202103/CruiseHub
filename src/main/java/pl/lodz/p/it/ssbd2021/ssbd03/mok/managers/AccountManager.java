@@ -37,6 +37,7 @@ import java.util.stream.Stream;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.IntegrityUtils.checkForOptimisticLock;
 
 /**
  * Klasa która zarządza logiką biznesową kont
@@ -100,9 +101,8 @@ public class AccountManager extends BaseManagerMok implements AccountManagerLoca
     @Override
     public Account grantModeratorAccessLevel(String accountLogin, long accountVersion) throws BaseAppException {
         Account account = accountFacade.findByLogin(accountLogin);
-        if (!(account.getVersion() == accountVersion)) {
-            throw FacadeException.optimisticLock();
-        }
+        checkForOptimisticLock(account, accountVersion);
+
         if (account.getAccessLevels().stream().anyMatch(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.MODERATOR)) {
             throw new AccountManagerException(ACCESS_LEVEL_ALREADY_ASSIGNED_ERROR);
         }
@@ -126,9 +126,8 @@ public class AccountManager extends BaseManagerMok implements AccountManagerLoca
     @Override
     public Account grantAdministratorAccessLevel(String accountLogin, long accountVersion) throws BaseAppException {
         Account account = accountFacade.findByLogin(accountLogin);
-        if (!(account.getVersion() == accountVersion)) {
-            throw FacadeException.optimisticLock();
-        }
+        checkForOptimisticLock(account, accountVersion);
+
         if (account.getAccessLevels().stream().anyMatch(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.ADMINISTRATOR)) {
             throw new AccountManagerException(ACCESS_LEVEL_ALREADY_ASSIGNED_ERROR);
         }
@@ -145,9 +144,7 @@ public class AccountManager extends BaseManagerMok implements AccountManagerLoca
     public Account changeAccessLevelState(String accountLogin, AccessLevelType accessLevelType,
                                           boolean enabled, long accountVersion) throws BaseAppException {
         Account account = accountFacade.findByLogin(accountLogin);
-        if (!(account.getVersion() == accountVersion)) {
-            throw FacadeException.optimisticLock();
-        }
+        checkForOptimisticLock(account, accountVersion);
 
         Optional<AccessLevel> accountAccessLevel = account.getAccessLevels().stream()
                 .filter(accessLevel -> accessLevel.getAccessLevelType() == accessLevelType).findFirst();
@@ -238,9 +235,8 @@ public class AccountManager extends BaseManagerMok implements AccountManagerLoca
     @Override
     public Account blockUser(String login, long version) throws BaseAppException {
         Account account = this.accountFacade.findByLogin(login);
-        if (!(account.getVersion() == version)) {
-            throw FacadeException.optimisticLock();
-        }
+        checkForOptimisticLock(account, version);
+
         account.setActive(false);
         setUpdatedMetadata(account);
         accountFacade.edit(account);
@@ -349,9 +345,7 @@ public class AccountManager extends BaseManagerMok implements AccountManagerLoca
             throw new AccountManagerException(ACCOUNT_NOT_VERIFIED_ERROR);
         }
 
-        if (!(account.getVersion() == claims.get("version").asLong())) {
-            throw FacadeException.optimisticLock();
-        }
+        checkForOptimisticLock(account, claims.get("version").asLong());
 
         account.setPasswordHash(passwordHash);
 
@@ -419,9 +413,8 @@ public class AccountManager extends BaseManagerMok implements AccountManagerLoca
     @Override
     public Account unblockUser(String unblockedUserLogin, long version) throws BaseAppException {
         Account account = this.accountFacade.findByLogin(unblockedUserLogin);
-        if (!(account.getVersion() == version)) {
-            throw FacadeException.optimisticLock();
-        }
+        checkForOptimisticLock(account, version);
+
         account.setActive(true);
         setUpdatedMetadata(account);
         return account;
@@ -432,9 +425,7 @@ public class AccountManager extends BaseManagerMok implements AccountManagerLoca
     public Account changeOtherClientData(String login, String phoneNumber, Address addr, long version) throws BaseAppException {
         Account targetAccount = accountFacade.findByLogin(login);
         Client targetClient = (Client) getAccessLevel(targetAccount, AccessLevelType.CLIENT);
-        if (!(targetClient.getVersion() == version)) {
-            throw FacadeException.optimisticLock();
-        }
+        checkForOptimisticLock(targetClient, version);
 
         targetClient.setPhoneNumber(phoneNumber);
         Address targetAddress = targetClient.getHomeAddress();
@@ -462,10 +453,8 @@ public class AccountManager extends BaseManagerMok implements AccountManagerLoca
     @RolesAllowed("changeOtherAccountData")
     public Account changeOtherAccountData(Account updatedAccount) throws BaseAppException {
         Account targetAccount = accountFacade.findByLogin(updatedAccount.getLogin());
+        checkForOptimisticLock(targetAccount, updatedAccount.getVersion());
 
-        if (!(targetAccount.getVersion() == (updatedAccount.getVersion()))) {
-            throw FacadeException.optimisticLock();
-        }
         targetAccount.setFirstName(updatedAccount.getFirstName());
         targetAccount.setSecondName(updatedAccount.getSecondName());
 
@@ -478,9 +467,8 @@ public class AccountManager extends BaseManagerMok implements AccountManagerLoca
     public Account changeOtherBusinessWorkerData(String login, String phoneNumber, long version) throws BaseAppException {
         Account targetAccount = accountFacade.findByLogin(login);
         BusinessWorker targetBusinessWorker = (BusinessWorker) getAccessLevel(targetAccount, AccessLevelType.BUSINESS_WORKER);
-        if (!(targetBusinessWorker.getVersion() == version)) {
-            throw FacadeException.optimisticLock();
-        }
+        checkForOptimisticLock(targetBusinessWorker, version);
+
         targetBusinessWorker.setPhoneNumber(phoneNumber);
         setUpdatedMetadata(targetBusinessWorker);
         return targetAccount;
@@ -505,10 +493,9 @@ public class AccountManager extends BaseManagerMok implements AccountManagerLoca
         }
 
         Account account = this.accountFacade.findByLogin(login);
+        checkForOptimisticLock(account, claims.get("version").asLong());
 
-        if (!(account.getVersion() == claims.get("version").asLong())) {
-            throw FacadeException.optimisticLock();
-        }
+
         String newEmail = claims.get("email").asString();
         if (this.accountFacade.isEmailPresent(newEmail)) {
             throw new AccountManagerException(EMAIL_RESERVED_ERROR);
@@ -544,9 +531,8 @@ public class AccountManager extends BaseManagerMok implements AccountManagerLoca
     }
 
     private void setAccountChanges(Account target, Account from) throws BaseAppException {
-        if (!(target.getVersion() == from.getVersion())) {
-            throw FacadeException.optimisticLock();
-        }
+        checkForOptimisticLock(target, from.getVersion());
+
         target.setFirstName(from.getFirstName());
         target.setSecondName(from.getSecondName());
     }
@@ -556,10 +542,7 @@ public class AccountManager extends BaseManagerMok implements AccountManagerLoca
     @Override
     public void changeClientData(Account fromAccount) throws BaseAppException {
         Account targetAccount = accountFacade.findByLogin(fromAccount.getLogin());
-
-        if (!(fromAccount.getVersion() == targetAccount.getVersion())) {
-            throw FacadeException.optimisticLock();
-        }
+        checkForOptimisticLock(fromAccount, targetAccount.getVersion());
 
         setAccountChanges(targetAccount, fromAccount);
 
@@ -577,10 +560,7 @@ public class AccountManager extends BaseManagerMok implements AccountManagerLoca
     @Override
     public void changeBusinessWorkerData(Account fromAccount) throws BaseAppException {
         Account targetAccount = accountFacade.findByLogin(fromAccount.getLogin());
-
-        if (!(fromAccount.getVersion() == targetAccount.getVersion())) {
-            throw FacadeException.optimisticLock();
-        }
+        checkForOptimisticLock(fromAccount, targetAccount.getVersion());
 
         setAccountChanges(targetAccount, fromAccount);
 
@@ -607,10 +587,7 @@ public class AccountManager extends BaseManagerMok implements AccountManagerLoca
     @Override
     public void changeModeratorData(Account fromAccount) throws BaseAppException {
         Account targetAccount = accountFacade.findByLogin(fromAccount.getLogin());
-
-        if (!(fromAccount.getVersion() == targetAccount.getVersion())) {
-            throw FacadeException.optimisticLock();
-        }
+        checkForOptimisticLock(fromAccount, targetAccount.getVersion());
 
         setAccountChanges(targetAccount, fromAccount);
         Moderator targetModerator = (Moderator) getAccessLevel(targetAccount, AccessLevelType.MODERATOR);
@@ -621,10 +598,7 @@ public class AccountManager extends BaseManagerMok implements AccountManagerLoca
     @Override
     public void changeAdministratorData(Account fromAccount) throws BaseAppException {
         Account targetAccount = accountFacade.findByLogin(fromAccount.getLogin());
-
-        if (!(fromAccount.getVersion() == targetAccount.getVersion())) {
-            throw FacadeException.optimisticLock();
-        }
+        checkForOptimisticLock(fromAccount, targetAccount.getVersion());
 
         setAccountChanges(targetAccount, fromAccount);
 
@@ -678,10 +652,7 @@ public class AccountManager extends BaseManagerMok implements AccountManagerLoca
     @Override
     public void changeOwnPassword(String login, long version, String oldPassword, String newPassword) throws BaseAppException {
         Account account = accountFacade.findByLogin(login);
-
-        if (!(account.getVersion() == version)) {
-            throw FacadeException.optimisticLock();
-        }
+        checkForOptimisticLock(account, version);
 
         if (!account.getPasswordHash().equals(DigestUtils.sha256Hex(oldPassword))) {
             throw new AccountManagerException(PASSWORDS_DONT_MATCH_ERROR);
@@ -700,9 +671,8 @@ public class AccountManager extends BaseManagerMok implements AccountManagerLoca
     public void confirmBusinessWorker(String login, long version) throws BaseAppException {
         Account account = accountFacade.findByLogin(login);
         BusinessWorker worker = (BusinessWorker) getAccessLevel(account, AccessLevelType.BUSINESS_WORKER);
-        if (!(worker.getVersion() == version)) {
-            throw FacadeException.optimisticLock();
-        }
+        checkForOptimisticLock(worker, version);
+
         if (worker.isConfirmed()) {
             throw new AccountManagerException(BUSINESS_WORKER_CONFIRMED);
         }
@@ -713,10 +683,7 @@ public class AccountManager extends BaseManagerMok implements AccountManagerLoca
     @RolesAllowed("authenticatedUser")
     public void changeMode(String login, boolean newMode, long version) throws BaseAppException {
         Account account = accountFacade.findByLogin(login);
-
-        if (!(account.getVersion() == version)) {
-            throw FacadeException.optimisticLock();
-        }
+        checkForOptimisticLock(account, version);
 
         account.setDarkMode(newMode);
         setUpdatedMetadata(account);
@@ -827,10 +794,7 @@ public class AccountManager extends BaseManagerMok implements AccountManagerLoca
     @Override
     public void changeLanguage(String login, long version) throws BaseAppException {
         Account account = accountFacade.findByLogin(login);
-
-        if (!(account.getVersion() == version)) {
-            throw FacadeException.optimisticLock();
-        }
+        checkForOptimisticLock(account, version);
 
         if (account.getLanguageType().getName() == LanguageType.EN) {
             account.setLanguageType(accountFacade.getLanguageTypeWrapperByLanguageType(LanguageType.PL));

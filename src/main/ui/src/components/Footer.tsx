@@ -16,7 +16,7 @@ function Footer() {
             <div style={{
                 fontFamily: '"Montserrat", sans-serrif',
                 fontSize: '1.5rem', 
-                color: 'var(--white)'}}>©{new Date(Date.now()).getFullYear()}</div>
+                color: 'var(--white)'}}>© {new Date(Date.now()).getFullYear()}</div>
         </Box>
     )
 }

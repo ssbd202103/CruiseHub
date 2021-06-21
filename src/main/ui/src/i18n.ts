@@ -40,6 +40,7 @@ const resources = {
             'reserve': "Zarezerwuj",
             "reservations": "Rezerwacje",
             "publish": "Opublikuj",
+            "isPublished": "Opublikowana",
             'choose another date': 'Wybierz inną datę',
             'no dates': 'Nie ma innych dat',
             //signin
@@ -64,6 +65,7 @@ const resources = {
             "countryExample": "Polska",
             "phoneNumber": "Numer telefonu",
             "phoneNumberExample": "+48 507 422 550",
+            "activate.your.account": "Konto zostało utworzone! Wysłaliśmy Ci maila w celu potwierdzenia Twojego konta",
             //signup.client
             "signup.client.subtitle": "Zostań członkiem największej przygody w Twoim życiu",
             "i am a business worker": "Jestem pracownikiem firmy",
@@ -138,7 +140,7 @@ const resources = {
             "cancel reservation btn": "Anuluj rezerwację",
             //panels.ModeratorPanel
             "business workers": "Pracownicy firmy",
-            "search business workers": "Szukaj pracowników",
+            "search business workers": "Wyszukaj pracowników",
             "company name": "Nazwa firmy",
             "company phone number": " Numer telefonu firmy",
             "Manage business workers": "Zarządzaj pracownikami firm",
@@ -204,7 +206,8 @@ const resources = {
             "error.token.invalidate": "Niepoprawny token",
             "error.token.alreadyUsedError": "Ten link został już wcześniej użyty",
             "error.database.loginReserved": "Podany login jest juz użyty",
-            "error.database.emailReserved": "Podany email jest już użyty",
+            "error.database.emailReserved": "Podany e-mail jest już użyty",
+            "error.database.userNotExists": "Konto o podanym loginie nie istnieje",
             "error.constraintViolation": "Podane dane są niepoprawne",
             "error.constraint.positive": "Podana liczba musi być dodatnia",
             "error.constraint.positiveOrZero": "Podana wartość musi być większa lub równa 0",
@@ -276,7 +279,7 @@ const resources = {
             "/reset/resetSomebodyPassword": "Resetowanie hasła konta",
             "/verify/accountVerification": "Weryfikacja",
             "/accounts/change_access_level_state": "Zmień stan poziomu dostępu",
-            'accept.action': 'Czy chcesz wykonać tę akcję',
+            'accept.action': 'Czy chcesz wykonać tę akcję?',
             '/accounts/resetSomebodyPassword': 'Resetowanie hasła',
             "/addCruiseGroup": "Dodaj grupę wycieczek",
             "/addCruise": "Dodaj wycieczkę",
@@ -291,6 +294,7 @@ const resources = {
 
             "update": "Odśwież",
             "fill.login.password.fields": "Pola login oraz haslo muszą być wypełnione",
+            "fill.login.field": "Pole z loginem musi być wypełnione",
             "error.unauthorized": "Token sesyjny prawdopodobnie wygasł, zaloguj się ponownie",
             'token.missing': 'Brak tokenu',
             'redirect in': 'Przekierowanie na główną stronę przez',
@@ -300,7 +304,7 @@ const resources = {
             'UPDATE': 'Edycja',
             'INSERT': 'Wstawienie',
             'DELETE': 'Wycofanie',
-            'delete': 'wycofuj',
+            'delete': 'Wycofaj',
 
             // mięsiące
             'JANUARY': 'Styczeń',
@@ -341,7 +345,7 @@ const resources = {
             'no description': 'Nie ma żadnego opisu',
             'attractions': 'Atrakcje',
             'no attractions': 'Nie ma żadnych atrakcji',
-            'take': 'Weżmij',
+            'take': 'Weź',
             'opinions': 'Opinie',
             "search cruiseGroup": "Wyszukaj grupę",
             "seats": "Liczba miejsc",
@@ -447,6 +451,7 @@ const resources = {
             'reserve': "Reserve",
             "reservations": "Reservations",
             "publish": "Publish",
+            "isPublished": "Published",
             'choose another date': 'Choose another date',
             'no dates': 'There are no another dates',
             //signin
@@ -471,6 +476,7 @@ const resources = {
             "countryExample": "England",
             "phoneNumber": "Phone number",
             "phoneNumberExample": "+44 507 422 550",
+            "activate.your.account": "You signed up successfully! We've sent you an email in order to confirm your account",
             //signup.client
             "signup.client.subtitle": "Participate in the biggest adventure in your life",
             "i am a business worker": "I'm a business worker",
@@ -608,6 +614,7 @@ const resources = {
             "error.token.alreadyUsedError": "This link has already been used before",
             "error.database.loginReserved": "Given login is already in use",
             "error.database.emailReserved": "Given email is already in use",
+            "error.database.userNotExists": "Account with given login does not exist",
             "error.constraintViolation": "Incorrect data",
             "error.constraint.positive": "Given number must be positive",
             "error.constraint.positiveOrZero": "Given value must be greater or equal to zero",
@@ -692,6 +699,7 @@ const resources = {
             'no': 'No',
             "update": "Refresh",
             "fill.login.password.fields": "Fill in login and password fields",
+            "fill.login.field": "Fill in the login field",
             "error.unauthorized": "Session token is probably expired, please login one more time",
             'token.missing': 'Token is missing',
             'redirect in': 'Redirect to the main page in',

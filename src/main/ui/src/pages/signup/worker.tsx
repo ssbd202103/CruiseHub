@@ -15,16 +15,7 @@ import {useEffect, useState} from "react";
 import axios from "../../Services/URL";
 import Recaptcha from "react-recaptcha";
 import Popup from "../../PopupRecaptcha";
-import {useSelector} from "react-redux";
-import {
-    CITY_REGEX, COUNTRY_REGEX,
-    EMAIL_REGEX,
-    LOGIN_REGEX,
-    NAME_REGEX,
-    NUM_REGEX,
-    PASSWORD_REGEX,
-    PHONE_NUMBER_REGEX, POST_CODE_REGEX, STREET_REGEX
-} from "../../regexConstants";
+import {EMAIL_REGEX, LOGIN_REGEX, NAME_REGEX, PASSWORD_REGEX, PHONE_NUMBER_REGEX} from "../../regexConstants";
 import {useSnackbarQueue} from "../snackbar";
 import i18n from "i18next";
 import useHandleError from "../../errorHandler";
@@ -82,10 +73,10 @@ export default function WorkerSignUp() {
             headers: {
                 'Content-Type': 'application/json'
             }
-        }).then(res=>{
+        }).then(res => {
             setButtonPopup(false)
             history.push('/')
-            showSuccess(t('successful action'))
+            showSuccess(t('activate.your.account'))
         }).catch(error => {
             setButtonPopup(false)
             const message = error.response.data
@@ -113,13 +104,12 @@ export default function WorkerSignUp() {
 
         if (!LOGIN_REGEX.test(login) || !PASSWORD_REGEX.test(password) || !NAME_REGEX.test(firstName) ||
             !NAME_REGEX.test(secondName) || !EMAIL_REGEX.test(email) || !PHONE_NUMBER_REGEX.test(phoneNumber)) {
-
             handleError("invalid.form")
-
+        } else if (password != confirmPassword) {
+            handleError("passwords are not equal")
         } else {
             setButtonPopupAcceptAction(true)
         }
-
     }
 
 
@@ -328,11 +318,12 @@ export default function WorkerSignUp() {
                 </Popup>
                 <PopupAcceptAction
                     open={buttonPopupAcceptAction}
-                    onConfirm={()=> {
+                    onConfirm={() => {
                         setButtonPopup(true)
                         setButtonPopupAcceptAction(false)
                     }}
-                    onCancel={() => {setButtonPopupAcceptAction(false)
+                    onCancel={() => {
+                        setButtonPopupAcceptAction(false)
                     }}
                 />
                 <Link to="client">

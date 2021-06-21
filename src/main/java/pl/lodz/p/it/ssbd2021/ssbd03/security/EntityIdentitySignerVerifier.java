@@ -59,11 +59,11 @@ public class EntityIdentitySignerVerifier {
     /**
      * Metoda weryfikująca ETag z encją w celu sprawdzenia czy się zgadzają
      *
-     * @param tag    Wartość ETagu
      * @param entity Encja
+     * @param tag    Wartość ETagu
      * @return Zwracanie wartości reprezentującej czy encja i ETag się zgadzają
      */
-    public static boolean verifyEntityIntegrity(String tag, SignableEntity entity) {
+    public static boolean verifyEntityIntegrity(SignableEntity entity, String tag) {
         try {
             final String header = JWSObject.parse(tag).getPayload().toString();
             final String signableEntityPayload = entity.getSignablePayload();

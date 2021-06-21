@@ -20,7 +20,7 @@ public class ETagTest {
     void verifyEtag_SUCCESS() throws ETagException {
         List<TestAccountDto> accounts = getSampleAccounts();
         String etag = EntityIdentitySignerVerifier.calculateEntitySignature(accounts.get(0));
-        assertTrue(EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, accounts.get(0)));
+        assertTrue(EntityIdentitySignerVerifier.verifyEntityIntegrity(accounts.get(0), etag));
 
     }
 
@@ -29,7 +29,7 @@ public class ETagTest {
         List<TestAccountDto> accounts = getSampleAccounts();
         String etag = EntityIdentitySignerVerifier.calculateEntitySignature(accounts.get(0));
         accounts.get(0).setEmail("andrzej.konieczny@gmail.com");
-        assertFalse(EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, accounts.get(0)));
+        assertFalse(EntityIdentitySignerVerifier.verifyEntityIntegrity(accounts.get(0), etag));
 
     }
 

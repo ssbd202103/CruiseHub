@@ -80,17 +80,19 @@ function Row(props: RowProps) {
             <TableCell style={style}>{row.secondName}</TableCell>
             <TableCell style={style}>{row.email}</TableCell>
             <TableCell style={style}><ActiveIcon active={row.active} /></TableCell>
-            <TableCell style={style}>{row.accessLevels.toString()}</TableCell>
+            <TableCell style={style}>{row.accessLevels.map(item => t(item)).join(', ')}</TableCell>
             {
                 row.accessLevels.includes('CLIENT') ? (
-                    <Link to="/accounts/ratings">
-                        <TableCell style={style}>
-                            <Button
-                                onClick={() => sessionStorage.setItem("login", row.login)}
-                                className={buttonClass.root}>{t("ratings")}
-                            </Button>
-                        </TableCell>
-                    </Link>
+                    <TableCell style={style}>
+                        <Link to="/accounts/ratings">
+                            <TableCell style={style}>
+                                <Button
+                                    onClick={() => sessionStorage.setItem("login", row.login)}
+                                    className={buttonClass.root}>{t("ratings")}
+                                </Button>
+                            </TableCell>
+                        </Link>
+                    </TableCell>
                 ) : ""
             }
         </TableRow>
