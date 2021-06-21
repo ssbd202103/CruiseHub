@@ -177,8 +177,6 @@ function Row(props: CruiseData) {
         getCruisesForCruiseGroup(group.uuid)
             .then(res => {
                 setCruises(res.data)
-                console.log(cruises)
-                console.log(res.data)
                 refreshToken();
             })
             .catch(error => {
@@ -193,8 +191,6 @@ function Row(props: CruiseData) {
         getCruisesForCruiseGroup(group.uuid)
             .then(res => {
                 setCruises(res.data)
-                console.log(cruises)
-                console.log(res.data)
                 refreshToken();
             })
             .catch(error => {
@@ -304,12 +300,11 @@ function Row(props: CruiseData) {
                                             <TableCell align="center">
                                                 <Link to={`attractions/${cruise.uuid}`}><Button className={buttonClass.root}>{t("attractions")}</Button></Link>
                                             </TableCell>
-                                            {cruise.published && cruise.active ?
                                                 <React.Fragment>
-                                                    <TableCell align="center"/>
                                                     <TableCell align="center">
                                                     <RoundedButton
                                                         color="pink"
+                                                        disabled={!(cruise.published && cruise.active)}
                                                         className={buttonClass.root}
                                                         onClick={() => {
                                                             setDeactivateCruise({
@@ -324,8 +319,7 @@ function Row(props: CruiseData) {
                                                         {t("deactivate")}
                                                     </RoundedButton>
                                                 </TableCell>
-                                              </React.Fragment>: ""
-                                            }
+                                              </React.Fragment>
                                         </TableRow>
                                     ))}
                                 </TableBody>
