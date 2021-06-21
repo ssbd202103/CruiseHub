@@ -44,3 +44,13 @@
 .menu-dark * {
     color: var(--dark);
 }
+.panel_page{
+    white-space: pre-line;
+    font-family: "Montserrat", sans-serif;
+    font-size: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10%;
+    text-align: center;
+}

@@ -25,6 +25,7 @@ import ListReservationsForCruise from "./admin/ListReservationsForCruise";
 import ListReservationsForWorker from "./worker/ListReservationsForWokrersCruise";
 import ChangeCruiseGroup from "./worker/ChangeCruiseGroup"
 import AttractionList from "./worker/AttractionList";
+import WorkerHomePage from "../../components/WorkerHomePage";
 
 
 export default function WorkerPanel() {
@@ -160,7 +161,13 @@ export default function WorkerPanel() {
                     to: '/attractions/:uuid/:published',
                     Component: AttractionList
                 }
+                ,
+                {
+                    to: '/',
+                    Component: WorkerHomePage
+                }
             ]}
+
         />
     )
 }

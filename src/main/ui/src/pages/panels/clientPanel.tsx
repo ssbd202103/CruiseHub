@@ -18,6 +18,7 @@ import {refreshToken} from "../../Services/userService";
 import useHandleError from "../../errorHandler";
 import ListOwnRatings from "./client/ListOwnRatings";
 import ListSelfReservations from "./client/ListSelfReservations";
+import ClientHomePage from "../../components/ClientHomePage";
 
 export default function ClientPanel() {
     const {t} = useTranslation()
@@ -167,6 +168,12 @@ export default function ClientPanel() {
                     )
                 }
             ]}
+            otherRoutes={[
+            {
+                to: '/profile',
+                Component: ClientHomePage
+            }
+           ] }
         />
     )
 }

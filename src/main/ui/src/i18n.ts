@@ -411,6 +411,11 @@ const resources = {
             'no ratings': 'Nie ma żadnych ocen',
             'unknown error': 'Nieznany błąd',
             "/unconfirmed-business-workers": "Zarządzaj pracownikami",
+            "adminHomePage": "Witaj w panelu administracyjnym.\nW tym panelu możesz zarządzać użytkownikami oraz grupami wycieczek",
+            "moderatorHomePage":"Witaj w panelu moderatora.\nW tym panelu możesz przeglądać użytkowników i grupy wycieczek, oraz zarządzać firmami i pracownikami",
+            "clientHomePage": "Witaj w panelu klienta.\nW tym panelu możesz przeglądać swoje rezerwacje wycieczek oraz oceny dla wycieczek",
+            "business_workerHomePage":"Witaj w panelu pracownika firmy.\nW tym panelu możesz przeglądać, dodawać oraz modyfikować wycieczki i grupy wycieczek",
+
         }
     },
     EN: {
@@ -815,6 +820,11 @@ const resources = {
             'no ratings': 'There are no ratings',
             'unknown error': 'Unknown error',
             "/unconfirmed-business-workers": "Manage workers",
+            "adminHomePage": "Welcome to admin panel.\nIn here, you can manage accounts and cruise groups",
+            "moderatorHomePage":"Welcome to moderator panel.\nIn here, you can list clients and cruise groups, and manage companies and workers",
+            "clientHomePage": "Welcome to client panel.\nIn here, you can view your cruise reservations and your rating of crusies",
+            "business_workerHomePage":"Wlecome to worker panel.\nIn here, you can view, add and edit cruises and crusies groups for your company",
+
         }
     }
 }

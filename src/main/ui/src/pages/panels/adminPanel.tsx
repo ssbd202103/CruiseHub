@@ -22,6 +22,7 @@ import useHandleError from "../../errorHandler";
 import ListCruiseGroup from "./admin/ListCruiseGroupsForAdmin";
 import ListReservationsForCruise from "./admin/ListReservationsForCruise";
 import AttractionList from "./admin/AttractionList";
+import AdminHomePage from "../../components/AdminHomePage"
 export default function AdminPanel() {
     const {t} = useTranslation()
     const handleError = useHandleError()
@@ -161,6 +162,11 @@ export default function AdminPanel() {
                 {
                     to: '/attractions/:uuid',
                     Component: AttractionList
+                }
+                ,
+                {
+                    to: '/',
+                    Component: AdminHomePage
                 }
             ]}
         />
