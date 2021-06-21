@@ -54,6 +54,7 @@ const RequestPasswordReset = () => {
     return (
         <AuthLayout>
             <DarkedTextField
+                colorIgnored
                 label={t("login") + ' *'}
                 placeholder={t("login")}
                 className={styles.input}
@@ -73,7 +74,7 @@ const RequestPasswordReset = () => {
             />
             <RoundedButton
                 onClick={resetPassword}
-                style={{width: '100%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
+                style={{width: '50%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
                 color="pink"
             >{t("sendEmail")}</RoundedButton>
         </AuthLayout>
