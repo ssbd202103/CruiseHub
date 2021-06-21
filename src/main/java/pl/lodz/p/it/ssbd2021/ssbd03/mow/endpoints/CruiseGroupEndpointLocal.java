@@ -44,9 +44,9 @@ public interface CruiseGroupEndpointLocal extends TransactionalEndpoint {
     /**
      * Metoda odpowiedzialna za wywołanie metody odpowiedzialnej za deaktywacje grupy wycieczek
      *
-     * @param uuid
-     * @param version
-     * @throws BaseAppException
+     * @param uuid uuid grupy wyceczek do deaktywacji
+     * @param version wersjaq grupy wyceczek do deaktywacji
+     * @throws BaseAppException Bazowy wyjątek aplikacji
      */
     void deactivateCruiseGroup(UUID uuid, Long version) throws BaseAppException;
 

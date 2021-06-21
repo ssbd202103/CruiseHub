@@ -142,7 +142,6 @@ function Row(props: CruiseData) {
     }
 
     const reload = async () => {
-        console.log("Someone clicked me")
         await getCruisesForCruiseGroup(group.uuid)
             .then(res => {
                 setCruises(res.data)
@@ -156,7 +155,6 @@ function Row(props: CruiseData) {
     }
 
     const handleSetOpen = async () => {
-        console.log("Someone clicked me")
         setOpen(state => !state);
         await getCruisesForCruiseGroup(group.uuid)
             .then(res => {
@@ -184,6 +182,7 @@ function Row(props: CruiseData) {
                 </TableCell>
                 <TableCell component="th" scope="row" style={style}>{group.name}</TableCell>
                 <TableCell style={style}>{group.company.name}</TableCell>
+                <TableCell style={style}>{group.uuid}</TableCell>
                 <TableCell style={style}>{group.numberOfSeats}</TableCell>
                 <TableCell style={style}>{group.price + " pln"}</TableCell>
                 <TableCell style={style}>{group.description}</TableCell>
@@ -338,6 +337,10 @@ const ListCruiseGroups = () => {
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`
                             }}>{t("company name")}</TableCell>
+                            <TableCell style={{
+                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                            }}>{"UUID"}</TableCell>
                             <TableCell style={{
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`

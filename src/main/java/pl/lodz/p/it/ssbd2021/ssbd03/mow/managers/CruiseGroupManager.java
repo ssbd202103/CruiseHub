@@ -140,7 +140,7 @@ public class CruiseGroupManager implements CruiseGroupManagerLocal {
 
     @RolesAllowed("deactivateCruiseGroup")
     @Override
-    public CruiseGroup deactivateCruiseGroup(UUID uuid, Long version) throws BaseAppException { //todo refactor this method
+    public void deactivateCruiseGroup(UUID uuid, Long version) throws BaseAppException { //todo refactor this method
         CruiseGroup cruiseGroup = this.cruiseGroupFacadeMow.findByUUID(uuid);
         checkForOptimisticLock(cruiseGroup, version);
 
@@ -171,7 +171,6 @@ public class CruiseGroupManager implements CruiseGroupManagerLocal {
         cruiseGroup.setActive(false);
         setUpdatedMetadata(cruiseGroup);
         cruiseGroupFacadeMow.edit(cruiseGroup);
-        return cruiseGroup;
     }
 
     @RolesAllowed("getCruiseGroupForBusinessWorker")

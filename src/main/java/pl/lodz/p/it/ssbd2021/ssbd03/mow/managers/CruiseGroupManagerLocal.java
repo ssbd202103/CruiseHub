@@ -59,14 +59,13 @@ public interface CruiseGroupManagerLocal {
    Account getCurrentUser() throws BaseAppException;
 
         /**
-         * Deaktywuje daną grupę wycieczek
+         * Metoda odpowiedzialna za deaktywacje grupy wycieczek
          *
-         * @param uuid
-         * @param version
-         * @return
-         * @throws BaseAppException
+         * @param uuid uuid grupy wyceczek do deaktywacji oraz wersją
+         * @param version wersjaq grupy wyceczek do deaktywacji
+         * @throws BaseAppException Bazowy wyjątek aplikacji
          */
-    CruiseGroup deactivateCruiseGroup(UUID uuid, Long version) throws BaseAppException;
+    void deactivateCruiseGroup(UUID uuid, Long version) throws BaseAppException;
 
 
     List<Cruise> getCruiseBelongsToCruiseGroup(CruiseGroup cruiseGroup) throws FacadeException;
