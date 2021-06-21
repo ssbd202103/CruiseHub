@@ -52,6 +52,7 @@ public class AttractionFacadeMow extends AbstractFacade<Attraction> {
         super.create(entity);
     }
 
+    //TODO sprawdzić czy tylko @RolesAllowed("deleteAttraction")
     @PermitAll
     @Override
     public void remove(Attraction entity) throws FacadeException {
