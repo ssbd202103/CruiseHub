@@ -57,19 +57,19 @@ public class CruiseGroupManager extends BaseManagerMow implements CruiseGroupMan
     @Override
     public void addCruiseGroup(String companyName, String name, long number_of_seats, Double price, CruiseAddress start_address, List<CruisePicture> pictures, String description) throws BaseAppException {
         Company company = companyFacadeMow.findByName(companyName);
-        BusinessWorker worker = (BusinessWorker) accountFacadeMow.findByLogin(context.getUserPrincipal().getName())
+        BusinessWorker worker = (BusinessWorker) getCurrentUser()
         .getAccessLevels().stream()
                 .filter(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.BUSINESS_WORKER).findFirst().get();
-        if(worker.getCompany().getName() != company.getName())
+        if(!worker.getCompany().getName().equals(company.getName()))
         {
             throw new CruiseGroupManagerException(OPERATION_NOT_AUTHORIZED_ERROR);
         }
         CruiseGroup cruisegroup = new CruiseGroup(company, start_address, name, number_of_seats, price, pictures, description);
-        setCreatedMetadata(accountFacadeMow.findByLogin(context.getUserPrincipal().getName()), cruisegroup);
-        setCreatedMetadata(accountFacadeMow.findByLogin(context.getUserPrincipal().getName()), start_address);
+        setCreatedMetadata(getCurrentUser(), cruisegroup);
+        setCreatedMetadata(getCurrentUser(), start_address);
         for (CruisePicture picture : pictures
         ) {
-            setCreatedMetadata(accountFacadeMow.findByLogin(context.getUserPrincipal().getName()), picture);
+            setCreatedMetadata(getCurrentUser(), picture);
         }
         cruiseGroupFacadeMow.create(cruisegroup);
     }
@@ -85,14 +85,14 @@ public class CruiseGroupManager extends BaseManagerMow implements CruiseGroupMan
 
         CruiseGroup cruiseGroup = cruiseGroupFacadeMow.findByUUID(uuid);
         checkForOptimisticLock(cruiseGroup, version);
-        BusinessWorker worker = (BusinessWorker) accountFacadeMow.findByLogin(context.getUserPrincipal().getName())
+        BusinessWorker worker = (BusinessWorker) getCurrentUser()
                 .getAccessLevels().stream()
                 .filter(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.BUSINESS_WORKER).findFirst().get();
-        if(worker.getCompany().getName() != cruiseGroup.getCompany().getName())
+        if(!worker.getCompany().getName().equals(cruiseGroup.getCompany().getName()))
         {
             throw new CruiseGroupManagerException(OPERATION_NOT_AUTHORIZED_ERROR);
         }
-        if(cruiseFacadeMow.findByCruiseGroupUUID(cruiseGroup.getUuid()).isEmpty()){
+        if(!cruiseFacadeMow.findByCruiseGroupUUID(cruiseGroup.getUuid()).isEmpty()){
             throw new CruiseGroupManagerException(OPERATION_NOT_AUTHORIZED_ERROR);
         }
 
@@ -110,7 +110,7 @@ public class CruiseGroupManager extends BaseManagerMow implements CruiseGroupMan
         setUpdatedMetadata(start_address);
         if (!picture.getImg().isEmpty()) {
             if (cruiseGroup.getCruisePictures().isEmpty()) {
-                setCreatedMetadata(accountFacadeMow.findByLogin(context.getUserPrincipal().getName()), picture);
+                setCreatedMetadata(getCurrentUser(), picture);
                 cruiseGroup.getCruisePictures().add(picture);
                 setUpdatedMetadata(cruiseGroup.getCruisePictures().get(0));
             } else {
@@ -132,13 +132,6 @@ public class CruiseGroupManager extends BaseManagerMow implements CruiseGroupMan
     @RolesAllowed("getAllCruiseGroupList")
     @Override
     public List<Cruise> getCruiseBelongsToCruiseGroup(CruiseGroup cruiseGroup) throws BaseAppException {
-        BusinessWorker worker = (BusinessWorker) accountFacadeMow.findByLogin(context.getUserPrincipal().getName())
-                .getAccessLevels().stream()
-                .filter(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.BUSINESS_WORKER).findFirst().get();
-        if(worker.getCompany().getName() != cruiseGroup.getCompany().getName())
-        {
-            throw new CruiseGroupManagerException(OPERATION_NOT_AUTHORIZED_ERROR);
-        }
         return cruiseGroupFacadeMow.findCruisesForCruiseGroup(cruiseGroup);
     }
 
@@ -185,7 +178,7 @@ public class CruiseGroupManager extends BaseManagerMow implements CruiseGroupMan
         BusinessWorker worker = (BusinessWorker) accountFacadeMow.findByLogin(context.getUserPrincipal().getName())
                 .getAccessLevels().stream()
                 .filter(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.BUSINESS_WORKER).findFirst().get();
-        if(worker.getCompany().getName() != company.getName())
+        if(!worker.getCompany().getName().equals(company.getName()))
         {
             throw new CruiseGroupManagerException(OPERATION_NOT_AUTHORIZED_ERROR);
         }
