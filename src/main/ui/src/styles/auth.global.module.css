@@ -52,3 +52,14 @@
     color: var(--blue);
     margin-bottom: 15px;
 }
+
+.button-wrap {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.button-wrap > * {
+    margin-bottom: 16px;
+}

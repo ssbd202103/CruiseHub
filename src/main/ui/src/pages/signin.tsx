@@ -101,12 +101,7 @@ export default function SignIn() {
                 colorIgnored
             />
 
-            <Box style={{
-                width: '70%',
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between"
-            }}>
+            <Box className={styles['button-wrap']}>
                 <RoundedButton
                     style={{
                         width: '50%',
@@ -116,12 +111,12 @@ export default function SignIn() {
                     color="pink"
                     onClick={auth}
                 >{t("signin")}</RoundedButton>
-                <Link to="signup/client">
-                    <a className={styles.link}>{t("i don't have an account")}</a>
+                <Link to="signup/client" className={styles.link}>
+                    {t("i don't have an account")}
                 </Link>
 
-                <Link to="/reset/requestPassword">
-                    <a className={styles.link}>{t("forgot password")}</a>
+                <Link to="/reset/requestPassword" className={styles.link}>
+                    {t("forgot password")}
                 </Link>
 
             </Box>
