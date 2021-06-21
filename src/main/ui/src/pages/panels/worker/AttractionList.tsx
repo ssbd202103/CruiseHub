@@ -189,6 +189,7 @@ export default function AttractionList() {
         <>
             {published === 'false' ? '' : <><h3>{t("attractions read only")}</h3><br/></>}
             <DataGrid
+                autoPageSize
                 columns={published === 'true' ? cols.slice(0, -1) : cols}
                 rows={attractions.map((attraction) => ({id: attraction.uuid, ...attraction}))}
                 onRowSelected={handleSelectedRow}
