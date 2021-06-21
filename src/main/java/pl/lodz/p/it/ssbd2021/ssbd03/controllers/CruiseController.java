@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.ControllerException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.MapperException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations.CreateReservationDto;
@@ -17,6 +18,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,8 +44,14 @@ public class CruiseController {
     @GET
     @Path("/get-cruise/{uuid}")
     @Produces(MediaType.APPLICATION_JSON)
-    public CruiseDto getCruiseByUUID(@PathParam("uuid") String uuid) throws BaseAppException {
-        return tryAndRepeat(cruiseEndpoint, () -> cruiseEndpoint.getCruise(UUID.fromString(uuid)));
+    public CruiseDto getCruiseByUUID(@PathParam("uuid") String strUUID) throws BaseAppException {
+        UUID uuid;
+        try {
+            uuid = UUID.fromString(strUUID);
+        } catch (IllegalArgumentException e) {
+            throw new ControllerException(NO_SUCH_ELEMENT_ERROR);
+        }
+        return tryAndRepeat(cruiseEndpoint, () -> cruiseEndpoint.getCruise(UUID.fromString(strUUID)));
     }
 
     /**
