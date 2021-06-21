@@ -73,7 +73,7 @@ public class ReservationManager implements ReservationManagerLocal {
 
     @RolesAllowed("getWorkerCruiseReservations")
     @Override
-    public List<Reservation> getWorkerCruiseReservations(UUID cruise_uuid) throws BaseAppException {
+    public List<Reservation> getWorkerCruiseReservations(UUID cruise_uuid) throws BaseAppException { //todo refactor this method
         Cruise cruise = cruiseFacadeMow.findByUUID(cruise_uuid);
         Account account = accountFacade.findByLogin(securityContext.getUserPrincipal().getName());
         try {
