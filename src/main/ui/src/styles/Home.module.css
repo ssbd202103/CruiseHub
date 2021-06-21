@@ -11,7 +11,7 @@
 }
 
 .header h1 {
-    font-family: "Montserrat Alternates", sans-serif;
+    font-family: "Montserrat", sans-serif;
     font-weight: 500;
     font-size: 3rem;
     color: #FFFFFF;
@@ -51,7 +51,7 @@
     justify-content: center;
     align-items: center;
     font-size: 7rem;
-    font-family: 'Montserrat Alternates', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     color: #FFFFFF;
 }
 

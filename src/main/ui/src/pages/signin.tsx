@@ -50,7 +50,7 @@ export default function SignIn() {
                 }
             }).then(res => {
                 dispatch(setLoginAction(login))
-                history.push('/codeSignIn')
+                history.push('/signin-code')
                 showSuccess(t('successful action'))
             }).catch(error => {
                 const message = error.response.data

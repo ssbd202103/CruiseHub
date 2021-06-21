@@ -104,7 +104,7 @@ function App() {
                         <Route path="/verify/accountVerification">
                             <VerifyAccount/>
                         </Route>
-                        <Route path="/codeSignIn">
+                        <Route path="/signin-code">
                             <CodeSignIn/>
                         </Route>
 

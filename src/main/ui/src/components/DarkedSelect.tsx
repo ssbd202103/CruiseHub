@@ -56,7 +56,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const inputStyle = {
-    fontFamily: "'Montserrat Alternates', sans-serif",
+    fontFamily: "'Montserrat', sans-serif",
     fontSize: '1.2rem',
 }
 

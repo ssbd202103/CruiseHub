@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 export default function Brand() {
     return (
         <Box style={{
-            fontFamily: '"Montserrat Alternates", sans-serif',
+            fontFamily: '"Montserrat", sans-serif',
             fontSize: '2rem',
             color: 'var(--white)'
         }}>

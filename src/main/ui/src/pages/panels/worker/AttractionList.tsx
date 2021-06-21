@@ -222,7 +222,7 @@ export default function AttractionList() {
 
                     <TextareaAutosize
                         style={{
-                            fontFamily: "'Montserrat Alternates', sans-serif",
+                            fontFamily: "'Montserrat', sans-serif",
                             fontSize: '1.2rem',
                             marginBottom: 16,
                             padding: '14px 18px',
@@ -281,7 +281,7 @@ export default function AttractionList() {
 
                     <TextareaAutosize
                         style={{
-                            fontFamily: "'Montserrat Alternates', sans-serif",
+                            fontFamily: "'Montserrat', sans-serif",
                             fontSize: '1.2rem',
                             marginBottom: 16,
                             padding: '14px 18px',

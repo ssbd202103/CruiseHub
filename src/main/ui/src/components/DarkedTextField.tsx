@@ -65,7 +65,7 @@ export interface DarkedTextFieldProps {
 
 const DarkedTextField = (props: DarkedTextFieldProps) => {
         const inputStyle = {
-            fontFamily: "'Montserrat Alternates', sans-serif",
+            fontFamily: "'Montserrat', sans-serif",
             fontSize: '1.2rem',
             color: ''
         }
