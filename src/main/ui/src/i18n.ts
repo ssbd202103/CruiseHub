@@ -65,6 +65,7 @@ const resources = {
             "countryExample": "Polska",
             "phoneNumber": "Numer telefonu",
             "phoneNumberExample": "+48 507 422 550",
+            "activate.your.account": "Konto zostało utworzone! Wysłaliśmy Ci maila w celu potwierdzenia Twojego konta",
             //signup.client
             "signup.client.subtitle": "Zostań członkiem największej przygody w Twoim życiu",
             "i am a business worker": "Jestem pracownikiem firmy",
@@ -475,6 +476,7 @@ const resources = {
             "countryExample": "England",
             "phoneNumber": "Phone number",
             "phoneNumberExample": "+44 507 422 550",
+            "activate.your.account": "You signed up successfully! We've sent you an email in order to confirm your account",
             //signup.client
             "signup.client.subtitle": "Participate in the biggest adventure in your life",
             "i am a business worker": "I'm a business worker",

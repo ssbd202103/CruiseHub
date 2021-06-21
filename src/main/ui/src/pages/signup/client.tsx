@@ -100,7 +100,7 @@ export default function ClientSignUp() {
         }).then(res => {
             setButtonPopup(false)
             history.push('/')
-            showSuccess(t('successful action'))
+            showSuccess(t('activate.your.account'))
         }).catch(error => {
             setButtonPopup(false)
             const message = error.response.data

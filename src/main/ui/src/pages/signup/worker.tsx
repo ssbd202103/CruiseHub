@@ -76,7 +76,7 @@ export default function WorkerSignUp() {
         }).then(res => {
             setButtonPopup(false)
             history.push('/')
-            showSuccess(t('successful action'))
+            showSuccess(t('activate.your.account'))
         }).catch(error => {
             setButtonPopup(false)
             const message = error.response.data
