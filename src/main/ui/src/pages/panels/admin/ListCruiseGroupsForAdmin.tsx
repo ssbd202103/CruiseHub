@@ -217,6 +217,7 @@ function Row(props: CruiseData) {
                 </TableCell>
             <TableCell component="th" scope="row" style={style}>{group.name}</TableCell>
             <TableCell style={style}>{group.company.name}</TableCell>
+            <TableCell style={style}>{group.uuid}</TableCell>
             <TableCell style={style}>{group.numberOfSeats}</TableCell>
             <TableCell style={style}>{group.price +" pln"}</TableCell>
             <TableCell style={style}>{group.description}</TableCell>
@@ -429,6 +430,10 @@ const ListCruiseGroupsForAdmin = () => {
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`
                             }}>{t("company name")}</TableCell>
+                            <TableCell style={{
+                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                            }}>{"UUID"}</TableCell>
                             <TableCell style={{
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`
