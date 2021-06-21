@@ -106,7 +106,8 @@ export default function SignIn() {
                     style={{
                         width: '50%',
                         fontSize: '1.2rem',
-                        padding: '10px 0'
+                        padding: '10px 0',
+                        marginBottom: 16,
                     }}
                     color="pink"
                     onClick={auth}
