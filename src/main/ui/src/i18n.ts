@@ -40,6 +40,7 @@ const resources = {
             'reserve': "Zarezerwuj",
             "reservations": "Rezerwacje",
             "publish": "Opublikuj",
+            "isPublished": "Opublikowana",
             'choose another date': 'Wybierz inną datę',
             'no dates': 'Nie ma innych dat',
             //signin
@@ -449,6 +450,7 @@ const resources = {
             'reserve': "Reserve",
             "reservations": "Reservations",
             "publish": "Publish",
+            "isPublished": "Published",
             'choose another date': 'Choose another date',
             'no dates': 'There are no another dates',
             //signin

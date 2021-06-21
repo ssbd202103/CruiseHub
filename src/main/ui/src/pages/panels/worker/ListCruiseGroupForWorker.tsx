@@ -451,6 +451,10 @@ function Row(props: CruiseData) {
                                         <TableCell align="center" style={{
                                             backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                             color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                                        }}>{t("isPublished")}</TableCell>
+                                        <TableCell align="center" style={{
+                                            backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                            color: `var(--${!darkMode ? 'dark' : 'white-light'}`
                                         }}>{t("reservations")}</TableCell>
                                         <TableCell align="center" style={{
                                             backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
@@ -479,6 +483,8 @@ function Row(props: CruiseData) {
                                                        style={style}>{getParsedDate(cruise.endDate)}</TableCell>
                                             <TableCell align="center"
                                                        style={style}><ActiveIcon active={cruise.active} /></TableCell>
+                                            <TableCell align="center"
+                                                       style={style}><ActiveIcon active={cruise.published} /></TableCell>
                                             <TableCell align="center">
                                                 <Link to="/reservations">
                                                     <Button className={buttonClass.root} onClick={() => {
