@@ -55,11 +55,16 @@ function createData(
 
 export interface RowProps {
     row: ReturnType<typeof createData>,
-    style: React.CSSProperties
+    style: React.CSSProperties,
+    onChange: () => Promise<any>,
 }
 
 function Row(props: RowProps) {
+    const {
+        onChange
+    } = props;
     const handleError = useHandleError()
+    const [, forceUpdate] = useReducer(x => x + 1, 0);
     const { row } = props;
     const { style } = props;
     const classes = useRowStyles();
@@ -67,7 +72,7 @@ function Row(props: RowProps) {
     const {t} = useTranslation()
     const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
 
-    const confirmWorker = (props: any)=> {
+    const confirmWorker = async(props: any)=> {
         const {token} = store.getState()
         const {row} = props;
         const json = JSON.stringify({
@@ -75,7 +80,7 @@ function Row(props: RowProps) {
             version: row.version
         })
 
-        axios.put('account/confirm-business-worker', json, {
+        await axios.put('account/confirm-business-worker', json, {
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json",
@@ -86,7 +91,7 @@ function Row(props: RowProps) {
         }).then(res =>{
             refreshToken()
             showSuccess(t('successful action'))
-            getWorkers()
+
         },error =>{
             const message = error.response.data
             handleError(message, error.response.status)
@@ -98,10 +103,10 @@ function Row(props: RowProps) {
             <PopupAcceptAction
                 open={buttonPopupAcceptAction}
                 onConfirm={() => {
-                    confirmWorker({row})
+                    confirmWorker({row}).then(res => {
+                    onChange()})
                     setButtonPopupAcceptAction(false)
-                }
-                }
+                }}
                 onCancel={() => {setButtonPopupAcceptAction(false)
                 }}
             />
@@ -114,22 +119,20 @@ function Row(props: RowProps) {
             <TableCell style={style}>{row.phoneNumber}</TableCell>
             <TableCell style={style}>{row.companyName}</TableCell>
             <TableCell style={style}>{row.companyPhoneNumber}</TableCell>
-            <TableCell style={style}><Button onClick={() =>{
-                setButtonPopupAcceptAction(true)
-            }
+            <TableCell style={style}><RoundedButton color="blue" onClick={() =>{
+                {
 
-            }>{t("confirm")}</Button></TableCell>
+
+                    setButtonPopupAcceptAction(true)
+
+                }}
+
+            }>{t("confirm")}</RoundedButton></TableCell>
         </TableRow>
     );
-}
 
-function getWorkers() {
-    const {token} = store.getState()
-    return axios.get('account/unconfirmed-business-workers', {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    })
+
+
 }
 
 
@@ -137,14 +140,25 @@ function getWorkers() {
 export default function ModListClient() {
     const [, forceUpdate] = useReducer(x => x + 1, 0);
     const [users, setUsers] = useState([]);
+    const handleError = useHandleError()
     const [searchInput, setSearchInput] = useState("");
     const darkMode = useSelector(selectDarkMode)
-
-    useEffect(() => {
-        getWorkers().then(res => {
+    const getWorkers = () => {
+        const {token} = store.getState()
+        return axios.get('account/unconfirmed-business-workers', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }).then(res => {
             setUsers(res.data)
             refreshToken()
+        }).catch(error => {
+            const message = error.response.data
+            handleError(message, error.response.status)
         })
+    }
+    useEffect(() => {
+        getWorkers()
     }, []);
 
     function search(rows: any[]) {
@@ -163,15 +177,6 @@ export default function ModListClient() {
 
     const accounts: String[] = [];
 
-    const handleChange = () => {
-        forceUpdate()
-
-        getWorkers().then(res => {
-            setUsers(res.data)
-            refreshToken()
-        })
-
-    }
 
     const {t} = useTranslation()
     return (
@@ -231,7 +236,7 @@ export default function ModListClient() {
                     </TableHead>
                     <TableBody>
                         {search(users.map((user, index) => (
-                            <Row key={index} row={user} style={{
+                            <Row key={index} row={user} onChange={getWorkers} style={{
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`
                             }}/>

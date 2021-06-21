@@ -27,6 +27,7 @@ import Autocomplete from '../../../components/Autocomplete';
 import {refreshToken} from "../../../Services/userService";
 import useHandleError from "../../../errorHandler";
 import ActiveIcon from "../../../components/ActiveIcon";
+import RoundedButton from "../../../components/RoundedButton";
 
 interface UnblockAccountParams {
     login: string;
@@ -211,14 +212,14 @@ function Row(props: RowProps) {
                                     <TableRow>
                                         <TableCell align="center">
                                             <Link to="/accounts/change_account_data">
-                                                <Button className={buttonClass.root}>{t("edit")}</Button>
+                                                <RoundedButton color="blue" className={buttonClass.root}>{t("edit")}</RoundedButton>
                                             </Link>
                                             <Link to="/accounts/resetSomebodyPassword">
-                                                <Button onClick={setCurrentResetPasswordAccount}
-                                                        className={buttonClass.root}>{t("reset password")}</Button>
+                                                <RoundedButton color="blue" onClick={setCurrentResetPasswordAccount}
+                                                        className={buttonClass.root}>{t("reset password")}</RoundedButton>
                                             </Link>
 
-                                            <Button className={buttonClass.root} onClick={() => {
+                                            <RoundedButton color="blue" className={buttonClass.root} onClick={() => {
                                                 if (row.active) {
                                                     blockAccount({
                                                         etag: row.etag,
@@ -246,16 +247,16 @@ function Row(props: RowProps) {
                                                         handleError(t(message),error.response.data)
                                                     })
                                                 }
-                                            }}>{row.active ? t("block") : t("unblock")}</Button>
+                                            }}>{row.active ? t("block") : t("unblock")}</RoundedButton>
 
                                             <Link to="/accounts/grant_access_level">
-                                                <Button onClick={setCurrentGrantAccessLevelAccount}
-                                                        className={buttonClass.root}>{t("grant access level")}</Button>
+                                                <RoundedButton color="blue" onClick={setCurrentGrantAccessLevelAccount}
+                                                        className={buttonClass.root}>{t("grant access level")}</RoundedButton>
                                             </Link>
 
                                             <Link to="/accounts/change_access_level_state">
-                                                <Button onClick={setCurrentChangeAccessLevelStateAccount}
-                                                        className={buttonClass.root}>{t("change access level state")}</Button>
+                                                <RoundedButton color="blue" onClick={setCurrentChangeAccessLevelStateAccount}
+                                                        className={buttonClass.root}>{t("change access level state")}</RoundedButton>
                                             </Link>
                                         </TableCell>
                                     </TableRow>
