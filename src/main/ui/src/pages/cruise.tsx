@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useHistory, useParams} from "react-router-dom";
+import {Link, Redirect, Route, useHistory, useParams} from "react-router-dom";
 import {Card, CardActions, CardContent, Grid, Menu, MenuItem} from "@material-ui/core";
 import {getCruiseByUUID, getRelatedCruises} from "../Services/cruisesService";
 import styles from '../styles/Cruise.module.css';
@@ -20,6 +20,7 @@ import {selectActiveAccessLevel, selectLogin} from "../redux/slices/userSlice";
 import StarSpinner from "../components/StarSpinner";
 import {createRating, removeRating} from "../Services/ratingService";
 import useHandleError from "../errorHandler";
+import {ReactComponent as SVG404} from "../404.svg";
 
 export default function Cruise() {
     const {id} = useParams<{ id: string }>();
@@ -72,27 +73,31 @@ export default function Cruise() {
 
     const bookCruise = () => {
         console.log(`number of seats = ${selectedNumberOfSeats}`)
-        createReservation(cruise.version, id, selectedNumberOfSeats).then( () => {
+        createReservation(cruise.version, id, selectedNumberOfSeats).then(() => {
             showSuccess(t('successful action'))
         });
     }
 
     const getCruise = () => {
-        getCruiseByUUID(id).then(res => {
-            setCruise(res.data)
+        getCruiseByUUID(id)
+            .then(res => {
+                setCruise(res.data)
 
-            getRelatedCruises(res.data.cruiseGroupDto.uuid).then(related => {
-                setRelatedCruises(related.data.filter((item: any) => item.uuid !== res.data.uuid))
-            })
+                getRelatedCruises(res.data.cruiseGroupDto.uuid).then(related => {
+                    setRelatedCruises(related.data.filter((item: any) => item.uuid !== res.data.uuid))
+                })
 
-            getAttractionsByCruiseUUID(id).then(r => {
-                setAttractions(r.data)
+                getAttractionsByCruiseUUID(id).then(r => {
+                    setAttractions(r.data)
+                })
             })
-        })
+            .catch(error => {
+                history.push('/404')
+            })
     }
 
     useEffect(() => {
-       getCruise()
+        getCruise()
     }, [])
 
     const getDate = (date: any) => {
@@ -136,14 +141,14 @@ export default function Cruise() {
                         <div>
                             {
                                 new Array(Math.floor(cruise?.cruiseGroupDto?.avgRating || 0)).fill(1).map((item, index) => (
-                                    <StarIcon key={index} fontSize="large" style={{ fill: 'var(--yellow-dark)' }} />
+                                    <StarIcon key={index} fontSize="large" style={{fill: 'var(--yellow-dark)'}}/>
                                 ))
                             }
                             {
                                 cruise?.cruiseGroupDto?.avgRating % 1 >= 0.4 && cruise?.cruiseGroupDto?.avgRating % 1 <= 0.7 ? (
-                                    <StarHalfIcon fontSize="large" style={{ fill: 'var(--yellow-dark)' }} />
+                                    <StarHalfIcon fontSize="large" style={{fill: 'var(--yellow-dark)'}}/>
                                 ) : cruise?.cruiseGroupDto?.avgRating % 1 > 0.7 ? (
-                                    <StarIcon fontSize="large" style={{ fill: 'var(--yellow-dark)' }} />
+                                    <StarIcon fontSize="large" style={{fill: 'var(--yellow-dark)'}}/>
                                 ) : null
                             }
                         </div>
@@ -152,15 +157,15 @@ export default function Cruise() {
                             {cruise?.cruiseGroupDto?.description || t('no description')}
                         </p>
                         <div style={{display: 'flex', alignItems: 'center'}}>
-                            <PersonIcon fontSize="large" style={{fill: 'var(--dark-dark)', marginRight: 8}} />
+                            <PersonIcon fontSize="large" style={{fill: 'var(--dark-dark)', marginRight: 8}}/>
                             {cruise?.cruiseGroupDto?.numberOfSeats}
                         </div>
                         <div style={{display: 'flex', alignItems: 'center'}}>
-                            <AttachMoneyIcon fontSize="large" style={{fill: 'var(--dark-dark)', marginRight: 8}} />
+                            <AttachMoneyIcon fontSize="large" style={{fill: 'var(--dark-dark)', marginRight: 8}}/>
                             {cruise?.cruiseGroupDto?.price}
                         </div>
                         <div style={{display: 'flex', alignItems: 'center'}}>
-                            <DirectionsBoatIcon fontSize="large" style={{fill: 'var(--dark-dark)', marginRight: 8}} />
+                            <DirectionsBoatIcon fontSize="large" style={{fill: 'var(--dark-dark)', marginRight: 8}}/>
                             <div>
                                 <div>{`${cruise?.cruiseGroupDto?.cruiseAddress.street}, ${cruise?.cruiseGroupDto?.cruiseAddress.streetNumber} (${cruise?.cruiseGroupDto?.cruiseAddress.harborName})`}</div>
                                 <div>{`${cruise?.cruiseGroupDto?.cruiseAddress.cityName}, ${cruise?.cruiseGroupDto?.cruiseAddress.countryName}`}</div>
@@ -214,20 +219,20 @@ export default function Cruise() {
                     </div>
                 </Grid>
 
-                <Grid item xs={1} />
+                <Grid item xs={1}/>
 
                 <Grid item xs className={styles.attractions}>
-                    <h3 style={{ marginRight: 24 }}>{t('attractions')}</h3>
-                    <div style={{ padding: '0 24px', width: '100%', overflow: 'auto', height: '100%' }}>
+                    <h3 style={{marginRight: 24}}>{t('attractions')}</h3>
+                    <div style={{padding: '0 24px', width: '100%', overflow: 'auto', height: '100%'}}>
                         {
                             attractions.length ?
-                               attractions.map(({name, description, price}, index) => (
-                                    <Card key={index} style={{ marginBottom: 16 }}>
+                                attractions.map(({name, description, price}, index) => (
+                                    <Card key={index} style={{marginBottom: 16}}>
                                         <CardContent>
                                             <h4>{name}</h4>
                                             <p>{description}</p>
                                             <div style={{display: 'flex', alignItems: 'center'}}>
-                                                <AttachMoneyIcon style={{fill: 'var(--dark-dark)', marginRight: 8}} />
+                                                <AttachMoneyIcon style={{fill: 'var(--dark-dark)', marginRight: 8}}/>
                                                 {price}
                                             </div>
                                         </CardContent>
@@ -241,15 +246,15 @@ export default function Cruise() {
                     </div>
                 </Grid>
 
-                <Grid item xs={1} />
+                <Grid item xs={1}/>
 
                 <Grid item xs className={styles.ratings}>
-                    <h3 style={{ marginRight: 24 }}>{t('ratings')}</h3>
-                    <div style={{ padding: '0 24px', width: '100%', overflow: 'auto', height: '100%' }}>
+                    <h3 style={{marginRight: 24}}>{t('ratings')}</h3>
+                    <div style={{padding: '0 24px', width: '100%', overflow: 'auto', height: '100%'}}>
                         {
                             cruise?.cruiseGroupDto?.ratings.length ?
-                               cruise?.cruiseGroupDto?.ratings.map(({login: rLogin,accountFirstName, accountSecondName, rating}: any, index: number) => (
-                                    <Card key={index} style={{ marginBottom: 16 }}>
+                                cruise?.cruiseGroupDto?.ratings.map(({login: rLogin, accountFirstName, accountSecondName, rating}: any, index: number) => (
+                                    <Card key={index} style={{marginBottom: 16}}>
                                         <CardContent style={{
                                             display: 'flex',
                                             alignItems: 'center',
@@ -259,18 +264,22 @@ export default function Cruise() {
                                                 <div>
                                                     {
                                                         new Array(Math.floor(rating || 0)).fill(1).map((item, index) => (
-                                                            <StarIcon key={index} fontSize="large" style={{ fill: 'var(--yellow-dark)' }} />
+                                                            <StarIcon key={index} fontSize="large"
+                                                                      style={{fill: 'var(--yellow-dark)'}}/>
                                                         ))
                                                     }
                                                     {
                                                         rating % 1 == 0.5 ? (
-                                                            <StarHalfIcon fontSize="large" style={{ fill: 'var(--yellow-dark)' }} />
+                                                            <StarHalfIcon fontSize="large"
+                                                                          style={{fill: 'var(--yellow-dark)'}}/>
                                                         ) : null
                                                     }
                                                 </div>
                                             </div>
                                             {
-                                                rLogin === login ? <DeleteIcon fontSize="large" className={styles.delete} onClick={handleRemoveRating} /> : null
+                                                rLogin === login ?
+                                                    <DeleteIcon fontSize="large" className={styles.delete}
+                                                                onClick={handleRemoveRating}/> : null
                                             }
 
                                         </CardContent>
@@ -282,7 +291,7 @@ export default function Cruise() {
                     {
                         !cruise?.cruiseGroupDto?.ratings.find((item: any) => item.login === login) && activeAccessLevel !== '' ? (
                             <div style={{height: 200}}>
-                                <StarSpinner onSubmit={handleCreateRating} />
+                                <StarSpinner onSubmit={handleCreateRating}/>
                             </div>
                         ) : null
                     }
