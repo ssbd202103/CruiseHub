@@ -50,5 +50,11 @@ public interface CruiseGroupEndpointLocal extends TransactionalEndpoint {
      */
     void deactivateCruiseGroup(UUID uuid, Long version) throws BaseAppException;
 
+    /**
+     * Metoda odpowiedzialna za pobranie listy grup wycieczek dla podanej firmy
+     * @param companyName nazwa firmy
+     * @return  lista dto grup firm
+     * @throws BaseAppException bazowy wyjątek aplikacji
+     */
     List<CruiseGroupWithDetailsDto> getCruiseGroupForBusinessWorker(String companyName) throws BaseAppException;
 }

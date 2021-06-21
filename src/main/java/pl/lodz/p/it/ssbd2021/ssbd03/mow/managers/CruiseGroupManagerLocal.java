@@ -68,8 +68,19 @@ public interface CruiseGroupManagerLocal {
          */
     CruiseGroup deactivateCruiseGroup(UUID uuid, Long version) throws BaseAppException;
 
+    /**
+     * Pobiera wycieczki dla danej grupy wycieczek.
+     * @param cruiseGroup grupa wycieczek
+     * @return  lista wycieczek przypisanych do danej grupy wycieczek
+     * @throws BaseAppException bazowy wyjątek aplikacji
+     */
+    List<Cruise> getCruiseBelongsToCruiseGroup(CruiseGroup cruiseGroup) throws BaseAppException;
 
-    List<Cruise> getCruiseBelongsToCruiseGroup(CruiseGroup cruiseGroup) throws FacadeException;
-
+    /**
+     * Pobiera listę grup wycieczek należacych do danej firmy
+     * @param companyName   nazwa firmy dla której mają byc pobrane wycieczki
+     * @return  lista grup wycieczek dla danej firmy
+     * @throws BaseAppException bazowy wyjątek aplikacji.
+     */
     List<CruiseGroup> getCruiseGroupForBusinessWorker(String companyName) throws BaseAppException;
 }

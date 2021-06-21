@@ -30,7 +30,7 @@ public class CruiseGroupController {
 
     /**
      * Dodaje wycieczkę
-     *
+     *  @param addCruiseGroupDto obiekt dto pozwalający utworzyć wycieczkę
      * @throws BaseAppException Bazowy wyjątek aplikacji
      */
     @POST
@@ -67,6 +67,12 @@ public class CruiseGroupController {
         tryAndRepeat(cruiseGroupEndpoint, () -> cruiseGroupEndpoint.deactivateCruiseGroup(deactivateCruiseGroupDto.getUuid(), deactivateCruiseGroupDto.getVersion()));
     }
 
+    /**
+     * Metoda pobierająca listę grup wycieczek należacych do danej firmy
+     * @param companyName nazwa firmy
+     * @return  lista dto grup wycieczek
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
     @GET
     @Path("/CruiseGroupForBusinessWorker/{companyName}")
     @Produces(MediaType.APPLICATION_JSON)
