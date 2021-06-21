@@ -27,6 +27,7 @@ import store from "../../../redux/store";
 import axios from "../../../Services/URL";
 import PopupAcceptAction from "../../../PopupAcceptAction";
 import ActiveIcon from "../../../components/ActiveIcon";
+import RoundedButton from "../../../components/RoundedButton";
 
 
 const useRowStyles = makeStyles({
@@ -119,9 +120,6 @@ function Row(props: CruiseData) {
             version: version
         })
 
-
-
-
         await axios.put("cruise/deactivate-cruise", json, {
                 headers: {
                     "Content-Type": "application/json",
@@ -135,11 +133,26 @@ function Row(props: CruiseData) {
             showSuccess(t('successful action'))
             forceUpdate()
             refreshToken()
+            reload()
         }).catch(error => {
             setButtonPopupAcceptAction(false)
             const message = error.response.data
             handleError(message, error.response.status)
         });
+    }
+
+    const reload = async () => {
+        console.log("Someone clicked me")
+        await getCruisesForCruiseGroup(group.uuid)
+            .then(res => {
+                setCruises(res.data)
+                refreshToken();
+            })
+            .catch(error => {
+                const message = error.response.data
+                const status = error.response.status
+                handleError(message, status)
+            })
     }
 
     const handleSetOpen = async () => {
@@ -148,8 +161,6 @@ function Row(props: CruiseData) {
         await getCruisesForCruiseGroup(group.uuid)
             .then(res => {
                 setCruises(res.data)
-                console.log(cruises)
-                console.log(res.data)
                 refreshToken();
             })
             .catch(error => {
@@ -225,11 +236,11 @@ function Row(props: CruiseData) {
                                             <TableCell align="center">
                                                 <Link to={`attractions/${cruise.uuid}`}><Button className={buttonClass.root}>{t("attractions")}</Button></Link>
                                             </TableCell>
-                                            {cruise.published && cruise.active ?
                                                 <React.Fragment>
-                                                    <TableCell align="center"/>
                                                     <TableCell align="center">
-                                                        <Button className={buttonClass.root} onClick={() => {
+                                                        <RoundedButton color={"pink"}
+                                                            disabled={!(cruise.published && cruise.active)}
+                                                            className={buttonClass.root}  onClick={() => {
                                                             setDeactivateCruise({
                                                                 uuid : cruise.uuid,
                                                                 etag : cruise.etag,
@@ -237,10 +248,9 @@ function Row(props: CruiseData) {
                                                             })
                                                             setButtonPopupAcceptAction(true)
                                                         }
-                                                        }>{t("deactivate")}</Button>
+                                                        }>{t("deactivate")}</RoundedButton>
                                                     </TableCell>
-                                                </React.Fragment>: ""
-                                            }
+                                                </React.Fragment>
                                         </TableRow>
                                     ))}
                                 </TableBody>

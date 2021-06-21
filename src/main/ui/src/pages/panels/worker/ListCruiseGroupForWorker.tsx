@@ -281,6 +281,7 @@ function Row(props: CruiseData) {
             }).then(res => {
                 showSuccess(t('successful action'))
                 forceUpdate()
+                reload()
             }).catch(error => {
                 const message = error.response.data
                 handleError(message, error.response.status)
@@ -322,11 +323,26 @@ function Row(props: CruiseData) {
             showSuccess(t('successful action'))
             forceUpdate()
             refreshToken()
+            reload()
         }).catch(error => {
             setButtonPopupAcceptAction(false)
             const message = error.response.data
             handleError(message, error.response.status)
         });
+    }
+
+    const reload = async () => {
+        console.log("Someone clicked me")
+        await getCruisesForCruiseGroup(group.uuid)
+            .then(res => {
+                setCruises(res.data)
+                refreshToken();
+            })
+            .catch(error => {
+                const message = error.response.data
+                const status = error.response.status
+                handleError(message, status)
+            })
     }
 
     const handleSetOpen = async () => {
@@ -335,8 +351,6 @@ function Row(props: CruiseData) {
         await getCruisesForCruiseGroup(group.uuid)
             .then(res => {
                 setCruises(res.data)
-                console.log(cruises)
-                console.log(res.data)
                 refreshToken();
             })
             .catch(error => {
@@ -362,7 +376,7 @@ function Row(props: CruiseData) {
 
     function publishCruiseHandler(cruise: any) {
         publishCruise(cruise.uuid, cruise.version, cruise.etag).then(res => {
-            handleSetOpen();
+            reload();
             refreshToken();
             showSuccess(t('successful action'));
         })
@@ -521,8 +535,6 @@ function Row(props: CruiseData) {
                                                 }}>{t("changeData")
                                                 }</RoundedButton>
                                             </TableCell>
-
-
                                             <TableCell align="center">
                                                 <RoundedButton color={"pink"}
                                                                disabled={!(cruise.published && cruise.active)}
