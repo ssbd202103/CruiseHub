@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.IntegrityUtils.checkEtagIntegrity;
 import static pl.lodz.p.it.ssbd2021.ssbd03.utils.TransactionRepeater.tryAndRepeat;
 
 /**
@@ -149,9 +150,7 @@ public class CruiseController {
     @Path("/deactivate-cruise")
     @Consumes(MediaType.APPLICATION_JSON)
     public void deactivateCruise(@Valid @NotNull(message = CONSTRAINT_NOT_NULL) DeactivateCruiseDto deactivateCruiseDto, @HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) @Valid String etag) throws BaseAppException {
-        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, deactivateCruiseDto)) {
-            throw ControllerException.etagIdentityIntegrity();
-        }
+        checkEtagIntegrity(deactivateCruiseDto, etag);
         tryAndRepeat(cruiseEndpoint, () -> cruiseEndpoint.deactivateCruise(deactivateCruiseDto));
     }
 
@@ -166,9 +165,7 @@ public class CruiseController {
     @Path("/edit-cruise")
     @Consumes(MediaType.APPLICATION_JSON)
     public void editCruise(@Valid @NotNull(message = CONSTRAINT_NOT_NULL) EditCruiseDto editCruiseDto, @HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) @Valid String etag) throws BaseAppException {
-        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, editCruiseDto)) {
-            throw ControllerException.etagIdentityIntegrity();
-        }
+        checkEtagIntegrity(editCruiseDto, etag);
         tryAndRepeat(cruiseEndpoint, () -> cruiseEndpoint.editCruise(editCruiseDto));
     }
 
@@ -180,9 +177,7 @@ public class CruiseController {
     public void publishCruise(PublishCruiseDto publishCruiseDto,
                               @HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL)
                               @NotEmpty(message = CONSTRAINT_NOT_EMPTY) @Valid String etag) throws BaseAppException {
-        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, publishCruiseDto)) {
-            throw ControllerException.etagIdentityIntegrity();
-        }
+        checkEtagIntegrity(publishCruiseDto, etag);
         tryAndRepeat(cruiseEndpoint, () -> cruiseEndpoint.publishCruise(publishCruiseDto));
     }
 }

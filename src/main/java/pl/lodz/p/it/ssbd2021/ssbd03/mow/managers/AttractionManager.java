@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.managers;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.common.IntegrityUtils;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Attraction;
@@ -71,6 +72,7 @@ public class AttractionManager extends BaseManagerMow implements AttractionManag
     @Override
     public void editAttraction(UUID attractionUUID, String newName, String newDescription, double newPrice, int newNumberOfSeats, long version) throws BaseAppException {
         Attraction attraction = attractionFacadeMow.findByUUID(attractionUUID);
+        IntegrityUtils.checkForOptimisticLock(attraction, version);
 
         validateAttractionChangesPermission(attraction.getCruise(),
                 ATTRACTION_EDIT_CRUISE_PUBLISHED_ERROR,
@@ -84,7 +86,6 @@ public class AttractionManager extends BaseManagerMow implements AttractionManag
         attraction.setNumberOfSeats(newNumberOfSeats);
         setUpdatedMetadata(attraction);
 
-        attraction.setVersion(version);
         attractionFacadeMow.edit(attraction);
     }
 
