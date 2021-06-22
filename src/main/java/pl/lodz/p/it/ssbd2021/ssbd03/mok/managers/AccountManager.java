@@ -385,6 +385,7 @@ public class AccountManager extends BaseManagerMok implements AccountManagerLoca
         tokenW.setUsed(true);
         this.tokenWrapperFacade.edit(tokenW);
         setUpdatedMetadataWithModifier(account, account);
+        accountFacade.edit(account);
         sendMail(account, ACTIVATE_ACCOUNT_SUBJECT, ACTIVATE_ACCOUNT_BODY);
     }
 
