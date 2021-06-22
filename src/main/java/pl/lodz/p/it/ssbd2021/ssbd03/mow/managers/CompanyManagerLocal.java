@@ -44,5 +44,5 @@ public interface CompanyManagerLocal {
      * @return Firmę
      * @throws BaseAppException Bazowy wyjątek aplikacji
      */
-    Company findByNIP(String nip) throws BaseAppException;
+    Company findByNIP(long nip) throws BaseAppException;
 }

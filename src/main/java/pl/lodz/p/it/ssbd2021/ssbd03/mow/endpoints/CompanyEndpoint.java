@@ -63,7 +63,7 @@ public class CompanyEndpoint extends BaseEndpoint implements CompanyEndpointLoca
 
     @RolesAllowed("authenticatedUser")
     @Override
-    public MetadataDto getCompanyMetadata(String nip) throws BaseAppException {
+    public MetadataDto getCompanyMetadata(long nip) throws BaseAppException {
         return MetadataMapper.toMetadataDto(companyManager.findByNIP(nip));
     }
 }

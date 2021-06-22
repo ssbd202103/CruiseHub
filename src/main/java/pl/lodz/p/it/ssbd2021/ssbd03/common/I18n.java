@@ -120,6 +120,7 @@ public class I18n {
     public static final String CRUISE_MAPPER_UUID_PARSE = "error.cruise.mapper.uuid.parse";
     public static final String RESERVATION_MAPPER_UUID_PARSE = "error.reservation.mapper.uuid.parse";
     public static final String MAPPER_UUID_PARSE = "error.mapper.uuid.parse";
+    public static final String MAPPER_LONG_PARSE = "error.mapper.long.parse";
     public static final String NO_SEATS_AVAILABLE = "reservation.noSeats";
     public static final String RATING_MAPPER_UUID_PARSE = "rating.mapper.uuid.parse";
     public static final String NOT_YOURS_CRUISE = "error.cruise.not.yours";

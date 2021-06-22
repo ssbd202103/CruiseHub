@@ -10,3 +10,13 @@ export function getAllCompanies() {
         }
     })
 }
+export function getCompanyMetadata(nip:string){
+    const {token} = store.getState()
+
+    return axios.get(`cruise/metadata/${nip}`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+
+}

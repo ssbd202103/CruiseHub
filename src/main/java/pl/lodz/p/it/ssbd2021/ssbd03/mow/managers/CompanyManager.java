@@ -77,7 +77,7 @@ public class CompanyManager extends BaseManagerMow implements CompanyManagerLoca
 
     @PermitAll //TODO
     @Override
-    public Company findByNIP(String nip) throws BaseAppException {
+    public Company findByNIP(long nip) throws BaseAppException {
         return companyFacadeMow.findByNIP(nip);
     }
 

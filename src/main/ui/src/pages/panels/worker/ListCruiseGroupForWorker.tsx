@@ -513,6 +513,11 @@ function Row(props: CruiseData) {
                                                         className={buttonClass.root}>
                                                         {t("attractions")}</RoundedButton>
                                                 </Link>
+                                                <Link to={`cruise/metadata/${cruise.uuid}`}>
+                                                    <RoundedButton color={"green"}
+                                                                   className={buttonClass.root}>
+                                                        {t("metadata")}</RoundedButton>
+                                                </Link>
                                             </TableCell>
                                             <TableCell align="center">
                                                 <RoundedButton color={"pink"}

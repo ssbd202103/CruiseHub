@@ -99,7 +99,7 @@ public class CompanyFacadeMow extends AbstractFacade<Company> {
         }
     }
     @PermitAll //TODO double check rolesAllowed for this method
-    public Company findByNIP(String nip) throws BaseAppException {
+    public Company findByNIP(long nip) throws BaseAppException {
         TypedQuery<Company> tq = em.createNamedQuery("Company.findByNIP", Company.class);
         tq.setParameter("nip", nip);
         try {

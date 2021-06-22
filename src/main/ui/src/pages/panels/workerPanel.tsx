@@ -26,7 +26,7 @@ import ListReservationsForWorker from "./worker/ListReservationsForWokrersCruise
 import ChangeCruiseGroup from "./worker/ChangeCruiseGroup"
 import AttractionList from "./worker/AttractionList";
 import WorkerHomePage from "../../components/WorkerHomePage";
-
+import CruiseMetadata from "../../components/CruiseMetadata";
 
 export default function WorkerPanel() {
     const {t} = useTranslation()
@@ -166,6 +166,10 @@ export default function WorkerPanel() {
                 {
                     to: '/attractions/:uuid/:published',
                     Component: AttractionList
+                },
+                {
+                    to: '/cruise/metadata/:uuid',
+                    Component: CruiseMetadata
                 }
                 ,
                 {

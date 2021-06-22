@@ -174,6 +174,8 @@ const resources = {
             //change language
             "changeLanguage": "Zmień język",
             //errors
+            //TODO wyjątek z niepowodszeniem parsowania
+            "error.mapper.long.parse": "Niepowodzenie parsowania",
             "error.facade.noSuchElement": "Nie znaleziono elementu w bazie danych",
             "error.security.notAuthorized": "Brak uprawnień do wykonania operacji",
             "error.account.accessLevels.alreadyAssigned": "Poziom dostępu jest już przydzielony do konta",
@@ -588,6 +590,7 @@ const resources = {
             //change language
             "changeLanguage": "Change language",
             //errors
+            "error.mapper.long.parse": "Failed parsing",
             "error.facade.noSuchElement": "No such element found in the database",
             "error.security.notAuthorized": "Operation not authorized",
             "error.account.accessLevels.alreadyAssigned": "Access level already assigned to the account",

@@ -18,8 +18,7 @@ import javax.ws.rs.core.MediaType;
 import java.util.List;
 import java.util.UUID;
 
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.MAPPER_UUID_PARSE;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 import static pl.lodz.p.it.ssbd2021.ssbd03.utils.TransactionRepeater.tryAndRepeat;
 
 @Path("/company")
@@ -70,6 +69,7 @@ public class CompanyController {
 
     /**
      * Metoda odpowiedzialna za dodanie firmy przez moderatora
+     *
      * @param addCompanyDto obiekt dto przechowujący informacje podane przez moderatora
      * @throws BaseAppException Bazowy wyjątek aplikacji rzucany w przypadku naruszenia zasad biznesowych
      */
@@ -91,7 +91,11 @@ public class CompanyController {
     @Path("/metadata/{nip}")
     @Produces(MediaType.APPLICATION_JSON)
     public MetadataDto getCompanyMetadata(@PathParam("nip") String nip) throws BaseAppException {
-            return tryAndRepeat(companyEndpoint, () -> companyEndpoint.getCompanyMetadata(nip));
-
+        try {
+            long companyNIP = Long.parseLong(nip);
+            return tryAndRepeat(companyEndpoint, () -> companyEndpoint.getCompanyMetadata(companyNIP));
+        } catch (NumberFormatException e) {
+            throw new MapperException(MAPPER_LONG_PARSE);
+        }
     }
 }

@@ -55,5 +55,5 @@ public interface CompanyEndpointLocal extends TransactionalEndpoint {
      * @return Reprezentacja DTO metadanych
      * @throws BaseAppException Bazowy wyjątek aplikacji
      */
-    MetadataDto getCompanyMetadata(String nip) throws BaseAppException;
+    MetadataDto getCompanyMetadata(long nip) throws BaseAppException;
 }

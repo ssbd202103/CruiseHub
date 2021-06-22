@@ -44,3 +44,13 @@ export function publishCruise(uuid: string, version: number, etag: string,) {
         }
     })
 }
+export function getCruiseGroupMetadata(uuid:string){
+    const {token} = store.getState()
+
+    return axios.get(`cruise/metadata/${uuid}`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+
+}
