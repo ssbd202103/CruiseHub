@@ -96,7 +96,7 @@ export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}:
         setLastIncorrectAuthenticationLogicalAddress(currentSelfMTD.lastIncorrectAuthenticationLogicalAddress);
         setNumberOfAuthenticationFailures(currentSelfMTD.numberOfAuthenticationFailures)
         setVersion(currentSelfMTD.version);
-        setLanguage(currentSelfMTD.language);
+        setLanguage(currentSelfMTD.languageType);
     }, [firstName, secondName])
 
     const changeData = () => {

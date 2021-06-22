@@ -107,7 +107,7 @@ export default function ChangeClientData({open, onOpen, onConfirm, onCancel}: Ch
         setLastIncorrectAuthenticationLogicalAddress(currentSelfMTD.lastIncorrectAuthenticationLogicalAddress);
         setNumberOfAuthenticationFailures(currentSelfMTD.numberOfAuthenticationFailures)
         setVersion(currentSelfMTD.version);
-        setLanguage(currentSelfMTD.language);
+        setLanguage(currentSelfMTD.languageType);
 
     }, [firstName, secondName, phoneNumber])
 

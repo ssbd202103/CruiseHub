@@ -32,5 +32,5 @@ public class AccountMetadataDto {
 
     private int numberOfAuthenticationFailures;
 
-    private LanguageTypeWrapper languageType;
+    private String languageType;
 }

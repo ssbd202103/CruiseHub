@@ -412,6 +412,6 @@ public class AccountMapper {
                 account.getLastCorrectAuthenticationDateTime(),
                 account.getLastCorrectAuthenticationLogicalAddress(),
                 account.getNumberOfAuthenticationFailures(),
-                account.getLanguageType());
+                account.getLanguageType().getName().toString());
     }
 }

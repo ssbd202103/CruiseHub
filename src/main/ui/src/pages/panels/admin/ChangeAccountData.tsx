@@ -312,7 +312,7 @@ export default function ChangeAccountData() {
         setLastIncorrectAuthenticationLogicalAddress(currentAccountMTD.lastIncorrectAuthenticationLogicalAddress);
         setNumberOfAuthenticationFailures(currentAccountMTD.numberOfAuthenticationFailures)
         setVersion(currentAccountMTD.version);
-        setLanguage(currentAccountMTD.language);
+        setLanguage(currentAccountMTD.languageType);
 
         if (clientAddr) {
             setAlterTypeAdr(currentAccountAddressMTD.alterType);
