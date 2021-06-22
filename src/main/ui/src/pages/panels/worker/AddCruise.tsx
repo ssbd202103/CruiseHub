@@ -15,7 +15,7 @@ import pl from "date-fns/locale/pl"
 import eng from "date-fns/locale/en-GB"
 import styles from "../../../styles/auth.global.module.css";
 import DarkedSelect from "../../../components/DarkedSelect";
-import {getAllCruiseGroup} from "../../../Services/cruiseGroupService";
+import {getAllCruiseGroup, getCruiseGroupForBusinessWorker} from "../../../Services/cruiseGroupService";
 import {refreshToken} from "../../../Services/userService";
 
 
@@ -99,11 +99,12 @@ export default function AddCruise() {
     };
     const maxNumber = 1;
 
+    const worker_Company = useSelector(selectCompany);
 
     useEffect(() => {
 
-        getAllCruiseGroup().then(res => {
-            setCruiseGroupList(res.data.filter(({active}: { active: boolean }) => active).map((cruiseGroup: { uuid: string, name: string }) => cruiseGroup.uuid.toString()))
+        getCruiseGroupForBusinessWorker(worker_Company).then(res => {
+            setCruiseGroupList(res.data.filter(({active}: { active: boolean }) => active).map((cruiseGroup: { uuid: string, name: string }) => cruiseGroup.name +" - ( " +cruiseGroup.uuid+ " )"))
         }).catch(error => {
             const message = error.response.data
             handleError(message, error.response.status)
@@ -169,7 +170,7 @@ export default function AddCruise() {
             const json = JSON.stringify({
                 startDate: newStartDate.toISOString(),
                 endDate: newEndDate.toISOString(),
-                cruiseGroupUUID: cruiseGroup.toString()
+                cruiseGroupUUID: cruiseGroup.substr(-38,36)
             })
             axios.post('cruise/new-cruise',json,{
                 headers: {
