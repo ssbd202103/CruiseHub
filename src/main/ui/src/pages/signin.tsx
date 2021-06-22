@@ -12,13 +12,14 @@ import {useTranslation} from 'react-i18next'
 import styles from '../styles/auth.global.module.css'
 import axios from "../Services/URL"
 import React, {useEffect, useState} from "react"
-import {setLogin as setLoginAction} from '../redux/slices/userSlice'
+import {ILoginUserSliceState, selectDarkMode, setLogin as setLoginAction} from '../redux/slices/userSlice'
 
 import {useSnackbarQueue} from "./snackbar";
 import useHandleError from "../errorHandler";
 import store from "../redux/store";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import PopupAcceptAction from "../PopupAcceptAction";
+import i18n from "i18next";
 
 export default function SignIn() {
     const {t} = useTranslation();
@@ -34,6 +35,9 @@ export default function SignIn() {
     const [loginEmptyError, setLoginEmptyError] = useState(false)
     const [passwordEmptyError, setPasswordEmptyError] = useState(false)
 
+    const darkMode = useSelector(selectDarkMode)
+
+    console.log("darkMode: ", darkMode)
 
     const auth = () => {
         if (login === "" || password === "") {
@@ -42,7 +46,9 @@ export default function SignIn() {
         } else {
             const json = JSON.stringify({
                 login: login,
-                password: password
+                password: password,
+                darkMode: darkMode,
+                language: i18n.language.toUpperCase()
             })
             axios.post('/auth/sign-in', json, {
                 headers: {

@@ -1,9 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.managers;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Address;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
@@ -310,7 +307,7 @@ public interface AccountManagerLocal {
      * @param login Login uzytkownika
      * @throws BaseAppException Bazowy wyjatek aplikacji
      */
-    void sendAuthenticationCodeEmail(String login) throws BaseAppException;
+    void sendAuthenticationCodeEmail(String login, boolean darkMode, LanguageType languageType) throws BaseAppException;
 
 
     /**
