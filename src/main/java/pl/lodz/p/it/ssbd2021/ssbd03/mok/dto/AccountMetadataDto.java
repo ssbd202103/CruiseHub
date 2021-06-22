@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.LanguageTypeWrapper;
 
 import java.time.LocalDateTime;
 
@@ -30,4 +31,6 @@ public class AccountMetadataDto {
     private String lastCorrectAuthenticationLogicalAddress;
 
     private int numberOfAuthenticationFailures;
+
+    private LanguageTypeWrapper languageType;
 }

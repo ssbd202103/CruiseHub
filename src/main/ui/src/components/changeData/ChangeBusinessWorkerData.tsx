@@ -51,7 +51,7 @@ export default function ChangeBusinessWorkerData({open, onOpen, onConfirm, onCan
     const [lastIncorrectAuthenticationLogicalAddress, setLastIncorrectAuthenticationLogicalAddress] = useState('')
     const [numberOfAuthenticationFailures, setNumberOfAuthenticationFailures] = useState('')
     const [version, setVersion] = useState('')
-
+    const [language, setLanguage] = useState('')
     const [buttonPopup, setButtonPopup] = useState(false);
 
     const handleErase = () => {
@@ -107,6 +107,7 @@ export default function ChangeBusinessWorkerData({open, onOpen, onConfirm, onCan
         setLastIncorrectAuthenticationLogicalAddress(currentSelfMTD.lastIncorrectAuthenticationLogicalAddress);
         setNumberOfAuthenticationFailures(currentSelfMTD.numberOfAuthenticationFailures)
         setVersion(currentSelfMTD.version);
+        setLanguage(currentSelfMTD.language);
 
     }, [firstName, secondName, phoneNumber])
 
@@ -204,6 +205,7 @@ export default function ChangeBusinessWorkerData({open, onOpen, onConfirm, onCan
                     <td className={tbStyles.td}><h4>{t("lastIncorrectAuthenticationDateTime")}</h4></td>
                     <td className={tbStyles.td}><h4>{t("lastIncorrectAuthenticationLogicalAddress")}</h4></td>
                     <td className={tbStyles.td}><h4>{t("numberOfAuthenticationFailures")}</h4></td>
+                    <td className={tbStyles.td}><h4>{t("language")}</h4></td>
                 </tr>
                 <tr>
                     <td className={tbStyles.tdData}><h4>{lastCorrectAuthenticationDateTime}</h4></td>
@@ -211,6 +213,7 @@ export default function ChangeBusinessWorkerData({open, onOpen, onConfirm, onCan
                     <td className={tbStyles.tdData}><h4>{lastIncorrectAuthenticationDateTime}</h4></td>
                     <td className={tbStyles.tdData}><h4>{lastIncorrectAuthenticationLogicalAddress}</h4></td>
                     <td className={tbStyles.tdData}><h4>{numberOfAuthenticationFailures}</h4></td>
+                    <td className={tbStyles.tdData}><h4>{language}</h4></td>
                 </tr>
                 </Grid>
             </Grid>

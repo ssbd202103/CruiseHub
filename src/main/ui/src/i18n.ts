@@ -166,6 +166,7 @@ const resources = {
             "lastIncorrectAuthenticationLogicalAddress": "Adres IP ostatniej niepoprawnej autoryzacji:",
             "numberOfAuthenticationFailures": "Liczba niepoprawnych autoryzacji:",
             "version": "Wersja:",
+            "language": "Język",
             //cruisecard
             "cruiseExample": "Rejs po Morzu Śródziemnym",
             "createCruiseGroup": "Stwórz nową grupę wycieczek",
@@ -581,6 +582,7 @@ const resources = {
             "lastIncorrectAuthenticationLogicalAddress": "Last incorrect authentication IP Address:",
             "numberOfAuthenticationFailures": "Number of authentication failures:",
             "version": "Version:",
+            "language": "Language",
             //cruisecard
             "cruiseExample": "Cruise on the Mediterranean Sea",
             //change language

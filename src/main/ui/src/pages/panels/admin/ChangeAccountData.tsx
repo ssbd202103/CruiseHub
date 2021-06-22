@@ -76,7 +76,7 @@ export default function ChangeAccountData() {
     const [creationDateTimeAcl, setCreationDateTimeAcl] = useState('')
     const [lastAlterDateTimeAcl, setLastAlterDateTimeAcl] = useState('')
     const [versionAcl, setVersionAcl] = useState('')
-
+    const [language, setLanguage] = useState('')
     const [businessPhoneNumber, setBusinessPhoneNumber] = useState('')
     const {token} = store.getState()
     const [buttonPopupAcceptChangeNumber, setButtonPopupAcceptChangeNumber] = useState(false);
@@ -312,6 +312,7 @@ export default function ChangeAccountData() {
         setLastIncorrectAuthenticationLogicalAddress(currentAccountMTD.lastIncorrectAuthenticationLogicalAddress);
         setNumberOfAuthenticationFailures(currentAccountMTD.numberOfAuthenticationFailures)
         setVersion(currentAccountMTD.version);
+        setLanguage(currentAccountMTD.language);
 
         if (clientAddr) {
             setAlterTypeAdr(currentAccountAddressMTD.alterType);
@@ -414,6 +415,7 @@ export default function ChangeAccountData() {
                             <td className={tbStyles.td}><h4>{t("lastIncorrectAuthenticationDateTime")}</h4></td>
                             <td className={tbStyles.td}><h4>{t("lastIncorrectAuthenticationLogicalAddress")}</h4></td>
                             <td className={tbStyles.td}><h4>{t("numberOfAuthenticationFailures")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("language")}</h4></td>
                         </tr>
                         <tr>
                             <td className={tbStyles.tdData}><h4>{lastCorrectAuthenticationDateTime}</h4></td>
@@ -421,6 +423,7 @@ export default function ChangeAccountData() {
                             <td className={tbStyles.tdData}><h4>{lastIncorrectAuthenticationDateTime}</h4></td>
                             <td className={tbStyles.tdData}><h4>{lastIncorrectAuthenticationLogicalAddress}</h4></td>
                             <td className={tbStyles.tdData}><h4>{numberOfAuthenticationFailures}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{language}</h4></td>
                         </tr>
                     </Grid>
                     </Grid>
@@ -482,6 +485,7 @@ export default function ChangeAccountData() {
                             <td className={tbStyles.td}><h4>{t("lastIncorrectAuthenticationDateTime")}</h4></td>
                             <td className={tbStyles.td}><h4>{t("lastIncorrectAuthenticationLogicalAddress")}</h4></td>
                             <td className={tbStyles.td}><h4>{t("numberOfAuthenticationFailures")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("language")}</h4></td>
                         </tr>
                         <tr>
                             <td className={tbStyles.tdData}><h4>{lastCorrectAuthenticationDateTime}</h4></td>
@@ -489,6 +493,7 @@ export default function ChangeAccountData() {
                             <td className={tbStyles.tdData}><h4>{lastIncorrectAuthenticationDateTime}</h4></td>
                             <td className={tbStyles.tdData}><h4>{lastIncorrectAuthenticationLogicalAddress}</h4></td>
                             <td className={tbStyles.tdData}><h4>{numberOfAuthenticationFailures}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{language}</h4></td>
                         </tr>
                         </Grid>
                     </Grid>
