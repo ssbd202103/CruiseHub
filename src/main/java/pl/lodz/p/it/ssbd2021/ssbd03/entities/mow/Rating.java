@@ -72,6 +72,7 @@ public class Rating extends BaseEntity {
         this.account = account;
         this.cruiseGroup = cruiseGroup;
         this.rating = rating;
+        this.uuid = UUID.randomUUID();
     }
 
     public Rating() {

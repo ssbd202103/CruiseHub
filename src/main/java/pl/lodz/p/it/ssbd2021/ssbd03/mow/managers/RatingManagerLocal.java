@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.managers;
 import com.fasterxml.jackson.databind.ser.Serializers;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Rating;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 
 import javax.ejb.Local;
 import java.util.List;
@@ -15,16 +16,16 @@ public interface RatingManagerLocal {
      * Tworzy ocenę przypisując do niej odpowiednego użytkownika oraz wycieczkę, dla której ta ocena została wystawiona
      *
      * @param cruiseGroupUUID uuid grupy wycieczek, dla której zostanie wystawiona ocena
-     * @param rating     wartość oceny
+     * @param rating          wartość oceny
      * @throws BaseAppException bazowy wyjątek aplikacji, zwracany w przypadku nieznależenia użytkownika lub grupy wycieczek
      */
     void createRating(UUID cruiseGroupUUID, Double rating) throws BaseAppException;
 
     //TODO: bledny javadoc @Vitalii
+
     /**
      * Usuwa ocenę o podanym użytkowniku oraz wycieczce
      *
-     * @param login      login użytkownika, którego opinia zostanie usunięta
      * @param cruiseGroupUUID uuid grupy wycieczek, dla której opinia zostanie usunięta
      * @throws BaseAppException bazowy wyjątek aplikacji, zwracany w przypadku nieznależenia wycieczki, użytkownika lub oceny
      */
@@ -39,6 +40,7 @@ public interface RatingManagerLocal {
 
     /**
      * Metoda pobierająca wszystkie oceny klienta
+     *
      * @param login login klienta
      * @return listę ocen
      * @throws BaseAppException bazowy wyjątek aplikacji
@@ -47,9 +49,13 @@ public interface RatingManagerLocal {
 
     /**
      * Usuwa ocenę klienta zgloszoną przez moderatora
-     * @param login login klienta
+     *
+     * @param login           login klienta
      * @param cruiseGroupUUID UUID grupy wycieczek, do ktorej nalezy ocena
      * @throws BaseAppException bazowy wyjątek aplikacji
      */
     void removeClientRating(String login, UUID cruiseGroupUUID) throws BaseAppException;
+
+    Rating findByUuid(UUID uuid) throws FacadeException;
+
 }
