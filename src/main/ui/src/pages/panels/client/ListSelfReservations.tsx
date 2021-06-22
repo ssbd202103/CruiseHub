@@ -18,6 +18,7 @@ import {
     getSelfReservations, removeReservation,
 } from "../../../Services/reservationService";
 import {useSnackbarQueue} from "../../snackbar";
+import PopupAcceptAction from "../../../PopupAcceptAction";
 
 const useRowStyles = makeStyles({
     root: {
@@ -27,6 +28,7 @@ const useRowStyles = makeStyles({
     },
 });
 
+const [uuid, setUUID] = useState('')
 function createData(
     uuid: string,
     cruiseName: string,
@@ -55,40 +57,39 @@ export interface RowProps {
     onReload: () => void
 }
 
+const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
+
+
+
+
 function Row({row, style, onReload}: RowProps) {
     const {t} = useTranslation();
     const classes = useRowStyles();
     const buttonClass = useButtonStyles();
-    const handleError = useHandleError()
-    const showSuccess = useSnackbarQueue('success')
 
-    const cancelReservation = () => {
-        removeReservation(row.uuid).then(res => {
-            showSuccess(t('reservationCancelled'))
-            onReload()
-        }).catch(error => {
-            const message = error.response.data
-            handleError(message, error.response.status)
-            onReload()
-        }).then(res => {
-            refreshToken()
-        })
-    }
+
+
+
 
     return (
-        <TableRow className={classes.root}>
-            <TableCell style={style}>{row.cruiseName}</TableCell>
-            <TableCell style={style}>{row.attractions.map(item => t(item)).join(', ')}</TableCell>
-            <TableCell style={style}>{row.startDate.replace('T', ' ').split('.').shift()}</TableCell>
-            <TableCell style={style}>{row.endDate.replace('T', ' ').split('.').shift()}</TableCell>
-            <TableCell style={style}>{row.phoneNumber}</TableCell>
-            <TableCell style={style}>{row.numberOfSeats}</TableCell>
-            <TableCell style={style}>{row.price}</TableCell>
-            <TableCell style={style}>
-                <Button onClick={cancelReservation}
-                        className={buttonClass.root}>{t("cancel reservation btn")}</Button>
-            </TableCell>
-        </TableRow>
+        <div>
+            <TableRow className={classes.root}>
+                <TableCell style={style}>{row.cruiseName}</TableCell>
+                <TableCell style={style}>{row.attractions.map(item => t(item)).join(', ')}</TableCell>
+                <TableCell style={style}>{row.startDate.replace('T', ' ').split('.').shift()}</TableCell>
+                <TableCell style={style}>{row.endDate.replace('T', ' ').split('.').shift()}</TableCell>
+                <TableCell style={style}>{row.phoneNumber}</TableCell>
+                <TableCell style={style}>{row.numberOfSeats}</TableCell>
+                <TableCell style={style}>{row.price}</TableCell>
+                <TableCell style={style}>
+                    <Button onClick={()=>{setUUID(row.uuid)
+                        setButtonPopupAcceptAction(true)}}
+                            className={buttonClass.root}>{t("cancel reservation btn")}</Button>
+                </TableCell>
+            </TableRow>
+
+        </div>
+
     );
 }
 
@@ -109,7 +110,20 @@ const ListSelfReservations = () => {
     const [reservations, setReservations] = useState([]);
     const [searchInput, setSearchInput] = useState("");
     const handleError = useHandleError()
+    const showSuccess = useSnackbarQueue('success')
 
+    const cancelReservation = () => {
+        removeReservation(uuid).then(res => {
+            showSuccess(t('reservationCancelled'))
+            onReload()
+        }).catch(error => {
+            const message = error.response.data
+            handleError(message, error.response.status)
+            onReload()
+        }).then(res => {
+            refreshToken()
+        })
+    }
     const darkMode = useSelector(selectDarkMode)
 
     useEffect(() => {
@@ -211,6 +225,14 @@ const ListSelfReservations = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
+            <PopupAcceptAction
+                open={buttonPopupAcceptAction}
+                onConfirm={() => {
+                    cancelReservation()
+                }}
+                onCancel={() => {
+                    setButtonPopupAcceptAction(false)
+                }}/>
         </div>
     );
 };
