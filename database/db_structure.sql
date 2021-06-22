@@ -390,6 +390,7 @@ create table ratings
     account_id           bigint                                                                      not null, -- FOREIGN KEY
     cruise_group_id      bigint                                                                      not null, -- FOREIGN KEY
     rating               numeric(2, 1) check ((rating >= (1)::numeric) AND (rating <= (5)::numeric)) not null,
+    uuid                 varchar                                                                     not null,
 
     creation_date_time   timestamp default CURRENT_TIMESTAMP                                         not null,
     last_alter_date_time timestamp                                                                   not null,
@@ -644,7 +645,6 @@ GRANT SELECT
 
 GRANT SELECT
     ON clients TO ssbd03mow;
-
 
 
 
