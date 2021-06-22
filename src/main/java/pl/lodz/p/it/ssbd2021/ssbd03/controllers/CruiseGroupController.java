@@ -4,7 +4,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.AddCruiseGroupDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.CruiseGroupWithDetailsDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.DeactivateCruiseGroupDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.changeCruiseGroupDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.ChangeCruiseGroupDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.CruiseGroupEndpointLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.ETagFilterBinding;
 
@@ -90,7 +90,7 @@ public class CruiseGroupController {
     @Path("/change-cruise-group")
     @Consumes(MediaType.APPLICATION_JSON)
     @ETagFilterBinding
-    public void changeCruiseGroupData(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid changeCruiseGroupDto dto,
+    public void changeCruiseGroupData(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid ChangeCruiseGroupDto dto,
                                       @HeaderParam("If-Match") String etag) throws BaseAppException {
         checkEtagIntegrity(dto, etag);
         tryAndRepeat(cruiseGroupEndpoint, () -> cruiseGroupEndpoint.changeCruiseGroup(dto));

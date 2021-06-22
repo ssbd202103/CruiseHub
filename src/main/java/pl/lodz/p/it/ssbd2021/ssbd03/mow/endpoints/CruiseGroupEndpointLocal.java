@@ -4,7 +4,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints.TransactionalEndpoint;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.CruiseGroupWithDetailsDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.AddCruiseGroupDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.changeCruiseGroupDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.ChangeCruiseGroupDto;
 
 import javax.ejb.Local;
 import java.util.List;
@@ -30,7 +30,7 @@ public interface CruiseGroupEndpointLocal extends TransactionalEndpoint {
      * @return zmieniona grupa wycieczek
      * @throws BaseAppException Bazowy wyjątek aplikacji
      */
-    void changeCruiseGroup(changeCruiseGroupDto changeCruiseGroup) throws BaseAppException;
+    void changeCruiseGroup(ChangeCruiseGroupDto changeCruiseGroup) throws BaseAppException;
 
 
     /**

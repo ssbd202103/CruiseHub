@@ -26,12 +26,12 @@ public class EditAttractionDto implements SignableEntity {
     @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
     private String newDescription;
 
-    @Positive(message = CONSTRAINT_POSITIVE_ERROR)
+    @Positive(message = CONSTRAINT_POSITIVE)
     private double newPrice;
 
-    @Positive(message = CONSTRAINT_POSITIVE_ERROR)
+    @Positive(message = CONSTRAINT_POSITIVE)
     private int newNumberOfSeats;
-    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
+    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO)
     private long version;
 
     @JsonIgnore

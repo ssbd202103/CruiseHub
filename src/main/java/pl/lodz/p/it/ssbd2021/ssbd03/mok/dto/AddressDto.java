@@ -5,10 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.*;
 
-import javax.validation.constraints.Positive;
-
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_POSITIVE_ERROR;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

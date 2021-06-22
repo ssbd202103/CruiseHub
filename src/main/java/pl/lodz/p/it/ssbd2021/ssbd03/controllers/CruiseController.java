@@ -114,7 +114,7 @@ public class CruiseController {
     @POST
     @Path("/reserve")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void createReservation(CreateReservationDto reservationDto) throws BaseAppException {
+    public void createReservation(@Valid CreateReservationDto reservationDto) throws BaseAppException {
         tryAndRepeat(reservationEndpoint, () -> reservationEndpoint.createReservation(reservationDto));
     }
 
@@ -128,7 +128,7 @@ public class CruiseController {
     @DELETE
     @Path("/cancelReservation/{reservationUUID}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void cancelReservation(@PathParam("reservationUUID") UUID reservationUUID) throws BaseAppException {
+    public void cancelReservation(@PathParam("reservationUUID") UUID reservationUUID) throws BaseAppException { //todo change UUID to String and handle parsing exception
         tryAndRepeat(reservationEndpoint, () -> reservationEndpoint.cancelReservation(reservationUUID));
     }
 

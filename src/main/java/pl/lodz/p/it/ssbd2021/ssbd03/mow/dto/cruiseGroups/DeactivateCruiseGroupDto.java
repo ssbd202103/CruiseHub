@@ -10,15 +10,15 @@ import javax.validation.constraints.PositiveOrZero;
 
 import java.util.UUID;
 
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_POSITIVE_OR_ZERO_ERROR;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_POSITIVE_OR_ZERO;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class DeactivateCruiseGroupDto implements SignableEntity{
 
-    private UUID uuid;
+    private UUID uuid; //todo change UUID to String and handle parsing exception
 
-    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
+    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO)
     private long version;
 
     @JsonIgnore

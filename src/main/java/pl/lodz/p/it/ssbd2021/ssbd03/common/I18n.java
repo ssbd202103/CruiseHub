@@ -80,8 +80,8 @@ public class I18n {
     public static final String EMAIL_RESERVED_ERROR = "error.database.emailReserved";
     public static final String USER_NOT_EXISTS_ERROR = "error.database.userNotExists";
     public static final String CONSTRAINT_VIOLATION_ERROR = "error.constraintViolation";
-    public static final String CONSTRAINT_POSITIVE_ERROR = "error.constraint.positive";
-    public static final String CONSTRAINT_POSITIVE_OR_ZERO_ERROR = "error.constraint.positiveOrZero";
+    public static final String CONSTRAINT_POSITIVE = "error.constraint.positive";
+    public static final String CONSTRAINT_POSITIVE_OR_ZERO = "error.constraint.positiveOrZero";
     public static final String CONSTRAINT_NOT_EMPTY = "error.constraint.notEmpty";
     public static final String CONSTRAINT_NOT_NULL = "error.constraint.notNull";
     public static final String APP_FORBIDDEN = "error.forbidden";
