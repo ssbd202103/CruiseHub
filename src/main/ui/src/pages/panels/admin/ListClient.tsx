@@ -145,6 +145,9 @@ function Row(props: RowProps) {
     const handleSetOpen = async () => {
         getAccountDetailsAbout(row.login).then(res => {
             sessionStorage.setItem("changeAccountData", JSON.stringify(res.data));
+            store.dispatch(setChangeAccessLevelStateAccount(res.data))
+            sessionStorage.setItem('grantAccessLevelAccount', JSON.stringify(row));
+            sessionStorage.setItem('resetPasswordAccount', JSON.stringify(row));
         }).then(res => {
             getAccountMetadataDetailsAbout(row.login).then(respo => {
                 sessionStorage.setItem("changeAccountDataMta", JSON.stringify(respo.data));
@@ -169,23 +172,8 @@ function Row(props: RowProps) {
             });
         });
     }
-    const setCurrentGrantAccessLevelAccount = () => {
-        sessionStorage.setItem('grantAccessLevelAccount', JSON.stringify(row));
-    }
 
 
-    const setCurrentResetPasswordAccount = () => {
-        sessionStorage.setItem('resetPasswordAccount', JSON.stringify(row));
-    }
-
-    const setCurrentChangeAccessLevelStateAccount = async () => {
-        getAccountDetailsAbout(row.login).then(res => {
-            store.dispatch(setChangeAccessLevelStateAccount(res.data))
-        }).catch(error => {
-            const message = error.response.data
-            handleError(message, error.response.status)
-        });
-    }
 
     return (
         <React.Fragment>
@@ -222,7 +210,7 @@ function Row(props: RowProps) {
                                                                className={buttonClass.root}>{t("edit")}</RoundedButton>
                                             </Link>
                                             <Link to="/accounts/resetSomebodyPassword">
-                                                <RoundedButton color="blue" onClick={setCurrentResetPasswordAccount}
+                                                <RoundedButton color="blue"
                                                                className={buttonClass.root}>{t("reset password")}</RoundedButton>
                                             </Link>
 
@@ -257,13 +245,12 @@ function Row(props: RowProps) {
                                             }}>{row.active ? t("block") : t("unblock")}</RoundedButton>
 
                                             <Link to="/accounts/grant_access_level">
-                                                <RoundedButton color="blue" onClick={setCurrentGrantAccessLevelAccount}
+                                                <RoundedButton color="blue"
                                                                className={buttonClass.root}>{t("grant access level")}</RoundedButton>
                                             </Link>
 
                                             <Link to="/accounts/change_access_level_state">
                                                 <RoundedButton color="blue"
-                                                               onClick={setCurrentChangeAccessLevelStateAccount}
                                                                className={buttonClass.root}>{t("change access level state")}</RoundedButton>
                                             </Link>
                                         </TableCell>
