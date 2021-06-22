@@ -291,6 +291,7 @@ const resources = {
             "/accounts/ratings": "Oceny",
             "/company/business-workers": "Pracownicy firmy",
             "/company": "Firma",
+            "/profile/ratings": "Oceny",
 
             'yes': 'Tak',
             'no': 'Nie',
@@ -704,6 +705,7 @@ const resources = {
             "/company": "Company",
             'accept.action': 'Do you want to do this action?',
             "/companies": "Companies",
+            "/profile/ratings": "Ratings",
 
             'yes': 'Yes',
             'no': 'No',
