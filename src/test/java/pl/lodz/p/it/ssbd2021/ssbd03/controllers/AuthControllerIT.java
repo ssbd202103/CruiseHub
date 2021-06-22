@@ -19,6 +19,7 @@ class AuthControllerIT {
         Properties securityProperties = PropertiesReader.getSecurityProperties();
         authBaseUri = securityProperties.getProperty("app.baseurl") + "/api/auth";
     }
+
     @Disabled
     @Test
     void auth() {
@@ -26,13 +27,13 @@ class AuthControllerIT {
         String correctPassword = "abcABC123*";
 
         // correct test
-        AuthenticateDto authInfo = new AuthenticateDto(correctLogin, correctPassword);
+        AuthenticateDto authInfo = new AuthenticateDto(correctLogin, correctPassword, true, "PL");
         Response response = given().relaxedHTTPSValidation().baseUri(authBaseUri).contentType("application/json").body(authInfo).post("/sign-in");
         assertFalse(response.getBody().asPrettyString().isEmpty());
         assertEquals(200, response.getStatusCode());
 
         // a test with an incorrect password
-        AuthenticateDto authInfoFalse = new AuthenticateDto(correctLogin, "Incorre2*ctPassword");
+        AuthenticateDto authInfoFalse = new AuthenticateDto(correctLogin, "Incorre2*ctPassword", true, "PL");
         Response responseFalse = given().relaxedHTTPSValidation().baseUri(authBaseUri).contentType("application/json").body(authInfoFalse).post("/sign-in");
         assertEquals(401, responseFalse.getStatusCode());
     }

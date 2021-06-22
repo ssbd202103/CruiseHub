@@ -14,6 +14,10 @@ public class AuthenticateDto {
     private String login;
     private String password;
 
+    private Boolean darkMode;
+
+    private String language;
+
     public Credential toCredential() {
         return new UsernamePasswordCredential(login, password);
     }
