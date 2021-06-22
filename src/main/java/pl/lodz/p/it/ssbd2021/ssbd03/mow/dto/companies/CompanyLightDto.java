@@ -7,7 +7,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.validators.CompanyName;
 
 import javax.validation.constraints.Positive;
 
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_POSITIVE_ERROR;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_POSITIVE;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,6 +16,6 @@ public class CompanyLightDto {
     @CompanyName
     private String name;
 
-    @Positive(message = CONSTRAINT_POSITIVE_ERROR)
+    @Positive(message = CONSTRAINT_POSITIVE)
     private long nip;
 }

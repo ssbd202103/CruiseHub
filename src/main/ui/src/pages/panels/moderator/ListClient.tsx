@@ -11,8 +11,6 @@ import {useTranslation} from "react-i18next";
 import {useSelector} from "react-redux";
 import {selectDarkMode} from "../../../redux/slices/userSlice";
 import {getAllAccounts} from "../../../Services/accountsService";
-import DarkedTextField from "../../../components/DarkedTextField";
-import {useSnackbarQueue} from "../../snackbar";
 import {refreshToken} from "../../../Services/userService";
 import {Button, TextField} from "@material-ui/core";
 import Autocomplete from "../../../components/Autocomplete";
@@ -79,22 +77,21 @@ function Row(props: RowProps) {
             <TableCell style={style}>{row.firstName}</TableCell>
             <TableCell style={style}>{row.secondName}</TableCell>
             <TableCell style={style}>{row.email}</TableCell>
-            <TableCell style={style}><ActiveIcon active={row.active} /></TableCell>
+            <TableCell style={style}><ActiveIcon active={row.active}/></TableCell>
             <TableCell style={style}>{row.accessLevels.map(item => t(item)).join(', ')}</TableCell>
-            {
-                row.accessLevels.includes('CLIENT') ? (
-                    <TableCell style={style}>
-                        <Link to="/accounts/ratings">
-                            <TableCell style={style}>
-                                <Button
-                                    onClick={() => sessionStorage.setItem("login", row.login)}
-                                    className={buttonClass.root}>{t("ratings")}
-                                </Button>
-                            </TableCell>
-                        </Link>
-                    </TableCell>
-                ) : ""
-            }
+
+            <TableCell style={style}>
+                {row.accessLevels.includes('CLIENT') ? (
+                    <Link to="/accounts/ratings">
+                        <TableCell style={style}>
+                            <Button
+                                onClick={() => sessionStorage.setItem("login", row.login)}
+                                className={buttonClass.root}>{t("ratings")}
+                            </Button>
+                        </TableCell>
+                    </Link>
+                ) : ""}
+            </TableCell>
         </TableRow>
     );
 }
@@ -110,7 +107,7 @@ export default function ModListClient() {
 
     useEffect(() => {
         getAllAccounts().then(res => {
-            setUsers(res.data)
+            setUsers(res.data.sort((account1: any, account2: any) => account1.login.localeCompare(account2.login)))
         }).catch(error => {
             const message = error.response.data
             handleError(message, error.response.status)

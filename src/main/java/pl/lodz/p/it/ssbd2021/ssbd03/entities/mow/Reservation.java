@@ -49,7 +49,7 @@ public class Reservation extends BaseEntity {
 
     @Getter
     @Setter
-    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
+    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO)
     @Column(name = "number_of_seats")
     private long numberOfSeats;
 
@@ -63,7 +63,7 @@ public class Reservation extends BaseEntity {
 
     @Getter
     @Setter
-    @Positive(message = CONSTRAINT_POSITIVE_ERROR)
+    @Positive(message = CONSTRAINT_POSITIVE)
     @Column(name = "price")
     private Double price;
 

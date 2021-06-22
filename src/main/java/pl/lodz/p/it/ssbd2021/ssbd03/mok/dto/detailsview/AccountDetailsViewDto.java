@@ -48,7 +48,7 @@ public class AccountDetailsViewDto implements SignableEntity {
     @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
     private Set<AccessLevelDetailsViewDto> accessLevels;
 
-    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
+    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO)
     private long version;
 
     @NotEmpty(message = CONSTRAINT_NOT_EMPTY)

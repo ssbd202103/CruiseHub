@@ -12,8 +12,10 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.detailsview.accesslevels.ModeratorDe
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_POSITIVE;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -30,11 +32,11 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
 public abstract class AccessLevelDetailsViewDto {
     private boolean enabled;
 
-
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid
     private AccessLevelType accessLevelType;
 
+    @PositiveOrZero(message = CONSTRAINT_POSITIVE)
     private long accVersion;
 
     @Override

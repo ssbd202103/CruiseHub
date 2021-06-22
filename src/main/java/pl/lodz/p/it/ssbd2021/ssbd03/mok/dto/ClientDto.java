@@ -45,7 +45,7 @@ public class ClientDto implements SignableEntity {
     @PhoneNumber
     private String phoneNumber;
 
-    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
+    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO)
     private long version;
 
     @Override

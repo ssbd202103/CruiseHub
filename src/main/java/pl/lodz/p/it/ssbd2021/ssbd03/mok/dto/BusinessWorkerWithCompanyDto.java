@@ -45,7 +45,7 @@ public class BusinessWorkerWithCompanyDto implements SignableEntity {
     @PhoneNumber
     private String phoneNumber;
 
-    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
+    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO)
     private long version;
 
     @CompanyName
@@ -57,7 +57,7 @@ public class BusinessWorkerWithCompanyDto implements SignableEntity {
     @PhoneNumber
     private String companyPhoneNumber;
 
-    public BusinessWorkerWithCompanyDto(@Login String login, @Name String firstName, @Name String secondName, @Email(message = REGEX_INVALID_EMAIL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) String email, @NotNull(message = CONSTRAINT_NOT_NULL) LanguageType languageType, @PhoneNumber String phoneNumber, @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR) long version, @CompanyName String companyName, @PhoneNumber String companyPhoneNumber) throws ETagException {
+    public BusinessWorkerWithCompanyDto(@Login String login, @Name String firstName, @Name String secondName, @Email(message = REGEX_INVALID_EMAIL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) String email, @NotNull(message = CONSTRAINT_NOT_NULL) LanguageType languageType, @PhoneNumber String phoneNumber, @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO) long version, @CompanyName String companyName, @PhoneNumber String companyPhoneNumber) throws ETagException {
         this.login = login;
         this.firstName = firstName;
         this.secondName = secondName;

@@ -7,6 +7,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.RatingEndpointLocal;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -32,7 +33,7 @@ public class RatingController {
     @Path("/create")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void createRating(CreateRatingDto ratingDto) throws BaseAppException {
+    public void createRating(@Valid CreateRatingDto ratingDto) throws BaseAppException {
         tryAndRepeat(ratingEndpoint, () -> ratingEndpoint.createRating(ratingDto));
     }
 

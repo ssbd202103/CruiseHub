@@ -44,7 +44,7 @@ public class AccountDto implements SignableEntity {
     @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
     private Set<AccessLevelType> accessLevels;
 
-    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
+    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO)
     private long version;
 
     @JsonIgnore

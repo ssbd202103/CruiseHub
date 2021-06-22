@@ -14,7 +14,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Positive;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_EMPTY;
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_POSITIVE_ERROR;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_POSITIVE;
 
 
 @Entity(name = "cruise_addresses")
@@ -36,7 +36,7 @@ public class CruiseAddress extends BaseEntity {
 
     @Getter
     @Setter
-    @Positive(message = CONSTRAINT_POSITIVE_ERROR)
+    @Positive(message = CONSTRAINT_POSITIVE)
     @Column(name = "street_number")
     private int streetNumber;
 

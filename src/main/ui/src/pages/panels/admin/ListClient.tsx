@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Collapse from '@material-ui/core/Collapse';
@@ -12,13 +12,19 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-import {Button, TextField} from "@material-ui/core";
+import {TextField} from "@material-ui/core";
 import {Link} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import axios from "../../../Services/URL";
 import {useSelector} from "react-redux";
 import {selectDarkMode} from "../../../redux/slices/userSlice";
-import {getAccountDetailsAbout, getAllAccounts, getAccountMetadataDetailsAbout,getAccountAccessLevelMetadata,getClientAddressMetadata} from "../../../Services/accountsService";
+import {
+    getAccountAccessLevelMetadata,
+    getAccountDetailsAbout,
+    getAccountMetadataDetailsAbout,
+    getAllAccounts,
+    getClientAddressMetadata
+} from "../../../Services/accountsService";
 import {selectToken} from "../../../redux/slices/tokenSlice";
 import {useSnackbarQueue} from "../../snackbar";
 import store from "../../../redux/store";
@@ -145,13 +151,13 @@ function Row(props: RowProps) {
                 setOpen(state => !state);
                 refreshToken();
             }).then(res => {
-                if(row.accessLevels.includes("BUSINESS_WORKER")){
-                getAccountAccessLevelMetadata('BUSINESS_WORKER', row.login).then(respo => {
-                    sessionStorage.setItem("changeAccountAclDataMta", JSON.stringify(respo.data));
-                    refreshToken();
-                });
+                if (row.accessLevels.includes("BUSINESS_WORKER")) {
+                    getAccountAccessLevelMetadata('BUSINESS_WORKER', row.login).then(respo => {
+                        sessionStorage.setItem("changeAccountAclDataMta", JSON.stringify(respo.data));
+                        refreshToken();
+                    });
                 }
-                if(row.accessLevels.includes("CLIENT")) {
+                if (row.accessLevels.includes("CLIENT")) {
                     getClientAddressMetadata(row.login).then(respo => {
                         sessionStorage.setItem("changeAccountAddressDataMta", JSON.stringify(respo.data));
                         refreshToken();
@@ -160,9 +166,9 @@ function Row(props: RowProps) {
                         handleError(message, error.response.status)
                     });
                 }
-                });
             });
-        }
+        });
+    }
     const setCurrentGrantAccessLevelAccount = () => {
         sessionStorage.setItem('grantAccessLevelAccount', JSON.stringify(row));
     }
@@ -196,7 +202,7 @@ function Row(props: RowProps) {
                 <TableCell style={style}>{row.firstName}</TableCell>
                 <TableCell style={style}>{row.secondName}</TableCell>
                 <TableCell style={style}>{row.email}</TableCell>
-                <TableCell style={style}><ActiveIcon active={row.active} /></TableCell>
+                <TableCell style={style}><ActiveIcon active={row.active}/></TableCell>
                 <TableCell style={style}>{row.accessLevels.map(item => t(item)).join(', ')}</TableCell>
 
             </TableRow>
@@ -212,11 +218,12 @@ function Row(props: RowProps) {
                                     <TableRow>
                                         <TableCell align="center">
                                             <Link to="/accounts/change_account_data">
-                                                <RoundedButton color="blue" className={buttonClass.root}>{t("edit")}</RoundedButton>
+                                                <RoundedButton color="blue"
+                                                               className={buttonClass.root}>{t("edit")}</RoundedButton>
                                             </Link>
                                             <Link to="/accounts/resetSomebodyPassword">
                                                 <RoundedButton color="blue" onClick={setCurrentResetPasswordAccount}
-                                                        className={buttonClass.root}>{t("reset password")}</RoundedButton>
+                                                               className={buttonClass.root}>{t("reset password")}</RoundedButton>
                                             </Link>
 
                                             <RoundedButton color="blue" className={buttonClass.root} onClick={() => {
@@ -231,7 +238,7 @@ function Row(props: RowProps) {
 
                                                     }).catch(error => {
                                                         const message = error.response.data
-                                                        handleError(t(message),error.response.status)
+                                                        handleError(t(message), error.response.status)
                                                     })
                                                 } else {
                                                     unblockAccount({
@@ -244,19 +251,20 @@ function Row(props: RowProps) {
                                                             })
                                                         }).catch(error => {
                                                         const message = error.response.data
-                                                        handleError(t(message),error.response.data)
+                                                        handleError(t(message), error.response.data)
                                                     })
                                                 }
                                             }}>{row.active ? t("block") : t("unblock")}</RoundedButton>
 
                                             <Link to="/accounts/grant_access_level">
                                                 <RoundedButton color="blue" onClick={setCurrentGrantAccessLevelAccount}
-                                                        className={buttonClass.root}>{t("grant access level")}</RoundedButton>
+                                                               className={buttonClass.root}>{t("grant access level")}</RoundedButton>
                                             </Link>
 
                                             <Link to="/accounts/change_access_level_state">
-                                                <RoundedButton color="blue" onClick={setCurrentChangeAccessLevelStateAccount}
-                                                        className={buttonClass.root}>{t("change access level state")}</RoundedButton>
+                                                <RoundedButton color="blue"
+                                                               onClick={setCurrentChangeAccessLevelStateAccount}
+                                                               className={buttonClass.root}>{t("change access level state")}</RoundedButton>
                                             </Link>
                                         </TableCell>
                                     </TableRow>
@@ -281,7 +289,7 @@ export default function AdminListClient() {
 
     const getAccounts = () => {
         return getAllAccounts().then(res => {
-            setUsers(res.data)
+            setUsers(res.data.sort((account1: any, account2: any) => account1.login.localeCompare(account2.login)))
             refreshToken()
         }).catch(error => {
             const message = error.response.data
@@ -352,7 +360,8 @@ export default function AdminListClient() {
                     </TableHead>
                     <TableBody>
                         {search(users.map((user, index) => (
-                            <Row key={index} row={user} style={{color: `var(--${!darkMode ? 'dark' : 'white'})`}} onChange={getAccounts}/>
+                            <Row key={index} row={user} style={{color: `var(--${!darkMode ? 'dark' : 'white'})`}}
+                                 onChange={getAccounts}/>
                         )))}
                     </TableBody>
                 </Table>

@@ -100,13 +100,7 @@ export default function WorkerPanel() {
                     Icon: AccountsListIcon,
                     text: t('listCruiseGroup'),
                     Component: ListCruiseGroup
-                },
-                {
-                    link: '/companies',
-                    Icon: AccountsListIcon,
-                    text: t('list companies'),
-                    Component: ListCompany
-                },{
+                }, {
                     link: '/addCruiseGroup',
                     text: t('createCruiseGroup'),
                     Icon: CreateIcon,
@@ -129,20 +123,32 @@ export default function WorkerPanel() {
                             <ChangeBusinessWorkerData
                                 open={isDataEdit}
                                 onOpen={handleIsDataEdit}
-                                onConfirm={() => {setIsDataEdit(false)}}
-                                onCancel={() => {setIsDataEdit(false)}}
+                                onConfirm={() => {
+                                    setIsDataEdit(false)
+                                }}
+                                onCancel={() => {
+                                    setIsDataEdit(false)
+                                }}
                             />
                             <ChangeEmail
                                 open={isEmailEdit}
                                 onOpen={handleIsEmailEdit}
-                                onConfirm={() => {setIsEmailEdit(false)}}
-                                onCancel={() => {setIsEmailEdit(false)}}
+                                onConfirm={() => {
+                                    setIsEmailEdit(false)
+                                }}
+                                onCancel={() => {
+                                    setIsEmailEdit(false)
+                                }}
                             />
                             <ChangePassword
                                 open={isPasswordEdit}
                                 onOpen={handleIsPasswordEdit}
-                                onConfirm={() => {setIsPasswordEdit(false)}}
-                                onCancel={() => {setIsPasswordEdit(false)}}
+                                onConfirm={() => {
+                                    setIsPasswordEdit(false)
+                                }}
+                                onCancel={() => {
+                                    setIsPasswordEdit(false)
+                                }}
                             />
                         </>
                     )

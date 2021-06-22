@@ -11,7 +11,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RelatedCruiseDto {
-    UUID uuid;
+    private UUID uuid;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private boolean active;

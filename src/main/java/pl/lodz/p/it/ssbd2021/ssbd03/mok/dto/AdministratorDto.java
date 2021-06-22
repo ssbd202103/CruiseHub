@@ -36,7 +36,7 @@ public class AdministratorDto implements SignableEntity {
     @NotNull(message = CONSTRAINT_NOT_NULL)
     private LanguageType languageType;
 
-    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
+    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO)
     private long version;
 
     @Override
