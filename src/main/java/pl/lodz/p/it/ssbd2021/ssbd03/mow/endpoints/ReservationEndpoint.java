@@ -1,6 +1,8 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.common.dto.MetadataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints.BaseEndpoint;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.mappers.MetadataMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Reservation;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.MapperException;
@@ -84,5 +86,11 @@ public class ReservationEndpoint extends BaseEndpoint implements ReservationEndp
             res.add(ReservationMapper.toSelfReservationDto(reservation));
         }
         return res;
+    }
+
+    @RolesAllowed("authenticatedUser")
+    @Override
+    public MetadataDto getReservationMetadata(UUID uuid) throws BaseAppException {
+        return MetadataMapper.toMetadataDto(reservationManager.findByUUID(uuid));
     }
 }

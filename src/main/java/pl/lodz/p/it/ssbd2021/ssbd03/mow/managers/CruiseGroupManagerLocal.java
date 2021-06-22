@@ -1,10 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.managers;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseAddress;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruisePicture;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 
@@ -82,4 +79,13 @@ public interface CruiseGroupManagerLocal {
      * @throws BaseAppException bazowy wyjątek aplikacji.
      */
     List<CruiseGroup> getCruiseGroupForBusinessWorker(String companyName) throws BaseAppException;
+
+    /**
+     * Pobiera grupe wycieczek o danym uuid
+     *
+     * @param uuid uuid grupy wycieczek
+     * @return zwraca informacje o grupie wycieczek
+     * @throws BaseAppException wyjątek wyrzucany w razie nie znależenia atrakcji
+     */
+    CruiseGroup findByUUID(UUID uuid) throws BaseAppException;
 }

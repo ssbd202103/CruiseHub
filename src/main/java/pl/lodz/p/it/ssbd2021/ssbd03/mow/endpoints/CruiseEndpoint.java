@@ -1,6 +1,8 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.common.dto.MetadataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints.BaseEndpoint;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.mappers.MetadataMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.MapperException;
@@ -110,6 +112,12 @@ public class CruiseEndpoint extends BaseEndpoint implements CruiseEndpointLocal 
     @Override
     public List<CruiseForCruiseGroupDto> getCruisesForCruiseGroup(UUID cruiseGroupUUID) throws BaseAppException {
         return CruiseGroupMapper.toCruiseForCruiseGroupDtos(cruiseManager.getCruisesByCruiseGroup(cruiseGroupUUID));
+    }
+
+    @RolesAllowed("authenticatedUser")
+    @Override
+    public MetadataDto getCruiseMetadata(UUID uuid) throws BaseAppException {
+        return MetadataMapper.toMetadataDto(cruiseManager.findByUUID(uuid));
     }
 
 }

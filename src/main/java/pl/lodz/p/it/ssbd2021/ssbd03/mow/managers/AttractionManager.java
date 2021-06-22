@@ -96,6 +96,13 @@ public class AttractionManager extends BaseManagerMow implements AttractionManag
         return attractionFacadeMow.findByCruiseUUID(uuid);
     }
 
+    @PermitAll //TODO
+    @Override
+    public Attraction findByUUID(UUID uuid) throws BaseAppException {
+        return attractionFacadeMow.findByUUID(uuid);
+    }
+
+
     private void validateAttractionChangesPermission(Cruise cruise, String cruisePublishedError, String cruiseDisabledError, String cruiseStartedError) throws BaseAppException {
         BusinessWorker businessWorker = (BusinessWorker) AccountMapper.getAccessLevel(getCurrentUser(), AccessLevelType.BUSINESS_WORKER);
 

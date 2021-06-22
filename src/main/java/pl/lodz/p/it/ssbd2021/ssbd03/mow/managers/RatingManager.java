@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.managers;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Attraction;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Rating;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
@@ -10,6 +11,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseGroupFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.RatingFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
 import javax.ejb.TransactionAttribute;

@@ -5,6 +5,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Administrator;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Attraction;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
@@ -154,6 +155,12 @@ public class CruiseManager extends BaseManagerMow implements CruiseManagerLocal 
     @Override
     public List<Cruise> getPublishedCruises() throws BaseAppException {
         return cruiseFacadeMow.getPublishedCruises();
+    }
+
+    @PermitAll //TODO
+    @Override
+    public Cruise findByUUID(UUID uuid) throws BaseAppException {
+        return cruiseFacadeMow.findByUUID(uuid);
     }
 
 }

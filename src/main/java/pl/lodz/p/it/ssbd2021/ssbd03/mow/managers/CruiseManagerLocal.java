@@ -1,6 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.managers;
 
 
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Attraction;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.CruiseGroupWithCruisesDto;
@@ -78,4 +79,14 @@ public interface CruiseManagerLocal {
      * @return Lista wycieczek
      */
     List<Cruise> getPublishedCruises() throws BaseAppException;
+
+    /**
+     * Pobiera Wycieczki o danym uuid
+     *
+     * @param uuid uuid atrakcji
+     * @return zwraca informacje o wycieczce
+     * @throws BaseAppException wyjątek wyrzucany w razie nie znależenia atrakcji
+     */
+    Cruise findByUUID(UUID uuid) throws BaseAppException;
+
 }

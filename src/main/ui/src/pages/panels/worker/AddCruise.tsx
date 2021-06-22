@@ -103,7 +103,7 @@ export default function AddCruise() {
     useEffect(() => {
 
         getAllCruiseGroup().then(res => {
-            setCruiseGroupList(res.data.filter(({active}: { active: boolean }) => active).map((cruiseGroup: { uuid: string, name: string }) => cruiseGroup.name.toString() +" - ( " +cruiseGroup.uuid.toString()+ " )"))
+            setCruiseGroupList(res.data.filter(({active}: { active: boolean }) => active).map((cruiseGroup: { uuid: string, name: string }) => cruiseGroup.uuid.toString()))
         }).catch(error => {
             const message = error.response.data
             handleError(message, error.response.status)

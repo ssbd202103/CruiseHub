@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.common.dto.MetadataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints.TransactionalEndpoint;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations.*;
@@ -61,5 +62,14 @@ public interface ReservationEndpointLocal extends TransactionalEndpoint {
      * @throws BaseAppException bazowy wyjątek aplikacji
      */
     List<SelfReservationDto> viewSelfCruiseReservations() throws BaseAppException;
+
+    /**
+     * Pobiera metadane rezerwacji
+     *
+     * @param uuid UUID rezerwacji wybranej do metadanych
+     * @return Reprezentacja DTO metadanych
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
+    MetadataDto getReservationMetadata(UUID uuid) throws BaseAppException;
 }
 

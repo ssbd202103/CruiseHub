@@ -1,7 +1,9 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.common.dto.MetadataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.ControllerException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.MapperException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.companies.CompanyLightDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations.CruiseReservationDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations.RemoveClientReservationDto;
@@ -20,8 +22,7 @@ import javax.ws.rs.core.MediaType;
 import java.util.List;
 import java.util.UUID;
 
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_EMPTY;
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 import static pl.lodz.p.it.ssbd2021.ssbd03.utils.TransactionRepeater.tryAndRepeat;
 
 @Path("/reservation")
@@ -76,4 +77,24 @@ public class ReservationController {
     public List<SelfReservationDto> getSelfReservations() throws BaseAppException {
         return tryAndRepeat(reservationEndpoint, () -> reservationEndpoint.viewSelfCruiseReservations());
     }
+
+    /**
+     * Pobiera metadane rezerwacji
+     *
+     * @param uuid UUID rezerwacji wybranej do metadanych
+     * @return Reprezentacja DTO metadanych
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
+    @GET
+    @Path("/metadata/{uuid}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public MetadataDto getReservationMetadata(@PathParam("uuid") String uuid) throws BaseAppException {
+        try{
+            UUID convertedUUID = UUID.fromString(uuid);
+            return tryAndRepeat(reservationEndpoint, () -> reservationEndpoint.getReservationMetadata(convertedUUID));
+        }catch (IllegalArgumentException e) {
+            throw new MapperException(MAPPER_UUID_PARSE);
+        }
+    }
+
 }

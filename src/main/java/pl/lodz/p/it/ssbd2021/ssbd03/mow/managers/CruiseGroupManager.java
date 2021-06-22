@@ -15,6 +15,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseGroupFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
 import javax.inject.Inject;
@@ -159,5 +160,12 @@ public class CruiseGroupManager extends BaseManagerMow implements CruiseGroupMan
 
         return cruiseGroupFacadeMow.getCruiseGroupForBusinessWorker(company);
     }
+
+    @PermitAll //TODO
+    @Override
+    public CruiseGroup findByUUID(UUID uuid) throws BaseAppException {
+        return cruiseGroupFacadeMow.findByUUID(uuid);
+    }
+
 }
 

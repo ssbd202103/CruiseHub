@@ -500,19 +500,20 @@ function Row(props: CruiseData) {
                                                        style={style}><ActiveIcon active={cruise.published} /></TableCell>
                                             <TableCell align="center">
                                                 <Link to="/reservations">
-                                                    <Button className={buttonClass.root} onClick={() => {
+                                                    <RoundedButton color={"blue"}
+                                                        className={buttonClass.root} onClick={() => {
                                                         handleReservations(cruise.uuid)
                                                     }}
-                                                    >{t("reservations")}</Button>
+                                                    >{t("reservations")}</RoundedButton>
                                                 </Link>
                                             </TableCell>
                                             <TableCell align="center">
                                                 <Link to={`attractions/${cruise.uuid}/${cruise.published}`}>
-                                                    <Button className={buttonClass.root}>
-                                                        {t("attractions")}</Button>
+                                                    <RoundedButton color={"blue"}
+                                                        className={buttonClass.root}>
+                                                        {t("attractions")}</RoundedButton>
                                                 </Link>
                                             </TableCell>
-
                                             <TableCell align="center">
                                                 <RoundedButton color={"pink"}
                                                                className={buttonClass.root}

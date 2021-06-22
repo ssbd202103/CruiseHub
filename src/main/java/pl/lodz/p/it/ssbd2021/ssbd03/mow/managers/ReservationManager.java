@@ -4,6 +4,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Attraction;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Reservation;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
@@ -15,6 +16,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.ReservationFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
 import javax.ejb.TransactionAttribute;
@@ -122,4 +124,9 @@ public class ReservationManager extends BaseManagerMow implements ReservationMan
         return reservationFacadeMow.findReservationByLogin(account.getLogin());
     }
 
+    @PermitAll //TODO
+    @Override
+    public Reservation findByUUID(UUID uuid) throws BaseAppException {
+        return reservationFacadeMow.findByUUID(uuid);
+    }
 }

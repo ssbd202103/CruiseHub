@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.common.dto.MetadataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints.TransactionalEndpoint;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.CruiseGroupWithDetailsDto;
@@ -57,4 +58,13 @@ public interface CruiseGroupEndpointLocal extends TransactionalEndpoint {
      * @throws BaseAppException bazowy wyjątek aplikacji
      */
     List<CruiseGroupWithDetailsDto> getCruiseGroupForBusinessWorker(String companyName) throws BaseAppException;
+
+    /**
+     * Pobiera metadane grupy wycieczek
+     *
+     * @param uuid UUID grupy wycieczek wybranej do metadanych
+     * @return Reprezentacja DTO metadanych
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
+    MetadataDto getCruiseGroupMetadata(UUID uuid) throws BaseAppException;
 }

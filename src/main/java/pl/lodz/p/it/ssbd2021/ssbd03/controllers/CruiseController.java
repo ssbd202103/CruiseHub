@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.common.dto.MetadataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.ControllerException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
@@ -188,4 +189,24 @@ public class CruiseController {
         checkEtagIntegrity(publishCruiseDto, etag);
         tryAndRepeat(cruiseEndpoint, () -> cruiseEndpoint.publishCruise(publishCruiseDto));
     }
+
+    /**
+     * Pobiera metadane wycieczki
+     *
+     * @param uuid UUID wycieczki wybranej do metadanych
+     * @return Reprezentacja DTO metadanych
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
+    @GET
+    @Path("/metadata/{uuid}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public MetadataDto getCruiseMetadata(@PathParam("uuid") String uuid) throws BaseAppException {
+        try{
+            UUID convertedUUID = UUID.fromString(uuid);
+            return tryAndRepeat(cruiseEndpoint, () -> cruiseEndpoint.getCruiseMetadata(convertedUUID));
+        }catch (IllegalArgumentException e) {
+            throw new MapperException(MAPPER_UUID_PARSE);
+        }
+    }
+
 }

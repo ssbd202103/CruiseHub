@@ -1,7 +1,11 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
 
+import pl.lodz.p.it.ssbd2021.ssbd03.common.dto.MetadataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints.BaseEndpoint;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.mappers.MetadataMapper;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Attraction;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.MapperException;
@@ -76,4 +80,12 @@ public class AttractionEndpoint extends BaseEndpoint implements AttractionEndpoi
         }
         return attractions;
     }
+
+    @RolesAllowed("authenticatedUser")
+    @Override
+    public MetadataDto getAttractionMetadata(UUID uuid) throws BaseAppException {
+        return MetadataMapper.toMetadataDto(attractionManager.findByUUID(uuid));
+    }
+
+
 }

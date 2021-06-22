@@ -1,7 +1,9 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
 
+import pl.lodz.p.it.ssbd2021.ssbd03.common.dto.MetadataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints.BaseEndpoint;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.mappers.MetadataMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
@@ -87,5 +89,11 @@ public class CruiseGroupEndpoint extends BaseEndpoint implements CruiseGroupEndp
             res.add(CruiseGroupMapper.toCruiseGroupWithDetailsDto(cruiseGroup,cruise));
         }
       return res;
+    }
+
+    @RolesAllowed("authenticatedUser")
+    @Override
+    public MetadataDto getCruiseGroupMetadata(UUID uuid) throws BaseAppException {
+        return MetadataMapper.toMetadataDto(cruiseGroupManager.findByUUID(uuid));
     }
 }

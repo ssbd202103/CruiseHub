@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.common.dto.MetadataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints.TransactionalEndpoint;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.BusinessWorkerDto;
@@ -9,6 +10,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.companies.CompanyDto;
 
 import javax.ejb.Local;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Interfejs który zajmuje się gromadzeniem zmapowanych obiektów klas Dto na obiekty klas modelu związanych z firmami oraz wywołuje metody logiki przekazując zmapowane obiekty.
@@ -45,4 +47,13 @@ public interface CompanyEndpointLocal extends TransactionalEndpoint {
      * @throws BaseAppException bazowy wyjatek aplikacji
      */
     void addCompany(AddCompanyDto addCompanyDto) throws BaseAppException;
+
+    /**
+     * Pobiera metadane firmy
+     *
+     * @param nip nip firmy wybranej do metadanych
+     * @return Reprezentacja DTO metadanych
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
+    MetadataDto getCompanyMetadata(String nip) throws BaseAppException;
 }

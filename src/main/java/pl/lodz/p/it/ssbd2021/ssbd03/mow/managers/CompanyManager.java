@@ -5,19 +5,27 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Administrator;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Moderator;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Attraction;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.CompanyMangerException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters.AccountMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CompanyFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
 import javax.ejb.TransactionAttribute;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.List;
+import java.util.UUID;
 
 import static javax.ejb.TransactionAttributeType.MANDATORY;
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.OPERATION_NOT_AUTHORIZED_ERROR;
@@ -29,6 +37,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.OPERATION_NOT_AUTHORIZED_
 @TransactionAttribute(MANDATORY)
 @Interceptors(TrackingInterceptor.class)
 public class CompanyManager extends BaseManagerMow implements CompanyManagerLocal {
+
     @Inject
     private CompanyFacadeMow companyFacadeMow;
 
@@ -65,5 +74,12 @@ public class CompanyManager extends BaseManagerMow implements CompanyManagerLoca
 
         companyFacadeMow.create(company);
     }
+
+    @PermitAll //TODO
+    @Override
+    public Company findByNIP(String nip) throws BaseAppException {
+        return companyFacadeMow.findByNIP(nip);
+    }
+
 
 }
