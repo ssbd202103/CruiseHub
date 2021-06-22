@@ -749,8 +749,8 @@ const resources = {
             "addPicture": "Add picture",
             "removePicture": "Remove Picture",
             "addCruise": "Add group",
-            "listCruiseGroup": "List cruises groups",
-            "createCruiseGroup": "Create new cruiseGroup",
+            "listCruiseGroup": "List cruise groups",
+            "createCruiseGroup": "Create new cruise group",
             "cruiseReserved": "Cruise booked",
             'no description': 'There are no description',
             'attractions': 'Attractions',
@@ -822,8 +822,8 @@ const resources = {
             "/unconfirmed-business-workers": "Manage workers",
             "adminHomePage": "Welcome to admin panel.\nIn here, you can manage accounts and cruise groups",
             "moderatorHomePage":"Welcome to moderator panel.\nIn here, you can list clients and cruise groups, and manage companies and workers",
-            "clientHomePage": "Welcome to client panel.\nIn here, you can view your cruise reservations and your rating of crusies",
-            "business_workerHomePage":"Wlecome to worker panel.\nIn here, you can view, add and edit cruises and crusies groups for your company",
+            "clientHomePage": "Welcome to client panel.\nIn here, you can view your cruise reservations and your rating of cruises",
+            "business_workerHomePage":"welcome to worker panel.\nIn here, you can view, add and edit cruises and cruise groups for your company",
 
         }
     }

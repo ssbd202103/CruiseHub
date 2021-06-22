@@ -23,20 +23,11 @@ import javax.ws.rs.core.SecurityContext;
 @TransactionAttribute(TransactionAttributeType.MANDATORY)
 @Interceptors(TrackingInterceptor.class)
 public class BaseManagerMow {
-
     @Context
     private SecurityContext context;
 
     @Inject
     private AccountFacadeMow accountFacade;
-
-    protected void setUpdatedMetadataWithModifier(Account modifier, BaseEntity... entities) throws BaseAppException {
-        AlterTypeWrapper update = accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE);
-        for (BaseEntity e : entities) {
-            e.setAlterType(update);
-            e.setAlteredBy(modifier);
-        }
-    }
 
     protected void setUpdatedMetadata(BaseEntity... entities) throws BaseAppException {
         AlterTypeWrapper update = accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE);
@@ -46,7 +37,7 @@ public class BaseManagerMow {
         }
     }
 
-    protected void setCreatedMetadata(Account creator, BaseEntity... entities) throws BaseAppException {
+    protected void setCreatedMetadata(Account creator, BaseEntity... entities) {
         AlterTypeWrapper insert = accountFacade.getAlterTypeWrapperByAlterType(AlterType.INSERT);
         for (BaseEntity e : entities) {
             e.setAlterType(insert);
