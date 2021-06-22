@@ -18,6 +18,8 @@ import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
 import java.util.List;
@@ -32,6 +34,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.IntegrityUtils.checkForOptimis
  */
 @Stateful
 @Interceptors(TrackingInterceptor.class)
+@TransactionAttribute(TransactionAttributeType.MANDATORY)
 public class CruiseGroupManager extends BaseManagerMow implements CruiseGroupManagerLocal {
 
     @Inject

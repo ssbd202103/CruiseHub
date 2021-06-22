@@ -35,7 +35,6 @@ public class AddCruiseGroupDto {
     @Valid
     private CruiseAddressDto cruiseAddress;
 
-    @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
     private List<CruisePictureDto> cruisePictures;
 
     @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
