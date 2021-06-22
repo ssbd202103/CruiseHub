@@ -420,6 +420,9 @@ const resources = {
             "clientHomePage": "Witaj w panelu klienta.\nW tym panelu możesz przeglądać swoje rezerwacje wycieczek oraz oceny dla wycieczek",
             "business_workerHomePage":"Witaj w panelu pracownika firmy.\nW tym panelu możesz przeglądać, dodawać oraz modyfikować wycieczki i grupy wycieczek",
 
+            'filterCruises': 'Filtruj',
+            'filterByLowerPriceCruises': "Sortuj po najniższej cenie",
+            'filterByHigherPrices': "Sortuj po najwyzszej cenie"
         }
     },
     EN: {
@@ -832,6 +835,9 @@ const resources = {
             "clientHomePage": "Welcome to client panel.\nIn here, you can view your cruise reservations and your rating of cruises",
             "business_workerHomePage":"welcome to worker panel.\nIn here, you can view, add and edit cruises and cruise groups for your company",
 
+            'filterCruises': 'Filter',
+            'filterByLowerPriceCruises': "Sort at the lowest price",
+            'filterByHigherPrices': "Sort at the highest price"
         }
     }
 }
