@@ -5,9 +5,29 @@ import EyeIcon from '@material-ui/icons/VisibilityRounded'
 
 import styles from '../styles/CruiseCard.module.css'
 import {useTranslation} from "react-i18next";
+import ship3 from '../images/ship3.jpg'
+import {useState} from "react";
 
+export interface CruiseCardProps {
+    price: number,
+    title: string,
+    img:string,
+}
 
-export default function CruiseCard() {
+export default function CruiseCard(
+    {
+        price,
+        title,
+        img,
+
+    }: CruiseCardProps) {
+
+    let pictureUrl
+    if(img == null) {
+        pictureUrl = ship3
+    } else {
+        pictureUrl = img
+    }
     const {t} = useTranslation()
     const xlMatches = useMediaQuery('(min-width: 1920px)')
     const lgMatches = useMediaQuery('(min-width: 1280px)')
@@ -16,17 +36,13 @@ export default function CruiseCard() {
 
     return (
         <div className={styles.wrapper} style={{
-            height: xlMatches ? 400 : lgMatches ? 300 : 200
-        }}>
-            <div className={styles.cost}>1,000 zł</div>
+            height: xlMatches ? 400 : lgMatches ? 300 : 200,
+            backgroundImage:`url(${pictureUrl})`
+        }}  >
+            <div className={styles.cost}>{price}</div>
             <div className={styles.description}>
-                <span className={styles.title}>{t("cruiseExample")}</span>
-                <div>
-                    {[0,1,2,3,4].map(id => 
-                        <StarIcon key={id} style={{
-                            fill: 'var(--yellow)'
-                        }} />)}
-                </div>
+                <span className={styles.title}>{title}</span>
+
             </div>
             <div className={styles.eye}>
                 <div>

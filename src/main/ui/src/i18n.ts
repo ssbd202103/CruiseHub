@@ -407,6 +407,8 @@ const resources = {
             'no ratings': 'Nie ma żadnych ocen',
             'unknown error': 'Nieznany błąd',
             "/unconfirmed-business-workers": "Zarządzaj pracownikami",
+            'filterCruises': 'Filtruj',
+            'filterPriceCruises': 'Filtruj po cenie',
         }
     },
     EN: {
@@ -807,6 +809,8 @@ const resources = {
             'no ratings': 'There are no ratings',
             'unknown error': 'Unknown error',
             "/unconfirmed-business-workers": "Manage workers",
+            'filterCruises': 'Filter',
+            'filterPriceCruises': 'Filter by price',
         }
     }
 }
