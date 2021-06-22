@@ -408,7 +408,8 @@ const resources = {
             'unknown error': 'Nieznany błąd',
             "/unconfirmed-business-workers": "Zarządzaj pracownikami",
             'filterCruises': 'Filtruj',
-            'filterPriceCruises': 'Filtruj po cenie',
+            'filterByLowerPriceCruises': "Filtruj po najniższej cenie",
+            'filterByHigherPrices': "Filtruj po najwyzszej cenie"
         }
     },
     EN: {
@@ -810,7 +811,8 @@ const resources = {
             'unknown error': 'Unknown error',
             "/unconfirmed-business-workers": "Manage workers",
             'filterCruises': 'Filter',
-            'filterPriceCruises': 'Filter by price',
+            'filterByLowerPriceCruises': "Filter at the lowest price",
+            'filterByHigherPrices': "Filter at the highest price"
         }
     }
 }

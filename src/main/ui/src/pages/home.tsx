@@ -12,19 +12,13 @@ import {selectDarkMode, selectLanguage} from "../redux/slices/userSlice";
 import React, {useEffect, useState} from "react";
 import {getPublishedCruises} from "../Services/cruisesService";
 import store from "../redux/store";
-import {refreshToken} from "../Services/userService";
 import useHandleError from "../errorHandler";
-import {getAllAccounts} from "../Services/accountsService";
 import DateFnsUtils from "@date-io/date-fns";
-import {
-    MuiPickersUtilsProvider,
-    KeyboardDatePicker
-} from '@material-ui/pickers';
+import {KeyboardDatePicker, MuiPickersUtilsProvider} from '@material-ui/pickers';
 import pl from "date-fns/locale/pl";
 import eng from "date-fns/locale/en-GB";
 import {makeStyles} from "@material-ui/styles";
 import RoundedButton from "../components/RoundedButton";
-import axios from "../Services/URL";
 import {TextField} from "@material-ui/core";
 import Autocomplete from "../components/Autocomplete";
 
@@ -56,12 +50,21 @@ const useStyles = makeStyles(theme => ({
 
 
 
-
+export interface IDate {
+    dayOfMonth: number,
+    year: number,
+    monthValue: number,
+}
 
 export interface Cruise {
     price: number,
     name: string,
     img:string,
+    relatedCruises: {
+        uuid: string,
+        endDate: IDate,
+        startDate: IDate,
+    }[],
 }
 
 
@@ -104,24 +107,62 @@ function Row(props: RowProps) {
 
 export default function Home() {
     const [cruises, setCruises] = useState<Cruise[]>([]);
+    const [filteredCruises, setFilteredCruises] = useState<Cruise[]>([]);
     const handleError = useHandleError()
-    const {token} = store.getState()
 
     const {t} = useTranslation()
 
 
-    function search() {
 
+    const HandleFilterByName = (name : string) => {
+
+        const filtered = cruises.filter(item => {
+            return item.name.includes(name)
+        })
+        setFilteredCruises(filtered)
+        setCruisesNameList(filtered.map(({name}: Cruise)  => name))
+
+        }
+
+
+    const HandleFilterByDateCruise = () => {
+        const filtered = cruises.filter(item => {
+            return item.relatedCruises.find(r => {
+                const {
+                    year: sy,
+                    monthValue: sm,
+                    dayOfMonth: sd,
+                } = r.startDate;
+
+                const {
+                    year: ey,
+                    monthValue: em,
+                    dayOfMonth: ed,
+                } = r.endDate;
+
+                const start = new Date(sy, sm, sd, 0, 0, 0, 0).getTime();
+                const end = new Date(ey, em, ed, 0, 0, 0, 0).getTime();
+
+                return (startDate ? startDate.getTime() <= start : true) && (endDate ? endDate.getTime() >= end : true)
+            })
+        })
+        setFilteredCruises(filtered)
+        setCruisesNameList(filtered.map(({name}: Cruise)  => name))
     }
 
-    const HandleAddCruise = () => {
-
-
-
+    const HandleFilterByLowerPriceCruise = () => {
+        setFilteredCruises(prev => {
+            prev.sort((a, b) => (a.price - b.price))
+            return [...prev];
+        })
     }
 
-    const HandleFilterByPriceCruise = () => {
-        setCruises(prev=>cruises.sort((a, b) => (a.price - b.price)))
+
+    const HandleFilterByHigherPriceCruise = () => {
+        setFilteredCruises(prev => {
+            prev.sort((a, b) => (b.price - a.price))
+            return [...prev];
+        })
     }
 
     const darkMode = useSelector(selectDarkMode)
@@ -131,8 +172,8 @@ export default function Home() {
         new Date(),
     );
 
-    const handleStartDateChange = (startDate: Date | null) => {
-        setStartDate(startDate);
+    const handleStartDateChange = (date: Date | null) => {
+        setStartDate(date);
     };
 
 
@@ -141,8 +182,8 @@ export default function Home() {
         new Date(),
     );
 
-    const handleEndDateChange = (startDate: Date | null) => {
-        setStartDate(startDate);
+    const handleEndDateChange = (date: Date | null) => {
+        setEndDate(date);
     };
 
 
@@ -156,16 +197,19 @@ export default function Home() {
     useEffect(() => {
         getPublishedCruises().then(res => {
             setCruises(res.data)
-            refreshToken()
+            setFilteredCruises(res.data)
+            setCruisesNameList(res.data.map(({name}: Cruise)  => name))
+
         }).catch(error => {
             const message = error.response.data
             handleError(message, error.response.status)
         })
+
     }, []);
 
 
     const classes = useStyles()
-    const cruisesNameList: String[] = [];
+    const [cruisesNameList, setCruisesNameList] = useState<string[]>([])
 
     return (
         <HeaderFooterLayout>
@@ -226,7 +270,7 @@ export default function Home() {
                             />
                         </MuiPickersUtilsProvider>
                         <RoundedButton
-                            onClick={HandleAddCruise}
+                            onClick={HandleFilterByDateCruise}
                             style={{width: '50%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
                             color="pink"
                         >{t("filterCruises")} </RoundedButton>
@@ -237,21 +281,27 @@ export default function Home() {
                             options={cruisesNameList}
                             inputValue={searchInput}
                             noOptionsText={t('no options')}
-                            onChange={(event, value) => {
-                                setSearchInput(value as string ?? '')
-                            }}
+
                             renderInput={(params) => (
                                 <TextField {...params} label={t('search cruise')} variant="outlined"
-                                           onChange={(e) => setSearchInput(e.target.value)}/>
+                                           onChange={(e) => {
+                                               setSearchInput(e.target.value)
+                                               HandleFilterByName(e.target.value)
+                                           }}/>
                             )}
                         />
                     </div>
                     <div>
                         <RoundedButton
-                            onClick={HandleFilterByPriceCruise}
+                            onClick={HandleFilterByLowerPriceCruise}
                             style={{width: '50%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
                             color="pink"
-                        >{t("filterByPriceCruises")} </RoundedButton>
+                        >{t("filterByHigherPrices")} </RoundedButton>
+                        <RoundedButton
+                            onClick={HandleFilterByHigherPriceCruise}
+                            style={{width: '50%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
+                            color="pink"
+                        >{t("filterByLowerPriceCruises")} </RoundedButton>
                     </div>
                 </div>
             </section>
@@ -262,12 +312,12 @@ export default function Home() {
                     style={{color: `var(--${darkMode ? 'dark' : 'white'}`}}>{t("the best cruises")}</h2>
 
                 <div className={styles['cruises-grid']}>
-                    {(cruises.map((cruise, index) =>(<CruiseCard
-                        key = {index}
+                    {filteredCruises.map((cruise, index) =>(<CruiseCard
+                        key={index}
                         price = {cruise.price}
                         title = {cruise.name}
                         img = {cruise.img}
-                    />)))}
+                    />))}
                 </div>
             </section>
         </HeaderFooterLayout>

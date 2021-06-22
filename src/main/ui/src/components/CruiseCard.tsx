@@ -39,7 +39,7 @@ export default function CruiseCard(
             height: xlMatches ? 400 : lgMatches ? 300 : 200,
             backgroundImage:`url(${pictureUrl})`
         }}  >
-            <div className={styles.cost}>{price}</div>
+            <div className={styles.cost}>{price} PLN</div>
             <div className={styles.description}>
                 <span className={styles.title}>{title}</span>
 
