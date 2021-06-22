@@ -106,13 +106,11 @@ public class ReservationManager extends BaseManagerMow implements ReservationMan
     }
 
     private long getAvailableSeats(UUID cruiseUUID) throws BaseAppException {
-        List<Reservation> reservations;
-        long id = cruiseFacadeMow.findByUUID(cruiseUUID).getId(); //todo refactor facade method to accept uuid
-        reservations = reservationFacadeMow.findCruiseReservationsOrReturnEmptyList(id);
+        Cruise cruise = cruiseFacadeMow.findByUUID(cruiseUUID);
+        List<Reservation> reservations = reservationFacadeMow.findCruiseReservations(cruise);
 
         long reservedSeats = reservations.stream().mapToLong(Reservation::getNumberOfSeats).sum();
-
-        long allSeats = cruiseFacadeMow.findByUUID(cruiseUUID).getCruisesGroup().getNumberOfSeats();
+        long allSeats = cruise.getCruisesGroup().getNumberOfSeats();
 
         return allSeats - reservedSeats;
     }

@@ -1,19 +1,15 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.managers;
 
 
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.AlterType;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.AlterTypeWrapper;
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevel;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Administrator;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.CruiseManagerException;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.AccountFacadeMow;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CompanyFacadeMow;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters.AccountMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseGroupFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
@@ -25,11 +21,8 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.SecurityContext;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
@@ -41,65 +34,48 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.IntegrityUtils.checkForOptimis
 @Interceptors(TrackingInterceptor.class)
 @Stateful
 @TransactionAttribute(TransactionAttributeType.MANDATORY)
-public class CruiseManager implements CruiseManagerLocal {
-
-
-    @Context
-    private SecurityContext securityContext;
-
+public class CruiseManager extends BaseManagerMow implements CruiseManagerLocal {
     @Inject
     private CruiseFacadeMow cruiseFacadeMow;
-
-    @Inject
-    private AccountFacadeMow accountFacade;
-
-    @Inject
-    private CompanyFacadeMow companyFacade;
-
     @Inject
     private CruiseGroupFacadeMow cruiseGroupFacadeMow;
 
     @RolesAllowed("addCruise")
     @Override
     public void addCruise(Cruise cruise, UUID cruiseGroupUUID) throws BaseAppException { //todo refactor this method
-        LocalDateTime localDateTime = LocalDateTime.now();
-        if (cruise.getStartDate().isBefore(localDateTime)) {
+
+        if (cruise.getStartDate().isBefore(LocalDateTime.now())) {
             throw new CruiseManagerException(START_DATE_BEFORE_CURRENT_DATE);
         }
+
         if (cruise.getStartDate().isAfter(cruise.getEndDate())) {
             throw new CruiseManagerException(START_DATE_AFTER_END_DATE);
         }
 
         CruiseGroup cruiseGroup = cruiseGroupFacadeMow.findByUUID(cruiseGroupUUID);
         if (!cruiseGroup.isActive()) {
-            throw new CruiseManagerException(CRUISE_GROUP_NO_ACTIVE);
+            throw new CruiseManagerException(CRUISE_GROUP_INACTIVE);
         }
         cruise.setCruisesGroup(cruiseGroup);
-        Account account = accountFacade.findByLogin(securityContext.getUserPrincipal().getName());
-        try {
-            Optional<AccessLevel> accessLevelBusinessWorker = account.getAccessLevels().stream().filter(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.BUSINESS_WORKER).findFirst();
-            if (accessLevelBusinessWorker.isEmpty()) {
-                throw new CruiseManagerException(CANNOT_FIND_ACCESS_LEVEL);
-            }
-            BusinessWorker businessWorker = (BusinessWorker) accessLevelBusinessWorker.get();
-            if (cruise.getCruisesGroup().getCompany().getNIP() != businessWorker.getCompany().getNIP()) {
-                throw new CruiseManagerException(BUSINESS_WORKER_ADD_CRUISE_TO_BAD_COMPANY);
-            }
-        } catch (ClassCastException e) {
-            throw new CruiseManagerException(CANNOT_FIND_ACCESS_LEVEL);
-        }
-        setAlterTypeAlterCruiseAndCreatedBy(cruise);
-        cruiseFacadeMow.create(cruise);
 
+        Account account = getCurrentUser();
+        BusinessWorker businessWorker = (BusinessWorker) AccountMapper.getAccessLevel(account, AccessLevelType.BUSINESS_WORKER);
+
+        if (cruise.getCruisesGroup().getCompany().getNIP() != businessWorker.getCompany().getNIP()) {
+            throw new CruiseManagerException(BUSINESS_WORKER_ADD_CRUISE_TO_BAD_COMPANY);
+        }
+
+        setCreatedMetadata(account, cruise);
+        cruiseFacadeMow.create(cruise);
     }
 
     @RolesAllowed("deactivateCruise")
     @Override
-    public void deactivateCruise(UUID uuid, Long version) throws BaseAppException { //todo refactor this method
+    public void deactivateCruise(UUID uuid, Long version) throws BaseAppException {
         Cruise cruise = cruiseFacadeMow.findByUUID(uuid);
         checkForOptimisticLock(cruise, version);
 
-        Account account = accountFacade.findByLogin(securityContext.getUserPrincipal().getName());
+        Account account = getCurrentUser();
 
         if (!cruise.isActive()) {
             throw new CruiseManagerException(CRUISE_ALREADY_BLOCKED);
@@ -109,27 +85,18 @@ public class CruiseManager implements CruiseManagerLocal {
             throw new CruiseManagerException(CANNOT_BLOCK_THIS_CRUISE);
         }
 
-        try {
-            Optional<AccessLevel> optionalAccessLevel = account.getAccessLevels().stream().filter(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.ADMINISTRATOR).findFirst();
-            if (optionalAccessLevel.isEmpty()) {
-                optionalAccessLevel = account.getAccessLevels().stream().filter(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.MODERATOR).findFirst();
+        if (account.getAccessLevels().stream()
+                .noneMatch(accessLevel -> accessLevel instanceof Administrator)) {
+
+            BusinessWorker businessWorker = (BusinessWorker) AccountMapper.getAccessLevel(account, AccessLevelType.BUSINESS_WORKER);
+
+            if (cruise.getCruisesGroup().getCompany().getNIP() != businessWorker.getCompany().getNIP()) {
+                throw new CruiseManagerException(BUSINESS_WORKER_ADD_CRUISE_TO_BAD_COMPANY);
             }
-            if (optionalAccessLevel.isEmpty()) {
-                optionalAccessLevel = account.getAccessLevels().stream().filter(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.BUSINESS_WORKER).findFirst();
-                if (optionalAccessLevel.isEmpty()) {
-                    throw new CruiseManagerException(CANNOT_FIND_ACCESS_LEVEL);
-                }
-                BusinessWorker businessWorker = (BusinessWorker) optionalAccessLevel.get();
-                if (cruise.getCruisesGroup().getCompany().getNIP() != businessWorker.getCompany().getNIP()) {
-                    throw new CruiseManagerException(BUSINESS_WORKER_ADD_CRUISE_TO_BAD_COMPANY);
-                }
-            }
-        } catch (ClassCastException e) {
-            throw new CruiseManagerException(CANNOT_FIND_ACCESS_LEVEL);
         }
 
         cruise.setActive(false);
-        setAlterTypeAndAlterCruise(cruise);
+        setUpdatedMetadata(cruise);
     }
 
     @RolesAllowed("editCruise")
@@ -138,46 +105,20 @@ public class CruiseManager implements CruiseManagerLocal {
         Cruise cruiseToEdit = cruiseFacadeMow.findByUUID(uuid);
         checkForOptimisticLock(cruiseToEdit, version);
 
-        Account account = accountFacade.findByLogin(securityContext.getUserPrincipal().getName());
-
+        Account account = getCurrentUser();
 
         if (!cruiseToEdit.isActive() || cruiseToEdit.isPublished()) {
             throw new CruiseManagerException(CANNOT_EDIT_THIS_CRUISE);
         }
 
-        try {
-            Optional<AccessLevel> accessLevelBusinessWorker = account.getAccessLevels().stream().filter(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.BUSINESS_WORKER).findFirst();
-            if (accessLevelBusinessWorker.isEmpty()) {
-                throw new CruiseManagerException(CANNOT_FIND_ACCESS_LEVEL);
-            }
-            BusinessWorker businessWorker = (BusinessWorker) accessLevelBusinessWorker.get();
-            if (cruiseToEdit.getCruisesGroup().getCompany().getNIP() != businessWorker.getCompany().getNIP()) {
-                throw new CruiseManagerException(BUSINESS_WORKER_ADD_CRUISE_TO_BAD_COMPANY);
-            }
-        } catch (ClassCastException e) {
-            throw new CruiseManagerException(CANNOT_FIND_ACCESS_LEVEL);
+        BusinessWorker businessWorker = (BusinessWorker) AccountMapper.getAccessLevel(account, AccessLevelType.BUSINESS_WORKER);
+        if (cruiseToEdit.getCruisesGroup().getCompany().getNIP() != businessWorker.getCompany().getNIP()) {
+            throw new CruiseManagerException(BUSINESS_WORKER_ADD_CRUISE_TO_BAD_COMPANY);
         }
 
         cruiseToEdit.setEndDate(endDate);
         cruiseToEdit.setStartDate(startDate);
-        setAlterTypeAndAlterCruise(cruiseToEdit);
-    }
-
-    @RolesAllowed("authenticatedUser")
-    public Account getCurrentUser() throws BaseAppException {
-        return accountFacade.findByLogin(securityContext.getUserPrincipal().getName());
-    }
-
-    private void setAlterTypeAndAlterCruise(Cruise cruise) throws BaseAppException {
-        cruise.setAlteredBy(getCurrentUser());
-        cruise.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.UPDATE));
-    }
-
-    private void setAlterTypeAlterCruiseAndCreatedBy(Cruise cruise) throws BaseAppException {
-        Account a = getCurrentUser();
-        cruise.setCreatedBy(a);
-        cruise.setAlteredBy(a);
-        cruise.setAlterType(accountFacade.getAlterTypeWrapperByAlterType(AlterType.INSERT));
+        setUpdatedMetadata(cruiseToEdit);
     }
 
     @PermitAll
@@ -198,8 +139,14 @@ public class CruiseManager implements CruiseManagerLocal {
         Cruise cruise = cruiseFacadeMow.findByUUID(cruiseUuid);
         checkForOptimisticLock(cruise, cruiseVersion);
 
+        BusinessWorker businessWorker = (BusinessWorker) AccountMapper.getAccessLevel(getCurrentUser(), AccessLevelType.BUSINESS_WORKER);
+
+        if (cruise.getCruisesGroup().getCompany().getNIP() != businessWorker.getCompany().getNIP()) {
+            throw new CruiseManagerException(BUSINESS_WORKER_ADD_CRUISE_TO_BAD_COMPANY);
+        }
+
         cruise.setPublished(true);
-        setAlterTypeAndAlterCruise(cruise);
+        setUpdatedMetadata(cruise);
         cruiseFacadeMow.edit(cruise);
     }
 

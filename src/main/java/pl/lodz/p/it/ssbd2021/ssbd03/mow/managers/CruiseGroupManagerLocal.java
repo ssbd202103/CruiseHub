@@ -65,7 +65,7 @@ public interface CruiseGroupManagerLocal {
          * @param version wersjaq grupy wyceczek do deaktywacji
          * @throws BaseAppException Bazowy wyjątek aplikacji
          */
-    void deactivateCruiseGroup(UUID uuid, Long version) throws BaseAppException;
+    void deactivateCruiseGroup(UUID uuid, long version) throws BaseAppException;
 
     /**
      * Pobiera wycieczki dla danej grupy wycieczek.

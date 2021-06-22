@@ -12,11 +12,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.interceptor.Interceptors;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-import java.util.ArrayList;
+import javax.persistence.*;
 import java.util.List;
 import java.util.UUID;
 
@@ -55,24 +51,14 @@ public class ReservationFacadeMow extends AbstractFacade<Reservation> {
         }
     }
 
+    @RolesAllowed({"getWorkerCruiseReservations", "viewCruiseReservations", "createReservation"})
     public List<Reservation> findCruiseReservations(Cruise cruise) throws BaseAppException {
         TypedQuery<Reservation> tq = em.createNamedQuery("Reservation.findCruiseReservations", Reservation.class);
-        tq.setParameter("id", cruise.getId());
+        tq.setParameter("uuid", cruise.getUuid());
         try {
             return tq.getResultList();
-        } catch (NoResultException e) { //todo in case of no results, empty list would be returned, NoResultException would not be thrown
-            throw FacadeException.noSuchElement();
-        }
-    }
-
-    @RolesAllowed("createReservation")
-    public List<Reservation> findCruiseReservationsOrReturnEmptyList(long id) { //todo refactor to uuid
-        TypedQuery<Reservation> tq = em.createNamedQuery("Reservation.findCruiseReservations", Reservation.class);
-        tq.setParameter("id", id);
-        try {
-            return tq.getResultList();
-        } catch (Exception e) {
-            return new ArrayList<>(); //todo remove this catch block
+        } catch (PersistenceException exp) {
+            throw FacadeException.databaseOperation();
         }
     }
 
@@ -94,8 +80,8 @@ public class ReservationFacadeMow extends AbstractFacade<Reservation> {
         tq.setParameter("login", login);
         try {
             return tq.getResultList();
-        } catch (NoResultException e) { //todo in case of no results, empty list would be returned, NoResultException would not be thrown
-            throw FacadeException.noSuchElement();
+        } catch (PersistenceException exp) {
+            throw FacadeException.databaseOperation();
         }
     }
 
