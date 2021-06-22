@@ -421,8 +421,8 @@ const resources = {
             "business_workerHomePage":"Witaj w panelu pracownika firmy.\nW tym panelu możesz przeglądać, dodawać oraz modyfikować wycieczki i grupy wycieczek",
 
             'filterCruises': 'Filtruj',
-            'filterByLowerPriceCruises': "Filtruj po najniższej cenie",
-            'filterByHigherPrices': "Filtruj po najwyzszej cenie"
+            'filterByLowerPriceCruises': "Sortuj po najniższej cenie",
+            'filterByHigherPrices': "Sortuj po najwyzszej cenie"
         }
     },
     EN: {
@@ -836,8 +836,8 @@ const resources = {
             "business_workerHomePage":"welcome to worker panel.\nIn here, you can view, add and edit cruises and cruise groups for your company",
 
             'filterCruises': 'Filter',
-            'filterByLowerPriceCruises': "Filter at the lowest price",
-            'filterByHigherPrices': "Filter at the highest price"
+            'filterByLowerPriceCruises': "Sort at the lowest price",
+            'filterByHigherPrices': "Sort at the highest price"
         }
     }
 }

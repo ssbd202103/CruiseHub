@@ -115,12 +115,14 @@ export default function Home() {
 
 
     const HandleFilterByName = (name : string) => {
-
+        if(!name || name == '') {
+            setFilteredCruises(cruises)
+            return
+        }
         const filtered = cruises.filter(item => {
             return item.name.includes(name)
         })
         setFilteredCruises(filtered)
-        setCruisesNameList(filtered.map(({name}: Cruise)  => name))
 
         }
 
@@ -147,7 +149,6 @@ export default function Home() {
             })
         })
         setFilteredCruises(filtered)
-        setCruisesNameList(filtered.map(({name}: Cruise)  => name))
     }
 
     const HandleFilterByLowerPriceCruise = () => {
@@ -281,7 +282,10 @@ export default function Home() {
                             options={cruisesNameList}
                             inputValue={searchInput}
                             noOptionsText={t('no options')}
-
+                            onChange={(event, value) => {
+                                setSearchInput(value as string ?? '')
+                                HandleFilterByName(value)
+                            }}
                             renderInput={(params) => (
                                 <TextField {...params} label={t('search cruise')} variant="outlined"
                                            onChange={(e) => {
