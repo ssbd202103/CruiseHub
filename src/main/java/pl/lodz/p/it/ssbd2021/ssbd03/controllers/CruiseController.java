@@ -182,7 +182,7 @@ public class CruiseController {
     @PUT
     @Path("/publish")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void publishCruise(PublishCruiseDto publishCruiseDto,
+    public void publishCruise(@Valid PublishCruiseDto publishCruiseDto,
                               @HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL)
                               @NotEmpty(message = CONSTRAINT_NOT_EMPTY) @Valid String etag) throws BaseAppException {
         checkEtagIntegrity(publishCruiseDto, etag);
