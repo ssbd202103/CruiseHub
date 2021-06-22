@@ -88,6 +88,15 @@ public class Reservation extends BaseEntity {
         this.numberOfSeats = numberOfSeats;
         this.cruise = cruise;
         this.client = client;
+        this.uuid = UUID.randomUUID();
+    }
+
+    public Reservation(long numberOfSeats, Cruise cruise, Double price, Client client) {
+        this.numberOfSeats = numberOfSeats;
+        this.cruise = cruise;
+        this.price = price;
+        this.client = client;
+        this.uuid = UUID.randomUUID();
     }
 
     public Reservation() {

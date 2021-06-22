@@ -60,19 +60,19 @@ public class ReservationFacadeMow extends AbstractFacade<Reservation> {
         tq.setParameter("id", cruise.getId());
         try {
             return tq.getResultList();
-        } catch (NoResultException e) {
+        } catch (NoResultException e) { //todo in case of no results, empty list would be returned, NoResultException would not be thrown
             throw FacadeException.noSuchElement();
         }
     }
 
     @RolesAllowed("createReservation")
-    public List<Reservation> findCruiseReservationsOrReturnEmptyList(long id) {
+    public List<Reservation> findCruiseReservationsOrReturnEmptyList(long id) { //todo refactor to uuid
         TypedQuery<Reservation> tq = em.createNamedQuery("Reservation.findCruiseReservations", Reservation.class);
         tq.setParameter("id", id);
         try {
             return tq.getResultList();
         } catch (Exception e) {
-            return new ArrayList<>();
+            return new ArrayList<>(); //todo remove this catch block
         }
     }
 
@@ -89,12 +89,12 @@ public class ReservationFacadeMow extends AbstractFacade<Reservation> {
     }
 
     @RolesAllowed("viewSelfReservations")
-    public List<Reservation> findReservationByLogin(String login) throws BaseAppException {
+    public List<Reservation> findReservationByLogin(String login) throws BaseAppException { //todo refactor
         TypedQuery<Reservation> tq = em.createNamedQuery("Reservation.findByLogin", Reservation.class);
         tq.setParameter("login", login);
         try {
             return tq.getResultList();
-        } catch (NoResultException e) {
+        } catch (NoResultException e) { //todo in case of no results, empty list would be returned, NoResultException would not be thrown
             throw FacadeException.noSuchElement();
         }
     }
