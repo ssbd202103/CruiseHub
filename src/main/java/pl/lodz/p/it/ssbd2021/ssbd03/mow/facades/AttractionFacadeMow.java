@@ -71,6 +71,17 @@ public class AttractionFacadeMow extends AbstractFacade<Attraction> {
         }
     }
 
+    @RolesAllowed("createReservation")
+    public long getNumberOfTakenSeats(Attraction attraction) {
+        TypedQuery<Long> tq = em.createNamedQuery("Attraction.countReservedSpots", Long.class);
+        tq.setParameter("attraction", attraction);
+        try {
+            return tq.getSingleResult();
+        } catch (NoResultException e) {
+            return 0L;
+        }
+    }
+
 
     @PermitAll //TODO
     public List<Attraction> findByCruiseUUID(UUID uuid) throws BaseAppException {
