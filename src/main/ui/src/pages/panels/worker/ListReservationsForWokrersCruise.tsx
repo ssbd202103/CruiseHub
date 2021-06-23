@@ -17,6 +17,7 @@ import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableBody from "@material-ui/core/TableBody";
 import {getReservationsForWorkerCruise} from "../../../Services/reservationService";
+import RoundedButton from "../../../components/RoundedButton";
 
 const useRowStyles = makeStyles({
     root: {
@@ -32,6 +33,7 @@ function createData(
     price: number,
     cruiseName: string,
     attractions: [],
+    uuid: string,
 ) {
     return {
         clientName: clientName,
@@ -39,6 +41,7 @@ function createData(
         price: price,
         cruiseName: cruiseName,
         attractions: attractions,
+        uuid: uuid,
     };
 }
 
@@ -60,6 +63,13 @@ function Row(props: RowProps) {
             <TableCell style={style}>{row.price}</TableCell>
             <TableCell style={style}>{row.cruiseName}</TableCell>
             <TableCell style={style}>{row.attractions.map(item => t(item)).join(', ')}</TableCell>
+            <TableCell align="center">
+                <Link to={`reservation/metadata/${row.uuid}`}>
+                    <RoundedButton color={"green"}
+                                   >
+                        {t("metadata")}</RoundedButton>
+                </Link>
+            </TableCell>
         </TableRow>
     );
 }

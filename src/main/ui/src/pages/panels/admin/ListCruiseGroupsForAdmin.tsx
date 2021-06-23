@@ -243,6 +243,13 @@ function Row(props: CruiseData) {
                     {t("deactivate")}
                 </RoundedButton>
             </TableCell>
+            <TableCell align="center">
+                <Link to={`cruiseGroup/metadata/${group.uuid}`}>
+                    <RoundedButton color={"green"}
+                                   className={buttonClass.root}>
+                        {t("metadata")}</RoundedButton>
+                </Link>
+            </TableCell>
             </TableRow>
             <TableRow>
                 <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>
@@ -278,6 +285,10 @@ function Row(props: CruiseData) {
                                         <TableCell align="center" style={{
                                             backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                             color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                                        }}>{t("metadata")}</TableCell>
+                                        <TableCell align="center" style={{
+                                            backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                            color: `var(--${!darkMode ? 'dark' : 'white-light'}`
                                         }}>{t("deactivate")}</TableCell>
                                     </TableRow>
                                 </TableHead>
@@ -302,6 +313,13 @@ function Row(props: CruiseData) {
                                                 <Link to={`attractions/${cruise.uuid}`}><Button className={buttonClass.root}>{t("attractions")}</Button></Link>
                                             </TableCell>
                                                 <React.Fragment>
+                                                    <TableCell align="center">
+                                                    <Link to={`cruise/metadata/${cruise.uuid}`}>
+                                                        <RoundedButton color={"green"}
+                                                                       className={buttonClass.root}>
+                                                            {t("metadata")}</RoundedButton>
+                                                    </Link>
+                                                    </TableCell>
                                                     <TableCell align="center">
                                                     <RoundedButton
                                                         color="pink"
@@ -449,7 +467,11 @@ const ListCruiseGroupsForAdmin = () => {
                             <TableCell style={{
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`
-                            }}></TableCell>
+                            }}>{t("deactivate")}</TableCell>
+                            <TableCell align="center" style={{
+                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                            }}>{t("metadata")}</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>

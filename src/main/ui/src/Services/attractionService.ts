@@ -17,7 +17,7 @@ export function deleteAttraction(uuid: string){
 export function getAttractionMetadata(uuid:string){
     const {token} = store.getState()
 
-    return axios.get(`cruise/metadata/${uuid}`, {
+    return axios.get(`attractions/metadata/${uuid}`, {
         headers: {
             'Authorization': `Bearer ${token}`
         }

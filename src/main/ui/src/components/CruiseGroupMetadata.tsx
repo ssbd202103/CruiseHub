@@ -9,21 +9,21 @@ import AppColorSetter from "./AppColorSetter";
 import GoBackIcon from '@material-ui/icons/ArrowBackRounded';
 import {useTranslation} from "react-i18next";
 import LanguageSetter from "./LanguageSetter";
-import {getCruiseMetadata} from "../Services/cruisesService";
 import {refreshToken} from "../Services/userService";
 import useHandleError from "../errorHandler";
+import {getCruiseGroupMetadata} from "../Services/cruiseGroupService";
 
 
 
-export default function CruiseMetadata() {
+export default function CruiseGroupMetadata() {
     const darkMode = useSelector(selectDarkMode)
     const {t} = useTranslation()
     const {uuid} = useParams<{ uuid: string }>();
     const handleError = useHandleError()
 
     useEffect( () =>{
-        getCruiseMetadata(uuid).then(res => {
-            sessionStorage.setItem("CruiseMetadata", JSON.stringify(res.data));
+        getCruiseGroupMetadata(uuid).then(res => {
+            sessionStorage.setItem("CruiseGroupMetadata", JSON.stringify(res.data));
             refreshToken();
         }, error => {
             const message = error.response.data

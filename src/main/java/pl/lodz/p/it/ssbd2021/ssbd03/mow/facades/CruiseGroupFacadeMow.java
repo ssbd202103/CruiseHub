@@ -47,7 +47,7 @@ public class CruiseGroupFacadeMow extends AbstractFacade<CruiseGroup> {
     }
 
     @Override
-    @RolesAllowed({"changeCruiseGroup", "deactivateCruiseGroup", "removeClientRating"})
+    @RolesAllowed({"changeCruiseGroup", "deactivateCruiseGroup", "removeClientRating","createRating"})
     public void edit(CruiseGroup entity) throws FacadeException { //TODo throws FacadeException {
         super.edit(entity);
     }

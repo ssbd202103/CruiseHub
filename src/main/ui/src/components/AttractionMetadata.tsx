@@ -12,18 +12,19 @@ import LanguageSetter from "./LanguageSetter";
 import {getCruiseMetadata} from "../Services/cruisesService";
 import {refreshToken} from "../Services/userService";
 import useHandleError from "../errorHandler";
+import {getAttractionMetadata} from "../Services/attractionService";
 
 
 
-export default function CruiseMetadata() {
+export default function AttractionMetadata() {
     const darkMode = useSelector(selectDarkMode)
     const {t} = useTranslation()
     const {uuid} = useParams<{ uuid: string }>();
     const handleError = useHandleError()
 
     useEffect( () =>{
-        getCruiseMetadata(uuid).then(res => {
-            sessionStorage.setItem("CruiseMetadata", JSON.stringify(res.data));
+        getAttractionMetadata(uuid).then(res => {
+            sessionStorage.setItem("AttractionMetadata", JSON.stringify(res.data));
             refreshToken();
         }, error => {
             const message = error.response.data

@@ -18,6 +18,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableBody from "@material-ui/core/TableBody";
 import {getReservationsForCruise, removeClientReservation} from "../../../Services/reservationService";
 import {useSnackbarQueue} from "../../snackbar";
+import RoundedButton from "../../../components/RoundedButton";
 
 const useRowStyles = makeStyles({
     root: {
@@ -82,6 +83,13 @@ function Row({row, style, onReload}: RowProps) {
             <TableCell style={style}>
                 <Button onClick={removeCurrentReservation}
                         className={buttonClass.root}>{t("Remove reservation btn")}</Button>
+            </TableCell>
+            <TableCell align="center">
+                <Link to={`reservation/metadata/${row.uuid}`}>
+                    <RoundedButton color={"green"}
+                                   className={buttonClass.root}>
+                        {t("metadata")}</RoundedButton>
+                </Link>
             </TableCell>
         </TableRow>
     );

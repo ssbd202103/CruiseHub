@@ -441,6 +441,13 @@ function Row(props: CruiseData) {
                         </Link>
                     }
                 </TableCell>
+                <TableCell align="center">
+                    <Link to={`cruiseGroup/metadata/${group.uuid}`}>
+                        <RoundedButton color={"green"}
+                                       className={buttonClass.root}>
+                            {t("metadata")}</RoundedButton>
+                    </Link>
+                </TableCell>
             </TableRow>
             <TableRow>
                 <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>
@@ -473,6 +480,10 @@ function Row(props: CruiseData) {
                                             backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                             color: `var(--${!darkMode ? 'dark' : 'white-light'}`
                                         }}>{t("attractions")}</TableCell>
+                                        <TableCell align="center" style={{
+                                            backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                            color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                                        }}>{t("metadata")}</TableCell>
                                         <TableCell align="center" style={{
                                             backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                             color: `var(--${!darkMode ? 'dark' : 'white-light'}`
@@ -513,12 +524,14 @@ function Row(props: CruiseData) {
                                                         className={buttonClass.root}>
                                                         {t("attractions")}</RoundedButton>
                                                 </Link>
+                                            </TableCell>
+                                                <TableCell align="center">
                                                 <Link to={`cruise/metadata/${cruise.uuid}`}>
                                                     <RoundedButton color={"green"}
                                                                    className={buttonClass.root}>
                                                         {t("metadata")}</RoundedButton>
                                                 </Link>
-                                            </TableCell>
+                                                </TableCell>
                                             <TableCell align="center">
                                                 <RoundedButton color={"pink"}
                                                                className={buttonClass.root}
@@ -784,6 +797,10 @@ const ListCruiseGroups = () => {
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`
                             }}>{t("changeData")}</TableCell>
+                            <TableCell align="center" style={{
+                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                            }}>{t("metadata")}</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
