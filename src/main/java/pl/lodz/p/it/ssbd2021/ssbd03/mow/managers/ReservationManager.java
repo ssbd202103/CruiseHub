@@ -9,6 +9,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Reservation;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters.AccountMapper;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.AttractionFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.ReservationFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
@@ -21,6 +22,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,6 +40,9 @@ public class ReservationManager extends BaseManagerMow implements ReservationMan
 
     @Inject
     private ReservationFacadeMow reservationFacadeMow;
+
+    @Inject
+    private AttractionFacadeMow attractionFacadeMow;
 
     @Inject
     private CruiseFacadeMow cruiseFacadeMow;
@@ -74,7 +79,7 @@ public class ReservationManager extends BaseManagerMow implements ReservationMan
 
     @RolesAllowed("createReservation")
     @Override
-    public void createReservation(long version, UUID cruiseUUID, long numberOfSeats) throws BaseAppException {
+    public void createReservation(long version, UUID cruiseUUID, long numberOfSeats, List<String> attractionsUUID) throws BaseAppException {
         Cruise cruise = cruiseFacadeMow.findByUUID(cruiseUUID);
         checkForOptimisticLock(cruise, version);
 
@@ -89,7 +94,25 @@ public class ReservationManager extends BaseManagerMow implements ReservationMan
             throw new ReservationManagerException(CANNOT_BOOK_STARTED_CRUISE);
         }
 
+        List<Attraction> attractions = new ArrayList<>();
+
+        for (String uuidStr : attractionsUUID) {
+            try {
+                UUID uuid = UUID.fromString(uuidStr);
+                Attraction attraction = attractionFacadeMow.findByUUID(uuid);
+                long allSeats = attraction.getNumberOfSeats();
+                long takenSeats = attractionFacadeMow.getNumberOfTakenSeats(attraction);
+                if (allSeats < takenSeats + numberOfSeats) {
+                    throw new ReservationManagerException(NO_SEATS_FOR_ATTRACTION);
+                }
+                attractions.add(attraction);
+            } catch (IllegalArgumentException e) {
+                throw new MapperException(MAPPER_UUID_PARSE);
+            }
+        }
+
         Reservation reservation = new Reservation(numberOfSeats, cruise, cruise.getCruisesGroup().getPrice() * numberOfSeats, client);
+        reservation.getAttractions().addAll(attractions);
 
         setCreatedMetadata(account, reservation);
         reservationFacadeMow.create(reservation);

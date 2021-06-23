@@ -1,13 +1,14 @@
 import axios from "./URL";
 import store from "../redux/store";
 
-export function createReservation(cruiseVersion: number, uuid: string, numberOfSeats: number) {
+export function createReservation(cruiseVersion: number, uuid: string, numberOfSeats: number, attractionsUUID: string[]) {
 
     const {token} = store.getState()
     const json = {
         cruiseVersion: cruiseVersion,
         cruiseUuid: uuid,
         numberOfSeats: numberOfSeats,
+        attractionsUUID: attractionsUUID
     }
     return axios.post('cruise/reserve', json, {
         headers: {
