@@ -10,6 +10,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import java.util.UUID;
+
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 
 @Data
@@ -29,4 +31,6 @@ public class ClientRatingDto {
     @Max(value = 5, message = RATING_CONSTRAINT_ERROR)
     @Min(value = 1, message = RATING_CONSTRAINT_ERROR)
     private Double rating;
+
+    private String ratingUuid;
 }

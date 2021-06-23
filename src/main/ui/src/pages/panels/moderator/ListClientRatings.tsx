@@ -18,6 +18,8 @@ import TableHead from "@material-ui/core/TableHead";
 import TableBody from "@material-ui/core/TableBody";
 import {useSnackbarQueue} from "../../snackbar";
 import RoundedButton from "../../../components/RoundedButton";
+import PopupMetadata from "../../../PopupMetadata";
+import {getRatingMetadata} from "../../../Services/ratingService";
 
 const useRowStyles = makeStyles({
     root: {
@@ -26,18 +28,31 @@ const useRowStyles = makeStyles({
         },
     },
 });
-
+const useButtonStyles = makeStyles({
+    root: {
+        fontFamily: '"Montserrat", sans-serif',
+        color: 'var(--white)',
+        backgroundColor: "var(--blue)",
+        padding: '8px 16px',
+        margin: '0 16px',
+        '&:hover': {
+            backgroundColor: "var(--blue-dark)",
+        }
+    }
+})
 function createData(
     login: string,
     cruiseGroupName: string,
     cruiseGroupUUID: string,
     rating: number,
+    ratingUuid: string,
 ) {
     return {
         login: login,
         cruiseGroupName: cruiseGroupName,
         cruiseGroupUUID: cruiseGroupUUID,
-        rating: rating
+        rating: rating,
+        ratingUuid: ratingUuid,
     };
 }
 
@@ -46,7 +61,9 @@ export interface RowProps {
     style: React.CSSProperties,
     onReload: () => void
 }
-
+interface MetadataRating {
+    uuid: string,
+}
 function Row(props: RowProps) {
     const {t} = useTranslation();
     const {row} = props;
@@ -54,7 +71,34 @@ function Row(props: RowProps) {
     const handleError = useHandleError()
     const showSuccess = useSnackbarQueue('success')
     const classes = useRowStyles();
+    const buttonClass = useButtonStyles();
 
+    const [metadataPopupAcceptAction, setMetadataPopupAcceptAction] = useState(false);
+    const [alterType, setAlterType] = useState('')
+    const [alteredBy, setAlteredBy] = useState('')
+    const [createdBy, setCreatedBy] = useState('')
+    const [creationDateTime, setCreationDateTime] = useState('')
+    const [lastAlterDateTime, setLastAlterDateTime] = useState('')
+    const [version, setVersion] = useState('')
+
+    const handleMetadata = async ({uuid}: MetadataRating) =>{
+        getRatingMetadata(uuid).then(res => {
+            setAlterType(res.data.alterType);
+            setAlteredBy(res.data.alteredBy);
+            setCreatedBy(res.data.createdBy);
+            if(res.data.creationDateTime !=null)
+                setCreationDateTime(res.data.creationDateTime.dayOfMonth +" "+ t(res.data.creationDateTime.month) +" "+ res.data.creationDateTime.year +" "+ res.data.creationDateTime.hour +":"+ res.data.creationDateTime.minute.toString().padStart(2, '0') )
+            if(res.data.lastAlterDateTime !=null)
+                setLastAlterDateTime(res.data.lastAlterDateTime.dayOfMonth +" "+ t(res.data.lastAlterDateTime.month) +" "+ res.data.lastAlterDateTime.year +" "+ res.data.lastAlterDateTime.hour +":"+ res.data.lastAlterDateTime.minute.toString().padStart(2, '0'));
+            setVersion(res.data.version);
+            refreshToken();
+        }, error => {
+            const message = error.response.data
+            handleError(message, error.response.status)
+        }).then(res => {
+            setMetadataPopupAcceptAction(true);
+        })
+    }
     const removeRating = () => {
         removeClientRating(row.login, row.cruiseGroupUUID).then(res => {
             showSuccess(t('data.delete.success'))
@@ -77,6 +121,27 @@ function Row(props: RowProps) {
                     {t("remove rating")}
                 </RoundedButton>
             </TableCell>
+            <TableCell style={style}>
+                <RoundedButton color={"green"}
+                               className={buttonClass.root}
+                               onClick={() => {
+                                   handleMetadata({
+                                       uuid: row.ratingUuid
+                                   })
+                                   setMetadataPopupAcceptAction(true)
+                               }
+                               }>{t("metadata")}</RoundedButton>
+            </TableCell>
+            <PopupMetadata
+                open={metadataPopupAcceptAction}
+                onCancel={() => {setMetadataPopupAcceptAction(false)}}
+                alterType={alterType}
+                alteredBy={alteredBy}
+                createdBy={createdBy}
+                creationDateTime={creationDateTime}
+                lastAlterDateTime={lastAlterDateTime}
+                version={version}
+            />
         </TableRow>
     );
 }
@@ -158,6 +223,10 @@ const ListClientRatings = () => {
                                     backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                     color: `var(--${!darkMode ? 'dark' : 'white-light'}`
                                 }}>{t("remove button")}</TableCell>
+                                <TableCell style={{
+                                    backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                    color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                                }}>{t("metadata")}</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
