@@ -140,10 +140,10 @@ interface DeactivateCruise {
     etag: string,
     version: bigint
 }
-interface MetadataCruise {
+interface MetadataCruiseGroupe {
     uuid: string,
 }
-interface CruiseMetadataCruise {
+interface MetadataCruise {
     uuid: string,
 }
 const deactivateCruiseGroup = async ({uuid, etag, version, token}: DeactivateCruiseData) => {
@@ -209,9 +209,7 @@ function Row(props: CruiseData) {
     const [lastAlterDateTime, setLastAlterDateTime] = useState('')
     const [versionM, setVersionM] = useState('')
 
-    const handleMetadata = async ({uuid}: MetadataCruise) =>{
-    console.log(uuid);
-        console.log(group.uuid);
+    const handleMetadata = async ({uuid}: MetadataCruiseGroupe) =>{
         getCruiseGroupMetadata(uuid).then(res => {
             setAlterType(res.data.alterType);
             setAlteredBy(res.data.alteredBy);
@@ -229,7 +227,7 @@ function Row(props: CruiseData) {
             setMetadataPopupAcceptAction(true);
         })
     }
-    const handleCruiseMetadata = async ({uuid}: CruiseMetadataCruise) =>{
+    const handleCruiseMetadata = async ({uuid}: MetadataCruise) =>{
         getCruiseMetadata(uuid).then(res => {
             setAlterType(res.data.alterType);
             setAlteredBy(res.data.alteredBy);
@@ -593,7 +591,6 @@ function Row(props: CruiseData) {
                                                         {t("attractions")}</RoundedButton>
                                                 </Link>
                                             </TableCell>
-                                                <TableCell align="center">
                                                     <TableCell align="center">
                                                         <RoundedButton color={"green"}
                                                                        className={buttonClass.root}
@@ -605,7 +602,6 @@ function Row(props: CruiseData) {
                                                                        }
                                                                        }>{t("metadata")}</RoundedButton>
                                                     </TableCell>
-                                                </TableCell>
                                             <TableCell align="center">
                                                 <RoundedButton color={"pink"}
                                                                className={buttonClass.root}

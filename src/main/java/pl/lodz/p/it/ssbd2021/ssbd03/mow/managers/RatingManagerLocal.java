@@ -56,6 +56,12 @@ public interface RatingManagerLocal {
      */
     void removeClientRating(String login, UUID cruiseGroupUUID) throws BaseAppException;
 
+    /**
+     * Zwraca ocenę o podanym uuid
+     *
+     * @param uuid UUID oceny
+     * @throws BaseAppException bazowy wyjątek aplikacji
+     */
     Rating findByUuid(UUID uuid) throws FacadeException;
 
 }

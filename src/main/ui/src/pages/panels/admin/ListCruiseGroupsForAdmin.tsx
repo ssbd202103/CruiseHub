@@ -125,10 +125,10 @@ export interface  CruiseData{
     style: React.CSSProperties,
     onChange: () => Promise<any>,
 }
-interface MetadataCruise {
+interface MetadataCruiseGroup {
     uuid: string,
 }
-interface CruiseMetadataCruise {
+interface MetadataCruise {
     uuid: string,
 }
 function Row(props: CruiseData) {
@@ -161,9 +161,7 @@ function Row(props: CruiseData) {
     const [lastAlterDateTime, setLastAlterDateTime] = useState('')
     const [versionM, setVersionM] = useState('')
 
-    const handleMetadata = async ({uuid}: MetadataCruise) =>{
-        console.log(uuid);
-        console.log(group.uuid);
+    const handleMetadata = async ({uuid}: MetadataCruiseGroup) =>{
         getCruiseGroupMetadata(uuid).then(res => {
             setAlterType(res.data.alterType);
             setAlteredBy(res.data.alteredBy);
@@ -181,7 +179,7 @@ function Row(props: CruiseData) {
             setMetadataPopupAcceptAction(true);
         })
     }
-    const handleCruiseMetadata = async ({uuid}: CruiseMetadataCruise) =>{
+    const handleCruiseMetadata = async ({uuid}: MetadataCruise) =>{
         getCruiseMetadata(uuid).then(res => {
             setAlterType(res.data.alterType);
             setAlteredBy(res.data.alteredBy);

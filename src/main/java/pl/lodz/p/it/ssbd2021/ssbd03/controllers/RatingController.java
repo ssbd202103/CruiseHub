@@ -1,6 +1,8 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.common.dto.MetadataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.MapperException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CreateRatingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.ClientRatingDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.RatingEndpointLocal;
@@ -20,6 +22,7 @@ import javax.ws.rs.Produces;
 import java.util.List;
 import java.util.UUID;
 
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.MAPPER_UUID_PARSE;
 import static pl.lodz.p.it.ssbd2021.ssbd03.utils.TransactionRepeater.tryAndRepeat;
 
 @Path("/ratings")
@@ -55,4 +58,24 @@ public class RatingController {
     public void removeClientRating(@PathParam("clientLogin") String clientLogin, @PathParam("uuid") String uuid) throws BaseAppException {
         tryAndRepeat(ratingEndpoint, () -> ratingEndpoint.removeClientRating(clientLogin, UUID.fromString(uuid)));
     }
+
+    /**
+     * Pobiera metadane oceny
+     *
+     *@param uuid UUID oceny wybranej do metadanych
+     * @return Reprezentacja DTO metadanych
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
+    @GET
+    @Path("/metadata/{uuid}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public MetadataDto getRatingMetadata(@PathParam("uuid") String uuid) throws BaseAppException {
+        try{
+            UUID convertedUUID = UUID.fromString(uuid);
+            return tryAndRepeat(ratingEndpoint, () -> ratingEndpoint.getRatingMetadata(convertedUUID));
+        }catch (IllegalArgumentException e) {
+            throw new MapperException(MAPPER_UUID_PARSE);
+        }
+    }
+
 }

@@ -1,6 +1,8 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.common.dto.MetadataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints.BaseEndpoint;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.mappers.MetadataMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Rating;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.MapperException;
@@ -69,4 +71,11 @@ public class RatingEndpoint extends BaseEndpoint implements RatingEndpointLocal 
     public void removeClientRating(String login, UUID cruiseGroupUUID) throws BaseAppException {
         ratingManager.removeClientRating(login, cruiseGroupUUID);
     }
+
+    @RolesAllowed("authenticatedUser")
+    @Override
+    public MetadataDto getRatingMetadata(UUID uuid) throws BaseAppException {
+        return MetadataMapper.toMetadataDto(ratingManager.findByUuid(uuid));
+    }
+
 }
