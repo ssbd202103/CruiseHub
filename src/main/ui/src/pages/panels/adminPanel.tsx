@@ -23,9 +23,6 @@ import ListCruiseGroup from "./admin/ListCruiseGroupsForAdmin";
 import ListReservationsForCruise from "./admin/ListReservationsForCruise";
 import AttractionList from "./admin/AttractionList";
 import AdminHomePage from "../../components/AdminHomePage"
-import CruiseMetadata from "../../components/CruiseMetadata";
-import ReservationMetadata from "../../components/ReservationMetadata";
-import AttractionMetadata from "../../components/AttractionMetadata";
 export default function AdminPanel() {
     const {t} = useTranslation()
     const handleError = useHandleError()
