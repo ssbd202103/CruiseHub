@@ -142,10 +142,14 @@ export default function Home() {
                     dayOfMonth: ed,
                 } = r.endDate;
 
-                const start = new Date(sy, sm, sd, 0, 0, 0, 0).getTime();
-                const end = new Date(ey, em, ed, 0, 0, 0, 0).getTime();
+                const cruiseStartDate = new Date(sy, sm - 1, sd, 0, 0, 0, 0);
+                const cruiseEndDate = new Date(ey, em - 1, ed, 0, 0, 0, 0);
 
-                return (startDate ? startDate.getTime() <= start : true) && (endDate ? endDate.getTime() >= end : true)
+                startDate?.setHours(0, 0, 0,0)
+                endDate?.setHours(0, 0, 0,0)
+
+                return (startDate ? startDate.getTime() <= cruiseStartDate.getTime() : true) &&
+                    (endDate ? endDate.getTime() >= cruiseEndDate.getTime() : true)
             })
         })
         setFilteredCruises(filtered)
