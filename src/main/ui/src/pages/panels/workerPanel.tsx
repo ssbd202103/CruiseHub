@@ -17,11 +17,6 @@ import ListCompany from "./moderator/ListCompany";
 import AddCruiseGroup from "./worker/AddCruiseGroup";
 import ListCruiseGroup from "./worker/ListCruiseGroupForWorker"
 import AddCruise from "./worker/AddCruise"
-import ChangeAccountData from "./admin/ChangeAccountData";
-import GrantAccessLevel from "./admin/GrantAccessLevel";
-import ChangeAccessLevelState from "./admin/ChangeAccessLevelState";
-import RequestSomeonePasswordReset from "../reset/requestSomeonesPasswordReset";
-import ListReservationsForCruise from "./admin/ListReservationsForCruise";
 import ListReservationsForWorker from "./worker/ListReservationsForWokrersCruise";
 import ChangeCruiseGroup from "./worker/ChangeCruiseGroup"
 import AttractionList from "./worker/AttractionList";
