@@ -1,5 +1,5 @@
 import React from "react";
-import MuiAutocomplete, {AutocompleteProps} from "@material-ui/lab/Autocomplete";
+import MuiAutocomplete, { AutocompleteProps as MuiAutocompleteProps } from "@material-ui/lab/Autocomplete";
 import {makeStyles} from "@material-ui/core/styles";
 import {useSelector} from "react-redux";
 import {selectDarkMode} from "../redux/slices/userSlice";
@@ -21,17 +21,22 @@ const useAutocompleteStyles = (darkMode: boolean) => makeStyles(theme => ({
     }
 }))();
 
+export interface AutoCompleteProps extends MuiAutocompleteProps<any, any, any, any> {
+    colorIgnored?: boolean,
+}
+
 export default function Autocomplete(
     {
+        colorIgnored = false,
         options,
         inputValue,
         style,
         noOptionsText,
         onChange,
         renderInput,
-    }: AutocompleteProps<any, any, any, any>) {
+    }: AutoCompleteProps) {
     const darkMode = useSelector(selectDarkMode);
-    const classes = useAutocompleteStyles(darkMode);
+    const classes = useAutocompleteStyles(!colorIgnored && darkMode);
 
     return (
         <MuiAutocomplete

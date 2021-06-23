@@ -253,6 +253,7 @@ export default function Home() {
                 borderRadius: 16,
             }}>
                 <Autocomplete
+                    colorIgnored
                     options={cruisesNameList}
                     inputValue={searchInput}
                     noOptionsText={t('no options')}
@@ -277,7 +278,7 @@ export default function Home() {
                         <MuiPickersUtilsProvider locale={language} utils={DateFnsUtils} >
                             <KeyboardDatePicker
                                 style={{marginRight: 30}}
-                                className={darkMode ? classes.dark: classes.light}
+                                className={classes.light}
                                 disableToolbar
                                 autoOk={true}
                                 variant="inline"
@@ -299,7 +300,7 @@ export default function Home() {
                                 }}
                             />
                             <KeyboardDatePicker
-                                className={darkMode ? classes.dark: classes.light}
+                                className={classes.light}
                                 disableToolbar
                                 autoOk={true}
                                 variant="inline"
