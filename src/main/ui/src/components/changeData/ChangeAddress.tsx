@@ -151,9 +151,9 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
         setAlteredByAdr(currentSelfAddressMTD.alteredBy);
         setCreatedByAdr(currentSelfAddressMTD.createdBy);
         if(currentSelfAddressMTD.creationDateTime !=null)
-            setCreationDateTimeAdr(currentSelfAddressMTD.creationDateTime.dayOfMonth +" "+ t(currentSelfAddressMTD.creationDateTime.month) +" "+ currentSelfAddressMTD.creationDateTime.year +" "+ currentSelfAddressMTD.creationDateTime.hour +":"+ currentSelfAddressMTD.creationDateTime.minute )
+            setCreationDateTimeAdr(currentSelfAddressMTD.creationDateTime.dayOfMonth +" "+ t(currentSelfAddressMTD.creationDateTime.month) +" "+ currentSelfAddressMTD.creationDateTime.year +" "+ currentSelfAddressMTD.creationDateTime.hour +":"+ currentSelfAddressMTD.creationDateTime.minute.toString().padStart(2, '0') )
         if(currentSelfAddressMTD.lastAlterDateTime !=null)
-            setLastAlterDateTimeAdr(currentSelfAddressMTD.lastAlterDateTime.dayOfMonth +" "+ t(currentSelfAddressMTD.lastAlterDateTime.month) +" "+ currentSelfAddressMTD.lastAlterDateTime.year +" "+ currentSelfAddressMTD.lastAlterDateTime.hour +":"+ currentSelfAddressMTD.lastAlterDateTime.minute);
+            setLastAlterDateTimeAdr(currentSelfAddressMTD.lastAlterDateTime.dayOfMonth +" "+ t(currentSelfAddressMTD.lastAlterDateTime.month) +" "+ currentSelfAddressMTD.lastAlterDateTime.year +" "+ currentSelfAddressMTD.lastAlterDateTime.hour +":"+ currentSelfAddressMTD.lastAlterDateTime.minute.toString().padStart(2, '0'));
         setVersionAdr(currentSelfAddressMTD.version);
     }, [address])
 
