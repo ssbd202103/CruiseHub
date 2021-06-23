@@ -28,7 +28,6 @@ import axios from "../../../Services/URL";
 import PopupAcceptAction from "../../../PopupAcceptAction";
 import ActiveIcon from "../../../components/ActiveIcon";
 import RoundedButton from "../../../components/RoundedButton";
-import {getCompanyMetadata} from "../../../Services/companiesService";
 import {getCruiseMetadata} from "../../../Services/cruisesService";
 import PopupMetadata from "../../../PopupMetadata";
 

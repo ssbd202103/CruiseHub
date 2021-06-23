@@ -19,7 +19,7 @@ import TableBody from "@material-ui/core/TableBody";
 import {ImageListType} from "react-images-uploading";
 import {
     getAllCruiseGroup,
-    getCruiseGroupForBusinessWorker,
+    getCruiseGroupForBusinessWorker, getCruiseGroupMetadata,
     getCruisesForCruiseGroup
 } from "../../../Services/cruiseGroupService";
 import RoundedButton from "../../../components/RoundedButton";
@@ -35,6 +35,8 @@ import PopupAcceptAction from "../../../PopupAcceptAction";
 import store from "../../../redux/store";
 import {getSelfReservations} from "../../../Services/reservationService";
 import ActiveIcon from "../../../components/ActiveIcon";
+import {getCruiseMetadata} from "../../../Services/cruisesService";
+import PopupMetadata from "../../../PopupMetadata";
 
 
 const useRowStyles = makeStyles({
@@ -123,7 +125,12 @@ export interface  CruiseData{
     style: React.CSSProperties,
     onChange: () => Promise<any>,
 }
-
+interface MetadataCruise {
+    uuid: string,
+}
+interface CruiseMetadataCruise {
+    uuid: string,
+}
 function Row(props: CruiseData) {
     const [deactivateCruise, setDeactivateCruise] = useState<DeactivateCruise>({
         uuid : "",
@@ -144,7 +151,54 @@ function Row(props: CruiseData) {
     const buttonClass = useButtonStyles();
     const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
 
+    const [metadataPopupAcceptAction, setMetadataPopupAcceptAction] = useState(false);
+    const [cruiseMetadataPopupAcceptAction, setCruiseMetadataPopupAcceptAction] = useState(false);
 
+    const [alterType, setAlterType] = useState('')
+    const [alteredBy, setAlteredBy] = useState('')
+    const [createdBy, setCreatedBy] = useState('')
+    const [creationDateTime, setCreationDateTime] = useState('')
+    const [lastAlterDateTime, setLastAlterDateTime] = useState('')
+    const [versionM, setVersionM] = useState('')
+
+    const handleMetadata = async ({uuid}: MetadataCruise) =>{
+        console.log(uuid);
+        console.log(group.uuid);
+        getCruiseGroupMetadata(uuid).then(res => {
+            setAlterType(res.data.alterType);
+            setAlteredBy(res.data.alteredBy);
+            setCreatedBy(res.data.createdBy);
+            if(res.data.creationDateTime !=null)
+                setCreationDateTime(res.data.creationDateTime.dayOfMonth +" "+ t(res.data.creationDateTime.month) +" "+ res.data.creationDateTime.year +" "+ res.data.creationDateTime.hour +":"+ res.data.creationDateTime.minute)
+            if(res.data.lastAlterDateTime !=null)
+                setLastAlterDateTime(res.data.lastAlterDateTime.dayOfMonth +" "+ t(res.data.lastAlterDateTime.month) +" "+ res.data.lastAlterDateTime.year +" "+ res.data.lastAlterDateTime.hour +":"+ res.data.lastAlterDateTime.minute);
+            setVersionM(res.data.version);
+            refreshToken();
+        }, error => {
+            const message = error.response.data
+            handleError(message, error.response.status)
+        }).then(res => {
+            setMetadataPopupAcceptAction(true);
+        })
+    }
+    const handleCruiseMetadata = async ({uuid}: CruiseMetadataCruise) =>{
+        getCruiseMetadata(uuid).then(res => {
+            setAlterType(res.data.alterType);
+            setAlteredBy(res.data.alteredBy);
+            setCreatedBy(res.data.createdBy);
+            if(res.data.creationDateTime !=null)
+                setCreationDateTime(res.data.creationDateTime.dayOfMonth +" "+ t(res.data.creationDateTime.month) +" "+ res.data.creationDateTime.year +" "+ res.data.creationDateTime.hour +":"+ res.data.creationDateTime.minute)
+            if(res.data.lastAlterDateTime !=null)
+                setLastAlterDateTime(res.data.lastAlterDateTime.dayOfMonth +" "+ t(res.data.lastAlterDateTime.month) +" "+ res.data.lastAlterDateTime.year +" "+ res.data.lastAlterDateTime.hour +":"+ res.data.lastAlterDateTime.minute);
+            setVersionM(res.data.version);
+            refreshToken();
+        }, error => {
+            const message = error.response.data
+            handleError(message, error.response.status)
+        }).then(res => {
+            setCruiseMetadataPopupAcceptAction(true);
+        })
+    }
 
     const handleConfirm = async ({uuid, etag, version}: DeactivateCruise) => {
         const {token} = store.getState();
@@ -243,13 +297,27 @@ function Row(props: CruiseData) {
                     {t("deactivate")}
                 </RoundedButton>
             </TableCell>
-            <TableCell align="center">
-                <Link to={`cruiseGroup/metadata/${group.uuid}`}>
+                <TableCell align="center">
                     <RoundedButton color={"green"}
-                                   className={buttonClass.root}>
-                        {t("metadata")}</RoundedButton>
-                </Link>
-            </TableCell>
+                                   className={buttonClass.root}
+                                   onClick={() => {
+                                       handleMetadata({
+                                           uuid: group.uuid,
+                                       })
+                                       setMetadataPopupAcceptAction(true)
+                                   }
+                                   }>{t("metadata")}</RoundedButton>
+                </TableCell>
+                <PopupMetadata
+                    open={metadataPopupAcceptAction}
+                    onCancel={() => {setMetadataPopupAcceptAction(false)}}
+                    alterType={alterType}
+                    alteredBy={alteredBy}
+                    createdBy={createdBy}
+                    creationDateTime={creationDateTime}
+                    lastAlterDateTime={lastAlterDateTime}
+                    version={versionM}
+                />
             </TableRow>
             <TableRow>
                 <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>
@@ -314,11 +382,15 @@ function Row(props: CruiseData) {
                                             </TableCell>
                                                 <React.Fragment>
                                                     <TableCell align="center">
-                                                    <Link to={`cruise/metadata/${cruise.uuid}`}>
                                                         <RoundedButton color={"green"}
-                                                                       className={buttonClass.root}>
-                                                            {t("metadata")}</RoundedButton>
-                                                    </Link>
+                                                                       className={buttonClass.root}
+                                                                       onClick={() => {
+                                                                           handleCruiseMetadata({
+                                                                               uuid: cruise.uuid
+                                                                           })
+                                                                           setCruiseMetadataPopupAcceptAction(true)
+                                                                       }
+                                                                       }>{t("metadata")}</RoundedButton>
                                                     </TableCell>
                                                     <TableCell align="center">
                                                     <RoundedButton
@@ -342,6 +414,16 @@ function Row(props: CruiseData) {
                                         </TableRow>
                                     ))}
                                 </TableBody>
+                                <PopupMetadata
+                                    open={cruiseMetadataPopupAcceptAction}
+                                    onCancel={() => {setCruiseMetadataPopupAcceptAction(false)}}
+                                    alterType={alterType}
+                                    alteredBy={alteredBy}
+                                    createdBy={createdBy}
+                                    creationDateTime={creationDateTime}
+                                    lastAlterDateTime={lastAlterDateTime}
+                                    version={versionM}
+                                />
                             </Table>
                         </Box>
                     </Collapse>

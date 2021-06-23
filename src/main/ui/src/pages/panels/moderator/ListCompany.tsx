@@ -17,7 +17,6 @@ import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableBody from "@material-ui/core/TableBody";
 import RoundedButton from "../../../components/RoundedButton";
-import {getCruiseMetadata} from "../../../Services/cruisesService";
 import PopupMetadata from "../../../PopupMetadata";
 
 const useRowStyles = makeStyles({

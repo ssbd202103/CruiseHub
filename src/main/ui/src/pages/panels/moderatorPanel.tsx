@@ -23,8 +23,7 @@ import AddCompany from "./moderator/AddCompany";
 import ListClientRatings from "./moderator/ListClientRatings";
 import AttractionList from "./admin/AttractionList";
 import ModeratorHomePage from "../../components/ModeratorHomePage";
-import CruiseMetadata from "../../components/CruiseMetadata";
-import CompanyMetadata from "../../components/CompanyMetadata";
+
 
 export default function ModeratorPanel() {
     const {t} = useTranslation()
@@ -188,14 +187,6 @@ export default function ModeratorPanel() {
                     {
                         to: '/attractions/:uuid',
                         Component: AttractionList
-                    },
-                    {
-                        to: '/cruise/metadata/:uuid',
-                        Component: CruiseMetadata
-                    },
-                    {
-                        to: '/company/metadata/:nip',
-                        Component: CompanyMetadata
                     },
                     {
                         to: '/',

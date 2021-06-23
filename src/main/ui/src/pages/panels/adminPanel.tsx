@@ -25,7 +25,6 @@ import AttractionList from "./admin/AttractionList";
 import AdminHomePage from "../../components/AdminHomePage"
 import CruiseMetadata from "../../components/CruiseMetadata";
 import ReservationMetadata from "../../components/ReservationMetadata";
-import CruiseGroupMetadata from "../../components/CruiseGroupMetadata";
 import AttractionMetadata from "../../components/AttractionMetadata";
 export default function AdminPanel() {
     const {t} = useTranslation()
@@ -166,21 +165,6 @@ export default function AdminPanel() {
                 {
                     to: '/attractions/:uuid',
                     Component: AttractionList
-                },
-                {
-                    to: '/cruise/metadata/:uuid',
-                    Component: CruiseMetadata
-                },
-                {
-                    to: '/reservation/metadata/:uuid',
-                    Component: ReservationMetadata
-                },
-                {
-                    to: '/cruiseGroup/metadata/:uuid',
-                    Component: CruiseGroupMetadata
-                },                {
-                    to: '/attraction/metadata/:uuid',
-                    Component: AttractionMetadata
                 },
                 {
                     to: '/',
