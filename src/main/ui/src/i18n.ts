@@ -120,6 +120,7 @@ const resources = {
             "edit": "Edytuj dane",
             'create': 'Utwórz',
 
+            "reset btn": "Zresetuj hasło",
             "change password": "Zmień hasło",
             "reset password": "Resetuj hasło",
             "block": "Zablokuj konto",
@@ -555,6 +556,7 @@ const resources = {
             "edit": "Edit data",
             'create': 'Create',
             "change password": "Change password",
+            "reset btn": "Reset password",
             "reset password": "Reset password",
             "block": "Block account",
             "enable": "Enable",
