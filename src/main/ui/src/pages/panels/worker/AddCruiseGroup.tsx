@@ -4,7 +4,7 @@ import DarkedTextField from "../../../components/DarkedTextField";
 import React, {useEffect, useReducer, useState} from "react";
 import {useTranslation} from "react-i18next";
 import RoundedButton from "../../../components/RoundedButton";
-import ImageUploading, { ImageListType } from "react-images-uploading";
+import ImageUploading, {ImageListType} from "react-images-uploading";
 import store from "../../../redux/store";
 import {useSelector} from "react-redux";
 import {selectCompany} from "../../../redux/slices/userSlice";
@@ -18,7 +18,11 @@ import {
     COUNTRY_REGEX, HOUSE_STREET_NUMBER_REGEX, NAME_REGEX, POST_CODE_REGEX,
     STREET_REGEX
 } from "../../../regexConstants";
-export default function (){
+import PopupAcceptAction from "../../../PopupAcceptAction";
+
+export default function () {
+    const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
+
     const [, forceUpdate] = useReducer(x => x + 1, 0);
     const {t} = useTranslation();
     const [cruiseName, setCruiseName] = useState('')
@@ -45,13 +49,12 @@ export default function (){
     const worker_Company = useSelector(selectCompany);
     const showSuccess = useSnackbarQueue('success')
     const history = useHistory();
-    const [isPicture,setIsPicture] = React.useState(false)
+    const [isPicture, setIsPicture] = React.useState(false)
 
     const maxNumber = 1;
     const [images, setImages] = React.useState([]);
     const onChange = (
         imageList: ImageListType,
-
     ) => {
         setIsPicture(state => !state)
         setImages(imageList as []);
@@ -92,7 +95,7 @@ export default function (){
             name: cruiseName,
             numberOfSeats: numberOfSeats,
             price: price,
-            cruiseAddress:{
+            cruiseAddress: {
                 street: street,
                 streetNumber: streetNumber,
                 harborName: harborName,
@@ -102,49 +105,51 @@ export default function (){
             cruisePictures: images,
             description: description,
         })
-        axios.post('cruiseGroup/add-cuise-group',json,{
-             headers: {
-                 "Content-Type": "application/json",
-                 "Accept": "application/json",
-                 "Authorization": `Bearer ${token}`
-             }}).then(res => {
-             showSuccess(t('successful action'))
-             forceUpdate()
-             history.push('/listCruiseGroup')})
+        axios.post('cruiseGroup/add-cuise-group', json, {
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        }).then(res => {
+            showSuccess(t('successful action'))
+            forceUpdate()
+            history.push('/listCruiseGroup')
+        })
             .catch(error => {
-             const message = error.response.data
-             handleError(message, error.response.status)
-             for (let messageArray of Object.values(message.errors)) {
-                for (const error of messageArray as Array<String>) {
-                    switch(error) {
-                        case 'error.size.cruiseGroupName':
-                        case 'error.regex.cruiseGroupName':
-                            setCruiseNameRegexError(true)
-                            break
-                        case 'error.size.street':
-                        case 'error.regex.street':
-                            setStreetRegexError(true)
-                            break
-                        case 'error.size.streetNumber':
-                        case 'error.regex.streetNumber':
-                            setStreetNumberRegexError(true)
-                            break
-                        case 'error.size.harborName':
-                        case 'error.regex.harborName':
-                            setHarborNameRegexError(true)
-                            break
-                        case 'error.size.city':
-                        case 'error.regex.city':
-                            setCityRegexError(true)
-                            break
-                        case 'error.size.country':
-                        case 'error.regex.country':
-                            setCountryRegexError(true)
-                            break
+                const message = error.response.data
+                handleError(message, error.response.status)
+                for (let messageArray of Object.values(message.errors)) {
+                    for (const error of messageArray as Array<String>) {
+                        switch (error) {
+                            case 'error.size.cruiseGroupName':
+                            case 'error.regex.cruiseGroupName':
+                                setCruiseNameRegexError(true)
+                                break
+                            case 'error.size.street':
+                            case 'error.regex.street':
+                                setStreetRegexError(true)
+                                break
+                            case 'error.size.streetNumber':
+                            case 'error.regex.streetNumber':
+                                setStreetNumberRegexError(true)
+                                break
+                            case 'error.size.harborName':
+                            case 'error.regex.harborName':
+                                setHarborNameRegexError(true)
+                                break
+                            case 'error.size.city':
+                            case 'error.regex.city':
+                                setCityRegexError(true)
+                                break
+                            case 'error.size.country':
+                            case 'error.regex.country':
+                                setCountryRegexError(true)
+                                break
+                        }
                     }
                 }
-             }
-         })
+            })
     }
 
     return (
@@ -317,12 +322,13 @@ export default function (){
                     regexError={countryRegexError}
                 />
             </Box>
-            <Box style ={{
+            <Box style={{
                 width: '100%',
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
-                marginBottom: 20}}>
+                marginBottom: 20
+            }}>
                 <ImageUploading
                     multiple
                     value={images}
@@ -338,7 +344,7 @@ export default function (){
                           isDragging,
                           dragProps
                       }) => (
-                        <div className="upload__image-wrapper" >
+                        <div className="upload__image-wrapper">
                             <RoundedButton
                                 color="blue"
 
@@ -349,7 +355,7 @@ export default function (){
                             &nbsp;
                             {imageList.map((image, index) => (
                                 <div key={index} className="image-item">
-                                    <img src={image.dataURL} alt="" width="60%" />
+                                    <img src={image.dataURL} alt="" width="60%"/>
                                     <div className="image-item__btn-wrapper">
                                         <RoundedButton color="blue"
                                                        onClick={() => onImageRemove(index)}>{t("removePicture")}</RoundedButton>
@@ -361,10 +367,20 @@ export default function (){
                 </ImageUploading>
             </Box>
             <RoundedButton
-                onClick={handleConfirm}
+                onClick={() => setButtonPopupAcceptAction(true)}
                 style={{width: '50%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
                 color="pink"
             >{t("addCruise")} </RoundedButton>
+            <PopupAcceptAction
+                open={buttonPopupAcceptAction}
+                onConfirm={() => {
+                    setButtonPopupAcceptAction(false)
+                    handleConfirm()
+                }}
+                onCancel={() => {
+                    setButtonPopupAcceptAction(false)
+                }}
+            />
         </div>
     )
 }

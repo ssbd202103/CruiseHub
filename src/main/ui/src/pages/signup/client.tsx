@@ -417,6 +417,7 @@ export default function ClientSignUp() {
                     onConfirm={() => {
                         setButtonPopup(true)
                         setButtonPopupAcceptAction(false)
+
                     }}
                     onCancel={() => {
                         setButtonPopupAcceptAction(false)

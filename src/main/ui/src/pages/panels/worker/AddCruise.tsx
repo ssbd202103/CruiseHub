@@ -1,10 +1,9 @@
 import {Box, createMuiTheme, Grid, TextField} from "@material-ui/core";
-import PasswordIcon from "@material-ui/icons/VpnKeyRounded";
 import DarkedTextField from "../../../components/DarkedTextField";
 import React, {useEffect, useReducer, useState} from "react";
 import {useTranslation} from "react-i18next";
 import RoundedButton from "../../../components/RoundedButton";
-import ImageUploading, { ImageListType } from "react-images-uploading";
+import ImageUploading, {ImageListType} from "react-images-uploading";
 import store from "../../../redux/store";
 import {useSelector} from "react-redux";
 import {selectCompany, selectDarkMode, selectLanguage} from "../../../redux/slices/userSlice";
@@ -25,7 +24,9 @@ import {
 } from '@material-ui/pickers';
 import DateFnsUtils from "@date-io/date-fns";
 import {makeStyles} from "@material-ui/styles";
-
+import Popup from "../../../PopupRecaptcha";
+import Recaptcha from "react-recaptcha";
+import PopupAcceptAction from "../../../PopupAcceptAction";
 
 
 const useStyles = makeStyles(theme => ({
@@ -36,7 +37,7 @@ const useStyles = makeStyles(theme => ({
         '& .MuiSvgIcon-root': {
             fill: 'var(--dark)',
         },
-        '& .MuiInput-underline::before, & .MuiInput-underline::after, & .MuiInput-underline:hover:not(.Mui-disabled):before' : {
+        '& .MuiInput-underline::before, & .MuiInput-underline::after, & .MuiInput-underline:hover:not(.Mui-disabled):before': {
             borderColor: 'var(--dark)',
         },
     },
@@ -47,14 +48,14 @@ const useStyles = makeStyles(theme => ({
         '& .MuiSvgIcon-root': {
             fill: 'var(--white)',
         },
-        '& .MuiInput-underline::before, & .MuiInput-underline::after, & .MuiInput-underline:hover:not(.Mui-disabled):before' : {
+        '& .MuiInput-underline::before, & .MuiInput-underline::after, & .MuiInput-underline:hover:not(.Mui-disabled):before': {
             borderColor: 'var(--white)',
         },
     },
 }));
 
 export default function AddCruise() {
-
+    const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
 
 
     const [, forceUpdate] = useReducer(x => x + 1, 0);
@@ -104,7 +105,7 @@ export default function AddCruise() {
     useEffect(() => {
 
         getCruiseGroupForBusinessWorker(worker_Company).then(res => {
-            setCruiseGroupList(res.data.filter(({active}: { active: boolean }) => active).map((cruiseGroup: { uuid: string, name: string }) => cruiseGroup.name +" - ( " +cruiseGroup.uuid+ " )"))
+            setCruiseGroupList(res.data.filter(({active}: { active: boolean }) => active).map((cruiseGroup: { uuid: string, name: string }) => cruiseGroup.name + " - ( " + cruiseGroup.uuid + " )"))
         }).catch(error => {
             const message = error.response.data
             handleError(message, error.response.status)
@@ -123,25 +124,25 @@ export default function AddCruise() {
         startDate.setHours(0, 0, 0, 0)
         endDate.setHours(0, 0, 0, 0)
 
-        if(startDate.getTime() < new Date("1900-01-01").getTime()) {
+        if (startDate.getTime() < new Date("1900-01-01").getTime()) {
             handleError('min.date.message')
             return
         }
-        if(startDate.getTime() > new Date("2100-01-01").getTime()) {
+        if (startDate.getTime() > new Date("2100-01-01").getTime()) {
             handleError('max.date.message')
             return
         }
-        if(endDate.getTime() < new Date("1900-01-01").getTime()) {
+        if (endDate.getTime() < new Date("1900-01-01").getTime()) {
             handleError('min.date.message')
             return
         }
-        if(endDate.getTime() > new Date("2100-01-01").getTime()) {
+        if (endDate.getTime() > new Date("2100-01-01").getTime()) {
             handleError('max.date.message')
             return
         }
 
 
-        try{
+        try {
             var newStartDateWithoutTime = new Date(startTime.getTime())
             newStartDateWithoutTime.setHours(0, 0, 0, 0)
             var newStartDate = new Date(startDate.getTime() + startTime?.getTime() - newStartDateWithoutTime.getTime())
@@ -170,14 +171,15 @@ export default function AddCruise() {
             const json = JSON.stringify({
                 startDate: newStartDate.toISOString(),
                 endDate: newEndDate.toISOString(),
-                cruiseGroupUUID: cruiseGroup.substr(-38,36)
+                cruiseGroupUUID: cruiseGroup.substr(-38, 36)
             })
-            axios.post('cruise/new-cruise',json,{
+            axios.post('cruise/new-cruise', json, {
                 headers: {
                     "Content-Type": "application/json",
                     "Accept": "application/json",
                     "Authorization": `Bearer ${token}`
-                }}).then(res => {
+                }
+            }).then(res => {
                 showSuccess(t('successful action'))
                 forceUpdate()
             }).catch(error => {
@@ -198,11 +200,11 @@ export default function AddCruise() {
     return (
         <div>
             <Box>
-                <MuiPickersUtilsProvider locale={language} utils={DateFnsUtils} >
+                <MuiPickersUtilsProvider locale={language} utils={DateFnsUtils}>
 
                     <KeyboardDatePicker
                         style={{marginRight: 30}}
-                        className={darkMode ? classes.dark: classes.light}
+                        className={darkMode ? classes.dark : classes.light}
                         autoOk={true}
                         disableToolbar
                         maxDateMessage={t("max.date.message")}
@@ -224,7 +226,7 @@ export default function AddCruise() {
                         }}
                     />
                     <KeyboardTimePicker
-                        className={darkMode ? classes.dark: classes.light}
+                        className={darkMode ? classes.dark : classes.light}
                         autoOk={true}
                         maxDateMessage={t("max.date.message")}
                         minDateMessage={t("min.date.message")}
@@ -246,10 +248,10 @@ export default function AddCruise() {
                 </MuiPickersUtilsProvider>
             </Box>
             <Box>
-                <MuiPickersUtilsProvider locale={language} utils={DateFnsUtils} >
+                <MuiPickersUtilsProvider locale={language} utils={DateFnsUtils}>
                     <KeyboardDatePicker
                         style={{marginRight: 30}}
-                        className={darkMode ? classes.dark: classes.light}
+                        className={darkMode ? classes.dark : classes.light}
                         disableToolbar
                         autoOk={true}
                         variant="inline"
@@ -271,7 +273,7 @@ export default function AddCruise() {
                         }}
                     />
                     <KeyboardTimePicker
-                        className={darkMode ? classes.dark: classes.light}
+                        className={darkMode ? classes.dark : classes.light}
                         autoOk={true}
                         maxDateMessage={t("max.date.message")}
                         minDateMessage={t("min.date.message")}
@@ -311,10 +313,25 @@ export default function AddCruise() {
             </Box>
 
             <RoundedButton
-                onClick={HandleAddCruise}
+                onClick={() => {
+                    setButtonPopupAcceptAction(true)
+                }}
                 style={{width: '50%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
                 color="pink"
             >{t("newCruise")} </RoundedButton>
+
+
+            <PopupAcceptAction
+                open={buttonPopupAcceptAction}
+                onConfirm={() => {
+                    setButtonPopupAcceptAction(false)
+                    HandleAddCruise()
+                }}
+                onCancel={() => {
+                    setButtonPopupAcceptAction(false)
+                }}
+            />
+
         </div>
     )
 }

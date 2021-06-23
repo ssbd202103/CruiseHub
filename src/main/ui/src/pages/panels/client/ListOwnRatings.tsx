@@ -1,4 +1,4 @@
-import React, {Component, useEffect, useState} from 'react';
+import React, {Component, Ref, useEffect, useImperativeHandle, useRef, useState} from 'react';
 import {getOwnRatings} from "../../../Services/ratingsService";
 import {makeStyles} from "@material-ui/core/styles";
 import {useTranslation} from "react-i18next";
@@ -21,6 +21,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableBody from "@material-ui/core/TableBody";
 import {removeRating} from "../../../Services/ratingService";
 import {useSnackbarQueue} from "../../snackbar";
+import PopupAcceptAction from "../../../PopupAcceptAction";
 
 const useRowStyles = makeStyles({
     root: {
@@ -49,14 +50,31 @@ export interface RowProps {
     row: ReturnType<typeof createData>,
     style: React.CSSProperties,
     onLoad: () => void,
+    setButtonPopupAcceptActionMethod: (val: boolean) => (void),
+    removeRatingRef: Ref<{ remove: () => void }>
 }
 
-function Row({row, style, onLoad}: RowProps) {
+function Row({row, style, onLoad, setButtonPopupAcceptActionMethod, removeRatingRef}: RowProps) {
     const {t} = useTranslation();
     const classes = useRowStyles();
 
     const showSuccess = useSnackbarQueue('success');
     const handleError = useHandleError();
+
+    useImperativeHandle(removeRatingRef, () => ({remove}))
+
+    function remove ()  {
+        removeRating(row.cruiseGroupUUID).then(res => {
+            onLoad();
+            showSuccess('successful action');
+            setButtonPopupAcceptActionMethod(false)
+        }).catch(error => {
+            const message = error.response.data
+            const status =  error.response.status
+            handleError(message,status)
+            setButtonPopupAcceptActionMethod(false)
+        })
+    }
 
     return (
         <TableRow className={classes.root}>
@@ -67,14 +85,7 @@ function Row({row, style, onLoad}: RowProps) {
                 <RoundedButton
                     color="pink"
                     onClick={() => {
-                        removeRating(row.cruiseGroupUUID).then(res => {
-                            onLoad();
-                            showSuccess(t('successful action'));
-                        }).catch(error => {
-                            const message = error.response.data
-                            const status =  error.response.status
-                            handleError(message,status)
-                        })
+                        setButtonPopupAcceptActionMethod(true)
                     }}
                 >
                     {t('delete')}
@@ -89,7 +100,7 @@ const ListOwnRatings = () => {
     const [searchInput, setSearchInput] = useState("");
 
     const handleError = useHandleError()
-
+    const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
     const darkMode = useSelector(selectDarkMode)
 
     const getRatings = () => {
@@ -126,9 +137,14 @@ const ListOwnRatings = () => {
 
     const searchRatingList: String[] = [];
 
+
+    const setButtonPopupAcceptActionMethod = (val: boolean) => {
+        setButtonPopupAcceptAction(val)
+    }
+
     const {t} = useTranslation()
 
-
+    const removeRatingRef = useRef<{ remove: () => void }>(null);
     return (
         <>
             <div>
@@ -172,11 +188,23 @@ const ListOwnRatings = () => {
                                 <Row key={index} row={rating} style={{
                                     backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                     color: `var(--${!darkMode ? 'dark' : 'white-light'}`
-                                }} onLoad={getRatings}/>
+                                }} onLoad={getRatings}
+                                     setButtonPopupAcceptActionMethod={setButtonPopupAcceptActionMethod}
+                                     removeRatingRef={removeRatingRef}/>
                             )))}
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <PopupAcceptAction
+                    open={buttonPopupAcceptAction}
+                    onConfirm={() => {
+                        if (removeRatingRef.current) {
+                            removeRatingRef.current.remove()
+                        }
+                    }}
+                    onCancel={() => {
+                        setButtonPopupAcceptAction(false)
+                    }}/>
             </div>
         </>
     );

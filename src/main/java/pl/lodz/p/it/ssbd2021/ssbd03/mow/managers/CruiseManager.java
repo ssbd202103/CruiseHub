@@ -87,7 +87,9 @@ public class CruiseManager extends BaseManagerMow implements CruiseManagerLocal 
         }
 
         if (account.getAccessLevels().stream()
-                .noneMatch(accessLevel -> accessLevel instanceof Administrator)) {
+                .noneMatch(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.ADMINISTRATOR) &&
+                account.getAccessLevels().stream()
+                        .noneMatch(accessLevel -> accessLevel.getAccessLevelType() == AccessLevelType.MODERATOR)) {
 
             BusinessWorker businessWorker = (BusinessWorker) AccountMapper.getAccessLevel(account, AccessLevelType.BUSINESS_WORKER);
 
