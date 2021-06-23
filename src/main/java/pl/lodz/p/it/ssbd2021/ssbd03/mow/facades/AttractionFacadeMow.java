@@ -10,10 +10,7 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.interceptor.Interceptors;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.util.List;
 import java.util.UUID;
 
@@ -71,13 +68,14 @@ public class AttractionFacadeMow extends AbstractFacade<Attraction> {
     }
 
     @RolesAllowed("createReservation")
-    public long getNumberOfTakenSeats(Attraction attraction) {
+    public long getNumberOfTakenSeats(Attraction attraction) throws FacadeException {
         TypedQuery<Long> tq = em.createNamedQuery("Attraction.countReservedSpots", Long.class);
         tq.setParameter("attraction", attraction);
         try {
-            return tq.getSingleResult();
-        } catch (NoResultException e) {
-            return 0L;
+            Long temp = tq.getSingleResult();
+            return temp == null ? 0L : temp;
+        } catch (PersistenceException e) {
+            throw FacadeException.databaseOperation();
         }
     }
 
