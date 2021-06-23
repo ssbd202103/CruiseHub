@@ -18,6 +18,14 @@ import {refreshToken} from "../../../Services/userService";
 import useHandleError from "../../../errorHandler";
 
 import PopupAcceptAction from "../../../PopupAcceptAction";
+import {
+    CITY_REGEX, COUNTRY_REGEX,
+    EMAIL_REGEX,
+    HOUSE_STREET_NUMBER_REGEX,
+    NAME_REGEX,
+    PHONE_NUMBER_REGEX, POST_CODE_REGEX,
+    STREET_REGEX
+} from "../../../regexConstants";
 
 export default function ChangeAccountData() {
     const {t} = useTranslation()
@@ -43,6 +51,18 @@ export default function ChangeAccountData() {
     const [firstName, setFirstName] = useState('')
     const [secondName, setSecondName] = useState('')
     const [email, setEmail] = useState('')
+
+    const [firstNameRegexError, setFirstNameRegexError] = useState(false)
+    const [secondNameRegexError, setSecondNameRegexError] = useState(false)
+    const [emailRegexError, setEmailRegexError] = useState(false)
+    const [phoneNumberRegexError, setPhoneNumberRegexError] = useState(false)
+    const [businnesPhoneRegexError, setBusinnesPhoneRegexError] = useState(false)
+    const [streetRegexError, setStreetRegexError] = useState(false)
+    const [houseNumberRegexError, setHouseNumberRegexError] = useState(false)
+    const [postalCodeRegexError, setPostalCodeRegexError] = useState(false)
+    const [cityRegexError, setCityRegexError] = useState(false)
+    const [countryRegexError, setCountryRegexError] = useState(false)
+
 
     const [houseNumber, setHouseNumber] = useState('')
     const [street, setStreet] = useState('')
@@ -126,6 +146,16 @@ export default function ChangeAccountData() {
         setMetadata(state => !state)
     }
 
+    const handleConfirmChangeMail = () => {
+        setEmailRegexError(!EMAIL_REGEX.test(email))
+        if(!EMAIL_REGEX.test(email)) {
+            handleError('error.fields')
+            return
+        } else {
+            setButtonPopupAcceptChangeMail(true)
+        }
+    }
+
     const changeMail = async () => {
         const {token} = store.getState()
         await axios.post('account/request-other-email-change', {
@@ -147,6 +177,19 @@ export default function ChangeAccountData() {
             handleError(message, error.response.status)
         })
     }
+
+    const handleConfirmPersonalDataChange = () => {
+        setFirstNameRegexError(!NAME_REGEX.test(firstName))
+        setSecondNameRegexError(!NAME_REGEX.test(secondName))
+
+        if (!NAME_REGEX.test(firstName) || !NAME_REGEX.test(secondName)) {
+            handleError('error.fields')
+            return
+        } else {
+            setButtonPopupAcceptChangeData(true)
+        }
+    }
+
     const changePersonalData = async () => {
         const {token} = store.getState()
         const json = JSON.stringify({
@@ -190,6 +233,21 @@ export default function ChangeAccountData() {
 
     }
 
+    const handleConfirmChangeAddress = () => {
+        setHouseNumberRegexError(!HOUSE_STREET_NUMBER_REGEX.test(houseNumber))
+        setStreetRegexError(!STREET_REGEX.test(street))
+        setPostalCodeRegexError(!POST_CODE_REGEX.test(postalCode))
+        setCityRegexError(!CITY_REGEX.test(city))
+        setCountryRegexError(!COUNTRY_REGEX.test(country))
+        setPhoneNumberRegexError(!PHONE_NUMBER_REGEX.test(phoneNumber))
+        if (!HOUSE_STREET_NUMBER_REGEX.test(houseNumber) || !STREET_REGEX.test(street) || !POST_CODE_REGEX.test(postalCode) ||
+            !CITY_REGEX.test(city) || !COUNTRY_REGEX.test(country) || !PHONE_NUMBER_REGEX.test(phoneNumber)) {
+            handleError('error.fields')
+            return
+        } else {
+            setButtonPopupAcceptChangeAddress(true)
+        }
+    }
 
     const changeAddress = async () => {
         const {token} = store.getState()
@@ -239,6 +297,17 @@ export default function ChangeAccountData() {
             handleError(message, error.response.status)
         });
     }
+
+    const handleConfirmChangePhone = () => {
+        setPhoneNumberRegexError(!PHONE_NUMBER_REGEX.test(businessPhoneNumber))
+        if (!PHONE_NUMBER_REGEX.test(businessPhoneNumber)) {
+            handleError('error.fields')
+            return
+        } else {
+            setButtonPopupAcceptChangeNumber(true)
+        }
+    }
+
     const changeBusinessPhone = async () => {
         const json = JSON.stringify({
             login: currentAccount.login,
@@ -371,7 +440,9 @@ export default function ChangeAccountData() {
                             value={firstName}
                             onChange={event => {
                                 setFirstName(event.target.value)
-                            }}/>
+                                setFirstNameRegexError(!NAME_REGEX.test(event.target.value))
+                            }}
+                            regexError={firstNameRegexError}/>
                         <DarkedTextField
                             type="text"
                             label={t("surname") + ' *'}
@@ -379,11 +450,13 @@ export default function ChangeAccountData() {
                             value={secondName}
                             onChange={event => {
                                 setSecondName(event.target.value)
-                            }}/>
+                                setSecondNameRegexError(!NAME_REGEX.test(event.target.value))
+                            }}
+                            regexError={secondNameRegexError}/>
                     </div>
                     <div>
                     <RoundedButton color="blue"
-                                   onClick={() => setButtonPopupAcceptChangeData(true)}
+                                   onClick={handleConfirmPersonalDataChange}
                     >{t("confirm")}</RoundedButton>
                     <RoundedButton color="green"
                                    onClick={handleMetadata}
@@ -449,11 +522,13 @@ export default function ChangeAccountData() {
                                 value={email}
                                 onChange={event => {
                                     setEmail(event.target.value)
-                                }}/>
+                                    setEmailRegexError(!EMAIL_REGEX.test(event.target.value))
+                                }}
+                            regexError={emailRegexError}/>
                         </div>
                         <div>
                             <RoundedButton color="blue"
-                                           onClick={() => setButtonPopupAcceptChangeMail(true)}
+                                           onClick={handleConfirmChangeMail}
                             >{t("confirm")}</RoundedButton>
                             <RoundedButton color="green"
                                            onClick={handleMetadata}
@@ -542,7 +617,9 @@ export default function ChangeAccountData() {
                                 value={street}
                                 onChange={event => {
                                     setStreet(event.target.value)
-                                }}/>
+                                    setStreetRegexError(!STREET_REGEX.test(event.target.value))
+                                }}
+                                regexError={streetRegexError}/>
                             <DarkedTextField
                                 type="text"
                                 label={t("house number") + ' *'}
@@ -550,7 +627,9 @@ export default function ChangeAccountData() {
                                 value={houseNumber}
                                 onChange={event => {
                                     setHouseNumber(event.target.value)
-                                }}/>
+                                    setHouseNumberRegexError(!HOUSE_STREET_NUMBER_REGEX.test(event.target.value))
+                                }}
+                                regexError={houseNumberRegexError}/>
                             <DarkedTextField
                                 type="text"
                                 label={t("postal code") + ' *'}
@@ -558,7 +637,9 @@ export default function ChangeAccountData() {
                                 value={postalCode}
                                 onChange={event => {
                                     setPostalCode(event.target.value)
-                                }}/>
+                                    setCityRegexError(!CITY_REGEX.test(event.target.value))
+                                }}
+                                regexError={postalCodeRegexError}/>
                             <DarkedTextField
                                 type="text"
                                 label={t("city") + ' *'}
@@ -566,7 +647,9 @@ export default function ChangeAccountData() {
                                 value={city}
                                 onChange={event => {
                                     setCity(event.target.value)
-                                }}/>
+                                    setPostalCodeRegexError(!POST_CODE_REGEX.test(event.target.value))
+                                }}
+                                regexError={cityRegexError}/>
                             <DarkedTextField
                                 type="text"
                                 label={t("country") + ' *'}
@@ -574,7 +657,9 @@ export default function ChangeAccountData() {
                                 value={country}
                                 onChange={event => {
                                     setCountry(event.target.value)
-                                }}/>
+                                    setCountryRegexError(!COUNTRY_REGEX.test(event.target.value))
+                                }}
+                                regexError={countryRegexError}/>
                             <DarkedTextField
                                 type="text"
                                 label={t("phone number") + ' *'}
@@ -582,11 +667,13 @@ export default function ChangeAccountData() {
                                 value={phoneNumber}
                                 onChange={event => {
                                     setPhoneNumber(event.target.value)
-                                }}/>
+                                    setPhoneNumberRegexError(!PHONE_NUMBER_REGEX.test(event.target.value))
+                                }}
+                                regexError={phoneNumberRegexError}/>
                         </div>
                         <RoundedButton
                             color="blue"
-                            onClick={() => setButtonPopupAcceptChangeAddress(true)}
+                            onClick={handleConfirmChangeAddress}
                         >{t("confirm")}</RoundedButton>
                         <RoundedButton color="green"
                                        onClick={handleMetadata}
@@ -639,11 +726,13 @@ export default function ChangeAccountData() {
                                 value={businessPhoneNumber}
                                 onChange={event => {
                                     setBusinessPhoneNumber(event.target.value)
-                                }}/>
+                                    setBusinnesPhoneRegexError(!PHONE_NUMBER_REGEX.test(event.target.value))
+                                }}
+                                regexError={businnesPhoneRegexError}/>
                         </div>
                         <RoundedButton
                             color="blue"
-                            onClick={() => setButtonPopupAcceptChangeNumber(true)}
+                            onClick={handleConfirmChangePhone}
                         >{t("confirm")}</RoundedButton>
                         <RoundedButton color="green"
                                        onClick={handleMetadata}

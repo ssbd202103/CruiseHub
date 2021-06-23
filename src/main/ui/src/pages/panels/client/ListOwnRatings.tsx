@@ -70,7 +70,7 @@ function Row({row, style, onLoad}: RowProps) {
                     onClick={() => {
                         removeRating(row.cruiseGroupUUID).then(res => {
                             onLoad();
-                            showSuccess('successful action');
+                            showSuccess(t('successful action'));
                         }).catch(error => {
                             const message = error.response.data
                             const status =  error.response.status

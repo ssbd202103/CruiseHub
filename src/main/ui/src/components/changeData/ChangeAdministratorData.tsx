@@ -15,7 +15,7 @@ import Popup from "../../PopupRecaptcha";
 import {useSnackbarQueue} from "../../pages/snackbar";
 import useHandleError from "../../errorHandler";
 import PopupAcceptAction from "../../PopupAcceptAction";
-import {NAME_REGEX} from "../../regexConstants";
+import {NAME_REGEX, PHONE_NUMBER_REGEX} from "../../regexConstants";
 
 export default function ChangeAdministratorData({open, onOpen, onConfirm, onCancel}: ChangeDataComponentProps) {
     const {t} = useTranslation()
@@ -66,12 +66,19 @@ export default function ChangeAdministratorData({open, onOpen, onConfirm, onCanc
         setMetadata(state => !state)
     }
 
-    async function verifyCallback() {
-        setButtonPopup(false)
-        if (!firstNameValue || !secondNameValue) {
+    const handleConfirm = async () => {
+        setFirstNameRegexError(!NAME_REGEX.test(firstNameValue))
+        setSecondNameRegexError(!NAME_REGEX.test(secondNameValue))
+        if (!NAME_REGEX.test(firstNameValue) || !NAME_REGEX.test(secondNameValue)) {
             handleError('error.fields')
             return
+        } else {
+            setButtonPopupAcceptAction(true)
         }
+    }
+
+    function verifyCallback() {
+        setButtonPopup(false)
 
         changeAdministratorData(firstNameValue, secondNameValue).then(res => {
             showSuccess(t('successful action'))
@@ -184,7 +191,7 @@ export default function ChangeAdministratorData({open, onOpen, onConfirm, onCanc
                     }}
                 />
                 <ConfirmMetadataCancelButtonGroup
-                    onConfirm={()=>setButtonPopupAcceptAction(true)}
+                    onConfirm={handleConfirm}
                     onPress={handleMetadata}
                     onCancel={handleCancel} />
                 <Grid item style={{display: metadata ? "block" : "none"}} className={styles['change-item']}>
