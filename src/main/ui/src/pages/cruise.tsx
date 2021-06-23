@@ -137,7 +137,9 @@ export default function Cruise() {
             showSuccess(t('successfulaction'))
             getCruise()
         }).catch(error => {
-            handleError(error)
+            const message = error.response.data
+            const status =  error.response.status
+            handleError(message,status)
         })
     }
 
