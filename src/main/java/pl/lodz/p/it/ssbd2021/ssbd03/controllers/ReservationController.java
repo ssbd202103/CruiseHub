@@ -56,7 +56,12 @@ public class ReservationController {
     public List<CruiseReservationDto> getWorkerCruisesForReservations(@PathParam("cruiseUUID") UUID cruiseUUID) throws BaseAppException { //todo change UUID to String and handle parsing exception
         return tryAndRepeat(reservationEndpoint, () -> reservationEndpoint.viewWorkerCruiseReservations(cruiseUUID));
     }
-
+    /**
+     * Usuwa rezerwacje klienta
+     * @param clientLogin login klienta
+     * @param reservationUuid uuid rezerwacji
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
     @DELETE
     @Consumes({MediaType.APPLICATION_JSON})
     @Path("/{clientLogin}/{reservationUuid}")
