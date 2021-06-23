@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useImperativeHandle, useRef, useState} from 'react';
 import {makeStyles} from "@material-ui/core/styles";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
@@ -28,7 +28,6 @@ const useRowStyles = makeStyles({
     },
 });
 
-const [uuid, setUUID] = useState('')
 function createData(
     uuid: string,
     cruiseName: string,
@@ -55,41 +54,57 @@ export interface RowProps {
     row: ReturnType<typeof createData>,
     style: React.CSSProperties
     onReload: () => void
+    setButtonPopupAcceptActionMethod: any
+    cancelReservationRef: any
 }
 
-const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
-
-
-
-
-function Row({row, style, onReload}: RowProps) {
+function Row({row, style, onReload, setButtonPopupAcceptActionMethod,cancelReservationRef}: RowProps) {
     const {t} = useTranslation();
     const classes = useRowStyles();
     const buttonClass = useButtonStyles();
+    const handleError = useHandleError()
+    const showSuccess = useSnackbarQueue('success')
 
+    useImperativeHandle(cancelReservationRef, () => {
+        removeReservation(row.uuid).then(res => {
+            showSuccess(t('reservationCancelled'))
+            onReload()
+        }).catch(error => {
+            const message = error.response.data
+            handleError(message, error.response.status)
+            onReload()
+        }).then(res => {
+            refreshToken()
+        })
+    })
 
-
-
+    const cancelReservation = () => {
+        removeReservation(row.uuid).then(res => {
+            showSuccess(t('reservationCancelled'))
+            onReload()
+        }).catch(error => {
+            const message = error.response.data
+            handleError(message, error.response.status)
+            onReload()
+        }).then(res => {
+            refreshToken()
+        })
+    }
 
     return (
-        <div>
-            <TableRow className={classes.root}>
-                <TableCell style={style}>{row.cruiseName}</TableCell>
-                <TableCell style={style}>{row.attractions.map(item => t(item)).join(', ')}</TableCell>
-                <TableCell style={style}>{row.startDate.replace('T', ' ').split('.').shift()}</TableCell>
-                <TableCell style={style}>{row.endDate.replace('T', ' ').split('.').shift()}</TableCell>
-                <TableCell style={style}>{row.phoneNumber}</TableCell>
-                <TableCell style={style}>{row.numberOfSeats}</TableCell>
-                <TableCell style={style}>{row.price}</TableCell>
-                <TableCell style={style}>
-                    <Button onClick={()=>{setUUID(row.uuid)
-                        setButtonPopupAcceptAction(true)}}
-                            className={buttonClass.root}>{t("cancel reservation btn")}</Button>
-                </TableCell>
-            </TableRow>
-
-        </div>
-
+        <TableRow className={classes.root}>
+            <TableCell style={style}>{row.cruiseName}</TableCell>
+            <TableCell style={style}>{row.attractions.map(item => t(item)).join(', ')}</TableCell>
+            <TableCell style={style}>{row.startDate.replace('T', ' ').split('.').shift()}</TableCell>
+            <TableCell style={style}>{row.endDate.replace('T', ' ').split('.').shift()}</TableCell>
+            <TableCell style={style}>{row.phoneNumber}</TableCell>
+            <TableCell style={style}>{row.numberOfSeats}</TableCell>
+            <TableCell style={style}>{row.price}</TableCell>
+            <TableCell style={style}>
+                <Button onClick={setButtonPopupAcceptActionMethod}
+                        className={buttonClass.root}>{t("cancel reservation btn")}</Button>
+            </TableCell>
+        </TableRow>
     );
 }
 
@@ -110,25 +125,13 @@ const ListSelfReservations = () => {
     const [reservations, setReservations] = useState([]);
     const [searchInput, setSearchInput] = useState("");
     const handleError = useHandleError()
-    const showSuccess = useSnackbarQueue('success')
 
-    const cancelReservation = () => {
-        removeReservation(uuid).then(res => {
-            showSuccess(t('reservationCancelled'))
-            onReload()
-        }).catch(error => {
-            const message = error.response.data
-            handleError(message, error.response.status)
-            onReload()
-        }).then(res => {
-            refreshToken()
-        })
-    }
     const darkMode = useSelector(selectDarkMode)
 
     useEffect(() => {
         onReload()
     }, []);
+    const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
 
     function onReload() {
         getSelfReservations().then(res => {
@@ -140,6 +143,7 @@ const ListSelfReservations = () => {
             refreshToken()
         });
     }
+
 
     function search(rows: any[]) {
         if (Array.isArray(rows) && rows.length) {
@@ -161,6 +165,12 @@ const ListSelfReservations = () => {
 
     const {t} = useTranslation()
 
+
+    const setButtonPopupAcceptActionMethod = () => {
+        setButtonPopupAcceptAction(true)
+    }
+
+    const cancelReservationRef = useRef();
 
     return (
         <div>
@@ -220,7 +230,12 @@ const ListSelfReservations = () => {
                             <Row key={index} row={reservation} style={{
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`,
-                            }} onReload={onReload}/>
+
+                            }}
+                                 onReload={onReload}
+                                 setButtonPopupAcceptActionMethod={setButtonPopupAcceptActionMethod}
+                                 cancelReservationRef={cancelReservationRef}
+                            />
                         )))}
                     </TableBody>
                 </Table>
@@ -228,7 +243,7 @@ const ListSelfReservations = () => {
             <PopupAcceptAction
                 open={buttonPopupAcceptAction}
                 onConfirm={() => {
-                    cancelReservation()
+                    cancelReservationRef ? cancelReservationRef.current() : console.log("problemik pojawił się")
                 }}
                 onCancel={() => {
                     setButtonPopupAcceptAction(false)
