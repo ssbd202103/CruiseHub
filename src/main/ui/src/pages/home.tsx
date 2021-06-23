@@ -129,6 +129,7 @@ export default function Home() {
 
 
     const HandleFilterByDateCruise = () => {
+
         const filtered = cruises.filter(item => {
             return item.relatedCruises.find(r => {
                 const {
@@ -154,6 +155,12 @@ export default function Home() {
             })
         })
         setFilteredCruises(filtered)
+
+        handleFilteredStartDate(startDate)
+        handleFilteredEndDate(endDate)
+
+
+
     }
 
     const HandleFilterByLowerPriceCruise = () => {
@@ -173,6 +180,18 @@ export default function Home() {
 
     const darkMode = useSelector(selectDarkMode)
     const headersArray = t("mainPage.headers", {returnObjects: true})
+
+
+    const [filteredStartDate, setFilteredStartDate] = React.useState<Date | null>();
+    const [filteredEndDate, setFilteredEndDate] = React.useState<Date | null>();
+
+    const handleFilteredStartDate = (date: Date | null) => {
+        setFilteredStartDate(date);
+    };
+    const handleFilteredEndDate = (date: Date | null) => {
+        setFilteredEndDate(date);
+    };
+
 
     const [startDate, setStartDate] = React.useState<Date | null>(
         new Date(),
