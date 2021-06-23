@@ -72,7 +72,9 @@ function Row({row, style, onLoad}: RowProps) {
                             onLoad();
                             showSuccess('successful action');
                         }).catch(error => {
-                            handleError(error)
+                            const message = error.response.data
+                            const status =  error.response.status
+                            handleError(message,status)
                         })
                     }}
                 >
@@ -95,9 +97,9 @@ const ListOwnRatings = () => {
         getOwnRatings().then(res => {
             setRatings(res.data)
         }).catch(error => {
-            // console.log(error)
-            // const message = error.response.data
-            handleError(error)
+            const message = error.response.data
+            const status =  error.response.status
+            handleError(message,status)
         }).then(res => {
             refreshToken()
         });

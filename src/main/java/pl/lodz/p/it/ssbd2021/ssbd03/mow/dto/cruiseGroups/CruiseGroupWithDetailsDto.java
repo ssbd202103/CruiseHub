@@ -10,6 +10,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.CruiseForCruiseGroupDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.CruisePictureDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.companies.CompanyLightDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.CompanyName;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.CruiseGroupName;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Name;
 
 import javax.validation.constraints.NotEmpty;
@@ -30,7 +31,8 @@ public class CruiseGroupWithDetailsDto implements SignableEntity {
 
         @CompanyName
         private CompanyLightDto company;
-        @Name
+
+        @CruiseGroupName
         private String name;
 
         @Positive

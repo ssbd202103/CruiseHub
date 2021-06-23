@@ -5,6 +5,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.CruiseAddressDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.CruisePictureDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.CompanyName;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.CruiseGroupName;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
@@ -23,6 +24,7 @@ public class AddCruiseGroupDto {
     @CompanyName
     private String companyName;
 
+    @CruiseGroupName
     @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
     private String name;
 

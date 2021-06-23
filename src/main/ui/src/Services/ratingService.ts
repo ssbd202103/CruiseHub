@@ -35,3 +35,13 @@ export function removeRating(uuid: string) {
         }
     })
 }
+export function getRatingMetadata(uuid:string){
+    const {token} = store.getState()
+
+    return axios.get(`ratings/metadata/${uuid}`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+
+}

@@ -15,6 +15,7 @@ import Popup from "../../PopupRecaptcha";
 import {useSnackbarQueue} from "../../pages/snackbar";
 import useHandleError from "../../errorHandler";
 import PopupAcceptAction from "../../PopupAcceptAction";
+import {NAME_REGEX} from "../../regexConstants";
 
 export default function ChangeAdministratorData({open, onOpen, onConfirm, onCancel}: ChangeDataComponentProps) {
     const {t} = useTranslation()
@@ -33,6 +34,9 @@ export default function ChangeAdministratorData({open, onOpen, onConfirm, onCanc
 
     const [firstNameValue, setFirstNameValue] = useState(firstName)
     const [secondNameValue, setSecondNameValue] = useState(secondName)
+
+    const [firstNameRegexError, setFirstNameRegexError] = useState(false)
+    const [secondNameRegexError, setSecondNameRegexError] = useState(false)
 
     const [alterType, setAlterType] = useState('')
     const [alteredBy, setAlteredBy] = useState('')
@@ -53,6 +57,7 @@ export default function ChangeAdministratorData({open, onOpen, onConfirm, onCanc
     }
 
     const handleCancel = () => {
+        handleErase()
         setMetadata(false)
         onCancel()
     }
@@ -72,10 +77,22 @@ export default function ChangeAdministratorData({open, onOpen, onConfirm, onCanc
             showSuccess(t('successful action'))
             onConfirm()
         }).catch(error => {
-            handleErase()
             const message = error.response.data
             handleError(message, error.response.status)
-            onCancel()
+            for (let messageArray of Object.values(message.errors)) {
+                for (const error of messageArray as Array<String>) {
+                    switch(error) {
+                        case 'error.size.firstName':
+                        case 'error.regex.firstName':
+                            setFirstNameRegexError(true)
+                            break
+                        case 'error.size.secondName':
+                        case 'error.regex.secondName':
+                            setSecondNameRegexError(true)
+                            break
+                    }
+                }
+            }
         });
     }
 
@@ -87,14 +104,14 @@ export default function ChangeAdministratorData({open, onOpen, onConfirm, onCanc
         setAlteredBy(currentSelfMTD.alteredBy);
         setCreatedBy(currentSelfMTD.createdBy);
         if(currentSelfMTD.creationDateTime !=null)
-            setCreationDateTime(currentSelfMTD.creationDateTime.dayOfMonth +" "+ t(currentSelfMTD.creationDateTime.month) +" "+ currentSelfMTD.creationDateTime.year +" " + currentSelfMTD.creationDateTime.hour +":"+ currentSelfMTD.creationDateTime.minute )
+            setCreationDateTime(currentSelfMTD.creationDateTime.dayOfMonth +" "+ t(currentSelfMTD.creationDateTime.month) +" "+ currentSelfMTD.creationDateTime.year +" " + currentSelfMTD.creationDateTime.hour +":"+ currentSelfMTD.creationDateTime.minute.toString().padStart(2, '0') )
         if(currentSelfMTD.lastAlterDateTime !=null)
-            setLastAlterDateTime(currentSelfMTD.lastAlterDateTime.dayOfMonth +" "+ t(currentSelfMTD.lastAlterDateTime.month) +" "+ currentSelfMTD.lastAlterDateTime.year +" "+ currentSelfMTD.lastAlterDateTime.hour +":"+ currentSelfMTD.lastAlterDateTime.minute);
+            setLastAlterDateTime(currentSelfMTD.lastAlterDateTime.dayOfMonth +" "+ t(currentSelfMTD.lastAlterDateTime.month) +" "+ currentSelfMTD.lastAlterDateTime.year +" "+ currentSelfMTD.lastAlterDateTime.hour +":"+ currentSelfMTD.lastAlterDateTime.minute.toString().padStart(2, '0'));
         if(currentSelfMTD.lastCorrectAuthenticationDateTime !=null)
-            setLastCorrectAuthenticationDateTime(currentSelfMTD.lastCorrectAuthenticationDateTime.dayOfMonth +" "+ t(currentSelfMTD.lastCorrectAuthenticationDateTime.month) +" "+ currentSelfMTD.lastCorrectAuthenticationDateTime.year +" "+ currentSelfMTD.lastCorrectAuthenticationDateTime.hour +":"+ currentSelfMTD.creationDateTime.minute);
+            setLastCorrectAuthenticationDateTime(currentSelfMTD.lastCorrectAuthenticationDateTime.dayOfMonth +" "+ t(currentSelfMTD.lastCorrectAuthenticationDateTime.month) +" "+ currentSelfMTD.lastCorrectAuthenticationDateTime.year +" "+ currentSelfMTD.lastCorrectAuthenticationDateTime.hour +":"+ currentSelfMTD.creationDateTime.minute.toString().padStart(2, '0'));
         setLastCorrectAuthenticationLogicalAddress(currentSelfMTD.lastCorrectAuthenticationLogicalAddress)
         if(currentSelfMTD.lastIncorrectAuthenticationDateTime !=null)
-            setLastIncorrectAuthenticationDateTime(currentSelfMTD.lastIncorrectAuthenticationDateTime.dayOfMonth +" "+ t(currentSelfMTD.lastIncorrectAuthenticationDateTime.month) + " " + currentSelfMTD.lastIncorrectAuthenticationDateTime.year +" "+ currentSelfMTD.lastIncorrectAuthenticationDateTime.hour +":"+ currentSelfMTD.lastIncorrectAuthenticationDateTime.minute);
+            setLastIncorrectAuthenticationDateTime(currentSelfMTD.lastIncorrectAuthenticationDateTime.dayOfMonth +" "+ t(currentSelfMTD.lastIncorrectAuthenticationDateTime.month) + " " + currentSelfMTD.lastIncorrectAuthenticationDateTime.year +" "+ currentSelfMTD.lastIncorrectAuthenticationDateTime.hour +":"+ currentSelfMTD.lastIncorrectAuthenticationDateTime.minute.toString().padStart(2, '0'));
         setLastIncorrectAuthenticationLogicalAddress(currentSelfMTD.lastIncorrectAuthenticationLogicalAddress);
         setNumberOfAuthenticationFailures(currentSelfMTD.numberOfAuthenticationFailures)
         setVersion(currentSelfMTD.version);
@@ -132,20 +149,24 @@ export default function ChangeAdministratorData({open, onOpen, onConfirm, onCanc
                 <div>
                     <DarkedTextField
                         type="text"
-                        label={t("name")}
+                        label={t("name") + ' *'}
                         placeholder={t("nameExample")}
                         value={firstNameValue}
                         onChange={event => {
                             setFirstNameValue(event.target.value)
-                        }}/>
+                            setFirstNameRegexError(!NAME_REGEX.test(event.target.value))
+                        }}
+                        regexError={firstNameRegexError}/>
                     <DarkedTextField
                         type="text"
-                        label={t("surname")}
+                        label={t("surname") + ' *'}
                         placeholder={t("surnameExample")}
                         value={secondNameValue}
                         onChange={event => {
                             setSecondNameValue(event.target.value)
-                        }}/>
+                            setSecondNameRegexError(!NAME_REGEX.test(event.target.value))
+                        }}
+                        regexError={secondNameRegexError}/>
                 </div>
                 <Popup trigger={buttonPopup} setTrigger={setButtonPopup}>
                     <div>

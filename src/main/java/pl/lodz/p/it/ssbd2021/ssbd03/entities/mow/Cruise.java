@@ -10,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -82,7 +83,7 @@ public class Cruise extends BaseEntity {
     @Setter
     @ToString.Exclude
     @OneToMany(mappedBy = "cruise", cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST}, orphanRemoval = true)
-    private List<Attraction> attractions;
+    private List<Attraction> attractions = new ArrayList<>();
 
     @Getter
     @Setter

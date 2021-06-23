@@ -6,10 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AddressDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
-import pl.lodz.p.it.ssbd2021.ssbd03.validators.Name;
-import pl.lodz.p.it.ssbd2021.ssbd03.validators.Password;
-import pl.lodz.p.it.ssbd2021.ssbd03.validators.PhoneNumber;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
@@ -23,10 +20,10 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 @NoArgsConstructor
 public class ClientForRegistrationDto {
 
-    @Name
+    @FirstName
     private String firstName;
 
-    @Name
+    @SecondName
     private String secondName;
 
     @Login

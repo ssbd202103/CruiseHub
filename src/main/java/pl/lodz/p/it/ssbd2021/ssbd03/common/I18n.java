@@ -37,6 +37,7 @@ public class I18n {
     public static final String TOKEN_ALREADY_USED_ERROR = "error.token.alreadyUsedError";
     public static final String REGEX_INVALID_POST_CODE = "error.regex.postCode";
     public static final String REGEX_INVALID_HOUSE_NUMBER = "error.regex.houseNumber";
+    public static final String REGEX_INVALID_STREET_NUMBER = "error.regex.streetNumber";
     public static final String REGEX_INVALID_CITY = "error.regex.city";
     public static final String REGEX_INVALID_COUNTRY = "error.regex.country";
     public static final String REGEX_INVALID_STREET = "error.regex.street";
@@ -44,8 +45,16 @@ public class I18n {
     public static final String REGEX_INVALID_LOGIN = "error.regex.login";
     public static final String REGEX_INVALID_PASSWORD = "error.regex.password";
     public static final String REGEX_INVALID_NAME = "error.regex.name";
+    public static final String REGEX_INVALID_FIRST_NAME = "error.regex.firstName";
+    public static final String REGEX_INVALID_SECOND_NAME = "error.regex.secondName";
+    public static final String REGEX_INVALID_HARBOR_NAME = "error.regex.harborName";
+    public static final String REGEX_INVALID_CRUISE_GROUP_NAME = "error.regex.cruiseGroupName";
     public static final String REGEX_INVALID_EMAIL = "error.regex.email";
     public static final String PHONE_NUMBER_SIZE = "error.size.phoneNumber";
+    public static final String FIRST_NAME_SIZE = "error.size.firstName";
+    public static final String SECOND_NAME_SIZE = "error.size.secondName";
+    public static final String HARBOR_NAME_SIZE = "error.size.harborName";
+    public static final String CRUISE_GROUP_NAME_SIZE = "error.size.cruiseGroupName";
     public static final String NAME_SIZE = "error.size.name";
     public static final String COUNTRY_SIZE = "error.size.country";
     public static final String CITY_SIZE = "error.size.city";
@@ -70,7 +79,7 @@ public class I18n {
     public static final String INCORRECT_LOGIN = "auth.incorrect.login";
     public static final String INCORRECT_PASSWORD = "auth.incorrect.password";
     public static final String PASSWORDS_DONT_MATCH_ERROR = "error.password.change.oldPasswordError";
-    public static final String PASSWORDS_ARE_THE_SAME_ERROR = "error.password.change.newAndOldPasswordAreTheSameErorr";
+    public static final String PASSWORDS_ARE_THE_SAME_ERROR = "error.password.change.newAndOldPasswordAreTheSameError";
     public static final String CODE_DONT_MATCH_ERROR = "error.code.dontMatchError";
     public static final String CODE_EXPIRE_ERROR = "error.code.expireError";
     public static final String CODE_ALREADY_USED_ERROR = "error.code.alreadyUsedError";
@@ -146,6 +155,7 @@ public class I18n {
     public static final String CANNOT_CANCEL_STARTED_CRUISE = "cruise.cannot.cancel.started";
     public static final String CANNOT_BOOK_STARTED_CRUISE = "cruise.cannot.book.started";
     public static final String RATING_EXISTS = "rating.exists";
+    public static final String NO_SEATS_FOR_ATTRACTION = "no.seats.for.attraction";
 
     private ResourceBundle bundle;
 

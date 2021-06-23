@@ -216,7 +216,7 @@ create table cruise_addresses
 (
     id                   bigint                              not null,
     street               varchar(64)                         not null,
-    street_number        bigint check ((street_number >= 0) AND (street_number <= 999)),
+    street_number        varchar(6)                          not null,
     harbor_name          varchar(64)                         not null,
     city_name            varchar(64)                         not null,
     country_name         varchar(64)                         not null,
@@ -390,7 +390,7 @@ create table ratings
     account_id           bigint                                                                      not null, -- FOREIGN KEY
     cruise_group_id      bigint                                                                      not null, -- FOREIGN KEY
     rating               numeric(2, 1) check ((rating >= (1)::numeric) AND (rating <= (5)::numeric)) not null,
-    uuid                 varchar                                                                     not null,
+    uuid                 uuid                                                                        not null,
 
     creation_date_time   timestamp default CURRENT_TIMESTAMP                                         not null,
     last_alter_date_time timestamp                                                                   not null,

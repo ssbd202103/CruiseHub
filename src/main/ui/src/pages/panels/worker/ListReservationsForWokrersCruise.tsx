@@ -16,8 +16,9 @@ import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableBody from "@material-ui/core/TableBody";
-import {getReservationsForWorkerCruise} from "../../../Services/reservationService";
+import {getReservationMetadata, getReservationsForWorkerCruise} from "../../../Services/reservationService";
 import RoundedButton from "../../../components/RoundedButton";
+import PopupMetadata from "../../../PopupMetadata";
 
 const useRowStyles = makeStyles({
     root: {
@@ -26,7 +27,18 @@ const useRowStyles = makeStyles({
         },
     },
 });
-
+const useButtonStyles = makeStyles({
+    root: {
+        fontFamily: '"Montserrat", sans-serif',
+        color: 'var(--white)',
+        backgroundColor: "var(--blue)",
+        padding: '8px 16px',
+        margin: '0 16px',
+        '&:hover': {
+            backgroundColor: "var(--blue-dark)",
+        }
+    }
+})
 function createData(
     clientName: string,
     numberOfSeats: number,
@@ -49,12 +61,45 @@ export interface RowProps {
     row: ReturnType<typeof createData>,
     style: React.CSSProperties
 }
-
+interface MetadataReservation {
+    uuid: string,
+}
 function Row(props: RowProps) {
     const {row} = props;
     const {style} = props;
     const {t} = useTranslation();
     const classes = useRowStyles();
+    const buttonClass = useButtonStyles();
+    const handleError = useHandleError();
+    const [metadataPopupAcceptAction, setMetadataPopupAcceptAction] = useState(false);
+
+    const [alterType, setAlterType] = useState('')
+    const [alteredBy, setAlteredBy] = useState('')
+    const [createdBy, setCreatedBy] = useState('')
+    const [creationDateTime, setCreationDateTime] = useState('')
+    const [lastAlterDateTime, setLastAlterDateTime] = useState('')
+    const [version, setVersion] = useState('')
+
+    const handleMetadata = async ({uuid}: MetadataReservation) =>{
+        getReservationMetadata(uuid).then(res => {
+            setAlterType(res.data.alterType);
+            setAlteredBy(res.data.alteredBy);
+            setCreatedBy(res.data.createdBy);
+            if(res.data.creationDateTime !=null)
+                setCreationDateTime(res.data.creationDateTime.dayOfMonth +" "+ t(res.data.creationDateTime.month) +" "+ res.data.creationDateTime.year +" "+ res.data.creationDateTime.hour +":"+ res.data.creationDateTime.minute.toString().padStart(2, '0'))
+            if(res.data.lastAlterDateTime !=null)
+                setLastAlterDateTime(res.data.lastAlterDateTime.dayOfMonth +" "+ t(res.data.lastAlterDateTime.month) +" "+ res.data.lastAlterDateTime.year +" "+ res.data.lastAlterDateTime.hour +":"+ res.data.lastAlterDateTime.minute.toString().padStart(2, '0'));
+            setVersion(res.data.version);
+            refreshToken();
+        }, error => {
+            const message = error.response.data
+            handleError(message, error.response.status)
+        }).then(res => {
+            setMetadataPopupAcceptAction(true);
+        })
+    }
+
+
 
     return (
         <TableRow className={classes.root}>
@@ -63,13 +108,27 @@ function Row(props: RowProps) {
             <TableCell style={style}>{row.price}</TableCell>
             <TableCell style={style}>{row.cruiseName}</TableCell>
             <TableCell style={style}>{row.attractions.map(item => t(item)).join(', ')}</TableCell>
-            <TableCell align="center">
-                <Link to={`reservation/metadata/${row.uuid}`}>
-                    <RoundedButton color={"green"}
-                                   >
-                        {t("metadata")}</RoundedButton>
-                </Link>
+            <TableCell style={style}>
+                <RoundedButton color={"green"}
+                               className={buttonClass.root}
+                               onClick={() => {
+                                   handleMetadata({
+                                       uuid: row.uuid,
+                                   })
+                                   setMetadataPopupAcceptAction(true)
+                               }
+                               }>{t("metadata")}</RoundedButton>
             </TableCell>
+            <PopupMetadata
+                open={metadataPopupAcceptAction}
+                onCancel={() => {setMetadataPopupAcceptAction(false)}}
+                alterType={alterType}
+                alteredBy={alteredBy}
+                createdBy={createdBy}
+                creationDateTime={creationDateTime}
+                lastAlterDateTime={lastAlterDateTime}
+                version={version}
+            />
         </TableRow>
     );
 }
@@ -154,7 +213,11 @@ const ListReservationsForWorker = () => {
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`
                             }}>{t("Attractions name")}</TableCell>
-                        </TableRow>
+                            <TableCell style={{
+                            backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                            color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                            }}>{t("metadata")}</TableCell>
+                    </TableRow>
                     </TableHead>
                     <TableBody>
                         {search(reservations.map((reservation, index) => (

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Attraction} from '../../../interfaces/Attraction';
-import {deleteAttraction, getAttractionsByCruiseUUID} from "../../../Services/attractionService";
+import {deleteAttraction, getAttractionMetadata, getAttractionsByCruiseUUID} from "../../../Services/attractionService";
 import {useSnackbarQueue} from "../../snackbar";
 import {useTranslation} from "react-i18next";
 import {useParams} from 'react-router-dom';
@@ -19,6 +19,8 @@ import {refreshToken} from "../../../Services/userService";
 import {useSelector} from "react-redux";
 import {selectDarkMode, selectLanguage} from "../../../redux/slices/userSlice";
 import {makeStyles} from "@material-ui/styles";
+import PopupMetadata from "../../../PopupMetadata";
+
 
 export default function AttractionList() {
     const darkMode = useSelector(selectDarkMode);
@@ -27,7 +29,9 @@ export default function AttractionList() {
             color: `var(--${darkMode ? 'white' : 'dark'})`,
         }
     }))()
-
+    interface MetadataAttraction {
+        uuid: string,
+    }
     const {uuid, published} = useParams<{ uuid: string, published: string }>();
     const {token} = store.getState()
     const {t} = useTranslation();
@@ -51,7 +55,32 @@ export default function AttractionList() {
         getAttractions()
     }, [])
 
+    const [metadataPopupAcceptAction, setMetadataPopupAcceptAction] = useState(false);
+    const [alterType, setAlterType] = useState('')
+    const [alteredBy, setAlteredBy] = useState('')
+    const [createdBy, setCreatedBy] = useState('')
+    const [creationDateTime, setCreationDateTime] = useState('')
+    const [lastAlterDateTime, setLastAlterDateTime] = useState('')
+    const [version, setVersion] = useState('')
 
+    const handleMetadata = async ({uuid}: MetadataAttraction) =>{
+        getAttractionMetadata(uuid).then(res => {
+            setAlterType(res.data.alterType);
+            setAlteredBy(res.data.alteredBy);
+            setCreatedBy(res.data.createdBy);
+            if(res.data.creationDateTime !=null)
+                setCreationDateTime(res.data.creationDateTime.dayOfMonth +" "+ t(res.data.creationDateTime.month) +" "+ res.data.creationDateTime.year +" "+ res.data.creationDateTime.hour +":"+ res.data.creationDateTime.minute.toString().padStart(2, '0') )
+            if(res.data.lastAlterDateTime !=null)
+                setLastAlterDateTime(res.data.lastAlterDateTime.dayOfMonth +" "+ t(res.data.lastAlterDateTime.month) +" "+ res.data.lastAlterDateTime.year +" "+ res.data.lastAlterDateTime.hour +":"+ res.data.lastAlterDateTime.minute.toString().padStart(2, '0'));
+            setVersion(res.data.version);
+            refreshToken();
+        }, error => {
+            const message = error.response.data
+            handleError(message, error.response.status)
+        }).then(res => {
+            setMetadataPopupAcceptAction(true);
+        })
+    }
     // Data grid events
     const [selectedRow, setSelectedRow] = useState('')
 
@@ -64,8 +93,43 @@ export default function AttractionList() {
         {field: 'description', headerName: t('description'), flex: 1},
         {field: 'price', headerName: t('price'), flex: 1},
         {field: 'numberOfSeats', headerName: t('numberOfSeats'), flex: 1},
-        //tu button
-        //
+        {
+            field: 'metadata',
+            headerName: t('metadata'),
+            sortable: false,
+            disableColumnMenu: true,
+            flex: 0.5,
+            renderCell: (params: GridCellParams) =>
+                (
+                    <div>
+                        {selectedRow === params.row.id && (
+                            <>
+                                <RoundedButton
+                                    color="green"
+                                   onClick={() => {
+                                       const attraction = attractions.find(attraction => attraction.uuid === params.row.id)
+                                       if(attraction){
+                                           handleMetadata({
+                                           uuid: attraction.uuid
+                                       })
+                                       setMetadataPopupAcceptAction(true)
+                                   }}
+                                   }>{t("metadata")}</RoundedButton>
+                                <PopupMetadata
+                                    open={metadataPopupAcceptAction}
+                                    onCancel={() => {setMetadataPopupAcceptAction(false)}}
+                                    alterType={alterType}
+                                    alteredBy={alteredBy}
+                                    createdBy={createdBy}
+                                    creationDateTime={creationDateTime}
+                                    lastAlterDateTime={lastAlterDateTime}
+                                    version={version}
+                                />
+                            </>
+                            )}
+                    </div>
+            )
+        },
         {
             field: '',
             renderHeader: params => <RoundedButton color="blue" onClick={() => {

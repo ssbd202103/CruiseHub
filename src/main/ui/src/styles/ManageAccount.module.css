@@ -11,6 +11,8 @@
 .change-item h3,
 .item h4,
 .change-item h4,
+.item h6,
+.change-item h6,
 .item p {
     font-family: "Montserrat", sans-serif;
 }
@@ -32,6 +34,11 @@
 .item h4 {
     font-weight: 500;
     font-size: 1.3rem;
+}
+
+.item h6 {
+    font-weight: 200;
+    font-size: 0.75rem;
 }
 
 .item p {

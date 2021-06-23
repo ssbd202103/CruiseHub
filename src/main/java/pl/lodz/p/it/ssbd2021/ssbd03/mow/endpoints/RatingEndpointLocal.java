@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.common.dto.MetadataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints.TransactionalEndpoint;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.ClientRatingDto;
@@ -51,4 +52,13 @@ public interface RatingEndpointLocal extends TransactionalEndpoint {
      * @throws BaseAppException
      */
     void removeClientRating(String login, UUID cruiseGroupUUID) throws BaseAppException;
+
+    /**
+     * Pobiera mewtadane oceny o danym uuid
+     *
+     * @param uuid uuid oceny
+     * @return zwraca informacje o ocenie
+     * @throws BaseAppException wyjątek wyrzucany w razie nie znależenia atrakcji
+     */
+    MetadataDto getRatingMetadata(UUID uuid) throws BaseAppException;
 }

@@ -300,15 +300,15 @@ export default function ChangeAccountData() {
         setAlteredBy(currentAccountMTD.alteredBy);
         setCreatedBy(currentAccountMTD.createdBy);
         if (currentAccountMTD.creationDateTime != null){
-            setCreationDateTime(currentAccountMTD.creationDateTime.dayOfMonth + " " + t(currentAccountMTD.creationDateTime.month) + " " + currentAccountMTD.creationDateTime.year + " " + currentAccountMTD.creationDateTime.hour + ":" + currentAccountMTD.creationDateTime.minute)
+            setCreationDateTime(currentAccountMTD.creationDateTime.dayOfMonth + " " + t(currentAccountMTD.creationDateTime.month) + " " + currentAccountMTD.creationDateTime.year + " " + currentAccountMTD.creationDateTime.hour + ":" + currentAccountMTD.creationDateTime.minute.toString().padStart(2, '0'))
         }
         if (currentAccountMTD.lastAlterDateTime != null)
-            setLastAlterDateTime(currentAccountMTD.lastAlterDateTime.dayOfMonth + " " + t(currentAccountMTD.lastAlterDateTime.month) + " " + currentAccountMTD.lastAlterDateTime.year + " " + currentAccountMTD.lastAlterDateTime.hour + ":" + currentAccountMTD.lastAlterDateTime.minute);
+            setLastAlterDateTime(currentAccountMTD.lastAlterDateTime.dayOfMonth + " " + t(currentAccountMTD.lastAlterDateTime.month) + " " + currentAccountMTD.lastAlterDateTime.year + " " + currentAccountMTD.lastAlterDateTime.hour + ":" + currentAccountMTD.lastAlterDateTime.minute.toString().padStart(2, '0'));
         if (currentAccountMTD.lastCorrectAuthenticationDateTime != null)
-            setLastCorrectAuthenticationDateTime(currentAccountMTD.lastCorrectAuthenticationDateTime.dayOfMonth + " " + t(currentAccountMTD.lastCorrectAuthenticationDateTime.month) + " " + currentAccountMTD.lastCorrectAuthenticationDateTime.year + " " + currentAccountMTD.lastCorrectAuthenticationDateTime.hour + ":" + currentAccountMTD.creationDateTime.minute);
+            setLastCorrectAuthenticationDateTime(currentAccountMTD.lastCorrectAuthenticationDateTime.dayOfMonth + " " + t(currentAccountMTD.lastCorrectAuthenticationDateTime.month) + " " + currentAccountMTD.lastCorrectAuthenticationDateTime.year + " " + currentAccountMTD.lastCorrectAuthenticationDateTime.hour + ":" + currentAccountMTD.creationDateTime.minute.toString().padStart(2, '0'));
         setLastCorrectAuthenticationLogicalAddress(currentAccountMTD.lastCorrectAuthenticationLogicalAddress)
         if (currentAccountMTD.lastIncorrectAuthenticationDateTime != null)
-            setLastIncorrectAuthenticationDateTime(currentAccountMTD.lastIncorrectAuthenticationDateTime.dayOfMonth + " " + t(currentAccountMTD.lastIncorrectAuthenticationDateTime.month) + " " + currentAccountMTD.lastIncorrectAuthenticationDateTime.year + " " + currentAccountMTD.lastIncorrectAuthenticationDateTime.hour + ":" + currentAccountMTD.lastIncorrectAuthenticationDateTime.minute);
+            setLastIncorrectAuthenticationDateTime(currentAccountMTD.lastIncorrectAuthenticationDateTime.dayOfMonth + " " + t(currentAccountMTD.lastIncorrectAuthenticationDateTime.month) + " " + currentAccountMTD.lastIncorrectAuthenticationDateTime.year + " " + currentAccountMTD.lastIncorrectAuthenticationDateTime.hour + ":" + currentAccountMTD.lastIncorrectAuthenticationDateTime.minute.toString().padStart(2, '0'));
         setLastIncorrectAuthenticationLogicalAddress(currentAccountMTD.lastIncorrectAuthenticationLogicalAddress);
         setNumberOfAuthenticationFailures(currentAccountMTD.numberOfAuthenticationFailures)
         setVersion(currentAccountMTD.version);
@@ -319,9 +319,9 @@ export default function ChangeAccountData() {
             setAlteredByAdr(currentAccountAddressMTD.alteredBy);
             setCreatedByAdr(currentAccountAddressMTD.createdBy);
             if (currentAccountAddressMTD.creationDateTime != null)
-                setCreationDateTimeAdr(currentAccountAddressMTD.creationDateTime.dayOfMonth + " " + t(currentAccountAddressMTD.creationDateTime.month) + " " + currentAccountAddressMTD.creationDateTime.year + " " + currentAccountAddressMTD.creationDateTime.hour + ":" + currentAccountAddressMTD.creationDateTime.minute)
+                setCreationDateTimeAdr(currentAccountAddressMTD.creationDateTime.dayOfMonth + " " + t(currentAccountAddressMTD.creationDateTime.month) + " " + currentAccountAddressMTD.creationDateTime.year + " " + currentAccountAddressMTD.creationDateTime.hour + ":" + currentAccountAddressMTD.creationDateTime.minute.toString().padStart(2, '0'))
             if (currentAccountAddressMTD.lastAlterDateTime != null)
-                setLastAlterDateTimeAdr(currentAccountAddressMTD.lastAlterDateTime.dayOfMonth + " " + t(currentAccountAddressMTD.lastAlterDateTime.month) + " " + currentAccountAddressMTD.lastAlterDateTime.year + " " + currentAccountAddressMTD.lastAlterDateTime.hour + ":" + currentAccountAddressMTD.lastAlterDateTime.minute);
+                setLastAlterDateTimeAdr(currentAccountAddressMTD.lastAlterDateTime.dayOfMonth + " " + t(currentAccountAddressMTD.lastAlterDateTime.month) + " " + currentAccountAddressMTD.lastAlterDateTime.year + " " + currentAccountAddressMTD.lastAlterDateTime.hour + ":" + currentAccountAddressMTD.lastAlterDateTime.minute.toString().padStart(2, '0'));
             setVersionAdr(currentAccountAddressMTD.version);
         }
         if (businnesPhone) {
@@ -329,9 +329,9 @@ export default function ChangeAccountData() {
             setAlteredByAcl(currentAccountAclMTD.alteredBy);
             setCreatedByAcl(currentAccountAclMTD.createdBy);
             if (currentAccountAclMTD.creationDateTime != null)
-                setCreationDateTimeAcl(currentAccountAclMTD.creationDateTime.dayOfMonth + " " + t(currentAccountAclMTD.creationDateTime.month) + " " + currentAccountAclMTD.creationDateTime.year + " " + currentAccountAclMTD.creationDateTime.hour + ":" + currentAccountAclMTD.creationDateTime.minute)
+                setCreationDateTimeAcl(currentAccountAclMTD.creationDateTime.dayOfMonth + " " + t(currentAccountAclMTD.creationDateTime.month) + " " + currentAccountAclMTD.creationDateTime.year + " " + currentAccountAclMTD.creationDateTime.hour + ":" + currentAccountAclMTD.creationDateTime.minute.toString().padStart(2, '0'))
             if (currentAccountAclMTD.lastAlterDateTime != null)
-                setLastAlterDateTimeAcl(currentAccountAclMTD.lastAlterDateTime.dayOfMonth + " " + t(currentAccountAclMTD.lastAlterDateTime.month) + " " + currentAccountAclMTD.lastAlterDateTime.year + " " + currentAccountAclMTD.lastAlterDateTime.hour + ":" + currentAccountAclMTD.lastAlterDateTime.minute);
+                setLastAlterDateTimeAcl(currentAccountAclMTD.lastAlterDateTime.dayOfMonth + " " + t(currentAccountAclMTD.lastAlterDateTime.month) + " " + currentAccountAclMTD.lastAlterDateTime.year + " " + currentAccountAclMTD.lastAlterDateTime.hour + ":" + currentAccountAclMTD.lastAlterDateTime.minute.toString().padStart(2, '0'));
             setVersionAcl(currentAccountAclMTD.version);
         }
     })
@@ -366,7 +366,7 @@ export default function ChangeAccountData() {
                     <div>
                         <DarkedTextField
                             type="text"
-                            label={t("name")}
+                            label={t("name") + ' *'}
                             placeholder={currentAccount.firstName}
                             value={firstName}
                             onChange={event => {
@@ -374,7 +374,7 @@ export default function ChangeAccountData() {
                             }}/>
                         <DarkedTextField
                             type="text"
-                            label={t("surname")}
+                            label={t("surname") + ' *'}
                             placeholder={currentAccount.secondName}
                             value={secondName}
                             onChange={event => {
@@ -444,7 +444,7 @@ export default function ChangeAccountData() {
                         <div>
                             <DarkedTextField
                                 type="text"
-                                label={t("new email")}
+                                label={t("new email") + ' *'}
                                 placeholder={t(currentAccount.email)}
                                 value={email}
                                 onChange={event => {
@@ -537,7 +537,7 @@ export default function ChangeAccountData() {
                         <div>
                             <DarkedTextField
                                 type="text"
-                                label={t("street")}
+                                label={t("street") + ' *'}
                                 placeholder={clientAddr ? clientAddr.address.street : ""}
                                 value={street}
                                 onChange={event => {
@@ -545,7 +545,7 @@ export default function ChangeAccountData() {
                                 }}/>
                             <DarkedTextField
                                 type="text"
-                                label={t("house number")}
+                                label={t("house number") + ' *'}
                                 placeholder={clientAddr ? clientAddr.address.houseNumber : ""}
                                 value={houseNumber}
                                 onChange={event => {
@@ -553,7 +553,7 @@ export default function ChangeAccountData() {
                                 }}/>
                             <DarkedTextField
                                 type="text"
-                                label={t("postal code")}
+                                label={t("postal code") + ' *'}
                                 placeholder={clientAddr ? clientAddr.address.postalCode : ""}
                                 value={postalCode}
                                 onChange={event => {
@@ -561,7 +561,7 @@ export default function ChangeAccountData() {
                                 }}/>
                             <DarkedTextField
                                 type="text"
-                                label={t("city")}
+                                label={t("city") + ' *'}
                                 placeholder={clientAddr ? clientAddr.address.city : ""}
                                 value={city}
                                 onChange={event => {
@@ -569,7 +569,7 @@ export default function ChangeAccountData() {
                                 }}/>
                             <DarkedTextField
                                 type="text"
-                                label={t("country")}
+                                label={t("country") + ' *'}
                                 placeholder={clientAddr ? clientAddr.address.country : ""}
                                 value={country}
                                 onChange={event => {
@@ -577,7 +577,7 @@ export default function ChangeAccountData() {
                                 }}/>
                             <DarkedTextField
                                 type="text"
-                                label={t("phone number")}
+                                label={t("phone number") + ' *'}
                                 placeholder={clientAddr ? clientAddr.phoneNumber : ""}
                                 value={phoneNumber}
                                 onChange={event => {
@@ -634,7 +634,7 @@ export default function ChangeAccountData() {
                         <div>
                             <DarkedTextField
                                 type="text"
-                                label={t("phone number")}
+                                label={t("phone number") + ' *'}
                                 placeholder={businnesPhone ? businnesPhone.phoneNumber : ""}
                                 value={businessPhoneNumber}
                                 onChange={event => {

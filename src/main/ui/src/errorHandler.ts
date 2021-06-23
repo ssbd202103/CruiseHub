@@ -25,8 +25,11 @@ function useHandleError() {
             showError(t('unknown error'))
             return
         }
-
-        if (status == 401 && error != "auth.incorrect.password" && error != "error.facade.noSuchElement") {
+        if( status == 401 && error == "error.database.userNotExists"){
+            showError(t("error.database.userNotExists"))
+            return
+        }
+        if (status == 401 && error != "auth.incorrect.password" && error != "error.facade.noSuchElement" ) {
             showWarning(t("error.unauthorized"))
             setTimeout(logOut, 3000)
             return

@@ -4,8 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.FirstName;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Name;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.SecondName;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -32,9 +34,9 @@ public class RatingDto {
 
     private String name;
 
-    @Name
+    @FirstName
     private String accountFirstName;
 
-    @Name
+    @SecondName
     private String accountSecondName;
 }

@@ -2,7 +2,9 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.changedata;
 
 import lombok.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AbstractAccountDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.FirstName;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Name;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.SecondName;
 
 @Getter
 @Setter
@@ -10,9 +12,10 @@ import pl.lodz.p.it.ssbd2021.ssbd03.validators.Name;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AccountChangeDataDto extends AbstractAccountDto {
-    @Name
+    @FirstName
     private String newFirstName;
-    @Name
+
+    @SecondName
     private String newSecondName;
 
     public AccountChangeDataDto(String login, long version, String newFirstName, String newSecondName) {

@@ -221,7 +221,7 @@ function Row(props: RowProps) {
                                                         login: row.login, version: row.version, token: token
                                                     }).then(res => {
                                                         onChange().then(() => {
-                                                            showSuccess(t('data.load.success'))
+                                                            showSuccess(t('successful action'))
                                                         })
 
                                                     }).catch(error => {
@@ -235,7 +235,7 @@ function Row(props: RowProps) {
                                                     })
                                                         .then(res => {
                                                             onChange().then(() => {
-                                                                showSuccess(t('data.load.success'))
+                                                                showSuccess(t('successful action'))
                                                             })
                                                         }).catch(error => {
                                                         const message = error.response.data

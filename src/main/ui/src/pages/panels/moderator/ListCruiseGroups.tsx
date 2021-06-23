@@ -28,6 +28,8 @@ import axios from "../../../Services/URL";
 import PopupAcceptAction from "../../../PopupAcceptAction";
 import ActiveIcon from "../../../components/ActiveIcon";
 import RoundedButton from "../../../components/RoundedButton";
+import {getCruiseMetadata} from "../../../Services/cruisesService";
+import PopupMetadata from "../../../PopupMetadata";
 
 
 const useRowStyles = makeStyles({
@@ -91,6 +93,9 @@ interface DeactivateCruise {
     etag: string,
     version:bigint
 }
+interface MetadataCruise {
+    uuid: string,
+}
 
 function Row(props: CruiseData) {
     const {group} = props;
@@ -110,6 +115,33 @@ function Row(props: CruiseData) {
     const [, forceUpdate] = useReducer(x => x + 1, 0);
 
     const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
+    const [metadataPopupAcceptAction, setMetadataPopupAcceptAction] = useState(false);
+
+    const [alterType, setAlterType] = useState('')
+    const [alteredBy, setAlteredBy] = useState('')
+    const [createdBy, setCreatedBy] = useState('')
+    const [creationDateTime, setCreationDateTime] = useState('')
+    const [lastAlterDateTime, setLastAlterDateTime] = useState('')
+    const [version, setVersion] = useState('')
+
+    const handleMetadata = async ({uuid}: MetadataCruise) =>{
+        getCruiseMetadata(uuid).then(res => {
+            setAlterType(res.data.alterType);
+            setAlteredBy(res.data.alteredBy);
+            setCreatedBy(res.data.createdBy);
+            if(res.data.creationDateTime !=null)
+                setCreationDateTime(res.data.creationDateTime.dayOfMonth +" "+ t(res.data.creationDateTime.month) +" "+ res.data.creationDateTime.year +" "+ res.data.creationDateTime.hour +":"+ res.data.creationDateTime.minute.toString().padStart(2, '0') )
+            if(res.data.lastAlterDateTime !=null)
+                setLastAlterDateTime(res.data.lastAlterDateTime.dayOfMonth +" "+ t(res.data.lastAlterDateTime.month) +" "+ res.data.lastAlterDateTime.year +" "+ res.data.lastAlterDateTime.hour +":"+ res.data.lastAlterDateTime.minute.toString().padStart(2, '0'));
+            setVersion(res.data.version);
+            refreshToken();
+        }, error => {
+            const message = error.response.data
+            handleError(message, error.response.status)
+        }).then(res => {
+            setMetadataPopupAcceptAction(true);
+        })
+    }
 
 
 
@@ -254,16 +286,31 @@ function Row(props: CruiseData) {
                                                         }>{t("deactivate")}</RoundedButton>
                                                     </TableCell>
                                                     <TableCell align="center">
-                                                        <Link to={`cruise/metadata/${cruise.uuid}`}>
                                                             <RoundedButton color={"green"}
-                                                                           className={buttonClass.root}>
-                                                                {t("metadata")}</RoundedButton>
-                                                        </Link>
+                                                                           className={buttonClass.root}
+                                                            onClick={() => {
+                                                                handleMetadata({
+                                                                    uuid: cruise.uuid
+                                                                })
+                                                                setMetadataPopupAcceptAction(true)
+                                                            }
+                                                            }>{t("metadata")}</RoundedButton>
                                                     </TableCell>
+
                                                 </React.Fragment>
                                         </TableRow>
                                     ))}
                                 </TableBody>
+                                <PopupMetadata
+                                    open={metadataPopupAcceptAction}
+                                    onCancel={() => {setMetadataPopupAcceptAction(false)}}
+                                    alterType={alterType}
+                                    alteredBy={alteredBy}
+                                    createdBy={createdBy}
+                                    creationDateTime={creationDateTime}
+                                    lastAlterDateTime={lastAlterDateTime}
+                                    version={version}
+                                />
                                 <PopupAcceptAction
                                     open={buttonPopupAcceptAction}
                                     onConfirm={()=>{handleConfirm(deactivateCruise)}}

@@ -16,9 +16,14 @@ import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableBody from "@material-ui/core/TableBody";
-import {getReservationsForCruise, removeClientReservation} from "../../../Services/reservationService";
+import {
+    getReservationMetadata,
+    getReservationsForCruise,
+    removeClientReservation
+} from "../../../Services/reservationService";
 import {useSnackbarQueue} from "../../snackbar";
 import RoundedButton from "../../../components/RoundedButton";
+import PopupMetadata from "../../../PopupMetadata";
 
 const useRowStyles = makeStyles({
     root: {
@@ -51,7 +56,9 @@ export interface RowProps {
     style: React.CSSProperties
     onReload: () => void
 }
-
+interface MetadataReservation {
+    uuid: string,
+}
 function Row({row, style, onReload}: RowProps) {
     const {t} = useTranslation();
     const classes = useRowStyles();
@@ -59,7 +66,14 @@ function Row({row, style, onReload}: RowProps) {
     const handleError = useHandleError()
     const showSuccess = useSnackbarQueue('success')
     const history = useHistory();
+    const [metadataPopupAcceptAction, setMetadataPopupAcceptAction] = useState(false);
 
+    const [alterType, setAlterType] = useState('')
+    const [alteredBy, setAlteredBy] = useState('')
+    const [createdBy, setCreatedBy] = useState('')
+    const [creationDateTime, setCreationDateTime] = useState('')
+    const [lastAlterDateTime, setLastAlterDateTime] = useState('')
+    const [version, setVersion] = useState('')
     const removeCurrentReservation = () => {
         removeClientReservation(row.uuid, row.clientName).then(res => {
             showSuccess(t('data.delete.success'))
@@ -73,6 +87,26 @@ function Row({row, style, onReload}: RowProps) {
         });
     }
 
+
+    const handleMetadata = async ({uuid}: MetadataReservation) =>{
+        getReservationMetadata(uuid).then(res => {
+            setAlterType(res.data.alterType);
+            setAlteredBy(res.data.alteredBy);
+            setCreatedBy(res.data.createdBy);
+            if(res.data.creationDateTime !=null)
+                setCreationDateTime(res.data.creationDateTime.dayOfMonth +" "+ t(res.data.creationDateTime.month) +" "+ res.data.creationDateTime.year +" "+ res.data.creationDateTime.hour +":"+ res.data.creationDateTime.minute.toString().padStart(2, '0'))
+            if(res.data.lastAlterDateTime !=null)
+                setLastAlterDateTime(res.data.lastAlterDateTime.dayOfMonth +" "+ t(res.data.lastAlterDateTime.month) +" "+ res.data.lastAlterDateTime.year +" "+ res.data.lastAlterDateTime.hour +":"+ res.data.lastAlterDateTime.minute.toString().padStart(2, '0'));
+            setVersion(res.data.version);
+            refreshToken();
+        }, error => {
+            const message = error.response.data
+            handleError(message, error.response.status)
+        }).then(res => {
+            setMetadataPopupAcceptAction(true);
+        })
+    }
+
     return (
         <TableRow className={classes.root}>
             <TableCell component="th" scope="row" style={style}>{row.clientName}</TableCell>
@@ -84,13 +118,27 @@ function Row({row, style, onReload}: RowProps) {
                 <RoundedButton color="pink" onClick={removeCurrentReservation}
                                className={buttonClass.root}>{t("Remove reservation btn")}</RoundedButton>
             </TableCell>
-            <TableCell align="center">
-                <Link to={`reservation/metadata/${row.uuid}`}>
-                    <RoundedButton color={"green"}
-                                   className={buttonClass.root}>
-                        {t("metadata")}</RoundedButton>
-                </Link>
+            <TableCell style={style}>
+                <RoundedButton color={"green"}
+                               className={buttonClass.root}
+                               onClick={() => {
+                                   handleMetadata({
+                                       uuid: row.uuid,
+                                   })
+                                   setMetadataPopupAcceptAction(true)
+                               }
+                               }>{t("metadata")}</RoundedButton>
             </TableCell>
+            <PopupMetadata
+                open={metadataPopupAcceptAction}
+                onCancel={() => {setMetadataPopupAcceptAction(false)}}
+                alterType={alterType}
+                alteredBy={alteredBy}
+                createdBy={createdBy}
+                creationDateTime={creationDateTime}
+                lastAlterDateTime={lastAlterDateTime}
+                version={version}
+            />
         </TableRow>
     );
 }
@@ -194,6 +242,10 @@ const ListReservations = () => {
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`
                             }}>{t("Remove reservation btn")}</TableCell>
+                            <TableCell style={{
+                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                            }}>{t("metadata")}</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
