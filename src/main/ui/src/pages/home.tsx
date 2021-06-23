@@ -6,6 +6,7 @@ import HeaderFooterLayout from '../layouts/HeaderFooterLayout'
 
 import styles from '../styles/Home.module.css'
 
+import { Link } from 'react-router-dom';
 import {useTranslation} from 'react-i18next'
 import {useSelector} from "react-redux";
 import {selectDarkMode, selectLanguage} from "../redux/slices/userSlice";
@@ -320,12 +321,18 @@ export default function Home() {
                     style={{color: `var(--${darkMode ? 'dark' : 'white'}`}}>{t("the best cruises")}</h2>
 
                 <div className={styles['cruises-grid']}>
-                    {filteredCruises.map((cruise, index) =>(<CruiseCard
-                        key={index}
-                        price = {cruise.price}
-                        title = {cruise.name}
-                        img = {cruise.img}
-                    />))}
+                    {filteredCruises.map(({relatedCruises, price, name, img}, index) =>(
+                        <Link
+                            key={index}
+                            to={`/cruise/${relatedCruises[0].uuid}`}
+                        >
+                            <CruiseCard
+                                price = {price}
+                                title = {name}
+                                img = {img}
+                            />
+                        </Link>
+                    ))}
                 </div>
             </section>
         </HeaderFooterLayout>
