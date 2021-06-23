@@ -65,7 +65,7 @@ const resources = {
             "countryExample": "Polska",
             "phoneNumber": "Numer telefonu",
             "phoneNumberExample": "+48 507 422 550",
-            "activate.your.account": "Konto zostało utworzone! Wysłaliśmy Ci maila w celu potwierdzenia Twojego konta",
+            "activate.your.account": "Konto zostało utworzone! Wysłaliśmy Ci wiadomość e-mail w celu potwierdzenia Twojego konta",
             //signup.client
             "signup.client.subtitle": "Zostań członkiem największej przygody w Twoim życiu",
             "i am a business worker": "Jestem pracownikiem firmy",
@@ -99,7 +99,7 @@ const resources = {
             "old password": "Podaj stare hasło",
             "new password": "Wprowadź nowe hasło",
             "new password confirm": "Potwierdź nowe hasło",
-            "confrim email change": "Potwierdź zmianę maila",
+            "confrim email change": "Potwierdź zmianę e-maila",
             //workerPanel
             "workerPanel": "Panel pracownika",
             "deactivateCruiseGroup": "Dezaktywuj grupę wycieczek",
@@ -288,7 +288,7 @@ const resources = {
             "/accounts/change_account_data": "Zmiana danych konta",
             "/accounts/grant_access_level": "Przydzielenie dostępu kontowi",
             "/reset/passwordReset": "Resetowanie hasła",
-            "/reset/changeEmail": "Zmiana maila konta",
+            "/reset/changeEmail": "Zmiana e-maila konta",
             "/reset/resetSomebodyPassword": "Resetowanie hasła konta",
             "/verify/accountVerification": "Weryfikacja",
             "/accounts/change_access_level_state": "Zmień stan poziomu dostępu",

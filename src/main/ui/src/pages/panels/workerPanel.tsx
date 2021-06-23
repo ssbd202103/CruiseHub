@@ -91,7 +91,7 @@ export default function WorkerPanel() {
             menu={[
                 {
                     link: '/listCruiseGroup',
-                    Icon: AccountsListIcon,
+                    Icon: CruiseIcon,
                     text: t('listCruiseGroup'),
                     Component: ListCruiseGroup
                 }, {
@@ -106,7 +106,6 @@ export default function WorkerPanel() {
                     text: t('createCruise'),
                     Icon: CreateIcon,
                     Component: AddCruise
-
                 },
                 {
                     link: '/settings',
