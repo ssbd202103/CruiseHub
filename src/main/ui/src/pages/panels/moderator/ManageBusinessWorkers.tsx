@@ -120,11 +120,7 @@ function Row(props: RowProps) {
             <TableCell style={style}>{row.companyName}</TableCell>
             <TableCell style={style}>{row.companyPhoneNumber}</TableCell>
             <TableCell style={style}><RoundedButton color="blue" onClick={() =>{
-                {
-
-
-                    setButtonPopupAcceptAction(true)
-
+                {setButtonPopupAcceptAction(true)
                 }}
 
             }>{t("confirm")}</RoundedButton></TableCell>

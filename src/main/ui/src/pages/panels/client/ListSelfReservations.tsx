@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {Ref, RefObject, useEffect, useImperativeHandle, useRef, useState} from 'react';
 import {makeStyles} from "@material-ui/core/styles";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
@@ -18,6 +18,7 @@ import {
     getSelfReservations, removeReservation,
 } from "../../../Services/reservationService";
 import {useSnackbarQueue} from "../../snackbar";
+import PopupAcceptAction from "../../../PopupAcceptAction";
 import RoundedButton from "../../../components/RoundedButton";
 
 const useRowStyles = makeStyles({
@@ -50,20 +51,26 @@ function createData(
     };
 }
 
+
 export interface RowProps {
     row: ReturnType<typeof createData>,
     style: React.CSSProperties
     onReload: () => void
+    setButtonPopupAcceptActionMethod: (val: boolean) => (void),
+    cancelReservationRef: Ref<{ cancelReservation: () => void }>
 }
 
-function Row({row, style, onReload}: RowProps) {
+
+function Row({row, style, onReload, setButtonPopupAcceptActionMethod, cancelReservationRef}: RowProps) {
     const {t} = useTranslation();
     const classes = useRowStyles();
     const buttonClass = useButtonStyles();
     const handleError = useHandleError()
     const showSuccess = useSnackbarQueue('success')
 
-    const cancelReservation = () => {
+    useImperativeHandle(cancelReservationRef, () => ({cancelReservation}))
+
+    function cancelReservation() {
         removeReservation(row.uuid).then(res => {
             showSuccess(t('reservationCancelled'))
             onReload()
@@ -71,8 +78,10 @@ function Row({row, style, onReload}: RowProps) {
             const message = error.response.data
             handleError(message, error.response.status)
             onReload()
+            setButtonPopupAcceptActionMethod(false)
         }).then(res => {
             refreshToken()
+            setButtonPopupAcceptActionMethod(false)
         })
     }
 
@@ -86,8 +95,8 @@ function Row({row, style, onReload}: RowProps) {
             <TableCell style={style}>{row.numberOfSeats}</TableCell>
             <TableCell style={style}>{row.price}</TableCell>
             <TableCell style={style}>
-                <RoundedButton color="pink" onClick={cancelReservation}
-                               className={buttonClass.root}>{t("cancel reservation btn")}</RoundedButton>
+                <Button onClick={()=>(setButtonPopupAcceptActionMethod(true))}
+                        className={buttonClass.root}>{t("cancel reservation btn")}</Button>
             </TableCell>
         </TableRow>
     );
@@ -116,6 +125,7 @@ const ListSelfReservations = () => {
     useEffect(() => {
         onReload()
     }, []);
+    const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
 
     function onReload() {
         getSelfReservations().then(res => {
@@ -127,6 +137,7 @@ const ListSelfReservations = () => {
             refreshToken()
         });
     }
+
 
     function search(rows: any[]) {
         if (Array.isArray(rows) && rows.length) {
@@ -148,6 +159,12 @@ const ListSelfReservations = () => {
 
     const {t} = useTranslation()
 
+
+    const setButtonPopupAcceptActionMethod = (val: boolean) => {
+        setButtonPopupAcceptAction(val)
+    }
+
+    const cancelReservationRef = useRef<{ cancelReservation: () => void }>(null);
 
     return (
         <div>
@@ -207,11 +224,26 @@ const ListSelfReservations = () => {
                             <Row key={index} row={reservation} style={{
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`,
-                            }} onReload={onReload}/>
+
+                            }}
+                                 onReload={onReload}
+                                 setButtonPopupAcceptActionMethod={setButtonPopupAcceptActionMethod}
+                                 cancelReservationRef={cancelReservationRef}
+                            />
                         )))}
                     </TableBody>
                 </Table>
             </TableContainer>
+            <PopupAcceptAction
+                open={buttonPopupAcceptAction}
+                onConfirm={() => {
+                    if (cancelReservationRef.current) {
+                        cancelReservationRef.current.cancelReservation()
+                    }
+                }}
+                onCancel={() => {
+                    setButtonPopupAcceptAction(false)
+                }}/>
         </div>
     );
 };

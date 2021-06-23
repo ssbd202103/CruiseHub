@@ -14,6 +14,7 @@ import {
     PHONE_NUMBER_REGEX, POST_CODE_REGEX,
     STREET_REGEX
 } from "../../../regexConstants";
+import PopupAcceptAction from "../../../PopupAcceptAction";
 
 export default function () {
     const [, forceUpdate] = useReducer(x => x + 1, 0)
@@ -39,7 +40,9 @@ export default function () {
     const [postalCodeRegexError, setPostalCodeRegexError] = useState(false)
     const [countryRegexError, setCountryRegexError] = useState(false)
 
-    const handleAddCompany = () => {
+    const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
+
+    const handleAddCompany =  () => {
         const {token} = store.getState();
         const json = JSON.stringify({
             name: companyName,
@@ -75,7 +78,7 @@ export default function () {
         })
     }
 
-    const handleConfirm = async () => {
+    const addCompanyCheck = async () => {
         setCompanyNameRegexError(!COMPANY_NAME_REGEX.test(companyName))
         setPhoneNumberRegexError(!PHONE_NUMBER_REGEX.test(phoneNumber))
         setNipRegexError(!NIP_REGEX.test(nip))
@@ -227,10 +230,19 @@ export default function () {
                 />
             </Box>
             <RoundedButton
-                onClick={handleConfirm}
+                onClick={() =>{ setButtonPopupAcceptAction(true)}}
                 style={{width: '25%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
                 color="pink"
             >{t("add company")} </RoundedButton>
+            <PopupAcceptAction
+                open={buttonPopupAcceptAction}
+                onConfirm={() => {
+                    setButtonPopupAcceptAction(false)
+                    addCompanyCheck()
+                }}
+                onCancel={() => {
+                    setButtonPopupAcceptAction(false)
+                }}/>
         </div>
     )
 }
