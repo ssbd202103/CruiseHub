@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {Ref, useEffect, useImperativeHandle, useRef, useState} from 'react';
 import {getAllCompanies} from "../../../Services/companiesService";
 import {makeStyles} from "@material-ui/core/styles";
 import TableRow from "@material-ui/core/TableRow";
@@ -19,6 +19,7 @@ import TableBody from "@material-ui/core/TableBody";
 import {getReservationsForCruise, removeClientReservation} from "../../../Services/reservationService";
 import {useSnackbarQueue} from "../../snackbar";
 import RoundedButton from "../../../components/RoundedButton";
+import PopupAcceptAction from "../../../PopupAcceptAction";
 
 const useRowStyles = makeStyles({
     root: {
@@ -50,9 +51,11 @@ export interface RowProps {
     row: ReturnType<typeof createData>,
     style: React.CSSProperties
     onReload: () => void
+    setButtonPopupAcceptActionMethod: (val: boolean) => (void),
+    removeCurrentReservationRef: Ref<{ removeCurrentReservation: () => void }>
 }
 
-function Row({row, style, onReload}: RowProps) {
+function Row({row, style, onReload, setButtonPopupAcceptActionMethod, removeCurrentReservationRef}: RowProps) {
     const {t} = useTranslation();
     const classes = useRowStyles();
     const buttonClass = useButtonStyles();
@@ -60,15 +63,20 @@ function Row({row, style, onReload}: RowProps) {
     const showSuccess = useSnackbarQueue('success')
     const history = useHistory();
 
+    useImperativeHandle(removeCurrentReservationRef, () => ({removeCurrentReservation}))
+
     const removeCurrentReservation = () => {
         removeClientReservation(row.uuid, row.clientName).then(res => {
+            setButtonPopupAcceptActionMethod(false)
             showSuccess(t('data.delete.success'))
             onReload()
         }).catch(error => {
+            setButtonPopupAcceptActionMethod(false)
             const message = error.response.data
             handleError(message, error.response.status)
             onReload()
         }).then(res => {
+            setButtonPopupAcceptActionMethod(false)
             refreshToken()
         });
     }
@@ -81,7 +89,10 @@ function Row({row, style, onReload}: RowProps) {
             <TableCell style={style}>{row.cruiseName}</TableCell>
             <TableCell style={style}>{row.attractions.map(item => t(item)).join(', ')}</TableCell>
             <TableCell style={style}>
-                <RoundedButton color="pink" onClick={removeCurrentReservation}
+                <RoundedButton color="pink" onClick={() =>{
+                    setButtonPopupAcceptActionMethod(true)
+                }
+                }
                                className={buttonClass.root}>{t("Remove reservation btn")}</RoundedButton>
             </TableCell>
             <TableCell align="center">
@@ -113,7 +124,7 @@ const ListReservations = () => {
     const [searchInput, setSearchInput] = useState("");
 
     const handleError = useHandleError()
-
+    const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
     const darkMode = useSelector(selectDarkMode)
     const uuid = sessionStorage.getItem("cruiseUUID")
 
@@ -150,7 +161,13 @@ const ListReservations = () => {
 
     const reservationss: String[] = [];
 
+    const setButtonPopupAcceptActionMethod = (val: boolean) => {
+        setButtonPopupAcceptAction(val)
+    }
+
     const {t} = useTranslation()
+
+    const removeCurrentReservationRef = useRef<{ removeCurrentReservation: () => void }>(null);
 
     return (
         <div>
@@ -201,11 +218,23 @@ const ListReservations = () => {
                             <Row key={index} row={reservation} style={{
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`,
-                            }} onReload={onReload}/>
+                            }} onReload={onReload}
+                                 setButtonPopupAcceptActionMethod={setButtonPopupAcceptActionMethod}
+                                 removeCurrentReservationRef={removeCurrentReservationRef}/>
                         )))}
                     </TableBody>
                 </Table>
             </TableContainer>
+            <PopupAcceptAction
+                open={buttonPopupAcceptAction}
+                onConfirm={() => {
+                    if (removeCurrentReservationRef.current) {
+                        removeCurrentReservationRef.current.removeCurrentReservation()
+                    }
+                }}
+                onCancel={() => {
+                    setButtonPopupAcceptAction(false)
+                }}/>
         </div>
     );
 };

@@ -1,4 +1,4 @@
-import React, {Component, useEffect, useState} from 'react';
+import React, {Component, Ref, useEffect, useImperativeHandle, useRef, useState} from 'react';
 import {getClientRatings, removeClientRating} from "../../../Services/ratingsService";
 import {makeStyles} from "@material-ui/core/styles";
 import {useTranslation} from "react-i18next";
@@ -18,6 +18,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableBody from "@material-ui/core/TableBody";
 import {useSnackbarQueue} from "../../snackbar";
 import RoundedButton from "../../../components/RoundedButton";
+import PopupAcceptAction from "../../../PopupAcceptAction";
 
 const useRowStyles = makeStyles({
     root: {
@@ -45,25 +46,29 @@ export interface RowProps {
     row: ReturnType<typeof createData>,
     style: React.CSSProperties,
     onReload: () => void
+    setButtonPopupAcceptActionMethod: (val: boolean) => (void),
+    removeRatingRef: Ref<{ removeRating: () => void }>
 }
 
-function Row(props: RowProps) {
+function Row({row,style, onReload, setButtonPopupAcceptActionMethod, removeRatingRef}: RowProps) {
     const {t} = useTranslation();
-    const {row} = props;
-    const {style} = props;
+
     const handleError = useHandleError()
     const showSuccess = useSnackbarQueue('success')
     const classes = useRowStyles();
-
+    useImperativeHandle(removeRatingRef, () => ({removeRating}))
     const removeRating = () => {
         removeClientRating(row.login, row.cruiseGroupUUID).then(res => {
+            setButtonPopupAcceptActionMethod(false)
             showSuccess(t('data.delete.success'))
-            props.onReload()
+            onReload()
         }).catch(error => {
+            setButtonPopupAcceptActionMethod(false)
             const message = error.response.data
             handleError(message, error.response.status)
-            props.onReload()
+            onReload()
         }).then(res => {
+            setButtonPopupAcceptActionMethod(false)
             refreshToken()
         });
     }
@@ -73,7 +78,9 @@ function Row(props: RowProps) {
             <TableCell component="th" scope="row" style={style}>{row.cruiseGroupName}</TableCell>
             <TableCell style={style}>{row.rating}</TableCell>
             <TableCell style={style}>
-                <RoundedButton color="pink" onClick={removeRating}>
+                <RoundedButton color="pink" onClick={() => {
+                    setButtonPopupAcceptActionMethod(true)
+                }}>
                     {t("remove rating")}
                 </RoundedButton>
             </TableCell>
@@ -86,7 +93,7 @@ const ListClientRatings = () => {
     const [searchInput, setSearchInput] = useState("");
     const login = sessionStorage.getItem("login")!;
     const handleError = useHandleError();
-
+    const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
     const darkMode = useSelector(selectDarkMode)
 
     useEffect(() => {
@@ -122,8 +129,13 @@ const ListClientRatings = () => {
 
     const searchRatingList: String[] = [];
 
+    const setButtonPopupAcceptActionMethod = (val: boolean) => {
+        setButtonPopupAcceptAction(val)
+    }
+
     const {t} = useTranslation()
 
+    const removeRatingRef = useRef<{ removeRating: () => void }>(null);
 
     return (
         <>
@@ -165,11 +177,23 @@ const ListClientRatings = () => {
                                 <Row key={index} row={rating} style={{
                                     backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                     color: `var(--${!darkMode ? 'dark' : 'white-light'}`
-                                }} onReload={onReload} />
+                                }} onReload={onReload}
+                                     setButtonPopupAcceptActionMethod={setButtonPopupAcceptActionMethod}
+                                     removeRatingRef={removeRatingRef}/>
                             )))}
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <PopupAcceptAction
+                    open={buttonPopupAcceptAction}
+                    onConfirm={() => {
+                        if (removeRatingRef.current) {
+                            removeRatingRef.current.removeRating()
+                        }
+                    }}
+                    onCancel={() => {
+                        setButtonPopupAcceptAction(false)
+                    }}/>
             </div>
         </>
     );

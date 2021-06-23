@@ -143,7 +143,12 @@ function Row(props: CruiseData) {
     const darkMode = useSelector(selectDarkMode)
     const buttonClass = useButtonStyles();
     const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
+    const [buttonPopupAcceptActionDeactivateCruiseGroup, setButtonPopupAcceptActionDeactivateCruiseGroup] = useState(false);
 
+
+    const [uuid, setUuid] = useState("");
+    const [etag, setEtag] = useState("");
+    const [version, setVersion] = useState(BigInt(0));
 
 
     const handleConfirm = async ({uuid, etag, version}: DeactivateCruise) => {
@@ -172,6 +177,24 @@ function Row(props: CruiseData) {
             handleError(message, error.response.status)
         });
     }
+    function deactivateCruiseG (){
+        deactivateCruiseGroup({
+            uuid: uuid,
+            etag: etag,
+            version: version,
+            token: token,
+        }).then(res => {
+            setButtonPopupAcceptActionDeactivateCruiseGroup(false)
+            onChange().then(() => {
+                showSuccess(t('successful action'))
+            })
+        }).catch(error => {
+            setButtonPopupAcceptActionDeactivateCruiseGroup(false)
+            const message = error.response.data
+            handleError(t(message), error.response.status)
+        })
+    }
+
 
     const reload = () => {
         getCruisesForCruiseGroup(group.uuid)
@@ -224,19 +247,11 @@ function Row(props: CruiseData) {
             <TableCell style={style}>
                 <RoundedButton
                     color="pink" onClick={() => {
-                    deactivateCruiseGroup({
-                        uuid: group.uuid,
-                        etag: group.etag,
-                        version: group.version,
-                        token: token
-                    }).then(res => {
-                        onChange().then(() => {
-                            showSuccess(t('successful action'))
-                        })
-                    }).catch(error => {
-                        const message = error.response.data
-                        handleError(t(message), error.response.status)
-                    })
+                        setUuid(group.uuid)
+                        setEtag(group.etag)
+                        setVersion(group.version)
+                        setButtonPopupAcceptActionDeactivateCruiseGroup(true)
+
                 }}
                     disabled={!group.active}
                 >
@@ -331,7 +346,7 @@ function Row(props: CruiseData) {
                                                                 etag : cruise.etag,
                                                                 version : cruise.version
                                                             })
-                                                            handleConfirm(deactivateCruise)
+                                                            setButtonPopupAcceptAction(true)
                                                             }
                                                         }
                                                     >
@@ -347,6 +362,14 @@ function Row(props: CruiseData) {
                     </Collapse>
                 </TableCell>
             </TableRow>
+            <PopupAcceptAction
+                open={buttonPopupAcceptAction}
+                onConfirm={() => {handleConfirm(deactivateCruise)}}
+                onCancel={() => {setButtonPopupAcceptAction(false)}}/>
+            <PopupAcceptAction
+                open={buttonPopupAcceptActionDeactivateCruiseGroup}
+                onConfirm={() => {deactivateCruiseG()}}
+                onCancel={() => {setButtonPopupAcceptActionDeactivateCruiseGroup(false)}}/>
         </React.Fragment>
     );
 }
