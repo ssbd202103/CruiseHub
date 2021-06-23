@@ -361,7 +361,7 @@ const resources = {
             'take': 'Weź',
             'add.attraction': "Dodaj atrakcję",
             'no.seats.for.attraction': "Niestety, nie ma już miejsc na atrakcje, które wybrano",
-            'delete.attraction': "Delete attraction",
+            'delete.attraction': "Usuń atrakcję",
             'opinions': 'Opinie',
             "search cruiseGroup": "Wyszukaj grupę",
             "seats": "Liczba miejsc",
