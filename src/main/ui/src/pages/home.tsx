@@ -165,7 +165,7 @@ export default function Home() {
 
     const HandleFilterByLowerPriceCruise = () => {
         setFilteredCruises(prev => {
-            prev.sort((a, b) => (a.price - b.price))
+            prev.sort((a, b) => (b.price - a.price))
             return [...prev];
         })
     }
@@ -173,7 +173,7 @@ export default function Home() {
 
     const HandleFilterByHigherPriceCruise = () => {
         setFilteredCruises(prev => {
-            prev.sort((a, b) => (b.price - a.price))
+            prev.sort((a, b) => (a.price - b.price))
             return [...prev];
         })
     }
