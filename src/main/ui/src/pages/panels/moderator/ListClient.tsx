@@ -17,6 +17,7 @@ import Autocomplete from "../../../components/Autocomplete";
 import useHandleError from "../../../errorHandler";
 import {Link} from "react-router-dom";
 import ActiveIcon from '../../../components/ActiveIcon';
+import RoundedButton from "../../../components/RoundedButton";
 
 const useRowStyles = makeStyles({
     root: {
@@ -83,12 +84,10 @@ function Row(props: RowProps) {
             <TableCell style={style}>
                 {row.accessLevels.includes('CLIENT') ? (
                     <Link to="/accounts/ratings">
-                        <TableCell style={style}>
-                            <Button
+                            <RoundedButton color="blue"
                                 onClick={() => sessionStorage.setItem("login", row.login)}
                                 className={buttonClass.root}>{t("ratings")}
-                            </Button>
-                        </TableCell>
+                            </RoundedButton>
                     </Link>
                 ) : ""}
             </TableCell>

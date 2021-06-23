@@ -237,7 +237,7 @@ function Row(props: CruiseData) {
                                             <TableCell align="center"
                                                        style={style}><ActiveIcon active={cruise.published} /></TableCell>
                                             <TableCell align="center">
-                                                <Link to={`attractions/${cruise.uuid}`}><Button className={buttonClass.root}>{t("attractions")}</Button></Link>
+                                                <Link to={`attractions/${cruise.uuid}`}><RoundedButton color="blue" className={buttonClass.root}>{t("attractions")}</RoundedButton></Link>
                                             </TableCell>
                                                 <React.Fragment>
                                                     <TableCell align="center">
