@@ -40,7 +40,7 @@ public class ReservationController {
     @GET
     @Path("/reservations-for-cruise/{cruiseUUID}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<CruiseReservationDto> getCruisesForReservations(@PathParam("cruiseUUID") UUID cruiseUUID) throws BaseAppException { //todo change UUID to String and handle parsing exception
+    public List<CruiseReservationDto> getCruisesForReservations(@PathParam("cruiseUUID") UUID cruiseUUID) throws BaseAppException {
         return tryAndRepeat(reservationEndpoint, () -> reservationEndpoint.viewCruiseReservations(cruiseUUID));
     }
 
@@ -53,7 +53,7 @@ public class ReservationController {
     @GET
     @Path("/reservations-for-worker-cruise/{cruiseUUID}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<CruiseReservationDto> getWorkerCruisesForReservations(@PathParam("cruiseUUID") UUID cruiseUUID) throws BaseAppException { //todo change UUID to String and handle parsing exception
+    public List<CruiseReservationDto> getWorkerCruisesForReservations(@PathParam("cruiseUUID") UUID cruiseUUID) throws BaseAppException {
         return tryAndRepeat(reservationEndpoint, () -> reservationEndpoint.viewWorkerCruiseReservations(cruiseUUID));
     }
     /**
@@ -68,7 +68,7 @@ public class ReservationController {
     public void removeReservation(@PathParam("clientLogin") String clientLogin,
                                   @PathParam("reservationUuid") UUID reservationUuid
                                   ) throws BaseAppException {
-        reservationEndpoint.removeClientReservation(new RemoveClientReservationDto(reservationUuid.toString(), clientLogin)); //todo change UUID to String and handle parsing exception
+        reservationEndpoint.removeClientReservation(new RemoveClientReservationDto(reservationUuid.toString(), clientLogin));
     }
 
     /**

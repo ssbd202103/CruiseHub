@@ -109,7 +109,7 @@ public class SystemScheduler {
     }
 
     @Schedule(hour = "*/12", persistent = false)
-    private void sendActivationEmailWithToken() throws BaseAppException { // todo handle this exception
+    private void sendActivationEmailWithToken() throws BaseAppException {
         List<Account> unconfirmed = accountFacade.getUnconfirmedAccounts();
         for (Account acc : unconfirmed
         ) {

@@ -132,7 +132,7 @@ public class CruiseController {
     @DELETE
     @Path("/cancelReservation/{reservationUUID}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void cancelReservation(@PathParam("reservationUUID") UUID reservationUUID) throws BaseAppException { //todo change UUID to String and handle parsing exception
+    public void cancelReservation(@PathParam("reservationUUID") UUID reservationUUID) throws BaseAppException {
         tryAndRepeat(reservationEndpoint, () -> reservationEndpoint.cancelReservation(reservationUUID));
     }
 

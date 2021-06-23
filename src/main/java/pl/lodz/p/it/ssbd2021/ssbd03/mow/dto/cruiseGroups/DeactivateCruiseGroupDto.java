@@ -16,7 +16,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_POSITIVE_OR_ZE
 @NoArgsConstructor
 public class DeactivateCruiseGroupDto implements SignableEntity{
 
-    private UUID uuid; //todo change UUID to String and handle parsing exception
+    private UUID uuid;
 
     @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO)
     private long version;

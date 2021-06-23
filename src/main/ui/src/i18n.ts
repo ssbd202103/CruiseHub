@@ -174,7 +174,6 @@ const resources = {
             //change language
             "changeLanguage": "Zmień język",
             //errors
-            //TODO wyjątek z niepowodszeniem parsowania
             "error.mapper.long.parse": "Niepowodzenie parsowania",
             "error.facade.noSuchElement": "Nie znaleziono elementu w bazie danych",
             "error.security.notAuthorized": "Brak uprawnień do wykonania operacji",

@@ -124,7 +124,7 @@ public class CruiseGroupManager extends BaseManagerMow implements CruiseGroupMan
 
     @RolesAllowed("deactivateCruiseGroup")
     @Override
-    public void deactivateCruiseGroup(UUID uuid, long version) throws BaseAppException { //todo refactor this method
+    public void deactivateCruiseGroup(UUID uuid, long version) throws BaseAppException {
         CruiseGroup cruiseGroup = cruiseGroupFacadeMow.findByUUID(uuid);
         checkForOptimisticLock(cruiseGroup, version);
 
@@ -164,7 +164,7 @@ public class CruiseGroupManager extends BaseManagerMow implements CruiseGroupMan
         return cruiseGroupFacadeMow.getCruiseGroupForBusinessWorker(company);
     }
 
-    @PermitAll //TODO
+    @PermitAll
     @Override
     public CruiseGroup findByUUID(UUID uuid) throws BaseAppException {
         return cruiseGroupFacadeMow.findByUUID(uuid);

@@ -132,7 +132,12 @@ public interface AccountEndpointLocal extends TransactionalEndpoint {
      */
     void requestSomeonesPasswordReset(String login, String email) throws BaseAppException;
 
-    //todo add javadoc
+    /**
+     * Metoda odpowiedzialna za weryfikację konta
+     *
+     * @param accountVerificationDto Dto zawierające informacje o koncie
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
     void verifyAccount(AccountVerificationDto accountVerificationDto) throws BaseAppException;
 
     /**
