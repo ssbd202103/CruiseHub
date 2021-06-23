@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.converters;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Reservation;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.CruiseGroupWithUUIDDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.MapperException;
@@ -45,7 +46,7 @@ public class CruiseMapper {
         CruiseGroupWithUUIDDto cruiseGroupDto = CruiseGroupMapper.toCruiseGroupWithUUIDDto(cruise.getCruisesGroup());
         return new CruiseDto(cruise.getUuid().toString(), cruise.getVersion(),
                 cruise.getStartDate(), cruise.getEndDate(),
-                cruise.isActive(), cruiseGroupDto, cruiseGroupDto.getNumberOfSeats() - cruise.getReservations().size());
+                cruise.isActive(), cruiseGroupDto, cruiseGroupDto.getNumberOfSeats() - cruise.getReservations().stream().mapToLong(Reservation::getNumberOfSeats).sum());
 
 
     }
