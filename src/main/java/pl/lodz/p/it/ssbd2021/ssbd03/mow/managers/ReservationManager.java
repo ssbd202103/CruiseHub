@@ -99,7 +99,13 @@ public class ReservationManager extends BaseManagerMow implements ReservationMan
         for (String uuidStr : attractionsUUID) {
             try {
                 UUID uuid = UUID.fromString(uuidStr);
-                attractions.add(attractionFacadeMow.findByUUID(uuid));
+                Attraction attraction = attractionFacadeMow.findByUUID(uuid);
+                long allSeats = attraction.getNumberOfSeats();
+                long takenSeats = attractionFacadeMow.getNumberOfTakenSeats(attraction);
+                if (allSeats < takenSeats + numberOfSeats) {
+                    throw new ReservationManagerException(NO_SEATS_FOR_ATTRACTION);
+                }
+                attractions.add(attraction);
             } catch (IllegalArgumentException e) {
                 throw new MapperException(MAPPER_UUID_PARSE);
             }
