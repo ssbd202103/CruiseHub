@@ -147,7 +147,7 @@ const resources = {
             "show business workers": "Pokaż pracowników",
             "add company": "Dodaj firmę",
             "company name example": "FirmaJez",
-            "remove rating": "Usuń ocenę",
+            "remove rating": "Wycofaj ocenę",
             //verify
             "verifyAccount": "Zweryfikuj konto",
             //color
@@ -582,7 +582,7 @@ const resources = {
             "show business workers": "Show business workers",
             "add company": "Add a company",
             "company name example": "Hedgehog Company",
-            "remove rating": "Remove rating",
+            "remove rating": "Delete rating",
             //verify
             "verifyAccount": "Verify account",
             //color
