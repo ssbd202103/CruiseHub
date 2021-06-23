@@ -2,9 +2,11 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruisePicture;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.CruiseAddressDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.CruisePictureDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.CruiseGroupName;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Name;
 
 import javax.validation.Valid;
@@ -24,13 +26,13 @@ public class ChangeCruiseGroupDto implements SignableEntity {
 
     private UUID uuid; //todo change UUID to String and handle parse exception
 
-    @Name
+    @CruiseGroupName
     private String name;
 
-    @Positive(message = CONSTRAINT_POSITIVE)
+    @Positive
     private long numberOfSeats;
 
-    @Positive(message = CONSTRAINT_POSITIVE)
+    @Positive
     private Double price;
 
     @Valid

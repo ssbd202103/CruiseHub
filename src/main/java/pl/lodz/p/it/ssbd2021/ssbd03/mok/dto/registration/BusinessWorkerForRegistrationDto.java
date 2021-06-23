@@ -18,10 +18,10 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 @NoArgsConstructor
 public class BusinessWorkerForRegistrationDto {
 
-    @Name
+    @FirstName
     private String firstName;
 
-    @Name
+    @SecondName
     private String secondName;
 
     @Login

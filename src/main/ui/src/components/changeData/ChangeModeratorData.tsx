@@ -15,6 +15,7 @@ import Popup from "../../PopupRecaptcha";
 import {useSnackbarQueue} from "../../pages/snackbar";
 import useHandleError from "../../errorHandler";
 import PopupAcceptAction from "../../PopupAcceptAction";
+import {NAME_REGEX, PHONE_NUMBER_REGEX} from "../../regexConstants";
 
 export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}: ChangeDataComponentProps) {
     const {t} = useTranslation()
@@ -27,6 +28,9 @@ export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}:
 
     const [firstNameValue, setFirstNameValue] = useState(firstName)
     const [secondNameValue, setSecondNameValue] = useState(secondName)
+
+    const [firstNameRegexError, setFirstNameRegexError] = useState(false)
+    const [secondNameRegexError, setSecondNameRegexError] = useState(false)
 
     const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
     const [metadata, setMetadata] = useState(false)
@@ -55,8 +59,20 @@ export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}:
         setMetadata(false)
         onCancel()
     }
+
     const handleMetadata = () => {
         setMetadata(state => !state)
+    }
+
+    const handleConfirm = async () => {
+        setFirstNameRegexError(!NAME_REGEX.test(firstNameValue))
+        setSecondNameRegexError(!NAME_REGEX.test(secondNameValue))
+        if (!NAME_REGEX.test(firstNameValue) || !NAME_REGEX.test(secondNameValue)) {
+            handleError('error.fields')
+            return
+        } else {
+            setButtonPopupAcceptAction(true)
+        }
     }
 
     function verifyCallback(){
@@ -70,10 +86,22 @@ export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}:
             onConfirm()
             showSuccess(t('successful action'))
         }).catch(error => {
-            handleErase()
             const message = error.response.data
             handleError(message, error.response.status)
-            onCancel()
+            for (let messageArray of Object.values(message.errors)) {
+                for (const error of messageArray as Array<String>) {
+                    switch(error) {
+                        case 'error.size.firstName':
+                        case 'error.regex.firstName':
+                            setFirstNameRegexError(true)
+                            break
+                        case 'error.size.secondName':
+                        case 'error.regex.secondName':
+                            setSecondNameRegexError(true)
+                            break
+                    }
+                }
+            }
         });
     }
 
@@ -130,16 +158,24 @@ export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}:
                 <div>
                     <DarkedTextField
                         type="text"
-                        label={t("name")}
+                        label={t("name") + ' *'}
                         placeholder={t("nameExample")}
                         value={firstNameValue}
-                        onChange={event => {setFirstNameValue(event.target.value)}} />
+                        onChange={event => {
+                            setFirstNameValue(event.target.value)
+                            setFirstNameRegexError(!NAME_REGEX.test(event.target.value))
+                        }}
+                        regexError={firstNameRegexError}/>
                     <DarkedTextField
                         type="text"
-                        label={t("surname")}
+                        label={t("surname") + ' *'}
                         placeholder={t("surnameExample")}
                         value={secondNameValue}
-                        onChange={event => {setSecondNameValue(event.target.value)}} />
+                        onChange={event => {
+                            setSecondNameValue(event.target.value)
+                            setSecondNameRegexError(!NAME_REGEX.test(event.target.value))
+                        }}
+                        regexError={secondNameRegexError}/>
                 </div>
                 <Popup trigger={buttonPopup} setTrigger={setButtonPopup}>
                     <div>
@@ -157,7 +193,7 @@ export default function ChangeModeratorData({open, onOpen, onConfirm, onCancel}:
                     }}
                 />
                 <ConfirmMetadataCancelButtonGroup
-                    onConfirm={()=>setButtonPopupAcceptAction(true)}
+                    onConfirm={handleConfirm}
                     onPress={handleMetadata}
                     onCancel={handleCancel} />
                 <Grid item style={{display: metadata ? "block" : "none"}} className={styles['change-item']}>

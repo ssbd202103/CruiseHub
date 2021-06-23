@@ -118,7 +118,7 @@ export default function ModeratorPanel() {
                 },
                 {
                     link: '/companies',
-                    Icon: AccountsListIcon,
+                    Icon: BusinessIcon,
                     text: t('list companies'),
                     Component: ListCompany
                 },
