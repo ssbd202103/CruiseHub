@@ -301,9 +301,8 @@
         <profile>
             <id>prod</id>
             <properties>
-                <!--                <app.baseurl>http://studapp.it.p.lodz.pl:8003</app.baseurl>-->
-                <app.baseurl>https://172.16.0.84:8403</app.baseurl>
-                <app.frontend.url>https://172.16.0.84:8403</app.frontend.url>
+                <app.baseurl>https://studapp.it.p.lodz.pl:8403</app.baseurl>
+                <app.frontend.url>https://studapp.it.p.lodz.pl:8403</app.frontend.url>
             </properties>
             <activation>
                 <activeByDefault>true</activeByDefault>
