@@ -6,6 +6,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruisePicture;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.CruiseAddressDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.CruisePictureDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.CruiseGroupName;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Name;
 
 import javax.validation.Valid;
@@ -21,7 +22,8 @@ import java.util.UUID;
 public class changeCruiseGroupDto implements SignableEntity {
 
     private UUID uuid;
-    @Name
+
+    @CruiseGroupName
     private String name;
 
     @Positive
@@ -29,6 +31,7 @@ public class changeCruiseGroupDto implements SignableEntity {
 
     @Positive
     private Double price;
+
     @Valid
     private CruiseAddressDto cruiseAddress;
 

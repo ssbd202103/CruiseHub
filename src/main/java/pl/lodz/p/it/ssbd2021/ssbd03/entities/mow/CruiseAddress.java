@@ -8,6 +8,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.City;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Country;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Street;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.StreetNumber;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -36,9 +37,9 @@ public class CruiseAddress extends BaseEntity {
 
     @Getter
     @Setter
-    @Positive(message = CONSTRAINT_POSITIVE_ERROR)
+    @StreetNumber
     @Column(name = "street_number")
-    private int streetNumber;
+    private String streetNumber;
 
     @Getter
     @Setter
@@ -58,7 +59,7 @@ public class CruiseAddress extends BaseEntity {
     @Column(name = "country_name")
     private String countryName;
 
-    public CruiseAddress(String street, int streetNumber, String harborName, String cityName, String countryName) {
+    public CruiseAddress(String street, String streetNumber, String harborName, String cityName, String countryName) {
         this.street = street;
         this.streetNumber = streetNumber;
         this.harborName = harborName;

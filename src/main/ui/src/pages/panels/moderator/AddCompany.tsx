@@ -10,7 +10,7 @@ import {useSnackbarQueue} from "../../snackbar";
 import styles from "../../../styles/auth.global.module.css";
 import {
     CITY_REGEX,
-    COMPANY_NAME_REGEX, COUNTRY_REGEX, HOUSE_NUMBER_REGEX, NIP_REGEX,
+    COMPANY_NAME_REGEX, COUNTRY_REGEX, HOUSE_STREET_NUMBER_REGEX, NIP_REGEX,
     PHONE_NUMBER_REGEX, POST_CODE_REGEX,
     STREET_REGEX
 } from "../../../regexConstants";
@@ -39,7 +39,7 @@ export default function () {
     const [postalCodeRegexError, setPostalCodeRegexError] = useState(false)
     const [countryRegexError, setCountryRegexError] = useState(false)
 
-    const handleAddCompany =  () => {
+    const handleAddCompany = () => {
         const {token} = store.getState();
         const json = JSON.stringify({
             name: companyName,
@@ -64,23 +64,31 @@ export default function () {
         }).catch(error => {
             const message = error.response.data
             handleError(message, error.response.status)
+            switch (message) {
+                case 'companies_nip_unique_constraint':
+                    setNipRegexError(true)
+                    break
+                case 'companies_name_unique_constraint':
+                    setCompanyNameRegexError(true)
+                    break
+            }
         })
     }
 
-    const addCompanyCheck = async () => {
+    const handleConfirm = async () => {
         setCompanyNameRegexError(!COMPANY_NAME_REGEX.test(companyName))
         setPhoneNumberRegexError(!PHONE_NUMBER_REGEX.test(phoneNumber))
         setNipRegexError(!NIP_REGEX.test(nip))
         setStreetRegexError(!STREET_REGEX.test(street))
-        setHouseNumberRegexError(!HOUSE_NUMBER_REGEX.test(houseNumber))
+        setHouseNumberRegexError(!HOUSE_STREET_NUMBER_REGEX.test(houseNumber))
         setCityRegexError(!CITY_REGEX.test(city))
         setPostalCodeRegexError(!POST_CODE_REGEX.test(postalCode))
         setCountryRegexError(!COUNTRY_REGEX.test(country))
 
         if (!COMPANY_NAME_REGEX.test(companyName) || !PHONE_NUMBER_REGEX.test(phoneNumber) || !NIP_REGEX.test(nip) ||
-            !STREET_REGEX.test(street) || !HOUSE_NUMBER_REGEX.test(houseNumber) || !CITY_REGEX.test(city) ||
+            !STREET_REGEX.test(street) || !HOUSE_STREET_NUMBER_REGEX.test(houseNumber) || !CITY_REGEX.test(city) ||
             !POST_CODE_REGEX.test(postalCode) || !COUNTRY_REGEX.test(country)) {
-            handleError("invalid.form")
+            handleError("error.fields")
         } else {
             handleAddCompany()
         }
@@ -169,7 +177,7 @@ export default function () {
                     value={houseNumber}
                     onChange={event => {
                         setHouseNumber(event.target.value)
-                        setHouseNumberRegexError(!HOUSE_NUMBER_REGEX.test(event.target.value))
+                        setHouseNumberRegexError(!HOUSE_STREET_NUMBER_REGEX.test(event.target.value))
                     }}
                     regexError={houseNumberRegexError}
                 />
@@ -219,7 +227,7 @@ export default function () {
                 />
             </Box>
             <RoundedButton
-                onClick={addCompanyCheck}
+                onClick={handleConfirm}
                 style={{width: '25%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
                 color="pink"
             >{t("add company")} </RoundedButton>

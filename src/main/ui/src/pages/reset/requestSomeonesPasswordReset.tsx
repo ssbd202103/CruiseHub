@@ -14,14 +14,7 @@ import useHandleError from "../../errorHandler";
 import PopupAcceptAction from "../../PopupAcceptAction";
 import EmailIcon from "@material-ui/icons/AlternateEmail";
 import {
-    CITY_REGEX, COUNTRY_REGEX,
     EMAIL_REGEX,
-    LOGIN_REGEX,
-    NAME_REGEX,
-    NUM_REGEX,
-    PASSWORD_REGEX, PHONE_NUMBER_REGEX,
-    POST_CODE_REGEX,
-    STREET_REGEX
 } from "../../regexConstants";
 
 export default function RequestSomeonePasswordReset () {

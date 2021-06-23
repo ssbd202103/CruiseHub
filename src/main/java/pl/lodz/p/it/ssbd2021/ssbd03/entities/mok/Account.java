@@ -5,8 +5,10 @@ import lombok.Setter;
 import lombok.ToString;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.common.BaseEntity;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.wrappers.LanguageTypeWrapper;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.FirstName;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Name;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.SecondName;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -53,13 +55,13 @@ public class Account extends BaseEntity {
 
     @Getter
     @Setter
-    @Name
+    @FirstName
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
     @Getter
     @Setter
-    @Name
+    @SecondName
     @Column(name = "second_name", nullable = false)
     private String secondName;
 

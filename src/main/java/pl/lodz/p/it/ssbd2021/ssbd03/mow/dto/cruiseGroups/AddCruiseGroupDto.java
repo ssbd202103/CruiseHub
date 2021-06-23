@@ -4,6 +4,7 @@ import lombok.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.CruiseAddressDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.CruisePictureDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.CompanyName;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.CruiseGroupName;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
@@ -18,21 +19,24 @@ import java.util.List;
 public class AddCruiseGroupDto {
     @CompanyName
     private String companyName;
+
+    @CruiseGroupName
     @NotEmpty
     private String name;
 
     @Positive
     @NotNull
     private long numberOfSeats;
+
     @Positive
     @NotNull
     private Double price;
+
     @Valid
     private CruiseAddressDto cruiseAddress;
 
     private List<CruisePictureDto> cruisePictures;
+
     @NotEmpty
     private String description;
-
-
 }

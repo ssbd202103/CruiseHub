@@ -7,8 +7,10 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.FirstName;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Name;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.SecondName;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
@@ -22,10 +24,10 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 @Data
 @NoArgsConstructor
 public class AccountDetailsViewDto implements SignableEntity {
-    @Name
+    @FirstName
     private String firstName;
 
-    @Name
+    @SecondName
     private String secondName;
 
     private boolean darkMode;

@@ -15,6 +15,12 @@ import Popup from "../../PopupRecaptcha";
 import {useSnackbarQueue} from "../../pages/snackbar";
 import useHandleError from "../../errorHandler";
 import PopupAcceptAction from "../../PopupAcceptAction";
+import {
+    CITY_REGEX,
+    COUNTRY_REGEX, HOUSE_STREET_NUMBER_REGEX,
+    POST_CODE_REGEX,
+    STREET_REGEX
+} from "../../regexConstants";
 
 export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: ChangeDataComponentProps) {
     const {t} = useTranslation()
@@ -31,6 +37,12 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
     const [postalCode, setPostalCode] = useState(address.street)
     const [city, setCity] = useState(address.city)
     const [country, setCountry] = useState(address.country)
+
+    const [streetRegexError, setStreetRegexError] = useState(false)
+    const [houseNumberRegexError, setHouseNumberRegexError] = useState(false)
+    const [postalCodeRegexError, setPostalCodeRegexError] = useState(false)
+    const [cityRegexError, setCityRegexError] = useState(false)
+    const [countryRegexError, setCountryRegexError] = useState(false)
 
     const [alterTypeAdr, setAlterTypeAdr] = useState('')
     const [alteredByAdr, setAlteredByAdr] = useState('')
@@ -49,7 +61,6 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
         setPostalCode(address.postalCode)
         setCity(address.city)
         setCountry(address.country)
-
     }
 
     const handleCancel = () => {
@@ -62,13 +73,22 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
         setMetadata(state => !state)
     }
 
-    async function verifyCallback() {
-        setButtonPopup(false)
-        if (!houseNumber || !street || !postalCode || !city || !country) {
+    const handleConfirm = async () => {
+        setHouseNumberRegexError(!HOUSE_STREET_NUMBER_REGEX.test(houseNumber))
+        setStreetRegexError(!STREET_REGEX.test(street))
+        setPostalCodeRegexError(!POST_CODE_REGEX.test(postalCode))
+        setCityRegexError(!CITY_REGEX.test(city))
+        setCountryRegexError(!COUNTRY_REGEX.test(country))
+        if (!HOUSE_STREET_NUMBER_REGEX.test(houseNumber) || !STREET_REGEX.test(street) || !POST_CODE_REGEX.test(postalCode) || !CITY_REGEX.test(city) || !COUNTRY_REGEX.test(country)) {
             handleError('error.fields')
             return
+        } else {
+            setButtonPopupAcceptAction(true)
         }
+    }
 
+    async function verifyCallback() {
+        setButtonPopup(false)
 
         changeClientAddress({
             houseNumber,
@@ -85,10 +105,33 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
             showSuccess(t('successful action'))
             onConfirm()
         }).catch(error => {
-            handleErase()
             const message = error.response.data
             handleError(message, error.response.status)
-            onCancel()
+            for (let messageArray of Object.values(message.errors)) {
+                for (const error of messageArray as Array<String>) {
+                    switch(error) {
+                        case 'error.size.street':
+                        case 'error.regex.street':
+                            setStreetRegexError(true)
+                            break
+                        case 'error.regex.houseNumber':
+                            setHouseNumberRegexError(true)
+                            break
+                        case 'error.size.city':
+                        case 'error.regex.city':
+                            setCityRegexError(true)
+                            break
+                        case 'error.size.postCode':
+                        case 'error.regex.postCode':
+                            setPostalCodeRegexError(true)
+                            break
+                        case 'error.size.country':
+                        case 'error.regex.country':
+                            setCountryRegexError(true)
+                            break
+                    }
+                }
+            }
         });
     }
 
@@ -128,12 +171,12 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
                         <p>{address.houseNumber}</p>
                     </div>
                     <div>
-                        <h4>{t("postal code")}</h4>
-                        <p>{address.postalCode}</p>
-                    </div>
-                    <div>
                         <h4>{t("city")}</h4>
                         <p>{address.city}</p>
+                    </div>
+                    <div>
+                        <h4>{t("postal code")}</h4>
+                        <p>{address.postalCode}</p>
                     </div>
                     <div>
                         <h4>{t("country")}</h4>
@@ -149,44 +192,54 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
                 <div>
                     <DarkedTextField
                         type="text"
-                        label={t("street")}
+                        label={t("street") + ' *'}
                         placeholder={t("streetExample")}
                         value={street}
                         onChange={event => {
                             setStreet(event.target.value)
-                        }}/>
+                            setStreetRegexError(!STREET_REGEX.test(event.target.value))
+                        }}
+                        regexError={streetRegexError}/>
                     <DarkedTextField
                         type="text"
-                        label={t("house number")}
+                        label={t("house number") + ' *'}
                         placeholder={t("houseNumberExample")}
                         value={houseNumber}
                         onChange={event => {
                             setHouseNumber(event.target.value)
-                        }}/>
+                            setHouseNumberRegexError(!HOUSE_STREET_NUMBER_REGEX.test(event.target.value))
+                        }}
+                        regexError={houseNumberRegexError}/>
                     <DarkedTextField
                         type="text"
-                        label={t("postal code")}
-                        placeholder={t("postalCodeExample")}
-                        value={postalCode}
-                        onChange={event => {
-                            setPostalCode(event.target.value)
-                        }}/>
-                    <DarkedTextField
-                        type="text"
-                        label={t("city")}
+                        label={t("city") + ' *'}
                         placeholder={t("cityExample")}
                         value={city}
                         onChange={event => {
                             setCity(event.target.value)
-                        }}/>
+                            setCityRegexError(!CITY_REGEX.test(event.target.value))
+                        }}
+                        regexError={cityRegexError}/>
                     <DarkedTextField
                         type="text"
-                        label={t("country")}
+                        label={t("postal code") + ' *'}
+                        placeholder={t("postalCodeExample")}
+                        value={postalCode}
+                        onChange={event => {
+                            setPostalCode(event.target.value)
+                            setPostalCodeRegexError(!POST_CODE_REGEX.test(event.target.value))
+                        }}
+                        regexError={postalCodeRegexError}/>
+                    <DarkedTextField
+                        type="text"
+                        label={t("country") + ' *'}
                         placeholder={t("countryExample")}
                         value={country}
                         onChange={event => {
                             setCountry(event.target.value)
-                        }}/>
+                            setCountryRegexError(!COUNTRY_REGEX.test(event.target.value))
+                        }}
+                        regexError={countryRegexError}/>
                 </div>
                 <Popup trigger={buttonPopup} setTrigger={setButtonPopup}>
                     <div>
@@ -204,7 +257,7 @@ export default function ChangeAddress({open, onOpen, onConfirm, onCancel}: Chang
                     }}
                 />
                 <ConfirmMetadataCancelButtonGroup
-                    onConfirm={()=>setButtonPopupAcceptAction(true)}
+                    onConfirm={handleConfirm}
                     onPress={handleMetadata}
                     onCancel={handleCancel} />
                 <Grid item style={{display: metadata ? "block" : "none"}} className={styles['change-item']}>

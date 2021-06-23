@@ -9,8 +9,10 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.FirstName;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Name;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.SecondName;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -29,10 +31,10 @@ public class AccountDtoForList implements SignableEntity {
     @Login
     private String login;
 
-    @Name
+    @FirstName
     private String firstName;
 
-    @Name
+    @SecondName
     private String secondName;
 
     @Email(message = REGEX_INVALID_EMAIL)
@@ -52,7 +54,7 @@ public class AccountDtoForList implements SignableEntity {
     @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
     private String etag;
 
-    public AccountDtoForList(@Login String login, @Name String firstName, @Name String secondName, @Email(message = REGEX_INVALID_EMAIL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
+    public AccountDtoForList(@Login String login, @FirstName String firstName, @SecondName String secondName, @Email(message = REGEX_INVALID_EMAIL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
             String email, @NotNull(message = CONSTRAINT_NOT_NULL) boolean active, @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR) long version, @NotNull(message = CONSTRAINT_NOT_NULL) Set<AccessLevelType> accessLevels, String etag) {
         this.login = login;
         this.firstName = firstName;
@@ -70,7 +72,7 @@ public class AccountDtoForList implements SignableEntity {
         return login + "." + version;
     }
 
-    public AccountDtoForList(@Login String login, @Name String firstName, @Name String secondName, @Email(message = REGEX_INVALID_EMAIL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
+    public AccountDtoForList(@Login String login, @FirstName String firstName, @SecondName String secondName, @Email(message = REGEX_INVALID_EMAIL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
             String email, @NotNull(message = CONSTRAINT_NOT_NULL) boolean active, @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR) long version, @NotNull(message = CONSTRAINT_NOT_NULL) Set<AccessLevelType> accessLevels) throws BaseAppException {
         this.login = login;
         this.firstName = firstName;

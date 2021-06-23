@@ -6,8 +6,10 @@ import lombok.Setter;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.FirstName;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Name;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.SecondName;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -23,10 +25,10 @@ public class TestAccountDto implements SignableEntity {
     @Login
     private String login;
 
-    @Name
+    @FirstName
     private String firstName;
 
-    @Name
+    @SecondName
     private String secondName;
 
     @Email(message = REGEX_INVALID_EMAIL)

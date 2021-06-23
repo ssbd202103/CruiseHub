@@ -28,6 +28,7 @@ export default function CodeSignIn() {
 
     const codeAuth = async () => {
         if (code === "") {
+            setCodeEmptyError(true)
             handleError("invalid.form")
         } else {
             const json = JSON.stringify({
@@ -49,6 +50,9 @@ export default function CodeSignIn() {
             }).catch(error => {
                 const message = error.response.data
                 handleError(message, error.response.status)
+                if (message == 'error.code.incorrectCodeError') {
+                    setCodeEmptyError(true);
+                }
             })
         }
     }

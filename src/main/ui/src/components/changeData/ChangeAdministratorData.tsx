@@ -15,6 +15,7 @@ import Popup from "../../PopupRecaptcha";
 import {useSnackbarQueue} from "../../pages/snackbar";
 import useHandleError from "../../errorHandler";
 import PopupAcceptAction from "../../PopupAcceptAction";
+import {NAME_REGEX} from "../../regexConstants";
 
 export default function ChangeAdministratorData({open, onOpen, onConfirm, onCancel}: ChangeDataComponentProps) {
     const {t} = useTranslation()
@@ -34,6 +35,9 @@ export default function ChangeAdministratorData({open, onOpen, onConfirm, onCanc
     const [firstNameValue, setFirstNameValue] = useState(firstName)
     const [secondNameValue, setSecondNameValue] = useState(secondName)
 
+    const [firstNameRegexError, setFirstNameRegexError] = useState(false)
+    const [secondNameRegexError, setSecondNameRegexError] = useState(false)
+
     const [alterType, setAlterType] = useState('')
     const [alteredBy, setAlteredBy] = useState('')
     const [createdBy, setCreatedBy] = useState('')
@@ -52,6 +56,7 @@ export default function ChangeAdministratorData({open, onOpen, onConfirm, onCanc
     }
 
     const handleCancel = () => {
+        handleErase()
         setMetadata(false)
         onCancel()
     }
@@ -71,10 +76,22 @@ export default function ChangeAdministratorData({open, onOpen, onConfirm, onCanc
             showSuccess(t('successful action'))
             onConfirm()
         }).catch(error => {
-            handleErase()
             const message = error.response.data
             handleError(message, error.response.status)
-            onCancel()
+            for (let messageArray of Object.values(message.errors)) {
+                for (const error of messageArray as Array<String>) {
+                    switch(error) {
+                        case 'error.size.firstName':
+                        case 'error.regex.firstName':
+                            setFirstNameRegexError(true)
+                            break
+                        case 'error.size.secondName':
+                        case 'error.regex.secondName':
+                            setSecondNameRegexError(true)
+                            break
+                    }
+                }
+            }
         });
     }
 
@@ -131,20 +148,24 @@ export default function ChangeAdministratorData({open, onOpen, onConfirm, onCanc
                 <div>
                     <DarkedTextField
                         type="text"
-                        label={t("name")}
+                        label={t("name") + ' *'}
                         placeholder={t("nameExample")}
                         value={firstNameValue}
                         onChange={event => {
                             setFirstNameValue(event.target.value)
-                        }}/>
+                            setFirstNameRegexError(!NAME_REGEX.test(event.target.value))
+                        }}
+                        regexError={firstNameRegexError}/>
                     <DarkedTextField
                         type="text"
-                        label={t("surname")}
+                        label={t("surname") + ' *'}
                         placeholder={t("surnameExample")}
                         value={secondNameValue}
                         onChange={event => {
                             setSecondNameValue(event.target.value)
-                        }}/>
+                            setSecondNameRegexError(!NAME_REGEX.test(event.target.value))
+                        }}
+                        regexError={secondNameRegexError}/>
                 </div>
                 <Popup trigger={buttonPopup} setTrigger={setButtonPopup}>
                     <div>

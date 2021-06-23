@@ -216,7 +216,7 @@ create table cruise_addresses
 (
     id                   bigint                              not null,
     street               varchar(64)                         not null,
-    street_number        bigint check ((street_number >= 0) AND (street_number <= 999)),
+    street_number        varchar(6)                          not null,
     harbor_name          varchar(64)                         not null,
     city_name            varchar(64)                         not null,
     country_name         varchar(64)                         not null,
