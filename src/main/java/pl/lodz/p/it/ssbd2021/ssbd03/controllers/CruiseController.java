@@ -41,6 +41,9 @@ public class CruiseController {
 
     /**
      * Pobiera informację o wycieczce o podanym uuid
+     *
+     * @return obiekt reprezentujący wycieczke
+     * @throws BaseAppException wyjątek rzucany w razie nie znależenia encji
      */
     @GET
     @Path("/get-cruise/{uuid}")
