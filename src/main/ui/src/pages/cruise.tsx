@@ -22,11 +22,17 @@ import {createRating, removeRating} from "../Services/ratingService";
 import useHandleError from "../errorHandler";
 import store from "../redux/store";
 
+function useForceUpdate() {
+    const [value, setValue] = useState(0); // integer state
+    return () => setValue(value => value + 1); // update the state to force render
+}
+
 export default function Cruise() {
     const {id} = useParams<{ id: string }>();
 
     const login = useSelector(selectLogin);
     const activeAccessLevel = useSelector(selectActiveAccessLevel);
+    const forceUpdate = useForceUpdate();
 
     const {t} = useTranslation();
     const showSuccess = useSnackbarQueue('success')
@@ -142,7 +148,25 @@ export default function Cruise() {
     }
 
     const addAttraction = (uuid: string) => {
-        selectedAttractions.push(uuid)
+        let index = selectedAttractions.indexOf(uuid);
+        if (index === -1) {
+            selectedAttractions.push(uuid)
+            setSelectedAttractions(selectedAttractions)
+        }
+        forceUpdate()
+    }
+
+    const deleteAttraction = (uuid: string) => {
+        let index = selectedAttractions.indexOf(uuid);
+        if (index !== -1) {
+            selectedAttractions.splice(index, 1);
+        }
+        forceUpdate()
+    }
+
+    const isAttractionAdded = (uuid: string) => {
+        let index = selectedAttractions.indexOf(uuid);
+        return index !== -1
     }
 
     return (
@@ -258,7 +282,12 @@ export default function Cruise() {
                                             </div>
                                         </CardContent>
                                         <CardActions>
-                                            <RoundedButton color="yellow" onClick={() => addAttraction(uuid)}>{t('take')}</RoundedButton>
+                                            { selectedAttractions.includes(uuid)
+                                                ? <RoundedButton color="pink"
+                                                                 onClick={() => deleteAttraction(uuid)}>{t('delete.attraction')}</RoundedButton>
+                                                : <RoundedButton color="yellow"
+                                                                 onClick={() => addAttraction(uuid)}>{t('add.attraction')}</RoundedButton>
+                                            }
                                         </CardActions>
                                     </Card>
                                 ))
