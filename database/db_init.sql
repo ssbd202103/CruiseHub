@@ -155,7 +155,7 @@ values (-3, '45', 'wolnosci', '92-300', 'Aleksandrów', 'Polska', now(), now(), 
 insert into companies(id, name, address_id, phone_number, nip, creation_date_time, last_alter_date_time, alter_type_id,
                       created_by_id,
                       altered_by_id, version)
-values (-1, 'FirmaJez', 1, '604203145', 1265485965, now(), now(), -2, -1, -1, 0);
+values (-1, 'FirmaJez', -1, '604203145', 1265485965, now(), now(), -2, -1, -1, 0);
 insert into companies(id, name, address_id, phone_number, nip, creation_date_time, last_alter_date_time, alter_type_id,
                       created_by_id,
                       altered_by_id, version)
@@ -243,17 +243,17 @@ values (-3, 'PearlHarbort.jpg', 'https://studapp.it.p.lodz.pl:8403/static/media/
 insert into cruises_groups(id, company_id, name, number_of_seats, price, start_address_id, average_rating, active,
                            creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id,
                            version, uuid, description)
-values (-1, -1, 'Przygoda', 24, 52, 1, 2.5, true, now(), now(), -2, -1, -1, 0, 'dd0ea0ca-bbac-11eb-8529-0242ac130003',
+values (-1, -1, 'Przygoda', 24, 52, -1, 2.5, true, now(), now(), -2, -1, -1, 0, 'dd0ea0ca-bbac-11eb-8529-0242ac130003',
         'The most Beautiful tour');
 insert into cruises_groups(id, company_id, name, number_of_seats, price, start_address_id, average_rating, active,
                            creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id,
                            version, uuid, description)
-values (-2, -3, 'Santa Maria Beach', 42, 152, 2, 4.5, true, now(), now(), -2, -1, -1, 0,
+values (-2, -3, 'Santa Maria Beach', 42, 152, -2, 4.5, true, now(), now(), -2, -1, -1, 0,
         'dd1ea0ca-bbac-11eb-8529-0242ac130003', 'Beautiful tour');
 insert into cruises_groups(id, company_id, name, number_of_seats, price, start_address_id, average_rating, active,
                            creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id,
                            version, uuid, description)
-values (-3, -2, 'Beautiful Sandy Shores', 31, 502, 4, 5, true, now(), now(), -2, -1, -1, 0,
+values (-3, -2, 'Beautiful Sandy Shores', 31, 502, -4, 5, true, now(), now(), -2, -1, -1, 0,
         'dd2ea0ca-bbac-11eb-8529-0242ac130003', 'Beautiful Beautiful tour');
 --cruises_groups end
 --
@@ -434,9 +434,9 @@ values (-1,-3);
 --
 --reservation_attractions start
 insert into reservation_attractions (reservation_id, attraction_id)
-values (1, 1);
+values (-1, -1);
 insert into reservation_attractions (reservation_id, attraction_id)
-values (2, 2);
+values (-2, -2);
 insert into reservation_attractions (reservation_id, attraction_id)
-values (3, 3);
+values (-3, -3);
 --reservation_attractions end
