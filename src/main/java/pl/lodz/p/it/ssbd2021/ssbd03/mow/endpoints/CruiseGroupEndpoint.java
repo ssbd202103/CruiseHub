@@ -1,23 +1,26 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
 
+import pl.lodz.p.it.ssbd2021.ssbd03.common.dto.MetadataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints.BaseEndpoint;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.mappers.MetadataMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.CruiseGroupWithDetailsDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.AddCruiseGroupDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.changeCruiseGroupDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.ChangeCruiseGroupDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.converters.CruiseGroupMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.managers.CruiseGroupManagerLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,6 +29,7 @@ import java.util.UUID;
  */
 @Stateful
 @Interceptors(TrackingInterceptor.class)
+@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 public class CruiseGroupEndpoint extends BaseEndpoint implements CruiseGroupEndpointLocal {
 
     @Inject
@@ -42,7 +46,7 @@ public class CruiseGroupEndpoint extends BaseEndpoint implements CruiseGroupEndp
 
     @Override
     @RolesAllowed("changeCruiseGroup")
-    public void changeCruiseGroup(changeCruiseGroupDto changeCruiseGroupDto) throws BaseAppException {
+    public void changeCruiseGroup(ChangeCruiseGroupDto changeCruiseGroupDto) throws BaseAppException {
         CruiseAddress start_address = new CruiseAddress(changeCruiseGroupDto.getCruiseAddress().getStreet(), changeCruiseGroupDto.getCruiseAddress().getStreetNumber(),
                 changeCruiseGroupDto.getCruiseAddress().getHarborName(), changeCruiseGroupDto.getCruiseAddress().getCityName(),
                 changeCruiseGroupDto.getCruiseAddress().getCountryName());
@@ -87,5 +91,11 @@ public class CruiseGroupEndpoint extends BaseEndpoint implements CruiseGroupEndp
             res.add(CruiseGroupMapper.toCruiseGroupWithDetailsDto(cruiseGroup,cruise));
         }
       return res;
+    }
+
+    @RolesAllowed("authenticatedUser")
+    @Override
+    public MetadataDto getCruiseGroupMetadata(UUID uuid) throws BaseAppException {
+        return MetadataMapper.toMetadataDto(cruiseGroupManager.findByUUID(uuid));
     }
 }

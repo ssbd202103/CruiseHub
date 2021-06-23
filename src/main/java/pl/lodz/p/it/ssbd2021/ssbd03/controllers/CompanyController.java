@@ -1,6 +1,8 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.common.dto.MetadataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.MapperException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.BusinessWorkerDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.companies.AddCompanyDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.companies.CompanyLightDto;
@@ -14,8 +16,9 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
+import java.util.UUID;
 
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 import static pl.lodz.p.it.ssbd2021.ssbd03.utils.TransactionRepeater.tryAndRepeat;
 
 @Path("/company")
@@ -66,6 +69,7 @@ public class CompanyController {
 
     /**
      * Metoda odpowiedzialna za dodanie firmy przez moderatora
+     *
      * @param addCompanyDto obiekt dto przechowujący informacje podane przez moderatora
      * @throws BaseAppException Bazowy wyjątek aplikacji rzucany w przypadku naruszenia zasad biznesowych
      */
@@ -74,5 +78,24 @@ public class CompanyController {
     @Consumes(MediaType.APPLICATION_JSON)
     public void addCompany(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid AddCompanyDto addCompanyDto) throws BaseAppException {
         tryAndRepeat(companyEndpoint, () -> companyEndpoint.addCompany(addCompanyDto));
+    }
+
+    /**
+     * Pobiera metadane firmy
+     *
+     * @param nip nip firmy wybranej do metadanych
+     * @return Reprezentacja DTO metadanych
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
+    @GET
+    @Path("/metadata/{nip}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public MetadataDto getCompanyMetadata(@PathParam("nip") String nip) throws BaseAppException {
+        try {
+            long companyNIP = Long.parseLong(nip);
+            return tryAndRepeat(companyEndpoint, () -> companyEndpoint.getCompanyMetadata(companyNIP));
+        } catch (NumberFormatException e) {
+            throw new MapperException(MAPPER_LONG_PARSE);
+        }
     }
 }

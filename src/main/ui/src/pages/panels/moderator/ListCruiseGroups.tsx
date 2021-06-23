@@ -219,6 +219,10 @@ function Row(props: CruiseData) {
                                             backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                             color: `var(--${!darkMode ? 'dark' : 'white-light'}`
                                         }}>{t("deactivate")}</TableCell>
+                                        <TableCell align="center" style={{
+                                            backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                            color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                                        }}>{t("metadata")}</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -233,7 +237,7 @@ function Row(props: CruiseData) {
                                             <TableCell align="center"
                                                        style={style}><ActiveIcon active={cruise.published} /></TableCell>
                                             <TableCell align="center">
-                                                <Link to={`attractions/${cruise.uuid}`}><Button className={buttonClass.root}>{t("attractions")}</Button></Link>
+                                                <Link to={`attractions/${cruise.uuid}`}><RoundedButton color="blue" className={buttonClass.root}>{t("attractions")}</RoundedButton></Link>
                                             </TableCell>
                                                 <React.Fragment>
                                                     <TableCell align="center">
@@ -248,6 +252,13 @@ function Row(props: CruiseData) {
                                                             setButtonPopupAcceptAction(true)
                                                         }
                                                         }>{t("deactivate")}</RoundedButton>
+                                                    </TableCell>
+                                                    <TableCell align="center">
+                                                        <Link to={`cruise/metadata/${cruise.uuid}`}>
+                                                            <RoundedButton color={"green"}
+                                                                           className={buttonClass.root}>
+                                                                {t("metadata")}</RoundedButton>
+                                                        </Link>
                                                     </TableCell>
                                                 </React.Fragment>
                                         </TableRow>

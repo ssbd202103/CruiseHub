@@ -98,6 +98,16 @@ public class CompanyFacadeMow extends AbstractFacade<Company> {
             throw FacadeException.noSuchElement();
         }
     }
+    @PermitAll //TODO double check rolesAllowed for this method
+    public Company findByNIP(long nip) throws BaseAppException {
+        TypedQuery<Company> tq = em.createNamedQuery("Company.findByNIP", Company.class);
+        tq.setParameter("nip", nip);
+        try {
+            return tq.getSingleResult();
+        } catch (NoResultException e) {
+            throw FacadeException.noSuchElement();
+        }
+    }
 
 
 }

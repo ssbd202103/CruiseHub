@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.common.dto.MetadataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.ControllerException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
@@ -114,7 +115,7 @@ public class CruiseController {
     @POST
     @Path("/reserve")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void createReservation(CreateReservationDto reservationDto) throws BaseAppException {
+    public void createReservation(@Valid CreateReservationDto reservationDto) throws BaseAppException {
         tryAndRepeat(reservationEndpoint, () -> reservationEndpoint.createReservation(reservationDto));
     }
 
@@ -128,7 +129,7 @@ public class CruiseController {
     @DELETE
     @Path("/cancelReservation/{reservationUUID}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void cancelReservation(@PathParam("reservationUUID") UUID reservationUUID) throws BaseAppException {
+    public void cancelReservation(@PathParam("reservationUUID") UUID reservationUUID) throws BaseAppException { //todo change UUID to String and handle parsing exception
         tryAndRepeat(reservationEndpoint, () -> reservationEndpoint.cancelReservation(reservationUUID));
     }
 
@@ -182,10 +183,30 @@ public class CruiseController {
     @PUT
     @Path("/publish")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void publishCruise(PublishCruiseDto publishCruiseDto,
+    public void publishCruise(@Valid PublishCruiseDto publishCruiseDto,
                               @HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL)
                               @NotEmpty(message = CONSTRAINT_NOT_EMPTY) @Valid String etag) throws BaseAppException {
         checkEtagIntegrity(publishCruiseDto, etag);
         tryAndRepeat(cruiseEndpoint, () -> cruiseEndpoint.publishCruise(publishCruiseDto));
     }
+
+    /**
+     * Pobiera metadane wycieczki
+     *
+     * @param uuid UUID wycieczki wybranej do metadanych
+     * @return Reprezentacja DTO metadanych
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
+    @GET
+    @Path("/metadata/{uuid}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public MetadataDto getCruiseMetadata(@PathParam("uuid") String uuid) throws BaseAppException {
+        try{
+            UUID convertedUUID = UUID.fromString(uuid);
+            return tryAndRepeat(cruiseEndpoint, () -> cruiseEndpoint.getCruiseMetadata(convertedUUID));
+        }catch (IllegalArgumentException e) {
+            throw new MapperException(MAPPER_UUID_PARSE);
+        }
+    }
+
 }

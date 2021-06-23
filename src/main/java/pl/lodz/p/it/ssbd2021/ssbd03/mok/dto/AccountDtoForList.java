@@ -43,7 +43,7 @@ public class AccountDtoForList implements SignableEntity {
 
     private boolean active;
 
-    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
+    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO)
     private long version;
 
     @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
@@ -53,7 +53,7 @@ public class AccountDtoForList implements SignableEntity {
     private String etag;
 
     public AccountDtoForList(@Login String login, @Name String firstName, @Name String secondName, @Email(message = REGEX_INVALID_EMAIL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
-            String email, @NotNull(message = CONSTRAINT_NOT_NULL) boolean active, @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR) long version, @NotNull(message = CONSTRAINT_NOT_NULL) Set<AccessLevelType> accessLevels, String etag) {
+            String email, @NotNull(message = CONSTRAINT_NOT_NULL) boolean active, @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO) long version, @NotNull(message = CONSTRAINT_NOT_NULL) Set<AccessLevelType> accessLevels, String etag) {
         this.login = login;
         this.firstName = firstName;
         this.secondName = secondName;
@@ -71,7 +71,7 @@ public class AccountDtoForList implements SignableEntity {
     }
 
     public AccountDtoForList(@Login String login, @Name String firstName, @Name String secondName, @Email(message = REGEX_INVALID_EMAIL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
-            String email, @NotNull(message = CONSTRAINT_NOT_NULL) boolean active, @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR) long version, @NotNull(message = CONSTRAINT_NOT_NULL) Set<AccessLevelType> accessLevels) throws BaseAppException {
+            String email, @NotNull(message = CONSTRAINT_NOT_NULL) boolean active, @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO) long version, @NotNull(message = CONSTRAINT_NOT_NULL) Set<AccessLevelType> accessLevels) throws BaseAppException {
         this.login = login;
         this.firstName = firstName;
         this.secondName = secondName;

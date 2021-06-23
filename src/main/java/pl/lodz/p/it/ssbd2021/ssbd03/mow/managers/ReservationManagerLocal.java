@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.managers;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Attraction;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Reservation;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 
@@ -61,4 +62,13 @@ public interface ReservationManagerLocal {
      * @throws BaseAppException bazowy wyjątek aplikacji
      */
     List<Reservation> getClientReservations() throws BaseAppException;
+
+    /**
+     * Pobiera rezerwacje o danym uuid
+     *
+     * @param uuid uuid rezerwacji
+     * @return zwraca informacje o rezerwacji
+     * @throws BaseAppException wyjątek wyrzucany w razie nie znależenia atrakcji
+     */
+    Reservation findByUUID(UUID uuid) throws BaseAppException;
 }

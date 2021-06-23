@@ -80,8 +80,8 @@ public class I18n {
     public static final String EMAIL_RESERVED_ERROR = "error.database.emailReserved";
     public static final String USER_NOT_EXISTS_ERROR = "error.database.userNotExists";
     public static final String CONSTRAINT_VIOLATION_ERROR = "error.constraintViolation";
-    public static final String CONSTRAINT_POSITIVE_ERROR = "error.constraint.positive";
-    public static final String CONSTRAINT_POSITIVE_OR_ZERO_ERROR = "error.constraint.positiveOrZero";
+    public static final String CONSTRAINT_POSITIVE = "error.constraint.positive";
+    public static final String CONSTRAINT_POSITIVE_OR_ZERO = "error.constraint.positiveOrZero";
     public static final String CONSTRAINT_NOT_EMPTY = "error.constraint.notEmpty";
     public static final String CONSTRAINT_NOT_NULL = "error.constraint.notNull";
     public static final String APP_FORBIDDEN = "error.forbidden";
@@ -113,13 +113,14 @@ public class I18n {
     public static final String ACCESS_LEVEL_DEACTIVATE_CLIENT_BODY = "account.accessLevels.deactivateClient.body";
     public static final String ACCESS_LEVEL_REACTIVATE_CLIENT_SUBJECT = "account.accessLevels.reactivateClient.subject";
     public static final String ACCESS_LEVEL_REACTIVATE_CLIENT_BODY = "account.accessLevels.reactivateClient.body";
-    public static final String CRUISE_GROUP_NO_ACTIVE = "error.cruiseGroup.no.active";
+    public static final String CRUISE_GROUP_INACTIVE = "error.cruiseGroup.no.active";
     public static final String START_DATE_BEFORE_CURRENT_DATE = "error.startDate.before.currentDate";
     public static final String START_DATE_AFTER_END_DATE = "error.startDate.after.endDate";
     public static final String CRUISE_MAPPER_DATE_PARSE = "error.cruise.mapper.data.parse";
     public static final String CRUISE_MAPPER_UUID_PARSE = "error.cruise.mapper.uuid.parse";
     public static final String RESERVATION_MAPPER_UUID_PARSE = "error.reservation.mapper.uuid.parse";
     public static final String MAPPER_UUID_PARSE = "error.mapper.uuid.parse";
+    public static final String MAPPER_LONG_PARSE = "error.mapper.long.parse";
     public static final String NO_SEATS_AVAILABLE = "reservation.noSeats";
     public static final String RATING_MAPPER_UUID_PARSE = "rating.mapper.uuid.parse";
     public static final String NOT_YOURS_CRUISE = "error.cruise.not.yours";
@@ -143,6 +144,7 @@ public class I18n {
     public static final String CANNOT_EDIT_THIS_CRUISE = "cruise.cannot.edit";
     public static final String CANNOT_BLOCK_THIS_CRUISE = "cruise.cannot.block";
     public static final String CANNOT_CANCEL_STARTED_CRUISE = "cruise.cannot.cancel.started";
+    public static final String CANNOT_BOOK_STARTED_CRUISE = "cruise.cannot.book.started";
     public static final String RATING_EXISTS = "rating.exists";
 
     private ResourceBundle bundle;

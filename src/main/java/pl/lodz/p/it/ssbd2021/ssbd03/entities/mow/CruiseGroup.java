@@ -12,7 +12,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -73,13 +72,13 @@ public class CruiseGroup extends BaseEntity {
 
     @Getter
     @Setter
-    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
+    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO)
     @Column(name = "number_of_seats")
     private long numberOfSeats;
 
     @Getter
     @Setter
-    @Positive(message = CONSTRAINT_POSITIVE_ERROR)
+    @Positive(message = CONSTRAINT_POSITIVE)
     @Column(name = "price")
     private Double price;
 
@@ -98,7 +97,7 @@ public class CruiseGroup extends BaseEntity {
 
     @Getter
     @Setter
-    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
+    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO)
     @Column(name = "average_rating")
     private Double averageRating;
 

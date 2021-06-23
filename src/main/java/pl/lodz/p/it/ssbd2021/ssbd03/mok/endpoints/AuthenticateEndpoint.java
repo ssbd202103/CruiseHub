@@ -2,7 +2,9 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints;
 
 
 import pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints.BaseEndpoint;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AuthenticateDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.managers.AccountManagerLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
@@ -41,13 +43,13 @@ public class AuthenticateEndpoint extends BaseEndpoint implements AuthenticateEn
 
     @PermitAll
     @Override
-    public void sendAuthenticationCodeEmail(String login) throws BaseAppException {
-        accountManager.sendAuthenticationCodeEmail(login);
+    public void sendAuthenticationCodeEmail(AuthenticateDto auth) throws BaseAppException {
+        accountManager.sendAuthenticationCodeEmail(auth.getLogin(), auth.getDarkMode(), LanguageType.valueOf(auth.getLanguage()));
     }
 
     @PermitAll
     @Override
-    public String authWCodeUpdateCorrectAuthenticateInfo(String login, String code, String IpAddr, LocalDateTime time) throws BaseAppException{
+    public String authWCodeUpdateCorrectAuthenticateInfo(String login, String code, String IpAddr, LocalDateTime time) throws BaseAppException {
         return accountManager.authWCodeUpdateCorrectAuthenticateInfo(login, code, IpAddr, time);
     }
 

@@ -166,6 +166,7 @@ const resources = {
             "lastIncorrectAuthenticationLogicalAddress": "Adres IP ostatniej niepoprawnej autoryzacji:",
             "numberOfAuthenticationFailures": "Liczba niepoprawnych autoryzacji:",
             "version": "Wersja:",
+            "language": "Język",
             //cruisecard
             "cruiseExample": "Rejs po Morzu Śródziemnym",
             "createCruiseGroup": "Stwórz nową grupę wycieczek",
@@ -173,6 +174,8 @@ const resources = {
             //change language
             "changeLanguage": "Zmień język",
             //errors
+            //TODO wyjątek z niepowodszeniem parsowania
+            "error.mapper.long.parse": "Niepowodzenie parsowania",
             "error.facade.noSuchElement": "Nie znaleziono elementu w bazie danych",
             "error.security.notAuthorized": "Brak uprawnień do wykonania operacji",
             "error.account.accessLevels.alreadyAssigned": "Poziom dostępu jest już przydzielony do konta",
@@ -224,6 +227,7 @@ const resources = {
             "companies_nip_unique_constraint": "Firma o podanym numerze NIP znajduje się już w bazie danych",
             "companies_name_unique_constraint": "Firma o podanej nazwie znajduje się już w bazie danych",
             "cruise.cannot.cancel.started": "Nie możesz anulować wycieczki, która się już rozpoczęła",
+            "cruise.cannot.book.started": "Nie możesz zarezerwować wycieczki, która się już rozpoczęła",
 
             //auth errors
             "auth.incorrect.login": "Błąd logowania",
@@ -288,6 +292,7 @@ const resources = {
             "/accounts/ratings": "Oceny",
             "/company/business-workers": "Pracownicy firmy",
             "/company": "Firma",
+            "/profile/ratings": "Oceny",
 
             'yes': 'Tak',
             'no': 'Nie',
@@ -416,6 +421,9 @@ const resources = {
             "clientHomePage": "Witaj w panelu klienta.\nW tym panelu możesz przeglądać swoje rezerwacje wycieczek oraz oceny dla wycieczek",
             "business_workerHomePage":"Witaj w panelu pracownika firmy.\nW tym panelu możesz przeglądać, dodawać oraz modyfikować wycieczki i grupy wycieczek",
 
+            'filterCruises': 'Filtruj',
+            'filterByLowerPriceCruises': "Sortuj po najniższej cenie",
+            'filterByHigherPrices': "Sortuj po najwyzszej cenie"
         }
     },
     EN: {
@@ -581,11 +589,13 @@ const resources = {
             "lastIncorrectAuthenticationLogicalAddress": "Last incorrect authentication IP Address:",
             "numberOfAuthenticationFailures": "Number of authentication failures:",
             "version": "Version:",
+            "language": "Language",
             //cruisecard
             "cruiseExample": "Cruise on the Mediterranean Sea",
             //change language
             "changeLanguage": "Change language",
             //errors
+            "error.mapper.long.parse": "Failed parsing",
             "error.facade.noSuchElement": "No such element found in the database",
             "error.security.notAuthorized": "Operation not authorized",
             "error.account.accessLevels.alreadyAssigned": "Access level already assigned to the account",
@@ -636,6 +646,7 @@ const resources = {
             "companies_nip_unique_constraint": "Company with said NIP already exists in the database",
             "companies_name_unique_constraint": "Company with said name already exists in the database",
             "cruise.cannot.cancel.started": "You cannot cancel a cruise that has started",
+            "cruise.cannot.book.started": "You cannot book a cruise that has started",
 
             //auth errors
             "auth.incorrect.login": "Login error",
@@ -699,6 +710,7 @@ const resources = {
             "/company": "Company",
             'accept.action': 'Do you want to do this action?',
             "/companies": "Companies",
+            "/profile/ratings": "Ratings",
 
             'yes': 'Yes',
             'no': 'No',
@@ -749,8 +761,8 @@ const resources = {
             "addPicture": "Add picture",
             "removePicture": "Remove Picture",
             "addCruise": "Add group",
-            "listCruiseGroup": "List cruises groups",
-            "createCruiseGroup": "Create new cruiseGroup",
+            "listCruiseGroup": "List cruise groups",
+            "createCruiseGroup": "Create new cruise group",
             "cruiseReserved": "Cruise booked",
             'no description': 'There are no description',
             'attractions': 'Attractions',
@@ -822,9 +834,12 @@ const resources = {
             "/unconfirmed-business-workers": "Manage workers",
             "adminHomePage": "Welcome to admin panel.\nIn here, you can manage accounts and cruise groups",
             "moderatorHomePage":"Welcome to moderator panel.\nIn here, you can list clients and cruise groups, and manage companies and workers",
-            "clientHomePage": "Welcome to client panel.\nIn here, you can view your cruise reservations and your rating of crusies",
-            "business_workerHomePage":"Wlecome to worker panel.\nIn here, you can view, add and edit cruises and crusies groups for your company",
+            "clientHomePage": "Welcome to client panel.\nIn here, you can view your cruise reservations and your rating of cruises",
+            "business_workerHomePage":"welcome to worker panel.\nIn here, you can view, add and edit cruises and cruise groups for your company",
 
+            'filterCruises': 'Filter',
+            'filterByLowerPriceCruises': "Sort at the lowest price",
+            'filterByHigherPrices': "Sort at the highest price"
         }
     }
 }

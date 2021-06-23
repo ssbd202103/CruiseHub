@@ -69,3 +69,13 @@ export function removeReservation(reservationUUID: string) {
         }
     })
 }
+export function getReservationMetadata(uuid:string){
+    const {token} = store.getState()
+
+    return axios.get(`/reservation/metadata/${uuid}`, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+
+}

@@ -2,23 +2,22 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.managers;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.common.I18n;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Attraction;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruiseGroup;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Rating;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.RatingExistsException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.AccountFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseGroupFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.RatingFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
 import javax.ejb.TransactionAttribute;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.SecurityContext;
-
 import java.util.List;
 import java.util.UUID;
 
@@ -29,14 +28,11 @@ import static javax.ejb.TransactionAttributeType.MANDATORY;
 @Interceptors(TrackingInterceptor.class)
 public class RatingManager extends BaseManagerMow implements RatingManagerLocal {
 
-    @Context
-    SecurityContext securityContext;
+    @Inject
+    private RatingFacadeMow ratingFacade;
 
     @Inject
-    RatingFacadeMow ratingFacade;
-
-    @Inject
-    CruiseGroupFacadeMow cruiseGroupFacadeMow;
+    private CruiseGroupFacadeMow cruiseGroupFacadeMow;
 
     @RolesAllowed("createRating")
     @Override
@@ -67,17 +63,19 @@ public class RatingManager extends BaseManagerMow implements RatingManagerLocal 
         ratingFacade.remove(r);
 
         CruiseGroup cruiseGroup = cruiseGroupFacadeMow.findByUUID(cruiseGroupUUID);
-        
+
         calculateAverageRating(cruiseGroup);
     }
 
     private void calculateAverageRating(CruiseGroup cruiseGroup) throws BaseAppException {
         List<Rating> ratings = ratingFacade.findByCruiseGroupUUID(cruiseGroup.getUuid());
-        Double avgRating = 0.0;
-        if (ratings.size() > 0)
+        double avgRating = 0.0;
+        if (ratings.size() > 0) {
             avgRating = ratings.stream().mapToDouble(Rating::getRating).sum() / ratings.size();
+        }
 
         cruiseGroup.setAverageRating(avgRating);
+        setUpdatedMetadata(cruiseGroup);
         cruiseGroupFacadeMow.edit(cruiseGroup);
     }
 
@@ -100,5 +98,11 @@ public class RatingManager extends BaseManagerMow implements RatingManagerLocal 
         ratingFacade.remove(rating);
         CruiseGroup cruiseGroup = cruiseGroupFacadeMow.findByUUID(cruiseGroupUUID);
         calculateAverageRating(cruiseGroup);
+    }
+
+    @RolesAllowed("authenticatedUser")
+    @Override
+    public Rating findByUuid(UUID uuid) throws FacadeException {
+        return ratingFacade.findRatingByUuid(uuid);
     }
 }

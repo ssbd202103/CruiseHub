@@ -19,6 +19,7 @@ import {
 } from "../../../Services/reservationService";
 import {useSnackbarQueue} from "../../snackbar";
 import PopupAcceptAction from "../../../PopupAcceptAction";
+import RoundedButton from "../../../components/RoundedButton";
 
 const useRowStyles = makeStyles({
     root: {

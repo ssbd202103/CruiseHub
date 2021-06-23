@@ -116,7 +116,7 @@ export default function ClientPanel() {
                     link: '/profile/ratings',
                     text: t('ratings'),
                     Icon: StarIcon,
-                    Component: () => (<ListOwnRatings/>)
+                    Component: ListOwnRatings
                 },
                 {
                     link: '/profile/settings',

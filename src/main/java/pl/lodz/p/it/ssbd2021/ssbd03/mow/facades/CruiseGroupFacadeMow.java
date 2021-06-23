@@ -13,6 +13,8 @@ import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -23,6 +25,7 @@ import java.util.UUID;
 
 @Stateless
 @Interceptors(TrackingInterceptor.class)
+@TransactionAttribute(TransactionAttributeType.MANDATORY)
 public class CruiseGroupFacadeMow extends AbstractFacade<CruiseGroup> {
 
     @PersistenceContext(unitName = "ssbd03mowPU")
@@ -44,7 +47,7 @@ public class CruiseGroupFacadeMow extends AbstractFacade<CruiseGroup> {
     }
 
     @Override
-    @RolesAllowed({"changeCruiseGroup", "deactivateCruiseGroup", "removeClientRating"})
+    @RolesAllowed({"changeCruiseGroup", "deactivateCruiseGroup", "removeClientRating","createRating"})
     public void edit(CruiseGroup entity) throws FacadeException { //TODo throws FacadeException {
         super.edit(entity);
     }

@@ -227,11 +227,13 @@ values (-3, '481d626f-d421-47dd-89ef-b41bc30aa36c', now(), now(), true, -3, now(
 insert into attractions(id, name, description, price, number_of_seats, has_free_spots, cruise_id, creation_date_time,
                         last_alter_date_time, alter_type_id, created_by_id,
                         altered_by_id, version, uuid)
-values (-1, 'Bungee2', 'Bungee jump22', 23, 20, true, -1, now(), now(), -2, -1, -1, 0, 'e42ea0ca-bbac-11eb-8529-0242ac130003');
+values (-1, 'Bungee2', 'Bungee jump22', 23, 20, true, -1, now(), now(), -2, -1, -1, 0,
+        'e42ea0ca-bbac-11eb-8529-0242ac130003');
 insert into attractions(id, name, description, price, number_of_seats, has_free_spots, cruise_id, creation_date_time,
                         last_alter_date_time, alter_type_id, created_by_id,
                         altered_by_id, version, uuid)
-values (-2, 'Scuba Diving2', 'Scuba diving in the sea2', 223, 20, true, -2, now(), now(), -2, -1, -1, 0, 'e42e9fd0-bbac-11eb-8529-0242ac130003');
+values (-2, 'Scuba Diving2', 'Scuba diving in the sea2', 223, 20, true, -2, now(), now(), -2, -1, -1, 0,
+        'e42e9fd0-bbac-11eb-8529-0242ac130003');
 insert into attractions(id, name, description, price, number_of_seats, has_free_spots, cruise_id, creation_date_time,
                         last_alter_date_time, alter_type_id, created_by_id,
                         altered_by_id, version, uuid)
@@ -264,16 +266,16 @@ values (-3, 'ab3ea0ca-bbac-11eb-8529-0242ac130003', -2, 1, -3, 30, now(), now(),
 --ratings start
 insert into ratings(id, account_id, cruise_group_id, rating, creation_date_time, last_alter_date_time, alter_type_id,
                     created_by_id,
-                    altered_by_id, version)
-values (-1, -2, -1, 3, now(), now(), -2, -1, -1, 0);
+                    altered_by_id, version, uuid)
+values (-1, -2, -1, 3, now(), now(), -2, -1, -1, 0, '4c6daca3-1000-4e48-a901-a4d0f9cb91e5');
 insert into ratings(id, account_id, cruise_group_id, rating, creation_date_time, last_alter_date_time, alter_type_id,
                     created_by_id,
-                    altered_by_id, version)
-values (-2, -1, -2, 4.5, now(), now(), -2, -1, -1, 0);
+                    altered_by_id, version, uuid)
+values (-2, -1, -2, 4.5, now(), now(), -2, -1, -1, 0, '4c6daca3-1000-4e48-a901-a4d0f9cb91e6');
 insert into ratings(id, account_id, cruise_group_id, rating, creation_date_time, last_alter_date_time, alter_type_id,
                     created_by_id,
-                    altered_by_id, version)
-values (-3, -1, -3, 5, now(), now(), -2, -1, -1, 0);
+                    altered_by_id, version, uuid)
+values (-3, -1, -3, 5, now(), now(), -2, -1, -1, 0, '4c6daca3-1000-4e48-a901-a4d0f9cb91e7');
 --ratings end
 --
 --

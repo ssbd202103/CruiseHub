@@ -12,11 +12,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.interceptor.Interceptors;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-import java.util.ArrayList;
+import javax.persistence.*;
 import java.util.List;
 import java.util.UUID;
 
@@ -55,24 +51,14 @@ public class ReservationFacadeMow extends AbstractFacade<Reservation> {
         }
     }
 
+    @RolesAllowed({"getWorkerCruiseReservations", "viewCruiseReservations", "createReservation"})
     public List<Reservation> findCruiseReservations(Cruise cruise) throws BaseAppException {
         TypedQuery<Reservation> tq = em.createNamedQuery("Reservation.findCruiseReservations", Reservation.class);
-        tq.setParameter("id", cruise.getId());
+        tq.setParameter("uuid", cruise.getUuid());
         try {
             return tq.getResultList();
-        } catch (NoResultException e) {
-            throw FacadeException.noSuchElement();
-        }
-    }
-
-    @RolesAllowed("createReservation")
-    public List<Reservation> findCruiseReservationsOrReturnEmptyList(long id) {
-        TypedQuery<Reservation> tq = em.createNamedQuery("Reservation.findCruiseReservations", Reservation.class);
-        tq.setParameter("id", id);
-        try {
-            return tq.getResultList();
-        } catch (Exception e) {
-            return new ArrayList<>();
+        } catch (PersistenceException exp) {
+            throw FacadeException.databaseOperation();
         }
     }
 
@@ -89,13 +75,13 @@ public class ReservationFacadeMow extends AbstractFacade<Reservation> {
     }
 
     @RolesAllowed("viewSelfReservations")
-    public List<Reservation> findReservationByLogin(String login) throws BaseAppException {
+    public List<Reservation> findReservationByLogin(String login) throws BaseAppException { //todo refactor
         TypedQuery<Reservation> tq = em.createNamedQuery("Reservation.findByLogin", Reservation.class);
         tq.setParameter("login", login);
         try {
             return tq.getResultList();
-        } catch (NoResultException e) {
-            throw FacadeException.noSuchElement();
+        } catch (PersistenceException exp) {
+            throw FacadeException.databaseOperation();
         }
     }
 

@@ -13,6 +13,8 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import java.util.UUID;
+
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.RATING_CONSTRAINT_ERROR;
 
@@ -22,7 +24,8 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.RATING_CONSTRAINT_ERROR;
         @NamedQuery(name = "Rating.findByCruiseGroupUUIDAndAccountLogin", query = "SELECT r FROM ratings r WHERE r.cruiseGroup.uuid=:uuid AND r.account.login=:login"),
         @NamedQuery(name = "Rating.findByUuidAndAccountLogin", query = "SELECT r FROM ratings r WHERE r.cruiseGroup.uuid =:uuid AND r.account.login=:login"),
         @NamedQuery(name = "Rating.findUserRatings", query = "SELECT r FROM ratings r WHERE r.account.login=:login"),
-        @NamedQuery(name = "Rating.countByCruiseGroupUUIDAndAccountLogin", query = "SELECT COUNT(r) FROM ratings r WHERE r.account.login=:login AND cruiseGroup.uuid=:uuid")
+        @NamedQuery(name = "Rating.countByCruiseGroupUUIDAndAccountLogin", query = "SELECT COUNT(r) FROM ratings r WHERE r.account.login=:login AND cruiseGroup.uuid=:uuid"),
+        @NamedQuery(name = "Rating.findByUuid", query = "SELECT r FROM ratings r WHERE r.uuid=:uuid"),
 })
 @ToString
 public class Rating extends BaseEntity {
@@ -57,12 +60,19 @@ public class Rating extends BaseEntity {
     @Column(name = "rating")
     private Double rating;
 
+    @Getter
+    @Setter
+    @NotNull(message = CONSTRAINT_NOT_NULL)
+    @Column(name = "uuid", nullable = false, unique = true, updatable = false)
+    private UUID uuid;
+
     public Rating(@NotNull(message = CONSTRAINT_NOT_NULL) Account account,
                   @NotNull(message = CONSTRAINT_NOT_NULL) CruiseGroup cruiseGroup,
                   @NotNull(message = CONSTRAINT_NOT_NULL) Double rating) {
         this.account = account;
         this.cruiseGroup = cruiseGroup;
         this.rating = rating;
+        this.uuid = UUID.randomUUID();
     }
 
     public Rating() {

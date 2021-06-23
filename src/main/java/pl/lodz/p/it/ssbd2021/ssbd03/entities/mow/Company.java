@@ -21,7 +21,9 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Company.NIP_UNIQUE_CONST
 
 @Entity(name = "companies")
 @NamedQueries({
-        @NamedQuery(name = "Company.findByName", query = "SELECT company FROM companies company WHERE company.name = :name")
+        @NamedQuery(name = "Company.findByName", query = "SELECT company FROM companies company WHERE company.name = :name"),
+        @NamedQuery(name = "Company.findByNIP", query = "SELECT company FROM companies company WHERE company.NIP = :nip")
+
 })
 @Table(uniqueConstraints = {
         @UniqueConstraint(columnNames = {"nip"}, name = NIP_UNIQUE_CONSTRAINT),

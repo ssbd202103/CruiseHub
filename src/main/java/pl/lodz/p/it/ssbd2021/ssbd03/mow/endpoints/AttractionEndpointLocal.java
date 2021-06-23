@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.common.dto.MetadataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints.TransactionalEndpoint;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.attractions.AddAttractionDto;
@@ -41,5 +42,21 @@ public interface AttractionEndpointLocal extends TransactionalEndpoint {
      */
     void editAttraction(EditAttractionDto editAttractionDto) throws BaseAppException;
 
+    /**
+     * Pobiera atrakcje wycieczki o danym uuid
+     *
+     * @param uuid uuid wycieczki
+     *@return zwraca liste atrakcji
+     * @throws BaseAppException wyjątek wyrzucany w razie nie znależenia atrakcji
+     */
     List<AttractionDto> getAttractionsByCruiseUUID(UUID uuid) throws BaseAppException;
+
+    /**
+     * Pobiera mewtadane atrakcji o danym uuid
+     *
+     * @param uuid uuid atrakcji
+     * @return zwraca informacje o atrakcje
+     * @throws BaseAppException wyjątek wyrzucany w razie nie znależenia atrakcji
+     */
+    MetadataDto getAttractionMetadata(UUID uuid) throws BaseAppException;
 }

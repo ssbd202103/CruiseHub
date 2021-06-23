@@ -77,6 +77,13 @@ function Row(props: RowProps) {
                     </RoundedButton>
                 </Link>
             </TableCell>
+            <TableCell style={style}>
+                <Link to={`/company/metadata/${row.nip}`}>
+                    <RoundedButton color="green" >
+                        {t("metadata")}
+                    </RoundedButton>
+                </Link>
+            </TableCell>
 
         </TableRow>
     );
@@ -176,6 +183,10 @@ const ListCompany = () => {
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`
                             }}>{t("show business workers")}</TableCell>
+                            <TableCell style={{
+                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                            }}>{t("metadata")}</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>

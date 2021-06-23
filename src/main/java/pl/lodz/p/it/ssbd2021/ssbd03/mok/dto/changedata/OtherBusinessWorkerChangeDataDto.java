@@ -7,7 +7,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.validators.PhoneNumber;
 
 import javax.validation.constraints.PositiveOrZero;
 
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_POSITIVE_OR_ZERO_ERROR;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_POSITIVE_OR_ZERO;
 
 @Getter
 @Setter
@@ -17,7 +17,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_POSITIVE_OR_ZE
 public class OtherBusinessWorkerChangeDataDto extends AbstractAccountDto {
     @PhoneNumber
     private String newPhoneNumber;
-    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
+    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO)
     private long accVersion;
 
     public OtherBusinessWorkerChangeDataDto(String login, long version, String newPhoneNumber, long accVersion) {

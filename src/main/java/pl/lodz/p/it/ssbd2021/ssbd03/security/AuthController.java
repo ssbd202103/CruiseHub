@@ -68,7 +68,7 @@ public class AuthController {
             }
             return Response.status(Response.Status.UNAUTHORIZED).entity(I18n.INCORRECT_PASSWORD).build();
         }
-       authEndpoint.sendAuthenticationCodeEmail(auth.getLogin());
+       authEndpoint.sendAuthenticationCodeEmail(auth);
         return Response.ok().build();
     }
 

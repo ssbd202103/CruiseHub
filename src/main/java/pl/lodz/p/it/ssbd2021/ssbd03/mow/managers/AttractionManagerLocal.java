@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.managers;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Attraction;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 
+import javax.annotation.security.PermitAll;
 import javax.ejb.Local;
 import java.util.List;
 import java.util.UUID;
@@ -54,4 +55,15 @@ public interface AttractionManagerLocal {
      * @throws BaseAppException wyjątek wyrzucany w razie nie znależenia atrakcji
      */
     List<Attraction> findByCruiseUUID(UUID uuid) throws BaseAppException;
+
+    /**
+     * Pobiera atrakcje o danym uuid
+     *
+     * @param uuid uuid atrakcji
+     * @return zwraca informacje o atrakcje
+     * @throws BaseAppException wyjątek wyrzucany w razie nie znależenia atrakcji
+     */
+    Attraction findByUUID(UUID uuid) throws BaseAppException;
+
+
 }

@@ -504,7 +504,7 @@ class AccountControllerIT {
         String adminToken = this.getAuthToken("rbranson", "abcABC123*");
         ClientForRegistrationDto client = getSampleClientForRegistrationDto();
         AccountDto account = registerClientAndGetAccountDto(client);
-        AuthenticateDto authInfoFalse = new AuthenticateDto(account.getLogin(), "Incorre2*ctPassword");
+        AuthenticateDto authInfoFalse = new AuthenticateDto(account.getLogin(), "Incorre2*ctPassword", true, "PL");
         for(int i=0;i<=5;i++) {
             Response responseFalse = given().relaxedHTTPSValidation().baseUri(authBaseUri).contentType("application/json").body(authInfoFalse).post("/sign-in");
         }

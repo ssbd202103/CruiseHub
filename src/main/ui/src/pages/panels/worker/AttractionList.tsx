@@ -64,6 +64,8 @@ export default function AttractionList() {
         {field: 'description', headerName: t('description'), flex: 1},
         {field: 'price', headerName: t('price'), flex: 1},
         {field: 'numberOfSeats', headerName: t('numberOfSeats'), flex: 1},
+        //tu button
+        //
         {
             field: '',
             renderHeader: params => <RoundedButton color="blue" onClick={() => {
@@ -116,6 +118,16 @@ export default function AttractionList() {
             handleError(t(message),error.response.data)
         })
     }
+    const handleMetadataAttraction = (uuid: string) => ()  =>{
+        deleteAttraction(uuid).then(res => {
+            showSuccess(t('successful action'))
+            getAttractions()
+        }).catch(error => {
+            const message = error.response.data
+            handleError(t(message),error.response.data)
+        })
+    }
+
 
     const handleEditAttraction = async () => {
         const json = {

@@ -385,6 +385,7 @@ public class AccountManager extends BaseManagerMok implements AccountManagerLoca
         tokenW.setUsed(true);
         this.tokenWrapperFacade.edit(tokenW);
         setUpdatedMetadataWithModifier(account, account);
+        accountFacade.edit(account);
         sendMail(account, ACTIVATE_ACCOUNT_SUBJECT, ACTIVATE_ACCOUNT_BODY);
     }
 
@@ -747,8 +748,12 @@ public class AccountManager extends BaseManagerMok implements AccountManagerLoca
 
     @PermitAll
     @Override
-    public void sendAuthenticationCodeEmail(String login) throws BaseAppException {
+    public void sendAuthenticationCodeEmail(String login, boolean darkMode, LanguageType languageType) throws BaseAppException {
         Account account = accountFacade.findByLogin(login);
+        account.setDarkMode(darkMode);
+        account.setLanguageType(accountFacade.getLanguageTypeWrapperByLanguageType(languageType));
+        accountFacade.edit(account);
+
         Locale locale = new Locale(account.getLanguageType().getName().name());
         String subject = i18n.getMessage(AUTH_CODE_EMAIL_SUBJECT, locale);
         String body = i18n.getMessage(AUTH_CODE_EMAIL_BODY, locale);

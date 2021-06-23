@@ -9,6 +9,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
+import javax.enterprise.context.RequestScoped;
 import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -67,6 +68,17 @@ public class RatingFacadeMow extends AbstractFacade<Rating> {
         tq.setParameter("login", login);
         tq.setParameter("uuid", uuid);
 
+        try {
+            return tq.getSingleResult();
+        } catch (NoResultException e) {
+            throw FacadeException.noSuchElement();
+        }
+    }
+
+    @RolesAllowed("authenticatedUser")
+    public Rating findRatingByUuid(UUID uuid) throws FacadeException {
+        TypedQuery<Rating> tq = em.createNamedQuery("Rating.findByUuid", Rating.class);
+        tq.setParameter("uuid", uuid);
         try {
             return tq.getSingleResult();
         } catch (NoResultException e) {
