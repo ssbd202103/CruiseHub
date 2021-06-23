@@ -414,6 +414,7 @@ const resources = {
             "error.attraction.edit.cruisePublished": "Nie można edytować atrakcji do opublikowanej wycieczki",
             "attractions read only": "Atrakcje wyświetlane w trybie odczytu - wycieczka jest już opublikowana",
             "/editCruise": "Edytuj wycieczkę",
+            "reservation.noSeats": "Brak miejsc na daną wycieczkę",
 
 
             "businessWorker.add.cruise.to.bad.company":"To konto nie należy do właściwej firmy",
@@ -778,6 +779,7 @@ const resources = {
             "numberPlaceHolder": "55",
             "harborName": "Harbor name",
             "harborPlaceHolder": " Srilanka port",
+            "reservation.noSeats": "No seats available for this cruise",
             "cityPlaceHolder": " London",
             "countryPlaceHolder": "Poland",
             "addPicture": "Add picture",
