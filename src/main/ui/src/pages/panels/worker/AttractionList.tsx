@@ -20,6 +20,7 @@ import {useSelector} from "react-redux";
 import {selectDarkMode, selectLanguage} from "../../../redux/slices/userSlice";
 import {makeStyles} from "@material-ui/styles";
 import PopupMetadata from "../../../PopupMetadata";
+import PopupAcceptAction from "../../../PopupAcceptAction";
 
 
 export default function AttractionList() {
@@ -87,6 +88,10 @@ export default function AttractionList() {
     const handleSelectedRow = (row: GridRowSelectedParams) => {
         setSelectedRow(row.data.id as string)
     }
+
+
+    const [buttonPopupAccept, setButtonPopupAccept] = useState(false);
+    const [id, setId] = useState("");
 
     const cols: GridColDef[] = [
         {field: 'name', headerName: t('attractionName'), flex: 1},
@@ -163,7 +168,11 @@ export default function AttractionList() {
                                 />
                                 <DeleteIcon
                                     className={styles.delete}
-                                    onClick={handleDeleteAttraction(params.row.id)}
+                                    onClick={() => {
+                                        setId(params.row.id)
+                                        setButtonPopupAccept(true)
+
+                                    }}
                                 />
                             </div>
                         )}
@@ -175,9 +184,11 @@ export default function AttractionList() {
     // Requests handler
     const handleDeleteAttraction = (uuid: string) => ()  =>{
         deleteAttraction(uuid).then(res => {
+            setButtonPopupAccept(false)
             showSuccess(t('successful action'))
             getAttractions()
             }).catch(error => {
+            setButtonPopupAccept(false)
             const message = error.response.data
             handleError(t(message),error.response.data)
         })
@@ -392,6 +403,13 @@ export default function AttractionList() {
                     />
                 </div>
             </Dialog>
+
+            <PopupAcceptAction
+                open={buttonPopupAccept}
+                onConfirm={handleDeleteAttraction(id)}
+                onCancel={() => {
+                    setButtonPopupAccept(false)
+                }}/>
         </>
     )
 }

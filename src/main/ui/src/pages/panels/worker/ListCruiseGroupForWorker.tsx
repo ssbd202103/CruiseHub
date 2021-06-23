@@ -354,6 +354,25 @@ function Row(props: CruiseData) {
     const [, forceUpdate] = useReducer(x => x + 1, 0);
 
     const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
+    const [buttonPopupAcceptActionCruiseGroup, setButtonPopupAcceptActionCruiseGroup] = useState(false);
+    const deactivateCruiseG = () => {
+         deactivateCruiseGroup({
+            uuid: group.uuid,
+            etag: group.etag,
+            version: group.version,
+            token: token
+        }).then(res => {
+             setButtonPopupAcceptActionCruiseGroup(false)
+
+             onChange().then(() => {
+                showSuccess(t('successful action'))
+            })
+        }).catch(error => {
+             setButtonPopupAcceptActionCruiseGroup(false)
+             const message = error.response.data
+            handleError(t(message), error.response.status)
+        })
+    }
 
     const handleConfirm = async ({uuid, etag, version}: DeactivateCruise) => {
         const {token} = store.getState();
@@ -454,19 +473,7 @@ function Row(props: CruiseData) {
                 <TableCell style={style}>
                     <RoundedButton
                         color="pink" onClick={() => {
-                        deactivateCruiseGroup({
-                            uuid: group.uuid,
-                            etag: group.etag,
-                            version: group.version,
-                            token: token
-                        }).then(res => {
-                            onChange().then(() => {
-                                showSuccess(t('successful action'))
-                            })
-                        }).catch(error => {
-                            const message = error.response.data
-                            handleError(t(message), error.response.status)
-                        })
+                       setButtonPopupAcceptActionCruiseGroup(true)
                     }}
                         disabled={!group.active}
                     >
@@ -769,6 +776,15 @@ function Row(props: CruiseData) {
                     </Box>
                 </div>
             </Dialog>
+
+            <PopupAcceptAction
+                open={buttonPopupAcceptActionCruiseGroup}
+                onConfirm={() => {
+                    deactivateCruiseG()
+                }}
+                onCancel={() => {
+                    setButtonPopupAcceptActionCruiseGroup(false)
+                }}/>
         </React.Fragment>
 
     );

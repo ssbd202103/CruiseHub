@@ -16,6 +16,7 @@ import ship3 from "../../../images/ship3.jpg";
 import {Link, useHistory} from "react-router-dom";
 import {CITY_REGEX, COUNTRY_REGEX, HOUSE_STREET_NUMBER_REGEX, NAME_REGEX, STREET_REGEX} from "../../../regexConstants";
 import styles from "../../../styles/auth.global.module.css";
+import PopupAcceptAction from "../../../PopupAcceptAction";
 
 export default function ChangeCruiseGroupData(){
     const {t} = useTranslation()
@@ -67,6 +68,8 @@ export default function ChangeCruiseGroupData(){
 
 
 }, [])
+
+    const [buttonPopupAcceptActionCruiseGroup, setButtonPopupAcceptActionCruiseGroup] = useState(false);
 
     const handleConfirm = async () => {
         setCruiseNameRegexError(!NAME_REGEX.test(cruiseName))
@@ -121,10 +124,12 @@ export default function ChangeCruiseGroupData(){
                 "If-Match": crusieGropData.etag,
                 "Authorization": `Bearer ${token}`
             }}).then(res => {
+                setButtonPopupAcceptActionCruiseGroup(false)
                 showSuccess(t('successful action'))
                 forceUpdate()
                 history.push('/listCruiseGroup')
         }).catch(error => {
+                setButtonPopupAcceptActionCruiseGroup(false)
                 const message = error.response.data
                 handleError(message, error.response.status)
                for (let messageArray of Object.values(message.errors)) {
@@ -383,10 +388,18 @@ export default function ChangeCruiseGroupData(){
 
             </Box>
             <RoundedButton
-                onClick={handleConfirm}
+                onClick={() => { setButtonPopupAcceptActionCruiseGroup(true)}}
                 style={{width: '50%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
                 color="pink"
             >{t("changeData")} </RoundedButton>
+            <PopupAcceptAction
+                open={buttonPopupAcceptActionCruiseGroup}
+                onConfirm={() => {
+                    handleConfirm()
+                }}
+                onCancel={() => {
+                    setButtonPopupAcceptActionCruiseGroup(false)
+                }}/>
         </div>
     )
 }
