@@ -50,7 +50,7 @@ const useStyles = makeStyles(theme => ({
 
 
 export interface DarkedTextFieldProps {
-    readonly type?: "text" | "email" | "password",
+    readonly type?: "text" | "email" | "password" | "number",
     readonly className?: string,
     readonly icon?: JSX.Element,
     readonly placeholder?: string,
@@ -65,7 +65,7 @@ export interface DarkedTextFieldProps {
 
 const DarkedTextField = (props: DarkedTextFieldProps) => {
         const inputStyle = {
-            fontFamily: "'Montserrat Alternates', sans-serif",
+            fontFamily: "'Montserrat', sans-serif",
             fontSize: '1.2rem',
             color: ''
         }

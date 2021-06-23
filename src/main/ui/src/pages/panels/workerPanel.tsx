@@ -15,7 +15,12 @@ import useHandleError from "../../errorHandler";
 import AccountsListIcon from "@material-ui/icons/PeopleAltRounded";
 import ListCompany from "./moderator/ListCompany";
 import AddCruiseGroup from "./worker/AddCruiseGroup";
-import ListCruiseGroup from "../../components/ListCruiseGroup";
+import ListCruiseGroup from "./worker/ListCruiseGroupForWorker"
+import AddCruise from "./worker/AddCruise"
+import ListReservationsForWorker from "./worker/ListReservationsForWokrersCruise";
+import ChangeCruiseGroup from "./worker/ChangeCruiseGroup"
+import AttractionList from "./worker/AttractionList";
+import WorkerHomePage from "../../components/WorkerHomePage";
 
 export default function WorkerPanel() {
     const {t} = useTranslation()
@@ -85,28 +90,22 @@ export default function WorkerPanel() {
             }}
             menu={[
                 {
-                    link: '/cruises',
-                    text: t('cruises'),
-                    Icon: CruiseIcon,
-                    Component: () => <></>
-                },
-                {
                     link: '/listCruiseGroup',
-                    Icon: AccountsListIcon,
+                    Icon: CruiseIcon,
                     text: t('listCruiseGroup'),
                     Component: ListCruiseGroup
-                },
-                {
-                    link: '/companies',
-                    Icon: AccountsListIcon,
-                    text: t('list companies'),
-                    Component: ListCompany
-                },{
+                }, {
                     link: '/addCruiseGroup',
                     text: t('createCruiseGroup'),
                     Icon: CreateIcon,
                     Component: AddCruiseGroup
 
+                },
+                {
+                    link: '/addCruise',
+                    text: t('createCruise'),
+                    Icon: CreateIcon,
+                    Component: AddCruise
                 },
                 {
                     link: '/settings',
@@ -117,25 +116,56 @@ export default function WorkerPanel() {
                             <ChangeBusinessWorkerData
                                 open={isDataEdit}
                                 onOpen={handleIsDataEdit}
-                                onConfirm={() => {setIsDataEdit(false)}}
-                                onCancel={() => {setIsDataEdit(false)}}
+                                onConfirm={() => {
+                                    setIsDataEdit(false)
+                                }}
+                                onCancel={() => {
+                                    setIsDataEdit(false)
+                                }}
                             />
                             <ChangeEmail
                                 open={isEmailEdit}
                                 onOpen={handleIsEmailEdit}
-                                onConfirm={() => {setIsEmailEdit(false)}}
-                                onCancel={() => {setIsEmailEdit(false)}}
+                                onConfirm={() => {
+                                    setIsEmailEdit(false)
+                                }}
+                                onCancel={() => {
+                                    setIsEmailEdit(false)
+                                }}
                             />
                             <ChangePassword
                                 open={isPasswordEdit}
                                 onOpen={handleIsPasswordEdit}
-                                onConfirm={() => {setIsPasswordEdit(false)}}
-                                onCancel={() => {setIsPasswordEdit(false)}}
+                                onConfirm={() => {
+                                    setIsPasswordEdit(false)
+                                }}
+                                onCancel={() => {
+                                    setIsPasswordEdit(false)
+                                }}
                             />
                         </>
                     )
                 }
             ]}
+            otherRoutes={[
+                {
+                    to: '/reservations',
+                    Component: ListReservationsForWorker
+                },
+                {
+                    to: '/changeCruiseGroupData',
+                    Component: ChangeCruiseGroup
+                },
+                {
+                    to: '/attractions/:uuid/:published',
+                    Component: AttractionList
+                },
+                {
+                    to: '/',
+                    Component: WorkerHomePage
+                }
+            ]}
+
         />
     )
 }

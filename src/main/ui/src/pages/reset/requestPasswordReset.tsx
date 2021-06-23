@@ -9,6 +9,7 @@ import {useSnackbarQueue} from "../snackbar";
 import useHandleError from "../../errorHandler";
 import PopupAcceptAction from "../../PopupAcceptAction";
 import {useHistory} from "react-router-dom";
+import {LOGIN_REGEX} from "../../regexConstants";
 
 const RequestPasswordReset = () => {
     const {t} = useTranslation()
@@ -19,43 +20,50 @@ const RequestPasswordReset = () => {
     const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
 
     const [login, setLogin] = useState('')
-    const [loginEmptyError, setLoginEmptyError] = useState(false)
+    const [loginError, setLoginError] = useState(false)
 
     const resetPassword = () => {
-        setButtonPopupAcceptAction(true)
+        if (login === "") {
+            setLoginError(true);
+            handleError("fill.login.field");
+        } else {
+            setLoginError(!LOGIN_REGEX.test(login))
+            if (!LOGIN_REGEX.test(login)) {
+                handleError("error.regex.login");
+            } else {
+                setButtonPopupAcceptAction(true);
+            }
+        }
     }
 
 
     const onFormSubmit = () => {
-        if (login === "") {
-            setLoginEmptyError(true)
-            handleError("fill.login.password.fields")
-        } else {
-            axios.post(`account/request-password-reset/${login}`, {})
-                .then(res => {
-                    console.log("hello")
-                    showSuccess(t('successful action'))
-                    history.push('/')
-                })
-                .catch(error => {
-                    const message = error.response.data
-                    handleError(message, error.response.status)
-                });
-        }
+        axios.post(`account/request-password-reset/${login}`, {})
+            .then(res => {
+                showSuccess(t('successful action'))
+                history.push('/')
+            })
+            .catch(error => {
+                const message = error.response.data
+                handleError(message, error.response.status)
+                setLoginError(true);
+                setButtonPopupAcceptAction(false);
+            });
     }
 
     return (
         <AuthLayout>
             <DarkedTextField
+                colorIgnored
                 label={t("login") + ' *'}
                 placeholder={t("login")}
                 className={styles.input}
                 value={login}
                 onChange={event => {
                     setLogin(event.target.value)
-                    event.target.value ? setLoginEmptyError(false) : setLoginEmptyError(true)
+                    setLoginError(!LOGIN_REGEX.test(event.target.value))
                 }}
-                regexError={loginEmptyError}
+                regexError={loginError}
             />
             <PopupAcceptAction
                 open={buttonPopupAcceptAction}
@@ -66,12 +74,10 @@ const RequestPasswordReset = () => {
             />
             <RoundedButton
                 onClick={resetPassword}
-                style={{width: '100%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
+                style={{width: '50%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
                 color="pink"
             >{t("sendEmail")}</RoundedButton>
-
         </AuthLayout>
-
     );
 };
 

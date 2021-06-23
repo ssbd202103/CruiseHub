@@ -1,9 +1,13 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.managers;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Rating;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 
 import javax.ejb.Local;
+import java.util.List;
+import java.util.UUID;
 
 @Local
 public interface RatingManagerLocal {
@@ -11,37 +15,51 @@ public interface RatingManagerLocal {
     /**
      * Tworzy ocenę przypisując do niej odpowiednego użytkownika oraz wycieczkę, dla której ta ocena została wystawiona
      *
-     * @param login      login użytkownika, który wystawia ocenę
-     * @param cruiseName grupa wycieczek, dla której zostanie wystawiona ocena
-     * @param rating     wartość oceny
+     * @param cruiseGroupUUID uuid grupy wycieczek, dla której zostanie wystawiona ocena
+     * @param rating          wartość oceny
      * @throws BaseAppException bazowy wyjątek aplikacji, zwracany w przypadku nieznależenia użytkownika lub grupy wycieczek
      */
-    void createRating(String login, String cruiseName, Integer rating) throws BaseAppException;
+    void createRating(UUID cruiseGroupUUID, Double rating) throws BaseAppException;
 
     /**
-     * Usuwa ocenę o podanym użytkowniku oraz wycieczce
+     * Usuwa ocenę grupy wycieczek o podanym uuid
      *
-     * @param login      login użytkownika, którego opinia zostanie usunięta
-     * @param cruiseName nazwa grupy wycieczek, dla której opinia zostanie usunięta
-     * @throws BaseAppException bazowy wyjątek aplikacji, zwracany w przypadku nieznależenia wycieczki, użytkownika lub oceny
+     * @param cruiseGroupUUID uuid grupy wycieczek, dla której ocena zostanie usunięta
+     * @throws BaseAppException bazowy wyjątek aplikacji, zwracany w przypadku nieznależenia grupy wycieczek, użytkownika lub oceny
      */
-    void removeRating(String login, String cruiseName) throws BaseAppException;
-
+    void removeRating(UUID cruiseGroupUUID) throws BaseAppException;
 
     /**
      * Pobiera ocene klienta dla podanej wycieczki
      *
-     * @param login           login klienta
-     * @param cruiseGroupName login
      * @throws BaseAppException bazowy wyjątek aplikacji, zwracany w przypadku nieznależenia oceny
      */
-    Rating getRating(String login, String cruiseGroupName) throws BaseAppException;
+    List<Rating> getOwnRatings() throws BaseAppException;
+
+    /**
+     * Metoda pobierająca wszystkie oceny klienta
+     *
+     * @param login login klienta
+     * @return listę ocen
+     * @throws BaseAppException bazowy wyjątek aplikacji
+     */
+    List<Rating> getClientRatings(String login) throws BaseAppException;
 
     /**
      * Usuwa ocenę klienta zgloszoną przez moderatora
-     * @param login login klienta
-     * @param cruiseGroupName nazwa grupy wycieczek, dla ktorej zostanie usunieta ocena
+     *
+     * @param login           login klienta
+     * @param cruiseGroupUUID UUID grupy wycieczek, do ktorej nalezy ocena
      * @throws BaseAppException bazowy wyjątek aplikacji
      */
-    void removeClientRating(String login, String cruiseGroupName) throws BaseAppException;
+    void removeClientRating(String login, UUID cruiseGroupUUID) throws BaseAppException;
+
+    /**
+     * Zwraca ocenę o podanym uuid
+     *
+     * @param uuid UUID oceny
+     * @throws BaseAppException bazowy wyjątek aplikacji
+     */
+    Rating findByUuid(UUID uuid) throws FacadeException;
+
 }

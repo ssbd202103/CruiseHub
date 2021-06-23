@@ -18,7 +18,7 @@ import {
     CITY_REGEX,
     COUNTRY_REGEX,
     EMAIL_REGEX,
-    HOUSE_NUMBER_REGEX,
+    HOUSE_STREET_NUMBER_REGEX,
     LOGIN_REGEX,
     NAME_REGEX,
     PASSWORD_REGEX,
@@ -43,7 +43,7 @@ export default function ClientSignUp() {
     const [login, setLogin] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [confirmPassword, setConfirmPassword] = useState('')
+    const [passwordConfirm, setPasswordConfirm] = useState('')
     const [languageType, setLanguageType] = useState('')
 
     const [houseNumber, setHouseNumber] = useState('')
@@ -59,6 +59,7 @@ export default function ClientSignUp() {
 
     const [loginRegexError, setLoginRegexError] = useState(false)
     const [passwordRegexError, setPasswordRegexError] = useState(false)
+    const [passwordConfirmRegexError, setPasswordConfirmRegexError] = useState(false)
     const [firstNameRegexError, setFirstNameRegexError] = useState(false)
     const [secondNameRegexError, setSecondNameRegexError] = useState(false)
     const [emailRegexError, setEmailRegexError] = useState(false)
@@ -97,14 +98,22 @@ export default function ClientSignUp() {
                 'Content-Type': 'application/json'
             }
 
-        }).then(res=>{
+        }).then(res => {
             setButtonPopup(false)
             history.push('/')
-            showSuccess(t('successful action'))
+            showSuccess(t('activate.your.account'))
         }).catch(error => {
             setButtonPopup(false)
             const message = error.response.data
             handleError(message, error.response.status)
+            switch (message) {
+                case 'error.database.loginReserved':
+                    setLoginRegexError(true)
+                    break
+                case 'error.database.emailReserved':
+                    setEmailRegexError(true)
+                    break
+            }
         });
     }
 
@@ -112,21 +121,24 @@ export default function ClientSignUp() {
     const clientSignUpFun = async () => {
         setLoginRegexError(!LOGIN_REGEX.test(login))
         setPasswordRegexError(!PASSWORD_REGEX.test(password))
+        setPasswordConfirmRegexError(!PASSWORD_REGEX.test(passwordConfirm))
         setFirstNameRegexError(!NAME_REGEX.test(firstName))
         setSecondNameRegexError(!NAME_REGEX.test(secondName))
         setEmailRegexError(!EMAIL_REGEX.test(email))
-        setHouseNumberRegexError(!HOUSE_NUMBER_REGEX.test(houseNumber))
+        setHouseNumberRegexError(!HOUSE_STREET_NUMBER_REGEX.test(houseNumber))
         setStreetRegexError(!STREET_REGEX.test(street))
         setPostalCodeRegexError(!POST_CODE_REGEX.test(postalCode))
         setCityRegexError(!CITY_REGEX.test(city))
         setCountryRegexError(!COUNTRY_REGEX.test(country))
         setPhoneNumberRegexError(!PHONE_NUMBER_REGEX.test(phoneNumber))
 
-        if (!LOGIN_REGEX.test(login) || !PASSWORD_REGEX.test(password) || !NAME_REGEX.test(firstName) ||
-            !NAME_REGEX.test(secondName) || !EMAIL_REGEX.test(email) || !HOUSE_NUMBER_REGEX.test(houseNumber) ||
-            !STREET_REGEX.test(street) || !POST_CODE_REGEX.test(postalCode) || !CITY_REGEX.test(city) ||
-            !COUNTRY_REGEX.test(country) || !PHONE_NUMBER_REGEX.test(phoneNumber)) {
+        if (!LOGIN_REGEX.test(login) || !PASSWORD_REGEX.test(password) || !PASSWORD_REGEX.test(passwordConfirm) ||
+            !NAME_REGEX.test(firstName) || !NAME_REGEX.test(secondName) || !EMAIL_REGEX.test(email) ||
+            !HOUSE_STREET_NUMBER_REGEX.test(houseNumber) || !STREET_REGEX.test(street) || !POST_CODE_REGEX.test(postalCode) ||
+            !CITY_REGEX.test(city) || !COUNTRY_REGEX.test(country) || !PHONE_NUMBER_REGEX.test(phoneNumber)) {
             handleError("invalid.form")
+        } else if (password != passwordConfirm) {
+            handleError("passwords are not equal")
         } else {
             setButtonPopupAcceptAction(true)
         }
@@ -242,7 +254,7 @@ export default function ClientSignUp() {
                     value={houseNumber}
                     onChange={event => {
                         setHouseNumber(event.target.value)
-                        setHouseNumberRegexError(!HOUSE_NUMBER_REGEX.test(event.target.value))
+                        setHouseNumberRegexError(!HOUSE_STREET_NUMBER_REGEX.test(event.target.value))
                     }}
                     colorIgnored
                     regexError={houseNumberRegexError}
@@ -336,11 +348,17 @@ export default function ClientSignUp() {
                     value={password}
                     onChange={event => {
                         setPassword(event.target.value)
-                        setPasswordRegexError(!PASSWORD_REGEX.test(event.target.value))
-                        if (event.target.value != confirmPassword || !PASSWORD_REGEX.test(event.target.value)) {
-                            setPasswordRegexError(true)
+                        if (PASSWORD_REGEX.test(passwordConfirm)) {
+                            setPasswordConfirmRegexError(false)
+                        }
+                        if (!PASSWORD_REGEX.test(event.target.value)) {
+                            setPasswordRegexError(!PASSWORD_REGEX.test(event.target.value))
                         } else {
-                            setPasswordRegexError(false)
+                            if (event.target.value != passwordConfirm && PASSWORD_REGEX.test(passwordConfirm)) {
+                                setPasswordRegexError(true)
+                            } else {
+                                setPasswordRegexError(false)
+                            }
                         }
                     }}
                     colorIgnored
@@ -353,18 +371,24 @@ export default function ClientSignUp() {
                     placeholder="1234567890"
                     className={styles.input}
                     icon={(<PasswordIcon/>)}
-                    value={confirmPassword}
+                    value={passwordConfirm}
                     onChange={event => {
-                        setConfirmPassword(event.target.value)
-                        setPasswordRegexError(!PASSWORD_REGEX.test(event.target.value))
-                        if (password != event.target.value || !PASSWORD_REGEX.test(event.target.value)) {
-                            setPasswordRegexError(true)
+                        setPasswordConfirm(event.target.value)
+                        if (PASSWORD_REGEX.test(password)) {
+                            setPasswordRegexError(false);
+                        }
+                        if (!PASSWORD_REGEX.test(event.target.value)) {
+                            setPasswordConfirmRegexError(!PASSWORD_REGEX.test(event.target.value))
                         } else {
-                            setPasswordRegexError(false)
+                            if (event.target.value != password && PASSWORD_REGEX.test(password)) {
+                                setPasswordConfirmRegexError(true)
+                            } else {
+                                setPasswordConfirmRegexError(false)
+                            }
                         }
                     }}
                     colorIgnored
-                    regexError={passwordRegexError}
+                    regexError={passwordConfirmRegexError}
                 />
             </Box>
 
@@ -390,11 +414,13 @@ export default function ClientSignUp() {
                 </Popup>
                 <PopupAcceptAction
                     open={buttonPopupAcceptAction}
-                    onConfirm={()=> {
+                    onConfirm={() => {
                         setButtonPopup(true)
                         setButtonPopupAcceptAction(false)
+
                     }}
-                    onCancel={() => {setButtonPopupAcceptAction(false)
+                    onCancel={() => {
+                        setButtonPopupAcceptAction(false)
                     }}
                 />
 

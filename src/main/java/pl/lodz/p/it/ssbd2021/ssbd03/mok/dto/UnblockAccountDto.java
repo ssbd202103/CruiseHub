@@ -9,7 +9,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 
 import javax.validation.constraints.PositiveOrZero;
 
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_POSITIVE_OR_ZERO_ERROR;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_POSITIVE_OR_ZERO;
 
 @Data
 @AllArgsConstructor
@@ -18,7 +18,7 @@ public class UnblockAccountDto implements SignableEntity {
     @Login
     private String login;
 
-    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
+    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO)
     private long version;
 
     @JsonIgnore

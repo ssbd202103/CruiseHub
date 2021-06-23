@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.entities.mow;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -9,6 +10,8 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
@@ -16,14 +19,17 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise.UUID_CONSTRAINT;
 
 @Entity(name = "cruises")
 @NamedQueries({
-    @NamedQuery(name = "Cruise.findByUUID", query = "SELECT c FROM cruises c WHERE c.uuid = :uuid"),
-    @NamedQuery(name = "Cruise.findAllPublished", query = "SELECT c FROM cruises c WHERE c.published = true")
+        @NamedQuery(name = "Cruise.findByUUID", query = "SELECT c FROM cruises c WHERE c.uuid = :uuid"),
+        // IntelliJ shows an error, but it's caused - as far as I know - by the insufficient IDE's support for Postgres.
+        // And it works
+        @NamedQuery(name = "Cruise.findAllPublished", query = "SELECT c FROM cruises c WHERE c.published = true AND c.active = true AND c.startDate >= NOW()"),
+        @NamedQuery(name = "Cruise.findByCruiseGroupUUID", query = "SELECT c FROM cruises c WHERE c.cruisesGroup.uuid = :uuid"),
 })
 @Table(
-    uniqueConstraints = {
-        @UniqueConstraint(columnNames = "uuid", name = UUID_CONSTRAINT),
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "uuid", name = UUID_CONSTRAINT),
 
-    }
+        }
 )
 @ToString
 public class Cruise extends BaseEntity {
@@ -62,12 +68,6 @@ public class Cruise extends BaseEntity {
 
     @Getter
     @Setter
-    @NotNull(message = CONSTRAINT_NOT_NULL)
-    @Column(name = "available")
-    private boolean available;
-
-    @Getter
-    @Setter
     @OneToOne
     @JoinColumn(name = "cruises_group_id")
     @Valid
@@ -79,12 +79,34 @@ public class Cruise extends BaseEntity {
     @Column(name = "published")
     private boolean published;
 
+    @Getter
+    @Setter
+    @ToString.Exclude
+    @OneToMany(mappedBy = "cruise", cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST}, orphanRemoval = true)
+    private List<Attraction> attractions = new ArrayList<>();
+
+    @Getter
+    @Setter
+    @ToString.Exclude
+    @OneToMany(mappedBy = "cruise", cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST}, orphanRemoval = true)
+    private List<Reservation> reservations;
+
+
+    public Cruise(LocalDateTime startDate, LocalDateTime endDate,
+                  CruiseGroup cruisesGroup) {
+        this.uuid = UUID.randomUUID();
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.active = true;
+        this.cruisesGroup = cruisesGroup;
+        this.published = false;
+    }
+
     public Cruise(LocalDateTime startDate, LocalDateTime endDate, boolean active,
-                  boolean available, CruiseGroup cruisesGroup) {
+                  CruiseGroup cruisesGroup) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.active = active;
-        this.available = available;
         this.cruisesGroup = cruisesGroup;
         this.uuid = UUID.randomUUID();
     }
@@ -96,5 +118,6 @@ public class Cruise extends BaseEntity {
     public Long getIdentifier() {
         return id;
     }
+
 }
 

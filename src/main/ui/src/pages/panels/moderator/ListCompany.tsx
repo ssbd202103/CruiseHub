@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {getAllCompanies} from "../../../Services/companiesService";
+import {getAllCompanies, getCompanyMetadata} from "../../../Services/companiesService";
 import {makeStyles} from "@material-ui/core/styles";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
@@ -8,13 +8,16 @@ import {useSelector} from "react-redux";
 import {selectDarkMode} from "../../../redux/slices/userSlice";
 import {refreshToken} from "../../../Services/userService";
 import {useTranslation} from "react-i18next";
-import Autocomplete from "@material-ui/lab/Autocomplete";
-import {TextField} from "@material-ui/core";
+import Autocomplete from "../../../components/Autocomplete";
+import {Button, TextField} from "@material-ui/core";
+import {Link} from "react-router-dom";
 import TableContainer from "@material-ui/core/TableContainer";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableBody from "@material-ui/core/TableBody";
+import RoundedButton from "../../../components/RoundedButton";
+import PopupMetadata from "../../../PopupMetadata";
 
 const useRowStyles = makeStyles({
     root: {
@@ -51,21 +54,96 @@ export interface RowProps {
     style: React.CSSProperties
 }
 
+interface MetadataCompany {
+    nip: string,
+}
+const useButtonStyles = makeStyles({
+    root: {
+        fontFamily: '"Montserrat", sans-serif',
+        color: 'var(--white)',
+        backgroundColor: "var(--blue)",
+        padding: '8px 16px',
+        margin: '0 16px',
+        '&:hover': {
+            backgroundColor: "var(--blue-dark)",
+        }
+    }
+})
+
+
 function Row(props: RowProps) {
     const {row} = props;
     const {style} = props;
+    const {t} = useTranslation();
     const classes = useRowStyles();
+    const buttonClass = useButtonStyles();
+    const handleError = useHandleError();
 
+    const [metadataPopupAcceptAction, setMetadataPopupAcceptAction] = useState(false);
+    const [alterType, setAlterType] = useState('')
+    const [alteredBy, setAlteredBy] = useState('')
+    const [createdBy, setCreatedBy] = useState('')
+    const [creationDateTime, setCreationDateTime] = useState('')
+    const [lastAlterDateTime, setLastAlterDateTime] = useState('')
+    const [version, setVersion] = useState('')
+
+    const handleMetadata = async ({nip}: MetadataCompany) =>{
+        getCompanyMetadata(nip).then(res => {
+            setAlterType(res.data.alterType);
+            setAlteredBy(res.data.alteredBy);
+            setCreatedBy(res.data.createdBy);
+            if(res.data.creationDateTime !=null)
+                setCreationDateTime(res.data.creationDateTime.dayOfMonth +" "+ t(res.data.creationDateTime.month) +" "+ res.data.creationDateTime.year +" "+ res.data.creationDateTime.hour +":"+ res.data.creationDateTime.minute.toString().padStart(2, '0') )
+            if(res.data.lastAlterDateTime !=null)
+                setLastAlterDateTime(res.data.lastAlterDateTime.dayOfMonth +" "+ t(res.data.lastAlterDateTime.month) +" "+ res.data.lastAlterDateTime.year +" "+ res.data.lastAlterDateTime.hour +":"+ res.data.lastAlterDateTime.minute.toString().padStart(2, '0'));
+            setVersion(res.data.version);
+            refreshToken();
+        }, error => {
+            const message = error.response.data
+            handleError(message, error.response.status)
+        }).then(res => {
+            setMetadataPopupAcceptAction(true);
+        })
+    }
     return (
         <TableRow className={classes.root}>
             <TableCell component="th" scope="row" style={style}>{row.name}</TableCell>
-            <TableCell style={style}>{row.nip.toString()}</TableCell>
+            <TableCell style={style}>{row.nip}</TableCell>
             <TableCell style={style}>{row.phoneNumber}</TableCell>
             <TableCell style={style}>{row.country}</TableCell>
             <TableCell style={style}>{row.city}</TableCell>
             <TableCell style={style}>{row.street}</TableCell>
             <TableCell style={style}>{row.houseNumber}</TableCell>
             <TableCell style={style}>{row.postalCode}</TableCell>
+            <TableCell style={style}>
+
+                <Link to="/company/business-workers">
+                    <RoundedButton color="pink" onClick={() => sessionStorage.setItem("currentCompanyName", row.name)}>
+                        {t("show business workers")}
+                    </RoundedButton>
+                </Link>
+            </TableCell>
+            <TableCell style={style}>
+                <RoundedButton color={"green"}
+                               className={buttonClass.root}
+                               onClick={() => {
+                                   handleMetadata({
+                                       nip: String(row.nip)
+                                   })
+                                   setMetadataPopupAcceptAction(true)
+                               }
+                               }>{t("metadata")}</RoundedButton>
+            </TableCell>
+            <PopupMetadata
+                open={metadataPopupAcceptAction}
+                onCancel={() => {setMetadataPopupAcceptAction(false)}}
+                alterType={alterType}
+                alteredBy={alteredBy}
+                createdBy={createdBy}
+                creationDateTime={creationDateTime}
+                lastAlterDateTime={lastAlterDateTime}
+                version={version}
+            />
         </TableRow>
     );
 }
@@ -115,7 +193,6 @@ const ListCompany = () => {
             <Autocomplete
                 options={companies}
                 inputValue={searchInput}
-                style={{width: 300}}
                 noOptionsText={t('no options')}
                 onChange={(event, value) => {
                     setSearchInput(value as string ?? '')
@@ -136,7 +213,7 @@ const ListCompany = () => {
                             <TableCell style={{
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`
-                            }}>{t("NIP")}</TableCell>
+                            }}>{"NIP"}</TableCell>
                             <TableCell style={{
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`
@@ -161,6 +238,14 @@ const ListCompany = () => {
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`
                             }}>{t("postalCode")}</TableCell>
+                            <TableCell style={{
+                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                            }}>{t("show business workers")}</TableCell>
+                            <TableCell style={{
+                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                            }}>{t("metadata")}</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>

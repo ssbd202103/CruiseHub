@@ -4,6 +4,7 @@ import ListClient from "./moderator/ListClient";
 
 import SettingsIcon from '@material-ui/icons/SettingsRounded'
 import AccountsListIcon from '@material-ui/icons/PeopleAltRounded'
+import BusinessIcon from '@material-ui/icons/Business'
 
 import {useSelector} from "react-redux";
 import {selectDarkMode} from "../../redux/slices/userSlice";
@@ -12,11 +13,19 @@ import ChangePassword from "../../components/changeData/ChangePassword";
 import ChangeModeratorData from "../../components/changeData/ChangeModeratorData";
 import ManageWorkers from "./moderator/ManageBusinessWorkers";
 import PanelLayout from "../../layouts/PanelLayout";
-import {getSelfAddressMetadataDetails, getSelfMetadataDetails} from "../../Services/accountsService";
+import ListWorkersForCompany from "./moderator/ListWorkersForCompany"
+import {getSelfMetadataDetails} from "../../Services/accountsService";
 import {refreshToken} from "../../Services/userService";
 import useHandleError from "../../errorHandler";
 import ListCompany from "./moderator/ListCompany";
-import ListCruiseGroup from "../../components/ListCruiseGroup";
+import ListCruiseGroup from "./moderator/ListCruiseGroups";
+import AddCompany from "./moderator/AddCompany";
+import ListClientRatings from "./moderator/ListClientRatings";
+import AttractionList from "./admin/AttractionList";
+import ModeratorHomePage from "../../components/ModeratorHomePage";
+import CruiseIcon from "@material-ui/icons/CardTravelRounded";
+import CreateIcon from "@material-ui/icons/Create";
+
 
 export default function ModeratorPanel() {
     const {t} = useTranslation()
@@ -93,8 +102,8 @@ export default function ModeratorPanel() {
     return (
         <PanelLayout
             color={{
-                    light: 'pink-dark',
-                    dark: 'white'
+                light: 'pink-dark',
+                dark: 'white'
             }}
             menu={[
                 {
@@ -105,18 +114,24 @@ export default function ModeratorPanel() {
                 },
                 {
                     link: '/listCruiseGroup',
-                    Icon: AccountsListIcon,
+                    Icon: CruiseIcon,
                     text: t('listCruiseGroup'),
                     Component: ListCruiseGroup
                 },
                 {
                     link: '/companies',
-                    Icon: AccountsListIcon,
+                    Icon: BusinessIcon,
                     text: t('list companies'),
                     Component: ListCompany
                 },
                 {
-                    link: '/ManageWorkers',
+                    link: '/add-company',
+                    Icon: CreateIcon,
+                    text: t('add company'),
+                    Component: AddCompany
+                },
+                {
+                    link: '/unconfirmed-business-workers',
                     text: t('Manage business workers'),
                     Icon: AccountsListIcon,
                     Component: ManageWorkers
@@ -130,25 +145,57 @@ export default function ModeratorPanel() {
                             <ChangeModeratorData
                                 open={isDataEdit}
                                 onOpen={handleIsDataEdit}
-                                onConfirm={() => {setIsDataEdit(false)}}
-                                onCancel={() => {setIsDataEdit(false)}}
+                                onConfirm={() => {
+                                    setIsDataEdit(false)
+                                }}
+                                onCancel={() => {
+                                    setIsDataEdit(false)
+                                }}
                             />
                             <ChangeEmail
                                 open={isEmailEdit}
                                 onOpen={handleIsEmailEdit}
-                                onConfirm={() => {setIsEmailEdit(false)}}
-                                onCancel={() => {setIsEmailEdit(false)}}
+                                onConfirm={() => {
+                                    setIsEmailEdit(false)
+                                }}
+                                onCancel={() => {
+                                    setIsEmailEdit(false)
+                                }}
                             />
                             <ChangePassword
                                 open={isPasswordEdit}
                                 onOpen={handleIsPasswordEdit}
-                                onConfirm={() => {setIsPasswordEdit(false)}}
-                                onCancel={() => {setIsPasswordEdit(false)}}
+                                onConfirm={() => {
+                                    setIsPasswordEdit(false)
+                                }}
+                                onCancel={() => {
+                                    setIsPasswordEdit(false)
+                                }}
                             />
                         </>
                     )
                 }
             ]}
+            otherRoutes={
+                [
+                    {
+                        to: '/company/business-workers',
+                        Component: ListWorkersForCompany
+                    },
+                    {
+                        to: '/accounts/ratings',
+                        Component: ListClientRatings
+                    },
+                    {
+                        to: '/attractions/:uuid',
+                        Component: AttractionList
+                    },
+                    {
+                        to: '/',
+                        Component: ModeratorHomePage
+                    }
+                ]
+            }
         />
     )
 }

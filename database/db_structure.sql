@@ -79,7 +79,7 @@ create sequence used_tokens_id_seq
 create table used_codes
 (
     id                 bigint    not null,
-    code              varchar   not null,
+    code               varchar   not null,
     creation_date_time timestamp not null,
     used               bool      not null,
     account_id         bigint    not null,
@@ -190,8 +190,8 @@ create table companies
     CONSTRAINT companies_alter_type_id_fk_constraint FOREIGN KEY (alter_type_id) REFERENCES alter_types (id),
     CONSTRAINT companies_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
     CONSTRAINT companies_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id),
-    CONSTRAINT companies_name_unique_constraint UNIQUE (name, nip)
-
+    CONSTRAINT companies_nip_unique_constraint UNIQUE (nip),
+    CONSTRAINT companies_name_unique_constraint UNIQUE (name)
 );
 
 create sequence companies_id_seq
@@ -216,7 +216,7 @@ create table cruise_addresses
 (
     id                   bigint                              not null,
     street               varchar(64)                         not null,
-    street_number        bigint check ((street_number >= 0) AND (street_number <= 999)),
+    street_number        varchar(6)                          not null,
     harbor_name          varchar(64)                         not null,
     city_name            varchar(64)                         not null,
     country_name         varchar(64)                         not null,
@@ -242,7 +242,7 @@ create table cruise_pictures
 (
     id                   bigint                              not null,
     img_name             varchar(64),
-    img                  bytea,                                        --nullable only for implementation time.
+    img                  varchar,
 
     creation_date_time   timestamp default CURRENT_TIMESTAMP not null,
     last_alter_date_time timestamp                           not null,
@@ -278,8 +278,8 @@ create table cruises_groups
     altered_by_id        bigint                                                              not null, -- FOREIGN KEY
     alter_type_id        bigint                                                              not null, -- FOREIGN KEY
     version              bigint check (version >= 0)                                         not null,
-    description          varchar                             not null,
-    uuid                 varchar                             not null,
+    description          varchar                                                             not null,
+    uuid                 uuid                                                                not null,
 
 
     CONSTRAINT cruises_groups_id_pk_constraint PRIMARY KEY (id),
@@ -298,12 +298,11 @@ create sequence cruises_groups_id_seq
 create table cruises
 (
     id                   bigint                              not null,
-    uuid                 varchar                             not null,
+    uuid                 uuid                                not null,
     start_date           timestamp                           not null,
     end_date             timestamp,
     active               boolean   default false             not null,
     cruises_group_id     bigint                              not null, -- FOREIGN KEY
-    available            boolean   default false             not null,
 
     creation_date_time   timestamp default CURRENT_TIMESTAMP not null,
     last_alter_date_time timestamp                           not null,
@@ -342,7 +341,9 @@ create table attractions
     altered_by_id        bigint                              not null, -- FOREIGN KEY
     alter_type_id        bigint                              not null, -- FOREIGN KEY
     version              bigint check (version >= 0)         not null,
+    uuid                 uuid                                not null,
 
+    CONSTRAINT attractions_uuid_unique_constraint UNIQUE (uuid),
     CONSTRAINT attractions_id_pk_constraint PRIMARY KEY (id),
     CONSTRAINT attractions_cruise_id_fk_constraint FOREIGN KEY (cruise_id) REFERENCES cruises (id),
     CONSTRAINT attractions_alter_type_id_fk_constraint FOREIGN KEY (alter_type_id) REFERENCES alter_types (id),
@@ -357,7 +358,7 @@ create sequence attractions_id_seq
 create table reservations
 (
     id                   bigint                              not null,
-    uuid                 varchar                             not null,
+    uuid                 uuid                                not null,
     client_id            bigint                              not null, --FOREIGN KEY
     number_of_seats      bigint check (number_of_seats >= 0) not null,
     cruise_id            bigint                              not null, --FOREIGN KEY
@@ -388,7 +389,8 @@ create table ratings
     id                   bigint                                                                      not null,
     account_id           bigint                                                                      not null, -- FOREIGN KEY
     cruise_group_id      bigint                                                                      not null, -- FOREIGN KEY
-    rating               numeric(2, 1) check ((rating >= (0)::numeric) AND (rating <= (5)::numeric)) not null,
+    rating               numeric(2, 1) check ((rating >= (1)::numeric) AND (rating <= (5)::numeric)) not null,
+    uuid                 uuid                                                                        not null,
 
     creation_date_time   timestamp default CURRENT_TIMESTAMP                                         not null,
     last_alter_date_time timestamp                                                                   not null,
@@ -509,6 +511,11 @@ ALTER TABLE reservations_id_seq
     OWNER to ssbd03admin;
 ALTER TABLE ratings_id_seq
     OWNER to ssbd03admin;
+ALTER SEQUENCE used_tokens_id_seq
+    OWNER TO ssbd03admin;
+ALTER SEQUENCE used_codes_id_seq
+    OWNER TO ssbd03admin;
+
 
 ALTER
     VIEW glassfish_auth_view OWNER TO ssbd03admin;
@@ -582,7 +589,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE
 GRANT SELECT, INSERT, UPDATE, DELETE
     ON addresses TO ssbd03mok;
 
-GRANT SELECT
+GRANT SELECT, INSERT
     ON addresses TO ssbd03mow;
 
 GRANT SELECT, INSERT, UPDATE, DELETE
@@ -612,12 +619,34 @@ GRANT SELECT, UPDATE
 GRANT SELECT, UPDATE
     ON SEQUENCE address_id_seq TO ssbd03mok;
 
+GRANT SELECT, UPDATE
+    ON SEQUENCE address_id_seq TO ssbd03mow;
+
 -- Table permissions for MOW --
+GRANT SELECT
+    ON accounts TO ssbd03mow;
+
 GRANT SELECT
     ON access_levels TO ssbd03mow;
 
 GRANT SELECT
-    ON accounts TO ssbd03mow;
+    ON administrators TO ssbd03mow;
+
+GRANT SELECT
+    ON moderators TO ssbd03mow;
+
+GRANT SELECT
+    ON business_workers TO ssbd03mow;
+
+GRANT SELECT
+    ON clients TO ssbd03mow;
+
+
+
+GRANT SELECT
+    ON clients TO ssbd03mow;
+
+
 
 GRANT SELECT
     ON alter_types TO ssbd03mow;
@@ -628,10 +657,10 @@ GRANT SELECT, INSERT, UPDATE, DELETE
 GRANT SELECT, INSERT, UPDATE, DELETE
     ON companies TO ssbd03mow;
 
-GRANT SELECT, INSERT, DELETE
+GRANT SELECT, INSERT, DELETE, UPDATE
     ON cruise_addresses TO ssbd03mow;
 
-GRANT SELECT, INSERT, DELETE
+GRANT SELECT, INSERT, DELETE, UPDATE
     ON cruise_pictures TO ssbd03mow;
 
 GRANT SELECT, INSERT, UPDATE, DELETE
@@ -640,7 +669,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE
 GRANT SELECT, INSERT, UPDATE, DELETE
     ON cruises_groups TO ssbd03mow;
 
-GRANT SELECT, INSERT, DELETE
+GRANT SELECT, INSERT, DELETE, UPDATE
     ON cruises_group_pictures TO ssbd03mow;
 
 GRANT SELECT

@@ -1,27 +1,27 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.common.dto.MetadataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AccountDtoForList;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.AddCruiseGroupDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CompanyLightDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseGroupDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseGroupWithDetailsDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.CompanyEndpointLocal;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.CruiseGroupEndpoint;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.MapperException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.AddCruiseGroupDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.CruiseGroupWithDetailsDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.DeactivateCruiseGroupDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups.ChangeCruiseGroupDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.CruiseGroupEndpointLocal;
+import pl.lodz.p.it.ssbd2021.ssbd03.security.ETagFilterBinding;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
+import java.util.UUID;
 
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.IntegrityUtils.checkEtagIntegrity;
 import static pl.lodz.p.it.ssbd2021.ssbd03.utils.TransactionRepeater.tryAndRepeat;
 
 @Path("/cruiseGroup")
@@ -31,14 +31,14 @@ public class CruiseGroupController {
     private CruiseGroupEndpointLocal cruiseGroupEndpoint;
 
     /**
-     *Dodaje wycieczkę
-     *
+     * Dodaje wycieczkę
+     *  @param addCruiseGroupDto obiekt dto pozwalający utworzyć wycieczkę
      * @throws BaseAppException Bazowy wyjątek aplikacji
      */
     @POST
     @Path("/add-cuise-group")
     public void addCruiseGroup(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid AddCruiseGroupDto addCruiseGroupDto) throws BaseAppException {
-         tryAndRepeat(() -> cruiseGroupEndpoint.addCruiseGroup(addCruiseGroupDto));
+        tryAndRepeat(cruiseGroupEndpoint, () -> cruiseGroupEndpoint.addCruiseGroup(addCruiseGroupDto));
     }
 
     /**
@@ -50,6 +50,71 @@ public class CruiseGroupController {
     @Path("/cruise-groups")
     @Produces(MediaType.APPLICATION_JSON)
     public List<CruiseGroupWithDetailsDto> getAllCruiseGroups() throws BaseAppException {
-        return tryAndRepeat(() -> cruiseGroupEndpoint.getCruiseGroupsInfo());
+        return tryAndRepeat(cruiseGroupEndpoint, () -> cruiseGroupEndpoint.getCruiseGroupsInfo());
     }
+
+    /**
+     * Metoda pośrednio odpowiedzialna za deaktywacje grupy wycieczek
+     *
+     * @param deactivateCruiseGroupDto Obiekt z uuid grupy wyceczek do deaktywacji oraz wersją
+     * @param etag                     Wartość etaga
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
+    @ETagFilterBinding
+    @PUT
+    @Path("/deactivate-cruise-group")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void deactivateCruiseGroup(@Valid DeactivateCruiseGroupDto deactivateCruiseGroupDto, @HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) @Valid String etag) throws BaseAppException {
+        checkEtagIntegrity(deactivateCruiseGroupDto, etag);
+        tryAndRepeat(cruiseGroupEndpoint, () -> cruiseGroupEndpoint.deactivateCruiseGroup(deactivateCruiseGroupDto.getUuid(), deactivateCruiseGroupDto.getVersion()));
+    }
+
+    /**
+     * Metoda pobierająca listę grup wycieczek należacych do danej firmy
+     * @param companyName nazwa firmy
+     * @return  lista dto grup wycieczek
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
+    @GET
+    @Path("/CruiseGroupForBusinessWorker/{companyName}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<CruiseGroupWithDetailsDto> getCruiseGroupForBusinessWorker(@PathParam("companyName") @Valid String companyName) throws BaseAppException {
+        return tryAndRepeat(cruiseGroupEndpoint, () -> cruiseGroupEndpoint.getCruiseGroupForBusinessWorker(companyName));
+    }
+
+    /**
+     * Zmień dane wybranej grupy wycieczek
+     *
+     * @param dto  obiekt dto z nowymi danymi
+     * @param etag Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
+     */
+    @PUT
+    @Path("/change-cruise-group")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @ETagFilterBinding
+    public void changeCruiseGroupData(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid ChangeCruiseGroupDto dto,
+                                      @HeaderParam("If-Match") String etag) throws BaseAppException {
+        checkEtagIntegrity(dto, etag);
+        tryAndRepeat(cruiseGroupEndpoint, () -> cruiseGroupEndpoint.changeCruiseGroup(dto));
+    }
+
+    /**
+     * Pobiera metadane grupy wycieczek
+     *
+     * @param uuid UUID grupy wycieczek wybranej do metadanych
+     * @return Reprezentacja DTO metadanych
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
+    @GET
+    @Path("/metadata/{uuid}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public MetadataDto getCruiseGroupMetadata(@PathParam("uuid") String uuid) throws BaseAppException {
+        try{
+            UUID convertedUUID = UUID.fromString(uuid);
+            return tryAndRepeat(cruiseGroupEndpoint, () -> cruiseGroupEndpoint.getCruiseGroupMetadata(convertedUUID));
+        }catch (IllegalArgumentException e) {
+            throw new MapperException(MAPPER_UUID_PARSE);
+        }
+    }
+
 }

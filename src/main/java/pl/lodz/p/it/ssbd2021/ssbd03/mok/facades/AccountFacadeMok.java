@@ -81,19 +81,18 @@ public class AccountFacadeMok extends AbstractFacade<Account> {
         try {
             return tq.getSingleResult();
         } catch (NoResultException e) {
-            throw FacadeException.noSuchElement();
+            throw AccountFacadeException.userNotExists(e);
         }
     }
 
 
     @PermitAll
-// @RolesAllowed("SYSTEM")
     public List<Account> getUnconfirmedAccounts() {
         TypedQuery<Account> tqq = em.createNamedQuery("Account.findUnconfirmedAccounts", Account.class);
         return tqq.getResultList();
     }
 
-    @PermitAll
+    @RolesAllowed("authenticatedUser")
     public boolean isEmailPresent(String email) {
         TypedQuery<Account> tqq = em.createNamedQuery("Account.isEmailPresent", Account.class);
         tqq.setParameter("email", email);
@@ -140,7 +139,6 @@ public class AccountFacadeMok extends AbstractFacade<Account> {
 
 
     @PermitAll
-// @RolesAllowed("SYSTEM")
     @Override
     public void remove(Account entity) throws FacadeException {
         super.remove(entity);

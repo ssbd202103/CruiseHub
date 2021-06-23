@@ -23,7 +23,7 @@
 }
 
 .h1 {
-    font-family: 'Montserrat Alternates', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 3rem;
     font-weight: 700;
     color: var(--pink);
@@ -51,4 +51,15 @@
     text-decoration: none;
     color: var(--blue);
     margin-bottom: 15px;
+}
+
+.button-wrap {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.button-wrap > * {
+    margin-bottom: 16px;
 }

@@ -35,4 +35,14 @@ public interface CompanyManagerLocal {
      * @throws BaseAppException bazowy wyjatek aplikacji
      */
     void addCompany(Company company) throws BaseAppException;
+
+
+    /**
+     * Metoda znajdująca firmę po nip
+     *
+     * @param nip nip firmy
+     * @return Firmę
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
+    Company findByNIP(long nip) throws BaseAppException;
 }

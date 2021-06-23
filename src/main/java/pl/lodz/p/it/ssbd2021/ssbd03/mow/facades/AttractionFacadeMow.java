@@ -10,11 +10,9 @@ import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.interceptor.Interceptors;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.util.List;
+import java.util.UUID;
 
 @Stateless
 @Interceptors(TrackingInterceptor.class)
@@ -51,10 +49,17 @@ public class AttractionFacadeMow extends AbstractFacade<Attraction> {
         super.create(entity);
     }
 
+    @RolesAllowed("deleteAttraction")
+    @Override
+    public void remove(Attraction entity) throws FacadeException {
+        super.remove(entity);
+    }
+
+
     @PermitAll
-    public Attraction findByName(String name) throws BaseAppException {
-        TypedQuery<Attraction> tq = em.createNamedQuery("Attraction.findByName", Attraction.class);
-        tq.setParameter("name", name);
+    public Attraction findByUUID(UUID uuid) throws BaseAppException {
+        TypedQuery<Attraction> tq = em.createNamedQuery("Attraction.findByUUID", Attraction.class);
+        tq.setParameter("uuid", uuid);
         try {
             return tq.getSingleResult();
         } catch (NoResultException e) {
@@ -62,15 +67,28 @@ public class AttractionFacadeMow extends AbstractFacade<Attraction> {
         }
     }
 
-    @RolesAllowed("deleteAttraction")
-    public Attraction deleteAttraction(String name) throws BaseAppException {
-        //TODO change query
-        TypedQuery<Attraction> tq = em.createNamedQuery("Attraction.findByIdIfReserved", Attraction.class);
-        tq.setParameter("name", name);
+    @RolesAllowed("createReservation")
+    public long getNumberOfTakenSeats(Attraction attraction) throws FacadeException {
+        TypedQuery<Long> tq = em.createNamedQuery("Attraction.countReservedSpots", Long.class);
+        tq.setParameter("attraction", attraction);
         try {
-            return tq.getSingleResult();
+            Long temp = tq.getSingleResult();
+            return temp == null ? 0L : temp;
+        } catch (PersistenceException e) {
+            throw FacadeException.databaseOperation();
+        }
+    }
+
+
+    @PermitAll
+    public List<Attraction> findByCruiseUUID(UUID uuid) throws BaseAppException {
+        TypedQuery<Attraction> tq = em.createNamedQuery("Attraction.findByCruiseUUID", Attraction.class);
+        tq.setParameter("uuid", uuid);
+        try {
+            return tq.getResultList();
         } catch (NoResultException e) {
             throw FacadeException.noSuchElement();
         }
     }
+
 }

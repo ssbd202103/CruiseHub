@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.IntegrityUtils;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.dto.MetadataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
@@ -30,6 +31,7 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.IntegrityUtils.checkEtagIntegrity;
 import static pl.lodz.p.it.ssbd2021.ssbd03.utils.TransactionRepeater.tryAndRepeat;
 
 /**
@@ -41,7 +43,7 @@ public class AccountController {
     @Inject
     private AccountEndpointLocal accountEndpoint;
 
-    private final ObjectMapper mapper = new ObjectMapper(); //todo remove it when stable and consistent Jackson mapper settings are provided
+    private final ObjectMapper mapper = new ObjectMapper();
 
     /**
      * Pobiera użytkownika po loginie oraz tworzy ETaga na jego podstawie
@@ -54,7 +56,7 @@ public class AccountController {
     @Path("/{login}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAccountByLogin(@PathParam("login") @Login @Valid String login) throws BaseAppException {
-        AccountDto account = tryAndRepeat(() -> accountEndpoint.getAccountByLogin(login));
+        AccountDto account = tryAndRepeat(accountEndpoint, () -> accountEndpoint.getAccountByLogin(login));
         String ETag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
         return Response.ok().entity(account).header("ETag", ETag).build();
     }
@@ -69,7 +71,7 @@ public class AccountController {
     @Path("/details/{login}")
     @Produces(MediaType.APPLICATION_JSON)
     public String getAccountDetailsByLogin(@PathParam("login") @Valid @Login String login) throws BaseAppException, JsonProcessingException {
-        return mapper.writeValueAsString(tryAndRepeat(() -> accountEndpoint.getAccountDetailsByLogin(login)));
+        return mapper.writeValueAsString(tryAndRepeat(accountEndpoint, () -> accountEndpoint.getAccountDetailsByLogin(login)));
     }
 
     /**
@@ -82,7 +84,7 @@ public class AccountController {
     @Path("/client/{login}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getClientByLogin(@PathParam("login") @Valid @Login String login) throws BaseAppException {
-        ClientDto client = tryAndRepeat(() -> accountEndpoint.getClientByLogin(login));
+        ClientDto client = tryAndRepeat(accountEndpoint, () -> accountEndpoint.getClientByLogin(login));
         String ETag = EntityIdentitySignerVerifier.calculateEntitySignature(client);
         return Response.ok().entity(client).header("ETag", ETag).build();
     }
@@ -97,7 +99,7 @@ public class AccountController {
     @Path("/business-worker/{login}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBusinessWorkerByLogin(@PathParam("login") @Valid @Login String login) throws BaseAppException {
-        BusinessWorkerDto businessWorker = tryAndRepeat(() -> accountEndpoint.getBusinessWorkerByLogin(login));
+        BusinessWorkerDto businessWorker = tryAndRepeat(accountEndpoint, () -> accountEndpoint.getBusinessWorkerByLogin(login));
         String ETag = EntityIdentitySignerVerifier.calculateEntitySignature(businessWorker);
         return Response.ok().entity(businessWorker).header("ETag", ETag).build();
     }
@@ -112,7 +114,7 @@ public class AccountController {
     @Path("/moderator/{login}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getModeratorByLogin(@PathParam("login") @Valid @Login String login) throws BaseAppException {
-        ModeratorDto moderator = tryAndRepeat(() -> accountEndpoint.getModeratorByLogin(login));
+        ModeratorDto moderator = tryAndRepeat(accountEndpoint, () -> accountEndpoint.getModeratorByLogin(login));
         String ETag = EntityIdentitySignerVerifier.calculateEntitySignature(moderator);
         return Response.ok().entity(moderator).header("ETag", ETag).build();
     }
@@ -127,7 +129,7 @@ public class AccountController {
     @Path("/administrator/{login}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAdministratorByLogin(@PathParam("login") @Valid @Login String login) throws BaseAppException {
-        AdministratorDto administrator = tryAndRepeat(() -> accountEndpoint.getAdministratorByLogin(login));
+        AdministratorDto administrator = tryAndRepeat(accountEndpoint, () -> accountEndpoint.getAdministratorByLogin(login));
         String ETag = EntityIdentitySignerVerifier.calculateEntitySignature(administrator);
         return Response.ok().entity(administrator).header("ETag", ETag).build();
     }
@@ -141,7 +143,7 @@ public class AccountController {
     @Path("/accounts")
     @Produces(MediaType.APPLICATION_JSON)
     public List<AccountDtoForList> getAllAccounts() throws BaseAppException {
-        return tryAndRepeat(() -> accountEndpoint.getAllAccounts());
+        return tryAndRepeat(accountEndpoint, () -> accountEndpoint.getAllAccounts());
     }
 
     /**
@@ -154,7 +156,7 @@ public class AccountController {
     @Path("/unconfirmed-business-workers")
     @Produces(MediaType.APPLICATION_JSON)
     public List<BusinessWorkerWithCompanyDto> getAllUnconfirmedBusinessWorkers() throws BaseAppException {
-        return tryAndRepeat(() -> accountEndpoint.getAllUnconfirmedBusinessWorkers());
+        return tryAndRepeat(accountEndpoint, () -> accountEndpoint.getAllUnconfirmedBusinessWorkers());
     }
 
     /**
@@ -168,10 +170,8 @@ public class AccountController {
     @Path("/block")
     @Consumes(MediaType.APPLICATION_JSON)
     public void blockUser(@Valid BlockAccountDto blockAccountDto, @HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) @Valid String etag) throws BaseAppException {
-        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, blockAccountDto)) {
-            throw ControllerException.etagIdentityIntegrity();
-        }
-        tryAndRepeat(() -> accountEndpoint.blockUser(blockAccountDto.getLogin(), blockAccountDto.getVersion()));
+        checkEtagIntegrity(blockAccountDto, etag);
+        tryAndRepeat(accountEndpoint, () -> accountEndpoint.blockUser(blockAccountDto.getLogin(), blockAccountDto.getVersion()));
     }
 
     /**
@@ -183,10 +183,8 @@ public class AccountController {
     @Path("/unblock")
     @Consumes(MediaType.APPLICATION_JSON)
     public void unblockUser(@Valid UnblockAccountDto unblockAccountDto, @HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) String etag) throws BaseAppException {
-        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, unblockAccountDto)) {
-            throw ControllerException.etagIdentityIntegrity();
-        }
-        tryAndRepeat(() -> accountEndpoint.unblockUser(unblockAccountDto.getLogin(), unblockAccountDto.getVersion()));
+        checkEtagIntegrity(unblockAccountDto, etag);
+        tryAndRepeat(accountEndpoint, () -> accountEndpoint.unblockUser(unblockAccountDto.getLogin(), unblockAccountDto.getVersion()));
     }
 
     /**
@@ -201,10 +199,8 @@ public class AccountController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public AccountDto grantAccessLevel(@Valid GrantAccessLevelDto grantAccessLevel, @HeaderParam("If-Match") String etag) throws BaseAppException {
-        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, grantAccessLevel)) {
-            throw ControllerException.etagIdentityIntegrity();
-        }
-        return tryAndRepeat(() -> accountEndpoint.grantAccessLevel(grantAccessLevel));
+        checkEtagIntegrity(grantAccessLevel, etag);
+        return tryAndRepeat(accountEndpoint, () -> accountEndpoint.grantAccessLevel(grantAccessLevel));
     }
 
     /**
@@ -220,10 +216,8 @@ public class AccountController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public AccountDto changeAccessLevelState(@Valid ChangeAccessLevelStateDto changeAccessLevelStateDto, @HeaderParam("If-Match") String etag) throws BaseAppException {
-        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, changeAccessLevelStateDto)) {
-            throw ControllerException.etagIdentityIntegrity();
-        }
-        return tryAndRepeat(() -> accountEndpoint.changeAccessLevelState(changeAccessLevelStateDto));
+        checkEtagIntegrity(changeAccessLevelStateDto, etag);
+        return tryAndRepeat(accountEndpoint, () -> accountEndpoint.changeAccessLevelState(changeAccessLevelStateDto));
     }
 
 
@@ -235,7 +229,7 @@ public class AccountController {
     @PUT
     @Path("/reset-password")
     public void resetPassword(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid PasswordResetDto passwordResetDto) throws BaseAppException {
-        tryAndRepeat(() -> this.accountEndpoint.resetPassword(passwordResetDto));
+        tryAndRepeat(accountEndpoint, () -> accountEndpoint.resetPassword(passwordResetDto));
     }
 
     /**
@@ -246,7 +240,7 @@ public class AccountController {
     @POST
     @Path("/request-password-reset/{login}")
     public void requestPasswordReset(@PathParam("login") @Valid @Login String login) throws BaseAppException {
-        tryAndRepeat(() -> this.accountEndpoint.requestPasswordReset(login));
+        tryAndRepeat(accountEndpoint, () -> accountEndpoint.requestPasswordReset(login));
     }
 
     /**
@@ -259,7 +253,7 @@ public class AccountController {
     @Path("/request-someones-password-reset/{login}/{email}")
     public void requestSomeonesPasswordReset(@PathParam("login") @Valid @Login String login, @PathParam("email")
     @Valid @Email(message = REGEX_INVALID_EMAIL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) String email) throws BaseAppException {
-        tryAndRepeat(() -> this.accountEndpoint.requestSomeonesPasswordReset(login, email));
+        tryAndRepeat(accountEndpoint, () -> accountEndpoint.requestSomeonesPasswordReset(login, email));
     }
 
 
@@ -271,7 +265,7 @@ public class AccountController {
     @PUT
     @Path("/verify")
     public void verifyAccount(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid AccountVerificationDto accountVerificationDto) throws BaseAppException {
-        tryAndRepeat(() -> this.accountEndpoint.verifyAccount(accountVerificationDto));
+        tryAndRepeat(accountEndpoint, () -> accountEndpoint.verifyAccount(accountVerificationDto));
     }
 
     /**
@@ -288,11 +282,9 @@ public class AccountController {
     @ETagFilterBinding
     public OtherClientChangeDataDto changeOtherClientData(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid OtherClientChangeDataDto otherClientChangeDataDto,
                                                           @HeaderParam("If-Match") String etag) throws BaseAppException {
-        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, otherClientChangeDataDto)) {
-            throw ControllerException.etagIdentityIntegrity();
-        }
 
-        return tryAndRepeat(() -> accountEndpoint.changeOtherClientData(otherClientChangeDataDto));
+        checkEtagIntegrity(otherClientChangeDataDto, etag);
+        return tryAndRepeat(accountEndpoint, () -> accountEndpoint.changeOtherClientData(otherClientChangeDataDto));
     }
 
     /**
@@ -309,11 +301,9 @@ public class AccountController {
     @ETagFilterBinding
     public OtherBusinessWorkerChangeDataDto changeOtherBusinessWorkerData(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid OtherBusinessWorkerChangeDataDto otherBusinessWorkerChangeDataDto,
                                                                           @HeaderParam("If-Match") String etag) throws BaseAppException {
-        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, otherBusinessWorkerChangeDataDto)) {
-            throw ControllerException.etagIdentityIntegrity();
-        }
+        checkEtagIntegrity(otherBusinessWorkerChangeDataDto, etag);
 
-        return tryAndRepeat(() -> accountEndpoint.changeOtherBusinessWorkerData(otherBusinessWorkerChangeDataDto));
+        return tryAndRepeat(accountEndpoint, () -> accountEndpoint.changeOtherBusinessWorkerData(otherBusinessWorkerChangeDataDto));
     }
 
     /**
@@ -330,11 +320,9 @@ public class AccountController {
     @ETagFilterBinding
     public AccountDto changeOtherAccountData(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid OtherAccountChangeDataDto otherAccountChangeDataDto,
                                              @HeaderParam("If-Match") String etag) throws BaseAppException {
-        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, otherAccountChangeDataDto)) {
-            throw ControllerException.etagIdentityIntegrity();
-        }
 
-        return tryAndRepeat(() -> accountEndpoint.changeOtherAccountData(otherAccountChangeDataDto));
+        checkEtagIntegrity(otherAccountChangeDataDto, etag);
+        return tryAndRepeat(accountEndpoint, () -> accountEndpoint.changeOtherAccountData(otherAccountChangeDataDto));
     }
 
     /**
@@ -346,7 +334,7 @@ public class AccountController {
     @Path("/change-email")
     @Consumes(MediaType.APPLICATION_JSON)
     public void changeEmail(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid AccountVerificationDto accountVerificationDto) throws BaseAppException {
-        tryAndRepeat(() -> this.accountEndpoint.changeEmail(accountVerificationDto));
+        tryAndRepeat(accountEndpoint, () -> accountEndpoint.changeEmail(accountVerificationDto));
     }
 
     /**
@@ -361,10 +349,8 @@ public class AccountController {
     @ETagFilterBinding
     @Consumes(MediaType.APPLICATION_JSON)
     public void confirmBusinessWorker(@Valid BlockAccountDto blockAccountDto, @HeaderParam("If-Match") @NotNull(message = CONSTRAINT_NOT_NULL) @NotEmpty(message = CONSTRAINT_NOT_EMPTY) String etag) throws BaseAppException {
-        if (!EntityIdentitySignerVerifier.verifyEntityIntegrity(etag, blockAccountDto)) {
-            throw ControllerException.etagIdentityIntegrity();
-        }
-        tryAndRepeat(() -> accountEndpoint.confirmBusinessWorker(blockAccountDto));
+        checkEtagIntegrity(blockAccountDto, etag);
+        tryAndRepeat(accountEndpoint, () -> accountEndpoint.confirmBusinessWorker(blockAccountDto));
     }
 
     /**
@@ -375,7 +361,7 @@ public class AccountController {
     @POST
     @Path("/request-email-change")
     public void requestEmailChange(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException {
-        tryAndRepeat(() -> this.accountEndpoint.requestEmailChange(accountChangeEmailDto));
+        tryAndRepeat(accountEndpoint, () -> accountEndpoint.requestEmailChange(accountChangeEmailDto));
     }
 
     /**
@@ -386,7 +372,7 @@ public class AccountController {
     @POST
     @Path("/request-other-email-change")
     public void requestOtherEmailChange(@NotNull(message = CONSTRAINT_NOT_NULL) @Valid AccountChangeEmailDto accountChangeEmailDto) throws BaseAppException {
-        tryAndRepeat(() -> this.accountEndpoint.requestOtherEmailChange(accountChangeEmailDto));
+        tryAndRepeat(accountEndpoint, () -> accountEndpoint.requestOtherEmailChange(accountChangeEmailDto));
     }
 
     /**
@@ -400,7 +386,7 @@ public class AccountController {
     @Path("/metadata/{login}")
     @Produces(MediaType.APPLICATION_JSON)
     public AccountMetadataDto getAccountMetadata(@PathParam("login") String login) throws BaseAppException {
-        return tryAndRepeat(() -> accountEndpoint.getAccountMetadata(login));
+        return tryAndRepeat(accountEndpoint, () -> accountEndpoint.getAccountMetadata(login));
     }
 
 
@@ -423,7 +409,7 @@ public class AccountController {
         } catch (IllegalArgumentException e) {
             throw new ControllerException(ACCESS_LEVEL_PARSE_ERROR);
         }
-        return tryAndRepeat(() -> accountEndpoint.getAccessLevelMetadata(login, accessLevelType));
+        return tryAndRepeat(accountEndpoint, () -> accountEndpoint.getAccessLevelMetadata(login, accessLevelType));
     }
 
 
@@ -438,6 +424,6 @@ public class AccountController {
     @Path("/metadata/address/{login}")
     @Produces(MediaType.APPLICATION_JSON)
     public MetadataDto getClientAddressMetadata(@PathParam("login") String login) throws BaseAppException {
-        return tryAndRepeat(() -> accountEndpoint.getAddressMetadata(login));
+        return tryAndRepeat(accountEndpoint, () -> accountEndpoint.getAddressMetadata(login));
     }
 }

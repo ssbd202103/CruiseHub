@@ -8,6 +8,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
+import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -16,6 +17,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,8 +34,8 @@ public class CruiseFacadeMow extends AbstractFacade<Cruise> {
     }
 
     @Override
-    @RolesAllowed("editCruise")
-    protected void edit(Cruise entity) throws FacadeException {
+    @RolesAllowed({"editCruise","publishCruise"})
+    public void edit(Cruise entity) throws FacadeException {
         super.edit(entity);
     }
 
@@ -42,10 +44,10 @@ public class CruiseFacadeMow extends AbstractFacade<Cruise> {
         return em;
     }
 
-    @RolesAllowed({"deactivateCruise", "editCruise", "viewCruiseReservations", "getWorkerCruiseReservations", "createReservation", "cancelReservation"})
+    @PermitAll
     public Cruise findByUUID(UUID uuid) throws BaseAppException {
         TypedQuery<Cruise> tq = em.createNamedQuery("Cruise.findByUUID", Cruise.class);
-        tq.setParameter("uuid", uuid.toString());
+        tq.setParameter("uuid", uuid);
         try {
             return tq.getSingleResult();
         } catch (NoResultException e) {
@@ -54,9 +56,26 @@ public class CruiseFacadeMow extends AbstractFacade<Cruise> {
     }
 
     @PermitAll
-    public List<Cruise> getPublishedCruises() {
+    public List<Cruise> getPublishedCruises() throws BaseAppException {
         TypedQuery<Cruise> tq = em.createNamedQuery("Cruise.findAllPublished", Cruise.class);
-        return tq.getResultList();
+        try {
+            return tq.getResultList();
+        } catch (NoResultException e) {
+            throw FacadeException.noSuchElement();
+        }
+    }
+
+
+    @PermitAll
+    public List<Cruise> findByCruiseGroupUUID(UUID uuid) throws BaseAppException {
+        TypedQuery<Cruise> tq = em.createNamedQuery("Cruise.findByCruiseGroupUUID", Cruise.class);
+        tq.setParameter("uuid", uuid);
+
+        try {
+            return tq.getResultList();
+        } catch (NoResultException e) {
+            throw FacadeException.noSuchElement();
+        }
     }
 
     @RolesAllowed("addCruise")

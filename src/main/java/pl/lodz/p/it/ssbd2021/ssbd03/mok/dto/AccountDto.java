@@ -5,8 +5,10 @@ import lombok.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.FirstName;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Name;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.SecondName;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -25,10 +27,10 @@ public class AccountDto implements SignableEntity {
     @Login
     private String login;
 
-    @Name
+    @FirstName
     private String firstName;
 
-    @Name
+    @SecondName
     private String secondName;
 
     private boolean darkMode;
@@ -44,7 +46,7 @@ public class AccountDto implements SignableEntity {
     @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
     private Set<AccessLevelType> accessLevels;
 
-    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
+    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO)
     private long version;
 
     @JsonIgnore

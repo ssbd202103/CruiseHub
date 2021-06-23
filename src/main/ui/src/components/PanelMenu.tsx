@@ -41,12 +41,6 @@ export default function PanelMenu(props: PanelMenuProps) {
                         <ListItemText>{t("go back")}</ListItemText>
                     </ListItem>
                 </Link>
-                <ListItem button>
-                    <AppColorSetter />
-                </ListItem>
-                <ListItem button>
-                    <LanguageSetter />
-                </ListItem>
             </List>
         </Box>
     )

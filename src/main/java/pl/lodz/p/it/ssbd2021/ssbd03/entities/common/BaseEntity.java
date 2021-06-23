@@ -14,7 +14,7 @@ import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
-import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_POSITIVE_OR_ZERO_ERROR;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_POSITIVE_OR_ZERO;
 
 @MappedSuperclass
 @ToString
@@ -59,7 +59,7 @@ public abstract class BaseEntity implements IdentifiableEntity {
 
     @Getter
     @Setter
-    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
+    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO)
     @Version
     @Column(nullable = false)
     private long version;

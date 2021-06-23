@@ -1,11 +1,18 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.common.dto.MetadataDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints.TransactionalEndpoint;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.RatingDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.RemoveClientRatingDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.RemoveRankingDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.ClientRatingDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CreateRatingDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.ratings.RatingDto;
 
-public interface RatingEndpointLocal {
+import javax.ejb.Local;
+import java.util.List;
+import java.util.UUID;
+
+@Local
+public interface RatingEndpointLocal extends TransactionalEndpoint {
 
     /**
      * Dodaje ocenę użytkownika o podanym loginie dla wycieczki o podanym id
@@ -13,29 +20,45 @@ public interface RatingEndpointLocal {
      * @param ratingDto obiekt dto przechowujący informację do stworzenia oceny
      * @throws BaseAppException bazowy wyjątek aplikacji, zwracany w przypadku nieznależenia użytkownika lub grupy wycieczek
      */
-    void createRating(RatingDto ratingDto) throws BaseAppException;
+    void createRating(CreateRatingDto ratingDto) throws BaseAppException;
 
     /**
      * Usuwa ocenę o podanym użytkowniku oraz grupie wycieczek
      *
-     * @param removeRankingDto obiekt dto przechowujący informację do usuwania oceny
+     * @param cruiseGroupUUID uuid grupy wycieczek
      * @throws BaseAppException bazowy wyjątek aplikacji, zwracany w przypadku nieznależenia użytkownika lub grupy wycieczek
      */
-    void removeRating(RemoveRankingDto removeRankingDto) throws BaseAppException;
+    void removeRating(UUID cruiseGroupUUID) throws BaseAppException;
+
+    /**
+     * Pobiera wszystkie oceny klienta
+     * @param login login klienta
+     * @return listę ocen
+     * @throws BaseAppException bazowy wyjątek aplikacji
+     */
+    List<ClientRatingDto> getClientRatings(String login) throws BaseAppException;
 
     /**
      * Pobiera ocene klienta dla podanej wycieczki
      *
-     * @param login           login klienta
-     * @param cruiseGroupName login
      * @throws BaseAppException bazowy wyjątek aplikacji, zwracany w przypadku nieznależenia oceny
      */
-    RatingDto getRating(String login, String cruiseGroupName) throws BaseAppException;
+    List<RatingDto> getOwnRatings() throws BaseAppException;
 
     /**
      * Metoda służąca do usunięcia oceny klienta przez moderatora
-     * @param removeClientRatingDto obiekt dto przechowujący informacje odnosnie oceny do usunięcia
-     * @throws BaseAppException bazowy wyjątek aplikacji
+     * @param login login klienta
+     * @param cruiseGroupUUID uuid grupy wycieczek
+     * @throws BaseAppException
      */
-    void removeClientRating(RemoveClientRatingDto removeClientRatingDto) throws BaseAppException;
+    void removeClientRating(String login, UUID cruiseGroupUUID) throws BaseAppException;
+
+    /**
+     * Pobiera mewtadane oceny o danym uuid
+     *
+     * @param uuid uuid oceny
+     * @return zwraca informacje o ocenie
+     * @throws BaseAppException wyjątek wyrzucany w razie nie znależenia atrakcji
+     */
+    MetadataDto getRatingMetadata(UUID uuid) throws BaseAppException;
 }

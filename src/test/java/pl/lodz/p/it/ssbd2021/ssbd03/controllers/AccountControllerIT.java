@@ -66,7 +66,7 @@ class AccountControllerIT {
     }
 
 
-    @Test // todo
+    @Test
     @Disabled
     // Potrzebna jest metoda to potwierdzenia konta żeby przeprowadzić logowania do nowoutworzonego użytkownika dla którego w teście będzie zmieniane hasło
     public void resetPassword_SUCCESS() {
@@ -80,7 +80,6 @@ class AccountControllerIT {
     public void registerClientTest_SUCCESS() {
         ClientForRegistrationDto client = getSampleClientForRegistrationDto();
         given().relaxedHTTPSValidation().baseUri(authBaseUri).contentType(MediaType.APPLICATION_JSON).body(client).when().post("/client/registration").then().statusCode(204);
-        // todo implement remove method to clean created data
     }
 
     @Test
@@ -132,7 +131,6 @@ class AccountControllerIT {
 
         AccountDto updatedAccount = objectMapper.readValue(response.asString(), AccountDto.class);
         assertThat(updatedAccount.getAccessLevels()).contains(AccessLevelType.MODERATOR).containsAll(originalAccessLevels);
-        // todo implement remove method to clean created data
     }
 
     @Test
@@ -259,9 +257,6 @@ class AccountControllerIT {
         response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken)).body(grantAccessLevel).put("/grant-access-level");
         assertThat(response.getStatusCode()).isEqualTo(400);
         assertThat(response.asString()).isEqualTo(ACCESS_LEVEL_NOT_ASSIGNABLE_ERROR);
-
-        // todo check for optimistic lock once working mechanism is implemented correctly
-        // todo implement remove method to clean created data
     }
 
     @Test
@@ -504,7 +499,7 @@ class AccountControllerIT {
         String adminToken = this.getAuthToken("rbranson", "abcABC123*");
         ClientForRegistrationDto client = getSampleClientForRegistrationDto();
         AccountDto account = registerClientAndGetAccountDto(client);
-        AuthenticateDto authInfoFalse = new AuthenticateDto(account.getLogin(), "Incorre2*ctPassword");
+        AuthenticateDto authInfoFalse = new AuthenticateDto(account.getLogin(), "Incorre2*ctPassword", true, "PL");
         for(int i=0;i<=5;i++) {
             Response responseFalse = given().relaxedHTTPSValidation().baseUri(authBaseUri).contentType("application/json").body(authInfoFalse).post("/sign-in");
         }
@@ -539,5 +534,10 @@ class AccountControllerIT {
         return JWTHandler.createToken(Map.of("accessLevels", List.of("ADMINISTRATOR", "BUSINESS_WORKER", "MODERATOR")), "rbranson");
     }
 
+    @Test
+    public void getToken() {
+        String token = JWTHandler.createToken(Map.of("accessLevels", List.of("ADMINISTRATOR", "BUSINESS_WORKER", "MODERATOR")), "rbranson");
+        System.out.println(token);
+    }
 
 }

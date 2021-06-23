@@ -1,5 +1,7 @@
 import SettingsIcon from '@material-ui/icons/SettingsRounded'
 import CruiseIcon from '@material-ui/icons/CardTravelRounded'
+import StarIcon from '@material-ui/icons/CardTravelRounded'
+
 
 import {useTranslation} from 'react-i18next'
 
@@ -14,9 +16,12 @@ import PanelLayout from "../../layouts/PanelLayout";
 import {getSelfMetadataDetails, getSelfAddressMetadataDetails} from "../../Services/accountsService";
 import {refreshToken} from "../../Services/userService";
 import useHandleError from "../../errorHandler";
+import ListOwnRatings from "./client/ListOwnRatings";
+import ListSelfReservations from "./client/ListSelfReservations";
+import ClientHomePage from "../../components/ClientHomePage";
 
 export default function ClientPanel() {
-    const { t } = useTranslation()
+    const {t} = useTranslation()
     const handleError = useHandleError()
     const [isEmailEdit, setIsEmailEdit] = useState(false)
     const [isDataEdit, setIsDataEdit] = useState(false)
@@ -27,7 +32,7 @@ export default function ClientPanel() {
     const handleIsEmailEdit = () => {
         getSelfMetadataDetails().then(res => {
             sessionStorage.setItem("changeSelfAccountDataMta", JSON.stringify(res.data));
-  //          sessionStorage.setItem("changeSelfAddressDataMta", JSON.stringify(res.data));
+            //          sessionStorage.setItem("changeSelfAddressDataMta", JSON.stringify(res.data));
             refreshToken();
         }, error => {
             const message = error.response.data
@@ -42,7 +47,7 @@ export default function ClientPanel() {
     const handleIsDataEdit = () => {
         getSelfMetadataDetails().then(res => {
             sessionStorage.setItem("changeSelfAccountDataMta", JSON.stringify(res.data));
-  //          sessionStorage.setItem("changeSelfAddressDataMta", JSON.stringify(res.data));
+            //          sessionStorage.setItem("changeSelfAddressDataMta", JSON.stringify(res.data));
             refreshToken();
         }, error => {
             const message = error.response.data
@@ -71,7 +76,7 @@ export default function ClientPanel() {
     const handleIsPasswordEdit = () => {
         getSelfMetadataDetails().then(res => {
             sessionStorage.setItem("changeSelfAccountDataMta", JSON.stringify(res.data));
-        //    sessionStorage.setItem("changeSelfAddressDataMta", JSON.stringify(res.data));
+            //    sessionStorage.setItem("changeSelfAddressDataMta", JSON.stringify(res.data));
             refreshToken();
         }, error => {
             const message = error.response.data
@@ -101,10 +106,17 @@ export default function ClientPanel() {
             }}
             menu={[
                 {
-                    link: '/profile/cruises',
-                    text: t('cruises'),
+                    link: '/profile/reservations',
+                    text: t('reservations'),
                     Icon: CruiseIcon,
-                    Component: () => <></>
+                    Component: ListSelfReservations
+                },
+
+                {
+                    link: '/profile/ratings',
+                    text: t('ratings'),
+                    Icon: StarIcon,
+                    Component: ListOwnRatings
                 },
                 {
                     link: '/profile/settings',
@@ -115,31 +127,53 @@ export default function ClientPanel() {
                             <ChangeClientData
                                 open={isDataEdit}
                                 onOpen={handleIsDataEdit}
-                                onConfirm={() => {setIsDataEdit(false)}}
-                                onCancel={() => {setIsDataEdit(false)}}
+                                onConfirm={() => {
+                                    setIsDataEdit(false)
+                                }}
+                                onCancel={() => {
+                                    setIsDataEdit(false)
+                                }}
                             />
                             <ChangeAddress
                                 open={isAddressEdit}
                                 onOpen={handleIsAddressEdit}
-                                onConfirm={() => {setIsAddressEdit(false)}}
-                                onCancel={() => {setIsAddressEdit(false)}}
+                                onConfirm={() => {
+                                    setIsAddressEdit(false)
+                                }}
+                                onCancel={() => {
+                                    setIsAddressEdit(false)
+                                }}
                             />
                             <ChangeEmail
                                 open={isEmailEdit}
                                 onOpen={handleIsEmailEdit}
-                                onConfirm={() => {setIsEmailEdit(false)}}
-                                onCancel={() => {setIsEmailEdit(false)}}
+                                onConfirm={() => {
+                                    setIsEmailEdit(false)
+                                }}
+                                onCancel={() => {
+                                    setIsEmailEdit(false)
+                                }}
                             />
                             <ChangePassword
                                 open={isPasswordEdit}
                                 onOpen={handleIsPasswordEdit}
-                                onConfirm={() => {setIsPasswordEdit(false)}}
-                                onCancel={() => {setIsPasswordEdit(false)}}
+                                onConfirm={() => {
+                                    setIsPasswordEdit(false)
+                                }}
+                                onCancel={() => {
+                                    setIsPasswordEdit(false)
+                                }}
                             />
                         </>
                     )
                 }
             ]}
+            otherRoutes={[
+            {
+                to: '/profile',
+                Component: ClientHomePage
+            }
+           ] }
         />
     )
 }

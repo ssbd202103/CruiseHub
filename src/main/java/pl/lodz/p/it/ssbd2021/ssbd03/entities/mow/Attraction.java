@@ -12,13 +12,17 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 
+import java.util.UUID;
+
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 
 @Entity(name = "attractions")
 @NamedQueries({
         @NamedQuery(name = "Attraction.findByName", query = "SELECT att FROM attractions att WHERE att.name = :name"),
         @NamedQuery(name = "Attraction.findByIdIfReserved", query = "SELECT att FROM attractions att WHERE att.name = :name"),
-
+        @NamedQuery(name = "Attraction.findByCruiseUUID", query = "SELECT att FROM attractions att WHERE att.cruise.uuid = :uuid"),
+        @NamedQuery(name = "Attraction.countReservedSpots", query = "SELECT SUM(r.numberOfSeats) FROM reservations r WHERE :attraction MEMBER OF r.attractions"),
+        @NamedQuery(name = "Attraction.findByUUID", query = "SELECT att FROM attractions att WHERE att.uuid = :uuid")
 })
 @ToString
 public class Attraction extends BaseEntity {
@@ -29,6 +33,11 @@ public class Attraction extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ATTRACTION_SEQ_GEN")
     @ToString.Exclude
     private long id;
+
+    @Getter
+    @NotNull(message = CONSTRAINT_NOT_NULL)
+    @Column(name = "uuid", nullable = false, unique = true, updatable = false)
+    private UUID uuid;
 
     @Getter
     @Setter
@@ -44,13 +53,13 @@ public class Attraction extends BaseEntity {
 
     @Getter
     @Setter
-    @Positive(message = CONSTRAINT_POSITIVE_ERROR)
+    @Positive(message = CONSTRAINT_POSITIVE)
     @Column(name = "price")
     private double price;
 
     @Getter
     @Setter
-    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
+    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO)
     @Column(name = "number_of_seats")
     private long numberOfSeats;
 
@@ -61,15 +70,16 @@ public class Attraction extends BaseEntity {
 
     @Getter
     @Setter
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "cruise_id")
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid
     @ToString.Exclude
-    private CruiseGroup cruise;
+    private Cruise cruise;
 
     public Attraction(String name, String description,
-                      double price, long numberOfSeats, boolean hasFreeSpots, CruiseGroup cruise) {
+                      double price, long numberOfSeats, boolean hasFreeSpots, Cruise cruise) {
+        this.uuid = UUID.randomUUID();
         this.name = name;
         this.description = description;
         this.price = price;
@@ -78,7 +88,8 @@ public class Attraction extends BaseEntity {
         this.cruise = cruise;
     }
 
-    public Attraction(String name, String description, double price, long numberOfSeats, CruiseGroup cruise) {
+    public Attraction(String name, String description, double price, long numberOfSeats, Cruise cruise) {
+        this.uuid = UUID.randomUUID();
         this.name = name;
         this.description = description;
         this.price = price;

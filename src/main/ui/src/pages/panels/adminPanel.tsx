@@ -19,7 +19,11 @@ import PanelLayout from "../../layouts/PanelLayout";
 import {getSelfAddressMetadataDetails, getSelfMetadataDetails} from "../../Services/accountsService";
 import {refreshToken} from "../../Services/userService";
 import useHandleError from "../../errorHandler";
-import ListCruiseGroup from "../../components/ListCruiseGroup";
+import ListCruiseGroup from "./admin/ListCruiseGroupsForAdmin";
+import ListReservationsForCruise from "./admin/ListReservationsForCruise";
+import AttractionList from "./admin/AttractionList";
+import AdminHomePage from "../../components/AdminHomePage"
+import CruiseIcon from "@material-ui/icons/CardTravelRounded";
 export default function AdminPanel() {
     const {t} = useTranslation()
     const handleError = useHandleError()
@@ -106,7 +110,7 @@ export default function AdminPanel() {
                 },
                 {
                     link: '/listCruiseGroup',
-                    Icon: AccountsListIcon,
+                    Icon: CruiseIcon,
                     text: t('listCruiseGroup'),
                     Component: ListCruiseGroup
                 },
@@ -151,6 +155,18 @@ export default function AdminPanel() {
                 {
                     to: '/accounts/resetSomebodyPassword',
                     Component: RequestSomeonePasswordReset
+                },
+                {
+                    to: '/reservations',
+                    Component: ListReservationsForCruise
+                },
+                {
+                    to: '/attractions/:uuid',
+                    Component: AttractionList
+                },
+                {
+                    to: '/',
+                    Component: AdminHomePage
                 }
             ]}
         />

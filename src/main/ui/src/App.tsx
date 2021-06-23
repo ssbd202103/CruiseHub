@@ -20,6 +20,7 @@ import SignUpClient from './pages/signup/client'
 import SignUpWorker from './pages/signup/worker'
 import AdminPanel from './pages/panels/adminPanel'
 import ModeratorPanel from "./pages/panels/moderatorPanel";
+import Cruise from './pages/cruise';
 import ClientPanel from './pages/panels/clientPanel'
 import WorkerPanel from './pages/panels/workerPanel'
 import PasswordReset from "./pages/reset/passwordReset";
@@ -48,10 +49,10 @@ function App() {
 
     useEffect(() => {
         loadUserWithSavedToken()
-    //         .catch(error => {
-    //         handleError('error.response.data',error.response.status)
-    //     })
-    //
+        .catch(error => {
+            const message = error.response?.data
+            handleError(message, error.response?.status)
+        })
         }, [])
 
 
@@ -103,9 +104,11 @@ function App() {
                         <Route path="/verify/accountVerification">
                             <VerifyAccount/>
                         </Route>
-                        <Route path="/codeSignIn">
+                        <Route path="/signin-code">
                             <CodeSignIn/>
                         </Route>
+
+                        <Route path="/cruise/:id" component={Cruise} />
 
                         <Route path="*">
                             <div style={{

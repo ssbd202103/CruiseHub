@@ -58,6 +58,10 @@ public class SystemScheduler {
         ) {
             if (acc.getCreationDateTime().plus( Long.parseLong(securityProperties.getProperty("remove.unconfirmed.accounts.time")), ChronoUnit.HOURS).isBefore(LocalDateTime.now())) {
                 Locale locale = new Locale(acc.getLanguageType().getName().name());
+               List<TokenWrapper> tokens_for_account= tokenWrapperFacade.findByAccount(acc);
+               for(TokenWrapper token : tokens_for_account){
+                   tokenWrapperFacade.remove(token);
+               }
                 EmailService.sendEmailWithContent(acc.getEmail(), ii18n.getMessage(I18n.REMOVE_UNCONFIRMED_ACCOUNT_SUBJECT, locale), ii18n.getMessage(I18n.REMOVE_UNCONFIRMED_ACCOUNT_BODY, locale));
                 accountFacade.remove(acc);
             }
@@ -105,7 +109,7 @@ public class SystemScheduler {
     }
 
     @Schedule(hour = "*/12", persistent = false)
-    private void sendActivationEmailWithToken() throws BaseAppException { // todo handle this exception
+    private void sendActivationEmailWithToken() throws BaseAppException {
         List<Account> unconfirmed = accountFacade.getUnconfirmedAccounts();
         for (Account acc : unconfirmed
         ) {

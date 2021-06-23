@@ -1,12 +1,9 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
-import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.dto.MetadataDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints.TransactionalEndpoint;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.DeactivateCruiseDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.EditCruiseDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.NewCruiseDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.PublishCruiseDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.*;
 
 import javax.ejb.Local;
 import java.util.List;
@@ -17,7 +14,7 @@ import java.util.UUID;
  * Interfejs który zajmuje się obsługą obiektów dto z zakresu wycieczek
  */
 @Local
-public interface CruiseEndpointLocal {
+public interface CruiseEndpointLocal extends TransactionalEndpoint {
 
     /**
      * Tworzenie nowego rejsu
@@ -46,6 +43,14 @@ public interface CruiseEndpointLocal {
     CruiseDto getCruise(UUID uuid) throws BaseAppException;
 
     /**
+     * Zwraca wycieczki należących do grupy wycieczek o podanym uuid
+     * @param uuid uuid grupy wycieczek
+     * @return listę encji wycieczek nalężacych do grupy wycieczek o podanym uuid
+     * @throws BaseAppException wyjątek rzucany w razie nie znalezienia wycieczki
+     */
+    List<RelatedCruiseDto> getCruisesByCruiseGroup(UUID uuid) throws BaseAppException;
+
+    /**
      * Publikuje wycieczke
      *
      * @param publishCruiseDto dto niezbędne do publikacji wycieczki
@@ -64,7 +69,26 @@ public interface CruiseEndpointLocal {
 
     /**
      * Zwraca wszystkie opublikowane wycieczki
+     *
      * @return Lista wycieczek
+     * @throws BaseAppException Bazowy wyjatek aplikacji
      */
-    List<CruiseDto> getPublishedCruises();
+    List<CruiseGroupWithCruisesDto> getPublishedCruises() throws BaseAppException;
+
+    /**
+     * Pobiera informacje o wycieczkach dla danej grupy wycieczek
+     *
+     * @param cruiseGroupUUID UUID grupy wycieczek
+     * @return Lista wycieczek w reprezentacji DTO
+     */
+    List<CruiseForCruiseGroupDto> getCruisesForCruiseGroup(UUID cruiseGroupUUID) throws BaseAppException;
+
+    /**
+     * Pobiera metadane wycieczki
+     *
+     * @param uuid UUID wycieczki wybranej do metadanych
+     * @return Reprezentacja DTO metadanych
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
+    MetadataDto getCruiseMetadata(UUID uuid) throws BaseAppException;
 }

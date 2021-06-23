@@ -11,12 +11,13 @@ import {useTranslation} from "react-i18next";
 import {useSelector} from "react-redux";
 import {selectDarkMode} from "../../../redux/slices/userSlice";
 import {getAllAccounts} from "../../../Services/accountsService";
-import DarkedTextField from "../../../components/DarkedTextField";
-import {useSnackbarQueue} from "../../snackbar";
 import {refreshToken} from "../../../Services/userService";
-import {TextField} from "@material-ui/core";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+import {Button, TextField} from "@material-ui/core";
+import Autocomplete from "../../../components/Autocomplete";
 import useHandleError from "../../../errorHandler";
+import {Link} from "react-router-dom";
+import ActiveIcon from '../../../components/ActiveIcon';
+import RoundedButton from "../../../components/RoundedButton";
 
 const useRowStyles = makeStyles({
     root: {
@@ -25,6 +26,19 @@ const useRowStyles = makeStyles({
         },
     },
 });
+
+const useButtonStyles = makeStyles({
+    root: {
+        fontFamily: '"Montserrat", sans-serif',
+        color: 'var(--white)',
+        backgroundColor: "var(--blue)",
+        padding: '8px 16px',
+        margin: '0 16px',
+        '&:hover': {
+            backgroundColor: "var(--blue-dark)",
+        }
+    }
+})
 
 function createData(
     login: string,
@@ -53,6 +67,8 @@ function Row(props: RowProps) {
     const {row} = props;
     const {style} = props;
     const classes = useRowStyles();
+    const {t} = useTranslation();
+    const buttonClass = useButtonStyles();
 
     return (
         <TableRow className={classes.root}>
@@ -62,8 +78,19 @@ function Row(props: RowProps) {
             <TableCell style={style}>{row.firstName}</TableCell>
             <TableCell style={style}>{row.secondName}</TableCell>
             <TableCell style={style}>{row.email}</TableCell>
-            <TableCell style={style}>{row.active.toString()}</TableCell>
-            <TableCell style={style}>{row.accessLevels.toString()}</TableCell>
+            <TableCell style={style}><ActiveIcon active={row.active}/></TableCell>
+            <TableCell style={style}>{row.accessLevels.map(item => t(item)).join(', ')}</TableCell>
+
+            <TableCell style={style}>
+                {row.accessLevels.includes('CLIENT') ? (
+                    <Link to="/accounts/ratings">
+                            <RoundedButton color="blue"
+                                onClick={() => sessionStorage.setItem("login", row.login)}
+                                className={buttonClass.root}>{t("ratings")}
+                            </RoundedButton>
+                    </Link>
+                ) : ""}
+            </TableCell>
         </TableRow>
     );
 }
@@ -79,7 +106,7 @@ export default function ModListClient() {
 
     useEffect(() => {
         getAllAccounts().then(res => {
-            setUsers(res.data)
+            setUsers(res.data.sort((account1: any, account2: any) => account1.login.localeCompare(account2.login)))
         }).catch(error => {
             const message = error.response.data
             handleError(message, error.response.status)
@@ -110,7 +137,6 @@ export default function ModListClient() {
             <Autocomplete
                 options={accounts}
                 inputValue={searchInput}
-                style={{width: 300}}
                 noOptionsText={t('no options')}
                 onChange={(event, value) => {
                     setSearchInput(value as string ?? '')
@@ -148,6 +174,10 @@ export default function ModListClient() {
                                 backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                 color: `var(--${!darkMode ? 'dark' : 'white-light'}`
                             }}>{t("access level")}</TableCell>
+                            <TableCell style={{
+                                backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
+                                color: `var(--${!darkMode ? 'dark' : 'white-light'}`
+                            }}>{t("ratings")}</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>

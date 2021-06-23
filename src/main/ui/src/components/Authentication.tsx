@@ -1,6 +1,6 @@
 import React from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {Link, useHistory} from "react-router-dom";
+import {Link, useHistory, useLocation} from "react-router-dom";
 import styles from "../styles/Header.module.css";
 import RoundedButton from "./RoundedButton";
 import Box from "@material-ui/core/Box";
@@ -22,11 +22,14 @@ import {
     selectSecondName, AccessLevelType, setActiveAccessLevel
 } from "../redux/slices/userSlice";
 import {logOut} from "../Services/userService";
+import {clearHistory, selectHistory, setHistory} from "../redux/slices/historySlice";
 
 
 export default function Authentication() {
     const {t} = useTranslation()
     const history = useHistory()
+    const location = useLocation()
+    const h = useSelector(selectHistory)
     const dispatch = useDispatch()
 
     const isEmpty = useSelector(isUserEmpty)
@@ -52,8 +55,9 @@ export default function Authentication() {
     }
 
     const handleMenuItemClick = (accessLevel: AccessLevelType) => () => {
-            dispatch(setActiveAccessLevel(accessLevel))
-            history.push('/')
+        dispatch(setActiveAccessLevel(accessLevel))
+        dispatch(clearHistory())
+        history.push('/')
     }
 
     const handleLogOut = () => {
@@ -65,20 +69,34 @@ export default function Authentication() {
             {
                 isEmpty ? (
                     <>
-                        <Link to="signin">
-                            <a style={{marginRight: 20}} className={styles.link}>{t("signin")}</a>
-                        </Link>
+                        <a
+                            style={{
+                                cursor: 'pointer',
+                                marginRight: 20,
+                            }}
+                            className={styles.link}
+                            onClick={() => {
+                                dispatch(setHistory(location.pathname))
+                                history.push('/signin')
+                            }}
+                        >
+                            {t('signin')}
+                        </a>
 
-                        <Link to="signup/client">
-                            <RoundedButton
-                                color="pink"
-                                style={{
-                                    fontSize: '1rem',
-                                    padding: '10px 20px',
-                                    textTransform: 'none'
-                                }}
-                            >{t("signup")}</RoundedButton>
-                        </Link>
+                        <RoundedButton
+                            color="pink"
+                            style={{
+                                fontSize: '1rem',
+                                padding: '10px 20px',
+                                textTransform: 'none'
+                            }}
+                            onClick={() => {
+                                dispatch(setHistory(location.pathname))
+                                history.push('/signup/client')
+                            }}
+                        >
+                            {t("signup")}
+                        </RoundedButton>
                     </>
                 ) : (
                     <>

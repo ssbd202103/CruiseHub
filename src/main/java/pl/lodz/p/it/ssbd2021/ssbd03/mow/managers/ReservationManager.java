@@ -1,25 +1,33 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.managers;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.Account;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.BusinessWorker;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Attraction;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Reservation;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.AccountFacadeMow;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.*;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters.AccountMapper;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.AttractionFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.ReservationFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateful;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.SecurityContext;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.IntegrityUtils.checkForOptimisticLock;
 
 /**
  * Klasa która zarządza logiką biznesową rezerwacji
@@ -28,74 +36,109 @@ import java.util.UUID;
 @Stateful
 @TransactionAttribute(TransactionAttributeType.MANDATORY)
 @Interceptors(TrackingInterceptor.class)
-public class ReservationManager implements ReservationManagerLocal {
+public class ReservationManager extends BaseManagerMow implements ReservationManagerLocal {
 
     @Inject
     private ReservationFacadeMow reservationFacadeMow;
 
     @Inject
-    private AccountFacadeMow accountFacadeMow;
+    private AttractionFacadeMow attractionFacadeMow;
 
     @Inject
     private CruiseFacadeMow cruiseFacadeMow;
 
-    @Context
-    private SecurityContext context;
-
     @Override
     @RolesAllowed("viewCruiseReservations")
     public List<Reservation> getCruiseReservations(UUID cruise_uuid) throws BaseAppException {
-        long id = cruiseFacadeMow.findByUUID(cruise_uuid).getId();
-        List<Reservation> res = reservationFacadeMow.findCruiseReservations(id);
-        return res;
-
+        Cruise cruise = cruiseFacadeMow.findByUUID(cruise_uuid);
+        return reservationFacadeMow.findCruiseReservations(cruise);
     }
 
     @RolesAllowed("getWorkerCruiseReservations")
     @Override
     public List<Reservation> getWorkerCruiseReservations(UUID cruise_uuid) throws BaseAppException {
-        long id = cruiseFacadeMow.findByUUID(cruise_uuid).getId();
-        List<Reservation> res = reservationFacadeMow.findWorkerCruiseReservations(id);
-        return res;
+        Cruise cruise = cruiseFacadeMow.findByUUID(cruise_uuid);
+        Account account = getCurrentUser();
+
+        BusinessWorker businessWorker = (BusinessWorker) AccountMapper.getAccessLevel(account, AccessLevelType.BUSINESS_WORKER);
+
+        if (cruise.getCruisesGroup().getCompany().getNIP() != businessWorker.getCompany().getNIP()) {
+            throw new CruiseManagerException(NOT_YOURS_CRUISE);
+        }
+
+        return reservationFacadeMow.findCruiseReservations(cruise);
     }
 
     @RolesAllowed("removeClientReservation")
     @Override
-    public void removeClientReservation(long reservationVersion, UUID reservationUuid, String clientLogin) throws BaseAppException {
-        // todo finish implementation
-        Reservation reservation = reservationFacadeMow.findReservationByUuidAndLogin(UUID.randomUUID(), clientLogin);
+    public void removeClientReservation(UUID reservationUuid, String clientLogin) throws BaseAppException {
+        Reservation reservation = reservationFacadeMow.findReservationByUuidAndLogin(reservationUuid, clientLogin);
+        reservationFacadeMow.remove(reservation);
     }
+
 
     @RolesAllowed("createReservation")
     @Override
-    public void createReservation(long version, UUID cruiseUUID, long numberOfSeats, String login) throws BaseAppException {
+    public void createReservation(long version, UUID cruiseUUID, long numberOfSeats, List<String> attractionsUUID) throws BaseAppException {
         Cruise cruise = cruiseFacadeMow.findByUUID(cruiseUUID);
-        Account acc = accountFacadeMow.findByLogin(login);
-        if (numberOfSeats > getAvailableSeats(cruiseUUID)) {
-            // todo throw an exception
-        }
-//        Reservation reservation = new Reservation(numberOfSeats, cruise, acc);
-//        reservation.setPrice(cruise.getCruisesGroup().getPrice() * numberOfSeats);
+        checkForOptimisticLock(cruise, version);
 
-//        reservationFacadeMow.create(reservation);
+        Account account = getCurrentUser();
+        Client client = (Client) AccountMapper.getAccessLevel(account, AccessLevelType.CLIENT);
+
+        if (numberOfSeats > getAvailableSeats(cruiseUUID)) {
+            throw new NoSeatsAvailableException(NO_SEATS_AVAILABLE);
+        }
+
+        if (cruise.getStartDate().isBefore(LocalDateTime.now())) {
+            throw new ReservationManagerException(CANNOT_BOOK_STARTED_CRUISE);
+        }
+
+        List<Attraction> attractions = new ArrayList<>();
+
+        for (String uuidStr : attractionsUUID) {
+            try {
+                UUID uuid = UUID.fromString(uuidStr);
+                Attraction attraction = attractionFacadeMow.findByUUID(uuid);
+                long allSeats = attraction.getNumberOfSeats();
+                long takenSeats = attractionFacadeMow.getNumberOfTakenSeats(attraction);
+                if (allSeats < takenSeats + numberOfSeats) {
+                    throw new ReservationManagerException(NO_SEATS_FOR_ATTRACTION);
+                }
+                attractions.add(attraction);
+            } catch (IllegalArgumentException e) {
+                throw new MapperException(MAPPER_UUID_PARSE);
+            }
+        }
+
+        Reservation reservation = new Reservation(numberOfSeats, cruise, cruise.getCruisesGroup().getPrice() * numberOfSeats, client);
+        reservation.getAttractions().addAll(attractions);
+
+        setCreatedMetadata(account, reservation);
+        reservationFacadeMow.create(reservation);
     }
 
     @RolesAllowed("cancelReservation")
     @Override
-    public void cancelReservation(long reservationVersion, UUID cruiseUUID, String login) throws BaseAppException {
-        Cruise cruise = cruiseFacadeMow.findByUUID(cruiseUUID);
-        // TODO implement
+    public void cancelReservation(UUID reservationUUID) throws BaseAppException {
+        String login = getCurrentUser().getLogin();
+        Reservation reservation = reservationFacadeMow.findReservationByUuidAndLogin(reservationUUID, login);
+
+        if (reservation.getCruise().getStartDate().isBefore(LocalDateTime.now())) {
+            throw new FacadeException(CANNOT_CANCEL_STARTED_CRUISE);
+        }
+
+        reservationFacadeMow.remove(reservation);
     }
 
     private long getAvailableSeats(UUID cruiseUUID) throws BaseAppException {
-        List<Reservation> reservations = getCruiseReservations(cruiseUUID);
-        long takenSeats = 0L;
-        for (Reservation res : reservations) {
-            takenSeats += res.getNumberOfSeats();
-        }
-        long allSeats = cruiseFacadeMow.findByUUID(cruiseUUID).getCruisesGroup().getNumberOfSeats();
+        Cruise cruise = cruiseFacadeMow.findByUUID(cruiseUUID);
+        List<Reservation> reservations = reservationFacadeMow.findCruiseReservations(cruise);
 
-        return allSeats - takenSeats;
+        long reservedSeats = reservations.stream().mapToLong(Reservation::getNumberOfSeats).sum();
+        long allSeats = cruise.getCruisesGroup().getNumberOfSeats();
+
+        return allSeats - reservedSeats;
     }
 
     @RolesAllowed("viewSelfReservations")
@@ -106,7 +149,8 @@ public class ReservationManager implements ReservationManagerLocal {
     }
 
     @RolesAllowed("authenticatedUser")
-    private Account getCurrentUser() throws BaseAppException {
-        return accountFacadeMow.findByLogin(context.getUserPrincipal().getName());
+    @Override
+    public Reservation findByUUID(UUID uuid) throws BaseAppException {
+        return reservationFacadeMow.findByUUID(uuid);
     }
 }

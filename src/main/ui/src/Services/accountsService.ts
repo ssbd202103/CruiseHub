@@ -30,7 +30,7 @@ export function getAccountMetadataDetailsAbout(login: string) {
         }
     })
 }
-//TODO it takes only one access_level not more
+
 export function getAccountAccessLevelMetadata(access_level: string, login: string){
     const {token} = store.getState()
 

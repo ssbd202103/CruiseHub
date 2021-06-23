@@ -1,12 +1,12 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.common.dto.MetadataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints.BaseEndpoint;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.mappers.MetadataMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Reservation;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CancelReservationDTO;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CreateReservationDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.CruiseReservationDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.RemoveClientReservationDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.MapperException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.reservations.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.converters.ReservationMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.managers.ReservationManagerLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
@@ -20,6 +20,9 @@ import javax.interceptor.Interceptors;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CRUISE_MAPPER_UUID_PARSE;
+import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.RESERVATION_MAPPER_UUID_PARSE;
 
 /**
  * Klasa która zajmuje się growadzeniem zmapowanych obiektów klas Dto na obiekty klas modelu związanych z rezerwacją wycieczek, oraz wywołuje metody logiki przekazując zmapowane obiekty.
@@ -43,12 +46,11 @@ public class ReservationEndpoint extends BaseEndpoint implements ReservationEndp
         return res;
     }
 
-    //TODO how to get current user ?
     @RolesAllowed("getWorkerCruiseReservations")
     @Override
     public List<CruiseReservationDto> viewWorkerCruiseReservations(UUID cruise_uuid) throws BaseAppException {
         List<CruiseReservationDto> res = new ArrayList<>();
-        for (Reservation reservation : reservationManager.getCruiseReservations(cruise_uuid)) {
+        for (Reservation reservation : reservationManager.getWorkerCruiseReservations(cruise_uuid)) {
             res.add(ReservationMapper.toReservationDto(reservation));
         }
         return res;
@@ -57,27 +59,38 @@ public class ReservationEndpoint extends BaseEndpoint implements ReservationEndp
     @RolesAllowed("removeClientReservation")
     @Override
     public void removeClientReservation(RemoveClientReservationDto removeClientReservationDto) throws BaseAppException {
-        this.reservationManager.removeClientReservation(removeClientReservationDto.getReservationVersion(), removeClientReservationDto.getReservationUuid(), removeClientReservationDto.getClientLogin());
-        // todo implement
+        try {
+            this.reservationManager.removeClientReservation(UUID.fromString(removeClientReservationDto.getReservationUuid()), removeClientReservationDto.getClientLogin());
+        } catch (IllegalArgumentException e) {
+            throw new MapperException(RESERVATION_MAPPER_UUID_PARSE);
+        }
     }
 
     @RolesAllowed("createReservation")
     @Override
     public void createReservation(CreateReservationDto crDto) throws BaseAppException {
-        this.reservationManager.createReservation(crDto.getCruiseVersion(), crDto.getCruiseUuid(), crDto.getNumberOfSeats(), crDto.getClientLogin());
+        this.reservationManager.createReservation(crDto.getCruiseVersion(), crDto.getCruiseUuid(), crDto.getNumberOfSeats(), crDto.getAttractionsUUID());
     }
 
     @RolesAllowed("cancelReservation")
     @Override
-    public void cancelReservation(CancelReservationDTO crDto) throws BaseAppException {
-        this.reservationManager.cancelReservation(crDto.getReservationVersion(), crDto.getCruiseUuid(), crDto.getClientLogin());
+    public void cancelReservation(UUID reservationUUID) throws BaseAppException {
+        this.reservationManager.cancelReservation(reservationUUID);
     }
 
     @RolesAllowed("viewSelfReservations")
     @Override
-    public List<CruiseReservationDto> viewSelfCruiseReservations() throws BaseAppException {
-        List<CruiseReservationDto> res = new ArrayList<>();
-        // todo finish implementation
+    public List<SelfReservationDto> viewSelfCruiseReservations() throws BaseAppException {
+        List<SelfReservationDto> res = new ArrayList<>();
+        for (Reservation reservation : reservationManager.getClientReservations()) {
+            res.add(ReservationMapper.toSelfReservationDto(reservation));
+        }
         return res;
+    }
+
+    @RolesAllowed("authenticatedUser")
+    @Override
+    public MetadataDto getReservationMetadata(UUID uuid) throws BaseAppException {
+        return MetadataMapper.toMetadataDto(reservationManager.findByUUID(uuid));
     }
 }

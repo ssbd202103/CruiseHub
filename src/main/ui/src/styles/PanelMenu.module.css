@@ -19,7 +19,7 @@
 }
 
 .name {
-    font-family: 'Montserrat Alternates', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-weight: 700;
     font-size: 1.5rem;
 }
@@ -43,4 +43,14 @@
 
 .menu-dark * {
     color: var(--dark);
+}
+.panel_page{
+    white-space: pre-line;
+    font-family: "Montserrat", sans-serif;
+    font-size: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10%;
+    text-align: center;
 }

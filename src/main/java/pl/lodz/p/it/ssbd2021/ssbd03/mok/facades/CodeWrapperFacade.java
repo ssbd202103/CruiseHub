@@ -34,14 +34,12 @@ public class CodeWrapperFacade extends AbstractFacade<CodeWrapper> {
     }
 
     @PermitAll
-// @RolesAllowed("SYSTEM")
     public List<CodeWrapper> getUsedCode() {
         TypedQuery<CodeWrapper> tq = em.createNamedQuery("CodeWrapper.findUsed", CodeWrapper.class);
         return tq.getResultList();
     }
 
     @PermitAll
-// @RolesAllowed("SYSTEM")
     public List<CodeWrapper> getUnusedCode() {
         TypedQuery<CodeWrapper> tq = em.createNamedQuery("CodeWrapper.findUnused", CodeWrapper.class);
         return tq.getResultList();
@@ -71,7 +69,6 @@ public class CodeWrapperFacade extends AbstractFacade<CodeWrapper> {
     }
 
     @PermitAll
-    //    @RolesAllowed("SYSTEM")
     @Override
     public void remove(CodeWrapper entity) throws FacadeException {
         super.remove(entity);

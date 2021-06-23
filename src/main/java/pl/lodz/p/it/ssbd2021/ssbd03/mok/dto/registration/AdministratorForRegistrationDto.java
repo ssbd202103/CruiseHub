@@ -5,9 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
-import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
-import pl.lodz.p.it.ssbd2021.ssbd03.validators.Name;
-import pl.lodz.p.it.ssbd2021.ssbd03.validators.Password;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -20,10 +18,10 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 @NoArgsConstructor
 public class AdministratorForRegistrationDto {
 
-    @Name
+    @FirstName
     private String firstName;
 
-    @Name
+    @SecondName
     private String secondName;
 
     @Login

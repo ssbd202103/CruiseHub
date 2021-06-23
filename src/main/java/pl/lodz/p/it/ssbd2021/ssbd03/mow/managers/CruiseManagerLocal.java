@@ -1,10 +1,11 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.managers;
 
 
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Attraction;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.CruiseGroupWithCruisesDto;
 
-import javax.ejb.Local;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -19,16 +20,16 @@ public interface CruiseManagerLocal {
      * Zajmuje się tworzeniem nowego wycieczki
      *
      * @param cruise obiekt reprezentujący wycieczke
-     * @param cruiseGroupName nazwa grupy wycieczek
+     * @param cruiseGroupUUID uuid grupy wycieczek
      * @throws BaseAppException wyjątek rzucany w razie nie znalezienia użytkownika tworzącego wycieczke, bądź grupy wycieczek
      */
-    void addCruise(Cruise cruise, String cruiseGroupName) throws BaseAppException;
+    void addCruise(Cruise cruise, UUID cruiseGroupUUID) throws BaseAppException;
 
 
     /**
      * Zajmuje się deaktywowaniem istniejącego wycieczke
      *
-     * @param uuid uuid wycieczki
+     * @param uuid    uuid wycieczki
      * @param version wersja obiektu wycieczki wysyłana do sprawdzenia z wersją znajdującą się w bazie
      * @throws BaseAppException wyjątek rzucany w razie nie znalezienia wycieczki bądź konta deaktywującego, bądź złej wersji
      */
@@ -39,10 +40,17 @@ public interface CruiseManagerLocal {
      *
      * @param uuid uuid wycieczki
      * @return obiekt encji reprezentujący wycieczkę
-     * @throws BaseAppException wyjątek rzucany w raze nie znalezienia wycieczki
+     * @throws BaseAppException wyjątek rzucany w razie nie znalezienia wycieczki
      */
     Cruise getCruise(UUID uuid) throws BaseAppException;
 
+    /**
+     * Zwraca wycieczki należących do grupy wycieczek o podanym uuid
+     * @param uuid uuid grupy wycieczek
+     * @return listę encji wycieczek nalężacych do grupy wycieczek o podanym uuid
+     * @throws BaseAppException wyjątek rzucany w razie nie znalezienia wycieczki
+     */
+    List<Cruise> getCruisesByCruiseGroup(UUID uuid) throws BaseAppException;
 
     /**
      * Publikuje wycieczke
@@ -57,19 +65,28 @@ public interface CruiseManagerLocal {
     /**
      * Zajmuje się edycją wycieczki
      *
-     * @param description opis wycieczki do zmiany
-     * @param startDate data rozpoczęcia wycieczki do zmiany
-     * @param endDate data zakończenia wycieczki do zmiany
-     * @param uuid uuid wycieczki
-     * @param version wersja obiektu wycieczki
+     * @param startDate   data rozpoczęcia wycieczki do zmiany
+     * @param endDate     data zakończenia wycieczki do zmiany
+     * @param uuid        uuid wycieczki
+     * @param version     wersja obiektu wycieczki
      * @throws BaseAppException wyjątek rzucany w razie nie znalezienia wycieczki, bądź złej wersji
      */
-    void editCruise(String description, LocalDateTime startDate, LocalDateTime endDate, UUID uuid, Long version) throws BaseAppException;
+    void editCruise(LocalDateTime startDate, LocalDateTime endDate, UUID uuid, Long version) throws BaseAppException;
 
     /**
      * Zwraca wszystkie opublikowane wycieczki
+     *
      * @return Lista wycieczek
      */
-    List<Cruise> getPublishedCruises();
+    List<Cruise> getPublishedCruises() throws BaseAppException;
+
+    /**
+     * Pobiera Wycieczki o danym uuid
+     *
+     * @param uuid uuid atrakcji
+     * @return zwraca informacje o wycieczce
+     * @throws BaseAppException wyjątek wyrzucany w razie nie znależenia atrakcji
+     */
+    Cruise findByUUID(UUID uuid) throws BaseAppException;
 
 }

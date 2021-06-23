@@ -12,16 +12,15 @@ import {useTranslation} from 'react-i18next'
 import styles from '../styles/auth.global.module.css'
 import axios from "../Services/URL"
 import React, {useEffect, useState} from "react"
-import {setLogin as setLoginAction} from '../redux/slices/userSlice'
-
-
-import {getUser} from "../Services/userService";
+import {ILoginUserSliceState, selectDarkMode, setLogin as setLoginAction} from '../redux/slices/userSlice'
 
 import {useSnackbarQueue} from "./snackbar";
 import useHandleError from "../errorHandler";
 import store from "../redux/store";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import PopupAcceptAction from "../PopupAcceptAction";
+import i18n from "i18next";
+import {LOGIN_REGEX, PASSWORD_REGEX} from "../regexConstants";
 
 export default function SignIn() {
     const {t} = useTranslation();
@@ -34,34 +33,47 @@ export default function SignIn() {
     const [login, setLogin] = useState('')
     const [password, setPassword] = useState('')
 
-    const [loginEmptyError, setLoginEmptyError] = useState(false)
-    const [passwordEmptyError, setPasswordEmptyError] = useState(false)
+    const [loginRegexError, setLoginRegexError] = useState(false)
+    const [passwordRegexError, setPasswordRegexError] = useState(false)
 
+    const darkMode = useSelector(selectDarkMode)
+
+    const handleConfirm = async () => {
+        setLoginRegexError(!LOGIN_REGEX.test(login))
+        setPasswordRegexError(!PASSWORD_REGEX.test(password))
+
+        if (!LOGIN_REGEX.test(login) || !PASSWORD_REGEX.test(password)) {
+            handleError('error.fields')
+        } else {
+            auth()
+        }
+    }
 
     const auth = () => {
-        if (login === "" || password === "") {
-            login ? setPasswordEmptyError(true) : setLoginEmptyError(true)
-            handleError("fill.login.password.fields")
-        } else {
-            const json = JSON.stringify({
-                login: login,
-                password: password
-            })
-            axios.post('/auth/sign-in', json, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then(res => {
-                dispatch(setLoginAction(login))
-                history.push('/codeSignIn')
-                showSuccess(t('successful action'))
-            }).catch(error => {
-                const message = error.response.data
-                handleError(message, error.response.status)
-            })
-        }
-
-
+        const json = JSON.stringify({
+            login: login,
+            password: password,
+            darkMode: darkMode,
+            language: i18n.language.toUpperCase()
+        })
+        axios.post('/auth/sign-in', json, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(res => {
+            dispatch(setLoginAction(login))
+            history.push('/signin-code')
+            showSuccess(t('successful action'))
+        }).catch(error => {
+            const message = error.response.data
+            console.log(message)
+            handleError(message, error.response.status)
+            switch (message) {
+                case 'error.database.userNotExists':
+                    setLoginRegexError(true)
+                    break
+            }
+        })
     }
 
     return (
@@ -70,61 +82,58 @@ export default function SignIn() {
             <h2 className={styles.h2}>{t("signin.subtitle")}</h2>
 
             <DarkedTextField
-                type="text"
                 label={t("login") + ' *'}
+                placeholder={t("login")}
+                className={styles.input}
+                value={login}
                 style={{
                     width: '70%',
                     margin: '20px 0'
                 }}
-                placeholder="login"
-                value={login}
                 onChange={event => {
                     setLogin(event.target.value)
-                    event.target.value ? setLoginEmptyError(false) : setLoginEmptyError(true)
+                    setLoginRegexError(!LOGIN_REGEX.test(event.target.value))
                 }}
                 colorIgnored
-                regexError={loginEmptyError}
+                regexError={loginRegexError}
             />
 
             <DarkedTextField
                 type="password"
                 label={t("password") + ' *'}
+                placeholder="1234567890"
+                className={styles.input}
                 style={{
                     width: '70%',
                     margin: '20px 0'
                 }}
                 icon={(<PasswordIcon/>)}
-                placeholder="1234567890"
                 value={password}
                 onChange={event => {
                     setPassword(event.target.value)
-                    event.target.value ? setPasswordEmptyError(false) : setPasswordEmptyError(true)
+                    setPasswordRegexError(!PASSWORD_REGEX.test(event.target.value))
                 }}
-                regexError={passwordEmptyError}
                 colorIgnored
+                regexError={passwordRegexError}
             />
 
-            <Box style={{
-                width: '70%',
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between"
-            }}>
+            <Box className={styles['button-wrap']}>
                 <RoundedButton
                     style={{
                         width: '50%',
                         fontSize: '1.2rem',
-                        padding: '10px 0'
+                        padding: '10px 0',
+                        marginBottom: 16,
                     }}
                     color="pink"
-                    onClick={auth}
+                    onClick={handleConfirm}
                 >{t("signin")}</RoundedButton>
-                <Link to="signup/client">
-                    <a className={styles.link}>{t("i don't have an account")}</a>
+                <Link to="signup/client" className={styles.link}>
+                    {t("i don't have an account")}
                 </Link>
 
-                <Link to="/reset/requestPassword">
-                    <a className={styles.link}>{t("forgot password")}</a>
+                <Link to="/reset/requestPassword" className={styles.link}>
+                    {t("forgot password")}
                 </Link>
 
             </Box>

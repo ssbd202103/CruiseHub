@@ -1,6 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.facades;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.common.facades.AbstractFacade;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Reservation;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
@@ -11,10 +12,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.interceptor.Interceptors;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.util.List;
 import java.util.UUID;
 
@@ -53,34 +51,21 @@ public class ReservationFacadeMow extends AbstractFacade<Reservation> {
         }
     }
 
-    public List<Reservation> findCruiseReservations(long id) throws BaseAppException {
+    @RolesAllowed({"getWorkerCruiseReservations", "viewCruiseReservations", "createReservation"})
+    public List<Reservation> findCruiseReservations(Cruise cruise) throws BaseAppException {
         TypedQuery<Reservation> tq = em.createNamedQuery("Reservation.findCruiseReservations", Reservation.class);
-        tq.setParameter("id", id);
+        tq.setParameter("uuid", cruise.getUuid());
         try {
             return tq.getResultList();
-        } catch (NoResultException e) {
-            throw FacadeException.noSuchElement();
+        } catch (PersistenceException exp) {
+            throw FacadeException.databaseOperation();
         }
     }
 
-    @RolesAllowed("getWorkerCruiseReservations")
-    public List<Reservation> findWorkerCruiseReservations(long id) throws BaseAppException {
-        //TODO Metoda znajdujaca id uzytkownika który jest aktualnie uzytkujacy jako bisnez worker / zmienić query
-        //
-        //
-        TypedQuery<Reservation> tq = em.createNamedQuery("Reservation.findCruiseReservations", Reservation.class);
-        tq.setParameter("id", id);
-        try {
-            return tq.getResultList();
-        } catch (NoResultException e) {
-            throw FacadeException.noSuchElement();
-        }
-    }
-
-    @RolesAllowed("removeClientReservation")
+    @RolesAllowed({"removeClientReservation", "cancelReservation"})
     public Reservation findReservationByUuidAndLogin(UUID uuid, String login) throws BaseAppException {
         TypedQuery<Reservation> tq = em.createNamedQuery("Reservation.findByUUIDAndLogin", Reservation.class);
-        tq.setParameter("uuid", uuid.toString());
+        tq.setParameter("uuid", uuid);
         tq.setParameter("login", login);
         try {
             return tq.getSingleResult();
@@ -95,8 +80,14 @@ public class ReservationFacadeMow extends AbstractFacade<Reservation> {
         tq.setParameter("login", login);
         try {
             return tq.getResultList();
-        } catch (NoResultException e) {
-            throw FacadeException.noSuchElement();
+        } catch (PersistenceException exp) {
+            throw FacadeException.databaseOperation();
         }
+    }
+
+    @RolesAllowed({"removeClientReservation", "cancelReservation"})
+    @Override
+    public void remove(Reservation entity) throws FacadeException {
+        super.remove(entity);
     }
 }

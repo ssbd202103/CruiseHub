@@ -29,28 +29,18 @@ export default function AppColorSetter() {
     }
 
     return (
-        <div style={{
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'space-between',
-            fontFamily: 'Montserrat, sans-serif',
-            fontSize: '1.4rem',
-            alignItems: 'center'
-        }}
-             onClick={handleClick}
+        <IconButton
+            onClick={handleClick}
         >
-            <p>{t("color")}</p>
-            <IconButton>
-                {
-                    darkMode ?
-                        <DarkThemeIcon
-                            fontSize="large"
-                            style={{fill: 'var(--dark)'}}/> :
-                        <LightThemeIcon
-                            fontSize="large"
-                            style={{fill: 'var(--white)'}}/>
-                }
-            </IconButton>
-        </div>
+            {
+                darkMode ?
+                    <DarkThemeIcon
+                        fontSize="large"
+                        style={{fill: 'var(--dark)'}}/> :
+                    <LightThemeIcon
+                        fontSize="large"
+                        style={{fill: 'var(--white)'}}/>
+            }
+        </IconButton>
     )
 }

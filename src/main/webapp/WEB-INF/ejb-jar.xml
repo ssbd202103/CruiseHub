@@ -9,6 +9,10 @@
             <rollback>true</rollback>
         </application-exception>
         <application-exception>
+            <exception-class>javax.persistence.OptimisticLockException</exception-class>
+            <rollback>true</rollback>
+        </application-exception>
+        <application-exception>
             <exception-class>javax.ejb.EJBTransactionRolledbackException</exception-class>
             <rollback>true</rollback>
         </application-exception>

@@ -7,6 +7,7 @@ import {Link} from 'react-router-dom'
 import {useTranslation} from 'react-i18next';
 
 import styles from '../../../styles/ManageAccount.module.css'
+import tbStyles from '../../../styles/mtdTable.module.css'
 import RoundedButton from '../../../components/RoundedButton';
 import DarkedTextField from '../../../components/DarkedTextField';
 
@@ -17,6 +18,14 @@ import {refreshToken} from "../../../Services/userService";
 import useHandleError from "../../../errorHandler";
 
 import PopupAcceptAction from "../../../PopupAcceptAction";
+import {
+    CITY_REGEX, COUNTRY_REGEX,
+    EMAIL_REGEX,
+    HOUSE_STREET_NUMBER_REGEX,
+    NAME_REGEX,
+    PHONE_NUMBER_REGEX, POST_CODE_REGEX,
+    STREET_REGEX
+} from "../../../regexConstants";
 
 export default function ChangeAccountData() {
     const {t} = useTranslation()
@@ -37,10 +46,23 @@ export default function ChangeAccountData() {
     const [ChangePerData, setPerData] = useState(false)
     const [ChangAddress, setChangChangAddress] = useState(false)
     const [ChangePhone, setChangePhone] = useState(false)
+    const [metadata, setMetadata] = useState(false)
     const [ChangeMail, setMail] = useState(false)
     const [firstName, setFirstName] = useState('')
     const [secondName, setSecondName] = useState('')
     const [email, setEmail] = useState('')
+
+    const [firstNameRegexError, setFirstNameRegexError] = useState(false)
+    const [secondNameRegexError, setSecondNameRegexError] = useState(false)
+    const [emailRegexError, setEmailRegexError] = useState(false)
+    const [phoneNumberRegexError, setPhoneNumberRegexError] = useState(false)
+    const [businnesPhoneRegexError, setBusinnesPhoneRegexError] = useState(false)
+    const [streetRegexError, setStreetRegexError] = useState(false)
+    const [houseNumberRegexError, setHouseNumberRegexError] = useState(false)
+    const [postalCodeRegexError, setPostalCodeRegexError] = useState(false)
+    const [cityRegexError, setCityRegexError] = useState(false)
+    const [countryRegexError, setCountryRegexError] = useState(false)
+
 
     const [houseNumber, setHouseNumber] = useState('')
     const [street, setStreet] = useState('')
@@ -74,7 +96,7 @@ export default function ChangeAccountData() {
     const [creationDateTimeAcl, setCreationDateTimeAcl] = useState('')
     const [lastAlterDateTimeAcl, setLastAlterDateTimeAcl] = useState('')
     const [versionAcl, setVersionAcl] = useState('')
-
+    const [language, setLanguage] = useState('')
     const [businessPhoneNumber, setBusinessPhoneNumber] = useState('')
     const {token} = store.getState()
     const [buttonPopupAcceptChangeNumber, setButtonPopupAcceptChangeNumber] = useState(false);
@@ -82,61 +104,11 @@ export default function ChangeAccountData() {
     const [buttonPopupAcceptChangeAddress, setButtonPopupAcceptChangeAddress] = useState(false);
     const [buttonPopupAcceptChangeMail, setButtonPopupAcceptChangeMail] = useState(false);
 
-
-    useEffect(() => {
-        setFirstName(currentAccount.firstName);
-        setSecondName(currentAccount.secondName);
-        setAlterType(currentAccountMTD.alterType);
-        setAlteredBy(currentAccountMTD.alteredBy);
-        setCreatedBy(currentAccountMTD.createdBy);
-        if(currentAccountMTD.creationDateTime !=null)
-        setCreationDateTime(currentAccountMTD.creationDateTime.dayOfMonth +"/"+ currentAccountMTD.creationDateTime.month +" / "+ currentAccountMTD.creationDateTime.year +"    "+ currentAccountMTD.creationDateTime.hour +":"+ currentAccountMTD.creationDateTime.minute )
-        if(currentAccountMTD.lastAlterDateTime !=null)
-        setLastAlterDateTime(currentAccountMTD.lastAlterDateTime.dayOfMonth +"/"+ currentAccountMTD.lastAlterDateTime.month +" / "+ currentAccountMTD.lastAlterDateTime.year +"    "+ currentAccountMTD.lastAlterDateTime.hour +":"+ currentAccountMTD.lastAlterDateTime.minute);
-        if(currentAccountMTD.lastCorrectAuthenticationDateTime !=null)
-        setLastCorrectAuthenticationDateTime(currentAccountMTD.lastCorrectAuthenticationDateTime.dayOfMonth +"/"+ currentAccountMTD.lastCorrectAuthenticationDateTime.month +" / "+ currentAccountMTD.lastCorrectAuthenticationDateTime.year +"    "+ currentAccountMTD.lastCorrectAuthenticationDateTime.hour +":"+ currentAccountMTD.creationDateTime.minute);
-        setLastCorrectAuthenticationLogicalAddress(currentAccountMTD.lastCorrectAuthenticationLogicalAddress)
-        if(currentAccountMTD.lastIncorrectAuthenticationDateTime !=null)
-        setLastIncorrectAuthenticationDateTime(currentAccountMTD.lastIncorrectAuthenticationDateTime.dayOfMonth +"/"+ currentAccountMTD.lastIncorrectAuthenticationDateTime.month +" / "+ currentAccountMTD.lastIncorrectAuthenticationDateTime.year +"    "+ currentAccountMTD.lastIncorrectAuthenticationDateTime.hour +":"+ currentAccountMTD.lastIncorrectAuthenticationDateTime.minute);
-        setLastIncorrectAuthenticationLogicalAddress(currentAccountMTD.lastIncorrectAuthenticationLogicalAddress);
-        setNumberOfAuthenticationFailures(currentAccountMTD.numberOfAuthenticationFailures)
-        setVersion(currentAccountMTD.version);
-
-        if (clientAddr) {
-            setStreet(clientAddr.address.street);
-            setPostalCode(clientAddr.address.postalCode);
-            setHouseNumber(clientAddr.address.houseNumber);
-            setCountry(clientAddr.address.country);
-            setCity(clientAddr.address.city);
-            setPhoneNumber(clientAddr.phoneNumber);
-            
-            setAlterTypeAdr(currentAccountAddressMTD.alterType);
-            setAlteredByAdr(currentAccountAddressMTD.alteredBy);
-            setCreatedByAdr(currentAccountAddressMTD.createdBy);
-            if(currentAccountAddressMTD.creationDateTime !=null)
-                setCreationDateTimeAdr(currentAccountAddressMTD.creationDateTime.dayOfMonth +"/"+ currentAccountAddressMTD.creationDateTime.month +" / "+ currentAccountAddressMTD.creationDateTime.year +"    "+ currentAccountAddressMTD.creationDateTime.hour +":"+ currentAccountAddressMTD.creationDateTime.minute )
-            if(currentAccountAddressMTD.lastAlterDateTime !=null)
-                setLastAlterDateTimeAdr(currentAccountAddressMTD.lastAlterDateTime.dayOfMonth +"/"+ currentAccountAddressMTD.lastAlterDateTime.month +" / "+ currentAccountAddressMTD.lastAlterDateTime.year +"    "+ currentAccountAddressMTD.lastAlterDateTime.hour +":"+ currentAccountAddressMTD.lastAlterDateTime.minute);
-            setVersionAdr(currentAccountAddressMTD.version);
-        }
-        if (businnesPhone) {
-            setBusinessPhoneNumber(businnesPhone.phoneNumber);
-
-            setAlterTypeAcl(currentAccountAclMTD.alterType);
-            setAlteredByAcl(currentAccountAclMTD.alteredBy);
-            setCreatedByAcl(currentAccountAclMTD.createdBy);
-            if(currentAccountAclMTD.creationDateTime !=null)
-                setCreationDateTimeAcl(currentAccountAclMTD.creationDateTime.dayOfMonth +"/"+ currentAccountAclMTD.creationDateTime.month +" / "+ currentAccountAclMTD.creationDateTime.year +"    "+ currentAccountAclMTD.creationDateTime.hour +":"+ currentAccountAclMTD.creationDateTime.minute )
-            if(currentAccountAclMTD.lastAlterDateTime !=null)
-                setLastAlterDateTimeAcl(currentAccountAclMTD.lastAlterDateTime.dayOfMonth +"/"+ currentAccountAclMTD.lastAlterDateTime.month +" / "+ currentAccountAclMTD.lastAlterDateTime.year +"    "+ currentAccountAclMTD.lastAlterDateTime.hour +":"+ currentAccountAclMTD.lastAlterDateTime.minute);
-            setVersionAcl(currentAccountAclMTD.version);
-        }
-    }, [])
-
     const closeAll = () => {
         setPerData(false)
         setChangChangAddress(false)
         setChangePhone(false)
+        setMetadata(false)
         setMail(false)
     }
 
@@ -145,12 +117,14 @@ export default function ChangeAccountData() {
         setChangChangAddress(false)
         setChangePhone(false)
         setMail(false)
+        setMetadata(false)
         setPerData(state => !state)
     }
     const handleChangeMail = () => {
         setPerData(false)
         setChangChangAddress(false)
         setChangePhone(false)
+        setMetadata(false)
         setMail(state => !state)
     }
     //Functions for address data change
@@ -158,13 +132,28 @@ export default function ChangeAccountData() {
         setChangePhone(false)
         setMail(false)
         setPerData(false)
+        setMetadata(false)
         setChangChangAddress(state => !state)
     }
     const handleChangePhone = () => {
         setPerData(false)
         setChangChangAddress(false)
         setMail(false)
+        setMetadata(false)
         setChangePhone(state => !state)
+    }
+    const handleMetadata = () => {
+        setMetadata(state => !state)
+    }
+
+    const handleConfirmChangeMail = () => {
+        setEmailRegexError(!EMAIL_REGEX.test(email))
+        if(!EMAIL_REGEX.test(email)) {
+            handleError('error.fields')
+            return
+        } else {
+            setButtonPopupAcceptChangeMail(true)
+        }
     }
 
     const changeMail = async () => {
@@ -188,6 +177,19 @@ export default function ChangeAccountData() {
             handleError(message, error.response.status)
         })
     }
+
+    const handleConfirmPersonalDataChange = () => {
+        setFirstNameRegexError(!NAME_REGEX.test(firstName))
+        setSecondNameRegexError(!NAME_REGEX.test(secondName))
+
+        if (!NAME_REGEX.test(firstName) || !NAME_REGEX.test(secondName)) {
+            handleError('error.fields')
+            return
+        } else {
+            setButtonPopupAcceptChangeData(true)
+        }
+    }
+
     const changePersonalData = async () => {
         const {token} = store.getState()
         const json = JSON.stringify({
@@ -231,6 +233,21 @@ export default function ChangeAccountData() {
 
     }
 
+    const handleConfirmChangeAddress = () => {
+        setHouseNumberRegexError(!HOUSE_STREET_NUMBER_REGEX.test(houseNumber))
+        setStreetRegexError(!STREET_REGEX.test(street))
+        setPostalCodeRegexError(!POST_CODE_REGEX.test(postalCode))
+        setCityRegexError(!CITY_REGEX.test(city))
+        setCountryRegexError(!COUNTRY_REGEX.test(country))
+        setPhoneNumberRegexError(!PHONE_NUMBER_REGEX.test(phoneNumber))
+        if (!HOUSE_STREET_NUMBER_REGEX.test(houseNumber) || !STREET_REGEX.test(street) || !POST_CODE_REGEX.test(postalCode) ||
+            !CITY_REGEX.test(city) || !COUNTRY_REGEX.test(country) || !PHONE_NUMBER_REGEX.test(phoneNumber)) {
+            handleError('error.fields')
+            return
+        } else {
+            setButtonPopupAcceptChangeAddress(true)
+        }
+    }
 
     const changeAddress = async () => {
         const {token} = store.getState()
@@ -280,6 +297,17 @@ export default function ChangeAccountData() {
             handleError(message, error.response.status)
         });
     }
+
+    const handleConfirmChangePhone = () => {
+        setPhoneNumberRegexError(!PHONE_NUMBER_REGEX.test(businessPhoneNumber))
+        if (!PHONE_NUMBER_REGEX.test(businessPhoneNumber)) {
+            handleError('error.fields')
+            return
+        } else {
+            setButtonPopupAcceptChangeNumber(true)
+        }
+    }
+
     const changeBusinessPhone = async () => {
         const json = JSON.stringify({
             login: currentAccount.login,
@@ -318,6 +346,65 @@ export default function ChangeAccountData() {
         });
 
     }
+
+    useEffect( ()=>{
+        setFirstName(currentAccount.firstName);
+        setSecondName(currentAccount.secondName);
+
+        if (clientAddr) {
+            setStreet(clientAddr.address.street);
+            setPostalCode(clientAddr.address.postalCode);
+            setHouseNumber(clientAddr.address.houseNumber);
+            setCountry(clientAddr.address.country);
+            setCity(clientAddr.address.city);
+            setPhoneNumber(clientAddr.phoneNumber);
+        }
+        if (businnesPhone) {
+            setBusinessPhoneNumber(businnesPhone.phoneNumber);
+        }
+    }, [])
+
+    useEffect(() => {
+        setAlterType(currentAccountMTD.alterType);
+        setAlteredBy(currentAccountMTD.alteredBy);
+        setCreatedBy(currentAccountMTD.createdBy);
+        if (currentAccountMTD.creationDateTime != null){
+            setCreationDateTime(currentAccountMTD.creationDateTime.dayOfMonth + " " + t(currentAccountMTD.creationDateTime.month) + " " + currentAccountMTD.creationDateTime.year + " " + currentAccountMTD.creationDateTime.hour + ":" + currentAccountMTD.creationDateTime.minute.toString().padStart(2, '0'))
+        }
+        if (currentAccountMTD.lastAlterDateTime != null)
+            setLastAlterDateTime(currentAccountMTD.lastAlterDateTime.dayOfMonth + " " + t(currentAccountMTD.lastAlterDateTime.month) + " " + currentAccountMTD.lastAlterDateTime.year + " " + currentAccountMTD.lastAlterDateTime.hour + ":" + currentAccountMTD.lastAlterDateTime.minute.toString().padStart(2, '0'));
+        if (currentAccountMTD.lastCorrectAuthenticationDateTime != null)
+            setLastCorrectAuthenticationDateTime(currentAccountMTD.lastCorrectAuthenticationDateTime.dayOfMonth + " " + t(currentAccountMTD.lastCorrectAuthenticationDateTime.month) + " " + currentAccountMTD.lastCorrectAuthenticationDateTime.year + " " + currentAccountMTD.lastCorrectAuthenticationDateTime.hour + ":" + currentAccountMTD.creationDateTime.minute.toString().padStart(2, '0'));
+        setLastCorrectAuthenticationLogicalAddress(currentAccountMTD.lastCorrectAuthenticationLogicalAddress)
+        if (currentAccountMTD.lastIncorrectAuthenticationDateTime != null)
+            setLastIncorrectAuthenticationDateTime(currentAccountMTD.lastIncorrectAuthenticationDateTime.dayOfMonth + " " + t(currentAccountMTD.lastIncorrectAuthenticationDateTime.month) + " " + currentAccountMTD.lastIncorrectAuthenticationDateTime.year + " " + currentAccountMTD.lastIncorrectAuthenticationDateTime.hour + ":" + currentAccountMTD.lastIncorrectAuthenticationDateTime.minute.toString().padStart(2, '0'));
+        setLastIncorrectAuthenticationLogicalAddress(currentAccountMTD.lastIncorrectAuthenticationLogicalAddress);
+        setNumberOfAuthenticationFailures(currentAccountMTD.numberOfAuthenticationFailures)
+        setVersion(currentAccountMTD.version);
+        setLanguage(currentAccountMTD.languageType);
+
+        if (clientAddr) {
+            setAlterTypeAdr(currentAccountAddressMTD.alterType);
+            setAlteredByAdr(currentAccountAddressMTD.alteredBy);
+            setCreatedByAdr(currentAccountAddressMTD.createdBy);
+            if (currentAccountAddressMTD.creationDateTime != null)
+                setCreationDateTimeAdr(currentAccountAddressMTD.creationDateTime.dayOfMonth + " " + t(currentAccountAddressMTD.creationDateTime.month) + " " + currentAccountAddressMTD.creationDateTime.year + " " + currentAccountAddressMTD.creationDateTime.hour + ":" + currentAccountAddressMTD.creationDateTime.minute.toString().padStart(2, '0'))
+            if (currentAccountAddressMTD.lastAlterDateTime != null)
+                setLastAlterDateTimeAdr(currentAccountAddressMTD.lastAlterDateTime.dayOfMonth + " " + t(currentAccountAddressMTD.lastAlterDateTime.month) + " " + currentAccountAddressMTD.lastAlterDateTime.year + " " + currentAccountAddressMTD.lastAlterDateTime.hour + ":" + currentAccountAddressMTD.lastAlterDateTime.minute.toString().padStart(2, '0'));
+            setVersionAdr(currentAccountAddressMTD.version);
+        }
+        if (businnesPhone) {
+            setAlterTypeAcl(currentAccountAclMTD.alterType);
+            setAlteredByAcl(currentAccountAclMTD.alteredBy);
+            setCreatedByAcl(currentAccountAclMTD.createdBy);
+            if (currentAccountAclMTD.creationDateTime != null)
+                setCreationDateTimeAcl(currentAccountAclMTD.creationDateTime.dayOfMonth + " " + t(currentAccountAclMTD.creationDateTime.month) + " " + currentAccountAclMTD.creationDateTime.year + " " + currentAccountAclMTD.creationDateTime.hour + ":" + currentAccountAclMTD.creationDateTime.minute.toString().padStart(2, '0'))
+            if (currentAccountAclMTD.lastAlterDateTime != null)
+                setLastAlterDateTimeAcl(currentAccountAclMTD.lastAlterDateTime.dayOfMonth + " " + t(currentAccountAclMTD.lastAlterDateTime.month) + " " + currentAccountAclMTD.lastAlterDateTime.year + " " + currentAccountAclMTD.lastAlterDateTime.hour + ":" + currentAccountAclMTD.lastAlterDateTime.minute.toString().padStart(2, '0'));
+            setVersionAcl(currentAccountAclMTD.version);
+        }
+    })
+
     return (
         <>
             <Grid container className={styles.wrapper}>
@@ -348,27 +435,71 @@ export default function ChangeAccountData() {
                     <div>
                         <DarkedTextField
                             type="text"
-                            label={t("name")}
+                            label={t("name") + ' *'}
                             placeholder={currentAccount.firstName}
                             value={firstName}
                             onChange={event => {
                                 setFirstName(event.target.value)
-                            }}/>
+                                setFirstNameRegexError(!NAME_REGEX.test(event.target.value))
+                            }}
+                            regexError={firstNameRegexError}/>
                         <DarkedTextField
                             type="text"
-                            label={t("surname")}
+                            label={t("surname") + ' *'}
                             placeholder={currentAccount.secondName}
                             value={secondName}
                             onChange={event => {
                                 setSecondName(event.target.value)
-                            }}/>
+                                setSecondNameRegexError(!NAME_REGEX.test(event.target.value))
+                            }}
+                            regexError={secondNameRegexError}/>
                     </div>
+                    <div>
                     <RoundedButton color="blue"
-                                   onClick={() => setButtonPopupAcceptChangeData(true)}
+                                   onClick={handleConfirmPersonalDataChange}
                     >{t("confirm")}</RoundedButton>
+                    <RoundedButton color="green"
+                                   onClick={handleMetadata}
+                    >{t("metadata")}</RoundedButton>
                     <RoundedButton color="pink"
                                    onClick={handleChangePerData}
                     >{t("cancel")}</RoundedButton>
+                    </div>
+                    <Grid item style={{display: metadata ? "block" : "none"}} className={styles['change-item']}>
+                        <tr>
+                            <td className={tbStyles.td}><h4>{t("alterType")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("alteredBy")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("createdBy")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("creationDateTime")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("lastAlterDateTime")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("version")}</h4></td>
+                        </tr>
+                        <tr>
+                            <td className={tbStyles.tdData}><h4>{t(alterType)}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{alteredBy}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{createdBy}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{creationDateTime}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{lastAlterDateTime}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{version}</h4></td>
+                        </tr>
+                        <tr>
+                            <td className={tbStyles.td}><h4>{t("lastCorrectAuthenticationDateTime")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("lastCorrectAuthenticationLogicalAddress")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("lastIncorrectAuthenticationDateTime")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("lastIncorrectAuthenticationLogicalAddress")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("numberOfAuthenticationFailures")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("language")}</h4></td>
+                        </tr>
+                        <tr>
+                            <td className={tbStyles.tdData}><h4>{lastCorrectAuthenticationDateTime}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{lastCorrectAuthenticationLogicalAddress}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{lastIncorrectAuthenticationDateTime}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{lastIncorrectAuthenticationLogicalAddress}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{numberOfAuthenticationFailures}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{language}</h4></td>
+                        </tr>
+                    </Grid>
+                    </Grid>
                 </Grid>
                 <Grid>
                     <Grid item style={{display: ChangeMail ? "none" : "block"}} className={styles.item}>
@@ -386,36 +517,61 @@ export default function ChangeAccountData() {
                         <div>
                             <DarkedTextField
                                 type="text"
-                                label={t("new email")}
+                                label={t("new email") + ' *'}
                                 placeholder={t(currentAccount.email)}
                                 value={email}
                                 onChange={event => {
                                     setEmail(event.target.value)
-                                }}/>
+                                    setEmailRegexError(!EMAIL_REGEX.test(event.target.value))
+                                }}
+                            regexError={emailRegexError}/>
                         </div>
                         <div>
                             <RoundedButton color="blue"
-                                           onClick={() => setButtonPopupAcceptChangeMail(true)}
+                                           onClick={handleConfirmChangeMail}
                             >{t("confirm")}</RoundedButton>
+                            <RoundedButton color="green"
+                                           onClick={handleMetadata}
+                            >{t("metadata")}</RoundedButton>
                             <RoundedButton color="pink"
                                            onClick={handleChangeMail}
                             >{t("cancel")}</RoundedButton>
                         </div>
-                    </Grid>
-                    <div>
+                        <Grid item style={{display: metadata ? "block" : "none"}} className={styles['change-item']}>
                         <tr>
-                            <td><h4>{t("alterType")}</h4></td> <td><h4>{t("alteredBy")}</h4></td> <td><h4>{t("createdBy")}</h4></td>
-                            <td><h4>{t("creationDateTime")}</h4></td> <td><h4>{t("lastAlterDateTime")}</h4></td> <td><h4>{t("lastCorrectAuthenticationDateTime")}</h4></td>
-                            <td><h4>{t("lastCorrectAuthenticationLogicalAddress")}</h4></td> <td><h4>{t("lastIncorrectAuthenticationDateTime")}</h4></td> <td><h4>{t("lastIncorrectAuthenticationLogicalAddress")}</h4></td>
-                            <td><h4>{t("numberOfAuthenticationFailures")}</h4></td> <td><h4>{t("version")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("alterType")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("alteredBy")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("createdBy")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("creationDateTime")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("lastAlterDateTime")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("version")}</h4></td>
                         </tr>
                         <tr>
-                            <td><h4>{alterType}</h4></td><td><h4>{alteredBy}</h4></td><td><h4>{createdBy}</h4></td>
-                            <td><h4>{creationDateTime}</h4></td><td><h4>{lastAlterDateTime}</h4></td><td><h4>{lastCorrectAuthenticationDateTime}</h4></td>
-                            <td><h4>{lastCorrectAuthenticationLogicalAddress}</h4></td><td><h4>{lastIncorrectAuthenticationDateTime}</h4></td><td><h4>{lastIncorrectAuthenticationLogicalAddress}</h4></td>
-                           <td><h4>{numberOfAuthenticationFailures}</h4></td><td><h4>{version}</h4></td>
-                    </tr>
-                    </div>
+                            <td className={tbStyles.tdData}><h4>{t(alterType)}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{alteredBy}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{createdBy}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{creationDateTime}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{lastAlterDateTime}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{version}</h4></td>
+                        </tr>
+                        <tr>
+                            <td className={tbStyles.td}><h4>{t("lastCorrectAuthenticationDateTime")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("lastCorrectAuthenticationLogicalAddress")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("lastIncorrectAuthenticationDateTime")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("lastIncorrectAuthenticationLogicalAddress")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("numberOfAuthenticationFailures")}</h4></td>
+                            <td className={tbStyles.td}><h4>{t("language")}</h4></td>
+                        </tr>
+                        <tr>
+                            <td className={tbStyles.tdData}><h4>{lastCorrectAuthenticationDateTime}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{lastCorrectAuthenticationLogicalAddress}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{lastIncorrectAuthenticationDateTime}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{lastIncorrectAuthenticationLogicalAddress}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{numberOfAuthenticationFailures}</h4></td>
+                            <td className={tbStyles.tdData}><h4>{language}</h4></td>
+                        </tr>
+                        </Grid>
+                    </Grid>
                 </Grid>
                 <Grid item style={{display: acLevel.includes('CLIENT') ? "block" : "none"}} className={styles.item}>
                     <Grid item style={{display: ChangAddress ? "none" : "block"}} className={styles.item}>
@@ -456,70 +612,95 @@ export default function ChangeAccountData() {
                         <div>
                             <DarkedTextField
                                 type="text"
-                                label={t("street")}
+                                label={t("street") + ' *'}
                                 placeholder={clientAddr ? clientAddr.address.street : ""}
                                 value={street}
                                 onChange={event => {
                                     setStreet(event.target.value)
-                                }}/>
+                                    setStreetRegexError(!STREET_REGEX.test(event.target.value))
+                                }}
+                                regexError={streetRegexError}/>
                             <DarkedTextField
                                 type="text"
-                                label={t("house number")}
+                                label={t("house number") + ' *'}
                                 placeholder={clientAddr ? clientAddr.address.houseNumber : ""}
                                 value={houseNumber}
                                 onChange={event => {
                                     setHouseNumber(event.target.value)
-                                }}/>
+                                    setHouseNumberRegexError(!HOUSE_STREET_NUMBER_REGEX.test(event.target.value))
+                                }}
+                                regexError={houseNumberRegexError}/>
                             <DarkedTextField
                                 type="text"
-                                label={t("postal code")}
+                                label={t("postal code") + ' *'}
                                 placeholder={clientAddr ? clientAddr.address.postalCode : ""}
                                 value={postalCode}
                                 onChange={event => {
                                     setPostalCode(event.target.value)
-                                }}/>
+                                    setCityRegexError(!CITY_REGEX.test(event.target.value))
+                                }}
+                                regexError={postalCodeRegexError}/>
                             <DarkedTextField
                                 type="text"
-                                label={t("city")}
+                                label={t("city") + ' *'}
                                 placeholder={clientAddr ? clientAddr.address.city : ""}
                                 value={city}
                                 onChange={event => {
                                     setCity(event.target.value)
-                                }}/>
+                                    setPostalCodeRegexError(!POST_CODE_REGEX.test(event.target.value))
+                                }}
+                                regexError={cityRegexError}/>
                             <DarkedTextField
                                 type="text"
-                                label={t("country")}
+                                label={t("country") + ' *'}
                                 placeholder={clientAddr ? clientAddr.address.country : ""}
                                 value={country}
                                 onChange={event => {
                                     setCountry(event.target.value)
-                                }}/>
+                                    setCountryRegexError(!COUNTRY_REGEX.test(event.target.value))
+                                }}
+                                regexError={countryRegexError}/>
                             <DarkedTextField
                                 type="text"
-                                label={t("phone number")}
+                                label={t("phone number") + ' *'}
                                 placeholder={clientAddr ? clientAddr.phoneNumber : ""}
                                 value={phoneNumber}
                                 onChange={event => {
                                     setPhoneNumber(event.target.value)
-                                }}/>
+                                    setPhoneNumberRegexError(!PHONE_NUMBER_REGEX.test(event.target.value))
+                                }}
+                                regexError={phoneNumberRegexError}/>
                         </div>
                         <RoundedButton
                             color="blue"
-                            onClick={() => setButtonPopupAcceptChangeAddress(true)}
-                        >{t("confirm")}</RoundedButton><RoundedButton
+                            onClick={handleConfirmChangeAddress}
+                        >{t("confirm")}</RoundedButton>
+                        <RoundedButton color="green"
+                                       onClick={handleMetadata}
+                        >{t("metadata")}</RoundedButton>
+                        <RoundedButton
                         color="pink"
                         onClick={handleChangAddress}
                     >{t("cancel")}</RoundedButton>
-
+                    <Grid item style={{display: metadata ? "block" : "none"}} className={styles['change-item']}>
+                    <tr>
+                        <td className={tbStyles.td}><h4>{t("alterType")}</h4></td>
+                        <td className={tbStyles.td}><h4>{t("alteredBy")}</h4></td>
+                        <td className={tbStyles.td}><h4>{t("createdBy")}</h4></td>
+                        <td className={tbStyles.td}><h4>{t("creationDateTime")}</h4></td>
+                        <td className={tbStyles.td}><h4>{t("lastAlterDateTime")}</h4></td>
+                        <td className={tbStyles.td}><h4>{t("version")}</h4></td>
+                    </tr>
+                    <tr>
+                        <td className={tbStyles.tdData}><h4>{t(alterTypeAdr)}</h4></td>
+                        <td className={tbStyles.tdData}><h4>{alteredByAdr}</h4></td>
+                        <td className={tbStyles.tdData}><h4>{createdByAdr}</h4></td>
+                        <td className={tbStyles.tdData}><h4>{creationDateTimeAdr}</h4></td>
+                        <td className={tbStyles.tdData}><h4>{lastAlterDateTimeAdr}</h4></td>
+                        <td className={tbStyles.tdData}><h4>{versionAdr}</h4></td>
+                    </tr>
                     </Grid>
-                    <tr>
-                        <td><h4>{t("alterType")}</h4></td> <td><h4>{t("alteredBy")}</h4></td> <td><h4>{t("createdBy")}</h4></td>
-                        <td><h4>{t("creationDateTime")}</h4></td> <td><h4>{t("lastAlterDateTime")}</h4></td><td><h4>{t("version")}</h4></td>
-                    </tr>
-                    <tr>
-                        <td><h4>{alterTypeAdr}</h4></td><td><h4>{alteredByAdr}</h4></td><td><h4>{createdByAdr}</h4></td>
-                        <td><h4>{creationDateTimeAdr}</h4></td><td><h4>{lastAlterDateTimeAdr}</h4></td><td><h4>{versionAdr}</h4></td>
-                    </tr>
+                    </Grid>
                 </Grid>
                 <Grid item style={{display: acLevel.includes('BUSINESS_WORKER') ? "block" : "none"}}
                       className={styles.item}>
@@ -540,30 +721,44 @@ export default function ChangeAccountData() {
                         <div>
                             <DarkedTextField
                                 type="text"
-                                label={t("phone number")}
+                                label={t("phone number") + ' *'}
                                 placeholder={businnesPhone ? businnesPhone.phoneNumber : ""}
                                 value={businessPhoneNumber}
                                 onChange={event => {
                                     setBusinessPhoneNumber(event.target.value)
-                                }}/>
+                                    setBusinnesPhoneRegexError(!PHONE_NUMBER_REGEX.test(event.target.value))
+                                }}
+                                regexError={businnesPhoneRegexError}/>
                         </div>
                         <RoundedButton
                             color="blue"
-                            onClick={() => setButtonPopupAcceptChangeNumber(true)}
+                            onClick={handleConfirmChangePhone}
                         >{t("confirm")}</RoundedButton>
+                        <RoundedButton color="green"
+                                       onClick={handleMetadata}
+                        >{t("metadata")}</RoundedButton>
                         <RoundedButton
                             color="pink"
                             onClick={handleChangePhone}
                         >{t("cancel")}</RoundedButton>
+                    <Grid item style={{display: metadata ? "block" : "none"}} className={styles['change-item']}>
+                    <tr>
+                        <td className={tbStyles.td}><h4>{t("alterType")}</h4></td>
+                        <td className={tbStyles.td}><h4>{t("alteredBy")}</h4></td>
+                        <td className={tbStyles.td}><h4>{t("createdBy")}</h4></td>
+                        <td className={tbStyles.td}><h4>{t("creationDateTime")}</h4></td>
+                        <td className={tbStyles.td}><h4>{t("lastAlterDateTime")}</h4></td>
+                        <td className={tbStyles.td}><h4>{t("version")}</h4></td>
+                    </tr>
+                    <tr>
+                        <td className={tbStyles.tdData}><h4>{t(alterTypeAcl)}</h4></td>
+                        <td className={tbStyles.tdData}><h4>{alteredByAcl}</h4></td>
+                        <td className={tbStyles.tdData}><h4>{createdByAcl}</h4></td>
+                        <td className={tbStyles.tdData}><h4>{creationDateTimeAcl}</h4></td>
+                        <td className={tbStyles.tdData}><h4>{lastAlterDateTimeAcl}</h4></td>
+                        <td className={tbStyles.tdData}><h4>{versionAcl}</h4></td>
+                    </tr>
                     </Grid>
-                    <tr>
-                        <td><h4>{t("alterType")}</h4></td> <td><h4>{t("alteredBy")}</h4></td> <td><h4>{t("createdBy")}</h4></td>
-                        <td><h4>{t("creationDateTime")}</h4></td> <td><h4>{t("lastAlterDateTime")}</h4></td><td><h4>{t("version")}</h4></td>
-                    </tr>
-                    <tr>
-                        <td><h4>{alterTypeAcl}</h4></td><td><h4>{alteredByAcl}</h4></td><td><h4>{createdByAcl}</h4></td>
-                        <td><h4>{creationDateTimeAcl}</h4></td><td><h4>{lastAlterDateTimeAcl}</h4></td><td><h4>{versionAcl}</h4></td>
-                    </tr>
                 </Grid>
                 <Grid item>
                     <Link to="/accounts">

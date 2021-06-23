@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mow.managers;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Attraction;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Reservation;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 
@@ -33,31 +34,28 @@ public interface ReservationManagerLocal {
     /**
      * Usuwa wycieczke klienta podanego w obiekci dto
      *
-     * @param reservationVersion Wersja rezerwacji
      * @param reservationUuid UUID rezerwacji
      * @param clientLogin Login klienta
      * @throws BaseAppException Bazowy wyjatek aplikacji
      */
-    void removeClientReservation(long reservationVersion, UUID reservationUuid, String clientLogin) throws BaseAppException;
+    void removeClientReservation(UUID reservationUuid, String clientLogin) throws BaseAppException;
 
     /**
      * Rezerwuje wycieczke dla klienta
      * @param version Wersja wycieczki
      * @param cruiseUUID UUID wycieczki
      * @param numberOfSeats Liczba rezerwowanych miejsc
-     * @param login Login użytkownika
+     * @param attractionsUUID UUID wybranych atrakcji
      * @throws BaseAppException Bazowy wyjatek aplikacji
      */
-    void createReservation(long version, UUID cruiseUUID, long numberOfSeats, String login) throws BaseAppException;
+    void createReservation(long version, UUID cruiseUUID, long numberOfSeats, List<String> attractionsUUID) throws BaseAppException;
 
     /**
      * Anuluje wycieczke uzytkownika
-     * @param reservationVersion Wersja rezerwacji
-     * @param cruiseUUID UUID wycieczki
-     * @param login Login uzytkownika
+     * @param reservationUUID UUID rezerwacji
      * @throws BaseAppException Bazowy wyjatek aplikacji
      */
-    void cancelReservation(long reservationVersion, UUID cruiseUUID, String login) throws BaseAppException;
+    void cancelReservation(UUID reservationUUID) throws BaseAppException;
 
     /**
      * Zwraca listę rezerwacji obecnie zalogowanego klienta
@@ -65,4 +63,13 @@ public interface ReservationManagerLocal {
      * @throws BaseAppException bazowy wyjątek aplikacji
      */
     List<Reservation> getClientReservations() throws BaseAppException;
+
+    /**
+     * Pobiera rezerwacje o danym uuid
+     *
+     * @param uuid uuid rezerwacji
+     * @return zwraca informacje o rezerwacji
+     * @throws BaseAppException wyjątek wyrzucany w razie nie znależenia atrakcji
+     */
+    Reservation findByUUID(UUID uuid) throws BaseAppException;
 }

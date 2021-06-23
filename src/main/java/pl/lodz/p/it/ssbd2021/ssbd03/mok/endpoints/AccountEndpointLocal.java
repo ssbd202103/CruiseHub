@@ -1,6 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints;
 
 import pl.lodz.p.it.ssbd2021.ssbd03.common.dto.MetadataDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints.TransactionalEndpoint;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.*;
@@ -21,7 +22,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
  * Interfejs który zajmuje się gromadzeniem zmapowanych obiektów klas Dto na obiekty klas modelu związanych z kontami użytkowników i poziomami dostępu, oraz wywołuje metody logiki przekazując zmapowane obiekty.
  */
 @Local
-public interface AccountEndpointLocal {
+public interface AccountEndpointLocal extends TransactionalEndpoint {
 
     /**
      * Mapuje obiekt dto na obiekty modelu
@@ -131,7 +132,12 @@ public interface AccountEndpointLocal {
      */
     void requestSomeonesPasswordReset(String login, String email) throws BaseAppException;
 
-    //todo add javadoc
+    /**
+     * Metoda odpowiedzialna za weryfikację konta
+     *
+     * @param accountVerificationDto Dto zawierające informacje o koncie
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
     void verifyAccount(AccountVerificationDto accountVerificationDto) throws BaseAppException;
 
     /**

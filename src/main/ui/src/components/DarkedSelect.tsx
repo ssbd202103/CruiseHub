@@ -15,7 +15,7 @@ const useStyles = makeStyles(theme => ({
         '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
             borderColor: 'var(--dark)'
         },
-        '& input': {
+        '& .MuiInputBase-input': {
             color: 'var(--dark)'
         },
         '& input + fieldset': {
@@ -24,8 +24,8 @@ const useStyles = makeStyles(theme => ({
         '&:hover input + fieldset': {
             borderColor: 'var(--dark)'
         },
-        '& .MuiInputLabel-root': {
-            color: 'var(--dark-light)'
+        '& .MuiFormLabel-root': {
+            color: 'var(--dark)'
         }
     },
     dark: {
@@ -40,23 +40,23 @@ const useStyles = makeStyles(theme => ({
         '& input + fieldset': {
             borderColor: 'var(--white)'
         },
-        '& input': {
-            color: 'var(--white)'
-        },
-        '& input::placeholder': {
+        '& .MuiInputBase-input': {
             color: 'var(--white)'
         },
         '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
             borderColor: 'var(--white)'
         },
-        '& .MuiInputLabel-root': {
+        '& .MuiFormLabel-root': {
             color: 'var(--white-dark)'
+        },
+        '& .MuiInputBase-root > svg': {
+            fill: 'var(--white)'
         }
     }
 }))
 
 const inputStyle = {
-    fontFamily: "'Montserrat Alternates', sans-serif",
+    fontFamily: "'Montserrat', sans-serif",
     fontSize: '1.2rem',
 }
 
@@ -85,7 +85,7 @@ export default function DarkedSelect(props: DarkedSelectProps) {
         label,
         style,
         options,
-        colorIgnored,
+        colorIgnored = false,
         onSelectedChange
     } = props
 

@@ -12,6 +12,7 @@ import {useSnackbarQueue} from "../snackbar";
 import {refreshToken} from "../../Services/userService";
 import useHandleError from "../../errorHandler";
 import PopupAcceptAction from "../../PopupAcceptAction";
+import {LOGIN_REGEX, PASSWORD_REGEX} from "../../regexConstants";
 
 
 function PasswordReset(props: any) {
@@ -24,10 +25,28 @@ function PasswordReset(props: any) {
     const [confirmPassword, setConfirmPassword] = useState('')
     const showSuccess = useSnackbarQueue('success')
 
+    const [loginError, setLoginError] = useState(false)
+    const [newPasswordRegexError, setNewPasswordRegexError] = useState(false)
+    const [newPasswordConfirmRegexError, setNewPasswordConfirmRegexError] = useState(false)
+
     const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
 
     const resetPassword = () => {
-        setButtonPopupAcceptAction(true)
+        setLoginError(!LOGIN_REGEX.test(login))
+        setNewPasswordRegexError(!PASSWORD_REGEX.test(password))
+        setNewPasswordConfirmRegexError(!PASSWORD_REGEX.test(confirmPassword))
+
+        if(!LOGIN_REGEX.test(login) || !PASSWORD_REGEX.test(password) || !PASSWORD_REGEX.test(confirmPassword)) {
+            handleError('error.fields')
+            return
+        } else if (password != confirmPassword) {
+            setNewPasswordRegexError(true);
+            setNewPasswordConfirmRegexError(true);
+            handleError("passwords are not equal")
+            return
+        } else {
+            setButtonPopupAcceptAction(true)
+        }
     }
 
 
@@ -50,6 +69,9 @@ function PasswordReset(props: any) {
         }).catch(error => {
             const message = error.response.data
             handleError(message, error.response.status)
+            if (message == 'error.password.reset.wrongIdentity') {
+                setLoginError(true)
+            }
         });
     }
 
@@ -65,7 +87,9 @@ function PasswordReset(props: any) {
                         value={login}
                         onChange={event => {
                             setLogin(event.target.value)
+                            setLoginError(!LOGIN_REGEX.test(event.target.value))
                         }}
+                        regexError={loginError}
                     />
 
                     <DarkedTextField
@@ -78,8 +102,20 @@ function PasswordReset(props: any) {
                         value={password}
                         onChange={event => {
                             setPassword(event.target.value)
+                            if (PASSWORD_REGEX.test(confirmPassword)) {
+                                setNewPasswordConfirmRegexError(false)
+                            }
+                            if (!PASSWORD_REGEX.test(event.target.value)) {
+                                setNewPasswordRegexError(!PASSWORD_REGEX.test(event.target.value))
+                            } else {
+                                if (event.target.value != confirmPassword && PASSWORD_REGEX.test(confirmPassword)) {
+                                    setNewPasswordRegexError(true)
+                                } else {
+                                    setNewPasswordRegexError(false)
+                                }
+                            }
                         }}
-
+                        regexError={newPasswordRegexError}
                     />
 
                     <DarkedTextField
@@ -91,14 +127,27 @@ function PasswordReset(props: any) {
                         value={confirmPassword}
                         onChange={event => {
                             setConfirmPassword(event.target.value)
+                            if (PASSWORD_REGEX.test(password)) {
+                                setNewPasswordRegexError(false);
+                            }
+                            if (!PASSWORD_REGEX.test(event.target.value)) {
+                                setNewPasswordConfirmRegexError(!PASSWORD_REGEX.test(event.target.value))
+                            } else {
+                                if (event.target.value != password && PASSWORD_REGEX.test(password)) {
+                                    setNewPasswordConfirmRegexError(true)
+                                } else {
+                                    setNewPasswordConfirmRegexError(false)
+                                }
+                            }
                         }}
+                        regexError={newPasswordConfirmRegexError}
                     />
 
                     <RoundedButton
                         onClick={resetPassword}
                         style={{width: '100%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
                         color="pink"
-                    >Reset </RoundedButton>
+                    >{t("reset btn")}</RoundedButton>
                     <PopupAcceptAction
                         open={buttonPopupAcceptAction}
                         onConfirm={submitPasswordReset}

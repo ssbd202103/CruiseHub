@@ -4,6 +4,7 @@ import {clearToken, setToken} from "../redux/slices/tokenSlice";
 import {AccessLevelType, emptyUser, IUserSliceState, setActiveAccessLevel, setUser} from "../redux/slices/userSlice";
 import jwt_decode from "jwt-decode";
 import i18n from "i18next";
+import useHandleError from "../errorHandler";
 
 export function getUser(token: string) {
     return axios.get('self/account-details', {
@@ -20,7 +21,6 @@ export function getUser(token: string) {
 
 export function loadUserWithSavedToken() {
     i18n.changeLanguage(store.getState().user.languageType)
-    console.log(i18n.language)
     const savedToken = sessionStorage.getItem('cruisehub_token') as string;
 
     if (savedToken) {
@@ -31,7 +31,14 @@ export function loadUserWithSavedToken() {
     }
 
     return new Promise((res, rej) => {
-        if (!['/', '/signin', '/signup/client', '/signup/worker'].includes(document.location.pathname)) {
+        if (
+
+            !['/', '/signin', '/signup/client', '/signup/worker'].includes(document.location.pathname) &&
+            !document.location.pathname.match('accountVerification') &&
+            !document.location.pathname.match('reset') &&
+            !document.location.pathname.includes('cruise')
+
+        ) {
             rej({response: {data: 'token.missing'}})
         }
         res(null)

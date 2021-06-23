@@ -151,9 +151,13 @@
     </security-role>
 
     <security-role>
-        <role-name>removeClientRating</role-name>
+        <role-name>getClientRating</role-name>
     </security-role>
 
+    <security-role>
+        <role-name>removeClientRating</role-name>
+    </security-role>
+    
     <security-role>
         <role-name>getAllCruiseGroupList</role-name>
     </security-role>
@@ -220,6 +224,10 @@
 
     <security-role>
         <role-name>getMetadata</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>getCruiseGroupForBusinessWorker</role-name>
     </security-role>
 
     <security-constraint>

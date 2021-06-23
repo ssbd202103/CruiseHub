@@ -19,8 +19,11 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 
 @Entity(name = "cruises_groups")
 @NamedQueries({
+        @NamedQuery(name = "CruiseGroup.findByUUID", query = "SELECT crg FROM cruises_groups crg WHERE crg.uuid = :uuid"),
         @NamedQuery(name = "CruiseGroup.findByName", query = "SELECT crg FROM cruises_groups crg WHERE crg.name = :name"),
-        @NamedQuery(name= "CruiseGroup.findCruises", query = "SELECT cr FROM cruises  cr WHERE cr.cruisesGroup =:name")
+        @NamedQuery(name= "CruiseGroup.findCruises", query = "SELECT cr FROM cruises  cr WHERE cr.cruisesGroup =:name"),
+        @NamedQuery(name = "CruiseGroup.findForBusinessWorker", query = "SELECT crg FROM cruises_groups crg WHERE crg.company = :name"),
+
 })
 @ToString
 public class CruiseGroup extends BaseEntity {
@@ -69,21 +72,23 @@ public class CruiseGroup extends BaseEntity {
 
     @Getter
     @Setter
-    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
+    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO)
     @Column(name = "number_of_seats")
     private long numberOfSeats;
 
     @Getter
     @Setter
-    @Positive(message = CONSTRAINT_POSITIVE_ERROR)
+    @Positive(message = CONSTRAINT_POSITIVE)
     @Column(name = "price")
     private Double price;
 
     @Getter
+    @Setter
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.REMOVE})
     @JoinTable(name = "cruises_group_pictures",
-            joinColumns = @JoinColumn(name = "cruise_picture_id"),
-            inverseJoinColumns = @JoinColumn(name = "cruises_group_id")
+            joinColumns = @JoinColumn(name = "cruises_group_id"),
+            inverseJoinColumns =  @JoinColumn(name = "cruise_picture_id")
+
     )
     @Valid
   //  @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
@@ -92,15 +97,22 @@ public class CruiseGroup extends BaseEntity {
 
     @Getter
     @Setter
-    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO_ERROR)
+    @PositiveOrZero(message = CONSTRAINT_POSITIVE_OR_ZERO)
     @Column(name = "average_rating")
     private Double averageRating;
+
+
 
     @Getter
     @Setter
     @NotNull
     @Column(name = "active")
     private boolean active;
+
+    @Getter
+    @Setter
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "cruiseGroup")
+    private List<Rating> ratings;
 
     public CruiseGroup(Company company, CruiseAddress address, String name, long numberOfSeats,
                        Double price,  List<CruisePicture> cruisePictures,String description) {
@@ -113,6 +125,7 @@ public class CruiseGroup extends BaseEntity {
         this.cruisePictures = cruisePictures;
         this.description = description;
         this.uuid= uuid.randomUUID();
+        this.active=true;
     }
 
     public CruiseGroup() {
@@ -122,6 +135,8 @@ public class CruiseGroup extends BaseEntity {
     public Long getIdentifier() {
         return id;
     }
+
+
 }
 
 

@@ -1,6 +1,8 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints;
 
+import pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints.TransactionalEndpoint;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
+import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.AuthenticateDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.TransactionRepeater;
 
 import java.time.LocalDateTime;
@@ -8,7 +10,7 @@ import java.time.LocalDateTime;
 /**
  * Klasa służąca do logowania się użytkowników
  */
-public interface AuthenticateEndpointLocal {
+public interface AuthenticateEndpointLocal extends TransactionalEndpoint {
 
     /**
      * Metoda odpowiedzialna za edycję pól w bazie danych w przypadku niepoprawnego logowania.
@@ -45,10 +47,10 @@ public interface AuthenticateEndpointLocal {
     /**
      * Metoda odpowiadajaca za wysłanie e-mail służącego do dwufazowego uwierzytelnienia
      *
-     * @param login Login
+     * @param auth auth
      * @throws BaseAppException Bazowy wyjątek aplikacji
      */
-   void sendAuthenticationCodeEmail(String login) throws BaseAppException;
+   void sendAuthenticationCodeEmail(AuthenticateDto auth) throws BaseAppException;
 
         /**
          * Metoda odpowiedzialna za odświeżanie tokenu JWT
