@@ -168,7 +168,7 @@ export default function Cruise() {
                         </p>
                         <div style={{display: 'flex', alignItems: 'center'}}>
                             <PersonIcon fontSize="large" style={{fill: 'var(--dark-dark)', marginRight: 8}}/>
-                            {cruise?.cruiseGroupDto?.numberOfSeats}
+                            {cruise?.realNumberOfSeats}/{cruise?.cruiseGroupDto?.numberOfSeats}
                         </div>
                         <div style={{display: 'flex', alignItems: 'center'}}>
                             <AttachMoneyIcon fontSize="large" style={{fill: 'var(--dark-dark)', marginRight: 8}}/>

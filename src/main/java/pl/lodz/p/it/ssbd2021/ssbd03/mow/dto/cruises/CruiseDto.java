@@ -32,14 +32,17 @@ public class CruiseDto extends DeactivateCruiseDto {
     @NotNull(message = CONSTRAINT_NOT_NULL)
     private CruiseGroupWithUUIDDto cruiseGroupDto;
 
+    private Long realNumberOfSeats;
+
     public CruiseDto(String uuid, Long version,
                      LocalDateTime startDate, LocalDateTime endDate,
-                     boolean active, CruiseGroupWithUUIDDto cruiseGroupDto) {
+                     boolean active, CruiseGroupWithUUIDDto cruiseGroupDto, Long realNumberOfSeats) {
         super(uuid, version);
 
         this.startDate = startDate;
         this.endDate = endDate;
         this.active = active;
         this.cruiseGroupDto = cruiseGroupDto;
+        this.realNumberOfSeats = realNumberOfSeats;
     }
 }

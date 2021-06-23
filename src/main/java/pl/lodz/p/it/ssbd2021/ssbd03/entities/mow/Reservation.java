@@ -54,7 +54,7 @@ public class Reservation extends BaseEntity {
     private long numberOfSeats;
 
     @Getter
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name = "cruise_id")
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid

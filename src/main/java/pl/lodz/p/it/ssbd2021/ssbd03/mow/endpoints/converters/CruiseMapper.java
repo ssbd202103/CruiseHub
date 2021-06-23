@@ -45,7 +45,7 @@ public class CruiseMapper {
         CruiseGroupWithUUIDDto cruiseGroupDto = CruiseGroupMapper.toCruiseGroupWithUUIDDto(cruise.getCruisesGroup());
         return new CruiseDto(cruise.getUuid().toString(), cruise.getVersion(),
                 cruise.getStartDate(), cruise.getEndDate(),
-                cruise.isActive(), cruiseGroupDto);
+                cruise.isActive(), cruiseGroupDto, cruiseGroupDto.getNumberOfSeats() - cruise.getReservations().size());
 
 
     }

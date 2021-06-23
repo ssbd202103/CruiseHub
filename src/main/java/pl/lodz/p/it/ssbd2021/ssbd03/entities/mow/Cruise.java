@@ -78,17 +78,18 @@ public class Cruise extends BaseEntity {
     @Column(name = "published")
     private boolean published;
 
+    @Getter
+    @Setter
     @ToString.Exclude
     @OneToMany(mappedBy = "cruise", cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST}, orphanRemoval = true)
     private List<Attraction> attractions;
 
-    public List<Attraction> getAttractions() {
-        return attractions;
-    }
+    @Getter
+    @Setter
+    @ToString.Exclude
+    @OneToMany(mappedBy = "cruise", cascade = {CascadeType.REMOVE, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST}, orphanRemoval = true)
+    private List<Reservation> reservations;
 
-    public void setAttractions(List<Attraction> attractions) {
-        this.attractions = attractions;
-    }
 
     public Cruise(LocalDateTime startDate, LocalDateTime endDate,
                   CruiseGroup cruisesGroup) {
