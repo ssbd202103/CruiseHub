@@ -1,4 +1,4 @@
-import React, {useEffect, useImperativeHandle, useRef, useState} from 'react';
+import React, {Ref, RefObject, useEffect, useImperativeHandle, useRef, useState} from 'react';
 import {makeStyles} from "@material-ui/core/styles";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
@@ -50,35 +50,26 @@ function createData(
     };
 }
 
+
 export interface RowProps {
     row: ReturnType<typeof createData>,
     style: React.CSSProperties
     onReload: () => void
-    setButtonPopupAcceptActionMethod: any
-    cancelReservationRef: any
+    setButtonPopupAcceptActionMethod: (val: boolean) => (void),
+    cancelReservationRef: Ref<{ cancelReservation: () => void }>
 }
 
-function Row({row, style, onReload, setButtonPopupAcceptActionMethod,cancelReservationRef}: RowProps) {
+
+function Row({row, style, onReload, setButtonPopupAcceptActionMethod, cancelReservationRef}: RowProps) {
     const {t} = useTranslation();
     const classes = useRowStyles();
     const buttonClass = useButtonStyles();
     const handleError = useHandleError()
     const showSuccess = useSnackbarQueue('success')
 
-    useImperativeHandle(cancelReservationRef, () => {
-        removeReservation(row.uuid).then(res => {
-            showSuccess(t('reservationCancelled'))
-            onReload()
-        }).catch(error => {
-            const message = error.response.data
-            handleError(message, error.response.status)
-            onReload()
-        }).then(res => {
-            refreshToken()
-        })
-    })
+    useImperativeHandle(cancelReservationRef, () => ({cancelReservation}))
 
-    const cancelReservation = () => {
+    function cancelReservation() {
         removeReservation(row.uuid).then(res => {
             showSuccess(t('reservationCancelled'))
             onReload()
@@ -86,8 +77,10 @@ function Row({row, style, onReload, setButtonPopupAcceptActionMethod,cancelReser
             const message = error.response.data
             handleError(message, error.response.status)
             onReload()
+            setButtonPopupAcceptActionMethod(false)
         }).then(res => {
             refreshToken()
+            setButtonPopupAcceptActionMethod(false)
         })
     }
 
@@ -101,7 +94,7 @@ function Row({row, style, onReload, setButtonPopupAcceptActionMethod,cancelReser
             <TableCell style={style}>{row.numberOfSeats}</TableCell>
             <TableCell style={style}>{row.price}</TableCell>
             <TableCell style={style}>
-                <Button onClick={setButtonPopupAcceptActionMethod}
+                <Button onClick={()=>(setButtonPopupAcceptActionMethod(true))}
                         className={buttonClass.root}>{t("cancel reservation btn")}</Button>
             </TableCell>
         </TableRow>
@@ -166,11 +159,11 @@ const ListSelfReservations = () => {
     const {t} = useTranslation()
 
 
-    const setButtonPopupAcceptActionMethod = () => {
-        setButtonPopupAcceptAction(true)
+    const setButtonPopupAcceptActionMethod = (val: boolean) => {
+        setButtonPopupAcceptAction(val)
     }
 
-    const cancelReservationRef = useRef();
+    const cancelReservationRef = useRef<{ cancelReservation: () => void }>(null);
 
     return (
         <div>
@@ -243,7 +236,9 @@ const ListSelfReservations = () => {
             <PopupAcceptAction
                 open={buttonPopupAcceptAction}
                 onConfirm={() => {
-                    cancelReservationRef ? cancelReservationRef.current() : console.log("problemik pojawił się")
+                    if (cancelReservationRef.current) {
+                        cancelReservationRef.current.cancelReservation()
+                    }
                 }}
                 onCancel={() => {
                     setButtonPopupAcceptAction(false)
