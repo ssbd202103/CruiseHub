@@ -180,7 +180,7 @@ const ListOwnRatings = () => {
                                 <TableCell style={{
                                     backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                     color: `var(--${!darkMode ? 'dark' : 'white-light'}`
-                                }}>{t("remove button")}</TableCell>
+                                }} />
                             </TableRow>
                         </TableHead>
                         <TableBody>
