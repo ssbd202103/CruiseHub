@@ -68,12 +68,13 @@ public class AuthController {
             }
             return Response.status(Response.Status.UNAUTHORIZED).entity(I18n.INCORRECT_PASSWORD).build();
         }
-       authEndpoint.sendAuthenticationCodeEmail(auth);
+        authEndpoint.sendAuthenticationCodeEmail(auth);
         return Response.ok().build();
     }
 
     /**
      * Odswieza token uzytkownika
+     *
      * @param tokenString Token
      * @return Odswiezony token
      * @throws BaseAppException Bazowy wyjatek aplikacji
@@ -86,7 +87,7 @@ public class AuthController {
             throw new ControllerException("Invalid authorization header");
         }
         String token = tokenString.substring("Bearer ".length());
-        return tryAndRepeat(authEndpoint, () -> authEndpoint.refreshToken(token));
+        return authEndpoint.refreshToken(token);
     }
 
 
@@ -99,7 +100,7 @@ public class AuthController {
     @Path("/client/registration")
     @Consumes(MediaType.APPLICATION_JSON)
     public void createClient(@Valid @NotNull(message = CONSTRAINT_NOT_NULL) ClientForRegistrationDto clientForRegistrationDto) throws BaseAppException {
-        tryAndRepeat(accountEndpoint, () -> accountEndpoint.createClientAccount(clientForRegistrationDto));
+        accountEndpoint.createClientAccount(clientForRegistrationDto);
     }
 
     /**
@@ -111,7 +112,7 @@ public class AuthController {
     @Path("/business-worker/registration")
     @Consumes(MediaType.APPLICATION_JSON)
     public void createBusinessWorker(@Valid @NotNull(message = CONSTRAINT_NOT_NULL) BusinessWorkerForRegistrationDto businessWorkerForRegistrationDto) throws BaseAppException {
-        tryAndRepeat(accountEndpoint, () -> accountEndpoint.createBusinessWorkerAccount(businessWorkerForRegistrationDto));
+        accountEndpoint.createBusinessWorkerAccount(businessWorkerForRegistrationDto);
     }
 
     /**
@@ -126,6 +127,6 @@ public class AuthController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public String doubleAuth(@Valid @NotNull(message = CONSTRAINT_NOT_NULL) AuthenticateCodeDto auth) throws BaseAppException {
-        return authEndpoint.authWCodeUpdateCorrectAuthenticateInfo(auth.getLogin(), auth.getCode(),  httpServletRequest.getRemoteAddr(), LocalDateTime.now());
+        return authEndpoint.authWCodeUpdateCorrectAuthenticateInfo(auth.getLogin(), auth.getCode(), httpServletRequest.getRemoteAddr(), LocalDateTime.now());
     }
 }
