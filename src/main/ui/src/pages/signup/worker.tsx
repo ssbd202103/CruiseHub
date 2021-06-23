@@ -33,7 +33,7 @@ export default function WorkerSignUp() {
     const [login, setLogin] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [confirmPassword, setConfirmPassword] = useState('')
+    const [passwordConfirm, setPasswordConfirm] = useState('')
     const [languageType, setLanguageType] = useState('')
     const [phoneNumber, setPhoneNumber] = useState('')
 
@@ -45,6 +45,7 @@ export default function WorkerSignUp() {
 
     const [loginRegexError, setLoginRegexError] = useState(false)
     const [passwordRegexError, setPasswordRegexError] = useState(false)
+    const [passwordConfirmRegexError, setPasswordConfirmRegexError] = useState(false)
     const [firstNameRegexError, setFirstNameRegexError] = useState(false)
     const [secondNameRegexError, setSecondNameRegexError] = useState(false)
     const [emailRegexError, setEmailRegexError] = useState(false)
@@ -55,7 +56,6 @@ export default function WorkerSignUp() {
 
     const verifyCallback = () => {
         handleConfirm()
-
     }
 
     const handleConfirm = () => {
@@ -81,6 +81,14 @@ export default function WorkerSignUp() {
             setButtonPopup(false)
             const message = error.response.data
             handleError(message, error.response.status)
+            switch (message) {
+                case 'error.database.loginReserved':
+                    setLoginRegexError(true)
+                    break
+                case 'error.database.emailReserved':
+                    setEmailRegexError(true)
+                    break
+            }
         });
     }
 
@@ -96,16 +104,17 @@ export default function WorkerSignUp() {
     const workerSignUpFun = async () => {
         setLoginRegexError(!LOGIN_REGEX.test(login))
         setPasswordRegexError(!PASSWORD_REGEX.test(password))
+        setPasswordConfirmRegexError(!PASSWORD_REGEX.test(passwordConfirm))
         setFirstNameRegexError(!NAME_REGEX.test(firstName))
         setSecondNameRegexError(!NAME_REGEX.test(secondName))
         setEmailRegexError(!EMAIL_REGEX.test(email))
-
         setPhoneNumberRegexError(!PHONE_NUMBER_REGEX.test(phoneNumber))
 
-        if (!LOGIN_REGEX.test(login) || !PASSWORD_REGEX.test(password) || !NAME_REGEX.test(firstName) ||
-            !NAME_REGEX.test(secondName) || !EMAIL_REGEX.test(email) || !PHONE_NUMBER_REGEX.test(phoneNumber)) {
+        if (!LOGIN_REGEX.test(login) || !PASSWORD_REGEX.test(password) || !PASSWORD_REGEX.test(passwordConfirm) ||
+            !NAME_REGEX.test(firstName) || !NAME_REGEX.test(secondName) || !EMAIL_REGEX.test(email) ||
+            !PHONE_NUMBER_REGEX.test(phoneNumber)) {
             handleError("invalid.form")
-        } else if (password != confirmPassword) {
+        } else if (password != passwordConfirm) {
             handleError("passwords are not equal")
         } else {
             setButtonPopupAcceptAction(true)
@@ -258,11 +267,17 @@ export default function WorkerSignUp() {
                     value={password}
                     onChange={event => {
                         setPassword(event.target.value)
-                        setPasswordRegexError(!PASSWORD_REGEX.test(event.target.value))
-                        if (event.target.value != confirmPassword || !PASSWORD_REGEX.test(event.target.value)) {
-                            setPasswordRegexError(true)
+                        if (PASSWORD_REGEX.test(passwordConfirm)) {
+                            setPasswordConfirmRegexError(false)
+                        }
+                        if (!PASSWORD_REGEX.test(event.target.value)) {
+                            setPasswordRegexError(!PASSWORD_REGEX.test(event.target.value))
                         } else {
-                            setPasswordRegexError(false)
+                            if (event.target.value != passwordConfirm && PASSWORD_REGEX.test(passwordConfirm)) {
+                                setPasswordRegexError(true)
+                            } else {
+                                setPasswordRegexError(false)
+                            }
                         }
                     }}
                     colorIgnored
@@ -275,23 +290,26 @@ export default function WorkerSignUp() {
                     placeholder="1234567890"
                     className={styles.input}
                     icon={(<PasswordIcon/>)}
-                    value={confirmPassword}
+                    value={passwordConfirm}
                     onChange={event => {
-                        setConfirmPassword(event.target.value)
-
-                        setPasswordRegexError(!PASSWORD_REGEX.test(event.target.value))
-                        if (password != event.target.value || !PASSWORD_REGEX.test(event.target.value)) {
-                            setPasswordRegexError(true)
+                        setPasswordConfirm(event.target.value)
+                        if (PASSWORD_REGEX.test(password)) {
+                            setPasswordRegexError(false);
+                        }
+                        if (!PASSWORD_REGEX.test(event.target.value)) {
+                            setPasswordConfirmRegexError(!PASSWORD_REGEX.test(event.target.value))
                         } else {
-                            setPasswordRegexError(false)
+                            if (event.target.value != password && PASSWORD_REGEX.test(password)) {
+                                setPasswordConfirmRegexError(true)
+                            } else {
+                                setPasswordConfirmRegexError(false)
+                            }
                         }
                     }}
                     colorIgnored
-                    regexError={passwordRegexError}
-
-                />
+                    regexError={passwordConfirmRegexError}
+                    />
             </Box>
-
 
             <Box
                 style={{
