@@ -2,9 +2,11 @@ package pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruiseGroups;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.CruisePicture;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.CruiseAddressDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.cruises.CruisePictureDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.CruiseGroupName;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Name;
 
 import javax.validation.Valid;
@@ -20,17 +22,17 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_POSITIVE_OR_ZE
 @Data
 @Getter
 @Setter
-public class ChangeCruiseGroupDto implements SignableEntity {
+public class changeCruiseGroupDto implements SignableEntity {
 
     private UUID uuid; //todo change UUID to String and handle parse exception
 
-    @Name
+    @CruiseGropName
     private String name;
 
-    @Positive(message = CONSTRAINT_POSITIVE)
+    @Positive
     private long numberOfSeats;
 
-    @Positive(message = CONSTRAINT_POSITIVE)
+    @Positive
     private Double price;
 
     @Valid

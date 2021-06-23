@@ -15,6 +15,7 @@ import Popup from "../../PopupRecaptcha";
 import {useSnackbarQueue} from "../../pages/snackbar";
 import useHandleError from "../../errorHandler";
 import PopupAcceptAction from "../../PopupAcceptAction";
+import {NAME_REGEX, PHONE_NUMBER_REGEX} from "../../regexConstants";
 
 export default function ChangeClientData({open, onOpen, onConfirm, onCancel}: ChangeDataComponentProps) {
     const {t} = useTranslation()
@@ -29,6 +30,10 @@ export default function ChangeClientData({open, onOpen, onConfirm, onCancel}: Ch
     const [firstNameValue, setFirstNameValue] = useState(firstName)
     const [secondNameValue, setSecondNameValue] = useState(secondName)
     const [phoneNumberValue, setPhoneNumberValue] = useState(phoneNumber)
+
+    const [firstNameRegexError, setFirstNameRegexError] = useState(false)
+    const [secondNameRegexError, setSecondNameRegexError] = useState(false)
+    const [phoneNumberRegexError, setPhoneNumberRegexError] = useState(false)
 
     const [alterType, setAlterType] = useState('')
     const [alteredBy, setAlteredBy] = useState('')
@@ -64,21 +69,45 @@ export default function ChangeClientData({open, onOpen, onConfirm, onCancel}: Ch
         setMetadata(state => !state)
     }
 
-    function verifyCallback(){
-        setButtonPopup(false)
-        if (!firstNameValue || !secondNameValue || !phoneNumberValue) {
+    const handleConfirm = async () => {
+        setFirstNameRegexError(!NAME_REGEX.test(firstNameValue))
+        setSecondNameRegexError(!NAME_REGEX.test(secondNameValue))
+        setPhoneNumberRegexError(!PHONE_NUMBER_REGEX.test(phoneNumberValue))
+        if (!NAME_REGEX.test(firstNameValue) || !NAME_REGEX.test(secondNameValue) || !PHONE_NUMBER_REGEX.test(phoneNumberValue)) {
             handleError('error.fields')
-            return;
+            return
+        } else {
+            setButtonPopupAcceptAction(true)
         }
+    }
+
+    function verifyCallback() {
+        setButtonPopup(false)
 
         changeClientData(firstNameValue, secondNameValue, phoneNumberValue).then(res => {
             showSuccess(t('successful action'))
             onConfirm()
         }).catch(error => {
-            handleErase();
             const message = error.response.data
             handleError(message, error.response.status)
-            onCancel()
+            for (let messageArray of Object.values(message.errors)) {
+                for (const error of messageArray as Array<String>) {
+                    switch(error) {
+                        case 'error.size.firstName':
+                        case 'error.regex.firstName':
+                            setFirstNameRegexError(true)
+                            break
+                        case 'error.size.secondName':
+                        case 'error.regex.secondName':
+                            setSecondNameRegexError(true)
+                            break
+                        case 'error.size.phoneNumber':
+                        case 'error.regex.phoneNumber':
+                            setPhoneNumberRegexError(true)
+                            break
+                    }
+                }
+            }
         })
 
     }
@@ -141,22 +170,34 @@ export default function ChangeClientData({open, onOpen, onConfirm, onCancel}: Ch
                 <div>
                     <DarkedTextField
                         type="text"
-                        label={t("name")}
+                        label={t("name") + ' *'}
                         placeholder={t("nameExample")}
                         value={firstNameValue}
-                        onChange={event => {setFirstNameValue(event.target.value)}}/>
+                        onChange={event => {
+                            setFirstNameValue(event.target.value)
+                            setFirstNameRegexError(!NAME_REGEX.test(event.target.value))
+                        }}
+                        regexError={firstNameRegexError}/>
                     <DarkedTextField
                         type="text"
-                        label={t("surname")}
+                        label={t("surname") + ' *'}
                         placeholder={t("surnameExample")}
                         value={secondNameValue}
-                        onChange={event => {setSecondNameValue(event.target.value)}}/>
+                        onChange={event => {
+                            setSecondNameValue(event.target.value)
+                            setSecondNameRegexError(!NAME_REGEX.test(event.target.value))
+                        }}
+                        regexError={secondNameRegexError}/>
                     <DarkedTextField
                         type="text"
-                        label={t("phone")}
+                        label={t("phone") + ' *'}
                         placeholder={t("phoneNumberExample")}
                         value={phoneNumberValue}
-                        onChange={event => {setPhoneNumberValue(event.target.value)}}/>
+                        onChange={event => {
+                            setPhoneNumberValue(event.target.value)
+                            setPhoneNumberRegexError(!PHONE_NUMBER_REGEX.test(event.target.value))
+                        }}
+                        regexError={phoneNumberRegexError}/>
                     <Popup trigger={buttonPopup} setTrigger={setButtonPopup}>
                         <div>
                             <Recaptcha
@@ -174,7 +215,7 @@ export default function ChangeClientData({open, onOpen, onConfirm, onCancel}: Ch
                     />
                 </div>
                 <ConfirmMetadataCancelButtonGroup
-                    onConfirm={()=>setButtonPopupAcceptAction(true)}
+                    onConfirm={handleConfirm}
                     onPress={handleMetadata}
                     onCancel={handleCancel} />
                 <Grid item style={{display: metadata ? "block" : "none"}} className={styles['change-item']}>

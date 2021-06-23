@@ -13,6 +13,7 @@ import Popup from "../../PopupRecaptcha";
 import {useSnackbarQueue} from "../../pages/snackbar";
 import PopupAcceptAction from "../../PopupAcceptAction";
 import useHandleError from "../../errorHandler";
+import {EMAIL_REGEX, PASSWORD_REGEX} from "../../regexConstants";
 
 export default function ChangePassword({open, onOpen, onConfirm, onCancel}: ChangeDataComponentProps) {
     const {t} = useTranslation()
@@ -23,7 +24,11 @@ export default function ChangePassword({open, onOpen, onConfirm, onCancel}: Chan
     const currentSelfMTD = JSON.parse(sessionStorage.getItem("changeSelfAccountDataMta") as string)
     const [oldPassword, setOldPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
-    const [confirmNewPassword, setConfirmNewPassword] = useState('')
+    const [newPasswordConfirm, setNewPasswordConfirm] = useState('')
+
+    const [oldPasswordRegexError, setOldPasswordRegexError] = useState(false)
+    const [newPasswordRegexError, setNewPasswordRegexError] = useState(false)
+    const [newPasswordConfirmRegexError, setNewPasswordConfirmRegexError] = useState(false)
 
     const [buttonPopup, setButtonPopup] = useState(false);
     const [metadata, setMetadata] = useState(false)
@@ -45,7 +50,7 @@ export default function ChangePassword({open, onOpen, onConfirm, onCancel}: Chan
     const handleCancel = () => {
         setOldPassword('')
         setNewPassword('')
-        setConfirmNewPassword('')
+        setNewPasswordConfirm('')
         setMetadata(false)
         onCancel()
     }
@@ -54,21 +59,29 @@ export default function ChangePassword({open, onOpen, onConfirm, onCancel}: Chan
         setMetadata(state => !state)
     }
 
+    const handleConfirm = async () => {
+        setOldPasswordRegexError(!PASSWORD_REGEX.test(oldPassword))
+        setNewPasswordRegexError(!PASSWORD_REGEX.test(newPassword))
+        setNewPasswordConfirmRegexError(!PASSWORD_REGEX.test(newPasswordConfirm))
+
+        if(!PASSWORD_REGEX.test(oldPassword) || !PASSWORD_REGEX.test(newPassword) || !PASSWORD_REGEX.test(newPasswordConfirm)) {
+            handleError('error.fields')
+            return
+        } else if (newPassword != newPasswordConfirm) {
+            setNewPasswordRegexError(true);
+            setNewPasswordConfirmRegexError(true);
+            handleError("passwords are not equal")
+            return
+        } else {
+            setButtonPopupAcceptAction(true)
+        }
+    }
+
     async function verifyCallback() {
         setButtonPopup(false)
-        if (!oldPassword || !newPassword || !confirmNewPassword) {
-            handleError('error.fields')
-            return;
-        }
-
-        if (newPassword != confirmNewPassword) {
-            handleError('passwords are not equal');
-            return;
-        }
-
 
         changeOwnPasswordService(oldPassword, newPassword).then(res => {
-            setConfirmNewPassword('')
+            setNewPasswordConfirm('')
             onConfirm()
             showSuccess(t('successful action'))
         }).catch(error => {
@@ -78,12 +91,15 @@ export default function ChangePassword({open, onOpen, onConfirm, onCancel}: Chan
             } catch (e) {
                 handleError(message, error.response.status)
             }
-            onCancel()
-        }).finally(() => {
-            setOldPassword('')
-            setNewPassword('')
-        });
-
+            switch (message) {
+                case 'error.password.change.oldPasswordError':
+                    setOldPasswordRegexError(true)
+                    break
+                case 'error.password.change.newAndOldPasswordAreTheSameError':
+                    setNewPasswordRegexError(true)
+                    setNewPasswordConfirmRegexError(true)
+            }
+        })
     }
 
 
@@ -124,30 +140,58 @@ export default function ChangePassword({open, onOpen, onConfirm, onCancel}: Chan
                 <div>
                     <DarkedTextField
                         type="password"
-                        label={t("old password")}
+                        label={t("old password") + ' *'}
                         placeholder={t("old password")}
                         value={oldPassword}
                         onChange={event => {
                             setOldPassword(event.target.value)
-                        }}/>
+                            setOldPasswordRegexError(!PASSWORD_REGEX.test(event.target.value))
+                        }}
+                        regexError={oldPasswordRegexError}/>
 
                     <DarkedTextField
                         type="password"
-                        label={t("new password")}
+                        label={t("new password") + ' *'}
                         placeholder={t("new password")}
                         value={newPassword}
                         onChange={event => {
                             setNewPassword(event.target.value)
-                        }}/>
+                            if (PASSWORD_REGEX.test(newPasswordConfirm)) {
+                                setNewPasswordConfirmRegexError(false)
+                            }
+                            if (!PASSWORD_REGEX.test(event.target.value)) {
+                                setNewPasswordRegexError(!PASSWORD_REGEX.test(event.target.value))
+                            } else {
+                                if (event.target.value != newPasswordConfirm && PASSWORD_REGEX.test(newPasswordConfirm)) {
+                                    setNewPasswordRegexError(true)
+                                } else {
+                                    setNewPasswordRegexError(false)
+                                }
+                            }
+                        }}
+                        regexError={newPasswordRegexError}/>
 
                     <DarkedTextField
                         type="password"
-                        label={t("new password confirm")}
+                        label={t("new password confirm") + ' *'}
                         placeholder={t("new password confirm")}
-                        value={confirmNewPassword}
+                        value={newPasswordConfirm}
                         onChange={event => {
-                            setConfirmNewPassword(event.target.value)
-                        }}/>
+                            setNewPasswordConfirm(event.target.value)
+                            if (PASSWORD_REGEX.test(newPassword)) {
+                                setNewPasswordRegexError(false);
+                            }
+                            if (!PASSWORD_REGEX.test(event.target.value)) {
+                                setNewPasswordConfirmRegexError(!PASSWORD_REGEX.test(event.target.value))
+                            } else {
+                                if (event.target.value != newPassword && PASSWORD_REGEX.test(newPassword)) {
+                                    setNewPasswordConfirmRegexError(true)
+                                } else {
+                                    setNewPasswordConfirmRegexError(false)
+                                }
+                            }
+                        }}
+                        regexError={newPasswordConfirmRegexError}/>
                 </div>
                 <Popup trigger={buttonPopup} setTrigger={setButtonPopup}>
                     <div>
@@ -166,7 +210,7 @@ export default function ChangePassword({open, onOpen, onConfirm, onCancel}: Chan
                     }}
                 />
                 <ConfirmMetadataCancelButtonGroup
-                    onConfirm={() => setButtonPopupAcceptAction(true)}
+                    onConfirm={handleConfirm}
                     onPress={handleMetadata}
                     onCancel={handleCancel}/>
                 <Grid item style={{display: metadata ? "block" : "none"}} className={styles['change-item']}>

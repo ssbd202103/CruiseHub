@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.LanguageType;
 import pl.lodz.p.it.ssbd2021.ssbd03.security.SignableEntity;
-import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
-import pl.lodz.p.it.ssbd2021.ssbd03.validators.Name;
-import pl.lodz.p.it.ssbd2021.ssbd03.validators.PhoneNumber;
+import pl.lodz.p.it.ssbd2021.ssbd03.validators.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
@@ -25,10 +23,10 @@ public class ClientDto implements SignableEntity {
     @Login
     private String login;
 
-    @Name
+    @FirstName
     private String firstName;
 
-    @Name
+    @SecondName
     private String secondName;
 
     @Email(message = REGEX_INVALID_EMAIL)

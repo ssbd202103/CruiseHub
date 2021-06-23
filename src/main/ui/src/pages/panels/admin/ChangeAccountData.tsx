@@ -366,7 +366,7 @@ export default function ChangeAccountData() {
                     <div>
                         <DarkedTextField
                             type="text"
-                            label={t("name")}
+                            label={t("name") + ' *'}
                             placeholder={currentAccount.firstName}
                             value={firstName}
                             onChange={event => {
@@ -374,7 +374,7 @@ export default function ChangeAccountData() {
                             }}/>
                         <DarkedTextField
                             type="text"
-                            label={t("surname")}
+                            label={t("surname") + ' *'}
                             placeholder={currentAccount.secondName}
                             value={secondName}
                             onChange={event => {
@@ -444,7 +444,7 @@ export default function ChangeAccountData() {
                         <div>
                             <DarkedTextField
                                 type="text"
-                                label={t("new email")}
+                                label={t("new email") + ' *'}
                                 placeholder={t(currentAccount.email)}
                                 value={email}
                                 onChange={event => {
@@ -537,7 +537,7 @@ export default function ChangeAccountData() {
                         <div>
                             <DarkedTextField
                                 type="text"
-                                label={t("street")}
+                                label={t("street") + ' *'}
                                 placeholder={clientAddr ? clientAddr.address.street : ""}
                                 value={street}
                                 onChange={event => {
@@ -545,7 +545,7 @@ export default function ChangeAccountData() {
                                 }}/>
                             <DarkedTextField
                                 type="text"
-                                label={t("house number")}
+                                label={t("house number") + ' *'}
                                 placeholder={clientAddr ? clientAddr.address.houseNumber : ""}
                                 value={houseNumber}
                                 onChange={event => {
@@ -553,7 +553,7 @@ export default function ChangeAccountData() {
                                 }}/>
                             <DarkedTextField
                                 type="text"
-                                label={t("postal code")}
+                                label={t("postal code") + ' *'}
                                 placeholder={clientAddr ? clientAddr.address.postalCode : ""}
                                 value={postalCode}
                                 onChange={event => {
@@ -561,7 +561,7 @@ export default function ChangeAccountData() {
                                 }}/>
                             <DarkedTextField
                                 type="text"
-                                label={t("city")}
+                                label={t("city") + ' *'}
                                 placeholder={clientAddr ? clientAddr.address.city : ""}
                                 value={city}
                                 onChange={event => {
@@ -569,7 +569,7 @@ export default function ChangeAccountData() {
                                 }}/>
                             <DarkedTextField
                                 type="text"
-                                label={t("country")}
+                                label={t("country") + ' *'}
                                 placeholder={clientAddr ? clientAddr.address.country : ""}
                                 value={country}
                                 onChange={event => {
@@ -577,7 +577,7 @@ export default function ChangeAccountData() {
                                 }}/>
                             <DarkedTextField
                                 type="text"
-                                label={t("phone number")}
+                                label={t("phone number") + ' *'}
                                 placeholder={clientAddr ? clientAddr.phoneNumber : ""}
                                 value={phoneNumber}
                                 onChange={event => {
@@ -634,7 +634,7 @@ export default function ChangeAccountData() {
                         <div>
                             <DarkedTextField
                                 type="text"
-                                label={t("phone number")}
+                                label={t("phone number") + ' *'}
                                 placeholder={businnesPhone ? businnesPhone.phoneNumber : ""}
                                 value={businessPhoneNumber}
                                 onChange={event => {

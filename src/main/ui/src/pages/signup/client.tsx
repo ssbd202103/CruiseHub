@@ -18,7 +18,7 @@ import {
     CITY_REGEX,
     COUNTRY_REGEX,
     EMAIL_REGEX,
-    HOUSE_NUMBER_REGEX,
+    HOUSE_STREET_NUMBER_REGEX,
     LOGIN_REGEX,
     NAME_REGEX,
     PASSWORD_REGEX,
@@ -115,7 +115,7 @@ export default function ClientSignUp() {
         setFirstNameRegexError(!NAME_REGEX.test(firstName))
         setSecondNameRegexError(!NAME_REGEX.test(secondName))
         setEmailRegexError(!EMAIL_REGEX.test(email))
-        setHouseNumberRegexError(!HOUSE_NUMBER_REGEX.test(houseNumber))
+        setHouseNumberRegexError(!HOUSE_STREET_NUMBER_REGEX.test(houseNumber))
         setStreetRegexError(!STREET_REGEX.test(street))
         setPostalCodeRegexError(!POST_CODE_REGEX.test(postalCode))
         setCityRegexError(!CITY_REGEX.test(city))
@@ -123,7 +123,7 @@ export default function ClientSignUp() {
         setPhoneNumberRegexError(!PHONE_NUMBER_REGEX.test(phoneNumber))
 
         if (!LOGIN_REGEX.test(login) || !PASSWORD_REGEX.test(password) || !NAME_REGEX.test(firstName) ||
-            !NAME_REGEX.test(secondName) || !EMAIL_REGEX.test(email) || !HOUSE_NUMBER_REGEX.test(houseNumber) ||
+            !NAME_REGEX.test(secondName) || !EMAIL_REGEX.test(email) || !HOUSE_STREET_NUMBER_REGEX.test(houseNumber) ||
             !STREET_REGEX.test(street) || !POST_CODE_REGEX.test(postalCode) || !CITY_REGEX.test(city) ||
             !COUNTRY_REGEX.test(country) || !PHONE_NUMBER_REGEX.test(phoneNumber)) {
             handleError("invalid.form")
@@ -244,7 +244,7 @@ export default function ClientSignUp() {
                     value={houseNumber}
                     onChange={event => {
                         setHouseNumber(event.target.value)
-                        setHouseNumberRegexError(!HOUSE_NUMBER_REGEX.test(event.target.value))
+                        setHouseNumberRegexError(!HOUSE_STREET_NUMBER_REGEX.test(event.target.value))
                     }}
                     colorIgnored
                     regexError={houseNumberRegexError}
