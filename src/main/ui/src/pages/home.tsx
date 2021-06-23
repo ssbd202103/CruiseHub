@@ -20,7 +20,7 @@ import pl from "date-fns/locale/pl";
 import eng from "date-fns/locale/en-GB";
 import {makeStyles} from "@material-ui/styles";
 import RoundedButton from "../components/RoundedButton";
-import {TextField} from "@material-ui/core";
+import {Box, TextField} from "@material-ui/core";
 import Autocomplete from "../components/Autocomplete";
 
 
@@ -243,9 +243,37 @@ export default function Home() {
                 <ArrowIcon className={styles.arrow}/>
             </header>
 
-            <section className={styles.ad}>
-                <div>
-                    <div>
+            <Box style={{
+                display: 'flex',
+                margin: '32px 60px',
+                padding: 16,
+                backgroundColor: 'var(--yellow)',
+                justifyContent: 'space-around',
+                alignItems: 'center',
+                borderRadius: 16,
+            }}>
+                <Autocomplete
+                    options={cruisesNameList}
+                    inputValue={searchInput}
+                    noOptionsText={t('no options')}
+                    onChange={(event, value) => {
+                        setSearchInput(value as string ?? '')
+                        HandleFilterByName(value)
+                    }}
+                    renderInput={(params) => (
+                        <TextField {...params} label={t('search cruise')} variant="outlined"
+                                   onChange={(e) => {
+                                       setSearchInput(e.target.value)
+                                       HandleFilterByName(e.target.value)
+                                   }}/>
+                    )}
+                />
+                <Box style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                }}>
+                    <Box>
                         <MuiPickersUtilsProvider locale={language} utils={DateFnsUtils} >
                             <KeyboardDatePicker
                                 style={{marginRight: 30}}
@@ -271,7 +299,6 @@ export default function Home() {
                                 }}
                             />
                             <KeyboardDatePicker
-                                style={{marginRight: 30}}
                                 className={darkMode ? classes.dark: classes.light}
                                 disableToolbar
                                 autoOk={true}
@@ -294,46 +321,30 @@ export default function Home() {
                                 }}
                             />
                         </MuiPickersUtilsProvider>
-                        <RoundedButton
-                            onClick={HandleFilterByDateCruise}
-                            style={{width: '50%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
-                            color="pink"
-                        >{t("filterCruises")} </RoundedButton>
+                    </Box>
+                    <RoundedButton
+                        onClick={HandleFilterByDateCruise}
+                        style={{width: '100%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
+                        color="pink"
+                    >{t("filterCruises")} </RoundedButton>
+                </Box>
 
-                    </div>
-                    <div>
-                        <Autocomplete
-                            options={cruisesNameList}
-                            inputValue={searchInput}
-                            noOptionsText={t('no options')}
-                            onChange={(event, value) => {
-                                setSearchInput(value as string ?? '')
-                                HandleFilterByName(value)
-                            }}
-                            renderInput={(params) => (
-                                <TextField {...params} label={t('search cruise')} variant="outlined"
-                                           onChange={(e) => {
-                                               setSearchInput(e.target.value)
-                                               HandleFilterByName(e.target.value)
-                                           }}/>
-                            )}
-                        />
-                    </div>
-                    <div>
-                        <RoundedButton
-                            onClick={HandleFilterByLowerPriceCruise}
-                            style={{width: '50%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
-                            color="pink"
-                        >{t("filterByHigherPrices")} </RoundedButton>
-                        <RoundedButton
-                            onClick={HandleFilterByHigherPriceCruise}
-                            style={{width: '50%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
-                            color="pink"
-                        >{t("filterByLowerPriceCruises")} </RoundedButton>
-                    </div>
-                </div>
-            </section>
-
+                <Box style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                }}>
+                    <RoundedButton
+                        onClick={HandleFilterByLowerPriceCruise}
+                        style={{fontSize: '1.2rem', padding: '10px', marginBottom: 20}}
+                        color="pink"
+                    >{t("filterByHigherPrices")} </RoundedButton>
+                    <RoundedButton
+                        onClick={HandleFilterByHigherPriceCruise}
+                        style={{fontSize: '1.2rem', padding: '10px'}}
+                        color="pink"
+                    >{t("filterByLowerPriceCruises")} </RoundedButton>
+                </Box>
+            </Box>
 
             <section className={styles['top-cruises']}>
                 <h2 className={styles.h2}
