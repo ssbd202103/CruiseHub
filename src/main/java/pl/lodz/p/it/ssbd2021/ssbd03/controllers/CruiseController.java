@@ -178,7 +178,13 @@ public class CruiseController {
         tryAndRepeat(cruiseEndpoint, () -> cruiseEndpoint.editCruise(editCruiseDto));
     }
 
-
+    /**
+     * Zmienia status wycieczki na opublikowany
+     *
+     * @param publishCruiseDto obiekt reprezentujący wycieczke
+     * @param etag          Nagłówek If-Match żądania wymagany do potwierdzenia spójności danych
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
     @ETagFilterBinding
     @PUT
     @Path("/publish")

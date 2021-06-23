@@ -43,6 +43,14 @@ public class RatingController {
         tryAndRepeat(ratingEndpoint, () -> ratingEndpoint.removeRating(UUID.fromString(uuid)));
     }
 
+    /**
+     * Pobiera liste ocen użytkownika
+     *
+     * @param clientLogin login klienta
+     *
+     * @return Lista ocen użytkownika
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
     @GET
     @Path("/{clientLogin}")
     @Produces(MediaType.APPLICATION_JSON)
