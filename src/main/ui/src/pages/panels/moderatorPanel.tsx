@@ -23,6 +23,8 @@ import AddCompany from "./moderator/AddCompany";
 import ListClientRatings from "./moderator/ListClientRatings";
 import AttractionList from "./admin/AttractionList";
 import ModeratorHomePage from "../../components/ModeratorHomePage";
+import CruiseIcon from "@material-ui/icons/CardTravelRounded";
+import CreateIcon from "@material-ui/icons/Create";
 
 
 export default function ModeratorPanel() {
@@ -112,7 +114,7 @@ export default function ModeratorPanel() {
                 },
                 {
                     link: '/listCruiseGroup',
-                    Icon: AccountsListIcon,
+                    Icon: CruiseIcon,
                     text: t('listCruiseGroup'),
                     Component: ListCruiseGroup
                 },
@@ -124,7 +126,7 @@ export default function ModeratorPanel() {
                 },
                 {
                     link: '/add-company',
-                    Icon: BusinessIcon,
+                    Icon: CreateIcon,
                     text: t('add company'),
                     Component: AddCompany
                 },

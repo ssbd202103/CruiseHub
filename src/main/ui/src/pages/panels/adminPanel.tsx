@@ -23,6 +23,7 @@ import ListCruiseGroup from "./admin/ListCruiseGroupsForAdmin";
 import ListReservationsForCruise from "./admin/ListReservationsForCruise";
 import AttractionList from "./admin/AttractionList";
 import AdminHomePage from "../../components/AdminHomePage"
+import CruiseIcon from "@material-ui/icons/CardTravelRounded";
 export default function AdminPanel() {
     const {t} = useTranslation()
     const handleError = useHandleError()
@@ -109,7 +110,7 @@ export default function AdminPanel() {
                 },
                 {
                     link: '/listCruiseGroup',
-                    Icon: AccountsListIcon,
+                    Icon: CruiseIcon,
                     text: t('listCruiseGroup'),
                     Component: ListCruiseGroup
                 },

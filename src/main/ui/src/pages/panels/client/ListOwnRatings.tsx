@@ -61,7 +61,6 @@ function Row({row, style, onLoad}: RowProps) {
     return (
         <TableRow className={classes.root}>
             <TableCell component="th" scope="row" style={style}>{row.name}</TableCell>
-            <TableCell style={style}>{row.login}</TableCell>
             <TableCell style={style}>{row.rating}</TableCell>
             <TableCell style={style}>{row.cruiseGroupUUID}</TableCell>
             <TableCell style={style}>
@@ -154,10 +153,6 @@ const ListOwnRatings = () => {
                                     backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                     color: `var(--${!darkMode ? 'dark' : 'white-light'}`
                                 }}>{t("cruiseGroupName")}</TableCell>
-                                <TableCell style={{
-                                    backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
-                                    color: `var(--${!darkMode ? 'dark' : 'white-light'}`
-                                }}>{t("login")}</TableCell>
                                 <TableCell style={{
                                     backgroundColor: `var(--${!darkMode ? 'white' : 'dark-light'}`,
                                     color: `var(--${!darkMode ? 'dark' : 'white-light'}`
