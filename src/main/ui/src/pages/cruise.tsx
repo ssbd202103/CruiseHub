@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Link, Redirect, Route, useHistory, useParams} from "react-router-dom";
+import {useHistory, useParams} from "react-router-dom";
 import {Card, CardActions, CardContent, Grid, Menu, MenuItem} from "@material-ui/core";
 import {getCruiseByUUID, getRelatedCruises} from "../Services/cruisesService";
 import styles from '../styles/Cruise.module.css';
@@ -20,7 +20,7 @@ import {selectActiveAccessLevel, selectLogin} from "../redux/slices/userSlice";
 import StarSpinner from "../components/StarSpinner";
 import {createRating, removeRating} from "../Services/ratingService";
 import useHandleError from "../errorHandler";
-import {ReactComponent as SVG404} from "../404.svg";
+import store from "../redux/store";
 
 export default function Cruise() {
     const {id} = useParams<{ id: string }>();
@@ -73,9 +73,19 @@ export default function Cruise() {
 
     const bookCruise = () => {
         console.log(`number of seats = ${selectedNumberOfSeats}`)
-        createReservation(cruise.version, id, selectedNumberOfSeats).then(() => {
-            showSuccess(t('successful action'))
-        });
+        createReservation(cruise.version, id, selectedNumberOfSeats)
+            .then(() => {
+                showSuccess(t('successful action'))
+            })
+            .catch(error => {
+                const message = error.response?.data
+                handleError(message, error.response?.status)
+            });
+    }
+
+    const isBookingDisabled = () => {
+        const {token} = store.getState()
+        return (numberOfSeatsString == "" || token == "")
     }
 
     const getCruise = () => {
@@ -190,7 +200,7 @@ export default function Cruise() {
                         }
                     </Menu>
                     <div style={{display: 'flex', justifyContent: 'space-between'}} onClick={bookCruise}>
-                        <RoundedButton color="blue" style={{fontSize: 16}} disabled={numberOfSeatsString === ""}>
+                        <RoundedButton color="blue" style={{fontSize: 16}} disabled={isBookingDisabled()}>
                             {t('reserve')}
                         </RoundedButton>
 
