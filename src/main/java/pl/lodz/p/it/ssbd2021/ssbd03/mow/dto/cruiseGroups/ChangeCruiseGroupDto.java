@@ -22,11 +22,11 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_POSITIVE_OR_ZE
 @Data
 @Getter
 @Setter
-public class changeCruiseGroupDto implements SignableEntity {
+public class ChangeCruiseGroupDto implements SignableEntity {
 
     private UUID uuid; //todo change UUID to String and handle parse exception
 
-    @CruiseGropName
+    @CruiseGroupName
     private String name;
 
     @Positive
