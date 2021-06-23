@@ -40,6 +40,7 @@ export default function Cruise() {
     const [cruise, setCruise] = useState<any>()
     const [relatedCruises, setRelatedCruises] = useState<any[]>([])
     const [attractions, setAttractions] = useState<any[]>([])
+    const [selectedAttractions, setSelectedAttractions] = useState<string[]>([])
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [seatsAnchorEl, setSeatsAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -72,8 +73,7 @@ export default function Cruise() {
     }
 
     const bookCruise = () => {
-        console.log(`number of seats = ${selectedNumberOfSeats}`)
-        createReservation(cruise.version, id, selectedNumberOfSeats)
+        createReservation(cruise.version, id, selectedNumberOfSeats, selectedAttractions)
             .then(() => {
                 showSuccess(t('successful action'))
             })
@@ -139,6 +139,10 @@ export default function Cruise() {
         }).catch(error => {
             handleError(error)
         })
+    }
+
+    const addAttraction = (uuid: string) => {
+        selectedAttractions.push(uuid)
     }
 
     return (
@@ -243,7 +247,7 @@ export default function Cruise() {
                     <div style={{padding: '0 24px', width: '100%', overflow: 'auto', height: '100%'}}>
                         {
                             attractions.length ?
-                                attractions.map(({name, description, price}, index) => (
+                                attractions.map(({name, description, price, uuid}, index) => (
                                     <Card key={index} style={{marginBottom: 16}}>
                                         <CardContent>
                                             <h4>{name}</h4>
@@ -254,7 +258,7 @@ export default function Cruise() {
                                             </div>
                                         </CardContent>
                                         <CardActions>
-                                            <RoundedButton color="yellow">{t('take')}</RoundedButton>
+                                            <RoundedButton color="yellow" onClick={() => addAttraction(uuid)}>{t('take')}</RoundedButton>
                                         </CardActions>
                                     </Card>
                                 ))
