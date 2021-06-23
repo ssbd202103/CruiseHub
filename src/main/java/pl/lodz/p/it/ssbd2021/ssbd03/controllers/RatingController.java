@@ -32,6 +32,13 @@ public class RatingController {
     @Inject
     private RatingEndpointLocal ratingEndpoint;
 
+    /**
+     * Tworzy nową ocene dla wycieczki
+     *
+     * @param ratingDto obiekt reprezentujący
+     *
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
     @POST
     @Path("/create")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -40,6 +47,13 @@ public class RatingController {
         tryAndRepeat(ratingEndpoint, () -> ratingEndpoint.createRating(ratingDto));
     }
 
+    /**
+     * Usuwa ocene dla wycieczki
+     *
+     * @param uuid grupy wycieczek
+     *
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
     @DELETE
     @Path("/{uuid}")
     public void removeRating(@PathParam("uuid") String uuid) throws  BaseAppException {
@@ -61,6 +75,14 @@ public class RatingController {
         return tryAndRepeat(ratingEndpoint, () -> ratingEndpoint.getClientRatings(clientLogin));
     }
 
+    /**
+     * Usuwa ocene dla wycieczki danego użytkownika
+     *
+     * @param uuid grupy wycieczek
+     * @param clientLogin login użytkownika
+     *
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
     @DELETE
     @Path("/{clientLogin}/{uuid}")
     public void removeClientRating(@PathParam("clientLogin") String clientLogin, @PathParam("uuid") String uuid) throws BaseAppException {

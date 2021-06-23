@@ -215,6 +215,11 @@ public class AccountSelfController {
         return tryAndRepeat(accountEndpoint, () -> accountEndpoint.getSelfAddressMetadata());
     }
 
+    /**
+     * Pobiera wszystkie oceny dla zalogowanego użytkownika
+     *
+     * @throws BaseAppException Bazowy wyjątek aplikacji
+     */
     @GET
     @Path("/ratings")
     @Produces(MediaType.APPLICATION_JSON)
