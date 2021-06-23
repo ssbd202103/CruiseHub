@@ -199,14 +199,21 @@ export default function Cruise() {
                             ))
                         }
                     </Menu>
-                    <div style={{display: 'flex', justifyContent: 'space-between'}} onClick={bookCruise}>
-                        <RoundedButton color="blue" style={{fontSize: 16}} disabled={isBookingDisabled()}>
+                    <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                        <RoundedButton
+                            color="blue"
+                            style={{fontSize: 16}}
+                            disabled={isBookingDisabled()}
+                            onClick={numberOfSeatsString !== "" ? bookCruise : undefined}
+                        >
                             {t('reserve')}
                         </RoundedButton>
 
                         <div>
-                            <RoundedButton disabled={!relatedCruises.length} color="dark"
-                                           onClick={relatedCruises.length ? handleMenuOpen : undefined}>
+                            <RoundedButton
+                                disabled={!relatedCruises.length} color="dark"
+                                onClick={relatedCruises.length ? handleMenuOpen : undefined}
+                            >
                                 {t(relatedCruises.length ? 'choose another date' : 'no dates')}
                             </RoundedButton>
                             <Menu
