@@ -13,7 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EditCruiseDto implements SignableEntity {
-    private UUID uuid; //todo change UUID to String and handle parsing exception
+    private UUID uuid;
     private String startDate;
     private String endDate;
     private Long version;

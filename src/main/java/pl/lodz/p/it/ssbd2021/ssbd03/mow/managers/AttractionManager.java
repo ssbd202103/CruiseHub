@@ -90,13 +90,13 @@ public class AttractionManager extends BaseManagerMow implements AttractionManag
     }
 
 
-    @PermitAll //TODO
+    @PermitAll
     @Override
     public List<Attraction> findByCruiseUUID(UUID uuid) throws BaseAppException {
         return attractionFacadeMow.findByCruiseUUID(uuid);
     }
 
-    @PermitAll //TODO
+    @PermitAll
     @Override
     public Attraction findByUUID(UUID uuid) throws BaseAppException {
         return attractionFacadeMow.findByUUID(uuid);

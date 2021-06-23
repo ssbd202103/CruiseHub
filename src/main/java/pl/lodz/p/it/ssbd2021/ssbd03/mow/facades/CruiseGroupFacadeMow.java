@@ -42,19 +42,19 @@ public class CruiseGroupFacadeMow extends AbstractFacade<CruiseGroup> {
 
     @PermitAll
     @Override
-    public List<CruiseGroup> findAll() throws FacadeException { //TODO throws FacadeException {
+    public List<CruiseGroup> findAll() throws FacadeException {
         return super.findAll();
     }
 
     @Override
     @RolesAllowed({"changeCruiseGroup", "deactivateCruiseGroup", "removeClientRating","createRating"})
-    public void edit(CruiseGroup entity) throws FacadeException { //TODo throws FacadeException {
+    public void edit(CruiseGroup entity) throws FacadeException {
         super.edit(entity);
     }
 
     @Override
     @RolesAllowed("addCruiseGroup")
-    public void create(CruiseGroup entity) throws FacadeException { //TODO throws FacadeException {
+    public void create(CruiseGroup entity) throws FacadeException {
         super.create(entity);
     }
 

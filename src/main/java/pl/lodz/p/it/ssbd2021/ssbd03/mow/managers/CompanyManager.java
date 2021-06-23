@@ -75,7 +75,7 @@ public class CompanyManager extends BaseManagerMow implements CompanyManagerLoca
         companyFacadeMow.create(company);
     }
 
-    @PermitAll //TODO
+    @RolesAllowed("authenticatedUser")
     @Override
     public Company findByNIP(long nip) throws BaseAppException {
         return companyFacadeMow.findByNIP(nip);

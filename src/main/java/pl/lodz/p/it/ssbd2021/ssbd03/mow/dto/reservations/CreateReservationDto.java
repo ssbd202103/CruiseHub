@@ -13,7 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class CreateReservationDto {
     private long cruiseVersion;
-    private UUID cruiseUuid; //todo change UUID to String and handle parsing exception
+    private UUID cruiseUuid;
     private long numberOfSeats;
     private List<String> attractionsUUID;
 }

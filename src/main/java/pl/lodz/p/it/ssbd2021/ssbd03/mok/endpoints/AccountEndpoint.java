@@ -141,7 +141,6 @@ public class AccountEndpoint extends BaseEndpoint implements AccountEndpointLoca
     public void blockUser(@NotNull(message = CONSTRAINT_NOT_NULL) String login, @NotNull(message = CONSTRAINT_NOT_NULL) long version) throws BaseAppException {
         Account account = this.accountManager.blockUser(login, version);
 
-        //todo uncomment it when needed
         Locale locale = new Locale(account.getLanguageType().getName().name());
         String body = i18n.getMessage(BLOCKED_ACCOUNT_BODY, locale);
         String subject = i18n.getMessage(BLOCKED_ACCOUNT_SUBJECT, locale);
@@ -169,7 +168,6 @@ public class AccountEndpoint extends BaseEndpoint implements AccountEndpointLoca
     public void unblockUser(@NotNull(message = CONSTRAINT_NOT_NULL) String unblockedUserLogin, @NotNull(message = CONSTRAINT_NOT_NULL) long version) throws BaseAppException {
         Account account = this.accountManager.unblockUser(unblockedUserLogin, version);
 
-        //todo uncomment it when needed
         Locale locale = new Locale(account.getLanguageType().getName().name());
         String body = i18n.getMessage(UNBLOCKED_ACCOUNT_BODY, locale);
         String subject = i18n.getMessage(UNBLOCKED_ACCOUNT_SUBJECT, locale);

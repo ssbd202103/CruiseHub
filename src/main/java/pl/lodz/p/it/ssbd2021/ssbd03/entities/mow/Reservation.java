@@ -18,15 +18,11 @@ import java.util.UUID;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
 
-//TODO QA CHECK either implemented queries mentioned below or remove TODO tags
-//TODO sprawdzenie i powprawnienie Reservation.findWorkerCruiseReservations query
 @NamedQueries({
         @NamedQuery(name = "Reservation.findByUUID", query = "SELECT reservation FROM reservations reservation WHERE reservation.uuid = :uuid"),
         @NamedQuery(name = "Reservation.findCruiseReservations", query = "SELECT reservation FROM reservations reservation WHERE reservation.cruise.uuid = :uuid"),
         @NamedQuery(name = "Reservation.findByUUIDAndLogin", query = "SELECT res FROM reservations res WHERE res.uuid=:uuid AND res.client.account.login=:login"),
         @NamedQuery(name = "Reservation.findByLogin", query = "SELECT res FROM reservations res WHERE res.client.account.login=:login")
-        //todo change query so you can get reserwation that is in the criuse that is in the cruise group that i sowned by company that the Buissner worker is working for
-        // @NamedQuery(name = "Reservation.findWorkerCruiseReservations", query = "SELECT reservation FROM reservations reservation WHERE reservation.cruise = :id and reservation.cruise IN (SELECT id FROM cruises WHERE cruises_groups.id IN (SELECT id FROM cruises_groups WHERE company.id IN (SELECT id FROM companies WHERE companies.id IN (select business_workers.company FROM business_workers WHERE id = :id))) ) ")
 })
 @Entity(name = "reservations")
 @ToString
@@ -40,7 +36,6 @@ public class Reservation extends BaseEntity {
     private long id;
 
     @Basic
-//    @Convert(converter = pl.lodz.p.it.ssbd2021.ssbd03.entities.converters.UuidConverter.class) todo
     @Getter
     @Setter
     @NotNull(message = CONSTRAINT_NOT_NULL)

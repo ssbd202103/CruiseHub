@@ -148,7 +148,7 @@ public class ReservationManager extends BaseManagerMow implements ReservationMan
         return reservationFacadeMow.findReservationByLogin(account.getLogin());
     }
 
-    @PermitAll //TODO
+    @RolesAllowed("authenticatedUser")
     @Override
     public Reservation findByUUID(UUID uuid) throws BaseAppException {
         return reservationFacadeMow.findByUUID(uuid);

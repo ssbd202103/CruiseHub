@@ -43,7 +43,7 @@ public class CruiseManager extends BaseManagerMow implements CruiseManagerLocal 
 
     @RolesAllowed("addCruise")
     @Override
-    public void addCruise(Cruise cruise, UUID cruiseGroupUUID) throws BaseAppException { //todo refactor this method
+    public void addCruise(Cruise cruise, UUID cruiseGroupUUID) throws BaseAppException {
 
         if (cruise.getStartDate().isBefore(LocalDateTime.now())) {
             throw new CruiseManagerException(START_DATE_BEFORE_CURRENT_DATE);
@@ -102,7 +102,7 @@ public class CruiseManager extends BaseManagerMow implements CruiseManagerLocal 
 
     @RolesAllowed("editCruise")
     @Override
-    public void editCruise(LocalDateTime startDate, LocalDateTime endDate, UUID uuid, Long version) throws BaseAppException { //todo refactor this method
+    public void editCruise(LocalDateTime startDate, LocalDateTime endDate, UUID uuid, Long version) throws BaseAppException {
         Cruise cruiseToEdit = cruiseFacadeMow.findByUUID(uuid);
         checkForOptimisticLock(cruiseToEdit, version);
 
@@ -157,7 +157,7 @@ public class CruiseManager extends BaseManagerMow implements CruiseManagerLocal 
         return cruiseFacadeMow.getPublishedCruises();
     }
 
-    @PermitAll //TODO
+    @PermitAll
     @Override
     public Cruise findByUUID(UUID uuid) throws BaseAppException {
         return cruiseFacadeMow.findByUUID(uuid);

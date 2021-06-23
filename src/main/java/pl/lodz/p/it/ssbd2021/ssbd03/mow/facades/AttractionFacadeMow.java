@@ -60,7 +60,7 @@ public class AttractionFacadeMow extends AbstractFacade<Attraction> {
     }
 
 
-    @PermitAll //TODO double check rolesAllowed for this method
+    @PermitAll
     public Attraction findByUUID(UUID uuid) throws BaseAppException {
         TypedQuery<Attraction> tq = em.createNamedQuery("Attraction.findByUUID", Attraction.class);
         tq.setParameter("uuid", uuid);
@@ -83,7 +83,7 @@ public class AttractionFacadeMow extends AbstractFacade<Attraction> {
     }
 
 
-    @PermitAll //TODO
+    @PermitAll
     public List<Attraction> findByCruiseUUID(UUID uuid) throws BaseAppException {
         TypedQuery<Attraction> tq = em.createNamedQuery("Attraction.findByCruiseUUID", Attraction.class);
         tq.setParameter("uuid", uuid);

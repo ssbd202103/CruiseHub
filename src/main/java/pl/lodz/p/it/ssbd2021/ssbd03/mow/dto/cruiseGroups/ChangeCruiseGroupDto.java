@@ -24,7 +24,7 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_POSITIVE_OR_ZE
 @Setter
 public class ChangeCruiseGroupDto implements SignableEntity {
 
-    private UUID uuid; //todo change UUID to String and handle parse exception
+    private UUID uuid;
 
     @CruiseGroupName
     private String name;

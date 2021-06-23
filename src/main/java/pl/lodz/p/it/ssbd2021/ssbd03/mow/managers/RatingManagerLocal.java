@@ -21,13 +21,11 @@ public interface RatingManagerLocal {
      */
     void createRating(UUID cruiseGroupUUID, Double rating) throws BaseAppException;
 
-    //TODO: bledny javadoc @Vitalii
-
     /**
-     * Usuwa ocenę o podanym użytkowniku oraz wycieczce
+     * Usuwa ocenę grupy wycieczek o podanym uuid
      *
-     * @param cruiseGroupUUID uuid grupy wycieczek, dla której opinia zostanie usunięta
-     * @throws BaseAppException bazowy wyjątek aplikacji, zwracany w przypadku nieznależenia wycieczki, użytkownika lub oceny
+     * @param cruiseGroupUUID uuid grupy wycieczek, dla której ocena zostanie usunięta
+     * @throws BaseAppException bazowy wyjątek aplikacji, zwracany w przypadku nieznależenia grupy wycieczek, użytkownika lub oceny
      */
     void removeRating(UUID cruiseGroupUUID) throws BaseAppException;
 

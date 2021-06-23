@@ -76,7 +76,6 @@ public class AccountManager extends BaseManagerMok implements AccountManagerLoca
         setCreatedMetadata(account, account, address);
         accountFacade.create(account);
 
-        //todo uncomment it when it's needed
         if (accountFacade.findByLogin(account.getLogin()) != null) {
             sendVerificationEmail(account);
         }
@@ -91,7 +90,7 @@ public class AccountManager extends BaseManagerMok implements AccountManagerLoca
 
         setCreatedMetadata(account, account);
         accountFacade.create(account);
-        //todo uncomment it when it's needed
+
         if (accountFacade.findByLogin(account.getLogin()) != null) {
             sendVerificationEmail(account);
         }
@@ -718,7 +717,6 @@ public class AccountManager extends BaseManagerMok implements AccountManagerLoca
         String loggedString;
         try {
             if (isAuthValid) {
-                //todo check if user is admin and send email with authentication time and logical address if so
                 account.setLastCorrectAuthenticationDateTime(time);
                 account.setLastCorrectAuthenticationLogicalAddress(ipAddr);
                 account.setNumberOfAuthenticationFailures(0);
