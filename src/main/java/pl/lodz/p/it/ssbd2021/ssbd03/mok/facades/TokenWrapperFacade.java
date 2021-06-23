@@ -8,7 +8,6 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
 import javax.annotation.security.PermitAll;
-import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -35,15 +34,13 @@ public class TokenWrapperFacade extends AbstractFacade<TokenWrapper> {
         super(TokenWrapper.class);
     }
 
-    @PermitAll //TODO: usunac komentarz i sprawdzic permita
-// @RolesAllowed("SYSTEM")
+    @PermitAll
     public List<TokenWrapper> getUsedToken() {
         TypedQuery<TokenWrapper> tq = em.createNamedQuery("TokenWrapper.findUsed", TokenWrapper.class);
         return tq.getResultList();
     }
 
-    @PermitAll //TODO: usunac komentarz i sprawdzic permita
-// @RolesAllowed("SYSTEM")
+    @PermitAll
     public List<TokenWrapper> getUnusedToken() {
         TypedQuery<TokenWrapper> tq = em.createNamedQuery("TokenWrapper.findUnused", TokenWrapper.class);
         return tq.getResultList();
@@ -72,12 +69,12 @@ public class TokenWrapperFacade extends AbstractFacade<TokenWrapper> {
         super.edit(entity);
     }
 
-    @PermitAll //TODO: usunac komentarz i sprawdzic permita
-    //    @RolesAllowed("SYSTEM")
+    @PermitAll
     @Override
     public void remove(TokenWrapper entity) throws FacadeException {
         super.remove(entity);
     }
+
     @PermitAll
     public List<TokenWrapper> findByAccount(Account acc) throws FacadeException {
         TypedQuery<TokenWrapper> tq = em.createNamedQuery("TokenWrapper.findByAccount", TokenWrapper.class);

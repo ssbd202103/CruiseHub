@@ -147,7 +147,7 @@ function PasswordReset(props: any) {
                         onClick={resetPassword}
                         style={{width: '100%', fontSize: '1.2rem', padding: '10px 0', marginBottom: 20}}
                         color="pink"
-                    >Reset </RoundedButton>
+                    >{t("reset btn")}</RoundedButton>
                     <PopupAcceptAction
                         open={buttonPopupAcceptAction}
                         onConfirm={submitPasswordReset}
