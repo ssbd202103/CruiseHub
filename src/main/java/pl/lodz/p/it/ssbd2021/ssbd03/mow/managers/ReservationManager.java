@@ -7,10 +7,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.accesslevels.Client;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Attraction;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Cruise;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mow.Reservation;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.CruiseManagerException;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.FacadeException;
-import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.NoSeatsAvailableException;
+import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.*;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters.AccountMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.CruiseFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.ReservationFacadeMow;
@@ -86,6 +83,10 @@ public class ReservationManager extends BaseManagerMow implements ReservationMan
 
         if (numberOfSeats > getAvailableSeats(cruiseUUID)) {
             throw new NoSeatsAvailableException(NO_SEATS_AVAILABLE);
+        }
+
+        if (cruise.getStartDate().isBefore(LocalDateTime.now())) {
+            throw new ReservationManagerException(CANNOT_BOOK_STARTED_CRUISE);
         }
 
         Reservation reservation = new Reservation(numberOfSeats, cruise, cruise.getCruisesGroup().getPrice() * numberOfSeats, client);

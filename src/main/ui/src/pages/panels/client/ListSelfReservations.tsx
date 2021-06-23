@@ -18,6 +18,7 @@ import {
     getSelfReservations, removeReservation,
 } from "../../../Services/reservationService";
 import {useSnackbarQueue} from "../../snackbar";
+import RoundedButton from "../../../components/RoundedButton";
 
 const useRowStyles = makeStyles({
     root: {
@@ -85,8 +86,8 @@ function Row({row, style, onReload}: RowProps) {
             <TableCell style={style}>{row.numberOfSeats}</TableCell>
             <TableCell style={style}>{row.price}</TableCell>
             <TableCell style={style}>
-                <Button onClick={cancelReservation}
-                        className={buttonClass.root}>{t("cancel reservation btn")}</Button>
+                <RoundedButton color="pink" onClick={cancelReservation}
+                               className={buttonClass.root}>{t("cancel reservation btn")}</RoundedButton>
             </TableCell>
         </TableRow>
     );

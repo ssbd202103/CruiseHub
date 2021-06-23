@@ -6,6 +6,7 @@ import HeaderFooterLayout from '../layouts/HeaderFooterLayout'
 
 import styles from '../styles/Home.module.css'
 
+import { Link } from 'react-router-dom';
 import {useTranslation} from 'react-i18next'
 import {useSelector} from "react-redux";
 import {selectDarkMode, selectLanguage} from "../redux/slices/userSlice";
@@ -142,10 +143,14 @@ export default function Home() {
                     dayOfMonth: ed,
                 } = r.endDate;
 
-                const start = new Date(sy, sm, sd, 0, 0, 0, 0).getTime();
-                const end = new Date(ey, em, ed, 0, 0, 0, 0).getTime();
+                const cruiseStartDate = new Date(sy, sm - 1, sd, 0, 0, 0, 0);
+                const cruiseEndDate = new Date(ey, em - 1, ed, 0, 0, 0, 0);
 
-                return (startDate ? startDate.getTime() <= start : true) && (endDate ? endDate.getTime() >= end : true)
+                startDate?.setHours(0, 0, 0,0)
+                endDate?.setHours(0, 0, 0,0)
+
+                return (startDate ? startDate.getTime() <= cruiseStartDate.getTime() : true) &&
+                    (endDate ? endDate.getTime() >= cruiseEndDate.getTime() : true)
             })
         })
         setFilteredCruises(filtered)
@@ -316,12 +321,18 @@ export default function Home() {
                     style={{color: `var(--${darkMode ? 'dark' : 'white'}`}}>{t("the best cruises")}</h2>
 
                 <div className={styles['cruises-grid']}>
-                    {filteredCruises.map((cruise, index) =>(<CruiseCard
-                        key={index}
-                        price = {cruise.price}
-                        title = {cruise.name}
-                        img = {cruise.img}
-                    />))}
+                    {filteredCruises.map(({relatedCruises, price, name, img}, index) =>(
+                        <Link
+                            key={index}
+                            to={`/cruise/${relatedCruises[0].uuid}`}
+                        >
+                            <CruiseCard
+                                price = {price}
+                                title = {name}
+                                img = {img}
+                            />
+                        </Link>
+                    ))}
                 </div>
             </section>
         </HeaderFooterLayout>

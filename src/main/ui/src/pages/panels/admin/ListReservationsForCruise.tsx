@@ -81,8 +81,8 @@ function Row({row, style, onReload}: RowProps) {
             <TableCell style={style}>{row.cruiseName}</TableCell>
             <TableCell style={style}>{row.attractions.map(item => t(item)).join(', ')}</TableCell>
             <TableCell style={style}>
-                <Button onClick={removeCurrentReservation}
-                        className={buttonClass.root}>{t("Remove reservation btn")}</Button>
+                <RoundedButton color="pink" onClick={removeCurrentReservation}
+                               className={buttonClass.root}>{t("Remove reservation btn")}</RoundedButton>
             </TableCell>
             <TableCell align="center">
                 <Link to={`reservation/metadata/${row.uuid}`}>
