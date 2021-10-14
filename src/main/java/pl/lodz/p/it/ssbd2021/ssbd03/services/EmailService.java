@@ -60,9 +60,9 @@ public class EmailService {
 
             Transport transport = session.getTransport("smtp");
 
-            transport.connect(host, EMAIL_USER, PASSWD);
-            transport.sendMessage(message, message.getAllRecipients());
-            transport.close();
+//            transport.connect(host, EMAIL_USER, PASSWD);
+//            transport.sendMessage(message, message.getAllRecipients());
+//            transport.close();
         } catch (AddressException ae) {
             throw new EmailServiceException(EMAIL_SERVICE_INCORRECT_EMAIL);
         } catch (MessagingException me) {
@@ -109,9 +109,9 @@ public class EmailService {
 
             Transport transport = session.getTransport("smtp");
 
-            transport.connect(host, EMAIL_USER, PASSWD);
-            transport.sendMessage(message, message.getAllRecipients());
-            transport.close();
+//            transport.connect(host, EMAIL_USER, PASSWD);
+//            transport.sendMessage(message, message.getAllRecipients());
+//            transport.close();
         } catch (AddressException ae) {
             ae.printStackTrace();
         } catch (MessagingException me) {
