@@ -32,7 +32,7 @@ public abstract class BaseEntity implements IdentifiableEntity {
 
     @Getter
     @Setter
-    @OneToOne(cascade = CascadeType.PERSIST, optional = false)
+    @ManyToOne(cascade = CascadeType.PERSIST, optional = false)
     @JoinColumn(name = "created_by_id", updatable = false)
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid
@@ -41,7 +41,7 @@ public abstract class BaseEntity implements IdentifiableEntity {
 
     @Getter
     @Setter
-    @OneToOne(cascade = CascadeType.PERSIST, optional = false)
+    @ManyToOne(cascade = CascadeType.PERSIST, optional = false)
     @JoinColumn(name = "altered_by_id")
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid

@@ -39,7 +39,7 @@ public class BusinessWorker extends AccessLevel {
 
     @Getter
     @Setter
-    @OneToOne(cascade = CascadeType.PERSIST, optional = false)
+    @ManyToOne(cascade = CascadeType.PERSIST, optional = false)
     @JoinColumn(updatable = false, nullable = false, name = "company_id")
     @NotNull(message = CONSTRAINT_NOT_NULL)
     @Valid

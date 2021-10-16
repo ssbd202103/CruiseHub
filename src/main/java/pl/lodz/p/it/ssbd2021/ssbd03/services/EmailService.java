@@ -38,36 +38,36 @@ public class EmailService {
      */
     public static void sendEmailWithContent(String recipientEmail, String subject, String contentHtml) throws EmailServiceException {
 
-        Properties properties = System.getProperties();
-
-        String host = "smtp.gmail.com";
-        properties.put("mail.smtp.starttls.enable", "true");
-        properties.put("mail.smtp.ssl.trust", host);
-        properties.put("mail.smtp.user", EMAIL_USER);
-        properties.put("mail.smtp.password", PASSWD);
-        properties.put("mail.smtp.port", "587");
-        properties.put("mail.smtp.auth", "true");
-
-        Session session = Session.getDefaultInstance(properties);
-        MimeMessage message = new MimeMessage(session);
-
-        try {
-            message.setRecipient(Message.RecipientType.TO, new InternetAddress(recipientEmail));
-            message.setFrom(new InternetAddress(EMAIL_USER));
-
-            message.setSubject(subject, "UTF-8");
-            message.setContent(contentHtml, "text/html; charset=UTF-8");
-
-            Transport transport = session.getTransport("smtp");
-
-//            transport.connect(host, EMAIL_USER, PASSWD);
-//            transport.sendMessage(message, message.getAllRecipients());
-//            transport.close();
-        } catch (AddressException ae) {
-            throw new EmailServiceException(EMAIL_SERVICE_INCORRECT_EMAIL);
-        } catch (MessagingException me) {
-            throw new EmailServiceException(EMAIL_SERVICE_INACCESSIBLE);
-        }
+//        Properties properties = System.getProperties();
+//
+//        String host = "smtp.gmail.com";
+//        properties.put("mail.smtp.starttls.enable", "true");
+//        properties.put("mail.smtp.ssl.trust", host);
+//        properties.put("mail.smtp.user", EMAIL_USER);
+//        properties.put("mail.smtp.password", PASSWD);
+//        properties.put("mail.smtp.port", "587");
+//        properties.put("mail.smtp.auth", "true");
+//
+//        Session session = Session.getDefaultInstance(properties);
+//        MimeMessage message = new MimeMessage(session);
+//
+//        try {
+//            message.setRecipient(Message.RecipientType.TO, new InternetAddress(recipientEmail));
+//            message.setFrom(new InternetAddress(EMAIL_USER));
+//
+//            message.setSubject(subject, "UTF-8");
+//            message.setContent(contentHtml, "text/html; charset=UTF-8");
+//
+//            Transport transport = session.getTransport("smtp");
+//
+////            transport.connect(host, EMAIL_USER, PASSWD);
+////            transport.sendMessage(message, message.getAllRecipients());
+////            transport.close();
+//        } catch (AddressException ae) {
+//            throw new EmailServiceException(EMAIL_SERVICE_INCORRECT_EMAIL);
+//        } catch (MessagingException me) {
+//            throw new EmailServiceException(EMAIL_SERVICE_INACCESSIBLE);
+//        }
     }
 
     /**
@@ -78,45 +78,45 @@ public class EmailService {
      * @param body       zawartość maila
      */
     public static void sendFromGMail(String[] recipients, String subject, String body) {
-        Properties properties = System.getProperties();
-
-        String host = "smtp.gmail.com";
-        properties.put("mail.smtp.starttls.enable", "true");
-        properties.put("mail.smtp.ssl.trust", host);
-        properties.put("mail.smtp.user", EMAIL_USER);
-        properties.put("mail.smtp.password", PASSWD);
-        properties.put("mail.smtp.port", "587");
-        properties.put("mail.smtp.auth", "true");
-
-        Session session = Session.getDefaultInstance(properties);
-        MimeMessage message = new MimeMessage(session);
-
-        try {
-            message.setFrom(new InternetAddress(EMAIL_USER));
-            InternetAddress[] toAddress = new InternetAddress[recipients.length];
-
-            // To get the array of addresses
-            for (int i = 0; i < recipients.length; i++) {
-                toAddress[i] = new InternetAddress(recipients[i]);
-            }
-
-            for (int i = 0; i < toAddress.length; i++) {
-                message.addRecipient(Message.RecipientType.TO, toAddress[i]);
-            }
-
-            message.setSubject(subject);
-            message.setContent(body, "text/html; charset=UTF-8");
-
-            Transport transport = session.getTransport("smtp");
-
-//            transport.connect(host, EMAIL_USER, PASSWD);
-//            transport.sendMessage(message, message.getAllRecipients());
-//            transport.close();
-        } catch (AddressException ae) {
-            ae.printStackTrace();
-        } catch (MessagingException me) {
-            me.printStackTrace();
-        }
+//        Properties properties = System.getProperties();
+//
+//        String host = "smtp.gmail.com";
+//        properties.put("mail.smtp.starttls.enable", "true");
+//        properties.put("mail.smtp.ssl.trust", host);
+//        properties.put("mail.smtp.user", EMAIL_USER);
+//        properties.put("mail.smtp.password", PASSWD);
+//        properties.put("mail.smtp.port", "587");
+//        properties.put("mail.smtp.auth", "true");
+//
+//        Session session = Session.getDefaultInstance(properties);
+//        MimeMessage message = new MimeMessage(session);
+//
+//        try {
+//            message.setFrom(new InternetAddress(EMAIL_USER));
+//            InternetAddress[] toAddress = new InternetAddress[recipients.length];
+//
+//            // To get the array of addresses
+//            for (int i = 0; i < recipients.length; i++) {
+//                toAddress[i] = new InternetAddress(recipients[i]);
+//            }
+//
+//            for (int i = 0; i < toAddress.length; i++) {
+//                message.addRecipient(Message.RecipientType.TO, toAddress[i]);
+//            }
+//
+//            message.setSubject(subject);
+//            message.setContent(body, "text/html; charset=UTF-8");
+//
+//            Transport transport = session.getTransport("smtp");
+//
+////            transport.connect(host, EMAIL_USER, PASSWD);
+////            transport.sendMessage(message, message.getAllRecipients());
+////            transport.close();
+//        } catch (AddressException ae) {
+//            ae.printStackTrace();
+//        } catch (MessagingException me) {
+//            me.printStackTrace();
+//        }
     }
 
     private static String getAccount() {

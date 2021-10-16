@@ -132,7 +132,7 @@ public class Account extends BaseEntity {
     @Getter
     @Setter
     @Column(name = "number_of_authentication_failures")
-    private int numberOfAuthenticationFailures;
+    private Integer numberOfAuthenticationFailures = 0;
 
     @Getter
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "account")

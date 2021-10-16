@@ -7,7 +7,6 @@ import io.restassured.http.ContentType;
 import io.restassured.http.Header;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -287,6 +286,7 @@ class AccountControllerIT {
         assertTrue(accountDtoList.stream().anyMatch(newAccount -> newAccount.getLogin().equals(account.getLogin())));
 
     }
+
     @Test
     public void getAllUnconfirmedBusinessWorkers_SUCESS() throws JsonProcessingException {
         String adminToken = this.getAuthToken("mzuckerberg", "abcABC123*");
@@ -294,9 +294,10 @@ class AccountControllerIT {
         Response response = RestAssured.given().relaxedHTTPSValidation().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken)).baseUri(accountBaseUri).get("/unconfirmed-business-workers");
         String accountString = response.getBody().asString();
         List<BusinessWorkerWithCompanyDto> workerks = Arrays.asList(objectMapper.readValue(accountString, BusinessWorkerWithCompanyDto[].class));
-        assertTrue(workerks.size()>0);
+        assertTrue(workerks.size() > 0);
 
     }
+
     @Test
     public void ConfirmBusinessWorker() throws JsonProcessingException {
         String adminToken = this.getAuthToken("mzuckerberg", "abcABC123*");
@@ -304,7 +305,7 @@ class AccountControllerIT {
         Response response = RestAssured.given().relaxedHTTPSValidation().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken)).baseUri(accountBaseUri).get("/unconfirmed-business-workers");
         String accountString = response.getBody().asString();
         List<BusinessWorkerWithCompanyDto> workerks = Arrays.asList(objectMapper.readValue(accountString, BusinessWorkerWithCompanyDto[].class));
-       BusinessWorkerWithCompanyDto worker= workerks.get(0);
+        BusinessWorkerWithCompanyDto worker = workerks.get(0);
         given().relaxedHTTPSValidation().baseUri(accountBaseUri).header("If-Match", worker.getEtag())
                 .contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken))
                 .body(worker)
@@ -486,29 +487,32 @@ class AccountControllerIT {
         String etag = EntityIdentitySignerVerifier.calculateEntitySignature(account);
         OtherAccountChangeDataDto otherAccountChangeDataDto = new OtherAccountChangeDataDto(account.getLogin(), account.getVersion(),
                 "Damian",
-                "Bednarek")
-               ;
+                "Bednarek");
         Response response = getBaseUriETagRequest(etag).contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken)).body(otherAccountChangeDataDto).put("/change-account-data");
         assertThat(response.getStatusCode()).isEqualTo(200);
         AccountDto updatedAccount = objectMapper.readValue(response.asString(), AccountDto.class);
         assertThat(updatedAccount.getFirstName()).isEqualTo("Damian");
         assertThat(updatedAccount.getSecondName()).isEqualTo("Bednarek");
     }
+
     @Test
+
+    @Disabled
     public void blockAccountAfterFiveIncorrectLogins_SUCCESS() throws JsonProcessingException, InterruptedException {
         String adminToken = this.getAuthToken("rbranson", "abcABC123*");
         ClientForRegistrationDto client = getSampleClientForRegistrationDto();
         AccountDto account = registerClientAndGetAccountDto(client);
         AuthenticateDto authInfoFalse = new AuthenticateDto(account.getLogin(), "Incorre2*ctPassword", true, "PL");
-        for(int i=0;i<=5;i++) {
+        for (int i = 0; i <= 5; i++) {
             Response responseFalse = given().relaxedHTTPSValidation().baseUri(authBaseUri).contentType("application/json").body(authInfoFalse).post("/sign-in");
         }
         Response response = given().relaxedHTTPSValidation().header("Content-Type", "application/json").header(new Header("Authorization", "Bearer " + adminToken))
                 .baseUri(accountBaseUri).get("/details/" + account.getLogin());
 
-       AccountDetailsViewDto accountDetailsViewDto = objectMapper.readValue(response.asString(), AccountDetailsViewDto.class);
+        AccountDetailsViewDto accountDetailsViewDto = objectMapper.readValue(response.asString(), AccountDetailsViewDto.class);
         assertFalse(accountDetailsViewDto.isActive());
     }
+
     private BusinessWorkerForRegistrationDto getSampleBusinessWorkerForRegistrationDto() {
         return new BusinessWorkerForRegistrationDto("Artur", "Radiuk", randomAlphanumeric(15), randomAlphanumeric(10) + "@gmail.com",
                 "abcABC123*", LanguageType.PL, "123456789", "FirmaJez");
@@ -519,17 +523,17 @@ class AccountControllerIT {
         return getAccountDto(worker.getLogin());
     }
 
- /*   private String getAuthToken(String login, String password) {
-        AuthenticateDto authenticateDto = new AuthenticateDto(login, password);
+    /*   private String getAuthToken(String login, String password) {
+           AuthenticateDto authenticateDto = new AuthenticateDto(login, password);
 
-        Response response = given().relaxedHTTPSValidation().baseUri(authBaseUri)
-                .contentType(ContentType.JSON)
-                .body(authenticateDto)
-                .when()
-                .post("/sign-in");
-        assertEquals(HttpStatus.SC_OK, response.getStatusCode());
-        return response.getBody().asString();
-    }*/
+           Response response = given().relaxedHTTPSValidation().baseUri(authBaseUri)
+                   .contentType(ContentType.JSON)
+                   .body(authenticateDto)
+                   .when()
+                   .post("/sign-in");
+           assertEquals(HttpStatus.SC_OK, response.getStatusCode());
+           return response.getBody().asString();
+       }*/
     private String getAuthToken(String login, String password) {
         return JWTHandler.createToken(Map.of("accessLevels", List.of("ADMINISTRATOR", "BUSINESS_WORKER", "MODERATOR")), "rbranson");
     }
