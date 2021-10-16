@@ -20,11 +20,11 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.entities.common.wrappers.TokenWrapper
         @NamedQuery(name = "TokenWrapper.findByToken", query = "SELECT ut FROM used_tokens ut WHERE ut.token=:token"),
         @NamedQuery(name = "TokenWrapper.findByAccount", query = "SELECT ut FROM used_tokens  ut WHERE ut.account=:account")
 })
-@Table(
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = "token", name = TOKEN_CONSTRAINT),
-        }
-)
+//@Table(
+//        uniqueConstraints = {
+//                @UniqueConstraint(columnNames = "token", name = TOKEN_CONSTRAINT),
+//        }
+//)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -38,11 +38,11 @@ public class TokenWrapper {
     @SequenceGenerator(name = "USED_TOKENS_SEQ_GEN", sequenceName = "used_tokens_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USED_TOKENS_SEQ_GEN")
     @ToString.Exclude
-private long id;
+    private long id;
 
     @Getter
     @NotEmpty(message = CONSTRAINT_NOT_EMPTY)
-    @Column(name = "token", updatable = false, nullable = false, unique = true)
+    @Column(name = "token", updatable = false, nullable = false, columnDefinition = "TEXT")
     private String token;
 
     @Getter

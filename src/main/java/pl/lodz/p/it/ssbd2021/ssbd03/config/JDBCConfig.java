@@ -1,66 +1,54 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.config;
 
 import javax.annotation.sql.DataSourceDefinition;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.sql.Connection;
 
 @DataSourceDefinition(
         name = "java:app/jdbc/ssbd03adminDS",
-        className = "org.postgresql.ds.PGSimpleDataSource",
-        user = "ssbd03admin",
-        password = "adminpasswd",
-//        serverName = "studdev.it.p.lodz.pl",
-        portNumber = 5432,
-        databaseName = "ssbd03",
-        minPoolSize = 0,
-        maxPoolSize = 50,
-        maxIdleTime = 10,
-        isolationLevel = Connection.TRANSACTION_READ_COMMITTED
+        className = "com.mysql.cj.jdbc.Driver",
+//        user = "ssbd03admin",
+//        password = "adminpasswd",
+//        serverName = "localhost",
+//        portNumber = 3306,
+        url="jdbc:mysql://localhost:3306/ssbd03?autoReconnect=true&useSSL=false&user=ssbd03admin&password=adminpasswd&allowPublicKeyRetrieval=true"
 )
 
 @DataSourceDefinition(
         name = "java:app/jdbc/ssbd03glassfishDS",
-        className = "org.postgresql.ds.PGSimpleDataSource",
-        user = "ssbd03glassfish",
-        password = "glassfishpasswd",
-//        serverName = "studdev.it.p.lodz.pl",
-        portNumber = 5432,
-        databaseName = "ssbd03",
-        isolationLevel = Connection.TRANSACTION_READ_COMMITTED,
-        minPoolSize = 0,
-        maxPoolSize = 50,
-        maxIdleTime = 10
+        className = "com.mysql.cj.jdbc.Driver",
+//        user = "ssbd03glassfish",
+//        password = "glassfishpasswd",
+//        serverName = "localhost",
+//        portNumber = 3306,
+//        databaseName = "ssbd03",
+        url="jdbc:mysql://localhost:3306/ssbd03?autoReconnect=true&useSSL=false&user=ssbd03glassfish&password=glassfishpasswd&allowPublicKeyRetrieval=true"
 )
 
 @DataSourceDefinition(
         name = "java:app/jdbc/ssbd03mokDS",
-        className = "org.postgresql.ds.PGSimpleDataSource",
-        user = "ssbd03mok",
-        password = "mokpasswd",
-//        serverName = "studdev.it.p.lodz.pl",
-        portNumber = 5432,
-        databaseName = "ssbd03",
-        isolationLevel = Connection.TRANSACTION_READ_COMMITTED,
-        minPoolSize = 0,
-        maxPoolSize = 50,
-        maxIdleTime = 10
+        className = "com.mysql.cj.jdbc.Driver",
+//        user = "ssbd03mok",
+//        password = "mokpasswd",
+//        serverName = "localhost",
+//        portNumber = 3306,
+//        databaseName = "ssbd03",
+        url="jdbc:mysql://localhost:3306/ssbd03?autoReconnect=true&useSSL=false&user=ssbd03mok&password=mokpasswd&allowPublicKeyRetrieval=true"
 )
 
 @DataSourceDefinition(
         name = "java:app/jdbc/ssbd03mowDS",
-        className = "org.postgresql.ds.PGSimpleDataSource",
-        user = "ssbd03mow",
-        password = "mowpasswd",
-//        serverName = "studdev.it.p.lodz.pl",
-        portNumber = 5432,
-        databaseName = "ssbd03",
-        isolationLevel = Connection.TRANSACTION_READ_COMMITTED,
-        minPoolSize = 0,
-        maxPoolSize = 50,
-        maxIdleTime = 10
-)
+        className = "com.mysql.cj.jdbc.Driver",
+//        user = "ssbd03mow",
+//        password = "mowpasswd",
+//        serverName = "localhost",
+//        portNumber = 3306,
+//        databaseName = "ssbd03",
+        url="jdbc:mysql://localhost:3306/ssbd03?autoReconnect=true&useSSL=false&user=ssbd03mow&password=mowpasswd&allowPublicKeyRetrieval=true"
 
+)
+@Stateless
 public class JDBCConfig {
     @PersistenceContext(unitName = "ssbd03adminPU")
     private EntityManager em;

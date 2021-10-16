@@ -1,1 +1,1 @@
-REVOKE ALL ON TABLE accounts FROM ssbd03mok;
+-- REVOKE ALL ON TABLE accounts FROM ssbd03mok;
