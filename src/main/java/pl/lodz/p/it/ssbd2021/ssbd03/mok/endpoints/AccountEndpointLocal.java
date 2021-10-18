@@ -13,6 +13,7 @@ import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.BusinessWorkerForRegist
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.registration.ClientForRegistrationDto;
 
 import javax.ejb.Local;
+import javax.inject.Named;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 

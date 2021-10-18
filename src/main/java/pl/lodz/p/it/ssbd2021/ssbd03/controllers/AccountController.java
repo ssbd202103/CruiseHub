@@ -20,14 +20,17 @@ import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import java.util.List;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
@@ -42,6 +45,10 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.utils.TransactionRepeater.tryAndRepea
 public class AccountController {
     @Inject
     private AccountEndpointLocal accountEndpoint;
+
+    @Context
+    @Default
+    private SecurityContext context;
 
     private final ObjectMapper mapper = new ObjectMapper();
 

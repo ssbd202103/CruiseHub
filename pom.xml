@@ -60,6 +60,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.25</version>
+        </dependency>
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
             <version>${jakartaee}</version>
@@ -150,6 +155,11 @@
             <version>3.11</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>javax.security.enterprise</groupId>
+            <artifactId>javax.security.enterprise-api</artifactId>
+            <version>1.0</version>
+        </dependency>
 
 
     </dependencies>
@@ -194,7 +204,7 @@
         <profile>
             <id>dev-without-ui</id>
             <properties>
-                <app.baseurl>https://localhost:8181</app.baseurl>
+                <app.baseurl>http://localhost:8080</app.baseurl>
                 <app.frontend.url>http://localhost:3000</app.frontend.url>
             </properties>
             <activation>
@@ -208,7 +218,7 @@
         <profile>
             <id>dev</id>
             <properties>
-                <app.baseurl>https://localhost:8181</app.baseurl>
+                <app.baseurl>http://localhost:8080</app.baseurl>
                 <app.frontend.url>http://localhost:8080</app.frontend.url>
             </properties>
             <activation>
@@ -463,6 +473,7 @@
                                 <artifactId>jaxb-runtime</artifactId>
                                 <version>2.3.2</version>
                             </dependency>
+
                         </dependencies>
                     </plugin>
                 </plugins>

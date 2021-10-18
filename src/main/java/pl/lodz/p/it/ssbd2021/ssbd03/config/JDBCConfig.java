@@ -7,7 +7,7 @@ import javax.persistence.PersistenceContext;
 
 @DataSourceDefinition(
         name = "java:app/jdbc/ssbd03adminDS",
-        className = "com.mysql.cj.jdbc.Driver",
+        className = "com.mysql.cj.jdbc.MysqlDataSource",
 //        user = "ssbd03admin",
 //        password = "adminpasswd",
 //        serverName = "localhost",
@@ -17,7 +17,7 @@ import javax.persistence.PersistenceContext;
 
 @DataSourceDefinition(
         name = "java:app/jdbc/ssbd03glassfishDS",
-        className = "com.mysql.cj.jdbc.Driver",
+        className = "com.mysql.cj.jdbc.MysqlDataSource",
 //        user = "ssbd03glassfish",
 //        password = "glassfishpasswd",
 //        serverName = "localhost",
@@ -28,7 +28,7 @@ import javax.persistence.PersistenceContext;
 
 @DataSourceDefinition(
         name = "java:app/jdbc/ssbd03mokDS",
-        className = "com.mysql.cj.jdbc.Driver",
+        className = "com.mysql.cj.jdbc.MysqlDataSource",
 //        user = "ssbd03mok",
 //        password = "mokpasswd",
 //        serverName = "localhost",
@@ -39,7 +39,7 @@ import javax.persistence.PersistenceContext;
 
 @DataSourceDefinition(
         name = "java:app/jdbc/ssbd03mowDS",
-        className = "com.mysql.cj.jdbc.Driver",
+        className = "com.mysql.cj.jdbc.MysqlDataSource",
 //        user = "ssbd03mow",
 //        password = "mowpasswd",
 //        serverName = "localhost",

@@ -3,19 +3,20 @@ package pl.lodz.p.it.ssbd2021.ssbd03.common.endpoints;
 import lombok.Getter;
 import lombok.extern.java.Log;
 
+import javax.annotation.Resource;
+import javax.annotation.security.PermitAll;
 import javax.ejb.AfterBegin;
 import javax.ejb.AfterCompletion;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.SecurityContext;
+import javax.ejb.EJBContext;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 @Log
+@PermitAll
 public abstract class BaseEndpoint implements TransactionalEndpoint {
-
-    @Context
-    private SecurityContext context;
+    @Resource
+    private EJBContext context;
 
     @Getter
     private String lastTransactionID;
@@ -55,6 +56,6 @@ public abstract class BaseEndpoint implements TransactionalEndpoint {
     }
 
     private String getCurrentUserLogin() {
-        return context.getUserPrincipal() == null ? "ANONYMOUS" : context.getUserPrincipal().getName();
+        return context.getCallerPrincipal().getName();
     }
 }

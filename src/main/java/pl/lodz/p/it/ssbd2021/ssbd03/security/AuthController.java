@@ -25,7 +25,6 @@ import javax.ws.rs.core.Response;
 import java.time.LocalDateTime;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.CONSTRAINT_NOT_NULL;
-import static pl.lodz.p.it.ssbd2021.ssbd03.utils.TransactionRepeater.tryAndRepeat;
 
 /**
  * Klasa udostępniająca API do logowania
@@ -33,7 +32,6 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.utils.TransactionRepeater.tryAndRepea
 @Path("/auth")
 @RequestScoped
 public class AuthController {
-
     @Inject
     private IdentityStoreHandler identityStoreHandler;
 

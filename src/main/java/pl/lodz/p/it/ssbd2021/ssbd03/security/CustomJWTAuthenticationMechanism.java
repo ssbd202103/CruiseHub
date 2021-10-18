@@ -1,6 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.security;
 
 import com.auth0.jwt.interfaces.Claim;
+import lombok.extern.java.Log;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.JWTException;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
 
