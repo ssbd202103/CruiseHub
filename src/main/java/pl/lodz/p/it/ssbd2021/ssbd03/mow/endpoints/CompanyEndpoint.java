@@ -8,8 +8,8 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.dto.BusinessWorkerDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mok.endpoints.converters.AccountMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.companies.AddCompanyDto;
-import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.companies.CompanyLightDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.companies.CompanyDto;
+import pl.lodz.p.it.ssbd2021.ssbd03.mow.dto.companies.CompanyLightDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.endpoints.converters.CompanyMapper;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.managers.CompanyManagerLocal;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
@@ -21,7 +21,6 @@ import javax.ejb.TransactionAttribute;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static javax.ejb.TransactionAttributeType.REQUIRES_NEW;
@@ -36,6 +35,7 @@ public class CompanyEndpoint extends BaseEndpoint implements CompanyEndpointLoca
     @Inject
     private CompanyManagerLocal companyManager;
 
+    @PermitAll
     @Override
     public List<CompanyLightDto> getCompaniesInfo() throws BaseAppException {
         return companyManager.getAllCompanies().stream().map(CompanyMapper::mapCompanyToCompanyLightDto).collect(Collectors.toList());

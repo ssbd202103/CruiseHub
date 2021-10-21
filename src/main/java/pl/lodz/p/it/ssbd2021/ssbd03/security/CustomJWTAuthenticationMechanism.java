@@ -1,7 +1,7 @@
 package pl.lodz.p.it.ssbd2021.ssbd03.security;
 
 import com.auth0.jwt.interfaces.Claim;
-import lombok.extern.java.Log;
+import org.yaml.snakeyaml.Yaml;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.JWTException;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.PropertiesReader;
 
@@ -11,10 +11,9 @@ import javax.security.enterprise.authentication.mechanism.http.HttpAuthenticatio
 import javax.security.enterprise.authentication.mechanism.http.HttpMessageContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Klasa zapewniajaca mechanizm do uwierzytelniania z tokenem jwt
@@ -24,6 +23,8 @@ public class CustomJWTAuthenticationMechanism implements HttpAuthenticationMecha
 
     public final static String AUTHORIZATION_HEADER = "Authorization";
     public final static String BEARER = "Bearer ";
+    private final static Map<String, List<String>> ROLES_MAP = new Yaml().load(CustomJWTAuthenticationMechanism.class.getClassLoader()
+            .getResourceAsStream("security/roles.yaml"));
 
     @Override
     public AuthenticationStatus validateRequest(HttpServletRequest request, HttpServletResponse response, HttpMessageContext httpMessageContext) {
@@ -52,7 +53,7 @@ public class CustomJWTAuthenticationMechanism implements HttpAuthenticationMecha
             if (tokenExpired) {
                 return CORS(httpMessageContext).responseUnauthorized();
             }
-            return CORS(httpMessageContext).notifyContainerAboutLogin(login, new HashSet<>(groups));
+            return CORS(httpMessageContext).notifyContainerAboutLogin(login, getGroupsForRoles(groups));
         } catch (JWTException e) {
             e.printStackTrace();
             return CORS(httpMessageContext).responseUnauthorized();
@@ -65,5 +66,12 @@ public class CustomJWTAuthenticationMechanism implements HttpAuthenticationMecha
         context.getResponse().setHeader("Access-Control-Allow-Credentials", "true");
         context.getResponse().setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS,HEAD");
         return context;
+    }
+
+    private static Set<String> getGroupsForRoles(List<String> roles) {
+        return Stream.of(roles.stream(),
+                        roles.stream().flatMap(role -> ROLES_MAP.getOrDefault(role, Collections.emptyList()).stream())
+                ).flatMap(it -> it)
+                .collect(Collectors.toSet());
     }
 }

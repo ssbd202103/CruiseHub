@@ -9,22 +9,22 @@ import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
 import pl.lodz.p.it.ssbd2021.ssbd03.mow.facades.AccountFacadeMow;
 import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
+import javax.annotation.Resource;
 import javax.annotation.security.RolesAllowed;
+import javax.ejb.EJBContext;
 import javax.ejb.Stateful;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.SecurityContext;
 
 @Log
 @Stateful
 @TransactionAttribute(TransactionAttributeType.MANDATORY)
 @Interceptors(TrackingInterceptor.class)
 public class BaseManagerMow {
-    @Context
-    private SecurityContext context;
+    @Resource
+    private EJBContext context;
 
     @Inject
     private AccountFacadeMow accountFacade;
@@ -48,6 +48,6 @@ public class BaseManagerMow {
 
     @RolesAllowed("authenticatedUser")
     public Account getCurrentUser() throws BaseAppException {
-        return accountFacade.findByLogin(context.getUserPrincipal().getName());
+        return accountFacade.findByLogin(context.getCallerPrincipal().getName());
     }
 }

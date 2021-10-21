@@ -306,12 +306,13 @@ class AccountControllerIT {
         String accountString = response.getBody().asString();
         List<BusinessWorkerWithCompanyDto> workerks = Arrays.asList(objectMapper.readValue(accountString, BusinessWorkerWithCompanyDto[].class));
         BusinessWorkerWithCompanyDto worker = workerks.get(0);
-        given().relaxedHTTPSValidation().baseUri(accountBaseUri).header("If-Match", worker.getEtag())
+        BlockAccountDto blockAccountDto = new BlockAccountDto(worker.getLogin(), worker.getVersion());
+
+        given().baseUri(accountBaseUri).header("If-Match", worker.getEtag())
                 .contentType(ContentType.JSON).header(new Header("Authorization", "Bearer " + adminToken))
-                .body(worker)
+                .body(blockAccountDto)
                 .when()
                 .put("/confirm-business-worker").then().statusCode(204);
-
     }
 
     @Test

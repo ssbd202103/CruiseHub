@@ -2,7 +2,6 @@ package pl.lodz.p.it.ssbd2021.ssbd03.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import pl.lodz.p.it.ssbd2021.ssbd03.common.IntegrityUtils;
 import pl.lodz.p.it.ssbd2021.ssbd03.common.dto.MetadataDto;
 import pl.lodz.p.it.ssbd2021.ssbd03.entities.mok.AccessLevelType;
 import pl.lodz.p.it.ssbd2021.ssbd03.exceptions.BaseAppException;
@@ -20,17 +19,14 @@ import pl.lodz.p.it.ssbd2021.ssbd03.security.EntityIdentitySignerVerifier;
 import pl.lodz.p.it.ssbd2021.ssbd03.validators.Login;
 
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
 import java.util.List;
 
 import static pl.lodz.p.it.ssbd2021.ssbd03.common.I18n.*;
@@ -45,10 +41,6 @@ import static pl.lodz.p.it.ssbd2021.ssbd03.utils.TransactionRepeater.tryAndRepea
 public class AccountController {
     @Inject
     private AccountEndpointLocal accountEndpoint;
-
-    @Context
-    @Default
-    private SecurityContext context;
 
     private final ObjectMapper mapper = new ObjectMapper();
 
@@ -83,6 +75,7 @@ public class AccountController {
 
     /**
      * Pobiera klienta przy pomocy loginu
+     *
      * @param login Login klienta
      * @return Odpowiedź z klientem
      * @throws BaseAppException Bazowy wyjątek aplikacji
@@ -98,6 +91,7 @@ public class AccountController {
 
     /**
      * Pobiera pracownika firmy przy pomocy loginu
+     *
      * @param login Login pracownika
      * @return Odpowiedź z pracownikiem
      * @throws BaseAppException Bazowy wyjątek aplikacji
@@ -113,6 +107,7 @@ public class AccountController {
 
     /**
      * Pobiera moderatora przy pomocy loginu
+     *
      * @param login Login moderatora
      * @return Odpowiedź z moderatorem
      * @throws BaseAppException Bazowy wyjątek aplikacji
@@ -128,6 +123,7 @@ public class AccountController {
 
     /**
      * Pobiera administratora przy pomocy loginu
+     *
      * @param login Login administratora
      * @return Odpowiedź z administratorem
      * @throws BaseAppException Bazowy wyjątek aplikacji
@@ -362,6 +358,7 @@ public class AccountController {
 
     /**
      * Wysyła żądanie zmiany własnego emaila
+     *
      * @param accountChangeEmailDto DTO z loginem, wersją i nowym emailem
      * @throws BaseAppException Bazowy wyjątek aplikacji
      */
@@ -373,6 +370,7 @@ public class AccountController {
 
     /**
      * Wysyła żądanie zmiany cudzego emaila
+     *
      * @param accountChangeEmailDto DTO z loginem, wersją i nowym emailem
      * @throws BaseAppException Bazowy wyjątek aplikacji
      */

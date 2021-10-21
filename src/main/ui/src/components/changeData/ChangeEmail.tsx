@@ -3,9 +3,9 @@ import styles from "../../styles/ManageAccount.module.css";
 import tbStyles from "../../styles/mtdTable.module.css"
 import RoundedButton from "../RoundedButton";
 import DarkedTextField from "../DarkedTextField";
-import React, {createRef, useEffect, useReducer, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {changeEmail as changeEmailAction, selectEmail} from "../../redux/slices/userSlice";
+import {selectEmail} from "../../redux/slices/userSlice";
 import {changeEmail as changeEmailService} from "../../Services/changeEmailService";
 import {useTranslation} from "react-i18next";
 import {ConfirmMetadataCancelButtonGroup} from "../ConfirmMetadataCancelButtonGroup";
@@ -15,7 +15,7 @@ import Popup from "../../PopupRecaptcha";
 import {useSnackbarQueue} from "../../pages/snackbar";
 import useHandleError from "../../errorHandler";
 import PopupAcceptAction from "../../PopupAcceptAction";
-import {EMAIL_REGEX, PASSWORD_REGEX} from "../../regexConstants";
+import {EMAIL_REGEX} from "../../regexConstants";
 
 export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeDataComponentProps) {
     // i18n
@@ -62,7 +62,7 @@ export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeD
         setEmailRegexError(!EMAIL_REGEX.test(emailValue))
         setEmailConfirmRegexError(!EMAIL_REGEX.test(emailConfirmValue))
 
-        if(!EMAIL_REGEX.test(emailValue) || !EMAIL_REGEX.test(emailConfirmValue)) {
+        if (!EMAIL_REGEX.test(emailValue) || !EMAIL_REGEX.test(emailConfirmValue)) {
             handleError('error.fields')
             return
         } else if (emailValue != emailConfirmValue) {
@@ -79,7 +79,7 @@ export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeD
 
     const [buttonPopupAcceptAction, setButtonPopupAcceptAction] = useState(false);
 
-    function verifyCallback(){
+    function verifyCallback() {
         setButtonPopup(false)
 
         changeEmailService(emailValue).then(res => {
@@ -94,7 +94,7 @@ export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeD
             }
             for (let messageArray of Object.values(message.errors)) {
                 for (const error of messageArray as Array<String>) {
-                    switch(error) {
+                    switch (error) {
                         case 'error.regex.email':
                             setEmailRegexError(true)
                             setEmailConfirmRegexError(true)
@@ -111,18 +111,20 @@ export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeD
     }
 
     useEffect(() => {
+        console.log(`selfMTD: ${currentSelfMTD}`)
+        console.log()
         setAlterType(currentSelfMTD.alterType);
         setAlteredBy(currentSelfMTD.alteredBy);
         setCreatedBy(currentSelfMTD.createdBy);
-        if(currentSelfMTD.creationDateTime !=null)
-            setCreationDateTime(currentSelfMTD.creationDateTime.dayOfMonth +" "+ t(currentSelfMTD.creationDateTime.month) +" "+ currentSelfMTD.creationDateTime.year +" "+ currentSelfMTD.creationDateTime.hour +":"+ currentSelfMTD.creationDateTime.minute.toString().padStart(2, '0') )
-        if(currentSelfMTD.lastAlterDateTime !=null)
-            setLastAlterDateTime(currentSelfMTD.lastAlterDateTime.dayOfMonth +" "+ t(currentSelfMTD.lastAlterDateTime.month) +" "+ currentSelfMTD.lastAlterDateTime.year +" "+ currentSelfMTD.lastAlterDateTime.hour +":"+ currentSelfMTD.lastAlterDateTime.minute.toString().padStart(2, '0'));
-        if(currentSelfMTD.lastCorrectAuthenticationDateTime !=null)
-            setLastCorrectAuthenticationDateTime(currentSelfMTD.lastCorrectAuthenticationDateTime.dayOfMonth +" "+ t(currentSelfMTD.lastCorrectAuthenticationDateTime.month) +" "+ currentSelfMTD.lastCorrectAuthenticationDateTime.year +" "+ currentSelfMTD.lastCorrectAuthenticationDateTime.hour +":"+ currentSelfMTD.creationDateTime.minute.toString().padStart(2, '0'));
+        if (currentSelfMTD.creationDateTime != null)
+            setCreationDateTime(currentSelfMTD.creationDateTime.dayOfMonth + " " + t(currentSelfMTD.creationDateTime.month) + " " + currentSelfMTD.creationDateTime.year + " " + currentSelfMTD.creationDateTime.hour + ":" + currentSelfMTD.creationDateTime.minute.toString().padStart(2, '0'))
+        if (currentSelfMTD.lastAlterDateTime != null)
+            setLastAlterDateTime(currentSelfMTD.lastAlterDateTime.dayOfMonth + " " + t(currentSelfMTD.lastAlterDateTime.month) + " " + currentSelfMTD.lastAlterDateTime.year + " " + currentSelfMTD.lastAlterDateTime.hour + ":" + currentSelfMTD.lastAlterDateTime.minute.toString().padStart(2, '0'));
+        if (currentSelfMTD.lastCorrectAuthenticationDateTime != null)
+            setLastCorrectAuthenticationDateTime(currentSelfMTD.lastCorrectAuthenticationDateTime.dayOfMonth + " " + t(currentSelfMTD.lastCorrectAuthenticationDateTime.month) + " " + currentSelfMTD.lastCorrectAuthenticationDateTime.year + " " + currentSelfMTD.lastCorrectAuthenticationDateTime.hour + ":" + currentSelfMTD.creationDateTime.minute.toString().padStart(2, '0'));
         setLastCorrectAuthenticationLogicalAddress(currentSelfMTD.lastCorrectAuthenticationLogicalAddress)
-        if(currentSelfMTD.lastIncorrectAuthenticationDateTime !=null)
-            setLastIncorrectAuthenticationDateTime(currentSelfMTD.lastIncorrectAuthenticationDateTime.dayOfMonth +" "+ t(currentSelfMTD.lastIncorrectAuthenticationDateTime.month) +" "+ currentSelfMTD.lastIncorrectAuthenticationDateTime.year +" "+ currentSelfMTD.lastIncorrectAuthenticationDateTime.hour +":"+ currentSelfMTD.lastIncorrectAuthenticationDateTime.minute.toString().padStart(2, '0'));
+        if (currentSelfMTD.lastIncorrectAuthenticationDateTime != null)
+            setLastIncorrectAuthenticationDateTime(currentSelfMTD.lastIncorrectAuthenticationDateTime.dayOfMonth + " " + t(currentSelfMTD.lastIncorrectAuthenticationDateTime.month) + " " + currentSelfMTD.lastIncorrectAuthenticationDateTime.year + " " + currentSelfMTD.lastIncorrectAuthenticationDateTime.hour + ":" + currentSelfMTD.lastIncorrectAuthenticationDateTime.minute.toString().padStart(2, '0'));
         setLastIncorrectAuthenticationLogicalAddress(currentSelfMTD.lastIncorrectAuthenticationLogicalAddress);
         setNumberOfAuthenticationFailures(currentSelfMTD.numberOfAuthenticationFailures)
         setVersion(currentSelfMTD.version);
@@ -132,7 +134,7 @@ export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeD
 
     return (
         <>
-            <Grid item  style={{display: open ? "none" : "block"}} className={styles.item}>
+            <Grid item style={{display: open ? "none" : "block"}} className={styles.item}>
                 <h3>{t("email")}</h3>
                 <div>
                     <p>{email}</p>
@@ -142,7 +144,7 @@ export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeD
                     >{t("email change btn")}</RoundedButton>
                 </div>
             </Grid>
-            <Grid item  style={{display: open ? "block" : "none"}} className={styles['change-item']}>
+            <Grid item style={{display: open ? "block" : "none"}} className={styles['change-item']}>
                 <h3>{t("email change")}</h3>
                 <div>
                     <DarkedTextField
@@ -200,46 +202,47 @@ export default function ChangeEmail({open, onOpen, onConfirm, onCancel}: ChangeD
                 <PopupAcceptAction
                     open={buttonPopupAcceptAction}
                     onConfirm={changeEmail}
-                    onCancel={() => {setButtonPopupAcceptAction(false)
+                    onCancel={() => {
+                        setButtonPopupAcceptAction(false)
                     }}
                 />
                 <ConfirmMetadataCancelButtonGroup
                     onConfirm={handleConfirm}
                     onPress={handleMetadata}
-                    onCancel={handleCancel} />
+                    onCancel={handleCancel}/>
                 <Grid item style={{display: metadata ? "block" : "none"}} className={styles['change-item']}>
-                <tr>
-                    <td className={tbStyles.td}><h4>{t("alterType")}</h4></td>
-                    <td className={tbStyles.td}><h4>{t("alteredBy")}</h4></td>
-                    <td className={tbStyles.td}><h4>{t("createdBy")}</h4></td>
-                    <td className={tbStyles.td}><h4>{t("creationDateTime")}</h4></td>
-                    <td className={tbStyles.td}><h4>{t("lastAlterDateTime")}</h4></td>
-                    <td className={tbStyles.td}><h4>{t("version")}</h4></td>
-                </tr>
-                <tr>
-                    <td className={tbStyles.tdData}><h4>{t(alterType)}</h4></td>
-                    <td className={tbStyles.tdData}><h4>{alteredBy}</h4></td>
-                    <td className={tbStyles.tdData}><h4>{createdBy}</h4></td>
-                    <td className={tbStyles.tdData}><h4>{creationDateTime}</h4></td>
-                    <td className={tbStyles.tdData}><h4>{lastAlterDateTime}</h4></td>
-                    <td className={tbStyles.tdData}><h4>{version}</h4></td>
-                </tr>
-                <tr>
-                    <td className={tbStyles.td}><h4>{t("lastCorrectAuthenticationDateTime")}</h4></td>
-                    <td className={tbStyles.td}><h4>{t("lastCorrectAuthenticationLogicalAddress")}</h4></td>
-                    <td className={tbStyles.td}><h4>{t("lastIncorrectAuthenticationDateTime")}</h4></td>
-                    <td className={tbStyles.td}><h4>{t("lastIncorrectAuthenticationLogicalAddress")}</h4></td>
-                    <td className={tbStyles.td}><h4>{t("numberOfAuthenticationFailures")}</h4></td>
-                    <td className={tbStyles.td}><h4>{t("language")}</h4></td>
-                </tr>
-                <tr>
-                    <td className={tbStyles.tdData}><h4>{lastCorrectAuthenticationDateTime}</h4></td>
-                    <td className={tbStyles.tdData}><h4>{lastCorrectAuthenticationLogicalAddress}</h4></td>
-                    <td className={tbStyles.tdData}><h4>{lastIncorrectAuthenticationDateTime}</h4></td>
-                    <td className={tbStyles.tdData}><h4>{lastIncorrectAuthenticationLogicalAddress}</h4></td>
-                    <td className={tbStyles.tdData}><h4>{numberOfAuthenticationFailures}</h4></td>
-                    <td className={tbStyles.tdData}><h4>{language}</h4></td>
-                </tr>
+                    <tr>
+                        <td className={tbStyles.td}><h4>{t("alterType")}</h4></td>
+                        <td className={tbStyles.td}><h4>{t("alteredBy")}</h4></td>
+                        <td className={tbStyles.td}><h4>{t("createdBy")}</h4></td>
+                        <td className={tbStyles.td}><h4>{t("creationDateTime")}</h4></td>
+                        <td className={tbStyles.td}><h4>{t("lastAlterDateTime")}</h4></td>
+                        <td className={tbStyles.td}><h4>{t("version")}</h4></td>
+                    </tr>
+                    <tr>
+                        <td className={tbStyles.tdData}><h4>{t(alterType)}</h4></td>
+                        <td className={tbStyles.tdData}><h4>{alteredBy}</h4></td>
+                        <td className={tbStyles.tdData}><h4>{createdBy}</h4></td>
+                        <td className={tbStyles.tdData}><h4>{creationDateTime}</h4></td>
+                        <td className={tbStyles.tdData}><h4>{lastAlterDateTime}</h4></td>
+                        <td className={tbStyles.tdData}><h4>{version}</h4></td>
+                    </tr>
+                    <tr>
+                        <td className={tbStyles.td}><h4>{t("lastCorrectAuthenticationDateTime")}</h4></td>
+                        <td className={tbStyles.td}><h4>{t("lastCorrectAuthenticationLogicalAddress")}</h4></td>
+                        <td className={tbStyles.td}><h4>{t("lastIncorrectAuthenticationDateTime")}</h4></td>
+                        <td className={tbStyles.td}><h4>{t("lastIncorrectAuthenticationLogicalAddress")}</h4></td>
+                        <td className={tbStyles.td}><h4>{t("numberOfAuthenticationFailures")}</h4></td>
+                        <td className={tbStyles.td}><h4>{t("language")}</h4></td>
+                    </tr>
+                    <tr>
+                        <td className={tbStyles.tdData}><h4>{lastCorrectAuthenticationDateTime}</h4></td>
+                        <td className={tbStyles.tdData}><h4>{lastCorrectAuthenticationLogicalAddress}</h4></td>
+                        <td className={tbStyles.tdData}><h4>{lastIncorrectAuthenticationDateTime}</h4></td>
+                        <td className={tbStyles.tdData}><h4>{lastIncorrectAuthenticationLogicalAddress}</h4></td>
+                        <td className={tbStyles.tdData}><h4>{numberOfAuthenticationFailures}</h4></td>
+                        <td className={tbStyles.tdData}><h4>{language}</h4></td>
+                    </tr>
                 </Grid>
             </Grid>
         </>

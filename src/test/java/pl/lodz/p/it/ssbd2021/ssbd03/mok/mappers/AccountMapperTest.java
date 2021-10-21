@@ -56,5 +56,4 @@ class AccountMapperTest {
 
         return Arrays.asList(account1, account2, account3);
     }
-
 }

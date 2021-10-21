@@ -125,16 +125,6 @@
             <version>2.12.3</version>
         </dependency>
         <dependency>
-            <groupId>com.fasterxml.jackson.jaxrs</groupId>
-            <artifactId>jackson-jaxrs-json-provider</artifactId>
-            <version>2.12.3</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jersey.core</groupId>
-            <artifactId>jersey-server</artifactId>
-            <version>2.34</version>
-        </dependency>
-        <dependency>
             <groupId>com.nimbusds</groupId>
             <artifactId>nimbus-jose-jwt</artifactId>
             <version>9.4</version>
@@ -160,10 +150,23 @@
             <artifactId>javax.security.enterprise-api</artifactId>
             <version>1.0</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>1.29</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jackson2-provider</artifactId>
+            <version>4.7.2.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>2.12.5</version>
+        </dependency>
 
     </dependencies>
-
 
     <build>
         <finalName>ssbd03</finalName>
@@ -265,7 +268,7 @@
                     <plugin>
                         <artifactId>exec-maven-plugin</artifactId>
                         <groupId>org.codehaus.mojo</groupId>
-<!--                        <version>${exec.maven.plugin}</version>-->
+                        <!--                        <version>${exec.maven.plugin}</version>-->
                         <version>3.0.0</version>
                         <executions>
 
@@ -423,64 +426,8 @@
                             </execution>
                         </executions>
                     </plugin>
-
-                    <plugin>
-                        <groupId>org.codehaus.cargo</groupId>
-                        <artifactId>cargo-maven3-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>redeploy</id>
-                                <phase>pre-integration-test</phase>
-                                <goals>
-                                    <goal>redeploy</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <version>1.9.3</version>
-                        <configuration>
-                            <container>
-                                <containerId>payara</containerId>
-                                <type>remote</type>
-                            </container>
-                            <configuration>
-                                <type>runtime</type>
-                                <properties>
-                                    <cargo.runtime.args>force=true</cargo.runtime.args>
-                                    <cargo.remote.username>admin</cargo.remote.username>
-                                    <cargo.remote.password>RirjEwWyg7</cargo.remote.password>
-                                    <cargo.glassfish.admin.port>4803</cargo.glassfish.admin.port>
-                                    <cargo.hostname>172.16.0.84</cargo.hostname>
-                                </properties>
-                            </configuration>
-                        </configuration>
-                        <!-- provides JSR88 client API to deploy on Payara -->
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.glassfish.main.deployment</groupId>
-                                <artifactId>deployment-client</artifactId>
-                                <version>5.1.0</version>
-                            </dependency>
-                            <!-- API, java.xml.bind module -->
-                            <dependency>
-                                <groupId>jakarta.xml.bind</groupId>
-                                <artifactId>jakarta.xml.bind-api</artifactId>
-                                <version>2.3.2</version>
-                            </dependency>
-
-                            <!-- Runtime, com.sun.xml.bind module -->
-                            <dependency>
-                                <groupId>org.glassfish.jaxb</groupId>
-                                <artifactId>jaxb-runtime</artifactId>
-                                <version>2.3.2</version>
-                            </dependency>
-
-                        </dependencies>
-                    </plugin>
                 </plugins>
             </build>
         </profile>
-
     </profiles>
-
-
 </project>

@@ -30,14 +30,12 @@ import pl.lodz.p.it.ssbd2021.ssbd03.utils.interceptors.TrackingInterceptor;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
-import javax.ejb.*;
-import javax.enterprise.inject.Default;
+import javax.ejb.Stateful;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.interceptor.Interceptors;
 import javax.validation.constraints.NotNull;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.SecurityContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -61,9 +59,6 @@ public class AccountEndpoint extends BaseEndpoint implements AccountEndpointLoca
 
     @Inject
     I18n i18n;
-
-    @Context
-    private SecurityContext context;
 
     @PermitAll
     @Override
