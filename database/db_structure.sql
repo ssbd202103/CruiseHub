@@ -1,579 +1,492 @@
-create table language_types
+create table access_level_id_seq
 (
-    id   bigint  not null,
-    name varchar not null,
+    next_val bigint null
+);
 
-    CONSTRAINT language_types_primary_key_constraint PRIMARY KEY (id),
-    CONSTRAINT language_types_name_unique_constraint UNIQUE (name)
+create table account_id_seq
+(
+    next_val bigint null
+);
 
+create table address_id_seq
+(
+    next_val bigint null
 );
 
 create table alter_types
 (
-    id   bigint  not null,
-    name varchar not null,
+    id   bigint       not null
+        primary key,
+    name varchar(255) not null,
+    constraint UK_h4qxgv3iep1rugqvd4uwbuvka
+        unique (name)
+);
 
-    CONSTRAINT alter_types_primary_key_constraint PRIMARY KEY (id),
-    CONSTRAINT alter_types_name_unique_constraint UNIQUE (name)
+create table attractions_id_seq
+(
+    next_val bigint null
+);
 
+create table companies_id_seq
+(
+    next_val bigint null
+);
+
+create table cruise_addresses_id_seq
+(
+    next_val bigint null
+);
+
+create table cruise_pictures_id_seq
+(
+    next_val bigint null
+);
+
+create table cruises_groups_id_seq
+(
+    next_val bigint null
+);
+
+create table cruises_id_seq
+(
+    next_val bigint null
+);
+
+create table hibernate_sequence
+(
+    next_val bigint null
+);
+
+create table language_types
+(
+    id   bigint       not null
+        primary key,
+    name varchar(255) not null,
+    constraint UK_bl0bjeh16npdadtyhf0dcse
+        unique (name)
 );
 
 create table accounts
 (
-    id                                            bigint                              not null,
-    first_name                                    varchar(64)                         not null,
-    second_name                                   varchar(64)                         not null,
-    login                                         varchar(64)                         not null,
-    email                                         varchar(64)                         not null,
-    password_hash                                 varchar(64)                         not null, -- hash sha256
-    confirmed                                     boolean   default false             not null,
-    active                                        boolean   default false             not null,
-    dark_mode                                     boolean   default false             not null,
-
-    last_incorrect_authentication_date_time       timestamp,
-    last_incorrect_authentication_logical_address varchar,
-    last_correct_authentication_date_time         timestamp,
-    last_correct_authentication_logical_address   varchar,
-    number_of_authentication_failures             integer   default 0,
-
-    language_type_id                              bigint    default -1                not null, -- FOREIGN KEY
-
-    creation_date_time                            timestamp default CURRENT_TIMESTAMP not null,
-    last_alter_date_time                          timestamp                           not null,
-    created_by_id                                 bigint                              not null, -- FOREIGN KEY
-    altered_by_id                                 bigint                              not null, -- FOREIGN KEY
-    alter_type_id                                 bigint                              not null, -- FOREIGN KEY
-    version                                       bigint check (version >= 0)         not null,
-
-    CONSTRAINT accounts_primary_key_constraint PRIMARY KEY (id),
-    CONSTRAINT accounts_language_type_id_fk_constraint FOREIGN KEY (language_type_id) REFERENCES language_types (id),
-    CONSTRAINT accounts_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
-    CONSTRAINT accounts_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id),
-    CONSTRAINT accounts_alter_type_id_fk_constraint FOREIGN KEY (alter_type_id) REFERENCES alter_types (id),
-    CONSTRAINT accounts_number_of_authentication_failures_check CHECK (number_of_authentication_failures >= 0),
-    CONSTRAINT accounts_login_unique_constraint UNIQUE (login),
-    CONSTRAINT accounts_email_unique_constraint UNIQUE (email)
+    id                                            bigint       not null
+        primary key,
+    creation_date_time                            datetime(6)  not null,
+    last_alter_date_time                          datetime(6)  not null,
+    version                                       bigint       not null,
+    active                                        bit          not null,
+    confirmed                                     bit          not null,
+    dark_mode                                     bit          not null,
+    email                                         varchar(255) not null,
+    first_name                                    varchar(64)  not null,
+    last_correct_authentication_date_time         datetime(6)  null,
+    last_correct_authentication_logical_address   varchar(255) null,
+    last_incorrect_authentication_date_time       datetime(6)  null,
+    last_incorrect_authentication_logical_address varchar(255) null,
+    login                                         varchar(255) not null,
+    number_of_authentication_failures             int          null,
+    password_hash                                 varchar(255) not null,
+    second_name                                   varchar(64)  not null,
+    alter_type_id                                 bigint       not null,
+    altered_by_id                                 bigint       not null,
+    created_by_id                                 bigint       not null,
+    language_type_id                              bigint       not null,
+    constraint UK_cc2c9baeppipgy2rjeccwcqs0
+        unique (login),
+    constraint UK_n7ihswpy07ci568w34q0oi8he
+        unique (email),
+    constraint FK3ibj79ofx679xphlcdxew3er5
+        foreign key (created_by_id) references accounts (id),
+    constraint FK7xdylueapo3558cgup41ilgvj
+        foreign key (altered_by_id) references accounts (id),
+    constraint FKfyg9h1f2i3krh0xsiwyasquou
+        foreign key (language_type_id) references language_types (id),
+    constraint FKm92nbpwavuajxmsjli38hfkot
+        foreign key (alter_type_id) references alter_types (id)
 );
-
-create sequence account_id_seq
-    START WITH 1
-    INCREMENT BY 1;
-
-
-create table used_tokens
-(
-    id                 bigint    not null,
-    token              varchar   not null,
-    creation_date_time timestamp not null,
-    used               bool      not null,
-    account_id         bigint    not null,
-
-    CONSTRAINT used_tokens_token_unique_constraint UNIQUE (token),
-    CONSTRAINT used_tokens_account_id_fk_constraint FOREIGN KEY (account_id) REFERENCES accounts (id)
-
-);
-create sequence used_tokens_id_seq
-    START WITH 1
-    INCREMENT BY 1;
-
-create table used_codes
-(
-    id                 bigint    not null,
-    code               varchar   not null,
-    creation_date_time timestamp not null,
-    used               bool      not null,
-    account_id         bigint    not null,
-
-    CONSTRAINT used_codes_code_unique_constraint UNIQUE (code),
-    CONSTRAINT used_codes_account_id_fk_constraint FOREIGN KEY (account_id) REFERENCES accounts (id)
-
-);
-create sequence used_codes_id_seq
-    START WITH 1
-    INCREMENT BY 1;
 
 create table access_levels
 (
-    id                   bigint                              not null,
-    access_level         varchar(25)                         not null,
-    account_id           bigint                              not null, -- FOREIGN KEY
-    enabled              boolean   default false             not null,
-
-    creation_date_time   timestamp default CURRENT_TIMESTAMP not null,
-    last_alter_date_time timestamp                           not null,
-    created_by_id        bigint                              not null, -- FOREIGN KEY
-    altered_by_id        bigint                              not null, -- FOREIGN KEY
-    alter_type_id        bigint                              not null, -- FOREIGN KEY
-    version              bigint check (version >= 0)         not null,
-
-    CONSTRAINT access_levels_id_primary_key_constraint PRIMARY KEY (id),
-    CONSTRAINT access_levels_account_id_fk_constraint FOREIGN KEY (account_id) REFERENCES accounts (id),
-    CONSTRAINT access_levels_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
-    CONSTRAINT access_levels_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id),
-    CONSTRAINT access_levels_alter_type_id_fk_constraint FOREIGN KEY (alter_type_id) REFERENCES alter_types (id)
+    access_level         varchar(31) not null,
+    id                   bigint      not null
+        primary key,
+    creation_date_time   datetime(6) not null,
+    last_alter_date_time datetime(6) not null,
+    version              bigint      not null,
+    enabled              bit         not null,
+    alter_type_id        bigint      not null,
+    altered_by_id        bigint      not null,
+    created_by_id        bigint      not null,
+    account_id           bigint      not null,
+    constraint FK4t6qg0obxat6ffcfqrtpuerkt
+        foreign key (altered_by_id) references accounts (id),
+    constraint FK5rd7qdgfbq3m9ith8lx3vobf1
+        foreign key (alter_type_id) references alter_types (id),
+    constraint FKjoorx6s2dnm8ba6v9kplk3fl6
+        foreign key (created_by_id) references accounts (id),
+    constraint FKmmcqqo8rkbf9ew6oas1oqk2a2
+        foreign key (account_id) references accounts (id)
 );
 
-create sequence access_level_id_seq
-    START WITH 1
-    INCREMENT BY 1;
+create index accounts_alter_type_id_index
+    on accounts (alter_type_id);
 
-create table administrators
-(
-    id bigint not null, -- FOREIGN KEY
+create index accounts_altered_by_id_index
+    on accounts (altered_by_id);
 
-    CONSTRAINT administrators_id_pk_constraint PRIMARY KEY (id),
-    CONSTRAINT administrators_id_fk_constraint FOREIGN KEY (id) REFERENCES access_levels (id)
-);
+create index accounts_created_by_id_index
+    on accounts (created_by_id);
+
+create index accounts_language_type_id_index
+    on accounts (language_type_id);
 
 create table addresses
 (
-    id                   bigint                              not null,
-    house_number         varchar(6)                          not null,
-    street               varchar(64)                         not null,
-    postal_code          varchar(20)                         not null,
-    city                 varchar(64)                         not null,
-    country              varchar(64)                         not null,
-
-    creation_date_time   timestamp default CURRENT_TIMESTAMP not null,
-    last_alter_date_time timestamp                           not null,
-    created_by_id        bigint                              not null, -- FOREIGN KEY
-    altered_by_id        bigint                              not null, -- FOREIGN KEY
-    alter_type_id        bigint                              not null, -- FOREIGN KEY
-    version              bigint check (version >= 0)         not null,
-
-    CONSTRAINT address_primary_key_constraint PRIMARY KEY (id),
-    CONSTRAINT address_alter_type_id_fk_constraint FOREIGN KEY (alter_type_id) REFERENCES alter_types (id),
-    CONSTRAINT addresses_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
-    CONSTRAINT addresses_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id)
+    id                   bigint       not null
+        primary key,
+    creation_date_time   datetime(6)  not null,
+    last_alter_date_time datetime(6)  not null,
+    version              bigint       not null,
+    city                 varchar(64)  null,
+    country              varchar(64)  null,
+    house_number         varchar(255) null,
+    postal_code          varchar(20)  null,
+    street               varchar(64)  null,
+    alter_type_id        bigint       not null,
+    altered_by_id        bigint       not null,
+    created_by_id        bigint       not null,
+    constraint FK34nawl4s4r78r4qg05dsc3wtk
+        foreign key (altered_by_id) references accounts (id),
+    constraint FKf94qxd2cdck75pydk78t8j1ul
+        foreign key (created_by_id) references accounts (id),
+    constraint FKtc8wh3mkfwu51dl0g6u41k5yo
+        foreign key (alter_type_id) references alter_types (id)
 );
 
-create sequence address_id_seq
-    START WITH 1
-    INCREMENT BY 1;
+create table administrators
+(
+    id bigint not null
+        primary key,
+    constraint FKa4ulmbsfw23p55nsgylx6wq5g
+        foreign key (id) references access_levels (id)
+);
 
 create table clients
 (
-    id              bigint      not null, -- FOREIGN KEY
     phone_number    varchar(15) not null,
-    home_address_id bigint      not null, -- FOREIGN KEY
-
-    CONSTRAINT clients_id_pk_constraint PRIMARY KEY (id),
-    CONSTRAINT clients_id_fk_constraint FOREIGN KEY (id) REFERENCES access_levels (id),
-    CONSTRAINT clients_home_address_id_fk_constraint FOREIGN KEY (home_address_id) REFERENCES addresses (id)
-);
-
-create table moderators
-(
-    id bigint not null, -- FOREIGN KEY
-
-    CONSTRAINT moderators_id_pk_constraint PRIMARY KEY (id),
-    CONSTRAINT moderators_id_fk_constraint FOREIGN KEY (id) REFERENCES access_levels (id)
+    id              bigint      not null
+        primary key,
+    home_address_id bigint      not null,
+    constraint FK1vnppaewx21gstq7p97nrub9n
+        foreign key (home_address_id) references addresses (id),
+    constraint FKk4o4of3bc35b1d7bgwpvx45cr
+        foreign key (id) references access_levels (id)
 );
 
 create table companies
 (
-    id                   bigint                               not null,
-    name                 varchar(64)                          not null,
-    address_id           bigint                               not null, -- FOREIGN KEY
-    phone_number         varchar(15)                          not null,
-    nip                  numeric(10) check (nip >= 999999999) not null,
-
-    creation_date_time   timestamp default CURRENT_TIMESTAMP  not null,
-    last_alter_date_time timestamp                            not null,
-    created_by_id        bigint                               not null, -- FOREIGN KEY
-    altered_by_id        bigint                               not null, -- FOREIGN KEY
-    alter_type_id        bigint                               not null, -- FOREIGN KEY
-    version              bigint check (version >= 0)          not null,
-
-    CONSTRAINT companies_id_pk_constraint PRIMARY KEY (id),
-    CONSTRAINT companies_address_id_fk_constraint FOREIGN KEY (address_id) REFERENCES addresses (id),
-    CONSTRAINT companies_alter_type_id_fk_constraint FOREIGN KEY (alter_type_id) REFERENCES alter_types (id),
-    CONSTRAINT companies_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
-    CONSTRAINT companies_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id),
-    CONSTRAINT companies_nip_unique_constraint UNIQUE (nip),
-    CONSTRAINT companies_name_unique_constraint UNIQUE (name)
+    id                   bigint      not null
+        primary key,
+    creation_date_time   datetime(6) not null,
+    last_alter_date_time datetime(6) not null,
+    version              bigint      not null,
+    nip                  bigint      not null,
+    name                 varchar(64) not null,
+    phone_number         varchar(15) not null,
+    alter_type_id        bigint      not null,
+    altered_by_id        bigint      not null,
+    created_by_id        bigint      not null,
+    address_id           bigint      not null,
+    constraint UK_50ygfritln653mnfhxucoy8up
+        unique (name),
+    constraint UK_orn15lg0w4uod7ltljcjgd0le
+        unique (nip),
+    constraint FK8w70yf6urddd0ky7ev90okenf
+        foreign key (address_id) references addresses (id),
+    constraint FKds1kvnhdj71ohbsmfg5man36x
+        foreign key (altered_by_id) references accounts (id),
+    constraint FKe3rgg81vccs0vs1y3bq240jp1
+        foreign key (created_by_id) references accounts (id),
+    constraint FKp2j79g37wkq53f9fbm66eiadm
+        foreign key (alter_type_id) references alter_types (id)
 );
-
-create sequence companies_id_seq
-    START WITH 1
-    INCREMENT BY 1;
 
 create table business_workers
 (
-    id           bigint      not null, -- FOREIGN KEY
-    phone_number varchar(12) not null,
+    confirmed    bit         not null,
+    phone_number varchar(15) not null,
+    id           bigint      not null
+        primary key,
     company_id   bigint      not null,
-    confirmed    bool        not null,
-
-    CONSTRAINT business_workers_id_pk_constraint PRIMARY KEY (id),
-    CONSTRAINT business_workers_id_fk_constraint FOREIGN KEY (id) REFERENCES access_levels (id),
-    CONSTRAINT business_workers_company_id_fk_constraint FOREIGN KEY (company_id) REFERENCES companies (id)
+    constraint FK2ivkr8pivgktf35ehn6j8tc7k
+        foreign key (id) references access_levels (id),
+    constraint FKdjdxac2xdknx5a12jslbm1bge
+        foreign key (company_id) references companies (id)
 );
-
-
 
 create table cruise_addresses
 (
-    id                   bigint                              not null,
-    street               varchar(64)                         not null,
-    street_number        varchar(6)                          not null,
-    harbor_name          varchar(64)                         not null,
-    city_name            varchar(64)                         not null,
-    country_name         varchar(64)                         not null,
-
-    creation_date_time   timestamp default CURRENT_TIMESTAMP not null,
-    last_alter_date_time timestamp                           not null,
-    created_by_id        bigint                              not null, -- FOREIGN KEY
-    altered_by_id        bigint                              not null, -- FOREIGN KEY
-    alter_type_id        bigint                              not null, -- FOREIGN KEY
-    version              bigint check (version >= 0)         not null,
-
-    CONSTRAINT cruise_addresses_primary_key_constraint PRIMARY KEY (id),
-    CONSTRAINT cruise_alter_type_id_fk_constraint FOREIGN KEY (alter_type_id) REFERENCES alter_types (id),
-    CONSTRAINT cruise_addresses_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
-    CONSTRAINT cruise_addresses_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id)
+    id                   bigint       not null
+        primary key,
+    creation_date_time   datetime(6)  not null,
+    last_alter_date_time datetime(6)  not null,
+    version              bigint       not null,
+    city_name            varchar(64)  null,
+    country_name         varchar(64)  null,
+    harbor_name          varchar(255) null,
+    street               varchar(64)  null,
+    street_number        varchar(255) null,
+    alter_type_id        bigint       not null,
+    altered_by_id        bigint       not null,
+    created_by_id        bigint       not null,
+    constraint FK4u6ao6jhpgaxx6fmlx2a0h20g
+        foreign key (altered_by_id) references accounts (id),
+    constraint FKdyq8j0vn8masrij00crpq0vm7
+        foreign key (created_by_id) references accounts (id),
+    constraint FKlplxl1ubtnqqc9sl28oun1908
+        foreign key (alter_type_id) references alter_types (id)
 );
-
-create sequence cruise_addresses_id_seq
-    START WITH 1
-    INCREMENT BY 1;
 
 create table cruise_pictures
 (
-    id                   bigint                              not null,
-    img_name             varchar(64),
-    img                  varchar,
-
-    creation_date_time   timestamp default CURRENT_TIMESTAMP not null,
-    last_alter_date_time timestamp                           not null,
-    created_by_id        bigint                              not null, -- FOREIGN KEY
-    altered_by_id        bigint                              not null, -- FOREIGN KEY
-    alter_type_id        bigint                              not null, -- FOREIGN KEY
-    version              bigint check (version >= 0)         not null,
-
-    CONSTRAINT cruise_pictures_primary_key_constraint PRIMARY KEY (id),
-    CONSTRAINT cruise_pictures_alter_type_id_fk_constraint FOREIGN KEY (alter_type_id) REFERENCES alter_types (id),
-    CONSTRAINT cruise_pictures_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
-    CONSTRAINT cruise_pictures_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id)
+    id                   bigint       not null
+        primary key,
+    creation_date_time   datetime(6)  not null,
+    last_alter_date_time datetime(6)  not null,
+    version              bigint       not null,
+    img                  varchar(255) null,
+    img_name             varchar(255) null,
+    alter_type_id        bigint       not null,
+    altered_by_id        bigint       not null,
+    created_by_id        bigint       not null,
+    constraint FKc4pmtt6yy4gj4o1xtju3926vu
+        foreign key (created_by_id) references accounts (id),
+    constraint FKe6jetminus37cek0nldqumfrt
+        foreign key (alter_type_id) references alter_types (id),
+    constraint FKmhrv1bujb4a1xp1pu2bns5c7w
+        foreign key (altered_by_id) references accounts (id)
 );
-
-create sequence cruise_pictures_id_seq
-    START WITH 1
-    INCREMENT BY 1;
 
 create table cruises_groups
 (
-    id                   bigint                                                              not null,
-    company_id           bigint                                                              not null, -- FOREIGN KEY
-    name                 varchar(64)                                                         not null,
-    number_of_seats      bigint check ((number_of_seats >= 0) AND (number_of_seats <= 5200)) not null,
-    price                numeric(8, 2) check ((price >= (0)::numeric))                       not null,
-    start_address_id     bigint                                                              not null, -- FOREIGN KEY
-    average_rating       numeric(2, 1) check ((average_rating >= (0)::numeric) AND (average_rating <= (5)::numeric)),
-    active               boolean   default false                                             not null,
-
-    creation_date_time   timestamp default CURRENT_TIMESTAMP                                 not null,
-    last_alter_date_time timestamp                                                           not null,
-    created_by_id        bigint                                                              not null, -- FOREIGN KEY
-    altered_by_id        bigint                                                              not null, -- FOREIGN KEY
-    alter_type_id        bigint                                                              not null, -- FOREIGN KEY
-    version              bigint check (version >= 0)                                         not null,
-    description          varchar                                                             not null,
-    uuid                 uuid                                                                not null,
-
-
-    CONSTRAINT cruises_groups_id_pk_constraint PRIMARY KEY (id),
-    CONSTRAINT cruises_groups_uuid_unique_constraint UNIQUE (uuid),
-    CONSTRAINT cruises_groups_companies_fk FOREIGN KEY (company_id) REFERENCES companies (id),
-    CONSTRAINT cruises_groups_start_address_id_fk_constraint FOREIGN KEY (start_address_id) REFERENCES cruise_addresses (id),
-    CONSTRAINT cruises_groups_alter_type_id_fk_constraint FOREIGN KEY (alter_type_id) REFERENCES alter_types (id),
-    CONSTRAINT cruises_groups_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
-    CONSTRAINT cruises_groups_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id)
+    id                   bigint       not null
+        primary key,
+    creation_date_time   datetime(6)  not null,
+    last_alter_date_time datetime(6)  not null,
+    version              bigint       not null,
+    active               bit          not null,
+    average_rating       double       null,
+    description          varchar(255) null,
+    name                 varchar(255) null,
+    number_of_seats      bigint       null,
+    price                double       null,
+    uuid                 binary(255)  not null,
+    alter_type_id        bigint       not null,
+    altered_by_id        bigint       not null,
+    created_by_id        bigint       not null,
+    start_address_id     bigint       not null,
+    company_id           bigint       not null,
+    constraint UK_km110mavo8mv17crd2my6scsl
+        unique (uuid),
+    constraint FK4p7l7tjghg5392gd3h3xa7myl
+        foreign key (altered_by_id) references accounts (id),
+    constraint FK7eayl3gdmnpsfa6bijt9oun26
+        foreign key (alter_type_id) references alter_types (id),
+    constraint FK7fcq8txhrcj9n4rbbn3uvmtm6
+        foreign key (company_id) references companies (id),
+    constraint FK9ni0qa2heko00bhps3halbgiq
+        foreign key (start_address_id) references cruise_addresses (id),
+    constraint FKjbavbou3098y0iannr6csg8t1
+        foreign key (created_by_id) references accounts (id)
 );
-
-create sequence cruises_groups_id_seq
-    START WITH 1
-    INCREMENT BY 1;
 
 create table cruises
 (
-    id                   bigint                              not null,
-    uuid                 uuid                                not null,
-    start_date           timestamp                           not null,
-    end_date             timestamp,
-    active               boolean   default false             not null,
-    cruises_group_id     bigint                              not null, -- FOREIGN KEY
-
-    creation_date_time   timestamp default CURRENT_TIMESTAMP not null,
-    last_alter_date_time timestamp                           not null,
-    created_by_id        bigint                              not null, -- FOREIGN KEY
-    altered_by_id        bigint                              not null, -- FOREIGN KEY
-    alter_type_id        bigint                              not null, -- FOREIGN KEY
-
-    version              bigint check (version >= 0)         not null,
-    published            boolean                             not null,
-
-    CONSTRAINT cruises_uuid_unique_constraint UNIQUE (uuid),
-    CONSTRAINT cruises_id_pk_constraint PRIMARY KEY (id),
-    CONSTRAINT cruises_cruises_group_id_fk FOREIGN KEY (cruises_group_id) REFERENCES cruises_groups (id),
-    CONSTRAINT cruises_alter_type_id_fk_constraint FOREIGN KEY (alter_type_id) REFERENCES alter_types (id),
-    CONSTRAINT cruises_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
-    CONSTRAINT cruises_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id)
+    id                   bigint      not null
+        primary key,
+    creation_date_time   datetime(6) not null,
+    last_alter_date_time datetime(6) not null,
+    version              bigint      not null,
+    active               bit         null,
+    end_date             datetime(6) not null,
+    published            bit         null,
+    start_date           datetime(6) not null,
+    uuid                 binary(255) not null,
+    alter_type_id        bigint      not null,
+    altered_by_id        bigint      not null,
+    created_by_id        bigint      not null,
+    cruises_group_id     bigint      null,
+    constraint UK_c005e6dwop4ag5nwnco2ftuhu
+        unique (uuid),
+    constraint FK9r3m0jw60dpj84p5imlxrjfa6
+        foreign key (altered_by_id) references accounts (id),
+    constraint FKg8a8ekuvkuhgkfroja0p5fuja
+        foreign key (cruises_group_id) references cruises_groups (id),
+    constraint FKgixfusnynpio8jbhr5fee9h0i
+        foreign key (created_by_id) references accounts (id),
+    constraint FKlyufw2uc2tmkspj9yg3tspv8h
+        foreign key (alter_type_id) references alter_types (id)
 );
-
-create sequence cruises_id_seq
-    START WITH 1
-    INCREMENT BY 1;
 
 create table attractions
 (
-    id                   bigint                              not null,
-    name                 varchar(64)                         not null,
-    description          varchar                             not null,
-    price                numeric(8, 2)                       not null,
-    number_of_seats      bigint check (number_of_seats >= 0) not null,
-    has_free_spots       boolean   default true              not null,
-    cruise_id            bigint,                                       -- FOREIGN KEY
-
-    creation_date_time   timestamp default CURRENT_TIMESTAMP not null,
-    last_alter_date_time timestamp                           not null,
-    created_by_id        bigint                              not null, -- FOREIGN KEY
-    altered_by_id        bigint                              not null, -- FOREIGN KEY
-    alter_type_id        bigint                              not null, -- FOREIGN KEY
-    version              bigint check (version >= 0)         not null,
-    uuid                 uuid                                not null,
-
-    CONSTRAINT attractions_uuid_unique_constraint UNIQUE (uuid),
-    CONSTRAINT attractions_id_pk_constraint PRIMARY KEY (id),
-    CONSTRAINT attractions_cruise_id_fk_constraint FOREIGN KEY (cruise_id) REFERENCES cruises (id),
-    CONSTRAINT attractions_alter_type_id_fk_constraint FOREIGN KEY (alter_type_id) REFERENCES alter_types (id),
-    CONSTRAINT attractions_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
-    CONSTRAINT attractions_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id)
+    id                   bigint       not null
+        primary key,
+    creation_date_time   datetime(6)  not null,
+    last_alter_date_time datetime(6)  not null,
+    version              bigint       not null,
+    description          varchar(255) null,
+    has_free_spots       bit          null,
+    name                 varchar(255) null,
+    number_of_seats      bigint       null,
+    price                double       null,
+    uuid                 binary(255)  not null,
+    alter_type_id        bigint       not null,
+    altered_by_id        bigint       not null,
+    created_by_id        bigint       not null,
+    cruise_id            bigint       not null,
+    constraint UK_3xwc79almvjelk26cla1cx355
+        unique (uuid),
+    constraint FK3nig2pblhg3ow9av72o7ww2uh
+        foreign key (created_by_id) references accounts (id),
+    constraint FKo0vv0xfhmcneggmkb4taagton
+        foreign key (altered_by_id) references accounts (id),
+    constraint FKqravlyll53k618uyhode97kll
+        foreign key (cruise_id) references cruises (id),
+    constraint FKqs1sp5l1p67b2l1qb57vpi3s4
+        foreign key (alter_type_id) references alter_types (id)
 );
-
-create sequence attractions_id_seq
-    START WITH 1
-    INCREMENT BY 1;
-
-create table reservations
-(
-    id                   bigint                              not null,
-    uuid                 uuid                                not null,
-    client_id            bigint                              not null, --FOREIGN KEY
-    number_of_seats      bigint check (number_of_seats >= 0) not null,
-    cruise_id            bigint                              not null, --FOREIGN KEY
-    price                numeric(8, 2),
-
-    creation_date_time   timestamp default CURRENT_TIMESTAMP not null,
-    last_alter_date_time timestamp                           not null,
-    created_by_id        bigint                              not null, -- FOREIGN KEY
-    altered_by_id        bigint                              not null, -- FOREIGN KEY
-    alter_type_id        bigint                              not null, -- FOREIGN KEY
-    version              bigint check (version >= 0)         not null,
-
-    CONSTRAINT reservations_id_pk_constraint PRIMARY KEY (id),
-    CONSTRAINT reservations_uuid_unique_constraint UNIQUE (uuid),
-    CONSTRAINT reservations_client_id_fk_constraint FOREIGN KEY (client_id) REFERENCES clients (id),
-    CONSTRAINT reservations_cruise_id_fk_constraint FOREIGN KEY (cruise_id) REFERENCES cruises (id),
-    CONSTRAINT reservations_alter_type_id_fk_constraint FOREIGN KEY (alter_type_id) REFERENCES alter_types (id),
-    CONSTRAINT reservations_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
-    CONSTRAINT reservations_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id)
-);
-
-create sequence reservations_id_seq
-    START WITH 1
-    INCREMENT BY 1;
-
-create table ratings
-(
-    id                   bigint                                                                      not null,
-    account_id           bigint                                                                      not null, -- FOREIGN KEY
-    cruise_group_id      bigint                                                                      not null, -- FOREIGN KEY
-    rating               numeric(2, 1) check ((rating >= (1)::numeric) AND (rating <= (5)::numeric)) not null,
-    uuid                 uuid                                                                        not null,
-
-    creation_date_time   timestamp default CURRENT_TIMESTAMP                                         not null,
-    last_alter_date_time timestamp                                                                   not null,
-    created_by_id        bigint                                                                      not null, -- FOREIGN KEY
-    altered_by_id        bigint                                                                      not null, -- FOREIGN KEY
-    alter_type_id        bigint                                                                      not null, -- FOREIGN KEY
-    version              bigint check (version >= 0)                                                 not null,
-
-    CONSTRAINT ratings_primary_key_constraint PRIMARY KEY (id),
-    CONSTRAINT ratings_account_id_fk_constraint FOREIGN KEY (account_id) REFERENCES accounts (id),
-    CONSTRAINT ratings_cruise_group_id_fk_constraint FOREIGN KEY (cruise_group_id) REFERENCES cruises_groups (id),
-    CONSTRAINT ratings_alter_type_id_fk_constraint FOREIGN KEY (alter_type_id) REFERENCES alter_types (id),
-    CONSTRAINT ratings_created_by_id_fk_constraint FOREIGN KEY (created_by_id) REFERENCES accounts (id),
-    CONSTRAINT ratings_altered_by_id_fk_constraint FOREIGN KEY (altered_by_id) REFERENCES accounts (id)
-);
-
-create sequence ratings_id_seq
-    START WITH 1
-    INCREMENT BY 1;
-
-
 
 create table cruises_group_pictures
 (
-    cruises_group_id  bigint not null, -- FOREIGN KEY
-    cruise_picture_id bigint,          -- FOREIGN KEY no not null in this moment
+    cruises_group_id  bigint not null,
+    cruise_picture_id bigint not null,
+    constraint FK5bfbnt0pv7d4thtxae9rgyoyb
+        foreign key (cruises_group_id) references cruises_groups (id),
+    constraint FKp1du74igefjcxyq5ni41aubo4
+        foreign key (cruise_picture_id) references cruise_pictures (id)
+);
 
-    CONSTRAINT cruises_group_pictures_primary_key_constraint PRIMARY KEY (cruises_group_id, cruise_picture_id),
-    CONSTRAINT cruises_group_pictures_groups_id_pictures_id_unique UNIQUE (cruises_group_id, cruise_picture_id),
-    CONSTRAINT cruises_group_pictures_cruises_group_id_fk_constraint FOREIGN KEY (cruises_group_id) REFERENCES cruises_groups (id),
-    CONSTRAINT cruises_group_pictures_cruise_picture_id_fk_constraint FOREIGN KEY (cruise_picture_id) REFERENCES cruise_pictures (id)
+create table moderators
+(
+    id bigint not null
+        primary key,
+    constraint FKec3ocdsw9bxy72snsui63i7fx
+        foreign key (id) references access_levels (id)
+);
+
+create table ratings
+(
+    id                   bigint      not null
+        primary key,
+    creation_date_time   datetime(6) not null,
+    last_alter_date_time datetime(6) not null,
+    version              bigint      not null,
+    rating               double      null,
+    uuid                 binary(255) not null,
+    alter_type_id        bigint      not null,
+    altered_by_id        bigint      not null,
+    created_by_id        bigint      not null,
+    account_id           bigint      not null,
+    cruise_group_id      bigint      not null,
+    constraint UK_mmyum5upxsqk9htvhe0b6qpha
+        unique (uuid),
+    constraint FK16dlp35b75qcuy988cxcphy7t
+        foreign key (alter_type_id) references alter_types (id),
+    constraint FK71mqcse13gx0j55mo0rwqkolb
+        foreign key (account_id) references accounts (id),
+    constraint FKfjkwc7ufqfbthrxsn211nvgew
+        foreign key (created_by_id) references accounts (id),
+    constraint FKh4e9gx3tqy0896j5guedy2nmr
+        foreign key (altered_by_id) references accounts (id),
+    constraint FKpi3p22up9sedyov66hi2r0oji
+        foreign key (cruise_group_id) references cruises_groups (id)
+);
+
+create table ratings_id_seq
+(
+    next_val bigint null
+);
+
+create table reservations
+(
+    id                   bigint      not null
+        primary key,
+    creation_date_time   datetime(6) not null,
+    last_alter_date_time datetime(6) not null,
+    version              bigint      not null,
+    number_of_seats      bigint      null,
+    price                double      null,
+    uuid                 binary(255) not null,
+    alter_type_id        bigint      not null,
+    altered_by_id        bigint      not null,
+    created_by_id        bigint      not null,
+    client_id            bigint      not null,
+    cruise_id            bigint      not null,
+    constraint UK_6dlj3s139kj63kvhcd099x8xk
+        unique (uuid),
+    constraint FK1cij6euqjepr6mhdcwr9jg3pu
+        foreign key (created_by_id) references accounts (id),
+    constraint FK2gjhui5v08c5cl1vl1rcxijw3
+        foreign key (alter_type_id) references alter_types (id),
+    constraint FK6lekctbt4u88agg0b7cjsj6lf
+        foreign key (client_id) references clients (id),
+    constraint FKiqhukyao7wqh48mcfjuf352sl
+        foreign key (altered_by_id) references accounts (id),
+    constraint FKjnfs9nmt56u660060mvtm2i2e
+        foreign key (cruise_id) references cruises (id)
 );
 
 create table reservation_attractions
 (
-    reservation_id bigint not null,--FOREIGN KEY
-    attraction_id  bigint not null,--FOREIGN KEY
-
-    CONSTRAINT reservation_attractions_primary_key_constraint PRIMARY KEY (reservation_id, attraction_id),
-    CONSTRAINT reservation_attractions_reservation_id_attraction_id_unique UNIQUE (reservation_id, attraction_id),
-    CONSTRAINT reservation_attractions_reservation_id_fk_constraint FOREIGN KEY (reservation_id) REFERENCES reservations (id),
-    CONSTRAINT reservation_attractions_attraction_id_fk_constraint FOREIGN KEY (attraction_id) REFERENCES attractions (id)
+    reservation_id bigint not null,
+    attraction_id  bigint not null,
+    constraint FKf8jp01p7pb9uuabe304xst4fq
+        foreign key (attraction_id) references attractions (id),
+    constraint FKta6ba33igbn6kgvx3xd49b914
+        foreign key (reservation_id) references reservations (id)
 );
 
+create table reservations_id_seq
+(
+    next_val bigint null
+);
 
-CREATE VIEW glassfish_auth_view AS
-SELECT accounts.login, accounts.password_hash, access_levels.access_level
-FROM accounts
-         JOIN access_levels ON accounts.id = access_levels.account_id
-         LEFT JOIN business_workers bw on access_levels.id = bw.id
-WHERE accounts.confirmed
-  AND accounts.active
-  AND access_levels.enabled
-  AND (bw.confirmed OR bw.confirmed IS NULL);
+create table used_codes
+(
+    id                 bigint       not null
+        primary key,
+    code               varchar(255) not null,
+    creation_date_time datetime(6)  not null,
+    used               bit          not null,
+    account_id         bigint       not null,
+    constraint UK_qeipafi6jiafu4xvbp4tjsldt
+        unique (code),
+    constraint FKmjjp6lus9f7mxt6t1rc4l15et
+        foreign key (account_id) references accounts (id)
+);
 
--- Table owner --
-ALTER TABLE used_tokens
-    OWNER TO ssbd03admin;
-ALTER TABLE used_codes
-    OWNER TO ssbd03admin;
-ALTER TABLE accounts
-    OWNER TO ssbd03admin;
-ALTER TABLE access_levels
-    OWNER TO ssbd03admin;
-ALTER TABLE administrators
-    OWNER TO ssbd03admin;
-ALTER TABLE business_workers
-    OWNER TO ssbd03admin;
-ALTER TABLE addresses
-    OWNER TO ssbd03admin;
-ALTER TABLE clients
-    OWNER TO ssbd03admin;
-ALTER TABLE moderators
-    OWNER TO ssbd03admin;
-AlTER TABLE reservations
-    OWNER TO ssbd03admin;
-AlTER TABLE attractions
-    OWNER TO ssbd03admin;
-ALTER TABLE ratings
-    OWNER to ssbd03admin;
-ALTER TABLE cruise_addresses
-    OWNER to ssbd03admin;
-ALTER TABLE cruise_pictures
-    OWNER to ssbd03admin;
-ALTER TABLE language_types
-    OWNER to ssbd03admin;
-ALTER TABLE alter_types
-    OWNER to ssbd03admin;
-ALTER TABLE cruises_group_pictures
-    OWNER to ssbd03admin;
-ALTER TABLE reservation_attractions
-    OWNER to ssbd03admin;
-ALTER TABLE cruises_groups
-    OWNER to ssbd03admin;
-ALTER TABLE companies
-    OWNER to ssbd03admin;
-ALTER TABLE cruises
-    OWNER to ssbd03admin;
-ALTER TABLE account_id_seq
-    OWNER to ssbd03admin;
-ALTER TABLE access_level_id_seq
-    OWNER to ssbd03admin;
-ALTER TABLE address_id_seq
-    OWNER to ssbd03admin;
-ALTER TABLE cruise_addresses_id_seq
-    OWNER to ssbd03admin;
-ALTER TABLE cruise_pictures_id_seq
-    OWNER to ssbd03admin;
-ALTER TABLE companies_id_seq
-    OWNER to ssbd03admin;
-ALTER TABLE cruises_groups_id_seq
-    OWNER to ssbd03admin;
-ALTER TABLE cruises_id_seq
-    OWNER to ssbd03admin;
-ALTER TABLE attractions_id_seq
-    OWNER to ssbd03admin;
-ALTER TABLE reservations_id_seq
-    OWNER to ssbd03admin;
-ALTER TABLE ratings_id_seq
-    OWNER to ssbd03admin;
-ALTER SEQUENCE used_tokens_id_seq
-    OWNER TO ssbd03admin;
-ALTER SEQUENCE used_codes_id_seq
-    OWNER TO ssbd03admin;
+create table used_codes_id_seq
+(
+    next_val bigint null
+);
 
+create table used_tokens
+(
+    id                 bigint      not null
+        primary key,
+    creation_date_time datetime(6) not null,
+    token              text        not null,
+    used               bit         not null,
+    account_id         bigint      not null,
+    constraint FK3gxjppixy8ktf0hjfxa8t6j6k
+        foreign key (account_id) references accounts (id)
+);
 
-ALTER
-    VIEW glassfish_auth_view OWNER TO ssbd03admin;
+create table used_tokens_id_seq
+(
+    next_val bigint null
+);
 
---Table sequence--
-ALTER TABLE used_tokens
-    ALTER COLUMN id
-        SET DEFAULT nextval('used_tokens_id_seq');
-
-ALTER TABLE used_codes
-    ALTER COLUMN id
-        SET DEFAULT nextval('used_codes_id_seq');
-
-ALTER TABLE accounts
-    ALTER COLUMN id
-        SET DEFAULT nextval('account_id_seq');
-
-ALTER TABLE access_levels
-    ALTER COLUMN id
-        SET DEFAULT nextval('access_level_id_seq');
-
-ALTER TABLE addresses
-    ALTER COLUMN id
-        SET DEFAULT nextval('address_id_seq');
-
-AlTER TABLE reservations
-    ALTER COLUMN id
-        SET DEFAULT nextval('reservations_id_seq');
-
-AlTER TABLE attractions
-    ALTER COLUMN id
-        SET DEFAULT nextval('attractions_id_seq');
-
-ALTER TABLE ratings
-    ALTER COLUMN id
-        SET DEFAULT nextval('ratings_id_seq');
-
-ALTER TABLE cruise_addresses
-    ALTER COLUMN id
-        SET DEFAULT nextval('cruise_addresses_id_seq');
-
-ALTER TABLE cruise_pictures
-    ALTER COLUMN id
-        SET DEFAULT nextval('cruise_pictures_id_seq');
-
-ALTER TABLE cruises_groups
-    ALTER COLUMN id
-        SET DEFAULT nextval('cruises_groups_id_seq');
-
-ALTER TABLE companies
-    ALTER COLUMN id
-        SET DEFAULT nextval('companies_id_seq');
-
-ALTER TABLE cruises
-    ALTER COLUMN id
-        SET DEFAULT nextval('cruises_id_seq');
-
--- Table permissions --
 GRANT SELECT, INSERT, UPDATE, DELETE
     ON used_tokens TO ssbd03mok;
 
@@ -611,16 +524,16 @@ GRANT SELECT
     ON alter_types TO ssbd03mok;
 
 GRANT SELECT, UPDATE
-    ON SEQUENCE account_id_seq TO ssbd03mok;
+    ON account_id_seq TO ssbd03mok;
 
 GRANT SELECT, UPDATE
-    ON SEQUENCE access_level_id_seq TO ssbd03mok;
+    ON access_level_id_seq TO ssbd03mok;
 
 GRANT SELECT, UPDATE
-    ON SEQUENCE address_id_seq TO ssbd03mok;
+    ON address_id_seq TO ssbd03mok;
 
 GRANT SELECT, UPDATE
-    ON SEQUENCE address_id_seq TO ssbd03mow;
+    ON address_id_seq TO ssbd03mow;
 
 -- Table permissions for MOW --
 GRANT SELECT
@@ -694,208 +607,38 @@ GRANT SELECT, UPDATE
     ON used_codes_id_seq TO ssbd03mok;
 
 GRANT SELECT, UPDATE
-    ON SEQUENCE cruise_addresses_id_seq TO ssbd03mow;
+    ON cruise_addresses_id_seq TO ssbd03mow;
 
 GRANT SELECT, UPDATE
-    ON SEQUENCE cruise_pictures_id_seq TO ssbd03mow;
+    ON cruise_pictures_id_seq TO ssbd03mow;
 
 GRANT SELECT, UPDATE
-    ON SEQUENCE companies_id_seq TO ssbd03mow;
+    ON companies_id_seq TO ssbd03mow;
 
 GRANT SELECT, UPDATE
-    ON SEQUENCE cruises_groups_id_seq TO ssbd03mow;
+    ON cruises_groups_id_seq TO ssbd03mow;
 
 GRANT SELECT, UPDATE
-    ON SEQUENCE cruises_id_seq TO ssbd03mow;
+    ON cruises_id_seq TO ssbd03mow;
 
 GRANT SELECT, UPDATE
-    ON SEQUENCE attractions_id_seq TO ssbd03mow;
+    ON attractions_id_seq TO ssbd03mow;
 
 GRANT SELECT, UPDATE
-    ON SEQUENCE reservations_id_seq TO ssbd03mow;
+    ON reservations_id_seq TO ssbd03mow;
 
 GRANT SELECT, UPDATE
-    ON SEQUENCE ratings_id_seq TO ssbd03mow;
+    ON ratings_id_seq TO ssbd03mow;
 
 GRANT SELECT ON glassfish_auth_view TO ssbd03glassfish;
 
--- INDEXES --
-CREATE INDEX accounts_language_type_id_index
-    ON accounts USING btree
-        (language_type_id ASC NULLS LAST);
-CREATE INDEX accounts_created_by_id_index
-    ON accounts USING btree
-        (created_by_id ASC NULLS LAST);
-CREATE INDEX accounts_altered_by_id_index
-    ON accounts USING btree
-        (altered_by_id ASC NULLS LAST);
-CREATE INDEX accounts_alter_type_id_index
-    ON accounts USING btree
-        (alter_type_id ASC NULLS LAST);
 
-CREATE INDEX access_levels_account_id_index
-    ON access_levels USING btree
-        (account_id ASC NULLS LAST);
-CREATE INDEX access_levels_created_by_id_index
-    ON access_levels USING btree
-        (created_by_id ASC NULLS LAST);
-CREATE INDEX access_levels_altered_by_id_index
-    ON access_levels USING btree
-        (altered_by_id ASC NULLS LAST);
-CREATE INDEX access_levels_alter_type_id_index
-    ON access_levels USING btree
-        (alter_type_id ASC NULLS LAST);
+create definer = root@`%` view glassfish_auth_view as
+select `ssbd03`.`accounts`.`login`             AS `login`,
+       `ssbd03`.`accounts`.`password_hash`     AS `password_hash`,
+       `ssbd03`.`access_levels`.`access_level` AS `access_level`
+from ((`ssbd03`.`accounts` join `ssbd03`.`access_levels` on ((`ssbd03`.`accounts`.`id` = `ssbd03`.`access_levels`.`account_id`)))
+         left join `ssbd03`.`business_workers` `bw` on ((`ssbd03`.`access_levels`.`id` = `bw`.`id`)))
+where ((0 <> `ssbd03`.`accounts`.`confirmed`) and (0 <> `ssbd03`.`accounts`.`active`) and
+       (0 <> `ssbd03`.`access_levels`.`enabled`) and ((0 <> `bw`.`confirmed`) or (`bw`.`confirmed` is null)));
 
-CREATE INDEX administrators_id_index
-    ON administrators USING btree
-        (id ASC NULLS LAST);
-
-CREATE INDEX business_workers_id_index
-    ON business_workers USING btree
-        (id ASC NULLS LAST);
-
-CREATE INDEX business_workers_company_id_index
-    ON business_workers USING btree
-        (company_id ASC NULLS LAST);
-
-CREATE INDEX addresses_created_by_id_index
-    ON addresses USING btree
-        (created_by_id ASC NULLS LAST);
-CREATE INDEX addresses_altered_by_id_index
-    ON addresses USING btree
-        (altered_by_id ASC NULLS LAST);
-CREATE INDEX addresses_alter_type_id_index
-    ON addresses USING btree
-        (alter_type_id ASC NULLS LAST);
-
-CREATE INDEX clients_id_index
-    ON clients USING btree
-        (id ASC NULLS LAST);
-CREATE INDEX clients_home_address_id_index
-    ON clients USING btree
-        (home_address_id ASC NULLS LAST);
-
-CREATE INDEX moderators_id_index
-    ON moderators USING btree
-        (id ASC NULLS LAST);
-
-CREATE INDEX cruise_addresses_created_by_id_index
-    ON cruise_addresses USING btree
-        (created_by_id ASC NULLS LAST);
-CREATE INDEX cruise_addresses_altered_by_id_index
-    ON cruise_addresses USING btree
-        (altered_by_id ASC NULLS LAST);
-CREATE INDEX cruise_addresses_alter_type_id_index
-    ON cruise_addresses USING btree
-        (alter_type_id ASC NULLS LAST);
-
-CREATE INDEX cruise_pictures_created_by_id_index
-    ON cruise_pictures USING btree
-        (created_by_id ASC NULLS LAST);
-CREATE INDEX cruise_pictures_altered_by_id_index
-    ON cruise_pictures USING btree
-        (altered_by_id ASC NULLS LAST);
-CREATE INDEX cruise_pictures_alter_type_id_index
-    ON cruise_pictures USING btree
-        (alter_type_id ASC NULLS LAST);
-
-CREATE INDEX companies_address_id_index
-    ON companies USING btree
-        (address_id ASC NULLS LAST);
-CREATE INDEX companies_created_by_id_index
-    ON companies USING btree
-        (created_by_id ASC NULLS LAST);
-CREATE INDEX companies_altered_by_id_index
-    ON companies USING btree
-        (altered_by_id ASC NULLS LAST);
-CREATE INDEX companies_alter_type_id_index
-    ON companies USING btree
-        (alter_type_id ASC NULLS LAST);
-
-CREATE INDEX cruises_groups_company_id_index
-    ON cruises_groups USING btree
-        (company_id ASC NULLS LAST);
-CREATE INDEX cruises_groups_start_address_id_index
-    ON cruises_groups USING btree
-        (start_address_id ASC NULLS LAST);
-CREATE INDEX cruises_groups_created_by_id_index
-    ON cruises_groups USING btree
-        (created_by_id ASC NULLS LAST);
-CREATE INDEX cruises_groups_altered_by_id_index
-    ON cruises_groups USING btree
-        (altered_by_id ASC NULLS LAST);
-CREATE INDEX cruises_groups_alter_type_id_index
-    ON cruises_groups USING btree
-        (alter_type_id ASC NULLS LAST);
-
-CREATE INDEX cruises_cruises_groups_id_index
-    ON cruises USING btree
-        (cruises_group_id ASC NULLS LAST);
-CREATE INDEX cruises_created_by_id_index
-    ON cruises USING btree
-        (created_by_id ASC NULLS LAST);
-CREATE INDEX cruises_altered_by_id_index
-    ON cruises USING btree
-        (altered_by_id ASC NULLS LAST);
-CREATE INDEX cruises_alter_type_id_index
-    ON cruises USING btree
-        (alter_type_id ASC NULLS LAST);
-
-CREATE INDEX attractions_cruise_id_index
-    ON attractions USING btree
-        (cruise_id ASC NULLS LAST);
-CREATE INDEX attractions_created_by_id_index
-    ON attractions USING btree
-        (created_by_id ASC NULLS LAST);
-CREATE INDEX attractions_altered_by_id_index
-    ON attractions USING btree
-        (altered_by_id ASC NULLS LAST);
-CREATE INDEX attractions_alter_type_id_index
-    ON attractions USING btree
-        (alter_type_id ASC NULLS LAST);
-
-CREATE INDEX reservations_client_id_index
-    ON reservations USING btree
-        (client_id ASC NULLS LAST);
-CREATE INDEX reservations_cruise_id_index
-    ON reservations USING btree
-        (cruise_id ASC NULLS LAST);
-CREATE INDEX reservations_created_by_id_index
-    ON reservations USING btree
-        (created_by_id ASC NULLS LAST);
-CREATE INDEX reservations_altered_by_id_index
-    ON reservations USING btree
-        (altered_by_id ASC NULLS LAST);
-CREATE INDEX reservations_alter_type_id_index
-    ON reservations USING btree
-        (alter_type_id ASC NULLS LAST);
-
-CREATE INDEX ratings_account_id_index
-    ON ratings USING btree
-        (account_id ASC NULLS LAST);
-CREATE INDEX ratings_cruise_group_id_index
-    ON ratings USING btree
-        (cruise_group_id ASC NULLS LAST);
-CREATE INDEX ratings_created_by_id_index
-    ON ratings USING btree
-        (created_by_id ASC NULLS LAST);
-CREATE INDEX ratings_altered_by_id_index
-    ON ratings USING btree
-        (altered_by_id ASC NULLS LAST);
-CREATE INDEX ratings_alter_type_id_index
-    ON ratings USING btree
-        (alter_type_id ASC NULLS LAST);
-
-CREATE INDEX cruises_group_pictures_cruises_group_id_index
-    ON cruises_group_pictures USING btree
-        (cruises_group_id ASC NULLS LAST);
-CREATE INDEX cruises_group_pictures_cruise_picture_id_index
-    ON cruises_group_pictures USING btree
-        (cruise_picture_id ASC NULLS LAST);
-
-CREATE INDEX reservation_attractions_reservation_id_index
-    ON reservation_attractions USING btree
-        (reservation_id ASC NULLS LAST);
-CREATE INDEX reservation_attractions_attraction_id_index
-    ON reservation_attractions USING btree
-        (attraction_id ASC NULLS LAST);
