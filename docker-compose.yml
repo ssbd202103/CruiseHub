@@ -1,0 +1,25 @@
+version: '3'
+services:
+  mysql:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    volumes:
+      - ./database/db_structure.sql:/docker-entrypoint-initdb.d/1.sql
+      - ./database/db_init.sql:/docker-entrypoint-initdb.d/2.sql
+    cap_add:
+      - SYS_NICE  # CAP_SYS_NICE
+  cruise-hub:
+    depends_on:
+      - mysql
+    build: .
+    ports:
+      - "8080:8080"
+      - "9990:9990"
+    expose:
+      - "8080"

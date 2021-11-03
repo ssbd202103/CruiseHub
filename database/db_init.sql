@@ -1,5 +1,6 @@
 #language_types start
 #language_types 1
+use ssbd03;
 insert into language_types(id, name)
 values (-1, 'PL');
 #language_types 2
