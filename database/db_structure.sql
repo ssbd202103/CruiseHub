@@ -6,6 +6,12 @@ create user 'ssbd03glassfish' identified by 'glassfishpasswd';
 create user 'ssbd03mok' identified by 'mokpasswd';
 create user 'ssbd03mow' identified by 'mowpasswd';
 
+
+GRANT ALL PRIVILEGES ON ssbd03.* TO 'ssbd03admin';
+GRANT ALL PRIVILEGES ON ssbd03.* TO 'ssbd03glassfish';
+GRANT ALL PRIVILEGES ON ssbd03.* TO 'ssbd03mok';
+GRANT ALL PRIVILEGES ON ssbd03.* TO 'ssbd03mow';
+
 create table access_level_id_seq
 (
     next_val bigint null
