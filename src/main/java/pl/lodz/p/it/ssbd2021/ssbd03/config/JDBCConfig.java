@@ -12,7 +12,7 @@ import javax.persistence.PersistenceContext;
 //        password = "adminpasswd",
 //        serverName = "localhost",
 //        portNumber = 3306,
-        url="jdbc:mysql://localhost:3306/ssbd03?autoReconnect=true&useSSL=false&user=ssbd03admin&password=adminpasswd&allowPublicKeyRetrieval=true"
+        url="jdbc:mysql://ssbd03_mysql_db:3306/ssbd03?autoReconnect=true&useSSL=false&user=ssbd03admin&password=adminpasswd&allowPublicKeyRetrieval=true"
 )
 
 @DataSourceDefinition(
@@ -23,7 +23,7 @@ import javax.persistence.PersistenceContext;
 //        serverName = "localhost",
 //        portNumber = 3306,
 //        databaseName = "ssbd03",
-        url="jdbc:mysql://localhost:3306/ssbd03?autoReconnect=true&useSSL=false&user=ssbd03glassfish&password=glassfishpasswd&allowPublicKeyRetrieval=true"
+        url="jdbc:mysql://ssbd03_mysql_db:3306/ssbd03?autoReconnect=true&useSSL=false&user=ssbd03glassfish&password=glassfishpasswd&allowPublicKeyRetrieval=true"
 )
 
 @DataSourceDefinition(
@@ -34,7 +34,7 @@ import javax.persistence.PersistenceContext;
 //        serverName = "localhost",
 //        portNumber = 3306,
 //        databaseName = "ssbd03",
-        url="jdbc:mysql://localhost:3306/ssbd03?autoReconnect=true&useSSL=false&user=ssbd03mok&password=mokpasswd&allowPublicKeyRetrieval=true"
+        url="jdbc:mysql://ssbd03_mysql_db:3306/ssbd03?autoReconnect=true&useSSL=false&user=ssbd03mok&password=mokpasswd&allowPublicKeyRetrieval=true"
 )
 
 @DataSourceDefinition(
@@ -45,7 +45,7 @@ import javax.persistence.PersistenceContext;
 //        serverName = "localhost",
 //        portNumber = 3306,
 //        databaseName = "ssbd03",
-        url="jdbc:mysql://localhost:3306/ssbd03?autoReconnect=true&useSSL=false&user=ssbd03mow&password=mowpasswd&allowPublicKeyRetrieval=true"
+        url="jdbc:mysql://ssbd03_mysql_db:3306/ssbd03?autoReconnect=true&useSSL=false&user=ssbd03mow&password=mowpasswd&allowPublicKeyRetrieval=true"
 
 )
 @Stateless

@@ -6,6 +6,12 @@ create user 'ssbd03glassfish' identified by 'glassfishpasswd';
 create user 'ssbd03mok' identified by 'mokpasswd';
 create user 'ssbd03mow' identified by 'mowpasswd';
 
+
+GRANT ALL PRIVILEGES ON ssbd03.* TO 'ssbd03admin';
+GRANT ALL PRIVILEGES ON ssbd03.* TO 'ssbd03glassfish';
+GRANT ALL PRIVILEGES ON ssbd03.* TO 'ssbd03mok';
+GRANT ALL PRIVILEGES ON ssbd03.* TO 'ssbd03mow';
+
 create table access_level_id_seq
 (
     next_val bigint null
@@ -642,11 +648,11 @@ GRANT SELECT, UPDATE
 
 create definer = root@`%` view glassfish_auth_view as
 select `ssbd03`.`accounts`.`login`             AS `login`,
-`ssbd03`.`accounts`.`password_hash`     AS `password_hash`,
-`ssbd03`.`access_levels`.`access_level` AS `access_level`
+       `ssbd03`.`accounts`.`password_hash`     AS `password_hash`,
+       `ssbd03`.`access_levels`.`access_level` AS `access_level`
 from ((`ssbd03`.`accounts` join `ssbd03`.`access_levels` on ((`ssbd03`.`accounts`.`id` = `ssbd03`.`access_levels`.`account_id`)))
-left join `ssbd03`.`business_workers` `bw` on ((`ssbd03`.`access_levels`.`id` = `bw`.`id`)))
+         left join `ssbd03`.`business_workers` `bw` on ((`ssbd03`.`access_levels`.`id` = `bw`.`id`)))
 where ((0 <> `ssbd03`.`accounts`.`confirmed`) and (0 <> `ssbd03`.`accounts`.`active`) and
-(0 <> `ssbd03`.`access_levels`.`enabled`) and ((0 <> `bw`.`confirmed`) or (`bw`.`confirmed` is null)));
+       (0 <> `ssbd03`.`access_levels`.`enabled`) and ((0 <> `bw`.`confirmed`) or (`bw`.`confirmed` is null)));
 
 GRANT SELECT ON glassfish_auth_view TO ssbd03glassfish;
