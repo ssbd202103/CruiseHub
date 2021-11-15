@@ -10,8 +10,6 @@ services:
       MYSQL_ROOT_PASSWORD: root
     ports:
       - "3306:3306"
-    expose:
-      - "3306"
     volumes:
       - ./database/db_structure.sql:/docker-entrypoint-initdb.d/1.sql
       - ./database/db_init.sql:/docker-entrypoint-initdb.d/2.sql
@@ -27,9 +25,6 @@ services:
     depends_on:
       - ssbd03_mysql_db
     build: .
-    ports:
-      - "8080:8080"
-      - "9990:9990"
 
   ssbd03_nginx:
     container_name: ssbd03_nginx
