@@ -16,22 +16,35 @@ services:
       - ./database/db_structure.sql:/docker-entrypoint-initdb.d/1.sql
       - ./database/db_init.sql:/docker-entrypoint-initdb.d/2.sql
     cap_add:
-      - SYS_NICE  # CAP_SYS_NICE
+      - SYS_NICE
 
   ssbd03_app:
     container_name: ssbd03_app
     hostname: ssbd03_app
     networks:
       - ssbd03_internal_net
+      - ssbd03_http
     depends_on:
       - ssbd03_mysql_db
     build: .
     ports:
       - "8080:8080"
       - "9990:9990"
-    expose:
-      - "8080"
-      - "9990"
+
+  ssbd03_nginx:
+    container_name: ssbd03_nginx
+    image: nginx
+    depends_on:
+      - ssbd03_app
+    networks:
+      - ssbd03_http
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./certificate.crt:/etc/ssl/private/certificate.crt:ro
+      - ./private.key:/etc/ssl/private/private.key:ro
+    ports:
+      - "555:555"
 
 networks:
   ssbd03_internal_net: {}
+  ssbd03_http: {}
