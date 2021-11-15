@@ -4,7 +4,8 @@ services:
     image: mysql
     container_name: ssbd03_mysql_db
     hostname: ssbd03_mysql_db
-    command: --default-authentication-plugin=mysql_native_password
+    networks:
+      - ssbd03_internal_net
     environment:
       MYSQL_ROOT_PASSWORD: root
     ports:
@@ -20,6 +21,8 @@ services:
   ssbd03_app:
     container_name: ssbd03_app
     hostname: ssbd03_app
+    networks:
+      - ssbd03_internal_net
     depends_on:
       - ssbd03_mysql_db
     build: .
@@ -28,3 +31,7 @@ services:
       - "9990:9990"
     expose:
       - "8080"
+      - "9990"
+
+networks:
+  ssbd03_internal_net: {}
