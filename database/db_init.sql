@@ -441,3 +441,5 @@ values (-2, -2);
 insert into reservation_attractions (reservation_id, attraction_id)
 values (-3, -3);
 #reservation_attractions end
+
+insert into used_codes_id_seq (next_val) value (0);

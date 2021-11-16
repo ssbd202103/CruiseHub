@@ -24,6 +24,8 @@ services:
       - ssbd03_http
     depends_on:
       - ssbd03_mysql_db
+    volumes:
+      - ./target/ssbd03.war:/opt/jboss/wildfly/standalone/deployments/ssbd03.war:ro
     build: .
     ports:
       - "8080:8080"
