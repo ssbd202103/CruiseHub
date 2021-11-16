@@ -61,7 +61,7 @@ public class CustomJWTAuthenticationMechanism implements HttpAuthenticationMecha
     }
 
     private HttpMessageContext CORS(HttpMessageContext context) {
-        context.getResponse().setHeader("Access-Control-Allow-Origin", PropertiesReader.getSecurityProperties().getProperty("app.frontend.url"));
+        context.getResponse().setHeader("Access-Control-Allow-Origin", "https://localhost:555");
         context.getResponse().setHeader("Access-Control-Allow-Headers", "*");
         context.getResponse().setHeader("Access-Control-Allow-Credentials", "true");
         context.getResponse().setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS,HEAD");

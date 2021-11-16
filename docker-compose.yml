@@ -25,7 +25,8 @@ services:
     depends_on:
       - ssbd03_mysql_db
     build: .
-
+    ports:
+      - "8080:8080"
   ssbd03_nginx:
     container_name: ssbd03_nginx
     image: nginx
