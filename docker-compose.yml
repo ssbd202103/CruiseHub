@@ -28,7 +28,7 @@ services:
       - ./target/ssbd03.war:/opt/jboss/wildfly/standalone/deployments/ssbd03.war:ro
     build: .
     ports:
-      - "8080:8080"
+      - "8443:8443"
   ssbd03_nginx:
     container_name: ssbd03_nginx
     image: nginx

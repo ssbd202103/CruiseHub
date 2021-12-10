@@ -230,14 +230,14 @@
         <role-name>getCruiseGroupForBusinessWorker</role-name>
     </security-role>
 
-<!--    <security-constraint>-->
-<!--        <web-resource-collection>-->
-<!--            <web-resource-name>api</web-resource-name>-->
-<!--            <url-pattern>/*</url-pattern>-->
-<!--        </web-resource-collection>-->
-<!--&lt;!&ndash;        <user-data-constraint>&ndash;&gt;-->
-<!--&lt;!&ndash;            <transport-guarantee>CONFIDENTIAL</transport-guarantee>&ndash;&gt;-->
-<!--&lt;!&ndash;        </user-data-constraint>&ndash;&gt;-->
-<!--    </security-constraint>-->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>api</web-resource-name>
+            <url-pattern>/*</url-pattern>
+        </web-resource-collection>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
 
 </web-app>

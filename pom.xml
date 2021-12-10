@@ -221,8 +221,8 @@
         <profile>
             <id>dev</id>
             <properties>
-                <app.baseurl>http://localhost:8080</app.baseurl>
-                <app.frontend.url>http://localhost:8080</app.frontend.url>
+                <app.baseurl>https://localhost:8443</app.baseurl>
+                <app.frontend.url>https://localhost:555</app.frontend.url>
             </properties>
             <activation>
                 <property>
