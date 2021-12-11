@@ -1,4 +1,5 @@
-version: '3'
+version: "3.9"
+
 services:
   ssbd03_mysql_db:
     image: mysql
@@ -9,7 +10,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
     ports:
-      - "3306:3306"
+      - "127.0.0.1:3306:3306"
     volumes:
       - ./database/db_structure.sql:/docker-entrypoint-initdb.d/1.sql
       - ./database/db_init.sql:/docker-entrypoint-initdb.d/2.sql
@@ -27,8 +28,8 @@ services:
     volumes:
       - ./target/ssbd03.war:/opt/jboss/wildfly/standalone/deployments/ssbd03.war:ro
     build: .
-    ports:
-      - "8080:8080"
+#    ports:
+#      - "8080:8080"
   ssbd03_nginx:
     container_name: ssbd03_nginx
     image: nginx
@@ -41,7 +42,7 @@ services:
       - ./certificate.crt:/etc/ssl/private/certificate.crt:ro
       - ./private.key:/etc/ssl/private/private.key:ro
     ports:
-      - "555:555"
+      - "127.0.0.1:555:555"
 
 networks:
   ssbd03_internal_net: {}
