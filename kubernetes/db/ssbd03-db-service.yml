@@ -1,0 +1,45 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: ssbd03-db-service
+  namespace: tua02
+  selfLink: /api/v1/namespaces/tua02/services/ssbd03-db-service
+  uid: e03cb0f2-1a7c-451a-b484-93b600b31127
+  resourceVersion: '61104664'
+  creationTimestamp: '2021-12-12T22:56:01Z'
+  managedFields:
+    - manager: Mozilla
+      operation: Update
+      apiVersion: v1
+      time: '2021-12-12T22:56:01Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:spec':
+          'f:ports':
+            .: {}
+            'k:{"port":3306,"protocol":"TCP"}':
+              .: {}
+              'f:name': {}
+              'f:port': {}
+              'f:protocol': {}
+              'f:targetPort': {}
+          'f:selector':
+            .: {}
+            'f:app': {}
+          'f:sessionAffinity': {}
+          'f:type': {}
+spec:
+  ports:
+    - name: ssbd03-db
+      protocol: TCP
+      port: 3306
+      targetPort: 3306
+  selector:
+    app: ssbd03-db
+  clusterIP: 172.30.245.149
+  clusterIPs:
+    - 172.30.245.149
+  type: ClusterIP
+  sessionAffinity: None
+status:
+  loadBalancer: {}
