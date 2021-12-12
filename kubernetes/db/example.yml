@@ -1,0 +1,29 @@
+kind: Secret
+apiVersion: v1
+metadata:
+  name: example
+  namespace: tua02
+  selfLink: /api/v1/namespaces/tua02/secrets/example
+  uid: 980df94e-a3ca-431d-bf8f-368c8d3bd928
+  resourceVersion: '61011407'
+  creationTimestamp: '2021-12-12T20:26:46Z'
+  managedFields:
+    - manager: Mozilla
+      operation: Update
+      apiVersion: v1
+      time: '2021-12-12T20:28:32Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:data':
+          .: {}
+          'f:MYSQL_DATABASE': {}
+          'f:MYSQL_PASSWORD': {}
+          'f:MYSQL_ROOT_PASSWORD': {}
+          'f:MYSQL_USER': {}
+        'f:type': {}
+data:
+  MYSQL_DATABASE: dGVzdGRi
+  MYSQL_PASSWORD: cGFzc3dvcmQ=
+  MYSQL_ROOT_PASSWORD: cm9vdA==
+  MYSQL_USER: cGF0cnlr
+type: Opaque

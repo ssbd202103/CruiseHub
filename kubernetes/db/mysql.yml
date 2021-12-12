@@ -1,0 +1,245 @@
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: mysql
+  namespace: tua02
+  selfLink: /apis/apps/v1/namespaces/tua02/statefulsets/mysql
+  uid: 21fda408-96e0-4e7c-8e51-37d371f0d309
+  resourceVersion: '61054821'
+  generation: 19
+  creationTimestamp: '2021-12-12T20:32:11Z'
+  managedFields:
+    - manager: Mozilla
+      operation: Update
+      apiVersion: apps/v1
+      time: '2021-12-12T20:54:30Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:spec':
+          'f:podManagementPolicy': {}
+          'f:replicas': {}
+          'f:revisionHistoryLimit': {}
+          'f:selector': {}
+          'f:serviceName': {}
+          'f:template':
+            'f:metadata':
+              'f:labels':
+                .: {}
+                'f:app': {}
+            'f:spec':
+              'f:containers':
+                'k:{"name":"mysql"}':
+                  'f:envFrom': {}
+                  'f:image': {}
+                  'f:volumeMounts':
+                    .: {}
+                    'k:{"mountPath":"/docker-entrypoint-initdb.d"}':
+                      .: {}
+                      'f:mountPath': {}
+                      'f:name': {}
+                    'k:{"mountPath":"/var/lib"}':
+                      .: {}
+                      'f:mountPath': {}
+                      'f:name': {}
+                  'f:terminationMessagePolicy': {}
+                  .: {}
+                  'f:resources': {}
+                  'f:livenessProbe':
+                    .: {}
+                    'f:exec':
+                      .: {}
+                      'f:command': {}
+                    'f:failureThreshold': {}
+                    'f:initialDelaySeconds': {}
+                    'f:periodSeconds': {}
+                    'f:successThreshold': {}
+                    'f:timeoutSeconds': {}
+                  'f:env':
+                    .: {}
+                    'k:{"name":"MYSQL_DATABASE"}':
+                      .: {}
+                      'f:name': {}
+                      'f:valueFrom':
+                        .: {}
+                        'f:secretKeyRef':
+                          .: {}
+                          'f:key': {}
+                          'f:name': {}
+                    'k:{"name":"MYSQL_PASSWORD"}':
+                      .: {}
+                      'f:name': {}
+                      'f:valueFrom':
+                        .: {}
+                        'f:secretKeyRef':
+                          .: {}
+                          'f:key': {}
+                          'f:name': {}
+                    'k:{"name":"MYSQL_ROOT_PASSWORD"}':
+                      .: {}
+                      'f:name': {}
+                      'f:valueFrom':
+                        .: {}
+                        'f:secretKeyRef':
+                          .: {}
+                          'f:key': {}
+                          'f:name': {}
+                    'k:{"name":"MYSQL_USER"}':
+                      .: {}
+                      'f:name': {}
+                      'f:valueFrom':
+                        .: {}
+                        'f:secretKeyRef':
+                          .: {}
+                          'f:key': {}
+                          'f:name': {}
+                  'f:terminationMessagePath': {}
+                  'f:imagePullPolicy': {}
+                  'f:ports':
+                    .: {}
+                    'k:{"containerPort":3306,"protocol":"TCP"}':
+                      .: {}
+                      'f:containerPort': {}
+                      'f:name': {}
+                      'f:protocol': {}
+                  'f:name': {}
+              'f:dnsPolicy': {}
+              'f:restartPolicy': {}
+              'f:schedulerName': {}
+              'f:securityContext': {}
+              'f:terminationGracePeriodSeconds': {}
+              'f:volumes':
+                .: {}
+                'k:{"name":"initdb"}':
+                  .: {}
+                  'f:configMap':
+                    .: {}
+                    'f:defaultMode': {}
+                    'f:name': {}
+                  'f:name': {}
+          'f:updateStrategy':
+            'f:rollingUpdate':
+              .: {}
+              'f:partition': {}
+            'f:type': {}
+          'f:volumeClaimTemplates': {}
+    - manager: kube-controller-manager
+      operation: Update
+      apiVersion: apps/v1
+      time: '2021-12-12T21:37:14Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:status':
+          'f:collisionCount': {}
+          'f:currentReplicas': {}
+          'f:currentRevision': {}
+          'f:observedGeneration': {}
+          'f:readyReplicas': {}
+          'f:replicas': {}
+          'f:updateRevision': {}
+          'f:updatedReplicas': {}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: mysql
+    spec:
+      volumes:
+        - name: initdb
+          configMap:
+            name: initdb
+            defaultMode: 420
+      containers:
+        - resources: {}
+          terminationMessagePath: /dev/termination-log
+          name: mysql
+          livenessProbe:
+            exec:
+              command:
+                - mysqladmin
+                - ping
+                - '-u'
+                - patryk
+                - '-ppassword'
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          env:
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: example
+                  key: MYSQL_USER
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: example
+                  key: MYSQL_PASSWORD
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: example
+                  key: MYSQL_ROOT_PASSWORD
+            - name: MYSQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: example
+                  key: MYSQL_DATABASE
+          ports:
+            - name: mysql
+              containerPort: 3306
+              protocol: TCP
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib
+            - name: initdb
+              mountPath: /docker-entrypoint-initdb.d
+          terminationMessagePolicy: File
+          envFrom:
+            - secretRef:
+                name: example
+          image: 'mysql:8.0'
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 10
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+  volumeClaimTemplates:
+    - kind: PersistentVolumeClaim
+      apiVersion: v1
+      metadata:
+        name: data
+        creationTimestamp: null
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 3Gi
+        storageClassName: thin
+        volumeMode: Filesystem
+      status:
+        phase: Pending
+  serviceName: mysql
+  podManagementPolicy: OrderedReady
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      partition: 0
+  revisionHistoryLimit: 10
+status:
+  observedGeneration: 19
+  replicas: 1
+  readyReplicas: 1
+  currentReplicas: 1
+  updatedReplicas: 1
+  currentRevision: mysql-c68b85fdd
+  updateRevision: mysql-c68b85fdd
+  collisionCount: 0
