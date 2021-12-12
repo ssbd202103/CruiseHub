@@ -1,0 +1,1483 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: ssbd03-db-populate
+  namespace: tua02
+  selfLink: /api/v1/namespaces/tua02/configmaps/ssbd03-db-populate
+  uid: fa646153-1b6a-4a74-9c40-6be3d3f02716
+  resourceVersion: '61092140'
+  creationTimestamp: '2021-12-12T22:17:42Z'
+  managedFields:
+    - manager: Mozilla
+      operation: Update
+      apiVersion: v1
+      time: '2021-12-12T22:20:58Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:data':
+          .: {}
+          'f:0_start.sh': {}
+          'f:1_structure.sql': {}
+          'f:2_init.sql': {}
+          'f:3_finish.sh': {}
+data:
+  0_start.sh: |
+    #!/bin/bash
+    echo "START running scripts from catalog /docker-entrypoint-initdb.d"
+  1_structure.sql: >
+    use ssbd03;
+
+
+    create user 'ssbd03admin' identified by 'adminpasswd';
+
+    create user 'ssbd03glassfish' identified by 'glassfishpasswd';
+
+    create user 'ssbd03mok' identified by 'mokpasswd';
+
+    create user 'ssbd03mow' identified by 'mowpasswd';
+
+
+
+    GRANT ALL PRIVILEGES ON ssbd03.* TO 'ssbd03admin';
+
+    GRANT ALL PRIVILEGES ON ssbd03.* TO 'ssbd03glassfish';
+
+    GRANT ALL PRIVILEGES ON ssbd03.* TO 'ssbd03mok';
+
+    GRANT ALL PRIVILEGES ON ssbd03.* TO 'ssbd03mow';
+
+
+    create table access_level_id_seq
+
+    (
+        next_val bigint null
+    );
+
+
+    create table account_id_seq
+
+    (
+        next_val bigint null
+    );
+
+
+    create table address_id_seq
+
+    (
+        next_val bigint null
+    );
+
+
+    create table alter_types
+
+    (
+        id   bigint       not null
+            primary key,
+        name varchar(255) not null,
+        constraint UK_h4qxgv3iep1rugqvd4uwbuvka
+            unique (name)
+    );
+
+
+    create table attractions_id_seq
+
+    (
+        next_val bigint null
+    );
+
+
+    create table companies_id_seq
+
+    (
+        next_val bigint null
+    );
+
+
+    create table cruise_addresses_id_seq
+
+    (
+        next_val bigint null
+    );
+
+
+    create table cruise_pictures_id_seq
+
+    (
+        next_val bigint null
+    );
+
+
+    create table cruises_groups_id_seq
+
+    (
+        next_val bigint null
+    );
+
+
+    create table cruises_id_seq
+
+    (
+        next_val bigint null
+    );
+
+
+    create table hibernate_sequence
+
+    (
+        next_val bigint null
+    );
+
+
+    create table language_types
+
+    (
+        id   bigint       not null
+            primary key,
+        name varchar(255) not null,
+        constraint UK_bl0bjeh16npdadtyhf0dcse
+            unique (name)
+    );
+
+
+    create table accounts
+
+    (
+        id                                            bigint       not null
+            primary key,
+        creation_date_time                            datetime(6)  not null,
+        last_alter_date_time                          datetime(6)  not null,
+        version                                       bigint       not null,
+        active                                        bit          not null,
+        confirmed                                     bit          not null,
+        dark_mode                                     bit          not null,
+        email                                         varchar(255) not null,
+        first_name                                    varchar(64)  not null,
+        last_correct_authentication_date_time         datetime(6)  null,
+        last_correct_authentication_logical_address   varchar(255) null,
+        last_incorrect_authentication_date_time       datetime(6)  null,
+        last_incorrect_authentication_logical_address varchar(255) null,
+        login                                         varchar(255) not null,
+        number_of_authentication_failures             int          null,
+        password_hash                                 varchar(255) not null,
+        second_name                                   varchar(64)  not null,
+        alter_type_id                                 bigint       not null,
+        altered_by_id                                 bigint       not null,
+        created_by_id                                 bigint       not null,
+        language_type_id                              bigint       not null,
+        constraint UK_cc2c9baeppipgy2rjeccwcqs0
+            unique (login),
+        constraint UK_n7ihswpy07ci568w34q0oi8he
+            unique (email),
+        constraint FK3ibj79ofx679xphlcdxew3er5
+            foreign key (created_by_id) references accounts (id),
+        constraint FK7xdylueapo3558cgup41ilgvj
+            foreign key (altered_by_id) references accounts (id),
+        constraint FKfyg9h1f2i3krh0xsiwyasquou
+            foreign key (language_type_id) references language_types (id),
+        constraint FKm92nbpwavuajxmsjli38hfkot
+            foreign key (alter_type_id) references alter_types (id)
+    );
+
+
+    create table access_levels
+
+    (
+        access_level         varchar(31) not null,
+        id                   bigint      not null
+            primary key,
+        creation_date_time   datetime(6) not null,
+        last_alter_date_time datetime(6) not null,
+        version              bigint      not null,
+        enabled              bit         not null,
+        alter_type_id        bigint      not null,
+        altered_by_id        bigint      not null,
+        created_by_id        bigint      not null,
+        account_id           bigint      not null,
+        constraint FK4t6qg0obxat6ffcfqrtpuerkt
+            foreign key (altered_by_id) references accounts (id),
+        constraint FK5rd7qdgfbq3m9ith8lx3vobf1
+            foreign key (alter_type_id) references alter_types (id),
+        constraint FKjoorx6s2dnm8ba6v9kplk3fl6
+            foreign key (created_by_id) references accounts (id),
+        constraint FKmmcqqo8rkbf9ew6oas1oqk2a2
+            foreign key (account_id) references accounts (id)
+    );
+
+
+    create index accounts_alter_type_id_index
+        on accounts (alter_type_id);
+
+    create index accounts_altered_by_id_index
+        on accounts (altered_by_id);
+
+    create index accounts_created_by_id_index
+        on accounts (created_by_id);
+
+    create index accounts_language_type_id_index
+        on accounts (language_type_id);
+
+    create table addresses
+
+    (
+        id                   bigint       not null
+            primary key,
+        creation_date_time   datetime(6)  not null,
+        last_alter_date_time datetime(6)  not null,
+        version              bigint       not null,
+        city                 varchar(64)  null,
+        country              varchar(64)  null,
+        house_number         varchar(255) null,
+        postal_code          varchar(20)  null,
+        street               varchar(64)  null,
+        alter_type_id        bigint       not null,
+        altered_by_id        bigint       not null,
+        created_by_id        bigint       not null,
+        constraint FK34nawl4s4r78r4qg05dsc3wtk
+            foreign key (altered_by_id) references accounts (id),
+        constraint FKf94qxd2cdck75pydk78t8j1ul
+            foreign key (created_by_id) references accounts (id),
+        constraint FKtc8wh3mkfwu51dl0g6u41k5yo
+            foreign key (alter_type_id) references alter_types (id)
+    );
+
+
+    create table administrators
+
+    (
+        id bigint not null
+            primary key,
+        constraint FKa4ulmbsfw23p55nsgylx6wq5g
+            foreign key (id) references access_levels (id)
+    );
+
+
+    create table clients
+
+    (
+        phone_number    varchar(15) not null,
+        id              bigint      not null
+            primary key,
+        home_address_id bigint      not null,
+        constraint FK1vnppaewx21gstq7p97nrub9n
+            foreign key (home_address_id) references addresses (id),
+        constraint FKk4o4of3bc35b1d7bgwpvx45cr
+            foreign key (id) references access_levels (id)
+    );
+
+
+    create table companies
+
+    (
+        id                   bigint      not null
+            primary key,
+        creation_date_time   datetime(6) not null,
+        last_alter_date_time datetime(6) not null,
+        version              bigint      not null,
+        nip                  bigint      not null,
+        name                 varchar(64) not null,
+        phone_number         varchar(15) not null,
+        alter_type_id        bigint      not null,
+        altered_by_id        bigint      not null,
+        created_by_id        bigint      not null,
+        address_id           bigint      not null,
+        constraint UK_50ygfritln653mnfhxucoy8up
+            unique (name),
+        constraint UK_orn15lg0w4uod7ltljcjgd0le
+            unique (nip),
+        constraint FK8w70yf6urddd0ky7ev90okenf
+            foreign key (address_id) references addresses (id),
+        constraint FKds1kvnhdj71ohbsmfg5man36x
+            foreign key (altered_by_id) references accounts (id),
+        constraint FKe3rgg81vccs0vs1y3bq240jp1
+            foreign key (created_by_id) references accounts (id),
+        constraint FKp2j79g37wkq53f9fbm66eiadm
+            foreign key (alter_type_id) references alter_types (id)
+    );
+
+
+    create table business_workers
+
+    (
+        confirmed    bit         not null,
+        phone_number varchar(15) not null,
+        id           bigint      not null
+            primary key,
+        company_id   bigint      not null,
+        constraint FK2ivkr8pivgktf35ehn6j8tc7k
+            foreign key (id) references access_levels (id),
+        constraint FKdjdxac2xdknx5a12jslbm1bge
+            foreign key (company_id) references companies (id)
+    );
+
+
+    create table cruise_addresses
+
+    (
+        id                   bigint       not null
+            primary key,
+        creation_date_time   datetime(6)  not null,
+        last_alter_date_time datetime(6)  not null,
+        version              bigint       not null,
+        city_name            varchar(64)  null,
+        country_name         varchar(64)  null,
+        harbor_name          varchar(255) null,
+        street               varchar(64)  null,
+        street_number        varchar(255) null,
+        alter_type_id        bigint       not null,
+        altered_by_id        bigint       not null,
+        created_by_id        bigint       not null,
+        constraint FK4u6ao6jhpgaxx6fmlx2a0h20g
+            foreign key (altered_by_id) references accounts (id),
+        constraint FKdyq8j0vn8masrij00crpq0vm7
+            foreign key (created_by_id) references accounts (id),
+        constraint FKlplxl1ubtnqqc9sl28oun1908
+            foreign key (alter_type_id) references alter_types (id)
+    );
+
+
+    create table cruise_pictures
+
+    (
+        id                   bigint       not null
+            primary key,
+        creation_date_time   datetime(6)  not null,
+        last_alter_date_time datetime(6)  not null,
+        version              bigint       not null,
+        img                  varchar(255) null,
+        img_name             varchar(255) null,
+        alter_type_id        bigint       not null,
+        altered_by_id        bigint       not null,
+        created_by_id        bigint       not null,
+        constraint FKc4pmtt6yy4gj4o1xtju3926vu
+            foreign key (created_by_id) references accounts (id),
+        constraint FKe6jetminus37cek0nldqumfrt
+            foreign key (alter_type_id) references alter_types (id),
+        constraint FKmhrv1bujb4a1xp1pu2bns5c7w
+            foreign key (altered_by_id) references accounts (id)
+    );
+
+
+    create table cruises_groups
+
+    (
+        id                   bigint       not null
+            primary key,
+        creation_date_time   datetime(6)  not null,
+        last_alter_date_time datetime(6)  not null,
+        version              bigint       not null,
+        active               bit          not null,
+        average_rating       double       null,
+        description          varchar(255) null,
+        name                 varchar(255) null,
+        number_of_seats      bigint       null,
+        price                double       null,
+        uuid                 binary(255)  not null,
+        alter_type_id        bigint       not null,
+        altered_by_id        bigint       not null,
+        created_by_id        bigint       not null,
+        start_address_id     bigint       not null,
+        company_id           bigint       not null,
+        constraint UK_km110mavo8mv17crd2my6scsl
+            unique (uuid),
+        constraint FK4p7l7tjghg5392gd3h3xa7myl
+            foreign key (altered_by_id) references accounts (id),
+        constraint FK7eayl3gdmnpsfa6bijt9oun26
+            foreign key (alter_type_id) references alter_types (id),
+        constraint FK7fcq8txhrcj9n4rbbn3uvmtm6
+            foreign key (company_id) references companies (id),
+        constraint FK9ni0qa2heko00bhps3halbgiq
+            foreign key (start_address_id) references cruise_addresses (id),
+        constraint FKjbavbou3098y0iannr6csg8t1
+            foreign key (created_by_id) references accounts (id)
+    );
+
+
+    create table cruises
+
+    (
+        id                   bigint      not null
+            primary key,
+        creation_date_time   datetime(6) not null,
+        last_alter_date_time datetime(6) not null,
+        version              bigint      not null,
+        active               bit         null,
+        end_date             datetime(6) not null,
+        published            bit         null,
+        start_date           datetime(6) not null,
+        uuid                 binary(255) not null,
+        alter_type_id        bigint      not null,
+        altered_by_id        bigint      not null,
+        created_by_id        bigint      not null,
+        cruises_group_id     bigint      null,
+        constraint UK_c005e6dwop4ag5nwnco2ftuhu
+            unique (uuid),
+        constraint FK9r3m0jw60dpj84p5imlxrjfa6
+            foreign key (altered_by_id) references accounts (id),
+        constraint FKg8a8ekuvkuhgkfroja0p5fuja
+            foreign key (cruises_group_id) references cruises_groups (id),
+        constraint FKgixfusnynpio8jbhr5fee9h0i
+            foreign key (created_by_id) references accounts (id),
+        constraint FKlyufw2uc2tmkspj9yg3tspv8h
+            foreign key (alter_type_id) references alter_types (id)
+    );
+
+
+    create table attractions
+
+    (
+        id                   bigint       not null
+            primary key,
+        creation_date_time   datetime(6)  not null,
+        last_alter_date_time datetime(6)  not null,
+        version              bigint       not null,
+        description          varchar(255) null,
+        has_free_spots       bit          null,
+        name                 varchar(255) null,
+        number_of_seats      bigint       null,
+        price                double       null,
+        uuid                 binary(255)  not null,
+        alter_type_id        bigint       not null,
+        altered_by_id        bigint       not null,
+        created_by_id        bigint       not null,
+        cruise_id            bigint       not null,
+        constraint UK_3xwc79almvjelk26cla1cx355
+            unique (uuid),
+        constraint FK3nig2pblhg3ow9av72o7ww2uh
+            foreign key (created_by_id) references accounts (id),
+        constraint FKo0vv0xfhmcneggmkb4taagton
+            foreign key (altered_by_id) references accounts (id),
+        constraint FKqravlyll53k618uyhode97kll
+            foreign key (cruise_id) references cruises (id),
+        constraint FKqs1sp5l1p67b2l1qb57vpi3s4
+            foreign key (alter_type_id) references alter_types (id)
+    );
+
+
+    create table cruises_group_pictures
+
+    (
+        cruises_group_id  bigint not null,
+        cruise_picture_id bigint not null,
+        constraint FK5bfbnt0pv7d4thtxae9rgyoyb
+            foreign key (cruises_group_id) references cruises_groups (id),
+        constraint FKp1du74igefjcxyq5ni41aubo4
+            foreign key (cruise_picture_id) references cruise_pictures (id)
+    );
+
+
+    create table moderators
+
+    (
+        id bigint not null
+            primary key,
+        constraint FKec3ocdsw9bxy72snsui63i7fx
+            foreign key (id) references access_levels (id)
+    );
+
+
+    create table ratings
+
+    (
+        id                   bigint      not null
+            primary key,
+        creation_date_time   datetime(6) not null,
+        last_alter_date_time datetime(6) not null,
+        version              bigint      not null,
+        rating               double      null,
+        uuid                 binary(255) not null,
+        alter_type_id        bigint      not null,
+        altered_by_id        bigint      not null,
+        created_by_id        bigint      not null,
+        account_id           bigint      not null,
+        cruise_group_id      bigint      not null,
+        constraint UK_mmyum5upxsqk9htvhe0b6qpha
+            unique (uuid),
+        constraint FK16dlp35b75qcuy988cxcphy7t
+            foreign key (alter_type_id) references alter_types (id),
+        constraint FK71mqcse13gx0j55mo0rwqkolb
+            foreign key (account_id) references accounts (id),
+        constraint FKfjkwc7ufqfbthrxsn211nvgew
+            foreign key (created_by_id) references accounts (id),
+        constraint FKh4e9gx3tqy0896j5guedy2nmr
+            foreign key (altered_by_id) references accounts (id),
+        constraint FKpi3p22up9sedyov66hi2r0oji
+            foreign key (cruise_group_id) references cruises_groups (id)
+    );
+
+
+    create table ratings_id_seq
+
+    (
+        next_val bigint null
+    );
+
+
+    create table reservations
+
+    (
+        id                   bigint      not null
+            primary key,
+        creation_date_time   datetime(6) not null,
+        last_alter_date_time datetime(6) not null,
+        version              bigint      not null,
+        number_of_seats      bigint      null,
+        price                double      null,
+        uuid                 binary(255) not null,
+        alter_type_id        bigint      not null,
+        altered_by_id        bigint      not null,
+        created_by_id        bigint      not null,
+        client_id            bigint      not null,
+        cruise_id            bigint      not null,
+        constraint UK_6dlj3s139kj63kvhcd099x8xk
+            unique (uuid),
+        constraint FK1cij6euqjepr6mhdcwr9jg3pu
+            foreign key (created_by_id) references accounts (id),
+        constraint FK2gjhui5v08c5cl1vl1rcxijw3
+            foreign key (alter_type_id) references alter_types (id),
+        constraint FK6lekctbt4u88agg0b7cjsj6lf
+            foreign key (client_id) references clients (id),
+        constraint FKiqhukyao7wqh48mcfjuf352sl
+            foreign key (altered_by_id) references accounts (id),
+        constraint FKjnfs9nmt56u660060mvtm2i2e
+            foreign key (cruise_id) references cruises (id)
+    );
+
+
+    create table reservation_attractions
+
+    (
+        reservation_id bigint not null,
+        attraction_id  bigint not null,
+        constraint FKf8jp01p7pb9uuabe304xst4fq
+            foreign key (attraction_id) references attractions (id),
+        constraint FKta6ba33igbn6kgvx3xd49b914
+            foreign key (reservation_id) references reservations (id)
+    );
+
+
+    create table reservations_id_seq
+
+    (
+        next_val bigint null
+    );
+
+
+    create table used_codes
+
+    (
+        id                 bigint       not null
+            primary key,
+        code               varchar(255) not null,
+        creation_date_time datetime(6)  not null,
+        used               bit          not null,
+        account_id         bigint       not null,
+        constraint UK_qeipafi6jiafu4xvbp4tjsldt
+            unique (code),
+        constraint FKmjjp6lus9f7mxt6t1rc4l15et
+            foreign key (account_id) references accounts (id)
+    );
+
+
+    create table used_codes_id_seq
+
+    (
+        next_val bigint null
+    );
+
+
+    create table used_tokens
+
+    (
+        id                 bigint      not null
+            primary key,
+        creation_date_time datetime(6) not null,
+        token              text        not null,
+        used               bit         not null,
+        account_id         bigint      not null,
+        constraint FK3gxjppixy8ktf0hjfxa8t6j6k
+            foreign key (account_id) references accounts (id)
+    );
+
+
+    create table used_tokens_id_seq
+
+    (
+        next_val bigint null
+    );
+
+
+    GRANT SELECT, INSERT, UPDATE, DELETE
+        ON used_tokens TO ssbd03mok;
+
+    GRANT SELECT, INSERT, UPDATE, DELETE
+        ON used_codes TO ssbd03mok;
+
+    GRANT SELECT, INSERT, UPDATE, DELETE
+        ON access_levels TO ssbd03mok;
+
+    GRANT SELECT, INSERT, UPDATE, DELETE
+        ON accounts TO ssbd03mok;
+
+    GRANT SELECT, INSERT, UPDATE, DELETE
+        ON addresses TO ssbd03mok;
+
+    GRANT SELECT, INSERT
+        ON addresses TO ssbd03mow;
+
+    GRANT SELECT, INSERT, UPDATE, DELETE
+        ON administrators TO ssbd03mok;
+
+    GRANT SELECT, INSERT, UPDATE, DELETE
+        ON business_workers TO ssbd03mok;
+
+    GRANT SELECT
+        ON companies TO ssbd03mok;
+
+    GRANT SELECT, INSERT, UPDATE, DELETE
+        ON clients TO ssbd03mok;
+
+    GRANT SELECT, INSERT, UPDATE, DELETE
+        ON moderators TO ssbd03mok;
+
+    GRANT SELECT
+        ON alter_types TO ssbd03mok;
+
+    GRANT SELECT, UPDATE
+        ON account_id_seq TO ssbd03mok;
+
+    GRANT SELECT, UPDATE
+        ON access_level_id_seq TO ssbd03mok;
+
+    GRANT SELECT, UPDATE
+        ON address_id_seq TO ssbd03mok;
+
+    GRANT SELECT, UPDATE
+        ON address_id_seq TO ssbd03mow;
+
+    -- Table permissions for MOW --
+
+    GRANT SELECT
+        ON accounts TO ssbd03mow;
+
+    GRANT SELECT
+        ON access_levels TO ssbd03mow;
+
+    GRANT SELECT
+        ON administrators TO ssbd03mow;
+
+    GRANT SELECT
+        ON moderators TO ssbd03mow;
+
+    GRANT SELECT
+        ON business_workers TO ssbd03mow;
+
+    GRANT SELECT
+        ON clients TO ssbd03mow;
+
+
+
+    GRANT SELECT
+        ON clients TO ssbd03mow;
+
+
+
+    GRANT SELECT
+        ON alter_types TO ssbd03mow;
+
+    GRANT SELECT, INSERT, UPDATE, DELETE
+        ON attractions TO ssbd03mow;
+
+    GRANT SELECT, INSERT, UPDATE, DELETE
+        ON companies TO ssbd03mow;
+
+    GRANT SELECT, INSERT, DELETE, UPDATE
+        ON cruise_addresses TO ssbd03mow;
+
+    GRANT SELECT, INSERT, DELETE, UPDATE
+        ON cruise_pictures TO ssbd03mow;
+
+    GRANT SELECT, INSERT, UPDATE, DELETE
+        ON cruises TO ssbd03mow;
+
+    GRANT SELECT, INSERT, UPDATE, DELETE
+        ON cruises_groups TO ssbd03mow;
+
+    GRANT SELECT, INSERT, DELETE, UPDATE
+        ON cruises_group_pictures TO ssbd03mow;
+
+    GRANT SELECT
+        ON language_types TO ssbd03mok;
+
+    GRANT SELECT
+        ON language_types TO ssbd03mow;
+
+    GRANT SELECT, INSERT, UPDATE, DELETE
+        ON ratings TO ssbd03mow;
+
+    GRANT SELECT, INSERT, UPDATE, DELETE
+        ON reservations TO ssbd03mow;
+
+    GRANT SELECT, INSERT, UPDATE, DELETE
+        ON reservation_attractions TO ssbd03mow;
+
+    GRANT SELECT, UPDATE
+        ON used_tokens_id_seq TO ssbd03mok;
+
+    GRANT SELECT, UPDATE
+        ON used_codes_id_seq TO ssbd03mok;
+
+    GRANT SELECT, UPDATE
+        ON cruise_addresses_id_seq TO ssbd03mow;
+
+    GRANT SELECT, UPDATE
+        ON cruise_pictures_id_seq TO ssbd03mow;
+
+    GRANT SELECT, UPDATE
+        ON companies_id_seq TO ssbd03mow;
+
+    GRANT SELECT, UPDATE
+        ON cruises_groups_id_seq TO ssbd03mow;
+
+    GRANT SELECT, UPDATE
+        ON cruises_id_seq TO ssbd03mow;
+
+    GRANT SELECT, UPDATE
+        ON attractions_id_seq TO ssbd03mow;
+
+    GRANT SELECT, UPDATE
+        ON reservations_id_seq TO ssbd03mow;
+
+    GRANT SELECT, UPDATE
+        ON ratings_id_seq TO ssbd03mow;
+
+
+
+    create definer = root@`%` view glassfish_auth_view as
+
+    select `ssbd03`.`accounts`.`login`             AS `login`,
+
+    `ssbd03`.`accounts`.`password_hash`     AS `password_hash`,
+
+    `ssbd03`.`access_levels`.`access_level` AS `access_level`
+
+    from ((`ssbd03`.`accounts` join `ssbd03`.`access_levels` on
+    ((`ssbd03`.`accounts`.`id` = `ssbd03`.`access_levels`.`account_id`)))
+
+    left join `ssbd03`.`business_workers` `bw` on
+    ((`ssbd03`.`access_levels`.`id` = `bw`.`id`)))
+
+    where ((0 <> `ssbd03`.`accounts`.`confirmed`) and (0 <>
+    `ssbd03`.`accounts`.`active`) and
+
+    (0 <> `ssbd03`.`access_levels`.`enabled`) and ((0 <> `bw`.`confirmed`) or
+    (`bw`.`confirmed` is null)));
+
+
+    GRANT SELECT ON glassfish_auth_view TO ssbd03glassfish;
+  2_init.sql: >
+    #language_types start
+
+    #language_types 1
+
+    use ssbd03;
+
+    insert into language_types(id, name)
+
+    values (-1, 'PL');
+
+    #language_types 2
+
+    insert into language_types(id, name)
+
+    values (-2, 'EN');
+
+    #language_types end
+
+
+    #alter_types start
+
+    #alter_types 1
+
+    insert into alter_types(id, name)
+
+    values (-1, 'UPDATE');
+
+    #alter_types 2
+
+    insert into alter_types(id, name)
+
+    values (-2, 'INSERT');
+
+    #alter_types 3
+
+    insert into alter_types(id, name)
+
+    values (-3, 'DELETE');
+
+    #alter_types end
+
+
+    # accounts start ||| password is abcABC123*
+
+    insert into accounts(id, first_name, second_name, login, email,
+    password_hash, confirmed, active, dark_mode,
+                         last_incorrect_authentication_date_time, last_incorrect_authentication_logical_address,
+                         last_correct_authentication_date_time, last_correct_authentication_logical_address,
+                         language_type_id,
+                         creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id, version)
+    values (-1, 'Richard', 'Branson', 'rbranson', 'rbranson@gmail.com',
+            '70417c6b38327eddd1f5ee5633d8b90ab06398ebb4461c8ebcdc5b22bf7a6578',
+            true, true, false, null, null, null, null, -1, now(), now(), -2, -1, -1, 0);
+
+    insert into accounts(id, first_name, second_name, login, email,
+    password_hash, confirmed, active, dark_mode,
+                         last_incorrect_authentication_date_time, last_incorrect_authentication_logical_address,
+                         last_correct_authentication_date_time, last_correct_authentication_logical_address,
+                         language_type_id,
+                         creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id, version)
+    values (-2, 'Elon', 'Musk', 'emusk', 'emusk@gmail.com',
+            '70417c6b38327eddd1f5ee5633d8b90ab06398ebb4461c8ebcdc5b22bf7a6578',
+            true, true, false, null, null, null, null, -1, now(), now(), -2, -2, -2, 0);
+
+    insert into accounts(id, first_name, second_name, login, email,
+    password_hash, confirmed, active, dark_mode,
+                         last_incorrect_authentication_date_time, last_incorrect_authentication_logical_address,
+                         last_correct_authentication_date_time, last_correct_authentication_logical_address,
+                         language_type_id,
+                         creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id, version)
+    values (-3, 'Jeff', 'Bezos', 'jbezos', 'jbezos@gmail.com',
+            '70417c6b38327eddd1f5ee5633d8b90ab06398ebb4461c8ebcdc5b22bf7a6578',
+            true, true, false, null, null, null, null, -1, now(), now(), -2, -3, -3, 0);
+
+    insert into accounts(id, first_name, second_name, login, email,
+    password_hash, confirmed, active, dark_mode,
+                         last_incorrect_authentication_date_time, last_incorrect_authentication_logical_address,
+                         last_correct_authentication_date_time, last_correct_authentication_logical_address,
+                         language_type_id,
+                         creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id, version)
+    values (-4, 'Mark', 'Zuckerberg', 'mzuckerberg', 'mzuckerberg@gmail.com',
+            '70417c6b38327eddd1f5ee5633d8b90ab06398ebb4461c8ebcdc5b22bf7a6578',
+            true, true, false, null, null, null, null, -1, now(), now(), -2, -4, -4, 0);
+    insert into accounts(id, first_name, second_name, login, email,
+    password_hash, confirmed, active, dark_mode,
+                         last_incorrect_authentication_date_time, last_incorrect_authentication_logical_address,
+                         last_correct_authentication_date_time, last_correct_authentication_logical_address,
+                         language_type_id,
+                         creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id, version)
+    values (-5, 'Jan', 'Kowalski', 'jkowalski', 'kowalski@gmail.com',
+            '70417c6b38327eddd1f5ee5633d8b90ab06398ebb4461c8ebcdc5b22bf7a6578',
+            true, true, false, null, null, null, null, -1, now(), now(), -2, -5, -5, 0);
+    insert into accounts(id, first_name, second_name, login, email,
+    password_hash, confirmed, active, dark_mode,
+                         last_incorrect_authentication_date_time, last_incorrect_authentication_logical_address,
+                         last_correct_authentication_date_time, last_correct_authentication_logical_address,
+                         language_type_id,
+                         creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id, version)
+    values (-6, 'Michał', ' Tokarzewski-Karaszewicz', 'mtokarzewski',
+    'tokarzewski@gmail.com',
+            '70417c6b38327eddd1f5ee5633d8b90ab06398ebb4461c8ebcdc5b22bf7a6578',
+            true, false, false, null, null, null, null, -1, now(), now(), -2, -6, -6, 0);
+
+    insert into accounts(id, first_name, second_name, login, email,
+    password_hash, confirmed, active, dark_mode,
+                         last_incorrect_authentication_date_time, last_incorrect_authentication_logical_address,
+                         last_correct_authentication_date_time, last_correct_authentication_logical_address,
+                         language_type_id,
+                         creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id, version)
+    values (-7, 'Bob', ' Dylan', 'bdylan', 'dylan@gmail.com',
+            '70417c6b38327eddd1f5ee5633d8b90ab06398ebb4461c8ebcdc5b22bf7a6578',
+            true, true, false, null, null, null, null, -1, now(), now(), -2, -7, -7, 0);
+
+    # accounts end
+
+    #
+
+    #
+
+    #
+
+    # access_levels start
+
+    insert into access_levels (id, access_level, account_id, enabled,
+    creation_date_time, last_alter_date_time,
+                               created_by_id, altered_by_id, alter_type_id, version)
+    values (-1, 'Administrator', -1, true, now(), now(), -1, -1, -2, 0);
+
+
+    insert into access_levels (id, access_level, account_id, enabled,
+    creation_date_time, last_alter_date_time,
+                               created_by_id, altered_by_id, alter_type_id, version)
+    values (-2, 'Client', -1, true, now(), now(), -2, -2, -2, 0);
+
+
+    insert into access_levels (id, access_level, account_id, enabled,
+    creation_date_time, last_alter_date_time,
+                               created_by_id, altered_by_id, alter_type_id, version)
+    values (-3, 'Client', -2, true, now(), now(), -3, -3, -2, 0);
+
+
+    insert into access_levels (id, access_level, account_id, enabled,
+    creation_date_time, last_alter_date_time,
+                               created_by_id, altered_by_id, alter_type_id, version)
+    values (-4, 'BusinessWorker', -3, true, now(), now(), -3, -3, -2, 0);
+
+
+    insert into access_levels (id, access_level, account_id, enabled,
+    creation_date_time, last_alter_date_time,
+                               created_by_id, altered_by_id, alter_type_id, version)
+    values (-5, 'Moderator', -4, true, now(), now(), -4, -4, -2, 0);
+
+
+    insert into access_levels (id, access_level, account_id, enabled,
+    creation_date_time, last_alter_date_time,
+                               created_by_id, altered_by_id, alter_type_id, version)
+    values (-6, 'BusinessWorker', -5, true, now(), now(), -5, -5, -2, 0);
+
+
+    insert into access_levels (id, access_level, account_id, enabled,
+    creation_date_time, last_alter_date_time,
+                               created_by_id, altered_by_id, alter_type_id, version)
+    values (-7, 'Administrator', -6, false, now(), now(), -6, -6, -2, 0);
+
+
+    insert into access_levels (id, access_level, account_id, enabled,
+    creation_date_time, last_alter_date_time,
+                               created_by_id, altered_by_id, alter_type_id, version)
+    values (-8, 'Moderator', -6, true, now(), now(), -6, -6, -2, 0);
+
+
+
+    insert into access_levels (id, access_level, account_id, enabled,
+    creation_date_time, last_alter_date_time,
+                               created_by_id, altered_by_id, alter_type_id, version)
+    values (-9, 'BusinessWorker', -7, true, now(), now(), -7, -7, -2, 0);
+
+    # access_levels end
+
+    #
+
+    #
+
+    #
+
+    # administrators start
+
+    insert into administrators (id)
+
+    values (-1);
+
+    insert into administrators (id)
+
+    values (-7);
+
+    # administrators end
+
+    #
+
+    #
+
+    #
+
+    # addresses start
+
+    insert into addresses(id, house_number, street, postal_code, city, country,
+                          creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id, version)
+    values (-1, '1', 'street', '30-300', 'London', 'United Kingdom', now(),
+    now(), -2, -2, -2, 0);
+
+
+    insert into addresses(id, house_number, street, postal_code, city, country,
+                          creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id, version)
+    values (-2, '1', 'street', '30-300', 'Manchester', 'United Kingdom', now(),
+    now(), -2, -3, -3, 0);
+
+
+    insert into addresses(id, house_number, street, postal_code, city, country,
+                          creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id, version)
+    values (-3, '45', 'wolnosci', '92-300', 'Aleksandrów', 'Polska', now(),
+    now(), -2, -5, -5, 0);
+
+    # addresses end
+
+    #
+
+    #
+
+    #
+
+    #companies start
+
+    insert into companies(id, name, address_id, phone_number, nip,
+    creation_date_time, last_alter_date_time, alter_type_id,
+                          created_by_id,
+                          altered_by_id, version)
+    values (-1, 'FirmaJez', -1, '604203145', 1265485965, now(), now(), -2, -1,
+    -1, 0);
+
+    insert into companies(id, name, address_id, phone_number, nip,
+    creation_date_time, last_alter_date_time, alter_type_id,
+                          created_by_id,
+                          altered_by_id, version)
+    values (-2, 'GroveStreetFamilly', -2, '787123100', 2354685748, now(), now(),
+    -2, -1, -1, 0);
+
+    insert into companies(id, name, address_id, phone_number, nip,
+    creation_date_time, last_alter_date_time, alter_type_id,
+                          created_by_id,
+                          altered_by_id, version)
+    values (-3, 'BeautifulCompany', -2, '585230492', 9568545875, now(), now(),
+    -2, -1, -1, 0);
+
+    #companies end
+
+    #
+
+    #
+
+    #
+
+    # business_workers start
+
+    insert into business_workers (id, phone_number, company_id, confirmed)
+
+    values (-4, '887552642', -2, true);
+
+
+    insert into business_workers (id, phone_number, company_id, confirmed)
+
+    values (-6, '690066055', -3, false);
+
+    insert into business_workers (id, phone_number, company_id, confirmed)
+
+    values (-9, '690066055', -1, true);
+
+    # business_workers end
+
+    #
+
+    #
+
+    #
+
+    # clients start
+
+    insert into clients(id, phone_number, home_address_id)
+
+    values (-2, '123456789', -1);
+
+
+    insert into clients(id, phone_number, home_address_id)
+
+    values (-3, '123456789', -2);
+
+
+    # clients end
+
+    #
+
+    #
+
+    #
+
+    # moderators start
+
+    insert into moderators(id)
+
+    values (-5);
+
+
+    insert into moderators(id)
+
+    values (-8);
+
+    # moderators end
+
+    #
+
+    #
+
+    ######Insert Into MOW#######-
+
+    #
+
+    #
+
+    #cruise_addresses start
+
+    insert into cruise_addresses(id, street, street_number, harbor_name,
+    city_name, country_name,
+                                 creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id,
+                                 version)
+    values (-1, 'street Company', '321', 'ManchesterHabor', 'Manchester',
+    'United Kingdom', now(), now(), -2, -3, -3, 0);
+
+    insert into cruise_addresses(id, street, street_number, harbor_name,
+    city_name, country_name,
+                                 creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id,
+                                 version)
+    values (-2, 'Grove Street', '420', 'FamillyHarbor', 'Los Santos', 'USA',
+    now(), now(), -2, -3, -3, 0);
+
+    insert into cruise_addresses(id, street, street_number, harbor_name,
+    city_name, country_name,
+                                 creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id,
+                                 version)
+    values (-3, 'Ballas', '60', 'PurpleHarBor', 'Idlewood', 'USA', now(), now(),
+    -2, -3, -3, 0);
+
+    insert into cruise_addresses(id, street, street_number, harbor_name,
+    city_name, country_name,
+                                 creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id,
+                                 version)
+    values (-4, 'Rancho', '88', 'TackoHarbor', 'Las Colinas', 'USA', now(),
+    now(), -2, -3, -3, 0);
+
+    #cruise_addresses end
+
+    #
+
+    #
+
+    #
+
+    #cruise_pictures start
+
+    insert into cruise_pictures(id, img_name, img, creation_date_time,
+    last_alter_date_time, alter_type_id, created_by_id,
+                                altered_by_id, version)
+    values (-1, 'LowRidder.jpg',
+    'https://studapp.it.p.lodz.pl:8403/static/media/ship.e7e8f2e6.jpg', now(),
+    now(), -2, -1, -1, 0);
+
+    insert into cruise_pictures(id, img_name, img, creation_date_time,
+    last_alter_date_time, alter_type_id, created_by_id,
+                                altered_by_id, version)
+    values (-2, 'kitty.jpg',
+    'https://studapp.it.p.lodz.pl:8403/static/media/ship3.1b6fd8a1.jpg', now(),
+    now(), -2, -1, -1, 0);
+
+    insert into cruise_pictures(id, img_name, img, creation_date_time,
+    last_alter_date_time, alter_type_id, created_by_id,
+                                altered_by_id, version)
+    values (-3, 'PearlHarbort.jpg',
+    'https://studapp.it.p.lodz.pl:8403/static/media/ship3.1b6fd8a1.jpg', now(),
+    now(), -2, -1, -1, 0);
+
+
+    #cruise_pictures end
+
+    #
+
+    #
+
+    #
+
+    #cruises_groups start
+
+    insert into cruises_groups(id, company_id, name, number_of_seats, price,
+    start_address_id, average_rating, active,
+                               creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id,
+                               version, uuid, description)
+    values (-1, -1, 'Przygoda', 24, 52, -1, 2.5, true, now(), now(), -2, -1, -1,
+    0, 'dd0ea0ca-bbac-11eb-8529-0242ac130003',
+            'The most Beautiful tour');
+    insert into cruises_groups(id, company_id, name, number_of_seats, price,
+    start_address_id, average_rating, active,
+                               creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id,
+                               version, uuid, description)
+    values (-2, -3, 'Santa Maria Beach', 42, 152, -2, 4.5, true, now(), now(),
+    -2, -1, -1, 0,
+            'dd1ea0ca-bbac-11eb-8529-0242ac130003', 'Beautiful tour');
+    insert into cruises_groups(id, company_id, name, number_of_seats, price,
+    start_address_id, average_rating, active,
+                               creation_date_time, last_alter_date_time, alter_type_id, created_by_id, altered_by_id,
+                               version, uuid, description)
+    values (-3, -2, 'Beautiful Sandy Shores', 31, 502, -4, 5, true, now(),
+    now(), -2, -1, -1, 0,
+            'dd2ea0ca-bbac-11eb-8529-0242ac130003', 'Beautiful Beautiful tour');
+    #cruises_groups end
+
+    #
+
+    #
+
+    #
+
+    #cruises start
+
+    insert into cruises(id, uuid, start_date, end_date, active,
+    cruises_group_id,
+                        creation_date_time,
+                        last_alter_date_time, alter_type_id, created_by_id,
+                        altered_by_id, version, published)
+    values (-1, '581d626f-d421-47dd-89ef-b41bc30aa36c', '2021-06-30
+    13:35:22.650752', '2021-07-05 19:00:00.650752', true, -1, now(), now(), -2,
+           -1, -1, 0, true);
+    insert into cruises(id, uuid, start_date, end_date, active,
+    cruises_group_id,
+                        creation_date_time,
+                        last_alter_date_time, alter_type_id, created_by_id,
+                        altered_by_id, version, published)
+    values (-2, '181d626f-d421-47dd-89ef-b41bc30aa36c', '2021-06-29
+    08:00:00.650752', '2021-07-15 20:00:00.650752', false, -2, now(),
+            now(), -2, -1, -1, 0, true);
+    insert into cruises(id, uuid, start_date, end_date, active,
+    cruises_group_id,
+                        creation_date_time,
+                        last_alter_date_time, alter_type_id, created_by_id,
+                        altered_by_id, version, published)
+    values (-3, '481d626f-d421-47dd-89ef-b41bc30aa36c','2021-07-01
+    12:30:00.650752', '2021-07-25 12:00:00.650752', true, -3, now(),
+            now(), -2, -1, -1, 0, true);
+
+    insert into cruises(id, uuid, start_date, end_date, active,
+    cruises_group_id,
+                        creation_date_time,
+                        last_alter_date_time, alter_type_id, created_by_id,
+                        altered_by_id, version, published)
+    values (-4, '72956ba6-d451-11eb-b8bc-0242ac130003','2021-07-01
+    12:30:00.650752', '2021-07-25 12:00:00.650752', true, -1, now(),
+            now(), -2, -1, -1, 0, true);
+    insert into cruises(id, uuid, start_date, end_date, active,
+    cruises_group_id,
+                        creation_date_time,
+                        last_alter_date_time, alter_type_id, created_by_id,
+                        altered_by_id, version, published)
+    values (-5, '72956dfe-d451-11eb-b8bc-0242ac130003','2021-06-30
+    12:30:00.650752', '2021-07-18 12:00:00.650752', true, -1, now(),
+            now(), -2, -1, -1, 0, true);
+
+    insert into cruises(id, uuid, start_date, end_date, active,
+    cruises_group_id,
+                        creation_date_time,
+                        last_alter_date_time, alter_type_id, created_by_id,
+                        altered_by_id, version, published)
+    values (-6, '1fce60ae-d455-11eb-b8bc-0242ac130003','2021-06-30
+    12:30:00.650752', '2021-07-18 12:00:00.650752', true, -1, now(),
+            now(), -2, -1, -1, 0, true);
+
+    insert into cruises(id, uuid, start_date, end_date, active,
+    cruises_group_id,
+                        creation_date_time,
+                        last_alter_date_time, alter_type_id, created_by_id,
+                        altered_by_id, version, published)
+    values (-7, 'a454c84e-d451-11eb-b8bc-0242ac130003','2021-06-30
+    12:30:00.650752', '2021-07-18 12:00:00.650752', true, -2, now(),
+            now(), -2, -1, -1, 0, true);
+
+    insert into cruises(id, uuid, start_date, end_date, active,
+    cruises_group_id,
+                        creation_date_time,
+                        last_alter_date_time, alter_type_id, created_by_id,
+                        altered_by_id, version, published)
+    values (-8, 'a454c786-d451-11eb-b8bc-0242ac130003','2021-07-04
+    12:30:00.650752', '2021-07-18 12:00:00.650752', true, -2, now(),
+            now(), -2, -1, -1, 0, true);
+
+    insert into cruises(id, uuid, start_date, end_date, active,
+    cruises_group_id,
+                        creation_date_time,
+                        last_alter_date_time, alter_type_id, created_by_id,
+                        altered_by_id, version, published)
+    values (-9, '1804318c-d45a-11eb-b8bc-0242ac130003','2021-07-05
+    12:30:00.650752', '2021-07-19 12:00:00.650752', true, -2, now(),
+            now(), -2, -1, -1, 0, true);
+    insert into cruises(id, uuid, start_date, end_date, active,
+    cruises_group_id,
+                        creation_date_time,
+                        last_alter_date_time, alter_type_id, created_by_id,
+                        altered_by_id, version, published)
+    values (-17, '98c3c4f4-d45a-11eb-b8bc-0242ac130003','2021-07-09
+    12:30:00.650752', '2021-07-19 12:00:00.650752', true, -3, now(),
+            now(), -2, -1, -1, 0, true);
+    #cruises end
+
+    #
+
+    #
+
+    #
+
+    #attractions start
+
+    insert into attractions(id, name, description, price, number_of_seats,
+    has_free_spots, cruise_id, creation_date_time,
+                            last_alter_date_time, alter_type_id, created_by_id,
+                            altered_by_id, version, uuid)
+    values (-1, 'Bungee2', 'Bungee jump', 23, 20, true, -1, now(), now(), -2,
+    -1, -1, 0,
+            'e42ea0ca-bbac-11eb-8529-0242ac130003');
+    insert into attractions(id, name, description, price, number_of_seats,
+    has_free_spots, cruise_id, creation_date_time,
+                            last_alter_date_time, alter_type_id, created_by_id,
+                            altered_by_id, version, uuid)
+    values (-2, 'Scuba Diving2', 'Scuba diving in the sea', 223, 20, true, -2,
+    now(), now(), -2, -1, -1, 0,
+            'e42e9fd0-bbac-11eb-8529-0242ac130003');
+    insert into attractions(id, name, description, price, number_of_seats,
+    has_free_spots, cruise_id, creation_date_time,
+                            last_alter_date_time, alter_type_id, created_by_id,
+                            altered_by_id, version, uuid)
+    values (-3, 'Romantic dinner2', 'Romantic dinner on the most beautiful Sandy
+    Shores', 1203, 20, true, -3, now(), now(),
+           -2, -1, -1, 0, 'a454c6b4-d451-11eb-b8bc-0242ac130003');
+    insert into attractions(id, name, description, price, number_of_seats,
+    has_free_spots, cruise_id, creation_date_time,
+                            last_alter_date_time, alter_type_id, created_by_id,
+                            altered_by_id, version, uuid)
+    values (-4, 'Susnset at the wild beach', 'Unforgetable expirience', 222,
+    100, true, -3, now(), now(),
+            -2, -1, -1, 0, 'b4a61c10-d452-11eb-b8bc-0242ac130003');
+
+    insert into attractions(id, name, description, price, number_of_seats,
+    has_free_spots, cruise_id, creation_date_time,
+                            last_alter_date_time, alter_type_id, created_by_id,
+                            altered_by_id, version, uuid)
+    values (-5, 'Karaoke night', 'Spent wild night dancing and singing to the
+    greatest hits', 10, 20, true, -1, now(), now(),
+            -2, -1, -1, 0, 'b4a61e40-d452-11eb-b8bc-0242ac130003');
+
+    insert into attractions(id, name, description, price, number_of_seats,
+    has_free_spots, cruise_id, creation_date_time,
+                            last_alter_date_time, alter_type_id, created_by_id,
+                            altered_by_id, version, uuid)
+    values (-6, 'Stand up with stars', 'Comedian show for all familly', 55, 60,
+    true, -5, now(), now(),
+           -2, -1, -1, 0, '98c3c5da-d45a-11eb-b8bc-0242ac130003');
+    insert into attractions(id, name, description, price, number_of_seats,
+    has_free_spots, cruise_id, creation_date_time,
+                            last_alter_date_time, alter_type_id, created_by_id,
+                            altered_by_id, version, uuid)
+    values (-7, 'Golf lessons', 'Golf lessons in the ship ', 150, 20, true, -17,
+    now(), now(),
+            -2, -1, -1, 0, '98c3c6ac-d45a-11eb-b8bc-0242ac130003');
+    insert into attractions(id, name, description, price, number_of_seats,
+    has_free_spots, cruise_id, creation_date_time,
+                            last_alter_date_time, alter_type_id, created_by_id,
+                            altered_by_id, version, uuid)
+    values (-8, 'Visiting lonley island', 'Visit mysterious lonley island', 100,
+    10, true, -2, now(), now(),
+            -2, -1, -1, 0, '98c3c828-d45a-11eb-b8bc-0242ac130003');
+    #attractions end
+
+    #
+
+    #
+
+    #
+
+    #reservation start
+
+    insert into reservations(id, uuid, client_id, number_of_seats, cruise_id,
+    price, creation_date_time,
+                             last_alter_date_time,
+                             alter_type_id, created_by_id,
+                             altered_by_id, version)
+    values (-1, '6177391a-d453-11eb-b8bc-0242ac130003', -2, 2, -1, 50, now(),
+    now(), -2, -1, -1, 0);
+
+    insert into reservations(id, uuid, client_id, number_of_seats, cruise_id,
+    price, creation_date_time,
+                             last_alter_date_time,
+                             alter_type_id, created_by_id,
+                             altered_by_id, version)
+    values (-2, '61773d98-d453-11eb-b8bc-0242ac130003', -2, 5, -2, 20, now(),
+    now(), -2, -1, -1, 0);
+
+    insert into reservations(id, uuid, client_id, number_of_seats, cruise_id,
+    price, creation_date_time,
+                             last_alter_date_time,
+                             alter_type_id, created_by_id,
+                             altered_by_id, version)
+    values (-3, '61773eba-d453-11eb-b8bc-0242ac130003',-2, 1, -3, 30, now(),
+    now(), -2, -1, -1, 0);
+
+
+    insert into reservations(id, uuid, client_id, number_of_seats, cruise_id,
+    price, creation_date_time,
+                             last_alter_date_time,
+                             alter_type_id, created_by_id,
+                             altered_by_id, version)
+    values (-4, '9456de6c-d453-11eb-b8bc-0242ac130003',-3, 5, -1, 30, now(),
+    now(), -2, -1, -1, 0);
+
+    #reservation end
+
+    #
+
+    #
+
+    #
+
+    #ratings start
+
+    insert into ratings(id, account_id, cruise_group_id, rating,
+    creation_date_time, last_alter_date_time, alter_type_id,
+                        created_by_id,
+                        altered_by_id, version, uuid)
+    values (-1, -2, -1, 3, now(), now(), -2, -1, -1, 0,
+    '9456d84a-d453-11eb-b8bc-0242ac130003');
+
+    insert into ratings(id, account_id, cruise_group_id, rating,
+    creation_date_time, last_alter_date_time, alter_type_id,
+                        created_by_id,
+                        altered_by_id, version, uuid)
+    values (-2, -1, -2, 4.5, now(), now(), -2, -1, -1, 0,
+    '9456da84-d453-11eb-b8bc-0242ac130003');
+
+    insert into ratings(id, account_id, cruise_group_id, rating,
+    creation_date_time, last_alter_date_time, alter_type_id,
+                        created_by_id,
+                        altered_by_id, version, uuid)
+    values (-3, -1, -3, 5, now(), now(), -2, -1, -1, 0,
+    '9456db74-d453-11eb-b8bc-0242ac130003');
+
+    #ratings end
+
+    #
+
+    #
+
+    #
+
+    #
+
+    #cruises_group_pictures start
+     insert into cruises_group_pictures (cruises_group_id, cruise_picture_id)
+     values (-3,-1);
+    insert into cruises_group_pictures (cruises_group_id, cruise_picture_id)
+     values (-2,-2);
+    insert into cruises_group_pictures (cruises_group_id, cruise_picture_id)
+
+    values (-1,-3);
+
+
+    #cruises_group_pictures end
+
+    #
+
+    #
+
+    #
+
+    #reservation_attractions start
+
+    insert into reservation_attractions (reservation_id, attraction_id)
+
+    values (-1, -1);
+
+    insert into reservation_attractions (reservation_id, attraction_id)
+
+    values (-2, -2);
+
+    insert into reservation_attractions (reservation_id, attraction_id)
+
+    values (-3, -3);
+
+    #reservation_attractions end
+
+
+    insert into used_codes_id_seq (next_val) value (0);
+  3_finish.sh: |
+    #!/bin/bash
+    echo "FINISH running scripts from catalog /docker-entrypoint-initdb.d"
