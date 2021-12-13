@@ -1,0 +1,192 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  annotations:
+    alpha.image.policy.openshift.io/resolve-names: '*'
+    app.openshift.io/vcs-ref: migration_2
+    app.openshift.io/vcs-uri: 'https://github.com/ssbd202103/CruiseHub.git'
+    deployment.kubernetes.io/revision: '6'
+    image.openshift.io/triggers: >-
+      [{"from":{"kind":"ImageStreamTag","name":"ssbd03-app-temp:latest","namespace":"tua02"},"fieldPath":"spec.template.spec.containers[?(@.name==\"ssbd03-app-temp\")].image","pause":"false"}]
+    openshift.io/generated-by: OpenShiftWebConsole
+  selfLink: /apis/apps/v1/namespaces/tua02/deployments/ssbd03-app-temp
+  resourceVersion: '61650696'
+  name: ssbd03-app-temp
+  uid: 624acde3-99ee-4bb6-a60b-34ab56087cee
+  creationTimestamp: '2021-12-13T10:01:28Z'
+  generation: 10
+  managedFields:
+    - manager: openshift-controller-manager
+      operation: Update
+      apiVersion: apps/v1
+      time: '2021-12-13T10:14:21Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:spec':
+          'f:template':
+            'f:spec':
+              'f:containers':
+                'k:{"name":"ssbd03-app-temp"}':
+                  'f:image': {}
+    - manager: Mozilla
+      operation: Update
+      apiVersion: apps/v1
+      time: '2021-12-13T11:04:11Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:annotations':
+            .: {}
+            'f:alpha.image.policy.openshift.io/resolve-names': {}
+            'f:app.openshift.io/vcs-ref': {}
+            'f:app.openshift.io/vcs-uri': {}
+            'f:image.openshift.io/triggers': {}
+            'f:openshift.io/generated-by': {}
+          'f:labels':
+            .: {}
+            'f:app': {}
+            'f:app.kubernetes.io/component': {}
+            'f:app.kubernetes.io/instance': {}
+            'f:app.kubernetes.io/name': {}
+            'f:app.kubernetes.io/part-of': {}
+            'f:app.openshift.io/runtime': {}
+            'f:app.openshift.io/runtime-version': {}
+        'f:spec':
+          'f:progressDeadlineSeconds': {}
+          'f:replicas': {}
+          'f:revisionHistoryLimit': {}
+          'f:selector': {}
+          'f:strategy':
+            'f:rollingUpdate':
+              .: {}
+              'f:maxSurge': {}
+              'f:maxUnavailable': {}
+            'f:type': {}
+          'f:template':
+            'f:metadata':
+              'f:labels':
+                .: {}
+                'f:app': {}
+                'f:deploymentconfig': {}
+            'f:spec':
+              'f:containers':
+                'k:{"name":"ssbd03-app-temp"}':
+                  .: {}
+                  'f:imagePullPolicy': {}
+                  'f:name': {}
+                  'f:ports':
+                    .: {}
+                    'k:{"containerPort":8080,"protocol":"TCP"}':
+                      .: {}
+                      'f:containerPort': {}
+                      'f:protocol': {}
+                    'k:{"containerPort":8778,"protocol":"TCP"}':
+                      .: {}
+                      'f:containerPort': {}
+                      'f:protocol': {}
+                  'f:resources': {}
+                  'f:terminationMessagePath': {}
+                  'f:terminationMessagePolicy': {}
+              'f:dnsPolicy': {}
+              'f:restartPolicy': {}
+              'f:schedulerName': {}
+              'f:securityContext': {}
+              'f:terminationGracePeriodSeconds': {}
+    - manager: kube-controller-manager
+      operation: Update
+      apiVersion: apps/v1
+      time: '2021-12-13T13:20:28Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:annotations':
+            'f:deployment.kubernetes.io/revision': {}
+        'f:status':
+          'f:availableReplicas': {}
+          'f:conditions':
+            .: {}
+            'k:{"type":"Available"}':
+              .: {}
+              'f:lastTransitionTime': {}
+              'f:lastUpdateTime': {}
+              'f:message': {}
+              'f:reason': {}
+              'f:status': {}
+              'f:type': {}
+            'k:{"type":"Progressing"}':
+              .: {}
+              'f:lastTransitionTime': {}
+              'f:lastUpdateTime': {}
+              'f:message': {}
+              'f:reason': {}
+              'f:status': {}
+              'f:type': {}
+          'f:observedGeneration': {}
+          'f:readyReplicas': {}
+          'f:replicas': {}
+          'f:updatedReplicas': {}
+  namespace: tua02
+  labels:
+    app: ssbd03-app-temp
+    app.kubernetes.io/component: ssbd03-app-temp
+    app.kubernetes.io/instance: ssbd03-app-temp
+    app.kubernetes.io/name: wildfly
+    app.kubernetes.io/part-of: ssbd03-app-temp
+    app.openshift.io/runtime: wildfly
+    app.openshift.io/runtime-version: '21.0'
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ssbd03-app-temp
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: ssbd03-app-temp
+        deploymentconfig: ssbd03-app-temp
+    spec:
+      containers:
+        - name: ssbd03-app-temp
+          image: >-
+            image-registry.openshift-image-registry.svc:5000/tua02/ssbd03-app-temp@sha256:cc24c575388e475ec3d958ea6637063c23e1a97fbad4662615b01d9185357e54
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+            - containerPort: 8778
+              protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
+status:
+  observedGeneration: 10
+  replicas: 3
+  updatedReplicas: 3
+  readyReplicas: 3
+  availableReplicas: 3
+  conditions:
+    - type: Available
+      status: 'True'
+      lastUpdateTime: '2021-12-13T11:49:36Z'
+      lastTransitionTime: '2021-12-13T11:49:36Z'
+      reason: MinimumReplicasAvailable
+      message: Deployment has minimum availability.
+    - type: Progressing
+      status: 'True'
+      lastUpdateTime: '2021-12-13T13:20:28Z'
+      lastTransitionTime: '2021-12-13T10:14:21Z'
+      reason: NewReplicaSetAvailable
+      message: ReplicaSet "ssbd03-app-temp-686496d67b" has successfully progressed.

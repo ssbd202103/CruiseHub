@@ -1,0 +1,120 @@
+kind: BuildConfig
+apiVersion: build.openshift.io/v1
+metadata:
+  annotations:
+    app.openshift.io/vcs-ref: migration_2
+    app.openshift.io/vcs-uri: 'https://github.com/ssbd202103/CruiseHub.git'
+    openshift.io/generated-by: OpenShiftWebConsole
+  resourceVersion: '61922844'
+  name: ssbd03-app-temp
+  uid: 6b5d6172-cf1c-4eec-8408-3a56e45b5284
+  creationTimestamp: '2021-12-13T10:01:28Z'
+  generation: 8
+  managedFields:
+    - manager: openshift-apiserver
+      operation: Update
+      apiVersion: build.openshift.io/v1
+      time: '2021-12-13T10:01:28Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:spec':
+          'f:triggers': {}
+        'f:status':
+          'f:lastVersion': {}
+    - manager: Mozilla
+      operation: Update
+      apiVersion: build.openshift.io/v1
+      time: '2021-12-13T11:04:11Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:annotations':
+            .: {}
+            'f:app.openshift.io/vcs-ref': {}
+            'f:app.openshift.io/vcs-uri': {}
+            'f:openshift.io/generated-by': {}
+          'f:labels':
+            .: {}
+            'f:app': {}
+            'f:app.kubernetes.io/component': {}
+            'f:app.kubernetes.io/instance': {}
+            'f:app.kubernetes.io/name': {}
+            'f:app.kubernetes.io/part-of': {}
+            'f:app.openshift.io/runtime': {}
+            'f:app.openshift.io/runtime-version': {}
+        'f:spec':
+          'f:output':
+            'f:to':
+              .: {}
+              'f:kind': {}
+              'f:name': {}
+          'f:runPolicy': {}
+          'f:source':
+            'f:contextDir': {}
+            'f:git':
+              .: {}
+              'f:ref': {}
+              'f:uri': {}
+            'f:type': {}
+          'f:strategy':
+            'f:sourceStrategy':
+              .: {}
+              'f:env': {}
+              'f:from':
+                .: {}
+                'f:kind': {}
+                'f:name': {}
+                'f:namespace': {}
+            'f:type': {}
+  namespace: tua02
+  labels:
+    app: ssbd03-app-temp
+    app.kubernetes.io/component: ssbd03-app-temp
+    app.kubernetes.io/instance: ssbd03-app-temp
+    app.kubernetes.io/name: wildfly
+    app.kubernetes.io/part-of: ssbd03-app-temp
+    app.openshift.io/runtime: wildfly
+    app.openshift.io/runtime-version: '21.0'
+spec:
+  nodeSelector: null
+  output:
+    to:
+      kind: ImageStreamTag
+      name: 'ssbd03-app-temp:latest'
+  resources: {}
+  successfulBuildsHistoryLimit: 5
+  failedBuildsHistoryLimit: 5
+  strategy:
+    type: Source
+    sourceStrategy:
+      from:
+        kind: ImageStreamTag
+        namespace: openshift
+        name: 'wildfly:21.0'
+      env:
+        - name: MAVEN_ARGS
+          value: clean install -DskipTests -Pprod
+  postCommit: {}
+  source:
+    type: Git
+    git:
+      uri: 'https://github.com/ssbd202103/CruiseHub.git'
+      ref: migration_2
+    contextDir: /
+  triggers:
+    - type: Generic
+      generic:
+        secretReference:
+          name: ssbd03-app-temp-generic-webhook-secret
+    - type: GitHub
+      github:
+        secretReference:
+          name: ssbd03-app-temp-github-webhook-secret
+    - type: ImageChange
+      imageChange:
+        lastTriggeredImageID: >-
+          image-registry.openshift-image-registry.svc:5000/openshift/wildfly@sha256:c673b3a3b231e1fdaddde0ef139ff6c7786b339a7daa54fd71e812cd064d867b
+    - type: ConfigChange
+  runPolicy: Serial
+status:
+  lastVersion: 6

@@ -1,0 +1,81 @@
+kind: ImageStream
+apiVersion: image.openshift.io/v1
+metadata:
+  annotations:
+    app.openshift.io/vcs-ref: migration_2
+    app.openshift.io/vcs-uri: 'https://github.com/ssbd202103/CruiseHub.git'
+    openshift.io/generated-by: OpenShiftWebConsole
+  resourceVersion: '61649371'
+  name: ssbd03-app-temp
+  uid: a3f96b5b-0943-4a71-8ed8-2787940bbdfb
+  creationTimestamp: '2021-12-13T10:01:28Z'
+  generation: 1
+  managedFields:
+    - manager: Mozilla
+      operation: Update
+      apiVersion: image.openshift.io/v1
+      time: '2021-12-13T10:01:28Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:annotations':
+            .: {}
+            'f:app.openshift.io/vcs-ref': {}
+            'f:app.openshift.io/vcs-uri': {}
+            'f:openshift.io/generated-by': {}
+          'f:labels':
+            .: {}
+            'f:app': {}
+            'f:app.kubernetes.io/component': {}
+            'f:app.kubernetes.io/instance': {}
+            'f:app.kubernetes.io/name': {}
+            'f:app.kubernetes.io/part-of': {}
+            'f:app.openshift.io/runtime': {}
+            'f:app.openshift.io/runtime-version': {}
+  namespace: tua02
+  labels:
+    app: ssbd03-app-temp
+    app.kubernetes.io/component: ssbd03-app-temp
+    app.kubernetes.io/instance: ssbd03-app-temp
+    app.kubernetes.io/name: wildfly
+    app.kubernetes.io/part-of: ssbd03-app-temp
+    app.openshift.io/runtime: wildfly
+    app.openshift.io/runtime-version: '21.0'
+spec:
+  lookupPolicy:
+    local: false
+status:
+  dockerImageRepository: 'image-registry.openshift-image-registry.svc:5000/tua02/ssbd03-app-temp'
+  tags:
+    - tag: latest
+      items:
+        - created: '2021-12-13T13:18:35Z'
+          dockerImageReference: >-
+            image-registry.openshift-image-registry.svc:5000/tua02/ssbd03-app-temp@sha256:cc24c575388e475ec3d958ea6637063c23e1a97fbad4662615b01d9185357e54
+          image: >-
+            sha256:cc24c575388e475ec3d958ea6637063c23e1a97fbad4662615b01d9185357e54
+          generation: 1
+        - created: '2021-12-13T11:38:57Z'
+          dockerImageReference: >-
+            image-registry.openshift-image-registry.svc:5000/tua02/ssbd03-app-temp@sha256:78174c3a28f4a831d384776da133f2d69749fb22ebeb45f43511d5a8d338c6fe
+          image: >-
+            sha256:78174c3a28f4a831d384776da133f2d69749fb22ebeb45f43511d5a8d338c6fe
+          generation: 1
+        - created: '2021-12-13T11:20:28Z'
+          dockerImageReference: >-
+            image-registry.openshift-image-registry.svc:5000/tua02/ssbd03-app-temp@sha256:2b46e24ce4653a324415f78b34a70eb86fb9f4d8084d8165cf459f8344550414
+          image: >-
+            sha256:2b46e24ce4653a324415f78b34a70eb86fb9f4d8084d8165cf459f8344550414
+          generation: 1
+        - created: '2021-12-13T11:00:33Z'
+          dockerImageReference: >-
+            image-registry.openshift-image-registry.svc:5000/tua02/ssbd03-app-temp@sha256:7b8a7f0389fc89c62350bc5979fba650276a5ae930c1e7b5ddb79eedf7462b29
+          image: >-
+            sha256:7b8a7f0389fc89c62350bc5979fba650276a5ae930c1e7b5ddb79eedf7462b29
+          generation: 1
+        - created: '2021-12-13T10:14:21Z'
+          dockerImageReference: >-
+            image-registry.openshift-image-registry.svc:5000/tua02/ssbd03-app-temp@sha256:90e4e1323901cbb47c2d89f88333fafb74f16eea5aea2b326fef584fc34d5662
+          image: >-
+            sha256:90e4e1323901cbb47c2d89f88333fafb74f16eea5aea2b326fef584fc34d5662
+          generation: 1
