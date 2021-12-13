@@ -17,7 +17,7 @@
             <property name="javax.persistence.sql-load-script-source" value="init/db_test.sql"/>
 
             <property name="connection.url"
-                      value="jdbc:mysql://localhost:3306/ssbd03?autoReconnect=true&amp;useSSL=false&amp;user=ssbd03admin&amp;password=adminpasswd&amp;allowPublicKeyRetrieval=true"/>
+                      value="jdbc:mysql://172.30.245.149:3306/ssbd03?autoReconnect=true&amp;useSSL=false&amp;user=ssbd03admin&amp;password=adminpasswd&amp;allowPublicKeyRetrieval=true"/>
             <property name="connection.username" value="ssbd03admin"/>
             <property name="connection.password" value="adminpasswd"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
@@ -49,7 +49,7 @@
             <property name="hibernate.show_sql" value="true"/>
 
             <property name="connection.url"
-                      value="jdbc:mysql://localhost:3306/ssbd03?autoReconnect=true&amp;useSSL=false&amp;user=ssbd03glassfish&amp;password=glassfishpasswd&amp;allowPublicKeyRetrieval=true"/>
+                      value="jdbc:mysql://172.30.245.149:3306/ssbd03?autoReconnect=true&amp;useSSL=false&amp;user=ssbd03glassfish&amp;password=glassfishpasswd&amp;allowPublicKeyRetrieval=true"/>
             <property name="connection.username" value="ssbd03glassfish"/>
             <property name="connection.password" value="glassfishpasswd"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
@@ -79,7 +79,7 @@
             <property name="hibernate.canonicalmodel.prefix" value="mok"/>
 
             <property name="connection.url"
-                      value="jdbc:mysql://localhost:3306/ssbd03?autoReconnect=true&amp;useSSL=false&amp;user=ssbd03mok&amp;password=mokpasswd&amp;allowPublicKeyRetrieval=true"/>
+                      value="jdbc:mysql://172.30.245.149:3306/ssbd03?autoReconnect=true&amp;useSSL=false&amp;user=ssbd03mok&amp;password=mokpasswd&amp;allowPublicKeyRetrieval=true"/>
             <property name="connection.username" value="ssbd03mok"/>
             <property name="connection.password" value="mokpasswd"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
@@ -114,7 +114,7 @@
             <property name="hibernate.canonicalmodel.prefix" value="mow"/>
 
             <property name="connection.url"
-                      value="jdbc:mysql://localhost:3306/ssbd03?autoReconnect=true&amp;useSSL=false&amp;user=ssbd03mow&amp;password=mowpasswd&amp;allowPublicKeyRetrieval=true"/>
+                      value="jdbc:mysql://172.30.245.149:3306/ssbd03?autoReconnect=true&amp;useSSL=false&amp;user=ssbd03mow&amp;password=mowpasswd&amp;allowPublicKeyRetrieval=true"/>
             <property name="connection.username" value="ssbd03mow"/>
             <property name="connection.password" value="mowpasswd"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
