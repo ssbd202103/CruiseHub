@@ -56,6 +56,8 @@ public class AttractionController {
         return tryAndRepeat(attractionEndpoint, () -> attractionEndpoint.addAttraction(addAttractionDto));
     }
 
+
+
     @PUT
     @Path("/edit-attraction")
     public void editAttraction(@Valid EditAttractionDto editAttractionDto,
@@ -78,7 +80,7 @@ public class AttractionController {
      try{
          UUID convertedUUID = UUID.fromString(uuid);
          tryAndRepeat(attractionEndpoint, () -> attractionEndpoint.deleteAttraction(convertedUUID));
-     }catch (IllegalArgumentException e) {
+     } catch (IllegalArgumentException e) {
          throw new MapperException(MAPPER_UUID_PARSE);
      }
     }
